@@ -1,5 +1,6 @@
 package Main;
 
+import Handlers.FileHandler;
 import Listeners.AnnotationListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ public class Main {
         try {
             FileHandler handler = new FileHandler();
             handler.createDirectory(Constants.DIRECTORY_STORAGE);
+            handler.createDirectory(Constants.DIRECTORY_IMAGES);
             token = handler.readFromFile(Constants.FILE_TOKEN).get(0);
             IDiscordClient client = Client.getClient(token, true);
             client.isBot();

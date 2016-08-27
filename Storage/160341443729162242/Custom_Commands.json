@@ -1,27 +1,17 @@
 {
   "isInit": true,
-  "bannedInputs": [
+  "blackList": [
     {
-      "string": "\u003c@",
-      "reason": "Please do not put **mentions** in Custom Commands."
+      "phrase": "\u003c@",
+      "reason": "Please do not put **mentions** in Custom MessageHandler."
     },
     {
-      "string": "discord.gg",
-      "reason": "Please do not put **invites** in Custom Commands."
+      "phrase": "discord.gg",
+      "reason": "Please do not put **invites** in Custom MessageHandler."
     },
     {
-      "string": "discordapp.com/Invite/",
-      "reason": "Please do not put **invites** in Custom Commands."
-    }
-  ],
-  "bannedOutputs": [
-    {
-      "string": "@everyone",
-      "reason": "Please do not try to bypass mentions with S.A.I.L."
-    },
-    {
-      "string": "@here",
-      "reason": "Please do not try to bypass mentions with S.A.I.L."
+      "phrase": "discordapp.com/Invite/",
+      "reason": "Please do not put **invites** in Custom MessageHandler."
     }
   ],
   "commands": [

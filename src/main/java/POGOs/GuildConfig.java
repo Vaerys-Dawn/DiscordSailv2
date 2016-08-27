@@ -1,8 +1,9 @@
 package POGOs;
 
+import Main.Constants;
+import Objects.BlackListedPhrase;
 import Objects.ChannelType;
 import Objects.RoleType;
-import Objects.UserType;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class GuildConfig{
     ArrayList<ChannelType> channels = new ArrayList<>();
     ArrayList<RoleType> races = new ArrayList<>();
     ArrayList<RoleType> trustedRoles = new ArrayList<>();
+    ArrayList<BlackListedPhrase> blacklist = new ArrayList<>();
+    RoleType roleToMention = new RoleType("No Role Set", Constants.NULL_VARIABLE);
 
     public void setGuildName(String guildName) {
         this.guildName = guildName;
@@ -36,6 +39,14 @@ public class GuildConfig{
             doBlackListing = false;
         }else {
             doBlackListing = true;
+        }
+    }
+
+    public void toggleLogging(){
+        if (doLogging){
+            doLogging = false;
+        }else {
+            doLogging = true;
         }
     }
 
@@ -59,7 +70,7 @@ public class GuildConfig{
                 return c.getID();
             }
         }
-        return "";
+        return Constants.NULL_VARIABLE;
     }
 
     public void updateVariables(IGuild guild) {
@@ -77,5 +88,32 @@ public class GuildConfig{
             newTrustedRoles.add(r);
         }
         trustedRoles = newTrustedRoles;
+        if (!roleToMention.getRoleID().equals(Constants.NULL_VARIABLE)){
+            roleToMention.updateRoleName(guild.getRoleByID(roleToMention.getRoleID()).getName());
+        }
+    }
+
+    public ArrayList<BlackListedPhrase> getBlacklist (){
+        return blacklist;
+    }
+
+    public void addBlacklistItem(String phrase, String reason) {
+        blacklist.add(new BlackListedPhrase(phrase,reason));
+    }
+
+    public void removeBlackListItem(String phrase){
+        for (int i = 0;i < blacklist.size();i++){
+            if (blacklist.get(1).phrase.equalsIgnoreCase(phrase)){
+                blacklist.remove(i);
+            }
+        }
+    }
+
+    public void setRoleToMention(String roleName, String RoleID){
+        roleToMention = new RoleType(roleName,roleName);
+    }
+
+    public RoleType getRoleToMention() {
+        return roleToMention;
     }
 }

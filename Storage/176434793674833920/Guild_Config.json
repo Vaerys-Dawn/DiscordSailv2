@@ -1,10 +1,39 @@
 {
   "guildName": "Starbound",
   "doLoginMessage": false,
-  "doLogging": false,
-  "doInviteRemoval": false,
-  "channels": [],
+  "doLogging": true,
+  "doBlackListing": false,
+  "channels": [
+    {
+      "Type": "General",
+      "ID": "206983013060313088"
+    },
+    {
+      "Type": "Logging",
+      "ID": "210298461109616640"
+    },
+    {
+      "Type": "Servers",
+      "ID": "176667376157196288"
+    },
+    {
+      "Type": "RaceSelect",
+      "ID": "176667358599970816"
+    },
+    {
+      "Type": "Admin",
+      "ID": "176667695259975681"
+    },
+    {
+      "Type": "Info",
+      "ID": "176434793674833920"
+    }
+  ],
   "races": [],
-  "groupWaitingList": [],
-  "trustedRoles": []
+  "trustedRoles": [],
+  "blacklist": [],
+  "roleToMention": {
+    "RoleName": "No Role Set",
+    "RoleID": "Null"
+  }
 }

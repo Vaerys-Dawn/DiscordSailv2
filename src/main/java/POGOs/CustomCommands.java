@@ -1,8 +1,9 @@
 package POGOs;
 
+import Main.Constants;
 import Main.Globals;
-import Objects.BlackListedString;
-import Objects.CustomCommand;
+import Objects.BlackListedPhrase;
+import Objects.CCommand;
 
 import java.util.ArrayList;
 
@@ -11,35 +12,39 @@ import java.util.ArrayList;
  */
 public class CustomCommands {
     boolean isInit = false;
-    ArrayList<BlackListedString> bannedInputs = new ArrayList<>();
-    ArrayList<BlackListedString> bannedOutputs = new ArrayList<>();
-    ArrayList<CustomCommand> commands = new ArrayList<>();
-    final CustomCommand commandNotFound = new CustomCommand(true,"Error","404","Command not found");
+    ArrayList<BlackListedPhrase> blackList = new ArrayList<>();
+    ArrayList<CCommand> commands = new ArrayList<>();
+    final CCommand commandNotFound = new CCommand(true,"Error","404","> Command not found.");
 
-    public String addCommand(CustomCommand customCommand){
-        commands.add(customCommand);
-        return "Command Added";
+    public String addCommand(CCommand cCommand){
+        if (!exists(cCommand.getName())) {
+            commands.add(cCommand);
+            return "> Command Created, you can perform your new custom command by doing `" + Constants.CC_PREFIX + cCommand.getName()+  "`.";
+        }
+        return "> That command already exists.";
     }
 
     public void initCustomCommands(){
         if (!isInit) {
-            bannedInputs.add(new BlackListedString("<@", "Please do not put **mentions** in Custom Commands."));
-            bannedInputs.add(new BlackListedString("discord.gg", "Please do not put **invites** in Custom Commands."));
-            bannedInputs.add(new BlackListedString("discordapp.com/Invite/", "Please do not put **invites** in Custom Commands."));
-            bannedOutputs.add(new BlackListedString("@everyone", "Please do not try to bypass mentions with S.A.I.L."));
-            bannedOutputs.add(new BlackListedString("@here", "Please do not try to bypass mentions with S.A.I.L."));
+            blackList.add(new BlackListedPhrase("<@", "Please do not put **mentions** in Custom MessageHandler."));
+            blackList.add(new BlackListedPhrase("discord.gg", "Please do not put **invites** in Custom MessageHandler."));
+            blackList.add(new BlackListedPhrase("discordapp.com/Invite/", "Please do not put **invites** in Custom MessageHandler."));
             isInit = true;
         }
-        CustomCommand echo = new CustomCommand(true, Globals.creatorID,"Echo","#args#");
+        CCommand echo = new CCommand(true, Globals.creatorID,"Echo","#args#");
         if (!exists(echo.getName())) commands.add(echo);
     }
 
     private boolean exists(String name){
-        for (CustomCommand c : commands){
+        for (CCommand c : commands){
             if (c.getName().equalsIgnoreCase(name)){
                 return true;
             }
         }
         return false;
+    }
+
+    private ArrayList<CCommand> getCommandList(){
+        return commands;
     }
 }

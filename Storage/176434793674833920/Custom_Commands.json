@@ -1,27 +1,17 @@
 {
   "isInit": true,
-  "bannedInputs": [
+  "blackList": [
     {
-      "string": "\u003c@",
+      "phrase": "\u003c@",
       "reason": "Please do not put **mentions** in Custom Commands."
     },
     {
-      "string": "discord.gg",
+      "phrase": "discord.gg",
       "reason": "Please do not put **invites** in Custom Commands."
     },
     {
-      "string": "discordapp.com/Invite/",
+      "phrase": "discordapp.com/Invite/",
       "reason": "Please do not put **invites** in Custom Commands."
-    }
-  ],
-  "bannedOutputs": [
-    {
-      "string": "@everyone",
-      "reason": "Please do not try to bypass mentions with S.A.I.L."
-    },
-    {
-      "string": "@here",
-      "reason": "Please do not try to bypass mentions with S.A.I.L."
     }
   ],
   "commands": [
@@ -31,6 +21,18 @@
       "isLocked": true,
       "contents": [
         "#args#"
+      ]
+    },
+    {
+      "name": "Sail2.0",
+      "userID": "153159020528533505",
+      "isLocked": false,
+      "contents": [
+        "is a",
+        "GOD",
+        "DAMN",
+        "penguin",
+        "\u003c:sbPete:217158840196530177\u003e"
       ]
     }
   ],

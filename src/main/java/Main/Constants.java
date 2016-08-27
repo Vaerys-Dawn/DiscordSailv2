@@ -23,22 +23,25 @@ public class Constants {
 
 
     //Channel Constants
-    public static final String CHANNEL_GENERAL = "General";
     public static final String CHANNEL_ANY = "Any";
+    public static final String CHANNEL_GENERAL = "General";
     public static final String CHANNEL_SERVERS = "Servers";
     public static final String CHANNEL_RACE_SELECT = "RaceSelect";
     public static final String CHANNEL_LOGGING = "Logging";
     public static final String CHANNEL_ADMIN = "Admin";
+    public static final String CHANNEL_INFO = "Info";
 
     //------------------------------------
 
     //Error Constants
     public static final String GC_NOT_FOUND = "Error";
+    public static final String NULL_VARIABLE = "Null";
 
     //-------FilePath Constants--------
 
     //Directories
     public static final String DIRECTORY_STORAGE = "Storage/";
+    public static final String DIRECTORY_IMAGES = DIRECTORY_STORAGE + "Images/";
 
     //Files
     public static final String FILE_TOKEN = DIRECTORY_STORAGE+"Token.txt";
@@ -48,8 +51,4 @@ public class Constants {
     public static final String FILE_CHARACTERS = "Characters.json";
     public static final String FILE_INFO = "Info.txt";
 
-    public static ArrayList<String[]> FilePaths = new ArrayList<>();
-
-
-    //Full Paths
 }

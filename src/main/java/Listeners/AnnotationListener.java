@@ -1,12 +1,9 @@
 package Listeners;
 
-import Annotations.AliasAnnotation;
-import Annotations.CommandAnnotation;
-import Commands.Commands;
-import Main.Constants;
-import Main.FileHandler;
-import Main.Globals;
-import Main.Utility;
+import Handlers.DMHandler;
+import Handlers.FileHandler;
+import Main.*;
+import Handlers.MessageHandler;
 
 import POGOs.Characters;
 import POGOs.CustomCommands;
@@ -21,11 +18,6 @@ import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RateLimitException;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -101,9 +93,7 @@ public class AnnotationListener {
             if (!event.getClient().getApplicationName().equals(Globals.botName))
                 event.getClient().changeUsername(Globals.botName);
             consoleInput(event);
-        } catch (DiscordException e) {
-            e.printStackTrace();
-        } catch (RateLimitException e) {
+        } catch (DiscordException | RateLimitException e) {
             e.printStackTrace();
         }
     }
@@ -126,6 +116,10 @@ public class AnnotationListener {
     @EventSubscriber
     public void onMessageRecivedEvent(MessageReceivedEvent event) {
         // TODO: 14/08/2016 ccs must also be handled here
+        if (event.getMessage().getChannel().isPrivate()){
+            new DMHandler(event.getMessage());
+            return;
+        }
         IMessage message = event.getMessage();
         IGuild guild = message.getGuild();
         IChannel channel = message.getChannel();
@@ -133,11 +127,10 @@ public class AnnotationListener {
         String messageLC = message.toString().toLowerCase();
         String args = "";
         String command = "";
-        String guildID = guild.getID();
         boolean isBeta = false;
 
         for (IRole r : author.getRolesForGuild(guild)) {
-            if (r.getName().equalsIgnoreCase("Sail Beta Tester")) {
+            if (r.getName().equalsIgnoreCase("V2 Tester")) {
                 isBeta = true;
             }
         }
@@ -146,6 +139,7 @@ public class AnnotationListener {
         if (author.getID().equals(Globals.creatorID)) {
             Globals.consoleMessageCID = channel.getID();
         }
+
         if (isBeta) {
             //Sets Up Command Arguments
             if (messageLC.startsWith(Constants.COMMAND_PREFIX.toLowerCase()) || messageLC.startsWith(Constants.CC_PREFIX.toLowerCase())) {
@@ -156,121 +150,20 @@ public class AnnotationListener {
                 getArgs.delete(0, splitMessage[0].length() + 1);
                 args = getArgs.toString();
             }
-            Commands commands = new Commands(args, message);
-            if (command.equalsIgnoreCase(Constants.COMMAND_PREFIX + "Echo")) {
-                Utility.sendMessage(args, channel);
-            }
 
-            //
-            if (messageLC.startsWith(Constants.COMMAND_PREFIX.toLowerCase())) {
-                Method[] methods = Commands.class.getMethods();
-                for (Method m : methods) {
-                    if (m.isAnnotationPresent(CommandAnnotation.class)) {
-                        CommandAnnotation commandAnno = m.getAnnotation(CommandAnnotation.class);
-                        List<String> aliases = new ArrayList<>();
-                        if (m.isAnnotationPresent(AliasAnnotation.class)) {
-                            AliasAnnotation aliasAnno = m.getAnnotation(AliasAnnotation.class);
-                            aliases = new ArrayList<>(Arrays.asList(aliasAnno.alias()));
-                        }
-                        aliases.add(commandAnno.name());
-                        for (String s : aliases) {
-                            if ((Constants.COMMAND_PREFIX + s).equalsIgnoreCase(command)) {
-                                //init files
-                                if (commandAnno.requiresArgs() && args.equals("")){
-                                    Utility.sendMessage("Commands is missing Arguments: \n"+ Utility.getCommandInfo(commandAnno),channel);
-                                    return;
-                                }
-                                if (commandAnno.type().equals(Constants.TYPE_SERVERS) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                                    commands.loadServers();
-                                }
-                                if (commandAnno.type().equals(Constants.TYPE_ROLE_SELECT) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                                    commands.loadCharacters();
-                                }
-                                if (commandAnno.type().equals(Constants.TYPE_CC) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                                    commands.loadCC();
-                                }
-                                GuildConfig guildConfig = (GuildConfig) handler.readfromJson(Utility.getFilePath(guildID,Constants.FILE_GUILD_CONFIG),GuildConfig.class);
-                                if (commandAnno.doLogging() && guildConfig.doLogging){
-                                    if (!guildConfig.getChannelTypeID(Constants.CHANNEL_LOGGING).equals("")){
-                                        channel = guild.getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_LOGGING));
-                                        Utility.sendMessage("**"+author.getDisplayName(guild) + "** Has Used Command `" + command +"` with args: `" + args+ "`.",channel);
-                                    }
-                                }
-                                handleCommand(m, message, commands);
-                                commands.flushFiles();
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (messageLC.startsWith(Constants.CC_PREFIX.toLowerCase())) {
-
-                commands.flushFiles();
-            }
-
+            //message and command handling
+            new MessageHandler(command, args, message);
         }
 
-    }
-
-    private void handleCommand(Method m, IMessage message, Commands commands) {
-        boolean channelCorrect;
-        boolean permsCorrct;
-        IGuild guild = message.getGuild();
-        GuildConfig guildConfig = (GuildConfig) handler.readfromJson(Utility.getFilePath(guild.getID(), Constants.FILE_GUILD_CONFIG), GuildConfig.class);
-        IChannel channel = message.getChannel();
-        IUser author = message.getAuthor();
-        CommandAnnotation commandAnno = m.getAnnotation(CommandAnnotation.class);
-
-        //Channel Validation
-        if (!commandAnno.channel().equals(Constants.CHANNEL_ANY)) {
-            if (channel.getID().equals(guildConfig.getChannelTypeID(commandAnno.channel())) || guildConfig.getChannelTypeID(commandAnno.channel()).equals("")) {
-                channelCorrect = true;
-            } else channelCorrect = false;
-        } else channelCorrect = true;
-
-        //Permission Validation
-        if (channelCorrect) {
-            if (!Arrays.equals(commandAnno.perms(), new Permissions[]{Permissions.SEND_MESSAGES})) {
-                Permissions[] compiledPerms = new Permissions[commandAnno.perms().length];
-                int permsIndex = 0;
-                for (Permissions aP : commandAnno.perms()) {
-                    for (IRole r : author.getRolesForGuild(guild)) {
-                        for (Permissions p : r.getPermissions()) {
-                            if (aP.equals(p)) {
-                                compiledPerms[permsIndex] = p;
-                            }
-                        }
-                    }
-                    permsIndex++;
-                }
-                if (Arrays.equals(compiledPerms, commandAnno.perms())) {
-                    permsCorrct = true;
-                } else permsCorrct = false;
-            } else permsCorrct = true;
-
-            //message sending
-            if (channelCorrect && permsCorrct) {
-                try {
-                    if (commandAnno.doResponseGeneral()){
-                        channel = guild.getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));
-                    }
-                    Utility.sendMessage((String) m.invoke(commands, new Object[]{}), channel);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            } else
-                Utility.sendMessage("> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.", channel);
-        } else {
-            Utility.sendMessage("> Command must be performed in the " + guild.getChannelByID(guildConfig.getChannelTypeID(commandAnno.channel())).mention() + " channel.", channel);
-        }
     }
 
     @EventSubscriber
     public void onMentionEvent(MentionEvent event) {
         // TODO: 14/08/2016 set up do that mentioning the bot sends a priority message to the owner.
+        if (event.getMessage().getChannel().isPrivate()){
+            new DMHandler(event.getMessage());
+            return;
+        }
 
     }
 }

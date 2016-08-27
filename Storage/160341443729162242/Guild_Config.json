@@ -2,9 +2,13 @@
   "guildName": "VoxPort",
   "doLoginMessage": false,
   "doLogging": false,
-  "doInviteRemoval": false,
+  "doBlackListing": false,
   "channels": [],
   "races": [],
-  "groupWaitingList": [],
-  "trustedRoles": []
+  "trustedRoles": [],
+  "blacklist": [],
+  "roleToMention": {
+    "RoleName": "No Role Set",
+    "RoleID": "Null"
+  }
 }

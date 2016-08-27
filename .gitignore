@@ -46,6 +46,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-#Files that should not be pushed
+# Files that should not be pushed
 .Token.txt
 .png

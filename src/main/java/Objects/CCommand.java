@@ -6,14 +6,14 @@ import java.util.List;
 /**
  * Created by Vaerys on 17/08/2016.
  */
-public class CustomCommand {
+public class CCommand {
 
     String name;
     String userID;
     boolean isLocked;
     List<String> contents;
 
-    public CustomCommand(boolean isLocked, String userID, String name, String contents) {
+    public CCommand(boolean isLocked, String userID, String name, String contents) {
         this.isLocked = isLocked;
         this.userID = userID;
         this.name = name;

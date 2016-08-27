@@ -1,4 +1,4 @@
-package Main;
+package Handlers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -77,8 +77,6 @@ public class FileHandler {
             Object newObject = gson.fromJson(reader, objClass);
             logger.debug("Reading Data from Json File: " + file + "applying to Object: " + objClass.getName());
             return newObject;
-        } catch (FileNotFoundException e) {
-            logger.error(e.getCause().toString());
         } catch (IOException e) {
             logger.error(e.getCause().toString());
         }
@@ -97,10 +95,8 @@ public class FileHandler {
         }
     }
 
-    public boolean exists(String path){
-        if (Files.exists(Paths.get(path))){
-            return true;
-        }else return false;
+    private boolean exists(String path){
+        return Files.exists(Paths.get(path));
     }
 
     public void initFile(String path, Object object){
