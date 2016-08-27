@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DiscordSAIL.iml" filepath="$PROJECT_DIR$/DiscordSAIL.iml" />
+      <module fileurl="file://E://DiscordSailv2/DiscordSailv2.iml" filepath="E://DiscordSailv2/DiscordSailv2.iml" />
+    </modules>
+  </component>
+</project>

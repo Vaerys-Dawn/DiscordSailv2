@@ -1,0 +1,45 @@
+{
+  "isInit": true,
+  "bannedInputs": [
+    {
+      "string": "\u003c@",
+      "reason": "Please do not put **mentions** in Custom Commands."
+    },
+    {
+      "string": "discord.gg",
+      "reason": "Please do not put **invites** in Custom Commands."
+    },
+    {
+      "string": "discordapp.com/Invite/",
+      "reason": "Please do not put **invites** in Custom Commands."
+    }
+  ],
+  "bannedOutputs": [
+    {
+      "string": "@everyone",
+      "reason": "Please do not try to bypass mentions with S.A.I.L."
+    },
+    {
+      "string": "@here",
+      "reason": "Please do not try to bypass mentions with S.A.I.L."
+    }
+  ],
+  "commands": [
+    {
+      "name": "Echo",
+      "userID": "153159020528533505",
+      "isLocked": true,
+      "contents": [
+        "#args#"
+      ]
+    }
+  ],
+  "commandNotFound": {
+    "name": "404",
+    "userID": "Error",
+    "isLocked": true,
+    "contents": [
+      "Command not found"
+    ]
+  }
+}

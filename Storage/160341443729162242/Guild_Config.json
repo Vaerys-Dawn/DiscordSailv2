@@ -1,0 +1,10 @@
+{
+  "guildName": "VoxPort",
+  "doLoginMessage": false,
+  "doLogging": false,
+  "doInviteRemoval": false,
+  "channels": [],
+  "races": [],
+  "groupWaitingList": [],
+  "trustedRoles": []
+}
