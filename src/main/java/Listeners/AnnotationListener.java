@@ -39,8 +39,6 @@ public class AnnotationListener {
         IGuild guild = event.getGuild();
         String guildID = guild.getID();
 
-        logger.info("Initialising Guild With ID: " + guildID);
-
         //Init Cooldowns
         Globals.addCooldown(guildID);
 
@@ -50,6 +48,10 @@ public class AnnotationListener {
         CustomCommands customCommands = new CustomCommands();
         Characters characters = new Characters();
 
+        guildConfig.properlyInit = true;
+        servers.properlyInit = true;
+        customCommands.properlyInit = true;
+        characters.properlyInit = true;
         //Init Files
         handler.createDirectory(Utility.getDirectory(guildID));
         handler.initFile(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), guildConfig);
@@ -58,19 +60,24 @@ public class AnnotationListener {
         handler.initFile(Utility.getFilePath(guildID, Constants.FILE_CHARACTERS), characters);
         handler.initFile(Utility.getFilePath(guildID, Constants.FILE_INFO));
 
+
+
         //Load Guild Config for Init
         String pathGuildConfig = Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG);
         String pathCustomCommands = Utility.getFilePath(guildID, Constants.FILE_CUSTOM);
         guildConfig = (GuildConfig) handler.readfromJson(pathGuildConfig, GuildConfig.class);
         customCommands = (CustomCommands) handler.readfromJson(pathCustomCommands, CustomCommands.class);
         //Init Files
+
+        // Guild Config
+        guildConfig.updateVariables(guild);
         guildConfig.setGuildName(event.getGuild().getName());
         handler.writetoJson(pathGuildConfig, guildConfig);
+        //Custom commands
         customCommands.initCustomCommands();
         handler.writetoJson(pathCustomCommands, customCommands);
 
-        guildConfig.updateVariables(guild);
-
+        logger.info("Finished Initialising Guild With ID: " + guildID);
         //handling Login Message
         if (guildConfig.doLoginMessage) {
             IChannel channel;
@@ -115,7 +122,6 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMessageRecivedEvent(MessageReceivedEvent event) {
-        // TODO: 14/08/2016 ccs must also be handled here
         if (event.getMessage().getChannel().isPrivate()){
             new DMHandler(event.getMessage());
             return;
@@ -140,7 +146,7 @@ public class AnnotationListener {
             Globals.consoleMessageCID = channel.getID();
         }
 
-        if (isBeta) {
+    //    if (isBeta) {
             //Sets Up Command Arguments
             if (messageLC.startsWith(Constants.COMMAND_PREFIX.toLowerCase()) || messageLC.startsWith(Constants.CC_PREFIX.toLowerCase())) {
                 String[] splitMessage = message.toString().split(" ");
@@ -153,8 +159,7 @@ public class AnnotationListener {
 
             //message and command handling
             new MessageHandler(command, args, message);
-        }
-
+      //  }
     }
 
     @EventSubscriber

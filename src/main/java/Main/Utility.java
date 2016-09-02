@@ -2,6 +2,7 @@ package Main;
 
 import Annotations.CommandAnnotation;
 import Handlers.FileHandler;
+import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.obj.Guild;
@@ -41,10 +42,8 @@ public class Utility {
             channel.sendMessage(message);
         } catch (MissingPermissionsException e) {
             e.printStackTrace();
-        } catch (RateLimitException e) {
-            e.printStackTrace();
-        } catch (DiscordException e) {
-            logger.info(e.getCause().getMessage());
+        } catch (DiscordException | RateLimitException e) {
+            logger.info(e.getMessage());
             try {
                 Thread.sleep(1000);
                 sendMessage(message, channel);
@@ -63,8 +62,12 @@ public class Utility {
     public static String getFilePath(String guildID, String type){
         return Constants.DIRECTORY_STORAGE+guildID+"/"+type;
     }
+
     public static String getDirectory(String guildID){
         return Constants.DIRECTORY_STORAGE+guildID+"/";
     }
 
+    public static void flushFile(String guildID, String filePath, Object object) {
+        handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), object);
+    }
 }

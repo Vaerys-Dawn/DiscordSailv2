@@ -7,11 +7,11 @@ import Main.Globals;
 import Main.Utility;
 import Objects.BlackListedPhrase;
 import Objects.CCommand;
-import POGOs.Characters;
-import POGOs.CustomCommands;
-import POGOs.GuildConfig;
-import POGOs.Servers;
+import Objects.CompetitionObject;
+import POGOs.*;
 import org.apache.commons.lang3.text.WordUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
@@ -19,9 +19,22 @@ import sx.blah.discord.util.RateLimitException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+
+// TODO: 02/09/2016 Add a Buncha Stuff
+// TODO: 02/09/2016 Help command, Migrate from Live Build
+// TODO: 02/09/2016 Info command, Display: CommandName, Usage, Aliases, Permissions, Channel, Description  
+// TODO: 02/09/2016 Role List Commands, Role Adding/Removal, Listing, Stats
+// TODO: 02/09/2016 Server Listing Functionality
+// TODO: 02/09/2016 Server creation e.i AddServer [Server Name] [IP] [Port] (AutoGen 4 Digit Number for UniqueID)
+// TODO: 02/09/2016 Edit Server Desc Command
+// TODO: 02/09/2016 Edit Server Info Command
+
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -40,13 +53,17 @@ public class MessageHandler {
     private boolean loadedCC = false;
     private boolean loadedServers = false;
     private boolean loadedCharacters = false;
+    private boolean loadedCompetiton = false;
 
     private GuildConfig guildConfig = new GuildConfig();
     private CustomCommands customCommands = new CustomCommands();
     private Servers servers = new Servers();
     private Characters characters = new Characters();
+    private Competition competition = new Competition();
 
     private FileHandler handler = new FileHandler();
+
+    private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
     public MessageHandler(String command, String args, IMessage message) {
         this.command = command;
@@ -58,14 +75,15 @@ public class MessageHandler {
         guildID = guild.getID();
         loadConfig();
         checkBlacklist();
-        if (author.isBot()){
+        if (author.isBot()) {
             return;
         }
         if (command.toLowerCase().startsWith(Constants.COMMAND_PREFIX.toLowerCase())) {
             handleCommand();
         }
-        if (command.toLowerCase().startsWith(Constants.CC_PREFIX.toLowerCase())){
-            new CCHandler(command,args,message);
+        // TODO: 14/08/2016 ccs must also be handled here
+        if (command.toLowerCase().startsWith(Constants.CC_PREFIX.toLowerCase())) {
+            new CCHandler(command, args, message);
         }
     }
 
@@ -73,11 +91,6 @@ public class MessageHandler {
     private void loadConfig() {
         guildConfig = (GuildConfig) handler.readfromJson(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), GuildConfig.class);
         loadedConfig = true;
-    }
-
-    private void loadCC() {
-        customCommands = (CustomCommands) handler.readfromJson(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), CustomCommands.class);
-        loadedCC = true;
     }
 
     private void loadServers() {
@@ -90,12 +103,27 @@ public class MessageHandler {
         loadedCharacters = true;
     }
 
+    private void loadCC() {
+        customCommands = (CustomCommands) handler.readfromJson(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), CustomCommands.class);
+        loadedCC = true;
+    }
+
+    private void loadCompetition() {
+        competition = (Competition) handler.readfromJson(Constants.FILE_COMPETITION, Competition.class);
+        loadedCompetiton = true;
+    }
+
     private void flushFiles() {
-        if (loadedConfig) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), guildConfig);
-        if (loadedCC) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), customCommands);
-        if (loadedServers) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_SERVERS), servers);
-        if (loadedCharacters)
-            handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_CHARACTERS), characters);
+        if (loadedConfig && guildConfig.properlyInit) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), guildConfig);
+        else if (loadedConfig && !guildConfig.properlyInit) logger.error("Null Suppressed - Guild Config, Guild ID:" + guildID);
+        if (loadedCC && customCommands.properlyInit) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), customCommands);
+        else if (loadedCC && !customCommands.properlyInit) logger.error("Null Suppressed - Custom Commands, Guild ID:" + guildID);
+        if (loadedServers && servers.properlyInit) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_SERVERS), servers);
+        else if (loadedServers &&!servers.properlyInit) logger.error("Null Suppressed - Servers, Guild ID:" + guildID);
+        if (loadedCharacters && characters.properlyInit) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_CHARACTERS), characters);
+        else if (loadedCharacters && !characters.properlyInit) logger.error("Null Suppressed - Characters, Guild ID:" + guildID);
+        if (loadedCompetiton && competition.properlyInit) handler.writetoJson(Constants.FILE_COMPETITION, competition);
+        else if (loadedCompetiton && !competition.properlyInit) logger.error("Null Suppressed - Competition, Guild ID:" + guildID);
     }
 
     //BlackListed Phrase Remover
@@ -167,7 +195,7 @@ public class MessageHandler {
                                 if (!commandAnno.usage().equals(Constants.NULL_VARIABLE)) {
                                     builder.append(" with args: `" + args + "`");
                                 }
-                                builder.append(".");
+                                builder.append(" in channel " + channel.mention() + " .");
                                 Utility.sendMessage(builder.toString(), loggingChannel);
                             }
                         }
@@ -229,14 +257,24 @@ public class MessageHandler {
 
     //General commands
 
-    @CommandAnnotation(name = "Hello", description = "Says Hello.",type = Constants.TYPE_GENERAL)
+    @CommandAnnotation(name = "Hello", description = "Says Hello.", type = Constants.TYPE_GENERAL)
     public String hello() {
         return "> Hello " + author.getDisplayName(guild) + ".";
     }
 
-    @CommandAnnotation(name = "Test", description = "Tests things", doLogging = true,type = Constants.TYPE_GENERAL)
+    @CommandAnnotation(name = "Test", description = "Tests things", doLogging = true, type = Constants.TYPE_GENERAL)
     public String test() {
         return "> Tested";
+    }
+
+    @CommandAnnotation(name = "UserImage", description = "Gets the Mentionee's Profile Image", usage = "[@Users]", type = Constants.TYPE_GENERAL)
+    public String getUserAvatar() {
+        List<IUser> mentions = message.getMentions();
+        StringBuilder builder = new StringBuilder();
+        for (IUser u : mentions) {
+            builder.append(u.getDisplayName(guild) + ": " + u.getAvatarURL() + "\n");
+        }
+        return builder.toString();
     }
 
     //admin commands
@@ -289,11 +327,37 @@ public class MessageHandler {
 
     //Custom command commands
 
-    @CommandAnnotation(name = "newCC",description = "Creates a Custom Command.",usage = "[Command Name] [Contentes]",
-            requiresArgs = true,type = Constants.TYPE_CC)
-    public String newCC(){
+    //@CommandAnnotation(
+    //        name = "newCC",description = "Creates a Custom Command.",usage = "[Command Name] [Contentes]",
+    //        requiresArgs = true,type = Constants.TYPE_CC)
+    public String newCC() {
         String cCName = args.split(" ")[0];
-        String Content = args.replaceFirst(cCName + " ","");
-        return customCommands.addCommand(new CCommand(false,author.getID(),cCName,Content));
+        String Content = args.replaceFirst(cCName + " ", "");
+        return customCommands.addCommand(false, author.getID(), cCName, Content);
+    }
+
+    //Competition Command
+
+    @AliasAnnotation(alias = {"Comp","Enter"})
+    @CommandAnnotation(name = "Competition", description = "Enters your image into the Sail Competition", type = Constants.TYPE_GENERAL, doLogging = true, usage = "[Image Link or Image File]")
+    public String competition() {
+        loadCompetition();
+        String fileName;
+        String fileUrl;
+        if (message.getAttachments().size() > 0) {
+            List<IMessage.Attachment> attatchments = message.getAttachments();
+            IMessage.Attachment a = attatchments.get(0);
+            fileName = a.getFilename();
+            fileUrl = a.getUrl();
+        }else if (!args.equals("")){
+            fileName = author.getName() + "'s Entry";
+            fileUrl = args;
+        }else {
+            return "> Missing a File or Image link to enter into the competition.";
+        }
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy - HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        competition.newEntry(new CompetitionObject(author.getDisplayName(guild), author.getID(), fileName, fileUrl, dateFormat.format(cal.getTime())));
+        return "> Thank you " + author.getDisplayName(guild) + " For entering the Competition.";
     }
 }

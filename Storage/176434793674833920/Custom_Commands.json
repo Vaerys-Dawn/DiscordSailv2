@@ -1,5 +1,6 @@
 {
-  "isInit": true,
+  "properlyInit": true,
+  "blackListInit": true,
   "blackList": [
     {
       "phrase": "\u003c@",
@@ -12,6 +13,14 @@
     {
       "phrase": "discordapp.com/Invite/",
       "reason": "Please do not put **invites** in Custom Commands."
+    },
+    {
+      "phrase": "@everyone",
+      "reason": "Please go not put **mentions** in Custom Commands."
+    },
+    {
+      "phrase": "@here",
+      "reason": "Please go not put **mentions** in Custom Commands."
     }
   ],
   "commands": [
@@ -19,20 +28,9 @@
       "name": "Echo",
       "userID": "153159020528533505",
       "isLocked": true,
+      "timesRun": 0,
       "contents": [
         "#args#"
-      ]
-    },
-    {
-      "name": "Sail2.0",
-      "userID": "153159020528533505",
-      "isLocked": false,
-      "contents": [
-        "is a",
-        "GOD",
-        "DAMN",
-        "penguin",
-        "\u003c:sbPete:217158840196530177\u003e"
       ]
     }
   ],
@@ -40,8 +38,9 @@
     "name": "404",
     "userID": "Error",
     "isLocked": true,
+    "timesRun": 0,
     "contents": [
-      "Command not found"
+      "\u003e Command not found."
     ]
   }
 }

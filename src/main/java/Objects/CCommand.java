@@ -11,6 +11,7 @@ public class CCommand {
     String name;
     String userID;
     boolean isLocked;
+    long timesRun;
     List<String> contents;
 
     public CCommand(boolean isLocked, String userID, String name, String contents) {
@@ -18,6 +19,7 @@ public class CCommand {
         this.userID = userID;
         this.name = name;
         this.contents = Arrays.asList(contents.split("\n"));
+        timesRun = 0;
     }
 
     public void setLocked(boolean locked) {
@@ -41,6 +43,11 @@ public class CCommand {
     }
 
     public List<String> getContents() {
+        timesRun++;
         return contents;
+    }
+
+    public long getTimesRun() {
+        return timesRun;
     }
 }

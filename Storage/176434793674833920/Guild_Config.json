@@ -1,28 +1,29 @@
 {
+  "properlyInit": true,
   "guildName": "Starbound",
   "doLoginMessage": false,
   "doLogging": true,
   "doBlackListing": false,
   "channels": [
     {
-      "Type": "General",
-      "ID": "206983013060313088"
-    },
-    {
       "Type": "Logging",
       "ID": "210298461109616640"
     },
     {
-      "Type": "Servers",
-      "ID": "176667376157196288"
+      "Type": "General",
+      "ID": "206983013060313088"
+    },
+    {
+      "Type": "Admin",
+      "ID": "176667695259975681"
     },
     {
       "Type": "RaceSelect",
       "ID": "176667358599970816"
     },
     {
-      "Type": "Admin",
-      "ID": "176667695259975681"
+      "Type": "Servers",
+      "ID": "176667376157196288"
     },
     {
       "Type": "Info",

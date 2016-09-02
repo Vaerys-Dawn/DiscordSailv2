@@ -42,6 +42,7 @@ public class Constants {
     //Directories
     public static final String DIRECTORY_STORAGE = "Storage/";
     public static final String DIRECTORY_IMAGES = DIRECTORY_STORAGE + "Images/";
+    public static final String DIRECTORY_COMP = DIRECTORY_STORAGE + "Competition/";
 
     //Files
     public static final String FILE_TOKEN = DIRECTORY_STORAGE+"Token.txt";
@@ -51,4 +52,5 @@ public class Constants {
     public static final String FILE_CHARACTERS = "Characters.json";
     public static final String FILE_INFO = "Info.txt";
 
+    public static final String FILE_COMPETITION = DIRECTORY_COMP + "Competition.json";
 }

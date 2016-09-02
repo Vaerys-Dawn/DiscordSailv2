@@ -58,7 +58,7 @@ public class GuildCooldowns {
     }
 
     private void waiterRemover() {
-        logger.info("Waiter Removal initiated for guild with ID: " + guildID);
+        logger.debug("Waiter Removal initiated for guild with ID: " + guildID);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override

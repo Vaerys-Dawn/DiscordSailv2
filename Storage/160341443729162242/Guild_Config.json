@@ -1,4 +1,5 @@
 {
+  "properlyInit": true,
   "guildName": "VoxPort",
   "doLoginMessage": false,
   "doLogging": false,

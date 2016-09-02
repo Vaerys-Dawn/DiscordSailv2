@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * Created by Vaerys on 03/08/2016.
  */
 public class GuildConfig{
+    public boolean properlyInit = false;
     String guildName = "";
     public Boolean doLoginMessage = false;
     public Boolean doLogging = false;
