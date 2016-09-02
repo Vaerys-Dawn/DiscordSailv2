@@ -49,3 +49,4 @@ Temporary Items
 # Files that should not be pushed
 .Token.txt
 .png
+.json
