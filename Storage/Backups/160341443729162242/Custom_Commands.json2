@@ -28,7 +28,6 @@
       "name": "Echo",
       "userID": "153159020528533505",
       "isLocked": true,
-      "shitpost": false,
       "timesRun": 0,
       "contents": [
         "#args#"
@@ -39,7 +38,6 @@
     "name": "404",
     "userID": "Error",
     "isLocked": true,
-    "shitpost": false,
     "timesRun": 0,
     "contents": [
       "\u003e Command not found."

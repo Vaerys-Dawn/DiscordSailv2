@@ -48,34 +48,29 @@ public class AnnotationListener {
         CustomCommands customCommands = new CustomCommands();
         Characters characters = new Characters();
 
+        //Init Files
+        customCommands.initCustomCommands();
+        guildConfig.initConfig();
         guildConfig.properlyInit = true;
         servers.properlyInit = true;
         customCommands.properlyInit = true;
         characters.properlyInit = true;
-        //Init Files
         handler.createDirectory(Utility.getDirectory(guildID));
+        handler.createDirectory(Utility.getDirectory(guildID,true));
         handler.initFile(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), guildConfig);
         handler.initFile(Utility.getFilePath(guildID, Constants.FILE_SERVERS), servers);
         handler.initFile(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), customCommands);
         handler.initFile(Utility.getFilePath(guildID, Constants.FILE_CHARACTERS), characters);
         handler.initFile(Utility.getFilePath(guildID, Constants.FILE_INFO));
 
-
-
-        //Load Guild Config for Init
+        //Update Variables.
+        //Guild Config
         String pathGuildConfig = Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG);
-        String pathCustomCommands = Utility.getFilePath(guildID, Constants.FILE_CUSTOM);
         guildConfig = (GuildConfig) handler.readfromJson(pathGuildConfig, GuildConfig.class);
-        customCommands = (CustomCommands) handler.readfromJson(pathCustomCommands, CustomCommands.class);
-        //Init Files
-
-        // Guild Config
         guildConfig.updateVariables(guild);
         guildConfig.setGuildName(event.getGuild().getName());
         handler.writetoJson(pathGuildConfig, guildConfig);
-        //Custom commands
-        customCommands.initCustomCommands();
-        handler.writetoJson(pathCustomCommands, customCommands);
+
 
         logger.info("Finished Initialising Guild With ID: " + guildID);
         //handling Login Message
@@ -88,6 +83,7 @@ public class AnnotationListener {
             }
             Utility.sendMessage("> I have finished booting and I am now listening for commands...", channel);
         }
+        // TODO: 02/09/2016 Backups are a necessity
     }
 
     @EventSubscriber
@@ -146,8 +142,8 @@ public class AnnotationListener {
             Globals.consoleMessageCID = channel.getID();
         }
 
-    //    if (isBeta) {
-            //Sets Up Command Arguments
+//        if (isBeta) {
+//            Sets Up Command Arguments
             if (messageLC.startsWith(Constants.COMMAND_PREFIX.toLowerCase()) || messageLC.startsWith(Constants.CC_PREFIX.toLowerCase())) {
                 String[] splitMessage = message.toString().split(" ");
                 command = splitMessage[0];
@@ -159,7 +155,7 @@ public class AnnotationListener {
 
             //message and command handling
             new MessageHandler(command, args, message);
-      //  }
+//        }
     }
 
     @EventSubscriber

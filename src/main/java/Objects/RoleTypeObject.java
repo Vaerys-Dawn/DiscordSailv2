@@ -3,11 +3,11 @@ package Objects;
 /**
  * Created by Vaerys on 27/08/2016.
  */
-public class RoleType {
+public class RoleTypeObject {
     String RoleName;
     String RoleID;
 
-    public RoleType(String roleName, String roleID) {
+    public RoleTypeObject(String roleName, String roleID) {
         RoleName = roleName;
         RoleID = roleID;
     }

@@ -6,15 +6,16 @@ import java.util.List;
 /**
  * Created by Vaerys on 17/08/2016.
  */
-public class CCommand {
+public class CCommandObject {
 
     String name;
     String userID;
     boolean isLocked;
+    boolean shitpost = false;
     long timesRun;
     List<String> contents;
 
-    public CCommand(boolean isLocked, String userID, String name, String contents) {
+    public CCommandObject(boolean isLocked, String userID, String name, String contents) {
         this.isLocked = isLocked;
         this.userID = userID;
         this.name = name;
@@ -49,5 +50,9 @@ public class CCommand {
 
     public long getTimesRun() {
         return timesRun;
+    }
+
+    public void toggleShitPost(){
+        shitpost = !shitpost;
     }
 }

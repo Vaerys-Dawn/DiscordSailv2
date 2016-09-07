@@ -31,6 +31,7 @@ public class Main {
             handler.createDirectory(Constants.DIRECTORY_STORAGE);
             handler.createDirectory(Constants.DIRECTORY_IMAGES);
             handler.createDirectory(Constants.DIRECTORY_COMP);
+            handler.createDirectory(Constants.DIRECTORY_BACKUPS);
             Competition competition = new Competition();
             if (!Files.exists(Paths.get(Constants.FILE_COMPETITION))){
                 competition.properlyInit = true;

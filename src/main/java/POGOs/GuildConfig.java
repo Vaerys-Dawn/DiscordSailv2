@@ -1,10 +1,14 @@
 package POGOs;
 
 import Main.Constants;
-import Objects.BlackListedPhrase;
-import Objects.ChannelType;
-import Objects.RoleType;
+import Objects.BlackListObject;
+import Objects.ChannelTypeObject;
+import Objects.RoleTypeObject;
+import sx.blah.discord.api.IDiscordClient;
+import sx.blah.discord.api.internal.DiscordClientImpl;
+import sx.blah.discord.handle.obj.IDiscordObject;
 import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IRole;
 
 import java.util.ArrayList;
 
@@ -17,56 +21,56 @@ public class GuildConfig{
     public Boolean doLoginMessage = false;
     public Boolean doLogging = false;
     public Boolean doBlackListing = false;
-    ArrayList<ChannelType> channels = new ArrayList<>();
-    ArrayList<RoleType> races = new ArrayList<>();
-    ArrayList<RoleType> trustedRoles = new ArrayList<>();
-    ArrayList<BlackListedPhrase> blacklist = new ArrayList<>();
-    RoleType roleToMention = new RoleType("No Role Set", Constants.NULL_VARIABLE);
+    public Boolean doShitPostFiltering = false;
+    ArrayList<ChannelTypeObject> channels = new ArrayList<>();
+    ArrayList<RoleTypeObject> races = new ArrayList<>();
+    ArrayList<RoleTypeObject> trustedRoles = new ArrayList<>();
+    ArrayList<BlackListObject> blackList = new ArrayList<>();
+    RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", Constants.NULL_VARIABLE);
+
+    public void initConfig() {
+        if (!properlyInit){
+            blackList.add(new BlackListObject("discord.gg", "Please do not put **invites** in Custom Commands."));
+            blackList.add(new BlackListObject("discordapp.com/Invite/", "Please do not put **invites** in Custom Commands."));
+        }
+    }
 
     public void setGuildName(String guildName) {
         this.guildName = guildName;
     }
 
     public void toggleDoLoginMessage() {
-        if (doLogging){
-            doLogging = false;
-        }else {
-            doLogging = true;
-        }
+        doLoginMessage = !doLoginMessage;
     }
 
     public void toggleDoBlackListing(){
-        if (doBlackListing){
-            doBlackListing = false;
-        }else {
-            doBlackListing = true;
-        }
+        doBlackListing = !doBlackListing;
     }
 
     public void toggleLogging(){
-        if (doLogging){
-            doLogging = false;
-        }else {
-            doLogging = true;
-        }
+        doLogging = !doLogging;
+    }
+
+    public void toggleShitPostFiltering(){
+        doShitPostFiltering = !doShitPostFiltering;
     }
 
     public void setUpChannel(String channelType, String channelID){
         if (channels.size() == 0){
-            channels.add(new ChannelType(channelType,channelID));
+            channels.add(new ChannelTypeObject(channelType,channelID));
             return;
         }
         for (int i = 0;i < channels.size();i++){
             if (channels.get(i).getType().equals(channelType)){
-                channels.set(i,new ChannelType(channelType,channelID));
+                channels.set(i,new ChannelTypeObject(channelType,channelID));
                 return;
             }
         }
-        channels.add(new ChannelType(channelType,channelID));
+        channels.add(new ChannelTypeObject(channelType,channelID));
     }
 
     public String getChannelTypeID(String channelType){
-        for (ChannelType c : channels){
+        for (ChannelTypeObject c : channels){
             if (c.getType().equals(channelType)){
                 return c.getID();
             }
@@ -76,15 +80,15 @@ public class GuildConfig{
 
     public void updateVariables(IGuild guild) {
         //Update Races
-        ArrayList<RoleType> newRaces = new ArrayList<>();
-        for (RoleType r : races){
+        ArrayList<RoleTypeObject> newRaces = new ArrayList<>();
+        for (RoleTypeObject r : races){
             r.updateRoleName(guild.getRoleByID(r.getRoleID()).getName());
             newRaces.add(r);
         }
         races = newRaces;
         //Update Trusted Roles
-        ArrayList<RoleType> newTrustedRoles = new ArrayList<>();
-        for (RoleType r : trustedRoles){
+        ArrayList<RoleTypeObject> newTrustedRoles = new ArrayList<>();
+        for (RoleTypeObject r : trustedRoles){
             r.updateRoleName(guild.getRoleByID(r.getRoleID()).getName());
             newTrustedRoles.add(r);
         }
@@ -94,27 +98,52 @@ public class GuildConfig{
         }
     }
 
-    public ArrayList<BlackListedPhrase> getBlacklist (){
-        return blacklist;
+    public ArrayList<BlackListObject> getBlackList(){
+        return blackList;
     }
 
     public void addBlacklistItem(String phrase, String reason) {
-        blacklist.add(new BlackListedPhrase(phrase,reason));
+        blackList.add(new BlackListObject(phrase,reason));
     }
 
     public void removeBlackListItem(String phrase){
-        for (int i = 0;i < blacklist.size();i++){
-            if (blacklist.get(1).phrase.equalsIgnoreCase(phrase)){
-                blacklist.remove(i);
+        for (int i = 0; i < blackList.size(); i++){
+            if (blackList.get(1).phrase.equalsIgnoreCase(phrase)){
+                blackList.remove(i);
             }
         }
     }
 
     public void setRoleToMention(String roleName, String RoleID){
-        roleToMention = new RoleType(roleName,roleName);
+        roleToMention = new RoleTypeObject(roleName,roleName);
     }
 
-    public RoleType getRoleToMention() {
+    public RoleTypeObject getRoleToMention() {
         return roleToMention;
+    }
+
+    public String addRaceRole(String roleID,String roleName){
+        if (races.size() > 0){
+            for (RoleTypeObject r : races){
+                if (!r.getRoleID().equals(roleID)){
+                    races.add(new RoleTypeObject(roleName,roleID));
+                    return "> Role `" + roleName + "` Added to Role List.";
+                }
+            }
+        }else {
+            races.add(new RoleTypeObject(roleName,roleID));
+            return "> Role `" + roleName + "` Added to Role List.";
+        }
+        return "> Role already added to list.";
+    }
+
+    public String removeRaceRole(String roleID,String roleName) {
+        for (int i = 0; i < races.size(); i++){
+            if (races.get(i).getRoleID().equals(roleID)){
+                races.remove(i);
+                return "> Role `" + roleName + "` Removed from Role List.";
+            }
+        }
+        return "> Role not in list of roles.";
     }
 }

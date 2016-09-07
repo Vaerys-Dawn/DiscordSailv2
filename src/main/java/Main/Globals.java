@@ -18,26 +18,28 @@ public class Globals {
 
 
 
-    public static ArrayList<GuildCooldowns> cooldowns = new ArrayList<>();
+    public static ArrayList<GuildTimedEvents> cooldowns = new ArrayList<>();
+    public static int compEntries = 13;
+    public static int voteLimit = 3;
 
     /**
-     * Gets the "GuildCooldowns" for the guild with ID "guildID"
+     * Gets the "GuildTimedEvents" for the guild with ID "guildID"
      */
-    public static GuildCooldowns getCooldowns(String guildID) {
-        GuildCooldowns guildCooldowns = new GuildCooldowns(Constants.GC_NOT_FOUND);
-        for (GuildCooldowns gC : cooldowns) {
+    public static GuildTimedEvents getCooldowns(String guildID) {
+        GuildTimedEvents guildTimedEvents = new GuildTimedEvents(Constants.ERROR);
+        for (GuildTimedEvents gC : cooldowns) {
             if (gC.guildID.equals(guildID)) {
-                guildCooldowns = gC;
+                guildTimedEvents = gC;
             }
         }
-        return guildCooldowns;
+        return guildTimedEvents;
     }
 
     /**
      * Adds a "GuildCoolDowns" to the ArrayList "cooldowns" for the guild with ID "guildID"
      */
     public static void addCooldown(String guildID) {
-        cooldowns.add(new GuildCooldowns(guildID));
+        cooldowns.add(new GuildTimedEvents(guildID));
     }
 
 }

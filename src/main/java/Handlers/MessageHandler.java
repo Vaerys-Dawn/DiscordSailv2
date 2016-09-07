@@ -5,8 +5,7 @@ import Annotations.CommandAnnotation;
 import Main.Constants;
 import Main.Globals;
 import Main.Utility;
-import Objects.BlackListedPhrase;
-import Objects.CCommand;
+import Objects.BlackListObject;
 import Objects.CompetitionObject;
 import POGOs.*;
 import org.apache.commons.lang3.text.WordUtils;
@@ -114,22 +113,30 @@ public class MessageHandler {
     }
 
     private void flushFiles() {
-        if (loadedConfig && guildConfig.properlyInit) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), guildConfig);
-        else if (loadedConfig && !guildConfig.properlyInit) logger.error("Null Suppressed - Guild Config, Guild ID:" + guildID);
-        if (loadedCC && customCommands.properlyInit) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), customCommands);
-        else if (loadedCC && !customCommands.properlyInit) logger.error("Null Suppressed - Custom Commands, Guild ID:" + guildID);
-        if (loadedServers && servers.properlyInit) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_SERVERS), servers);
-        else if (loadedServers &&!servers.properlyInit) logger.error("Null Suppressed - Servers, Guild ID:" + guildID);
-        if (loadedCharacters && characters.properlyInit) handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_CHARACTERS), characters);
-        else if (loadedCharacters && !characters.properlyInit) logger.error("Null Suppressed - Characters, Guild ID:" + guildID);
+        if (loadedConfig && guildConfig.properlyInit)
+            handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), guildConfig);
+        else if (loadedConfig && !guildConfig.properlyInit)
+            logger.error("Null Suppressed - Guild Config, Guild ID:" + guildID);
+        if (loadedCC && customCommands.properlyInit)
+            handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), customCommands);
+        else if (loadedCC && !customCommands.properlyInit)
+            logger.error("Null Suppressed - Custom Commands, Guild ID:" + guildID);
+        if (loadedServers && servers.properlyInit)
+            handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_SERVERS), servers);
+        else if (loadedServers && !servers.properlyInit) logger.error("Null Suppressed - Servers, Guild ID:" + guildID);
+        if (loadedCharacters && characters.properlyInit)
+            handler.writetoJson(Utility.getFilePath(guildID, Constants.FILE_CHARACTERS), characters);
+        else if (loadedCharacters && !characters.properlyInit)
+            logger.error("Null Suppressed - Characters, Guild ID:" + guildID);
         if (loadedCompetiton && competition.properlyInit) handler.writetoJson(Constants.FILE_COMPETITION, competition);
-        else if (loadedCompetiton && !competition.properlyInit) logger.error("Null Suppressed - Competition, Guild ID:" + guildID);
+        else if (loadedCompetiton && !competition.properlyInit)
+            logger.error("Null Suppressed - Competition, Guild ID:" + guildID);
     }
 
     //BlackListed Phrase Remover
     private void checkBlacklist() {
         if (guildConfig.doBlackListing) {
-            for (BlackListedPhrase bLP : guildConfig.getBlacklist()) {
+            for (BlackListObject bLP : guildConfig.getBlackList()) {
                 if (message.toString().toLowerCase().contains(bLP.phrase.toLowerCase())) {
                     String response = bLP.getReason();
                     if (!guildConfig.getRoleToMention().getRoleID().equals(Constants.NULL_VARIABLE)) {
@@ -311,6 +318,9 @@ public class MessageHandler {
         } else if (args.equalsIgnoreCase(Constants.CHANNEL_INFO)) {
             guildConfig.setUpChannel(Constants.CHANNEL_INFO, channel.getID());
             channelUpdated = true;
+        } else if (args.equalsIgnoreCase(Constants.CHANNEL_SHITPOST)) {
+            guildConfig.setUpChannel(Constants.CHANNEL_SHITPOST, channel.getID());
+            channelUpdated = true;
         }
         if (channelUpdated) {
             return "> This channel is now this server's **" + WordUtils.capitalizeFully(args) + "** channel.";
@@ -320,6 +330,29 @@ public class MessageHandler {
     }
 
     //race select commands
+    @CommandAnnotation(
+            name = "AddRace", description = "Adds role to list of roles that can be selected", usage = "[Role Name]",
+            requiresArgs = true, type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_ROLES})
+    public String addRace() {
+        String roleID = Utility.getRoleIDFromName(args, guild);
+        if (roleID.equals(Constants.NULL_VARIABLE)) {
+            return Constants.ERROR_ROLE_NOT_FOUND;
+        } else {
+            return guildConfig.addRaceRole(roleID, guild.getRoleByID(roleID).getName());
+        }
+    }
+
+    @CommandAnnotation(
+            name = "DelRace", description = "Deletes role from list of roles that can be selected", usage = "[Role Name]",
+            requiresArgs = true, type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_ROLES})
+    public String removeRace() {
+        String roleID = Utility.getRoleIDFromName(args, guild);
+        if (roleID.equals(Constants.NULL_VARIABLE)) {
+            return Constants.ERROR_ROLE_NOT_FOUND;
+        } else {
+            return guildConfig.removeRaceRole(roleID, guild.getRoleByID(roleID).getName());
+        }
+    }
 
     //servers commands
 
@@ -338,7 +371,7 @@ public class MessageHandler {
 
     //Competition Command
 
-    @AliasAnnotation(alias = {"Comp","Enter"})
+    @AliasAnnotation(alias = {"Comp", "Enter"})
     @CommandAnnotation(name = "Competition", description = "Enters your image into the Sail Competition", type = Constants.TYPE_GENERAL, doLogging = true, usage = "[Image Link or Image File]")
     public String competition() {
         loadCompetition();
@@ -349,15 +382,21 @@ public class MessageHandler {
             IMessage.Attachment a = attatchments.get(0);
             fileName = a.getFilename();
             fileUrl = a.getUrl();
-        }else if (!args.equals("")){
+        } else if (!args.equals("")) {
             fileName = author.getName() + "'s Entry";
             fileUrl = args;
-        }else {
+        } else {
             return "> Missing a File or Image link to enter into the competition.";
         }
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy - HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         competition.newEntry(new CompetitionObject(author.getDisplayName(guild), author.getID(), fileName, fileUrl, dateFormat.format(cal.getTime())));
         return "> Thank you " + author.getDisplayName(guild) + " For entering the Competition.";
+    }
+
+    @CommandAnnotation(name = "Vote",description = "Saves your vote.",type = Constants.TYPE_GENERAL,usage = "(x) (y) (z) ...",requiresArgs = true,perms = {Permissions.ADMINISTRATOR})
+    public String voting(){
+        loadCompetition();
+        return competition.addVote(author.getID(),args);
     }
 }

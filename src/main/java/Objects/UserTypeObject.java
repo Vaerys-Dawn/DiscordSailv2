@@ -3,11 +3,11 @@ package Objects;
 /**
  * Created by Vaerys on 27/08/2016.
  */
-public class UserType {
+public class UserTypeObject {
     String displayName;
     String ID;
 
-    public UserType(String displayName, String ID) {
+    public UserTypeObject(String displayName, String ID) {
         this.displayName = displayName;
         this.ID = ID;
     }

@@ -11,19 +11,34 @@ import java.util.TimerTask;
 /**
  * Created by Vaerys on 14/08/2016.
  */
-public class GuildCooldowns {
+public class GuildTimedEvents {
 
     public static int doAdminMention = 0;
     public static int serverCoolDown = 0;
     String guildID = "";
     ArrayList<WaiterObject> waiterObjects = new ArrayList<>();
 
-    final static Logger logger = LoggerFactory.getLogger(GuildCooldowns.class);
+    final static Logger logger = LoggerFactory.getLogger(GuildTimedEvents.class);
 
-    public GuildCooldowns(String guildID) {
+    public GuildTimedEvents(String guildID) {
         this.guildID = guildID;
         doCoolDownRemoval();
         waiterRemover();
+        backups();
+    }
+
+    private void backups() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Utility.backupFile(guildID,Constants.FILE_GUILD_CONFIG);
+                Utility.backupFile(guildID,Constants.FILE_CUSTOM);
+                Utility.backupFile(guildID,Constants.FILE_CHARACTERS);
+                Utility.backupFile(guildID,Constants.FILE_SERVERS);
+                Utility.backupFile(guildID,Constants.FILE_INFO);
+            }
+        },5000,8640000);
     }
 
     public void addWaiter(String userID) {

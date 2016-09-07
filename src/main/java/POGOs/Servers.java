@@ -1,6 +1,6 @@
 package POGOs;
 
-import Objects.BlackListedPhrase;
+import Objects.BlackListObject;
 import Objects.ServerObject;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Random;
  */
 public class Servers {
     public boolean properlyInit = false;
-    ArrayList<BlackListedPhrase> BlackList = new ArrayList<>();
+    ArrayList<BlackListObject> BlackList = new ArrayList<>();
     ArrayList<ServerObject> servers = new ArrayList<>();
 
     public String addServer(String userID, String serverName, String serverIP, String serverPort){
@@ -21,7 +21,7 @@ public class Servers {
                 if (s.getName().equalsIgnoreCase(serverName)){
                     return "> A Server with that name already Exists.";
                 }
-                // TODO: 02/09/2016 add Mention blacklist.
+                // TODO: 02/09/2016 add Mention blackList.
             }
         }
 
