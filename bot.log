@@ -4347,3 +4347,91 @@ java.lang.NullPointerException: null
 2016-09-07 22:12:31.966 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
 2016-09-07 22:12:34.432 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
 2016-09-07 22:12:40.018 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-07 23:12:27.405 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @356ms
+2016-09-07 23:12:27.412 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0-SNAPSHOT
+2016-09-07 23:12:27.413 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-07 23:12:27.422 [main] INFO  Main.Client - Logging in to Discord
+2016-09-07 23:12:29.580 [WebSocketClient@7168446-18] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-07 23:12:29.593 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-07 23:12:37.464 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-07 23:12:47.489 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-07 23:12:49.766 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-07 23:12:52.837 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-08 16:49:50.211 [WebSocketClient@7168446-17] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-08 17:55:05.573 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @352ms
+2016-09-08 17:55:05.580 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0-SNAPSHOT
+2016-09-08 17:55:05.581 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-08 17:55:05.591 [main] INFO  Main.Client - Logging in to Discord
+2016-09-08 17:55:08.110 [WebSocketClient@7168446-15] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-08 17:55:08.130 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-08 17:55:15.396 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-08 17:55:25.398 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-08 17:55:27.714 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-08 17:55:30.147 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-09 18:08:52.681 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @514ms
+2016-09-09 18:08:52.688 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0-SNAPSHOT
+2016-09-09 18:08:52.689 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-09 18:08:52.713 [main] INFO  Main.Client - Logging in to Discord
+2016-09-09 18:08:56.022 [WebSocketClient@7168446-19] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-09 18:08:56.041 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-09 18:09:05.628 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-09 18:09:15.630 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-09 18:09:24.666 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-09 18:10:03.090 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @317ms
+2016-09-09 18:10:03.097 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0-SNAPSHOT
+2016-09-09 18:10:03.098 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-09 18:10:03.105 [main] INFO  Main.Client - Logging in to Discord
+2016-09-09 18:10:06.618 [WebSocketClient@7168446-18] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-09 18:10:06.630 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-09 18:10:15.563 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-09 18:10:25.565 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-09 18:10:34.592 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-09 18:15:42.620 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @349ms
+2016-09-09 18:15:42.627 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-09 18:15:42.627 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-09 18:15:42.639 [main] INFO  Main.Client - Logging in to Discord
+2016-09-09 18:15:45.401 [WebSocketClient@8314726-16] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-09 18:15:45.422 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-09 18:15:54.159 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-09 18:16:04.160 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-09 18:16:07.316 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-09 18:16:11.816 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-09 19:34:16.334 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @339ms
+2016-09-09 19:34:16.342 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-09 19:34:16.342 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-09 19:34:16.350 [main] INFO  Main.Client - Logging in to Discord
+2016-09-09 19:34:18.848 [WebSocketClient@8314726-16] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-09 19:34:18.863 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-09 19:34:26.830 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-09 19:34:36.855 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-09 19:34:39.370 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-09 19:34:41.511 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-09 19:39:15.946 [Event Dispatch Thread] INFO  Main.Utility - 502 error on request to https://discordapp.com/api/channels/176667358599970816/messages. This is due to CloudFlare.
+2016-09-09 20:04:56.741 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @508ms
+2016-09-09 20:04:56.753 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-09 20:04:56.754 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-09 20:04:56.765 [main] INFO  Main.Client - Logging in to Discord
+2016-09-09 20:04:59.321 [WebSocketClient@8314726-20] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-09 20:04:59.337 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-09 20:05:06.154 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-09 20:05:16.156 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-09 20:05:18.547 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-09 20:05:22.208 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-10 03:17:23.330 [WebSocketClient@8314726-18] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-10 03:17:53.331 [Reconnection Timer] ERROR sx.blah.discord.Discord4J - Reconnection attempt timed out.
+2016-09-10 03:17:53.331 [Reconnection Timer] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-10 03:17:54.454 [WebSocketClient@8314726-18] INFO  sx.blah.discord.Discord4J - Reconnected to the Discord websocket.
+2016-09-10 04:18:34.586 [WebSocketClient@8314726-19] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-10 04:19:03.587 [Reconnection Timer] ERROR sx.blah.discord.Discord4J - Reconnection attempt timed out.
+2016-09-10 04:19:03.587 [Reconnection Timer] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-10 04:19:04.730 [WebSocketClient@8314726-15] INFO  sx.blah.discord.Discord4J - Reconnected to the Discord websocket.
+2016-09-10 14:24:32.304 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @371ms
+2016-09-10 14:24:32.311 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-10 14:24:32.311 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-10 14:24:32.368 [main] INFO  Main.Client - Logging in to Discord
+2016-09-10 14:24:34.930 [WebSocketClient@8314726-20] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-10 14:24:34.945 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-10 14:24:42.603 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-10 14:24:52.605 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-10 14:24:55.507 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-10 14:24:59.139 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920

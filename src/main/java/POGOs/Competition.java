@@ -58,9 +58,9 @@ public class Competition {
                 try {
                     int entry = Integer.parseInt(newVotes.get(i));
                     if (entry > Globals.compEntries) {
-                        builder.append("    **Vote Not Counted. Reason: Number too high**\n");
+                        //builder.append("    **Vote Not Counted. Reason: Number too high**\n");
                     } else if(entry == 0) {
-                        builder.append("    **Vote Not Counted. Reason: Number = 0\n");
+                        //builder.append("    **Vote Not Counted. Reason: Number = 0\n");
                     }
                     else{
                         userVotes.add("" + entry);
@@ -68,14 +68,14 @@ public class Competition {
                         x++;
                     }
                 } catch (NumberFormatException e) {
-                    builder.append("    **Vote Not Counted. Reason: Not a number**\n");
+                    //builder.append("    **Vote Not Counted. Reason: Not a number**\n");
                 }
             }
         }
         if (newVotes.size() > Globals.voteLimit) {
-            builder.append("    **Rest of Votes Not Counted: Reason Max votes = " + Globals.voteLimit + "**\n");
+            //builder.append("    **Rest of Votes Not Counted: Reason Max votes = " + Globals.voteLimit + "**\n");
         }
-        builder.append("    Have been saved.");
+        builder.append("    Have been saved. you now have: **" + (Globals.voteLimit - userVotes.size() + 1) + "** Vote token(s) left.");
 
         StringBuilder finalVotes = new StringBuilder();
         for (String s : userVotes) {

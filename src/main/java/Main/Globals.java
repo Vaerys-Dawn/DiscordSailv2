@@ -19,7 +19,7 @@ public class Globals {
 
 
     public static ArrayList<GuildTimedEvents> cooldowns = new ArrayList<>();
-    public static int compEntries = 13;
+    public static int compEntries = 10;
     public static int voteLimit = 3;
 
     /**

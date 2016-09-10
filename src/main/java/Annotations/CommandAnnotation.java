@@ -18,7 +18,7 @@ public @interface CommandAnnotation {
     String type();
     String channel() default Constants.CHANNEL_ANY;
     Permissions[] perms() default {Permissions.SEND_MESSAGES};
-    String description() default "No description set.";
+    String description();
     String usage() default Constants.NULL_VARIABLE;
     boolean requiresArgs() default false;
     boolean doResponseGeneral() default false;

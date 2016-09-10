@@ -372,7 +372,7 @@ public class MessageHandler {
     //Competition Command
 
     @AliasAnnotation(alias = {"Comp", "Enter"})
-    @CommandAnnotation(name = "Competition", description = "Enters your image into the Sail Competition", type = Constants.TYPE_GENERAL, doLogging = true, usage = "[Image Link or Image File]")
+    @CommandAnnotation(name = "Competition", description = "Enters your image into the Sail Competition", type = Constants.TYPE_GENERAL, doLogging = true, usage = "[Image Link or Image File]",perms = {Permissions.ADMINISTRATOR})
     public String competition() {
         loadCompetition();
         String fileName;
@@ -394,7 +394,7 @@ public class MessageHandler {
         return "> Thank you " + author.getDisplayName(guild) + " For entering the Competition.";
     }
 
-    @CommandAnnotation(name = "Vote",description = "Saves your vote.",type = Constants.TYPE_GENERAL,usage = "(x) (y) (z) ...",requiresArgs = true,perms = {Permissions.ADMINISTRATOR})
+    @CommandAnnotation(name = "Vote",description = "Saves your vote.",type = Constants.TYPE_GENERAL,channel = Constants.CHANNEL_RACE_SELECT ,usage = "(x) (y) (z) ...",requiresArgs = true)
     public String voting(){
         loadCompetition();
         return competition.addVote(author.getID(),args);
