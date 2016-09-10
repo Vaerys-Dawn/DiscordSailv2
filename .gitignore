@@ -47,12 +47,16 @@ Temporary Items
 .apdisk
 
 # Files that should not be pushed
-.Token.txt
-.png
-.json
-.json1
-.json2
-.json3
-.txt1
-.txt2
-.txt3
+Token.txt
+*.json
+*.json1
+*.json2
+*.json3
+*.txt1
+*.txt2
+*.txt3
+*.png
+*.log
+*.txt
+Storage/Token.txt
+*.txt
