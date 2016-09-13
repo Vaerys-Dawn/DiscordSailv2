@@ -2,10 +2,8 @@ package Main;
 
 import Annotations.CommandAnnotation;
 import Handlers.FileHandler;
-import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.impl.obj.Guild;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
@@ -14,9 +12,7 @@ import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -67,7 +63,7 @@ public class Utility {
 
     public static String getCommandInfo(CommandAnnotation annotation) {
         StringBuilder builder = new StringBuilder();
-        builder.append("**" + Constants.COMMAND_PREFIX + annotation.name() + "** `" + annotation.usage() + "`\n");
+        builder.append("**" + Constants.PREFIX_COMMAND + annotation.name() + "** `" + annotation.usage() + "`\n");
         return builder.toString();
     }
 

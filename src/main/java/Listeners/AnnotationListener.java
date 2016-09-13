@@ -144,7 +144,7 @@ public class AnnotationListener {
 
 //        if (isBeta) {
 //            Sets Up Command Arguments
-            if (messageLC.startsWith(Constants.COMMAND_PREFIX.toLowerCase()) || messageLC.startsWith(Constants.CC_PREFIX.toLowerCase())) {
+            if (messageLC.startsWith(Constants.PREFIX_COMMAND.toLowerCase()) || messageLC.startsWith(Constants.PREFIX_CC.toLowerCase())) {
                 String[] splitMessage = message.toString().split(" ");
                 command = splitMessage[0];
                 StringBuilder getArgs = new StringBuilder();
@@ -165,6 +165,14 @@ public class AnnotationListener {
             new DMHandler(event.getMessage());
             return;
         }
+    }
 
+    @EventSubscriber
+    public void onRoleDeletEvent(RoleDeleteEvent event){
+        IGuild guild = event.getGuild();
+        String guildID = guild.getID();
+        GuildConfig guildConfig = (GuildConfig) handler.readfromJson(Utility.getFilePath(guildID,Constants.FILE_GUILD_CONFIG),GuildConfig.class);
+        guildConfig.removeRole(event.getRole().getID(),event.getRole().getName(),true);
+        guildConfig.removeRole(event.getRole().getID(),event.getRole().getName(),false);
     }
 }

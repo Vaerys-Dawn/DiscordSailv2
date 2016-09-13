@@ -6,7 +6,8 @@
   "doBlackListing": false,
   "doShitPostFiltering": false,
   "channels": [],
-  "races": [],
+  "cosmeticRoles": [],
+  "modifierRoles": [],
   "trustedRoles": [],
   "blackList": [
     {

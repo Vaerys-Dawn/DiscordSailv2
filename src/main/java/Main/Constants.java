@@ -6,9 +6,9 @@ package Main;
 public class Constants {
 
     //Command prefix constants
-    public static final String COMMAND_PREFIX = "$";
-    public static final String CC_PREFIX = "$$";
-
+    public static final String PREFIX_COMMAND = "$";
+    public static final String PREFIX_CC = "$$";
+    public static final String PREFIX_INDENT = "    ";
 
     //-------Command Constants---------
 
@@ -24,7 +24,8 @@ public class Constants {
     public static final String CHANNEL_GENERAL = "General";
     public static final String CHANNEL_SERVERS = "Servers";
     public static final String CHANNEL_RACE_SELECT = "RaceSelect";
-    public static final String CHANNEL_LOGGING = "Logging";
+    public static final String CHANNEL_SERVER_LOG = "ServerLog";
+    public static final String CHANNEL_ADMIN_LOG = "AdminLog";
     public static final String CHANNEL_ADMIN = "Admin";
     public static final String CHANNEL_INFO = "Info";
     public static final String CHANNEL_SHITPOST = "ShitPost";

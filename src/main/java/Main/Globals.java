@@ -17,7 +17,6 @@ public class Globals {
     public static String botName = "S.A.I.L v2.0";
 
 
-
     public static ArrayList<GuildTimedEvents> cooldowns = new ArrayList<>();
     public static int compEntries = 10;
     public static int voteLimit = 3;

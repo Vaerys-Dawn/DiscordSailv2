@@ -39,7 +39,7 @@ public class CustomCommands {
         CCommandObject cCommandObject = new CCommandObject(isLocked,userID,commandName,commandContents);
         if (!exists(cCommandObject.getName())) {
             commands.add(cCommandObject);
-            return "> Command Created, you can perform your new custom command by doing `" + Constants.CC_PREFIX + cCommandObject.getName()+  "`.";
+            return "> Command Created, you can perform your new custom command by doing `" + Constants.PREFIX_CC + cCommandObject.getName()+  "`.";
         }
         return "> That command already exists.";
     }

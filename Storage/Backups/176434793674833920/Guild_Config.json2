@@ -7,10 +7,6 @@
   "doShitPostFiltering": false,
   "channels": [
     {
-      "Type": "Logging",
-      "ID": "210298461109616640"
-    },
-    {
       "Type": "General",
       "ID": "206983013060313088"
     },
@@ -33,13 +29,31 @@
     {
       "Type": "ShitPost",
       "ID": "177089535576899584"
+    },
+    {
+      "Type": "AdminLog",
+      "ID": "210298461109616640"
+    },
+    {
+      "Type": "ServerLog",
+      "ID": "212836118419341314"
     }
   ],
-  "races": [],
+  "cosmeticRoles": [],
+  "modifierRoles": [
+    {
+      "RoleName": "Spy",
+      "RoleID": "199495331514155008"
+    },
+    {
+      "RoleName": "Rainmeter",
+      "RoleID": "215448377100468224"
+    }
+  ],
   "trustedRoles": [],
   "blackList": [],
   "roleToMention": {
-    "RoleName": "No Role Set",
-    "RoleID": "Null"
+    "RoleName": "Admin",
+    "RoleID": "176443159017029632"
   }
 }

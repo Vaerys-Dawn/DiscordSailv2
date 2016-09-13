@@ -4435,3 +4435,1776 @@ java.lang.NullPointerException: null
 2016-09-10 14:24:52.605 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
 2016-09-10 14:24:55.507 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
 2016-09-10 14:24:59.139 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-10 14:40:19.061 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @488ms
+2016-09-10 14:40:19.069 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-10 14:40:19.069 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-10 14:40:46.650 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @329ms
+2016-09-10 14:40:46.661 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-10 14:40:46.661 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-10 14:40:46.675 [main] INFO  Main.Client - Logging in to Discord
+2016-09-10 14:40:48.991 [WebSocketClient@8314726-19] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-10 14:40:49.005 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-10 14:40:56.844 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-10 14:41:06.846 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-10 14:41:09.575 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-10 14:41:13.399 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-11 12:23:49.338 [WebSocketClient@8314726-20] ERROR sx.blah.discord.Discord4J - Received 403 forbidden error for url https://discordapp.com/api/channels/206983013060313088/messages?limit=100. If you believe this is a Discord4J error, report this!
+2016-09-12 06:08:07.763 [WebSocketClient@8314726-15] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176662557199695883/messages/224622144133267467)
+2016-09-13 15:55:14.662 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @468ms
+2016-09-13 15:55:14.670 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 15:55:14.670 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 15:55:14.818 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 15:55:18.659 [WebSocketClient@8314726-13] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 15:55:18.693 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 15:55:26.550 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 15:55:32.154 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @340ms
+2016-09-13 15:55:32.162 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 15:55:32.162 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 15:55:32.169 [main] INFO  Main.Utility - Any
+2016-09-13 15:55:32.170 [main] INFO  Main.Utility - General
+2016-09-13 15:55:32.170 [main] INFO  Main.Utility - Servers
+2016-09-13 15:55:32.170 [main] INFO  Main.Utility - RaceSelect
+2016-09-13 15:55:32.170 [main] INFO  Main.Utility - Logging
+2016-09-13 15:55:32.170 [main] INFO  Main.Utility - Admin
+2016-09-13 15:55:32.170 [main] INFO  Main.Utility - Info
+2016-09-13 15:55:32.170 [main] INFO  Main.Utility - ShitPost
+2016-09-13 15:55:32.172 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 15:55:34.361 [WebSocketClient@18676436-16] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 15:55:34.390 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 15:55:42.051 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 15:55:52.053 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 15:55:54.489 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 15:55:58.584 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 15:57:05.888 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @406ms
+2016-09-13 15:57:05.898 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 15:57:05.898 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 15:57:05.914 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 15:57:08.245 [WebSocketClient@18676436-13] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 15:57:08.262 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 15:57:14.910 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 15:57:24.931 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 15:57:27.793 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 15:57:30.312 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 16:18:29.727 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @460ms
+2016-09-13 16:18:29.736 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 16:18:29.736 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 16:18:29.747 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 16:18:32.020 [WebSocketClient@8314726-13] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 16:18:32.035 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 16:18:39.596 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 16:18:49.603 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 16:18:52.351 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 16:18:55.057 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 16:22:37.538 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @361ms
+2016-09-13 16:22:37.547 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 16:22:37.547 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 16:22:37.555 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 16:22:41.246 [WebSocketClient@8314726-15] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 16:22:41.260 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 16:22:48.718 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 16:22:58.745 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 16:23:01.109 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 16:23:03.639 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 16:25:30.234 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @350ms
+2016-09-13 16:25:30.244 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 16:25:30.244 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 16:25:30.256 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 16:25:32.617 [WebSocketClient@8314726-17] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 16:25:32.636 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 16:25:39.851 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 16:25:50.668 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @362ms
+2016-09-13 16:25:50.676 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 16:25:50.677 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 16:25:50.686 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 16:25:53.179 [WebSocketClient@8314726-16] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 16:25:53.199 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 16:26:00.887 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 16:26:10.912 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 16:26:13.482 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 16:26:16.265 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 16:29:27.406 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @363ms
+2016-09-13 16:29:27.413 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 16:29:27.413 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 16:29:27.422 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 16:29:29.688 [WebSocketClient@8314726-17] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 16:29:29.706 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 16:29:37.193 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 16:29:47.203 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 16:29:49.478 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 16:29:52.952 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 16:52:43.976 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @444ms
+2016-09-13 16:52:43.984 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 16:52:43.984 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 16:52:43.993 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 16:52:46.211 [WebSocketClient@8314726-14] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 16:52:46.230 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 16:52:54.033 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 16:53:04.035 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 16:53:06.579 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 16:53:09.883 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 17:01:28.861 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @343ms
+2016-09-13 17:01:28.869 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:01:28.869 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:01:28.877 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:01:31.663 [WebSocketClient@8314726-19] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:01:31.680 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:01:39.303 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 17:01:49.306 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 17:01:51.734 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 17:01:54.966 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 17:07:46.154 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @341ms
+2016-09-13 17:07:46.162 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:07:46.162 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:07:46.171 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:07:48.732 [WebSocketClient@8314726-18] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:07:48.747 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:07:56.437 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 17:08:06.440 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 17:08:09.080 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 17:08:12.249 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 17:09:02.102 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @372ms
+2016-09-13 17:09:02.110 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:09:02.110 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:09:02.118 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:09:04.457 [WebSocketClient@8314726-15] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:09:04.474 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:09:12.032 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 17:09:16.501 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @313ms
+2016-09-13 17:09:16.508 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:09:16.508 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:09:16.516 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:09:18.999 [WebSocketClient@8314726-20] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:09:19.014 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:09:27.061 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @335ms
+2016-09-13 17:09:27.069 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:09:27.069 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:09:27.079 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:09:29.492 [WebSocketClient@8314726-13] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:09:29.517 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:09:36.672 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 17:09:46.675 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 17:09:49.429 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 17:09:52.277 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 17:10:10.568 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @436ms
+2016-09-13 17:10:10.578 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:10:10.578 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:10:10.588 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:10:13.049 [WebSocketClient@8314726-13] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:10:13.065 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:10:20.202 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 17:10:30.209 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 17:10:32.499 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 17:10:35.707 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 17:12:01.723 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @385ms
+2016-09-13 17:12:01.732 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:12:01.732 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:12:01.741 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:12:04.261 [WebSocketClient@8314726-15] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:12:04.276 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:12:06.957 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @331ms
+2016-09-13 17:12:06.964 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:12:06.964 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:12:06.973 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:12:09.244 [WebSocketClient@8314726-20] WARN  sx.blah.discord.Discord4J - Invalid session! Attempting to clear caches and reconnect...
+2016-09-13 17:12:09.245 [WebSocketClient@8314726-20] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:10.151 [WebSocketClient@20996601-29] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:10.152 [WebSocketClient@20996601-29] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:10.159 [WebSocketClient@20996601-29] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:10.159 [WebSocketClient@20996601-29] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:11.080 [WebSocketClient@12689105-41] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:11.080 [WebSocketClient@12689105-41] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:11.100 [WebSocketClient@12689105-41] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:11.101 [WebSocketClient@12689105-41] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:12.023 [WebSocketClient@16033406-61] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:12.024 [WebSocketClient@16033406-61] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:12.031 [WebSocketClient@16033406-61] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:12.031 [WebSocketClient@16033406-61] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:12.950 [WebSocketClient@14080267-67] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:12.950 [WebSocketClient@14080267-67] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:12.957 [WebSocketClient@14080267-67] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:12.958 [WebSocketClient@14080267-67] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:13.848 [WebSocketClient@31606405-80] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:13.848 [WebSocketClient@31606405-80] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:13.855 [WebSocketClient@31606405-80] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:13.855 [WebSocketClient@31606405-80] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:14.741 [WebSocketClient@25145849-93] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:14.742 [WebSocketClient@25145849-93] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:14.749 [WebSocketClient@25145849-93] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:14.749 [WebSocketClient@25145849-93] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:15.657 [WebSocketClient@17697783-108] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:15.657 [WebSocketClient@17697783-108] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:15.665 [WebSocketClient@17697783-108] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:15.666 [WebSocketClient@17697783-108] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:16.592 [WebSocketClient@1631012-124] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:16.592 [WebSocketClient@1631012-124] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:16.598 [WebSocketClient@1631012-124] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:16.598 [WebSocketClient@1631012-124] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:17.502 [WebSocketClient@3387711-139] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:17.503 [WebSocketClient@3387711-139] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:17.510 [WebSocketClient@3387711-139] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:17.510 [WebSocketClient@3387711-139] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:18.421 [WebSocketClient@20133246-145] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:18.422 [WebSocketClient@20133246-145] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:18.427 [WebSocketClient@20133246-145] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:18.427 [WebSocketClient@20133246-145] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:19.343 [WebSocketClient@26978598-162] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:19.343 [WebSocketClient@26978598-162] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:19.351 [WebSocketClient@26978598-162] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:19.351 [WebSocketClient@26978598-162] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:20.271 [WebSocketClient@7277918-171] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:20.272 [WebSocketClient@7277918-171] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:20.277 [WebSocketClient@7277918-171] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:20.277 [WebSocketClient@7277918-171] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:21.169 [WebSocketClient@22500662-190] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:21.169 [WebSocketClient@22500662-190] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:21.178 [WebSocketClient@22500662-190] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:21.178 [WebSocketClient@22500662-190] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:22.092 [WebSocketClient@13616733-198] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:22.092 [WebSocketClient@13616733-198] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:22.098 [WebSocketClient@13616733-198] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:22.098 [WebSocketClient@13616733-198] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:23.015 [WebSocketClient@1565008-215] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:23.016 [WebSocketClient@1565008-215] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:23.024 [WebSocketClient@1565008-215] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:23.024 [WebSocketClient@1565008-215] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:23.947 [WebSocketClient@15888408-224] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:23.947 [WebSocketClient@15888408-224] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:23.952 [WebSocketClient@15888408-224] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:23.953 [WebSocketClient@15888408-224] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:24.968 [WebSocketClient@26160442-240] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:24.968 [WebSocketClient@26160442-240] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:24.976 [WebSocketClient@26160442-240] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:24.976 [WebSocketClient@26160442-240] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:25.931 [WebSocketClient@20029736-258] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:25.931 [WebSocketClient@20029736-258] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:25.936 [WebSocketClient@20029736-258] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:25.936 [WebSocketClient@20029736-258] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:26.890 [WebSocketClient@20775941-272] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:26.890 [WebSocketClient@20775941-272] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:26.895 [WebSocketClient@20775941-272] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:26.896 [WebSocketClient@20775941-272] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:27.809 [WebSocketClient@1593172-284] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:27.809 [WebSocketClient@1593172-284] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:27.814 [WebSocketClient@1593172-284] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:27.814 [WebSocketClient@1593172-284] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:28.715 [WebSocketClient@12554932-297] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:28.715 [WebSocketClient@12554932-297] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:28.726 [WebSocketClient@12554932-297] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:28.726 [WebSocketClient@12554932-297] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:29.633 [WebSocketClient@95603-309] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:29.633 [WebSocketClient@95603-309] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:29.638 [WebSocketClient@95603-309] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:29.638 [WebSocketClient@95603-309] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:30.539 [WebSocketClient@16400248-321] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:30.539 [WebSocketClient@16400248-321] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:30.547 [WebSocketClient@16400248-321] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:30.547 [WebSocketClient@16400248-321] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:31.502 [WebSocketClient@14266056-336] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:31.502 [WebSocketClient@14266056-336] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:31.518 [WebSocketClient@14266056-336] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:31.518 [WebSocketClient@14266056-336] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:32.443 [WebSocketClient@31796397-347] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:32.444 [WebSocketClient@31796397-347] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:32.449 [WebSocketClient@31796397-347] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:32.449 [WebSocketClient@31796397-347] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:33.395 [WebSocketClient@1502822-361] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:33.395 [WebSocketClient@1502822-361] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:33.400 [WebSocketClient@1502822-361] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:33.400 [WebSocketClient@1502822-361] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:34.302 [WebSocketClient@21810970-372] ERROR sx.blah.discord.Discord4J - Websocket error, disconnecting...
+org.eclipse.jetty.websocket.api.UpgradeException: Didn't switch protocols, expected status <101>, but got <500>
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.validateResponse(UpgradeConnection.java:352)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:280)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:34.303 [WebSocketClient@21810970-372] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:34.307 [WebSocketClient@21810970-372] INFO  sx.blah.discord.Discord4J - Attempting to reconnect...
+2016-09-13 17:12:34.307 [WebSocketClient@21810970-372] ERROR sx.blah.discord.Discord4J - Error caught while attempting to reconnect.
+java.lang.IllegalStateException: Task already scheduled or cancelled
+	at java.util.Timer.sched(Timer.java:401)
+	at java.util.Timer.schedule(Timer.java:193)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:199)
+	at sx.blah.discord.api.internal.DiscordWS.disconnect(DiscordWS.java:206)
+	at sx.blah.discord.api.internal.DiscordWS.onError(DiscordWS.java:1135)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:71)
+	at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:68)
+	at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onError(JettyAnnotatedEventDriver.java:157)
+	at org.eclipse.jetty.websocket.client.io.ConnectPromise.failed(ConnectPromise.java:58)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.read(UpgradeConnection.java:300)
+	at org.eclipse.jetty.websocket.client.io.UpgradeConnection.onFillable(UpgradeConnection.java:196)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 17:12:35.593 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @412ms
+2016-09-13 17:12:35.600 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:12:35.600 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:12:35.609 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:12:38.544 [WebSocketClient@8314726-13] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:12:38.558 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:12:46.042 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 17:12:56.066 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 17:12:58.338 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 17:13:00.703 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 17:18:44.086 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @397ms
+2016-09-13 17:18:44.094 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:18:44.095 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:18:44.103 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:18:46.332 [WebSocketClient@8314726-17] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:18:46.357 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:19:01.857 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @346ms
+2016-09-13 17:19:01.864 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:19:01.864 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:19:01.874 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:19:04.099 [WebSocketClient@8314726-17] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:19:04.119 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:19:11.188 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 17:19:21.213 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 17:19:23.818 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 17:19:26.924 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 17:19:27.383 [WebSocketClient@8314726-17] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225153162657529856)
+2016-09-13 17:19:27.702 [WebSocketClient@8314726-17] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225153161378267136)
+2016-09-13 17:19:28.508 [WebSocketClient@8314726-17] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225153097650012162)
+2016-09-13 17:19:28.807 [WebSocketClient@8314726-17] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225153096114765825)
+2016-09-13 17:19:29.109 [WebSocketClient@8314726-17] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225153260669894656)
+2016-09-13 17:32:13.899 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @381ms
+2016-09-13 17:32:13.906 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 17:32:13.907 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 17:32:13.916 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 17:32:16.165 [WebSocketClient@8314726-15] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 17:32:16.179 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 17:32:24.071 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 17:32:34.076 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 17:32:36.488 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 17:32:39.902 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 18:36:28.813 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @407ms
+2016-09-13 18:36:28.820 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 18:36:28.820 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 18:36:28.829 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 18:36:31.863 [WebSocketClient@8314726-17] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 18:36:31.882 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 18:36:40.217 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 18:36:50.219 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 18:36:53.004 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 18:36:56.282 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event GuildCreateEvent
+java.lang.NullPointerException: null
+	at POGOs.GuildConfig.updateVariables(GuildConfig.java:94)
+	at Listeners.AnnotationListener.onGuildCreateEvent(AnnotationListener.java:70)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$8(EventDispatcher.java:282)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$9(EventDispatcher.java:280)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$10(EventDispatcher.java:279)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$15(EventDispatcher.java:278)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 18:38:16.198 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @335ms
+2016-09-13 18:38:16.206 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 18:38:16.206 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 18:38:16.214 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 18:38:18.497 [WebSocketClient@8314726-17] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 18:38:18.517 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 18:38:25.784 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 18:38:35.810 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 18:38:41.857 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event GuildCreateEvent
+java.lang.NullPointerException: null
+	at POGOs.GuildConfig.updateVariables(GuildConfig.java:94)
+	at Listeners.AnnotationListener.onGuildCreateEvent(AnnotationListener.java:70)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$8(EventDispatcher.java:282)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$9(EventDispatcher.java:280)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$10(EventDispatcher.java:279)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$15(EventDispatcher.java:278)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 18:39:37.596 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @453ms
+2016-09-13 18:39:37.605 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 18:39:37.605 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 18:39:37.669 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 18:39:40.142 [WebSocketClient@23316263-22] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 18:39:40.159 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 18:39:47.777 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 18:39:57.780 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 18:40:00.178 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 18:40:03.926 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event GuildCreateEvent
+java.lang.NullPointerException: null
+	at POGOs.GuildConfig.updateVariables(GuildConfig.java:94)
+	at Listeners.AnnotationListener.onGuildCreateEvent(AnnotationListener.java:70)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$8(EventDispatcher.java:282)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$9(EventDispatcher.java:280)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$10(EventDispatcher.java:279)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$15(EventDispatcher.java:278)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 18:41:16.010 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @451ms
+2016-09-13 18:41:16.019 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 18:41:16.019 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 18:41:16.094 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 18:41:19.978 [WebSocketClient@23316263-19] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 18:41:20.019 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 18:41:29.744 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 18:41:39.746 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 18:41:42.735 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 18:41:47.352 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event GuildCreateEvent
+java.lang.NullPointerException: null
+	at POGOs.GuildConfig.updateVariables(GuildConfig.java:94)
+	at Listeners.AnnotationListener.onGuildCreateEvent(AnnotationListener.java:70)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$8(EventDispatcher.java:282)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$9(EventDispatcher.java:280)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$10(EventDispatcher.java:279)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$15(EventDispatcher.java:278)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 18:41:50.509 [WebSocketClient@23316263-19] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225173922759311360)
+2016-09-13 18:41:50.826 [WebSocketClient@23316263-19] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225173860578885632)
+2016-09-13 18:41:51.997 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @439ms
+2016-09-13 18:41:52.006 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 18:41:52.007 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 18:41:52.020 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 18:41:54.446 [WebSocketClient@23316263-21] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 18:41:54.478 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 18:42:02.484 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 18:42:12.486 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 18:42:14.931 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 18:42:18.332 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event GuildCreateEvent
+java.lang.NullPointerException: null
+	at POGOs.GuildConfig.updateVariables(GuildConfig.java:94)
+	at Listeners.AnnotationListener.onGuildCreateEvent(AnnotationListener.java:70)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$8(EventDispatcher.java:282)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$9(EventDispatcher.java:280)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$10(EventDispatcher.java:279)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$15(EventDispatcher.java:278)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 18:42:18.624 [WebSocketClient@23316263-21] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225173858272018432)
+2016-09-13 18:42:54.174 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @379ms
+2016-09-13 18:42:54.184 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 18:42:54.184 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 18:42:54.214 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 18:42:56.583 [WebSocketClient@23316263-21] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 18:42:56.600 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 18:43:03.710 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 18:43:13.717 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 18:43:16.198 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 18:43:20.020 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event GuildCreateEvent
+java.lang.NullPointerException: null
+	at POGOs.GuildConfig.updateVariables(GuildConfig.java:94)
+	at Listeners.AnnotationListener.onGuildCreateEvent(AnnotationListener.java:70)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$8(EventDispatcher.java:282)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$9(EventDispatcher.java:280)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$10(EventDispatcher.java:279)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$15(EventDispatcher.java:278)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-09-13 18:43:20.320 [WebSocketClient@23316263-21] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225174371482861569)
+2016-09-13 18:43:20.640 [WebSocketClient@23316263-21] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225156995685023744)
+2016-09-13 18:43:21.074 [WebSocketClient@23316263-21] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667695259975681/messages/225156993826947072)
+2016-09-13 18:43:36.269 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @553ms
+2016-09-13 18:43:36.278 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 18:43:36.278 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 18:43:36.291 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 18:43:38.766 [WebSocketClient@23316263-20] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 18:43:38.785 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 18:43:46.325 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 18:43:56.327 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 18:43:58.977 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 18:44:03.178 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 18:44:09.637 [WebSocketClient@23316263-20] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667358599970816/messages/225174730636918784)
+2016-09-13 19:00:50.485 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @321ms
+2016-09-13 19:00:50.492 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 19:00:50.492 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 19:00:50.500 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 19:00:53.067 [WebSocketClient@8314726-19] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 19:00:53.090 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 19:00:59.994 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 19:01:09.996 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 19:01:12.763 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 19:01:16.102 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 19:03:37.340 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @418ms
+2016-09-13 19:03:37.347 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 19:03:37.348 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 19:03:37.356 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 19:03:39.667 [WebSocketClient@8314726-16] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 19:03:39.682 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 19:03:47.031 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 19:03:57.034 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 19:03:59.623 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 19:04:02.069 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-09-13 19:08:12.430 [Event Dispatch Thread] INFO  Main.Utility - 502 error on request to https://discordapp.com/api/channels/176667358599970816/messages. This is due to CloudFlare.
+2016-09-13 19:29:50.229 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @424ms
+2016-09-13 19:29:50.238 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.6.0
+2016-09-13 19:29:50.238 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-09-13 19:29:50.247 [main] INFO  Main.Client - Logging in to Discord
+2016-09-13 19:29:53.514 [WebSocketClient@8314726-18] INFO  sx.blah.discord.Discord4J - Connected to the Discord websocket v5
+2016-09-13 19:29:53.543 [Request Builder Async Executor] INFO  sx.blah.discord.Discord4J - Connected to 2 guilds.
+2016-09-13 19:30:02.463 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-09-13 19:30:12.466 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - 1 guilds determined unavailable!
+2016-09-13 19:30:15.212 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Console input initiated.
+2016-09-13 19:30:19.413 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920

@@ -7,15 +7,18 @@ import Main.Globals;
 import Main.Utility;
 import Objects.BlackListObject;
 import Objects.CompetitionObject;
+import Objects.RoleTypeObject;
 import POGOs.*;
-import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.impl.obj.Embedded;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
@@ -77,11 +80,11 @@ public class MessageHandler {
         if (author.isBot()) {
             return;
         }
-        if (command.toLowerCase().startsWith(Constants.COMMAND_PREFIX.toLowerCase())) {
+        if (command.toLowerCase().startsWith(Constants.PREFIX_COMMAND.toLowerCase())) {
             handleCommand();
         }
         // TODO: 14/08/2016 ccs must also be handled here
-        if (command.toLowerCase().startsWith(Constants.CC_PREFIX.toLowerCase())) {
+        if (command.toLowerCase().startsWith(Constants.PREFIX_CC.toLowerCase())) {
             new CCHandler(command, args, message);
         }
     }
@@ -177,10 +180,10 @@ public class MessageHandler {
                 }
                 aliases.add(commandAnno.name());
                 for (String s : aliases) {
-                    if ((Constants.COMMAND_PREFIX + s).equalsIgnoreCase(command)) {
+                    if ((Constants.PREFIX_COMMAND + s).equalsIgnoreCase(command)) {
                         //init files
                         if (commandAnno.requiresArgs() && args.equals("")) {
-                            Utility.sendMessage("MessageHandler is missing Arguments: \n" + Utility.getCommandInfo(commandAnno), channel);
+                            Utility.sendMessage("Command is missing Arguments: \n" + Utility.getCommandInfo(commandAnno), channel);
                             return;
                         }
                         if (commandAnno.type().equals(Constants.TYPE_SERVERS) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
@@ -195,8 +198,8 @@ public class MessageHandler {
 
                         //Logging Handling
                         if (commandAnno.doLogging() && guildConfig.doLogging) {
-                            if (!guildConfig.getChannelTypeID(Constants.CHANNEL_LOGGING).equals(Constants.NULL_VARIABLE)) {
-                                IChannel loggingChannel = guild.getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_LOGGING));
+                            if (!guildConfig.getChannelTypeID(Constants.CHANNEL_SERVER_LOG).equals(Constants.NULL_VARIABLE)) {
+                                IChannel loggingChannel = guild.getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_SERVER_LOG));
                                 StringBuilder builder = new StringBuilder();
                                 builder.append("**" + author.getDisplayName(guild) + "** Has Used Command `" + command + "`");
                                 if (!commandAnno.usage().equals(Constants.NULL_VARIABLE)) {
@@ -269,12 +272,12 @@ public class MessageHandler {
         return "> Hello " + author.getDisplayName(guild) + ".";
     }
 
-    @CommandAnnotation(name = "Test", description = "Tests things", doLogging = true, type = Constants.TYPE_GENERAL)
+    @CommandAnnotation(name = "Test", description = "Tests things.", doLogging = true, type = Constants.TYPE_GENERAL)
     public String test() {
         return "> Tested";
     }
 
-    @CommandAnnotation(name = "UserImage", description = "Gets the Mentionee's Profile Image", usage = "[@Users]", type = Constants.TYPE_GENERAL)
+    @CommandAnnotation(name = "UserImage", description = "Gets the Mentionee's Profile Image.", usage = "[@Users]", type = Constants.TYPE_GENERAL)
     public String getUserAvatar() {
         List<IUser> mentions = message.getMentions();
         StringBuilder builder = new StringBuilder();
@@ -299,61 +302,153 @@ public class MessageHandler {
             name = "ChannelHere", description = "Sets the current channel as the **General** channel.", usage = "[General, Servers, Admin, RaceSelect, Logging]",
             perms = {Permissions.MANAGE_CHANNELS}, type = Constants.TYPE_ADMIN, doLogging = true, requiresArgs = true)
     public String channelHere() {
-        boolean channelUpdated = false;
-        if (args.equalsIgnoreCase(Constants.CHANNEL_GENERAL)) {
-            guildConfig.setUpChannel(Constants.CHANNEL_GENERAL, channel.getID());
-            channelUpdated = true;
-        } else if (args.equalsIgnoreCase(Constants.CHANNEL_SERVERS)) {
-            guildConfig.setUpChannel(Constants.CHANNEL_SERVERS, channel.getID());
-            channelUpdated = true;
-        } else if (args.equalsIgnoreCase(Constants.CHANNEL_ADMIN)) {
-            guildConfig.setUpChannel(Constants.CHANNEL_ADMIN, channel.getID());
-            channelUpdated = true;
-        } else if (args.equalsIgnoreCase(Constants.CHANNEL_RACE_SELECT)) {
-            guildConfig.setUpChannel(Constants.CHANNEL_RACE_SELECT, channel.getID());
-            channelUpdated = true;
-        } else if (args.equalsIgnoreCase(Constants.CHANNEL_LOGGING)) {
-            guildConfig.setUpChannel(Constants.CHANNEL_LOGGING, channel.getID());
-            channelUpdated = true;
-        } else if (args.equalsIgnoreCase(Constants.CHANNEL_INFO)) {
-            guildConfig.setUpChannel(Constants.CHANNEL_INFO, channel.getID());
-            channelUpdated = true;
-        } else if (args.equalsIgnoreCase(Constants.CHANNEL_SHITPOST)) {
-            guildConfig.setUpChannel(Constants.CHANNEL_SHITPOST, channel.getID());
-            channelUpdated = true;
+        try {
+            for (Field f : Constants.class.getDeclaredFields()) {
+
+                if (f.getName().contains("CHANNEL_") && f.getType() == String.class && !f.get(null).equals(Constants.CHANNEL_ANY)) {
+                    try {
+                        if (args.equalsIgnoreCase((String) f.get(null))) {
+                            guildConfig.setUpChannel((String) f.get(null), channel.getID());
+                            return "> This channel is now the Server's **" + f.get(null) + "** channel.";
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
-        if (channelUpdated) {
-            return "> This channel is now this server's **" + WordUtils.capitalizeFully(args) + "** channel.";
-        } else {
-            return "> Channel type with that name not found.";
+        return "> Channel type with that name not found, you can see the channel types you can choose from " +
+                "by running the command `" + Constants.PREFIX_COMMAND + "ChannelTypes`.";
+    }
+
+    @CommandAnnotation(
+            name = "ChannelTypes", description = "Lists all of the Channel types that can be used in the command." + Constants.PREFIX_COMMAND + "ChannelHere.",
+            type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_CHANNELS})
+    public String channelTypes() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("> Here are the channel types you can set up.\n`");
+        try {
+            for (Field f : Constants.class.getDeclaredFields()) {
+                if (f.getName().contains("CHANNEL_") && f.getType() == String.class && !f.get(null).equals(Constants.CHANNEL_ANY)) {
+                    builder.append(f.get(null) + ", ");
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
+        builder.delete(builder.length() - 2, builder.length());
+        builder.append("`.");
+        return builder.toString();
     }
 
     //race select commands
     @CommandAnnotation(
-            name = "AddRace", description = "Adds role to list of roles that can be selected", usage = "[Role Name]",
+            name = "AddRole", description = "Adds role to list of Cosmetic roles that can be selected.", usage = "[Role Name]",
             requiresArgs = true, type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_ROLES})
     public String addRace() {
         String roleID = Utility.getRoleIDFromName(args, guild);
         if (roleID.equals(Constants.NULL_VARIABLE)) {
             return Constants.ERROR_ROLE_NOT_FOUND;
         } else {
-            return guildConfig.addRaceRole(roleID, guild.getRoleByID(roleID).getName());
+            return guildConfig.addRole(roleID, guild.getRoleByID(roleID).getName(), true);
         }
     }
 
     @CommandAnnotation(
-            name = "DelRace", description = "Deletes role from list of roles that can be selected", usage = "[Role Name]",
+            name = "DelRole", description = "Deletes role from list of Cosmetic roles that can be selected.", usage = "[Role Name]",
             requiresArgs = true, type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_ROLES})
     public String removeRace() {
         String roleID = Utility.getRoleIDFromName(args, guild);
         if (roleID.equals(Constants.NULL_VARIABLE)) {
             return Constants.ERROR_ROLE_NOT_FOUND;
         } else {
-            return guildConfig.removeRaceRole(roleID, guild.getRoleByID(roleID).getName());
+            return guildConfig.removeRole(roleID, guild.getRoleByID(roleID).getName(), true);
         }
     }
 
+    @CommandAnnotation(
+            name = "AddModif", description = "Adds role to list of Modifier roles that can be selected.", usage = "[Role Name]",
+            requiresArgs = true, type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_ROLES})
+    public String addModifyerRole() {
+        String roleID = Utility.getRoleIDFromName(args, guild);
+        if (roleID.equals(Constants.NULL_VARIABLE)) {
+            return Constants.ERROR_ROLE_NOT_FOUND;
+        } else {
+            return guildConfig.addRole(roleID, guild.getRoleByID(roleID).getName(), false);
+        }
+    }
+
+    @CommandAnnotation(
+            name = "DelModif", description = "Deletes role from list of Modifier roles that can be selected.", usage = "[Role Name]",
+            requiresArgs = true, type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_ROLES})
+    public String removeModifyerRole() {
+        String roleID = Utility.getRoleIDFromName(args, guild);
+        if (roleID.equals(Constants.NULL_VARIABLE)) {
+            return Constants.ERROR_ROLE_NOT_FOUND;
+        } else {
+            return guildConfig.removeRole(roleID, guild.getRoleByID(roleID).getName(), false);
+        }
+    }
+
+    @CommandAnnotation(
+            name = "Modifier", description = "Grants or Removes a modifier.", usage = "[add,remove] [Role Name]",
+            requiresArgs = true, type = Constants.TYPE_ROLE_SELECT, channel = Constants.CHANNEL_RACE_SELECT)
+    public String modifiers() {
+        String response = "> " + Constants.ERROR;
+        try {
+            String[] splitArgs = args.split(" ");
+            String modifier = splitArgs[0];
+            String roleName = args.replaceFirst(modifier + " ", "");
+            String newRoleID = Utility.getRoleIDFromName(roleName, guild);
+            if (newRoleID.equals(Constants.NULL_VARIABLE)) {
+                response = Constants.ERROR_ROLE_NOT_FOUND;
+            } else {
+                boolean isfound = false;
+                for (RoleTypeObject r : guildConfig.getModifierRoles()) {
+                    if (r.getRoleID().equals(newRoleID)) {
+                        isfound = true;
+                    }
+                }
+                if (isfound) {
+                    if (modifier.equalsIgnoreCase("add")) {
+                        author.addRole(guild.getRoleByID(newRoleID));
+                        response = "> Modifier Added: `" + guild.getRoleByID(newRoleID).getName() + "`.";
+                    } else if (modifier.equalsIgnoreCase("remove")) {
+                        author.removeRole(guild.getRoleByID(newRoleID));
+                        response = "> Modifier Removed: `" + guild.getRoleByID(newRoleID).getName() + "`.";
+                    } else {
+                        Method m = this.getClass().getMethod("modifiers");
+                        response = Utility.getCommandInfo(m.getAnnotation(CommandAnnotation.class));
+                    }
+                }else {
+                    response = "> You cannot that role as it is not a modifier.";
+                }
+            }
+        } catch (DiscordException e) {
+            e.printStackTrace();
+        } catch (RateLimitException e) {
+            e.printStackTrace();
+        } catch (MissingPermissionsException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    @CommandAnnotation(
+            name = "SetRoleToMention", description = "Sets the admin role that will be mentioned when the tag #admin# is used in the blacklisting process.", usage = "[Role Name]",
+            requiresArgs = true, type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_ROLES})
+    public String setAdminRole() {
+        String roleID = Utility.getRoleIDFromName(args, guild);
+        if (roleID.equals(Constants.NULL_VARIABLE)) {
+            return Constants.ERROR_ROLE_NOT_FOUND;
+        } else {
+            return guildConfig.setRoleToMention(guild.getRoleByID(roleID).getName(), roleID);
+        }
+    }
     //servers commands
 
     //character commands
@@ -372,7 +467,7 @@ public class MessageHandler {
     //Competition Command
 
     @AliasAnnotation(alias = {"Comp", "Enter"})
-    @CommandAnnotation(name = "Competition", description = "Enters your image into the Sail Competition", type = Constants.TYPE_GENERAL, doLogging = true, usage = "[Image Link or Image File]",perms = {Permissions.ADMINISTRATOR})
+    @CommandAnnotation(name = "Competition", description = "Enters your image into the Sail Competition", type = Constants.TYPE_GENERAL, doLogging = true, usage = "[Image Link or Image File]", perms = {Permissions.ADMINISTRATOR})
     public String competition() {
         loadCompetition();
         String fileName;
@@ -394,9 +489,9 @@ public class MessageHandler {
         return "> Thank you " + author.getDisplayName(guild) + " For entering the Competition.";
     }
 
-    @CommandAnnotation(name = "Vote",description = "Saves your vote.",type = Constants.TYPE_GENERAL,channel = Constants.CHANNEL_RACE_SELECT ,usage = "(x) (y) (z) ...",requiresArgs = true)
-    public String voting(){
+    @CommandAnnotation(name = "Vote", description = "Saves your vote.", type = Constants.TYPE_GENERAL, channel = Constants.CHANNEL_RACE_SELECT, usage = "(x) (y) (z) ...", requiresArgs = true)
+    public String voting() {
         loadCompetition();
-        return competition.addVote(author.getID(),args);
+        return competition.addVote(author.getID(), args);
     }
 }

@@ -60,3 +60,6 @@ Token.txt
 *.txt
 Storage/Token.txt
 *.txt
+*.json1
+*.json2
+*.json3

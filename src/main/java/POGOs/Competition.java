@@ -64,7 +64,7 @@ public class Competition {
                     }
                     else{
                         userVotes.add("" + entry);
-                        builder.append("    Entry: **" + entry + "**\n");
+                        builder.append(Constants.PREFIX_INDENT+"Entry: **" + entry + "**\n");
                         x++;
                     }
                 } catch (NumberFormatException e) {
@@ -75,7 +75,7 @@ public class Competition {
         if (newVotes.size() > Globals.voteLimit) {
             //builder.append("    **Rest of Votes Not Counted: Reason Max votes = " + Globals.voteLimit + "**\n");
         }
-        builder.append("    Have been saved. you now have: **" + (Globals.voteLimit - userVotes.size() + 1) + "** Vote token(s) left.");
+        builder.append(Constants.PREFIX_INDENT+"Have been saved. you now have: **" + (Globals.voteLimit - userVotes.size() + 1) + "** Vote token(s) left.");
 
         StringBuilder finalVotes = new StringBuilder();
         for (String s : userVotes) {
