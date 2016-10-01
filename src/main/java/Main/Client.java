@@ -16,6 +16,7 @@ public class Client {
         ClientBuilder clientBuilder = new ClientBuilder();
 
         clientBuilder.withToken(token);
+        clientBuilder.setMaxReconnectAttempts(4000);
         if(login){
             logger.info("Logging in to Discord");
             return clientBuilder.login();

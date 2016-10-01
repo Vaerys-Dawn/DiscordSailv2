@@ -1,5 +1,7 @@
 package Main;
 
+import sx.blah.discord.api.IDiscordClient;
+
 import java.util.ArrayList;
 
 /**
@@ -15,30 +17,16 @@ public class Globals {
     public static String consoleMessageCID = "161055776151044096";
     public static String creatorID = "153159020528533505";
     public static String botName = "S.A.I.L v2.0";
+    public static IDiscordClient client;
 
-
-    public static ArrayList<GuildTimedEvents> cooldowns = new ArrayList<>();
     public static int compEntries = 10;
     public static int voteLimit = 3;
 
-    /**
-     * Gets the "GuildTimedEvents" for the guild with ID "guildID"
-     */
-    public static GuildTimedEvents getCooldowns(String guildID) {
-        GuildTimedEvents guildTimedEvents = new GuildTimedEvents(Constants.ERROR);
-        for (GuildTimedEvents gC : cooldowns) {
-            if (gC.guildID.equals(guildID)) {
-                guildTimedEvents = gC;
-            }
-        }
-        return guildTimedEvents;
+    public static IDiscordClient getClient() {
+        return client;
     }
 
-    /**
-     * Adds a "GuildCoolDowns" to the ArrayList "cooldowns" for the guild with ID "guildID"
-     */
-    public static void addCooldown(String guildID) {
-        cooldowns.add(new GuildTimedEvents(guildID));
+    public static void setClient(IDiscordClient client) {
+        Globals.client = client;
     }
-
 }

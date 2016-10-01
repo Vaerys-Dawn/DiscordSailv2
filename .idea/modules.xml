@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DiscordSAIL.iml" filepath="$PROJECT_DIR$/DiscordSAIL.iml" />
-      <module fileurl="file://E://DiscordSailv2/DiscordSailv2.iml" filepath="E://DiscordSailv2/DiscordSailv2.iml" />
     </modules>
   </component>
 </project>

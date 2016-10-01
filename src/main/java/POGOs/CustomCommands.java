@@ -16,12 +16,14 @@ import java.util.ArrayList;
 // TODO: 31/08/2016 Add the ability to vote to remove a custom command (user must be trusted in order to initiate the vote) (must get 10 votes in 2 hour to remove)
 // TODO: 31/08/2016 Add blacklisting of phrases to custom command creation, editing and execution
 // TODO: 31/08/2016 Add the ability to see the amount of times the command is run
-// TODO: 02/09/2016 Add Regex tags i.e Author, Args, RoleListRole, Embed, Random
+// TODO: 02/09/2016 Add Regex tags i.e Author, Args, RoleListRole, Embed, Random                                                                                        {DONE}
 // TODO: 04/09/2016 Add ShitPost filtering
 // TODO: 04/09/2016 Add on creation tags
 // TODO: 04/09/2016 Add Command transferring.
+// TODO: 28/09/2016 200/100 char limit on #args#
 // TODO: 04/09/2016 Make it so that the command is default to ShitPost upon creation in the #shitpost channel
 // TODO: 04/09/2016 maye a helpful command list that those with manage messages can add to
+// TODO: 28/09/2016 make a way to have auto shitposting (togalable, off by default requires an admin to turn it on)
 // TODO: 31/08/2016 (Maybe) Add Fweeee to CC.RewardBag (using VoiceBot functionality)
 // TODO: 31/08/2016 (Maybe) Add the ability to have images uploaded to the guild rather than posting a link (maybe)
 
@@ -29,14 +31,22 @@ import java.util.ArrayList;
  * Created by Vaerys on 14/08/2016.
  */
 public class CustomCommands {
-    public boolean properlyInit = false;
+    boolean properlyInit = false;
     boolean blackListInit = false;
     ArrayList<BlackListObject> blackList = new ArrayList<>();
     ArrayList<CCommandObject> commands = new ArrayList<>();
-    final CCommandObject commandNotFound = new CCommandObject(true,"Error","404","> Command not found.");
+    final CCommandObject commandNotFound = new CCommandObject(true,"Error","404","> Command not found.",false);
 
-    public String addCommand(boolean isLocked, String userID, String commandName, String commandContents){
-        CCommandObject cCommandObject = new CCommandObject(isLocked,userID,commandName,commandContents);
+    public boolean isProperlyInit() {
+        return properlyInit;
+    }
+
+    public void setProperlyInit(boolean properlyInit) {
+        this.properlyInit = properlyInit;
+    }
+
+    public String addCommand(boolean isLocked, String userID, String commandName, String commandContents, boolean isShitpost){
+        CCommandObject cCommandObject = new CCommandObject(isLocked,userID,commandName,commandContents,isShitpost);
         if (!exists(cCommandObject.getName())) {
             commands.add(cCommandObject);
             return "> Command Created, you can perform your new custom command by doing `" + Constants.PREFIX_CC + cCommandObject.getName()+  "`.";
@@ -52,7 +62,8 @@ public class CustomCommands {
             blackList.add(new BlackListObject("@everyone","Please go not put **mentions** in Custom Commands."));
             blackList.add(new BlackListObject("@here","Please go not put **mentions** in Custom Commands."));
             blackListInit = true;
-            commands.add(new CCommandObject(true, Globals.creatorID,"Echo","#args#"));
+            commands.add(new CCommandObject(true, Globals.creatorID,"Echo","#args#",false));
+            commands.add(new CCommandObject(true, Globals.creatorID,"Wiki","http://starbounder.org/Special:Search/#args##regex#{ ;_}",false));
         }
     }
 
@@ -65,7 +76,16 @@ public class CustomCommands {
         return false;
     }
 
-    private ArrayList<CCommandObject> getCommandList(){
+    public ArrayList<CCommandObject> getCommandList(){
         return commands;
+    }
+
+    public String checkblackList(String args) {
+        for (BlackListObject bl : blackList){
+            if (args.contains(bl.getPhrase())){
+                return bl.getReason();
+            }
+        }
+        return null;
     }
 }

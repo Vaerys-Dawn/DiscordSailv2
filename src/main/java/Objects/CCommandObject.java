@@ -11,15 +11,16 @@ public class CCommandObject {
     String name;
     String userID;
     boolean isLocked;
-    boolean shitpost = false;
+    boolean shitPost;
     long timesRun;
     List<String> contents;
 
-    public CCommandObject(boolean isLocked, String userID, String name, String contents) {
+    public CCommandObject(boolean isLocked, String userID, String name, String contents,boolean shitPost) {
         this.isLocked = isLocked;
         this.userID = userID;
         this.name = name;
         this.contents = Arrays.asList(contents.split("\n"));
+        this.shitPost = shitPost;
         timesRun = 0;
     }
 
@@ -43,9 +44,13 @@ public class CCommandObject {
         return isLocked;
     }
 
-    public List<String> getContents() {
+    public String getContents() {
         timesRun++;
-        return contents;
+        StringBuilder builder = new StringBuilder();
+        for (String s: contents){
+            builder.append(s + "\n");
+        }
+        return builder.toString();
     }
 
     public long getTimesRun() {
@@ -53,6 +58,10 @@ public class CCommandObject {
     }
 
     public void toggleShitPost(){
-        shitpost = !shitpost;
+        shitPost = !shitPost;
+    }
+
+    public boolean isShitPost() {
+        return shitPost;
     }
 }

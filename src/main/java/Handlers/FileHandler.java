@@ -18,7 +18,7 @@ public class FileHandler {
     private final static Logger logger = LoggerFactory.getLogger(FileHandler.class);
 
     /**Creates Directory using "dirName" as the path.*/
-    public void createDirectory(String dirName) {
+    public static void createDirectory(String dirName) {
         File file = new File(dirName);
         if (!file.exists()) {
             file.mkdirs();
@@ -27,7 +27,7 @@ public class FileHandler {
     }
 
     /**Reads from File using "file" as the path and returns a ArrayList<String>.*/
-    public List<String> readFromFile(String file) {
+    public static List<String> readFromFile(String file) {
         try {
             if (!Paths.get(file).toFile().exists()) {
                 Files.createFile(Paths.get(file));
@@ -43,7 +43,7 @@ public class FileHandler {
     }
 
     /**Writes to File on line "line" using "file" as the path.*/
-    public void writeToFile(String file, int line, String text) {
+    public static void writeToFile(String file, int line, String text) {
         try {
             List<String> fileContents = readFromFile(file);
             fileContents.set(line, text);
@@ -55,7 +55,7 @@ public class FileHandler {
     }
 
     /**Writes to File using "file" as the path.*/
-    public void writeToFile(String file, String text){
+    public static void writeToFile(String file, String text){
         try {
             if(!Files.exists(Paths.get(file))){
                 Files.createFile(Paths.get(file));
@@ -71,11 +71,11 @@ public class FileHandler {
     }
 
     /**Reads from a .Json File using path "file" and returns a POGO based on "objClass".*/
-    public Object readfromJson(String file, Class<?> objClass){
+    public static Object readfromJson(String file, Class<?> objClass){
         Gson gson = new Gson();
         try (Reader reader = new FileReader(file)) {
             Object newObject = gson.fromJson(reader, objClass);
-            logger.debug("Reading Data from Json File: " + file + "applying to Object: " + objClass.getName());
+            logger.debug("Reading Data from Json File: " + file + " applying to Object: " + objClass.getName());
             return newObject;
         } catch (IOException e) {
             logger.error(e.getCause().toString());
@@ -85,7 +85,7 @@ public class FileHandler {
     }
 
     /**saves data from POGO of type "object" using path "file".*/
-    public void writetoJson(String file, Object object){
+    public static void writetoJson(String file, Object object){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter(file)) {
             gson.toJson(object, writer);
@@ -95,15 +95,15 @@ public class FileHandler {
         }
     }
 
-    private boolean exists(String path){
+    private static boolean exists(String path){
         return Files.exists(Paths.get(path));
     }
 
-    public void initFile(String path, Object object){
+    public static void initFile(String path, Object object){
         if (!exists(path)) writetoJson(path,object);
     }
 
-    public void initFile(String path){
+    public static void initFile(String path){
         if (!exists(path)) writeToFile(path, "");
     }
 }

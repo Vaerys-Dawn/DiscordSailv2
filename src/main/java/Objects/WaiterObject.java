@@ -4,15 +4,15 @@ package Objects;
  * Created by Vaerys on 27/08/2016.
  */
 public class WaiterObject {
-    String ID;
+    String userID;
     public int removerCountdown;
 
-    public WaiterObject(String ID) {
-        this.ID = ID;
+    public WaiterObject(String userID) {
+        this.userID = userID;
         this.removerCountdown = 60;
     }
 
     public String getID() {
-        return ID;
+        return userID;
     }
 }

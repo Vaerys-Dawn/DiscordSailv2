@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.austinv11:Discord4j:shaded:8819c88">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/8819c88/Discord4j-8819c88-shaded.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/8819c88/Discord4j-8819c88-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/8819c88/Discord4j-8819c88-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

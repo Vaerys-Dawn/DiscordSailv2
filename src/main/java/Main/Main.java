@@ -29,19 +29,21 @@ public class Main {
             Discord4J.disableChannelWarnings();
             FileHandler handler = new FileHandler();
             handler.createDirectory(Constants.DIRECTORY_STORAGE);
-            handler.createDirectory(Constants.DIRECTORY_IMAGES);
+            handler.createDirectory(Constants.DIRECTORY_GLOBAL_IMAGES);
             handler.createDirectory(Constants.DIRECTORY_COMP);
             handler.createDirectory(Constants.DIRECTORY_BACKUPS);
             Competition competition = new Competition();
             if (!Files.exists(Paths.get(Constants.FILE_COMPETITION))){
-                competition.properlyInit = true;
+                competition.setProperlyInit(true);
                 handler.writetoJson(Constants.FILE_COMPETITION, competition);
             }
             token = handler.readFromFile(Constants.FILE_TOKEN).get(0);
-            IDiscordClient client = Client.getClient(token, true);
+            IDiscordClient client = Client.getClient(token, false);
             client.isBot();
             EventDispatcher dispatcher = client.getDispatcher();
             dispatcher.registerListener(new AnnotationListener());
+            client.login();
+            Globals.setClient(client);
         } catch (DiscordException ex) {
             logger.error(ex.getErrorMessage());
         }

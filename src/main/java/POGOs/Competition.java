@@ -2,26 +2,32 @@ package POGOs;
 
 import Main.Constants;
 import Main.Globals;
-import Objects.CompetitionObject;
-import com.sun.javafx.image.impl.IntArgb;
+import Objects.PollObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Vaerys on 29/08/2016.
  */
 public class Competition {
-    public boolean properlyInit = false;
-    ArrayList<CompetitionObject> entries = new ArrayList<>();
+    boolean properlyInit = false;
+    ArrayList<PollObject> entries = new ArrayList<>();
     ArrayList<String> voting = new ArrayList<>();
 
-    public void newEntry(CompetitionObject entry) {
+    public boolean isProperlyInit() {
+        return properlyInit;
+    }
+
+    public void setProperlyInit(boolean properlyInit) {
+        this.properlyInit = properlyInit;
+    }
+
+    public void newEntry(PollObject entry) {
         entries.add(entry);
     }
 
-    public ArrayList<CompetitionObject> getEntries() {
+    public ArrayList<PollObject> getEntries() {
         return entries;
     }
 
@@ -89,4 +95,5 @@ public class Competition {
         }
         return builder.toString();
     }
+
 }

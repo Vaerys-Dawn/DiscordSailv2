@@ -1,5 +1,6 @@
 package POGOs;
 
+import Annotations.ToggleAnnotation;
 import Main.Constants;
 import Objects.BlackListObject;
 import Objects.ChannelTypeObject;
@@ -12,18 +13,28 @@ import java.util.ArrayList;
  * Created by Vaerys on 03/08/2016.
  */
 public class GuildConfig {
-    public boolean properlyInit = false;
+    boolean properlyInit = false;
     String guildName = "";
-    public Boolean doLoginMessage = false;
-    public Boolean doLogging = false;
-    public Boolean doBlackListing = false;
-    public Boolean doShitPostFiltering = false;
+    boolean doLoginMessage = false;
+    boolean doGeneralLogging = false;
+    boolean doAdminLogging = false;
+    boolean doBlackListing = false;
+    boolean doShitPostFiltering = false;
+
     ArrayList<ChannelTypeObject> channels = new ArrayList<>();
     ArrayList<RoleTypeObject> cosmeticRoles = new ArrayList<>();
     ArrayList<RoleTypeObject> modifierRoles = new ArrayList<>();
     ArrayList<RoleTypeObject> trustedRoles = new ArrayList<>();
     ArrayList<BlackListObject> blackList = new ArrayList<>();
     RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", Constants.NULL_VARIABLE);
+
+    public boolean isProperlyInit() {
+        return properlyInit;
+    }
+
+    public void setProperlyInit(boolean properlyInit) {
+        this.properlyInit = properlyInit;
+    }
 
     public void initConfig() {
         if (!properlyInit) {
@@ -36,20 +47,52 @@ public class GuildConfig {
         this.guildName = guildName;
     }
 
+
+    //Getters For the Toggles.
+    public boolean doLoginMessage() {
+        return doLoginMessage;
+    }
+
+    public boolean doGeneralLogging() {
+        return doGeneralLogging;
+    }
+
+    public boolean doBlackListing() {
+        return doBlackListing;
+    }
+
+    public boolean doShitPostFiltering() {
+        return doShitPostFiltering;
+    }
+
+    public boolean doAdminLogging() {
+        return doAdminLogging;
+    }
+
+    //Togglers
+    @ToggleAnnotation(name = "LoginMessage")
     public void toggleDoLoginMessage() {
         doLoginMessage = !doLoginMessage;
     }
 
+    @ToggleAnnotation(name = "BlackListing")
     public void toggleDoBlackListing() {
         doBlackListing = !doBlackListing;
     }
 
+    @ToggleAnnotation(name = "GeneralLogging")
     public void toggleLogging() {
-        doLogging = !doLogging;
+        doGeneralLogging = !doGeneralLogging;
     }
 
+    @ToggleAnnotation(name = "ShitPostFiltering")
     public void toggleShitPostFiltering() {
         doShitPostFiltering = !doShitPostFiltering;
+    }
+
+    @ToggleAnnotation(name = "AdminLogging")
+    public void toggleAdminLogging() {
+        doAdminLogging = !doAdminLogging;
     }
 
     public void setUpChannel(String channelType, String channelID) {
@@ -72,26 +115,40 @@ public class GuildConfig {
                 return c.getID();
             }
         }
-        return Constants.NULL_VARIABLE;
+        return null;
     }
 
     public void updateVariables(IGuild guild) {
+        //update Guild Name
+        setGuildName(guild.getName());
+
         //Update Races
         ArrayList<RoleTypeObject> newRaces = new ArrayList<>();
         for (RoleTypeObject r : cosmeticRoles) {
-            r.updateRoleName(guild.getRoleByID(r.getRoleID()).getName());
-            newRaces.add(r);
+            if (guild.getRoleByID(r.getRoleID()) != null) {
+                r.updateRoleName(guild.getRoleByID(r.getRoleID()).getName());
+                newRaces.add(r);
+            }
         }
         cosmeticRoles = newRaces;
+
         //Update Trusted Roles
         ArrayList<RoleTypeObject> newTrustedRoles = new ArrayList<>();
         for (RoleTypeObject r : trustedRoles) {
-            r.updateRoleName(guild.getRoleByID(r.getRoleID()).getName());
-            newTrustedRoles.add(r);
+            if (guild.getRoleByID(r.getRoleID()) != null) {
+                r.updateRoleName(guild.getRoleByID(r.getRoleID()).getName());
+                newTrustedRoles.add(r);
+            }
         }
         trustedRoles = newTrustedRoles;
+
+        //Update Role to Mention
         if (!roleToMention.getRoleID().equals(Constants.NULL_VARIABLE)) {
-            roleToMention.updateRoleName(guild.getRoleByID(roleToMention.getRoleID()).getName());
+            if (guild.getRoleByID(roleToMention.getRoleID()) == null) {
+                roleToMention = new RoleTypeObject("Role Missing", Constants.NULL_VARIABLE);
+            } else {
+                roleToMention.updateRoleName(guild.getRoleByID(roleToMention.getRoleID()).getName());
+            }
         }
     }
 
@@ -105,7 +162,7 @@ public class GuildConfig {
 
     public void removeBlackListItem(String phrase) {
         for (int i = 0; i < blackList.size(); i++) {
-            if (blackList.get(1).phrase.equalsIgnoreCase(phrase)) {
+            if (blackList.get(1).getPhrase().equalsIgnoreCase(phrase)) {
                 blackList.remove(i);
             }
         }
@@ -129,13 +186,13 @@ public class GuildConfig {
         } else {
             roleList = modifierRoles;
         }
-        while (i < roleList.size()){
+        while (i < roleList.size()) {
             if (roleList.get(i).getRoleID().equals(roleID)) {
                 isfound = true;
             }
             i++;
         }
-        if (!isfound){
+        if (!isfound) {
             roleList.add(new RoleTypeObject(roleName, roleID));
             if (isCosmetic) {
                 cosmeticRoles = roleList;

@@ -16,8 +16,10 @@ import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.*;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.Image;
 import sx.blah.discord.util.RateLimitException;
 
+import java.io.File;
 import java.util.Scanner;
 
 /**
@@ -27,10 +29,6 @@ public class AnnotationListener {
 
     final static Logger logger = LoggerFactory.getLogger(AnnotationListener.class);
 
-    //File Handler
-    FileHandler handler = new FileHandler();
-
-
     /**
      * Sets up the relevant files for each guild.
      */
@@ -38,9 +36,10 @@ public class AnnotationListener {
     public void onGuildCreateEvent(GuildCreateEvent event) {
         IGuild guild = event.getGuild();
         String guildID = guild.getID();
+        logger.info("Starting Guild init proccess for Guild with ID: " + guildID);
 
         //Init Cooldowns
-        Globals.addCooldown(guildID);
+        TimedEvents.addGuildCoolDown(guildID);
 
         //Create POGO templates
         GuildConfig guildConfig = new GuildConfig();
@@ -51,32 +50,32 @@ public class AnnotationListener {
         //Init Files
         customCommands.initCustomCommands();
         guildConfig.initConfig();
-        guildConfig.properlyInit = true;
-        servers.properlyInit = true;
-        customCommands.properlyInit = true;
-        characters.properlyInit = true;
-        handler.createDirectory(Utility.getDirectory(guildID));
-        handler.createDirectory(Utility.getDirectory(guildID,true));
-        handler.initFile(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), guildConfig);
-        handler.initFile(Utility.getFilePath(guildID, Constants.FILE_SERVERS), servers);
-        handler.initFile(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), customCommands);
-        handler.initFile(Utility.getFilePath(guildID, Constants.FILE_CHARACTERS), characters);
-        handler.initFile(Utility.getFilePath(guildID, Constants.FILE_INFO));
+        guildConfig.setProperlyInit(true);
+        servers.setProperlyInit(true);
+        customCommands.setProperlyInit(true);
+        characters.setProperlyInit(true);
+        FileHandler.createDirectory(Utility.getDirectory(guildID));
+        FileHandler.createDirectory(Utility.getDirectory(guildID, true));
+        FileHandler.createDirectory(Utility.getGuildImageDir(guildID));
+        FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), guildConfig);
+        FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_SERVERS), servers);
+        FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), customCommands);
+        FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_CHARACTERS), characters);
+        FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_INFO));
 
         //Update Variables.
         //Guild Config
         String pathGuildConfig = Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG);
-        guildConfig = (GuildConfig) handler.readfromJson(pathGuildConfig, GuildConfig.class);
+        guildConfig = (GuildConfig) FileHandler.readfromJson(pathGuildConfig, GuildConfig.class);
         guildConfig.updateVariables(guild);
-        guildConfig.setGuildName(event.getGuild().getName());
-        handler.writetoJson(pathGuildConfig, guildConfig);
+        FileHandler.writetoJson(pathGuildConfig, guildConfig);
 
 
         logger.info("Finished Initialising Guild With ID: " + guildID);
         //handling Login Message
-        if (guildConfig.doLoginMessage) {
+        if (guildConfig.doLoginMessage()) {
             IChannel channel;
-            if (!guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL).equals("")) {
+            if (guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL) == null) {
                 channel = guild.getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));
             } else {
                 channel = guild.getChannelByID(guildID);
@@ -89,12 +88,11 @@ public class AnnotationListener {
     @EventSubscriber
     public void onReadyEvent(ReadyEvent event) {
         try {
-//            final Image avatar = Image.forFile(new File("Icons/Sailvector.png"));
-//            event.getClient().changeAvatar(avatar);
             final Status status = Status.game("IN DEVELOPMENT");
             event.getClient().changeStatus(status);
             if (!event.getClient().getApplicationName().equals(Globals.botName))
                 event.getClient().changeUsername(Globals.botName);
+            new TimedEvents();
             consoleInput(event);
         } catch (DiscordException | RateLimitException e) {
             e.printStackTrace();
@@ -118,7 +116,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMessageRecivedEvent(MessageReceivedEvent event) {
-        if (event.getMessage().getChannel().isPrivate()){
+        if (event.getMessage().getChannel().isPrivate()) {
             new DMHandler(event.getMessage());
             return;
         }
@@ -129,50 +127,40 @@ public class AnnotationListener {
         String messageLC = message.toString().toLowerCase();
         String args = "";
         String command = "";
-        boolean isBeta = false;
-
-        for (IRole r : author.getRolesForGuild(guild)) {
-            if (r.getName().equalsIgnoreCase("V2 Tester")) {
-                isBeta = true;
-            }
-        }
 
         //Set Console Response Channel.
         if (author.getID().equals(Globals.creatorID)) {
             Globals.consoleMessageCID = channel.getID();
         }
 
-//        if (isBeta) {
-//            Sets Up Command Arguments
-            if (messageLC.startsWith(Constants.PREFIX_COMMAND.toLowerCase()) || messageLC.startsWith(Constants.PREFIX_CC.toLowerCase())) {
-                String[] splitMessage = message.toString().split(" ");
-                command = splitMessage[0];
-                StringBuilder getArgs = new StringBuilder();
-                getArgs.append(message.toString());
-                getArgs.delete(0, splitMessage[0].length() + 1);
-                args = getArgs.toString();
-            }
+        if (messageLC.startsWith(Constants.PREFIX_COMMAND.toLowerCase()) || messageLC.startsWith(Constants.PREFIX_CC.toLowerCase())) {
+            String[] splitMessage = message.toString().split(" ");
+            command = splitMessage[0];
+            StringBuilder getArgs = new StringBuilder();
+            getArgs.append(message.toString());
+            getArgs.delete(0, splitMessage[0].length() + 1);
+            args = getArgs.toString();
+        }
 
-            //message and command handling
-            new MessageHandler(command, args, message);
-//        }
+        //message and command handling
+        new MessageHandler(command, args, message);
     }
 
     @EventSubscriber
     public void onMentionEvent(MentionEvent event) {
         // TODO: 14/08/2016 set up do that mentioning the bot sends a priority message to the owner.
-        if (event.getMessage().getChannel().isPrivate()){
+        if (event.getMessage().getChannel().isPrivate()) {
             new DMHandler(event.getMessage());
             return;
         }
     }
 
     @EventSubscriber
-    public void onRoleDeletEvent(RoleDeleteEvent event){
+    public void onRoleDeleteEvent(RoleDeleteEvent event) {
         IGuild guild = event.getGuild();
         String guildID = guild.getID();
-        GuildConfig guildConfig = (GuildConfig) handler.readfromJson(Utility.getFilePath(guildID,Constants.FILE_GUILD_CONFIG),GuildConfig.class);
-        guildConfig.removeRole(event.getRole().getID(),event.getRole().getName(),true);
-        guildConfig.removeRole(event.getRole().getID(),event.getRole().getName(),false);
+        GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+        guildConfig.updateVariables(guild);
+        Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
     }
 }
