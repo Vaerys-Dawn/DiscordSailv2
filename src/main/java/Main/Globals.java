@@ -19,8 +19,8 @@ public class Globals {
     public static String botName = "S.A.I.L v2.0";
     public static IDiscordClient client;
 
-    public static int compEntries = 10;
-    public static int voteLimit = 3;
+    public static int argsMax = 500;
+    public static int maxWarnings = 3;
 
     public static IDiscordClient getClient() {
         return client;

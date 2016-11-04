@@ -15,4 +15,8 @@ public class UserTypeObject {
     public String getID() {
         return ID;
     }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 }

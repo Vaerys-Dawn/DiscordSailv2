@@ -5,10 +5,7 @@ import Handlers.FileHandler;
 import Main.*;
 import Handlers.MessageHandler;
 
-import POGOs.Characters;
-import POGOs.CustomCommands;
-import POGOs.GuildConfig;
-import POGOs.Servers;
+import POGOs.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +13,8 @@ import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.*;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.Image;
 import sx.blah.discord.util.RateLimitException;
 
-import java.io.File;
 import java.util.Scanner;
 
 /**
@@ -46,6 +41,7 @@ public class AnnotationListener {
         Servers servers = new Servers();
         CustomCommands customCommands = new CustomCommands();
         Characters characters = new Characters();
+        Competition competition = new Competition();
 
         //Init Files
         customCommands.initCustomCommands();
@@ -54,6 +50,7 @@ public class AnnotationListener {
         servers.setProperlyInit(true);
         customCommands.setProperlyInit(true);
         characters.setProperlyInit(true);
+        competition.setProperlyInit(true);
         FileHandler.createDirectory(Utility.getDirectory(guildID));
         FileHandler.createDirectory(Utility.getDirectory(guildID, true));
         FileHandler.createDirectory(Utility.getGuildImageDir(guildID));
@@ -62,13 +59,14 @@ public class AnnotationListener {
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), customCommands);
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_CHARACTERS), characters);
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_INFO));
+        FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_COMPETITION), competition);
 
         //Update Variables.
         //Guild Config
         String pathGuildConfig = Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG);
-        guildConfig = (GuildConfig) FileHandler.readfromJson(pathGuildConfig, GuildConfig.class);
+        guildConfig = (GuildConfig) FileHandler.readFromJson(pathGuildConfig, GuildConfig.class);
         guildConfig.updateVariables(guild);
-        FileHandler.writetoJson(pathGuildConfig, guildConfig);
+        FileHandler.writeToJson(pathGuildConfig, guildConfig);
 
 
         logger.info("Finished Initialising Guild With ID: " + guildID);
@@ -82,7 +80,6 @@ public class AnnotationListener {
             }
             Utility.sendMessage("> I have finished booting and I am now listening for commands...", channel);
         }
-        // TODO: 02/09/2016 Backups are a necessity
     }
 
     @EventSubscriber
@@ -92,7 +89,6 @@ public class AnnotationListener {
             event.getClient().changeStatus(status);
             if (!event.getClient().getApplicationName().equals(Globals.botName))
                 event.getClient().changeUsername(Globals.botName);
-            new TimedEvents();
             consoleInput(event);
         } catch (DiscordException | RateLimitException e) {
             e.printStackTrace();
@@ -148,7 +144,6 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMentionEvent(MentionEvent event) {
-        // TODO: 14/08/2016 set up do that mentioning the bot sends a priority message to the owner.
         if (event.getMessage().getChannel().isPrivate()) {
             new DMHandler(event.getMessage());
             return;
@@ -160,6 +155,19 @@ public class AnnotationListener {
         IGuild guild = event.getGuild();
         String guildID = guild.getID();
         GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+        guildConfig.updateVariables(guild);
+        Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
+    }
+
+    @EventSubscriber
+    public void onRoleUpdateEvent(RoleUpdateEvent event){
+        IGuild guild = event.getGuild();
+        if (guild == null){
+            return;
+        }
+        String guildID = guild.getID();
+        GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+        System.out.println("OnRoleUpdateEvent : " + guild.getID());
         guildConfig.updateVariables(guild);
         Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
     }

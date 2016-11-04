@@ -6,9 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Vaerys on 04/06/2016.
@@ -70,10 +73,24 @@ public class FileHandler {
         }
     }
 
+    /**saves data from POGO of type "object" to temp file using String "name".*/
+    public static File createTempFile(Object object, String name){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            File file = File.createTempFile(name,".json");
+            FileWriter writer = new FileWriter(file);
+            gson.toJson(object,writer);
+            return file;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**Reads from a .Json File using path "file" and returns a POGO based on "objClass".*/
-    public static Object readfromJson(String file, Class<?> objClass){
+    public static Object readFromJson(String file, Class<?> objClass){
         Gson gson = new Gson();
-        try (Reader reader = new FileReader(file)) {
+        try (Reader reader = new InputStreamReader(new FileInputStream(new File(file)), StandardCharsets.UTF_8)) {
             Object newObject = gson.fromJson(reader, objClass);
             logger.debug("Reading Data from Json File: " + file + " applying to Object: " + objClass.getName());
             return newObject;
@@ -85,9 +102,9 @@ public class FileHandler {
     }
 
     /**saves data from POGO of type "object" using path "file".*/
-    public static void writetoJson(String file, Object object){
+    public static void writeToJson(String file, Object object){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter(file)) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             gson.toJson(object, writer);
             logger.debug("Saving Data to Json File: " + file);
         } catch (IOException e) {
@@ -100,7 +117,7 @@ public class FileHandler {
     }
 
     public static void initFile(String path, Object object){
-        if (!exists(path)) writetoJson(path,object);
+        if (!exists(path)) writeToJson(path,object);
     }
 
     public static void initFile(String path){

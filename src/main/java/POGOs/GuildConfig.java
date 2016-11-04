@@ -1,11 +1,11 @@
 package POGOs;
 
 import Annotations.ToggleAnnotation;
-import Main.Constants;
-import Objects.BlackListObject;
-import Objects.ChannelTypeObject;
-import Objects.RoleTypeObject;
+import Main.Globals;
+import Objects.*;
 import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
 
@@ -15,18 +15,25 @@ import java.util.ArrayList;
 public class GuildConfig {
     boolean properlyInit = false;
     String guildName = "";
-    boolean doLoginMessage = false;
-    boolean doGeneralLogging = false;
-    boolean doAdminLogging = false;
-    boolean doBlackListing = false;
-    boolean doShitPostFiltering = false;
+    boolean loginMessage = true;
+    boolean generalLogging = false;
+    boolean adminLogging = false;
+    boolean blackListing = false;
+    boolean maxMentions = true;
+    boolean dailyMessage = true;
+    boolean shitPostFiltering = false;
+    boolean muteRepeatOffenders = true;
+    int maxMentionLimit = 8;
 
+    // TODO: 04/10/2016 let the mention limit be customisable.
     ArrayList<ChannelTypeObject> channels = new ArrayList<>();
     ArrayList<RoleTypeObject> cosmeticRoles = new ArrayList<>();
     ArrayList<RoleTypeObject> modifierRoles = new ArrayList<>();
     ArrayList<RoleTypeObject> trustedRoles = new ArrayList<>();
     ArrayList<BlackListObject> blackList = new ArrayList<>();
-    RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", Constants.NULL_VARIABLE);
+    ArrayList<OffenderObject> repeatOffenders = new ArrayList<>();
+    RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", null);
+    RoleTypeObject mutedRole = new RoleTypeObject("No Role Set",null);
 
     public boolean isProperlyInit() {
         return properlyInit;
@@ -50,49 +57,80 @@ public class GuildConfig {
 
     //Getters For the Toggles.
     public boolean doLoginMessage() {
-        return doLoginMessage;
+        return loginMessage;
+    }
+
+    public int getMaxMentionLimit() {
+        return maxMentionLimit;
     }
 
     public boolean doGeneralLogging() {
-        return doGeneralLogging;
+        return generalLogging;
     }
 
     public boolean doBlackListing() {
-        return doBlackListing;
+        return blackListing;
     }
 
     public boolean doShitPostFiltering() {
-        return doShitPostFiltering;
+        return shitPostFiltering;
     }
 
     public boolean doAdminLogging() {
-        return doAdminLogging;
+        return adminLogging;
+    }
+
+    public boolean doMaxMentions() {
+        return maxMentions;
+    }
+
+    public boolean doDailyMessage() {
+        return dailyMessage;
+    }
+
+    public boolean doMuteRepeatOffenders() {
+        return muteRepeatOffenders;
     }
 
     //Togglers
     @ToggleAnnotation(name = "LoginMessage")
     public void toggleDoLoginMessage() {
-        doLoginMessage = !doLoginMessage;
+        loginMessage = !loginMessage;
     }
 
     @ToggleAnnotation(name = "BlackListing")
     public void toggleDoBlackListing() {
-        doBlackListing = !doBlackListing;
+        blackListing = !blackListing;
     }
 
     @ToggleAnnotation(name = "GeneralLogging")
     public void toggleLogging() {
-        doGeneralLogging = !doGeneralLogging;
+        generalLogging = !generalLogging;
     }
 
     @ToggleAnnotation(name = "ShitPostFiltering")
     public void toggleShitPostFiltering() {
-        doShitPostFiltering = !doShitPostFiltering;
+        shitPostFiltering = !shitPostFiltering;
     }
 
     @ToggleAnnotation(name = "AdminLogging")
     public void toggleAdminLogging() {
-        doAdminLogging = !doAdminLogging;
+        adminLogging = !adminLogging;
+    }
+
+    @ToggleAnnotation(name = "MentionSpam")
+    public void toggelMaxMentions() {
+        maxMentions = !maxMentions;
+    }
+
+    @ToggleAnnotation(name = "DailyMessage")
+    public void toggleDailyMessage() {
+        dailyMessage = !dailyMessage;
+    }
+
+    @ToggleAnnotation(name = "MuteRepeatOffender")
+    public void toggleRepeatOffender() {
+        muteRepeatOffenders = !muteRepeatOffenders;
     }
 
     public void setUpChannel(String channelType, String channelID) {
@@ -143,13 +181,30 @@ public class GuildConfig {
         trustedRoles = newTrustedRoles;
 
         //Update Role to Mention
-        if (!roleToMention.getRoleID().equals(Constants.NULL_VARIABLE)) {
+        if (roleToMention.getRoleID() != null) {
             if (guild.getRoleByID(roleToMention.getRoleID()) == null) {
-                roleToMention = new RoleTypeObject("Role Missing", Constants.NULL_VARIABLE);
+                roleToMention = new RoleTypeObject("Role Missing", null);
             } else {
                 roleToMention.updateRoleName(guild.getRoleByID(roleToMention.getRoleID()).getName());
             }
         }
+
+        //update Muted Role
+        if (mutedRole.getRoleID() != null) {
+            if (guild.getRoleByID(mutedRole.getRoleID()) == null) {
+                mutedRole = new RoleTypeObject("Role Missing", null);
+            } else {
+                mutedRole.updateRoleName(guild.getRoleByID(mutedRole.getRoleID()).getName());
+            }
+        }
+
+        //update repeat offenders.
+        ArrayList<OffenderObject> newMentionSpammers = new ArrayList<>();
+        for (int i = 0;i < repeatOffenders.size();i++) {
+            IUser offender = Globals.getClient().getUserByID(repeatOffenders.get(i).getID());
+            repeatOffenders.get(i).setDisplayName(offender.getName() + "#" + offender.getDiscriminator());
+        }
+        repeatOffenders = newMentionSpammers;
     }
 
     public ArrayList<BlackListObject> getBlackList() {
@@ -231,5 +286,68 @@ public class GuildConfig {
 
     public ArrayList<RoleTypeObject> getCosmeticRoles() {
         return cosmeticRoles;
+    }
+
+    public boolean testIsTrusted(IUser author, IGuild guild) {
+        if (trustedRoles.size() == 0) {
+            return true;
+        } else {
+            for (RoleTypeObject task : trustedRoles) {
+                for (IRole role : author.getRolesForGuild(guild)) {
+                    if (role.getID().equals(task.getRoleID())) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
+    public void addTrusted(String roleID) {
+        for (RoleTypeObject r : trustedRoles) {
+            if (r.getRoleID().equals(roleID)) {
+                return;
+            }
+        }
+        trustedRoles.add(new RoleTypeObject(Globals.getClient().getRoleByID(roleID).getName(), roleID));
+    }
+
+    public void delTrusted(String roleID) {
+        int i = 0;
+        for (RoleTypeObject r : trustedRoles) {
+            if (r.getRoleID().equals(roleID)) {
+                trustedRoles.remove(i);
+                return;
+            }
+            i++;
+        }
+    }
+
+    public void setMaxMentionLimit(int maxMentionLimit) {
+        this.maxMentionLimit = maxMentionLimit;
+    }
+
+    public void addOffender(OffenderObject offenderObject) {
+        repeatOffenders.add(offenderObject);
+    }
+
+    public ArrayList<OffenderObject> getRepeatOffenders() {
+        return repeatOffenders;
+    }
+
+    public void addOffence(String userID) {
+        for (int i = 0; i< repeatOffenders.size();i++){
+            if (repeatOffenders.get(i).getID().equals(userID)){
+                repeatOffenders.get(i).addOffence();
+            }
+        }
+    }
+
+    public void setMutedRole(RoleTypeObject mutedRole) {
+        this.mutedRole = mutedRole;
+    }
+
+    public RoleTypeObject getMutedRole() {
+        return mutedRole;
     }
 }

@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 public @interface CommandAnnotation {
     String name();
     String description();
-    String usage() default Constants.NULL_VARIABLE;
+    String usage() default "";
     String type();
     String channel() default Constants.CHANNEL_ANY;
     Permissions[] perms() default {Permissions.SEND_MESSAGES};

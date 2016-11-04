@@ -24,8 +24,11 @@ public class DMHandler {
                     String response = message.toString();
                     String tagRespond = StringUtils.substringBetween(response, prefixResponse, "}");
                     response = response.replace(prefixResponse + tagRespond + "}", "");
+                    if (tagRespond == null){
+                        return;
+                    }
                     if (Utility.sendDM(response, tagRespond, message.getClient()).get()) {
-                        Utility.sendDM("> An Error occurred while attempting to run this command.", message.getClient().getOurUser().getID(), message.getClient());
+                        Utility.sendDM("> An Error occurred while attempting to run this command.", Globals.creatorID, message.getClient());
                     }
                 } catch (PatternSyntaxException ex) {
                     Utility.sendDM("> An Error occurred while attempting to run this command.", Globals.creatorID, message.getClient());

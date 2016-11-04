@@ -1,13 +1,14 @@
 package Main;
 
 import Annotations.CommandAnnotation;
+import Annotations.TagAnnotation;
 import Handlers.FileHandler;
 import Handlers.MessageHandler;
+import Objects.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.impl.obj.Message;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
@@ -20,12 +21,8 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 /**
  * Created by Vaerys on 17/08/2016.
@@ -37,9 +34,9 @@ public class Utility {
     //Logger
     final static Logger logger = LoggerFactory.getLogger(Utility.class);
 
-    //Discord Role Utils
+    //Discord Utils
     public static String getRoleIDFromName(String roleName, IGuild guild) {
-        String roleID = Constants.NULL_VARIABLE;
+        String roleID = null;
         List<IRole> guildRoles = guild.getRoles();
         for (IRole r : guildRoles) {
             if (r.getName().equalsIgnoreCase(roleName)) {
@@ -47,6 +44,24 @@ public class Utility {
             }
         }
         return roleID;
+    }
+
+    public static boolean testForPerms(Permissions[] perms, IUser author, IGuild guild) {
+        Permissions[] compiledPerms = new Permissions[perms.length];
+        int permsIndex = 0;
+        for (Permissions aP : perms) {
+            for (IRole r : author.getRolesForGuild(guild)) {
+                for (Permissions p : r.getPermissions()) {
+                    if (aP.equals(p)) {
+                        compiledPerms[permsIndex] = p;
+                    }
+                }
+            }
+            permsIndex++;
+        }
+        if (Arrays.equals(compiledPerms, perms)) {
+            return true;
+        } else return false;
     }
 
     //Command Utils
@@ -66,55 +81,15 @@ public class Utility {
         return null;
     }
 
-    public static String tagSystem(String contents, IMessage message, String args) {
-        String response = contents;
-        String tagRandom;
-        String tagRegex;
-        String prefixRandom = "#random#{";
-        String prefixRegex = "#regex#{";
-        String lastAttempt;
-        response = response.replace("#args#", args);
-        try {
-            if (response.contains(prefixRandom)) {
-                do {
-                    lastAttempt = response;
-                    tagRandom = StringUtils.substringBetween(response, prefixRandom, "}");
-                    if (tagRandom != null) {
-                        ArrayList<String> splitRandom = new ArrayList<>(Arrays.asList(tagRandom.split(";")));
-                        Random random = new Random();
-                        String toRegex = "#random#{" + tagRandom + "}";
-                        response = response.replaceFirst(Pattern.quote(toRegex), splitRandom.get(random.nextInt(splitRandom.size())));
-                    }
-                } while (StringUtils.countMatches(response, prefixRandom) > 0 && (!lastAttempt.equals(response)));
+
+
+    public static String checkBlacklist(String message, ArrayList<BlackListObject> blacklist) {
+        for (BlackListObject b : blacklist) {
+            if (message.toLowerCase().contains(b.getPhrase().toLowerCase())) {
+                return b.getReason();
             }
-            if (response.contains(prefixRegex)) {
-                do {
-                    lastAttempt = response;
-                    tagRegex = StringUtils.substringBetween(response, prefixRegex, "}");
-                    if (tagRegex != null) {
-                        ArrayList<String> splitRegex = new ArrayList<>(Arrays.asList(tagRegex.split(";")));
-                        String toRegex = prefixRegex + tagRegex + "}";
-                        if (splitRegex.size() == 2) {
-                            response = response.replace(toRegex, "");
-                            response = response.replace(splitRegex.get(0), splitRegex.get(1));
-                        } else {
-                            response = response.replace(tagRegex, "#ERROR#");
-                        }
-                    }
-                } while (StringUtils.countMatches(response, prefixRegex) > 0 && (!lastAttempt.equals(response)));
-            }
-        } catch (PatternSyntaxException ex) {
-            return "> An Error occurred while attempting to run this command.";
         }
-        response = response.replace("#author#", message.getAuthor().getDisplayName(message.getGuild()));
-        response = response.replace("#channel#", message.getChannel().mention());
-        response = response.replace("#guild#", message.getGuild().getName());
-        response = response.replace("#authorID#", message.getAuthor().getID());
-        response = response.replace("#channelID#", message.getChannel().getID());
-        response = response.replace("#guildID#", message.getGuild().getID());
-        response = response.replace("@everyone,", "**[REDACTED]**");
-        response = response.replace("@here", "**[REDACTED]**");
-        return response;
+        return null;
     }
 
     //File Utils
@@ -139,12 +114,12 @@ public class Utility {
     }
 
     public static Object initFile(String guildID, String filePath, Class<?> objClass) {
-        return handler.readfromJson(Utility.getFilePath(guildID, filePath), objClass);
+        return handler.readFromJson(Utility.getFilePath(guildID, filePath), objClass);
     }
 
     public static void flushFile(String guildID, String filePath, Object object, boolean wasInit) {
         if (wasInit) {
-            handler.writetoJson(Utility.getFilePath(guildID, filePath), object);
+            handler.writeToJson(Utility.getFilePath(guildID, filePath), object);
         } else ;
     }
 
@@ -167,9 +142,17 @@ public class Utility {
     //Discord Request Processors
     public static RequestBuffer.RequestFuture<Boolean> sendMessage(String message, IChannel channel) {
         return RequestBuffer.request(() -> {
+            if (message == null){
+                return false;
+            }
             if (message.length() < 2000) {
                 try {
-                    channel.sendMessage(message);
+                    if (StringUtils.containsOnly(message, "\n")) {
+                        return true;
+                    }
+                    if (message != null || !message.equals("")) {
+                        channel.sendMessage(message);
+                    }
                 } catch (MissingPermissionsException e) {
                     logger.error("Error sending message to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
@@ -184,7 +167,44 @@ public class Utility {
                 }
             } else {
                 logger.error("Message to be sent to channel with id: " + channel.getID() + "on guild with id: " + channel.getGuild().getID() +
-                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: message to large.");
+                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Message to large.");
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public static RequestBuffer.RequestFuture<Boolean> sendFile(String message, IChannel channel, File file) {
+        return RequestBuffer.request(() -> {
+            try {
+                if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("")) {
+                    if (message != null) {
+                        channel.sendFile(file);
+                    }else {
+                        logger.error("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                                ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
+                        return true;
+                    }
+                }else {
+                    if (message != null) {
+                        channel.sendFile(file,message);
+                    }else {
+                        sendMessage(message,channel);
+                        return true;
+                    }
+                }
+            } catch (DiscordException e) {
+                if (e.getMessage().contains("CloudFlare")) {
+                    sendMessage(message, channel);
+                } else {
+                    e.printStackTrace();
+                    return true;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (MissingPermissionsException e) {
+                logger.error("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
                 return true;
             }
             return false;
@@ -199,6 +219,9 @@ public class Utility {
             } catch (DiscordException e) {
                 e.printStackTrace();
                 return true;
+            } catch (NullPointerException e) {
+                logger.error("[sendDM] " + e.getMessage());
+                return true;
             }
             return false;
         });
@@ -208,9 +231,13 @@ public class Utility {
         return RequestBuffer.request(() -> {
             try {
                 if (isAdding) {
-                    author.addRole(guild.getRoleByID(newRoleID));
+                    if (guild.getRoleByID(newRoleID) != null) {
+                        author.addRole(guild.getRoleByID(newRoleID));
+                    }
                 } else {
-                    author.removeRole(guild.getRoleByID(newRoleID));
+                    if (guild.getRoleByID(newRoleID) != null) {
+                        author.removeRole(guild.getRoleByID(newRoleID));
+                    }
                 }
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("Edited roles hierarchy is too high.")) {
@@ -264,7 +291,7 @@ public class Utility {
         });
     }
 
-    public static RequestBuffer.RequestFuture updateAvatar(Image avatar) {
+    public static RequestBuffer.RequestFuture<Boolean> updateAvatar(Image avatar) {
         return RequestBuffer.request(() -> {
             try {
                 Globals.getClient().changeAvatar(avatar);
@@ -280,6 +307,32 @@ public class Utility {
         });
     }
 
+    public static RequestBuffer.RequestFuture<Boolean> deleteMessage(IMessage message) {
+        return RequestBuffer.request(() -> {
+            try {
+                message.delete();
+            } catch (MissingPermissionsException e) {
+                e.printStackTrace();
+                return true;
+            } catch (DiscordException e) {
+                if (e.getMessage().contains("CloudFlare")) {
+                    deleteMessage(message);
+                } else {
+                    e.printStackTrace();
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
 
+    //Time Utils
+    public static String formatTimeSeconds(long timeMillis) {
+        long second = (timeMillis) % 60;
+        long minute = (timeMillis / 60) % 60;
+        long hour = (timeMillis / (60 * 60)) % 24;
+        String time = String.format("%02d:%02d:%02d", hour, minute, second);
+        return time;
+    }
 
 }

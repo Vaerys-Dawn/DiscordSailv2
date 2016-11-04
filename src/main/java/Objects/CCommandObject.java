@@ -24,9 +24,6 @@ public class CCommandObject {
         timesRun = 0;
     }
 
-    public void setLocked(boolean locked) {
-        isLocked = locked;
-    }
 
     public void setContents(String contents) {
         this.contents = Arrays.asList(contents.split("\n"));
@@ -44,8 +41,10 @@ public class CCommandObject {
         return isLocked;
     }
 
-    public String getContents() {
-        timesRun++;
+    public String getContents(boolean addCounter) {
+        if(addCounter) {
+            timesRun++;
+        }
         StringBuilder builder = new StringBuilder();
         for (String s: contents){
             builder.append(s + "\n");
@@ -59,6 +58,10 @@ public class CCommandObject {
 
     public void toggleShitPost(){
         shitPost = !shitPost;
+    }
+
+    public void toggleLocked() {
+        isLocked = !isLocked();
     }
 
     public boolean isShitPost() {

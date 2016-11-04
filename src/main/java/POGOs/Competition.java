@@ -14,6 +14,7 @@ public class Competition {
     boolean properlyInit = false;
     ArrayList<PollObject> entries = new ArrayList<>();
     ArrayList<String> voting = new ArrayList<>();
+    int voteLimit = 1;
 
     public boolean isProperlyInit() {
         return properlyInit;
@@ -54,16 +55,16 @@ public class Competition {
             userVotes = new ArrayList<>();
             userVotes.add(voterID);
         }
-        if (userVotes.size() == Globals.voteLimit + 1) {
+        if (userVotes.size() == voteLimit + 1) {
             return "> You have already used up all of your votes.";
         }
         int x = 0;
         builder.append("> Your votes for entries: \n");
         for (int i = 0; newVotes.size() > i; i++) {
-            if (x < Globals.voteLimit && userVotes.size() < Globals.voteLimit + 1) {
+            if (x < voteLimit && userVotes.size() < voteLimit + 1) {
                 try {
                     int entry = Integer.parseInt(newVotes.get(i));
-                    if (entry > Globals.compEntries) {
+                    if (entry > entries.size()) {
                         //builder.append("    **Vote Not Counted. Reason: Number too high**\n");
                     } else if(entry == 0) {
                         //builder.append("    **Vote Not Counted. Reason: Number = 0\n");
@@ -78,10 +79,10 @@ public class Competition {
                 }
             }
         }
-        if (newVotes.size() > Globals.voteLimit) {
+        if (newVotes.size() > voteLimit) {
             //builder.append("    **Rest of Votes Not Counted: Reason Max votes = " + Globals.voteLimit + "**\n");
         }
-        builder.append(Constants.PREFIX_INDENT+"Have been saved. you now have: **" + (Globals.voteLimit - userVotes.size() + 1) + "** Vote token(s) left.");
+        builder.append(Constants.PREFIX_INDENT+"Have been saved. you now have: **" + (voteLimit - userVotes.size() + 1) + "** Vote token(s) left.");
 
         StringBuilder finalVotes = new StringBuilder();
         for (String s : userVotes) {

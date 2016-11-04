@@ -5,14 +5,22 @@ package Objects;
  */
 public class WaiterObject {
     String userID;
-    public int removerCountdown;
+    long remainderSecs;
 
     public WaiterObject(String userID) {
         this.userID = userID;
-        this.removerCountdown = 60;
+        this.remainderSecs = 60;
     }
 
     public String getID() {
         return userID;
+    }
+
+    public long getRemainderSecs() {
+        return remainderSecs;
+    }
+
+    public void setRemainderSecs(long remainderSecs) {
+        this.remainderSecs = remainderSecs;
     }
 }
