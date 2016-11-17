@@ -1,19 +1,15 @@
 package Main;
 
 import Annotations.CommandAnnotation;
-import Annotations.TagAnnotation;
 import Handlers.FileHandler;
 import Handlers.MessageHandler;
-import Objects.*;
+import Objects.BlackListObject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.*;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.Image;
-import sx.blah.discord.util.MissingPermissionsException;
-import sx.blah.discord.util.RequestBuffer;
+import sx.blah.discord.util.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,8 +17,9 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Vaerys on 17/08/2016.
@@ -80,7 +77,6 @@ public class Utility {
         }
         return null;
     }
-
 
 
     public static String checkBlacklist(String message, ArrayList<BlackListObject> blacklist) {
@@ -142,7 +138,7 @@ public class Utility {
     //Discord Request Processors
     public static RequestBuffer.RequestFuture<Boolean> sendMessage(String message, IChannel channel) {
         return RequestBuffer.request(() -> {
-            if (message == null){
+            if (message == null) {
                 return false;
             }
             if (message.length() < 2000) {
@@ -180,16 +176,16 @@ public class Utility {
                 if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("")) {
                     if (message != null) {
                         channel.sendFile(file);
-                    }else {
+                    } else {
                         logger.error("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
                                 ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
                         return true;
                     }
-                }else {
+                } else {
                     if (message != null) {
-                        channel.sendFile(file,message);
-                    }else {
-                        sendMessage(message,channel);
+                        channel.sendFile(message, file);
+                    } else {
+                        sendMessage(message, channel);
                         return true;
                     }
                 }
@@ -326,6 +322,44 @@ public class Utility {
         });
     }
 
+    public static RequestBuffer.RequestFuture<Boolean> deleteMessage(MessageList messages) {
+        return RequestBuffer.request(() -> {
+            try {
+                messages.bulkDelete(messages);
+            } catch (MissingPermissionsException e) {
+                e.printStackTrace();
+                return true;
+            } catch (DiscordException e) {
+                if (e.getMessage().contains("CloudFlare")) {
+                    deleteMessage(messages);
+                } else {
+                    e.printStackTrace();
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    public static RequestBuffer.RequestFuture<Boolean> updateUserNickName(IUser author, IGuild guild, String nickname) {
+        return RequestBuffer.request(() -> {
+            try{
+                guild.setUserNickname(author,nickname);
+            } catch (MissingPermissionsException e) {
+                e.printStackTrace();
+                return true;
+            } catch (DiscordException e) {
+                if (e.getMessage().contains("CloudFlare")) {
+                    updateUserNickName(author,guild,nickname);
+                } else {
+                    e.printStackTrace();
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
     //Time Utils
     public static String formatTimeSeconds(long timeMillis) {
         long second = (timeMillis) % 60;
@@ -334,5 +368,6 @@ public class Utility {
         String time = String.format("%02d:%02d:%02d", hour, minute, second);
         return time;
     }
+
 
 }

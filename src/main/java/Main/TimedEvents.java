@@ -1,11 +1,14 @@
 package Main;
 
-import Objects.*;
+import Objects.ReminderObject;
+import Objects.TimedObject;
+import Objects.WaiterObject;
 import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
-
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.util.Image;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -13,9 +16,6 @@ import java.text.DateFormat;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
-
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.util.Image;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -198,5 +198,9 @@ public class TimedEvents {
                 }
             }
         }, 3000, 60000);
+    }
+
+    public static void saveAndLogOff() {
+        //// TODO: 17/11/2016 this
     }
 }

@@ -1,7 +1,6 @@
 package POGOs;
 
 import Main.Constants;
-import Main.Globals;
 import Objects.PollObject;
 
 import java.util.ArrayList;

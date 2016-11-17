@@ -14,7 +14,6 @@ public class Client {
 
     public static IDiscordClient getClient(String token,boolean login) throws DiscordException {
         ClientBuilder clientBuilder = new ClientBuilder();
-
         clientBuilder.withToken(token);
         clientBuilder.setMaxReconnectAttempts(4000);
         if(login){

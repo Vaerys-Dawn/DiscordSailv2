@@ -2,21 +2,16 @@ package POGOs;
 
 import Main.Constants;
 import Main.Globals;
-import Main.TimedEvents;
 import Main.Utility;
 import Objects.BlackListObject;
 import Objects.ServerObject;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.impl.obj.Guild;
-import sx.blah.discord.handle.impl.obj.User;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Random;
 
 /**
  * Created by Vaerys on 14/08/2016.

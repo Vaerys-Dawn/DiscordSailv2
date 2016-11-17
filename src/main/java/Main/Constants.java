@@ -17,6 +17,7 @@ public class Constants {
     public static final String TYPE_GENERAL = "General";
     public static final String TYPE_ADMIN = "Admin";
     public static final String TYPE_ROLE_SELECT = "Role";
+    public static final String TYPE_CHARACTER = "Characters";
     public static final String TYPE_SERVERS = "Servers";
     public static final String TYPE_CC = "CC";
     public static final String TYPE_HELP = "Help";
@@ -26,6 +27,7 @@ public class Constants {
     public static final String TAG_TYPE_ALL = "all";
     public static final String TAG_TYPE_CC = "CC";
     public static final String TAG_TYPE_ADMIN = "Admin";
+    public static final String TAG_TYPE_INFO = "Info";
 
     //Channel Constants
     public static final String CHANNEL_ANY = "Any";
@@ -44,7 +46,9 @@ public class Constants {
     public static final String ERROR_ROLE_NOT_FOUND = "> Role with that name not found.";
     public static final String ERROR_UPDATING_ROLE = "> An Error Occurred when trying to Update your roles.";
     public static final String ERROR_NIH = "Nothing Interesting Happens.";
-    public static final String ERROR_CC_NOT_FOUND = "> Command with that name not found.";
+    public static final String ERROR_CC_NOT_FOUND = "> Command with that name could not be found.";
+    public static final String ERROR_CHAR_NOT_FOUND = "> Character with that name could not be found.";
+
 
     //-------FilePath Constants--------
 
@@ -55,6 +59,7 @@ public class Constants {
     public static final String DIRECTORY_COMP = DIRECTORY_STORAGE + "Competition/";
     public static final String DIRECTORY_GUILD_IMAGES = "Images/";
     public static final String DIRECTORY_TEMP = DIRECTORY_STORAGE + "Temp/";
+    public static final String DIRECTORY_OLD_FILES = DIRECTORY_STORAGE + "Old_Files/";
 
 
     //Files
@@ -69,8 +74,8 @@ public class Constants {
 
 
     //Special Messages
-    public static final String DAILY_MESSAGE_1 = "> Load Sail.getBehaviour(\"Cat\");;...\n" +
-            "> #random#{Meow;Feed MEEEE;;pet me;get way from me}, #random#{*Lick's self*;;***HISSSSSS***;Wait no don't leave me..}.";
+    public static final String DAILY_MESSAGE_1 = "> Load Sail.getBehaviour(\"Cat\");...\n" +
+            "> #random#{Meow;;Feed MEEEE;;pet me;get way from me}, #random#{*Lick's self*;;***HISSSSSS***;;Wait no don't leave me..}.";
     public static final String DAILY_MESSAGE_2 = "> Well hello again, looks like its a brand new day.";
     public static final String DAILY_MESSAGE_3 = "> #random#{Protocol Avali initiated;;Loading Avali Settings;;OS S.A.V.A.L.I Loaded}." +
             "#random#{Greetings;;Hello;;Salutations}, is seems that today is a new day. It looks like a great day for #random#{exploration;;discovery;;some cake;;**CIVILISATION**;;a picnic}.";
@@ -97,4 +102,6 @@ public class Constants {
             "Goodness what have you all done to the place since I was last here?;;" +
             "My My My Its a brand new day isn't it? looks like we're all still here.}";
     public static final String DAILY_MESSAGE_7 = "> A new Day arrives, Prepare for fun.";
+
+
 }

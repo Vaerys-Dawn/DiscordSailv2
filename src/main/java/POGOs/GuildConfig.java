@@ -2,7 +2,10 @@ package POGOs;
 
 import Annotations.ToggleAnnotation;
 import Main.Globals;
-import Objects.*;
+import Objects.BlackListObject;
+import Objects.ChannelTypeObject;
+import Objects.OffenderObject;
+import Objects.RoleTypeObject;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
@@ -349,5 +352,9 @@ public class GuildConfig {
 
     public RoleTypeObject getMutedRole() {
         return mutedRole;
+    }
+
+    public ArrayList<RoleTypeObject> getTrustedRoles() {
+        return trustedRoles;
     }
 }

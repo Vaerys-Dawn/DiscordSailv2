@@ -4,8 +4,8 @@ package Objects;
  * Created by Vaerys on 27/08/2016.
  */
 public class BlackListObject {
-    String phrase;
-    String reason;
+    private String phrase;
+    private String reason;
 
     public BlackListObject(String phrase, String reason) {
         this.phrase = phrase;

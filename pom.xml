@@ -129,7 +129,7 @@
         <dependency>
             <groupId>com.github.austinv11</groupId>
             <artifactId>Discord4j</artifactId>
-            <version>2.6.1</version>
+            <version>34a372f</version>
             <classifier>shaded</classifier>
         </dependency>
         <dependency>

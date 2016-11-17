@@ -2,11 +2,12 @@ package Listeners;
 
 import Handlers.DMHandler;
 import Handlers.FileHandler;
-import Main.*;
 import Handlers.MessageHandler;
-
+import Main.Constants;
+import Main.Globals;
+import Main.TimedEvents;
+import Main.Utility;
 import POGOs.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -78,6 +79,11 @@ public class AnnotationListener {
             } else {
                 channel = guild.getChannelByID(guildID);
             }
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Utility.sendMessage("> I have finished booting and I am now listening for commands...", channel);
         }
     }
@@ -85,30 +91,14 @@ public class AnnotationListener {
     @EventSubscriber
     public void onReadyEvent(ReadyEvent event) {
         try {
-            final Status status = Status.game("IN DEVELOPMENT");
-            event.getClient().changeStatus(status);
+            event.getClient().changeStatus(Status.game("Starbound"));
             if (!event.getClient().getApplicationName().equals(Globals.botName))
                 event.getClient().changeUsername(Globals.botName);
-            consoleInput(event);
         } catch (DiscordException | RateLimitException e) {
             e.printStackTrace();
         }
     }
 
-    private void consoleInput(ReadyEvent event) {
-        logger.info("Console input initiated.");
-        Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextLine()) {
-            IChannel channel = event.getClient().getChannelByID(Globals.consoleMessageCID);
-            String message = scanner.nextLine();
-            message = message.replaceAll("#Dawn#", event.getClient().getUserByID("153159020528533505").toString());
-            message = message.replaceAll("teh", "the");
-            message = message.replaceAll("Teh", "The");
-            if (!message.equals("")) {
-                Utility.sendMessage(message, channel);
-            }
-        }
-    }
 
     @EventSubscriber
     public void onMessageRecivedEvent(MessageReceivedEvent event) {

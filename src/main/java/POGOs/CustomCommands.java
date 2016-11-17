@@ -6,8 +6,6 @@ import Main.Globals;
 import Main.Utility;
 import Objects.BlackListObject;
 import Objects.CCommandObject;
-import sx.blah.discord.handle.impl.obj.Channel;
-import sx.blah.discord.handle.impl.obj.User;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
@@ -15,7 +13,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 // TODO: 31/08/2016 Add the ability to create custom commands -- done
 // TODO: 31/08/2016 Add the ability to delete custom commands -- done
@@ -64,6 +61,9 @@ public class CustomCommands {
         if (Utility.checkBlacklist(toCheck, blackList) != null) {
             return Utility.checkBlacklist(toCheck, blackList);
         }
+        if (commandName.length() > 50) {
+            return "> Command name too long.";
+        }
         boolean hasManagePerms = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, Globals.getClient().getUserByID(userID), guild);
         boolean hasAdminPerms = Utility.testForPerms(new Permissions[]{Permissions.ADMINISTRATOR}, Globals.getClient().getUserByID(userID), guild);
         if (hasManagePerms) {
@@ -105,6 +105,7 @@ public class CustomCommands {
             blackList.add(new BlackListObject("@here", "Please go not put **mentions** in Custom Commands."));
             commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getID(), "Echo", "#args#", false));
             commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getID(), "Wiki", "http://starbounder.org/Special:Search/#args##regex#{ ;_}", false));
+            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getID(), "TotalCCs", "Base User **+10**\nTrusted Role **+20**\nManage Messages Perm **+40**\nAdministrator perms **+100**", false));
         }
     }
 
@@ -190,31 +191,32 @@ public class CustomCommands {
         return builder.toString();
     }
 
-    // todo redo this for the love of god
     public String listCommands(int page) {
-        StringBuilder stringBuilder = new StringBuilder();
-        int finalPage = 0;
-        boolean counterComplete = false;
-        int testCounter = 0;
-        do {
-            finalPage++;
-            if (commands.size() > testCounter && commands.size() < testCounter + 15) {
-                counterComplete = true;
+        StringBuilder builder = new StringBuilder();
+        ArrayList<String> pages = new ArrayList<>();
+        int counter = 0;
+        int totalCCs = 0;
+        for (CCommandObject c : commands) {
+            if (counter > 15) {
+                pages.add(builder.toString());
+                builder.delete(0, builder.length());
+                counter = 0;
             }
-            testCounter = testCounter + 15;
-        } while (!counterComplete);
-        String header = "Here is Page `" + page + "/" + finalPage + "` of Custom Commands:\n`";
-        stringBuilder.append(header);
-        int count = page * 15;
-        for (int i = count - 15; i < count && i < commands.size(); i++) {
-            stringBuilder.append(Constants.PREFIX_CC + commands.get(i).getName() + ", ");
+            builder.append(Constants.PREFIX_CC + c.getName() + ", ");
+            totalCCs++;
+            counter++;
         }
-        if (stringBuilder.toString().equals(header)) {
+        pages.add(builder.toString());
+        builder.delete(0, builder.length());
+        try {
+            builder.append("> Here is Page `" + page + "/" + pages.size() + "` of Custom Commands:\n`");
+            builder.append(pages.get(page - 1));
+            builder.delete(builder.length() - 2, builder.length());
+            builder.append(".`\n> Total Custom Commands stored on this Server: " + totalCCs);
+            return builder.toString();
+        } catch (IndexOutOfBoundsException e) {
             return "> That Page does not exist.";
         }
-        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
-        stringBuilder.append(".`");
-        return stringBuilder.toString();
     }
 
     public String toggleShitPost(String args) {
