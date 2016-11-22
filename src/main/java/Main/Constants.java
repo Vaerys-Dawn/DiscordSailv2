@@ -45,6 +45,7 @@ public class Constants {
     public static final String ERROR = "> An Error Occurred";
     public static final String ERROR_ROLE_NOT_FOUND = "> Role with that name not found.";
     public static final String ERROR_UPDATING_ROLE = "> An Error Occurred when trying to Update your roles.";
+    public static final String ERROR_NIH = "> Not Yet Implemented.";
     public static final String ERROR_CC_NOT_FOUND = "> Command with that name could not be found.";
     public static final String ERROR_CHAR_NOT_FOUND = "> Character with that name could not be found.";
 
