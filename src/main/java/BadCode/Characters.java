@@ -36,12 +36,12 @@ public class Characters {
         for (String[] s : charList) {
             IUser author = Globals.getClient().getUserByID(s[1]);
             if (author != null) {
-                String username = author.getName() + "#" + author.getDiscriminator();
+                String username = s[2];
                 String[] roleIDs = s[3].split(Pattern.quote(","));
                 ArrayList<RoleTypeObject> roles = new ArrayList<>();
                 for (String role : roleIDs
                         ) {
-                    roles.add(new RoleTypeObject(role, Globals.getClient().getRoleByID(role).getName()));
+                    roles.add(new RoleTypeObject(Globals.getClient().getRoleByID(role).getName(),role));
                 }
                 characters.add(new CharacterObject(s[0], s[1], username, roles));
             }

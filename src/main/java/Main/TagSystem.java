@@ -23,6 +23,8 @@ public class TagSystem {
     public static String tagSystem(String contents, IMessage message, String args) {
         String response = contents;
         response = tagArgs(response, args);
+        response = tagNoNL(response);
+        response = tagSpacer(response);
         response = tagSpecialArgs(response,args);
         response = tagRandom(response);
         response = tagIfRole(response, message.getAuthor(), message.getGuild());
@@ -33,8 +35,6 @@ public class TagSystem {
         response = tagRandNum(response);
         response = tagGetAuthor(response,message.getAuthor(),message.getGuild());
         response = tagGetUsername(response,message.getAuthor());
-        response = tagSpacer(response);
-        response = tagNoNL(response);
         response = tagMentionRemover(response);
         return response;
     }

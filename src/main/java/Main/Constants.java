@@ -45,7 +45,6 @@ public class Constants {
     public static final String ERROR = "> An Error Occurred";
     public static final String ERROR_ROLE_NOT_FOUND = "> Role with that name not found.";
     public static final String ERROR_UPDATING_ROLE = "> An Error Occurred when trying to Update your roles.";
-    public static final String ERROR_NIH = "Nothing Interesting Happens.";
     public static final String ERROR_CC_NOT_FOUND = "> Command with that name could not be found.";
     public static final String ERROR_CHAR_NOT_FOUND = "> Character with that name could not be found.";
 
@@ -74,8 +73,8 @@ public class Constants {
 
 
     //Special Messages
-    public static final String DAILY_MESSAGE_1 = "> Load Sail.getBehaviour(\"Cat\");...\n" +
-            "> #random#{Meow;;Feed MEEEE;;pet me;get way from me}, #random#{*Lick's self*;;***HISSSSSS***;;Wait no don't leave me..}.";
+    public static final String DAILY_MESSAGE_1 = "> Load Sail.getBehaviour(\"Cat\");\n" +
+            "> #random#{Meow;;Feed MEEEE;;pet me;;get way from me}, #random#{*Lick's self*;;***HISSSSSS***;;Wait no don't leave me..}.";
     public static final String DAILY_MESSAGE_2 = "> Well hello again, looks like its a brand new day.";
     public static final String DAILY_MESSAGE_3 = "> #random#{Protocol Avali initiated;;Loading Avali Settings;;OS S.A.V.A.L.I Loaded}." +
             "#random#{Greetings;;Hello;;Salutations}, is seems that today is a new day. It looks like a great day for #random#{exploration;;discovery;;some cake;;**CIVILISATION**;;a picnic}.";

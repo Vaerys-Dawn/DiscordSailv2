@@ -67,8 +67,9 @@ public class Main {
     }
 
     private static void consoleInput() {
-        logger.info("Console input initiated.");
         Scanner scanner = new Scanner(System.in);
+        while (!Globals.isReady);
+        logger.info("Console input initiated.");
         while (scanner.hasNextLine()){
             IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
             String message = scanner.nextLine();

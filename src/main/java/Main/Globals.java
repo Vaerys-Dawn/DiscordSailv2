@@ -18,6 +18,7 @@ public class Globals {
     public static IDiscordClient client;
     public static int argsMax = 500;
     public static int maxWarnings = 3;
+    public static boolean isReady = false;
 
     public static IDiscordClient getClient() {
         return client;

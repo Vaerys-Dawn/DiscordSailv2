@@ -63,11 +63,13 @@ public class Characters {
 
                 }
                 for (int i = 0;i < c.getRoles().size();i++) {
-                    if (guild.getRoleByID(c.getRoles().get(i).getRoleID()) != null) {
-                        userRoles.add(guild.getRoleByID(c.getRoles().get(i).getRoleID()));
-                    } else {
+
+                    IRole newRole = guild.getRoleByID(c.getRoles().get(i).getRoleID());
+                    if (newRole != null) {
+                        userRoles.add(newRole);
+                    } /*else {
                         c.getRoles().remove(i);
-                    }
+                    }*/
 
                 }
                 Utility.roleManagement(author,guild,userRoles);

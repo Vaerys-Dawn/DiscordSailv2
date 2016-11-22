@@ -69,28 +69,25 @@ public class AnnotationListener {
         guildConfig.updateVariables(guild);
         FileHandler.writeToJson(pathGuildConfig, guildConfig);
 
-
         logger.info("Finished Initialising Guild With ID: " + guildID);
         //handling Login Message
-        if (guildConfig.doLoginMessage()) {
-            IChannel channel;
-            if (guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL) == null) {
-                channel = guild.getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));
-            } else {
-                channel = guild.getChannelByID(guildID);
-            }
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Utility.sendMessage("> I have finished booting and I am now listening for commands...", channel);
-        }
+//        while (!Globals.isReady);
+//        logger.info("Attempting to Send Login Message For guild with id: " + guildID);
+//        if (guildConfig.doLoginMessage()) {
+//            IChannel channel;
+//            if (guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL) == null) {
+//                channel = guild.getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));
+//            } else {
+//                channel = guild.getChannelByID(guildID);
+//            }
+//            Utility.sendMessage("> I have finished booting and I am now listening for commands...", channel);
+//        }
     }
 
     @EventSubscriber
     public void onReadyEvent(ReadyEvent event) {
         try {
+            Globals.isReady = true;
             event.getClient().changeStatus(Status.game("Starbound"));
             if (!event.getClient().getApplicationName().equals(Globals.botName))
                 event.getClient().changeUsername(Globals.botName);

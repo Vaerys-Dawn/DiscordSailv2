@@ -11609,3 +11609,1383 @@ java.lang.NullPointerException: null
 2016-11-17 23:12:06.553 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - Shard 0 failed to login.
 2016-11-17 23:27:11.591 [Event Dispatch Thread] INFO  Handlers.DMHandler - [118949128351907842] Fevix#4053 : BUG: I'm the admin but I only got 70? Did something chew up 30 of my slots?
 2016-11-17 23:28:54.757 [Event Dispatch Thread] INFO  Handlers.DMHandler - [118949128351907842] Fevix#4053 : OH THEY"RE ADDITIVE.
+2016-11-18 01:17:15.953 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @323ms
+2016-11-18 01:17:15.961 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-18 01:17:15.962 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-18 01:17:16.597 [main] INFO  Main.Main - Console input initiated.
+2016-11-18 01:17:21.847 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-18 01:17:21.864 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-18 01:17:26.168 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-18 01:17:26.178 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-18 01:17:38.136 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-18 01:17:38.146 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-18 01:17:44.044 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-18 01:17:44.051 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-18 01:17:54.059 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 01:17:54.946 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-18 01:17:54.954 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-18 01:23:50.984 [Event Dispatch Thread] ERROR Main.Utility - Message to be sent to channel with id: 176667358599970816on guild with id: 176434793674833920.
+                                     Reason: Message to large.
+2016-11-18 01:24:09.110 [Event Dispatch Thread] ERROR Main.Utility - Message to be sent to channel with id: 177089535576899584on guild with id: 176434793674833920.
+                                     Reason: Message to large.
+2016-11-18 01:25:49.638 [Event Dispatch Thread] ERROR Main.Utility - Message to be sent to channel with id: 176667358599970816on guild with id: 176434793674833920.
+                                     Reason: Message to large.
+2016-11-18 02:17:06.617 [WebSocketClient@9809434-22] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-18 02:17:06.618 [WebSocketClient@9809434-22] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-18 02:17:07.574 [WebSocketClient@21303398-52] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-18 06:28:58.682 [WebSocketClient@21303398-51] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/206983013060313088/messages/248892248891064321)
+2016-11-18 08:07:02.369 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @361ms
+2016-11-18 08:07:02.376 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-18 08:07:02.377 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-18 08:07:02.976 [main] INFO  Main.Main - Console input initiated.
+2016-11-18 08:07:08.754 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-18 08:07:08.784 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-18 08:07:13.846 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-18 08:07:13.855 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-18 08:07:26.553 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-18 08:07:26.565 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-18 08:07:33.181 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-18 08:07:33.185 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-18 08:07:44.300 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-18 08:07:44.305 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-18 08:11:02.898 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @406ms
+2016-11-18 08:11:02.907 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-18 08:11:02.908 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-18 08:11:03.599 [main] INFO  Main.Main - Console input initiated.
+2016-11-18 08:11:09.272 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-18 08:11:09.284 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-18 08:11:14.127 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-18 08:11:14.142 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-18 08:11:26.849 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-18 08:11:26.860 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-18 08:11:33.355 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-18 08:11:33.359 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-18 08:11:43.372 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:11:45.084 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-18 08:11:45.090 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-18 08:11:45.108 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:11:45.111 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:11:45.139 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:11:45.143 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:11:45.600 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:11:45.983 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:12:29.257 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at Main.Utility.testForPerms(Utility.java:51)
+	at Handlers.MessageHandler.checkMentionCount(MessageHandler.java:84)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:71)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:132)
+	at sun.reflect.GeneratedMethodAccessor5.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 08:13:11.844 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at Main.Utility.testForPerms(Utility.java:51)
+	at Handlers.MessageHandler.checkMentionCount(MessageHandler.java:84)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:71)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:132)
+	at sun.reflect.GeneratedMethodAccessor5.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 08:13:13.864 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at Main.Utility.testForPerms(Utility.java:51)
+	at Handlers.MessageHandler.checkMentionCount(MessageHandler.java:84)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:71)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:132)
+	at sun.reflect.GeneratedMethodAccessor5.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 08:13:16.706 [WebSocketClient@5180483-23] ERROR sx.blah.discord.Discord4J - Encountered websocket error: {}
+java.lang.NullPointerException: null
+	at sx.blah.discord.api.internal.DispatchHandler.lambda$guildMemberUpdate$6(DispatchHandler.java:244)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:174)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at sx.blah.discord.api.internal.DispatchHandler.guildMemberUpdate(DispatchHandler.java:254)
+	at sx.blah.discord.api.internal.DispatchHandler.handle(DispatchHandler.java:50)
+	at sx.blah.discord.api.internal.DiscordWS.onWebSocketText(DiscordWS.java:89)
+	at org.eclipse.jetty.websocket.common.events.JettyListenerEventDriver.onTextMessage(JettyListenerEventDriver.java:189)
+	at org.eclipse.jetty.websocket.common.message.SimpleTextMessage.messageComplete(SimpleTextMessage.java:69)
+	at org.eclipse.jetty.websocket.common.events.AbstractEventDriver.appendMessage(AbstractEventDriver.java:66)
+	at org.eclipse.jetty.websocket.common.events.JettyListenerEventDriver.onTextFrame(JettyListenerEventDriver.java:158)
+	at org.eclipse.jetty.websocket.common.events.AbstractEventDriver.incomingFrame(AbstractEventDriver.java:162)
+	at org.eclipse.jetty.websocket.common.WebSocketSession.incomingFrame(WebSocketSession.java:376)
+	at org.eclipse.jetty.websocket.common.extensions.ExtensionStack.incomingFrame(ExtensionStack.java:220)
+	at org.eclipse.jetty.websocket.common.Parser.notifyFrame(Parser.java:220)
+	at org.eclipse.jetty.websocket.common.Parser.parse(Parser.java:256)
+	at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.readParse(AbstractWebSocketConnection.java:679)
+	at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.onFillable(AbstractWebSocketConnection.java:511)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 08:13:16.713 [WebSocketClient@5180483-23] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-18 08:13:16.713 [WebSocketClient@5180483-23] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-18 08:13:17.624 [WebSocketClient@1706283-38] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-18 08:13:51.631 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at Main.Utility.testForPerms(Utility.java:51)
+	at Handlers.MessageHandler.checkMentionCount(MessageHandler.java:84)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:71)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:132)
+	at sun.reflect.GeneratedMethodAccessor5.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 08:13:57.686 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at Main.Utility.testForPerms(Utility.java:51)
+	at Handlers.MessageHandler.checkMentionCount(MessageHandler.java:84)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:71)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:132)
+	at sun.reflect.GeneratedMethodAccessor5.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 08:14:06.695 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at Main.Utility.testForPerms(Utility.java:51)
+	at Handlers.MessageHandler.checkMentionCount(MessageHandler.java:84)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:71)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:132)
+	at sun.reflect.GeneratedMethodAccessor5.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 08:15:54.715 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @361ms
+2016-11-18 08:15:54.722 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-18 08:15:54.722 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-18 08:15:55.403 [main] INFO  Main.Main - Console input initiated.
+2016-11-18 08:16:00.737 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-18 08:16:00.748 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-18 08:16:05.236 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-18 08:16:05.243 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-18 08:16:17.556 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-18 08:16:17.560 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-18 08:16:23.794 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-18 08:16:23.801 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-18 08:16:33.815 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:16:35.037 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-18 08:16:35.044 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-18 08:18:50.673 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @376ms
+2016-11-18 08:18:50.681 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-18 08:18:50.681 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-18 08:18:51.280 [main] INFO  Main.Main - Console input initiated.
+2016-11-18 08:18:56.705 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-18 08:18:56.736 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-18 08:19:10.225 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-18 08:19:10.233 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-18 08:19:14.855 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-18 08:19:14.863 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-18 08:19:21.471 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-18 08:19:21.478 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-18 08:19:31.492 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:19:32.511 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-18 08:19:32.519 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-18 08:19:32.608 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:19:33.408 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:25:06.576 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @350ms
+2016-11-18 08:25:06.583 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-18 08:25:06.583 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-18 08:25:07.226 [main] INFO  Main.Main - Console input initiated.
+2016-11-18 08:25:14.085 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-18 08:25:14.097 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-18 08:25:18.153 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-18 08:25:18.168 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-18 08:25:30.835 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-18 08:25:30.845 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-18 08:25:37.655 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-18 08:25:37.663 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-18 08:25:47.678 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:25:49.157 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-18 08:25:49.162 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-18 08:28:33.516 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @402ms
+2016-11-18 08:28:33.524 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-18 08:28:33.524 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-18 08:28:34.225 [main] INFO  Main.Main - Console input initiated.
+2016-11-18 08:28:48.306 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-18 08:28:48.319 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-18 08:28:52.252 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-18 08:28:52.261 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-18 08:28:57.326 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-18 08:28:57.334 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-18 08:29:04.216 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-18 08:29:04.220 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-18 08:29:14.227 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-18 08:29:15.080 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-18 08:29:15.091 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-18 09:03:10.653 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 09:03:15.036 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 09:03:15.064 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 09:03:15.102 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-18 09:25:27.562 [WebSocketClient@9809434-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201576777477390336/messages/248936541991206912)
+2016-11-18 09:28:02.609 [WebSocketClient@9809434-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201576777477390336/messages/248936601801981953)
+2016-11-18 09:28:06.507 [WebSocketClient@9809434-21] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201576777477390336/messages/248937310748540930)
+2016-11-18 09:28:24.655 [WebSocketClient@9809434-19] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201994927662432256/messages/248937407343230976)
+2016-11-18 09:29:12.765 [WebSocketClient@9809434-19] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201576777477390336/messages/248937361063280640)
+2016-11-18 09:29:15.832 [WebSocketClient@9809434-19] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201576777477390336/messages/248937606308429824)
+2016-11-18 11:00:00.249 [Timer-5] INFO  Main.TimedEvents - 18-Nov-2016 : Running Daily Tasks
+2016-11-18 13:26:53.622 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at Handlers.MessageHandler.checkBlacklist(MessageHandler.java:144)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:70)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:132)
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-19 08:15:26.790 [WebSocketClient@9809434-19] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249281427298844674)
+2016-11-19 08:15:54.320 [WebSocketClient@9809434-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249281544651407361)
+2016-11-19 08:38:53.948 [WebSocketClient@9809434-19] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249287331347955722)
+2016-11-19 08:40:44.313 [WebSocketClient@9809434-19] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249287793958846475)
+2016-11-19 08:42:53.643 [WebSocketClient@9809434-21] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249288335833563137)
+2016-11-19 09:04:06.593 [WebSocketClient@9809434-25] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249293675140481025)
+2016-11-19 09:18:12.485 [WebSocketClient@9809434-18] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-19 09:18:12.486 [WebSocketClient@9809434-18] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-19 09:18:15.646 [WebSocketClient@16627316-438] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-19 11:00:00.226 [Timer-5] INFO  Main.TimedEvents - 19-Nov-2016 : Running Daily Tasks
+2016-11-19 11:37:08.298 [WebSocketClient@16627316-436] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/206983013060313088/messages/249332137298362369)
+2016-11-19 12:39:35.731 [WebSocketClient@16627316-438] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249347903506612224)
+2016-11-19 12:40:50.243 [WebSocketClient@16627316-438] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249348218830323714)
+2016-11-19 13:44:19.907 [WebSocketClient@16627316-435] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249364194531606529)
+2016-11-19 13:46:23.965 [WebSocketClient@16627316-431] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249364715770216453)
+2016-11-19 13:50:16.322 [WebSocketClient@16627316-434] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249365689284952065)
+2016-11-19 13:53:09.801 [WebSocketClient@16627316-436] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249366413913882634)
+2016-11-19 13:54:14.327 [WebSocketClient@16627316-433] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249366688972275712)
+2016-11-19 13:55:58.261 [WebSocketClient@16627316-431] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249367124848410637)
+2016-11-19 13:59:38.738 [WebSocketClient@16627316-431] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249368045665910786)
+2016-11-19 14:06:27.341 [WebSocketClient@16627316-437] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249369760679067648)
+2016-11-19 15:48:06.297 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @411ms
+2016-11-19 15:48:06.306 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-19 15:48:06.306 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-19 15:48:07.776 [main] INFO  Main.Main - Console input initiated.
+2016-11-19 15:48:13.890 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-19 15:48:13.973 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-19 15:48:27.193 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-19 15:48:27.198 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-19 15:48:32.566 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-19 15:48:32.591 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-19 15:48:40.260 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-19 15:48:40.264 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-19 15:48:50.273 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-19 15:48:52.988 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-19 15:48:52.993 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-20 05:39:49.524 [WebSocketClient@9809434-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249604655330492436)
+2016-11-20 05:49:53.541 [WebSocketClient@9809434-18] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249607190187474945)
+2016-11-20 05:51:04.952 [WebSocketClient@9809434-21] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249607488867926037)
+2016-11-20 05:56:41.238 [WebSocketClient@9809434-22] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249608900721115136)
+2016-11-20 11:00:00.787 [Timer-5] INFO  Main.TimedEvents - 20-Nov-2016 : Running Daily Tasks
+2016-11-20 11:01:49.622 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @386ms
+2016-11-20 11:01:49.629 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-20 11:01:49.629 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-20 11:01:50.858 [main] INFO  Main.Main - Console input initiated.
+2016-11-20 11:01:58.411 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-20 11:01:58.618 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-20 11:02:04.228 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-20 11:02:04.231 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-20 11:02:18.514 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-20 11:02:18.519 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-20 11:02:25.601 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-20 11:02:25.604 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-20 11:02:35.612 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-20 11:02:41.317 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-20 11:02:41.324 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-20 12:38:29.274 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-20 12:38:29.275 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-20 12:38:29.275 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-20 12:38:29.277 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-20 12:38:29.287 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-20 12:38:29.287 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-20 12:38:32.839 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-20 14:12:41.299 [WebSocketClient@9809434-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249733728753025024)
+2016-11-20 14:13:39.755 [WebSocketClient@9809434-21] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249733971192053761)
+2016-11-20 15:09:10.010 [WebSocketClient@9809434-20] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249747940376051712)
+2016-11-20 15:09:32.227 [WebSocketClient@9809434-18] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249748034429255681)
+2016-11-20 15:09:51.513 [WebSocketClient@9809434-22] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249748114448187393)
+2016-11-20 15:10:55.964 [WebSocketClient@9809434-24] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249748385534312459)
+2016-11-20 15:11:23.774 [WebSocketClient@9809434-25] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249748502828023808)
+2016-11-20 15:12:10.479 [WebSocketClient@9809434-25] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249748688556130304)
+2016-11-20 15:13:13.661 [WebSocketClient@9809434-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249748962913812480)
+2016-11-20 15:13:46.148 [WebSocketClient@9809434-22] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249749100545703936)
+2016-11-20 15:13:58.045 [WebSocketClient@9809434-24] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249749148536930304)
+2016-11-20 15:26:29.690 [WebSocketClient@9809434-25] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249752297381298177)
+2016-11-21 00:59:02.462 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.IndexOutOfBoundsException: Index: 4, Size: 4
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at Main.TagSystem.tagSpecialArgs(TagSystem.java:95)
+	at Main.TagSystem.tagSystem(TagSystem.java:28)
+	at Handlers.CCHandler.handleCommand(CCHandler.java:72)
+	at Handlers.CCHandler.<init>(CCHandler.java:42)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:79)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:132)
+	at sun.reflect.GeneratedMethodAccessor6.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 00:59:17.755 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.IndexOutOfBoundsException: Index: 3, Size: 3
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at Main.TagSystem.tagSpecialArgs(TagSystem.java:95)
+	at Main.TagSystem.tagSystem(TagSystem.java:28)
+	at Handlers.CCHandler.handleCommand(CCHandler.java:72)
+	at Handlers.CCHandler.<init>(CCHandler.java:42)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:79)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:132)
+	at sun.reflect.GeneratedMethodAccessor6.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 01:06:34.618 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at Handlers.MessageHandler.checkBlacklist(MessageHandler.java:144)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:70)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:132)
+	at sun.reflect.GeneratedMethodAccessor6.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 01:25:41.119 [WebSocketClient@9809434-20] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/206983013060313088/messages/249903081955786752)
+2016-11-21 01:25:48.191 [WebSocketClient@9809434-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/206983013060313088/messages/249903121483038721)
+2016-11-21 01:34:05.913 [WebSocketClient@9809434-18] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/206983013060313088/messages/249905206656106496)
+2016-11-21 01:46:46.085 [WebSocketClient@9809434-22] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/206983013060313088/messages/249908366812512266)
+2016-11-21 02:19:58.849 [WebSocketClient@9809434-18] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/206983013060313088/messages/249916684721324032)
+2016-11-21 04:26:17.008 [WebSocketClient@9809434-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/206983013060313088/messages/249948533556248588)
+2016-11-21 04:45:05.925 [WebSocketClient@9809434-22] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/206983013060313088/messages/249953269537964032)
+2016-11-21 06:25:30.404 [WebSocketClient@9809434-20] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249978537006727168)
+2016-11-21 06:26:15.877 [WebSocketClient@9809434-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249978736227647488)
+2016-11-21 07:14:18.116 [WebSocketClient@9809434-18] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201695817373974528/messages/249990824228683776)
+2016-11-21 08:02:51.138 [WebSocketClient@9809434-22] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/206983013060313088/messages/250003023760326657)
+2016-11-21 08:21:54.366 [WebSocketClient@9809434-18] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667679778668544/messages/250007850376495115)
+2016-11-21 09:31:44.914 [Event Dispatch Thread] ERROR Main.Utility - Error Editing roles of user with id: 153159020528533505 on guild with id: 201576777477390336.
+                                     Reason: Edited roles hierarchy is too high.
+2016-11-21 09:59:57.999 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 09:59:58.074 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 09:59:58.163 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 10:00:33.049 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 10:00:33.065 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 10:00:39.969 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 10:00:39.969 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 10:00:39.969 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 10:00:39.969 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 10:00:39.977 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 10:00:42.796 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 10:00:44.530 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event RoleUpdateEvent
+java.lang.NullPointerException: null
+	at Listeners.AnnotationListener.onRoleUpdateEvent(AnnotationListener.java:161)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-21 11:00:00.879 [Timer-5] INFO  Main.TimedEvents - 21-Nov-2016 : Running Daily Tasks
+2016-11-21 19:43:38.671 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @612ms
+2016-11-21 19:43:38.679 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-21 19:43:38.679 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-21 19:43:40.728 [main] INFO  Main.Main - Console input initiated.
+2016-11-21 19:43:49.110 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-21 19:43:49.250 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-21 19:44:04.958 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-21 19:44:04.965 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-21 19:44:10.707 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-21 19:44:10.711 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-21 19:44:18.084 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-21 19:44:18.087 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-21 19:44:28.095 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-21 19:44:32.055 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-21 19:44:32.059 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-22 02:00:40.250 [WebSocketClient@9809434-25] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:00:40.252 [WebSocketClient@9809434-25] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:00:43.714 [WebSocketClient@2256916-123] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:01:02.440 [WebSocketClient@2256916-122] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:01:02.440 [WebSocketClient@2256916-122] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:01:04.770 [WebSocketClient@24916118-141] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:02:44.940 [WebSocketClient@24916118-138] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:02:44.941 [WebSocketClient@24916118-138] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:02:46.315 [WebSocketClient@6513600-150] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:03:05.459 [WebSocketClient@6513600-147] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:03:05.460 [WebSocketClient@6513600-147] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:03:06.963 [WebSocketClient@11259425-155] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:04:21.531 [WebSocketClient@11259425-164] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:04:21.532 [WebSocketClient@11259425-164] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:04:22.447 [WebSocketClient@23177525-174] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:04:41.130 [WebSocketClient@23177525-175] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:04:41.130 [WebSocketClient@23177525-175] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:04:42.025 [WebSocketClient@3162-193] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:06:00.190 [WebSocketClient@3162-191] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:06:00.190 [WebSocketClient@3162-191] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:06:01.133 [WebSocketClient@14522721-207] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:06:15.782 [WebSocketClient@14522721-203] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:06:15.783 [WebSocketClient@14522721-203] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:06:16.677 [WebSocketClient@30119046-210] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:07:30.755 [WebSocketClient@30119046-214] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:07:30.756 [WebSocketClient@30119046-214] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:07:31.641 [WebSocketClient@18795076-230] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:07:47.978 [WebSocketClient@18795076-220] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:07:47.979 [WebSocketClient@18795076-220] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:07:49.176 [WebSocketClient@15580478-239] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:08:59.249 [WebSocketClient@15580478-236] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:08:59.249 [WebSocketClient@15580478-236] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:09:00.138 [WebSocketClient@31259952-253] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:09:14.853 [WebSocketClient@31259952-245] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:09:14.853 [WebSocketClient@31259952-245] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:09:15.767 [WebSocketClient@20846771-257] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 02:10:25.581 [WebSocketClient@20846771-260] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-22 02:10:25.582 [WebSocketClient@20846771-260] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-22 02:10:26.480 [WebSocketClient@6754193-273] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-22 11:00:00.740 [Timer-5] INFO  Main.TimedEvents - 22-Nov-2016 : Running Daily Tasks
+2016-11-22 15:01:09.361 [WebSocketClient@6754193-274] WARN  sx.blah.discord.Discord4J - Unknown message received: WEBHOOKS_UPDATE, REPORT THIS TO THE DISCORD4J DEV!
+2016-11-22 15:34:14.578 [WebSocketClient@6754193-271] WARN  sx.blah.discord.Discord4J - Unknown message received: WEBHOOKS_UPDATE, REPORT THIS TO THE DISCORD4J DEV!
+2016-11-22 15:34:19.477 [WebSocketClient@6754193-274] WARN  sx.blah.discord.Discord4J - Unknown message received: WEBHOOKS_UPDATE, REPORT THIS TO THE DISCORD4J DEV!
+2016-11-22 19:10:16.368 [WebSocketClient@6754193-273] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/176667422500061184/messages/250533380746248203)
+2016-11-22 21:14:54.971 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @683ms
+2016-11-22 21:14:54.984 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-22 21:14:54.984 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-22 21:14:56.437 [main] INFO  Main.Main - Console input initiated.
+2016-11-22 21:14:57.623 [WebSocketClient@25405760-24] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-22 21:14:57.917 [WebSocketClient@25405760-21] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 5 guilds.
+2016-11-22 21:15:02.108 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-22 21:15:02.210 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-22 21:15:19.643 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-22 21:15:19.648 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-22 21:15:26.303 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-22 21:15:26.345 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-22 21:15:35.580 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-22 21:15:35.601 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-22 21:15:53.056 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-22 21:15:53.099 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-22 23:57:55.519 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @306ms
+2016-11-22 23:57:55.526 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-22 23:57:55.527 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-22 23:57:56.415 [main] INFO  Main.Main - Console input initiated.
+2016-11-22 23:57:57.412 [WebSocketClient@25405760-23] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-22 23:57:57.698 [WebSocketClient@25405760-19] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 5 guilds.
+2016-11-22 23:58:01.674 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-22 23:58:01.682 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-22 23:58:06.196 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-22 23:58:06.199 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-22 23:58:12.093 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-22 23:58:12.097 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-22 23:58:22.104 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Attempt to send message before bot is ready!
+2016-11-22 23:58:24.973 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-22 23:58:24.977 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-22 23:58:30.749 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @320ms
+2016-11-22 23:58:30.756 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-22 23:58:30.756 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-22 23:58:32.607 [WebSocketClient@25405760-21] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-22 23:58:32.873 [WebSocketClient@25405760-22] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 5 guilds.
+2016-11-22 23:58:36.932 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-22 23:58:36.940 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-22 23:58:41.721 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-22 23:58:41.725 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-22 23:58:54.786 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-22 23:58:54.793 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-22 23:59:00.704 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-22 23:59:00.707 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-22 23:59:06.922 [main] INFO  Main.Main - Console input initiated.
+2016-11-22 23:59:11.119 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-22 23:59:11.133 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-23 00:00:26.205 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @366ms
+2016-11-23 00:00:26.212 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-23 00:00:26.213 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-23 00:00:28.078 [WebSocketClient@20040739-23] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-23 00:00:28.357 [WebSocketClient@20040739-19] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 5 guilds.
+2016-11-23 00:00:32.314 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-23 00:00:32.344 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-23 00:00:45.918 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-23 00:00:45.925 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-23 00:00:50.642 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-23 00:00:50.651 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-23 00:00:58.961 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-23 00:00:58.964 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-23 00:01:11.757 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-23 00:01:11.765 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-23 00:01:27.162 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - Shard 0 failed to login.
+2016-11-23 00:01:27.162 [main] INFO  Main.Main - Console input initiated.
+2016-11-23 00:03:13.312 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @416ms
+2016-11-23 00:03:13.320 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-23 00:03:13.320 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-23 00:03:17.032 [WebSocketClient@13891774-22] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-23 00:03:17.517 [WebSocketClient@13891774-24] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 5 guilds.
+2016-11-23 00:03:24.748 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-23 00:03:24.757 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-23 00:03:31.348 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-23 00:03:31.354 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-23 00:03:53.507 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @301ms
+2016-11-23 00:03:53.514 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-23 00:03:53.514 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-23 00:03:57.543 [WebSocketClient@596441-22] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-23 00:03:57.953 [WebSocketClient@596441-21] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 5 guilds.
+2016-11-23 00:04:01.831 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-23 00:04:01.839 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-23 00:04:06.593 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-23 00:04:06.603 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-23 00:04:22.255 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-23 00:04:22.270 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-23 00:04:29.098 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-23 00:04:29.101 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-23 00:04:43.387 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-23 00:04:43.496 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-23 00:04:56.281 [Request Builder Async Executor] WARN  sx.blah.discord.Discord4J - Shard 0 failed to login.
+2016-11-23 00:04:56.281 [main] INFO  Main.Main - Console input initiated.
+2016-11-23 00:04:56.281 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Attempting to Send Login Message For guild with id: 160341443729162242
+2016-11-23 00:04:56.281 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Attempting to Send Login Message For guild with id: 153513567214108673
+2016-11-23 00:06:02.797 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @338ms
+2016-11-23 00:06:02.809 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-23 00:06:02.809 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-23 00:06:05.535 [WebSocketClient@15760521-18] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-23 00:06:05.889 [WebSocketClient@15760521-20] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 5 guilds.
+2016-11-23 00:06:10.285 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-23 00:06:10.315 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-23 00:06:24.871 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-23 00:06:24.875 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-23 00:06:31.113 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-23 00:06:31.119 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-23 00:06:37.965 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-23 00:06:37.968 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-23 00:06:45.535 [main] INFO  Main.Main - Console input initiated.
+2016-11-23 00:06:50.452 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-23 00:06:50.468 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-23 00:56:58.258 [WebSocketClient@15760521-23] INFO  sx.blah.discord.Discord4J - Shard 0 websocket disconnected with status code 1001 and reason "null".
+2016-11-23 00:56:58.259 [WebSocketClient@15760521-23] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-23 00:56:58.260 [WebSocketClient@15760521-23] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-23 00:56:59.200 [WebSocketClient@5319390-44] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-23 00:56:59.202 [WebSocketClient@5319390-44] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-23 00:56:59.420 [WebSocketClient@5319390-48] INFO  sx.blah.discord.Discord4J - Session resumed on shard 0
+2016-11-23 07:44:42.100 [Event Dispatch Thread] ERROR sx.blah.discord.Discord4J - Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at Handlers.MessageHandler.checkBlacklist(MessageHandler.java:144)
+	at Handlers.MessageHandler.<init>(MessageHandler.java:70)
+	at Listeners.AnnotationListener.onMessageRecivedEvent(AnnotationListener.java:129)
+	at sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$11(EventDispatcher.java:323)
+	at java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:890)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$12(EventDispatcher.java:321)
+	at java.util.concurrent.ConcurrentHashMap.forEach(ConcurrentHashMap.java:1597)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$13(EventDispatcher.java:320)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.concurrent.ConcurrentHashMap$EntrySpliterator.forEachRemaining(ConcurrentHashMap.java:3606)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$17(EventDispatcher.java:319)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
