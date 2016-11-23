@@ -14683,3 +14683,74 @@ Caused by: java.lang.NullPointerException: null
 2016-11-23 14:07:06.975 [main] INFO  Main.Main - Console input initiated.
 2016-11-23 14:07:11.999 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
 2016-11-23 14:07:12.008 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-23 14:09:54.754 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @378ms
+2016-11-23 14:09:54.761 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-23 14:09:54.762 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-23 14:09:56.857 [WebSocketClient@9343569-20] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-23 14:09:57.132 [WebSocketClient@9343569-22] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 5 guilds.
+2016-11-23 14:10:01.351 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-23 14:10:01.375 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-23 14:10:14.757 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-23 14:10:14.768 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-23 14:10:18.092 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @586ms
+2016-11-23 14:10:18.104 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-11-23 14:10:18.104 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-11-23 14:10:20.182 [WebSocketClient@24502454-27] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-23 14:10:20.453 [WebSocketClient@24502454-26] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 5 guilds.
+2016-11-23 14:10:24.637 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-11-23 14:10:24.685 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-11-23 14:10:37.965 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-11-23 14:10:37.969 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-11-23 14:10:42.757 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-11-23 14:10:42.763 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-11-23 14:10:49.035 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-11-23 14:10:49.039 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-11-23 14:10:55.018 [main] INFO  Main.Main - Console input initiated.
+2016-11-23 14:11:00.502 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-11-23 14:11:00.559 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-11-23 14:14:35.309 [WebSocketClient@24502454-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201576777477390336/messages/250760817270587393)
+2016-11-23 14:14:39.416 [WebSocketClient@24502454-23] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/201576777477390336/messages/250821392361062408)
+2016-11-23 14:15:28.865 [WebSocketClient@24502454-24] ERROR sx.blah.discord.Discord4J - Encountered websocket error: {}
+java.lang.NullPointerException: null
+	at sx.blah.discord.api.internal.DiscordUtils.getInviteFromJSON(DiscordUtils.java:109)
+	at sx.blah.discord.api.internal.DiscordClientImpl.getInviteForCode(DiscordClientImpl.java:485)
+	at sx.blah.discord.api.internal.DispatchHandler.lambda$messageCreate$6(DispatchHandler.java:159)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at sx.blah.discord.api.internal.DispatchHandler.messageCreate(DispatchHandler.java:159)
+	at sx.blah.discord.api.internal.DispatchHandler.handle(DispatchHandler.java:43)
+	at sx.blah.discord.api.internal.DiscordWS.onWebSocketText(DiscordWS.java:88)
+	at org.eclipse.jetty.websocket.common.events.JettyListenerEventDriver.onTextMessage(JettyListenerEventDriver.java:189)
+	at org.eclipse.jetty.websocket.common.message.SimpleTextMessage.messageComplete(SimpleTextMessage.java:69)
+	at org.eclipse.jetty.websocket.common.events.AbstractEventDriver.appendMessage(AbstractEventDriver.java:66)
+	at org.eclipse.jetty.websocket.common.events.JettyListenerEventDriver.onTextFrame(JettyListenerEventDriver.java:158)
+	at org.eclipse.jetty.websocket.common.events.AbstractEventDriver.incomingFrame(AbstractEventDriver.java:162)
+	at org.eclipse.jetty.websocket.common.WebSocketSession.incomingFrame(WebSocketSession.java:376)
+	at org.eclipse.jetty.websocket.common.extensions.ExtensionStack.incomingFrame(ExtensionStack.java:220)
+	at org.eclipse.jetty.websocket.common.Parser.notifyFrame(Parser.java:220)
+	at org.eclipse.jetty.websocket.common.Parser.parse(Parser.java:256)
+	at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.readParse(AbstractWebSocketConnection.java:679)
+	at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.onFillable(AbstractWebSocketConnection.java:511)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:202)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:273)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)
+	at org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)
+	at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)
+	at java.lang.Thread.run(Thread.java:745)
+2016-11-23 14:15:28.868 [WebSocketClient@24502454-24] INFO  sx.blah.discord.Discord4J - Shard 0 websocket disconnected with status code 1008 and reason "NullPointerException".
+2016-11-23 14:15:28.869 [WebSocketClient@24502454-24] INFO  sx.blah.discord.Discord4J - Beginning reconnect for shard 0.
+2016-11-23 14:15:28.869 [WebSocketClient@24502454-24] INFO  sx.blah.discord.Discord4J - Performing reconnect attempt 0.
+2016-11-23 14:15:29.777 [WebSocketClient@16800382-44] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-11-23 14:15:29.777 [WebSocketClient@16800382-47] INFO  sx.blah.discord.Discord4J - Reconnect for shard 0 succeeded.
+2016-11-23 14:15:30.028 [WebSocketClient@16800382-46] INFO  sx.blah.discord.Discord4J - Session resumed on shard 0

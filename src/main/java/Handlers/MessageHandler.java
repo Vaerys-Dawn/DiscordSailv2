@@ -729,6 +729,7 @@ public class MessageHandler {
             ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
             midnightUTC = midnightUTC.withHour(0).withSecond(0).withMinute(0).withNano(0).plusDays(1);
             int day = midnightUTC.getDayOfWeek().getValue();
+            logger.info(midnightUTC.toString() + "   DOW" + day);
             final Image avatar = Image.forFile(new File(Constants.DIRECTORY_GLOBAL_IMAGES + "avatarForDay_" + day + ".png"));
             Utility.updateAvatar(avatar);
             return "> Avatar updated.";
