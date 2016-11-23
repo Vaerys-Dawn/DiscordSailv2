@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bot.log" afterPath="$PROJECT_DIR$/bot.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" afterPath="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" />
     </list>
     <ignored path="DiscordSailv2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,11 +27,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="81" column="0" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+            <state relative-caret-position="306">
+              <caret line="730" column="60" selection-start-line="730" selection-start-column="60" selection-end-line="730" selection-end-column="60" />
               <folding>
                 <element signature="method#checkMentionCount#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#help#0;class#MessageHandler#0" expanded="false" />
@@ -48,6 +49,7 @@
                 <element signature="method#addModifyerRole#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#removeModifyerRole#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#trustedRoles#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#updateInfo#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#logoff#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#setRole#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#modifiers#0;class#MessageHandler#0" expanded="false" />
@@ -69,11 +71,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="TimedEvents.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Main/TimedEvents.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="72" column="64" selection-start-line="72" selection-start-column="64" selection-end-line="72" selection-end-column="64" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Info.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Storage/176434793674833920/Info.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
-              <caret line="180" column="33" selection-start-line="180" selection-start-column="33" selection-end-line="180" selection-end-column="33" />
+              <caret line="181" column="33" selection-start-line="181" selection-start-column="33" selection-end-line="181" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -130,11 +142,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InfoHandler.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="InfoHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="89" column="35" selection-start-line="89" selection-start-column="35" selection-end-line="89" selection-end-column="35" />
+            <state relative-caret-position="-457">
+              <caret line="100" column="61" selection-start-line="100" selection-start-column="61" selection-end-line="100" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -145,16 +157,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="453">
               <caret line="142" column="34" selection-start-line="142" selection-start-column="34" selection-end-line="142" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Main/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -228,7 +230,6 @@
         <option value="$PROJECT_DIR$/Storage/177687530714562560/Guild_Config.json" />
         <option value="$PROJECT_DIR$/Storage/177687530714562560/Custom_Commands.json" />
         <option value="$PROJECT_DIR$/src/main/java/Main/Client.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" />
         <option value="$PROJECT_DIR$/src/main/java/BadCode/CustomCommands.java" />
         <option value="$PROJECT_DIR$/src/main/java/Objects/CharacterObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
@@ -245,12 +246,13 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Main/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/Main/Constants.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/Main/Globals.java" />
         <option value="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" />
         <option value="$PROJECT_DIR$/Storage/176434793674833920/Info.txt" />
         <option value="$PROJECT_DIR$/src/main/java/Main/TagSystem.java" />
         <option value="$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
       </list>
     </option>
   </component>
@@ -631,7 +633,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://E:/Repositories/DiscordSailv2/src/main/java/Main/Utility.java" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://E:/Repositories/DiscordSailv2/src/main/java/Handlers/InfoHandler.java" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.4827586" />
@@ -1054,7 +1056,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.468039" sideWeight="0.49676377" order="6" side_tool="false" content_ui="tabs" />
@@ -1074,7 +1076,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34127843" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34127843" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1123,16 +1125,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/Objects/RoleTypeObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="e#313#314#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/Competition.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="489">
@@ -1497,7 +1489,7 @@
     <entry file="file://$PROJECT_DIR$/Storage/176434793674833920/Info.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
-          <caret line="180" column="33" selection-start-line="180" selection-start-column="33" selection-end-line="180" selection-end-column="33" />
+          <caret line="181" column="33" selection-start-line="181" selection-start-column="33" selection-end-line="181" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1525,47 +1517,6 @@
             <element signature="method#sendDM#0;class#Utility#0" expanded="false" />
             <element signature="method#updateAvatar#0;class#Utility#0" expanded="false" />
             <element signature="method#formatTimeSeconds#0;class#Utility#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="81" column="0" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-          <folding>
-            <element signature="method#checkMentionCount#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#help#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#info#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#report#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#setReminder#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#toggles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#toggleTypes#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#channelHere#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#channelTypes#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#setAdminRole#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#setMutedRole#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#addRace#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#removeRace#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#addModifyerRole#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#removeModifyerRole#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#trustedRoles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#logoff#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#setRole#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#modifiers#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#listRoles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#listModif#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#addServer#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#editServerIP#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#editServeDesc#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#editServeName#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#updateChar#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#delChar#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#listCCs#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#getCCData#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#transferCommand#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#competition#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#finalVotes#0;class#MessageHandler#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1598,9 +1549,59 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="89" column="35" selection-start-line="89" selection-start-column="35" selection-end-line="89" selection-end-column="35" />
+        <state relative-caret-position="-457">
+          <caret line="100" column="61" selection-start-line="100" selection-start-column="61" selection-end-line="100" selection-end-column="61" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Main/TimedEvents.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="72" column="64" selection-start-line="72" selection-start-column="64" selection-end-line="72" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="730" column="60" selection-start-line="730" selection-start-column="60" selection-end-line="730" selection-end-column="60" />
+          <folding>
+            <element signature="method#checkMentionCount#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#help#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#info#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#report#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#setReminder#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#toggles#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#toggleTypes#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#channelHere#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#channelTypes#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#setAdminRole#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#setMutedRole#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#addRace#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#removeRace#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#addModifyerRole#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#removeModifyerRole#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#trustedRoles#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#updateInfo#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#logoff#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#setRole#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#modifiers#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#listRoles#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#listModif#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#addServer#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#editServerIP#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#editServeDesc#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#editServeName#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#updateChar#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#delChar#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#listCCs#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#getCCData#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#transferCommand#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#competition#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#finalVotes#0;class#MessageHandler#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

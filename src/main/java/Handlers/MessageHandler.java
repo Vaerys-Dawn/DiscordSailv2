@@ -11,12 +11,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.Image;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -141,7 +145,7 @@ public class MessageHandler {
 
     //BlackListed Phrase Remover
     private void checkBlacklist() {
-        if (guildConfig.getBlackList() == null){
+        if (guildConfig.getBlackList() == null) {
             return;
         }
         if (guildConfig.doBlackListing()) {
@@ -713,6 +717,21 @@ public class MessageHandler {
                 e.printStackTrace();
             }
             return null;
+        } else {
+            return noAllowed;
+        }
+    }
+
+    @CommandAnnotation(name = "UpdateAvatar", description = "Shuts the bot down safely.",
+            type = Constants.TYPE_ADMIN, doAdminLogging = true)
+    public String updateAvatar() {
+        if (author.getID().equals(Globals.creatorID)) {
+            ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
+            midnightUTC = midnightUTC.withHour(0).withSecond(0).withMinute(0).withNano(0).plusDays(1);
+            int day = midnightUTC.getDayOfWeek().getValue();
+            final Image avatar = Image.forFile(new File(Constants.DIRECTORY_GLOBAL_IMAGES + "avatarForDay_" + day + ".png"));
+            Utility.updateAvatar(avatar);
+            return "> Avatar updated.";
         } else {
             return noAllowed;
         }

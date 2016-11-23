@@ -69,10 +69,9 @@ public class TimedEvents {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Calendar c = Calendar.getInstance();
-                int day = c.get(Calendar.DAY_OF_WEEK);
-                DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM,Locale.getDefault());
-                logger.info(dateFormat.format(c.getTime()) + " : Running Daily Tasks");
+                ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
+                int day = midnightUTC.getDayOfWeek().getValue();
+                logger.info(midnightUTC.toString() + ": Running "+ midnightUTC.getDayOfWeek().toString()+ "'s Daily Tasks");
                 final Image avatar = Image.forFile(new File(Constants.DIRECTORY_GLOBAL_IMAGES + "avatarForDay_" + day + ".png"));
                 Utility.updateAvatar(avatar);
                 for (TimedObject g : TimerObjects) {
