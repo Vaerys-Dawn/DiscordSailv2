@@ -141,10 +141,10 @@ public class MessageHandler {
 
     //BlackListed Phrase Remover
     private void checkBlacklist() {
+        if (guildConfig.getBlackList() == null){
+            return;
+        }
         if (guildConfig.doBlackListing()) {
-            if (guildConfig.getBlackList() == null){
-                return;
-            }
             for (BlackListObject bLP : guildConfig.getBlackList()) {
                 if (message.toString().toLowerCase().contains(bLP.getPhrase().toLowerCase())) {
                     if (guildConfig.testIsTrusted(author, guild)) {

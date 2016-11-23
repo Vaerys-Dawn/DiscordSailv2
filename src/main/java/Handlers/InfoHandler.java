@@ -31,6 +31,10 @@ public class InfoHandler {
         Utility.deleteMessage(channel.getMessages());
         StringBuilder builder = new StringBuilder();
         ArrayList<String> stringChunks = new ArrayList<>();
+        String lastChunk;
+        String nextChunk;
+        String imageTag;
+        String[] imageSplit;
         String lastAttepmt;
         String imagePrefix = "#image#{";
         String imageSuffix = "}";
@@ -38,23 +42,35 @@ public class InfoHandler {
 
         String[] contentsSplit;
         //prep for the everything...
-        for (String s : infoContents) {
-            if (!s.startsWith("//")) {
-                //the file is first split up into 1800 or less chunks to make it easier to manage
-                if ((builder + doTextTags(s) + "\n").length() > 1800) {
+        for (String s: infoContents){
+            //this ignores commented out code.
+            if (!s.startsWith("//")){
+                if (builder.toString().contains(imagePrefix)){
+                    imageTag = StringUtils.substringBetween(builder.toString(),imagePrefix,imageSuffix);
+                    imageSplit = builder.toString().split(imageTag);
+                    lastChunk = imageSplit[0];
+                    nextChunk = imageSplit[1];
+                    stringChunks.add(lastChunk);
+                    stringChunks.add(imageTag);
+                    builder.delete(0,builder.length());
+                    builder.append(nextChunk);
+                }
+                if ((builder + doTextTags(s) + "\n").length() > 2000){
                     stringChunks.add(builder.toString());
                     builder.delete(0, builder.length());
                 }
                 builder.append(doTextTags(s) + "\n");
             }
+            stringChunks.add(builder.toString());
+            builder.delete(0, builder.length());
         }
-        stringChunks.add(builder.toString());
-        builder.delete(0, builder.length());
+
 
         //actual code.
         for (String contents : stringChunks) {
             try {
                 contents = TagSystem.tagNoNL(contents);
+                contents = TagSystem.tagEmoji(contents,guild);
                 //test to see if adding the next set will make the message to long and stops that.
                 if ((builder.toString() + contents).length() > 1800) {
                     Utility.sendMessage(builder.toString(), channel);

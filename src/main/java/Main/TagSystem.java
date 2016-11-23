@@ -348,4 +348,25 @@ public class TagSystem {
         return from;
     }
 
+    public static String tagEmoji(String from,IGuild guild) {
+        String prefix = "#:";
+        String suffix = ":#";
+        String contents;
+        String lastAttempt;
+        if (from.contains(prefix)) {
+            do {
+                lastAttempt = from;
+                contents = StringUtils.substringBetween(from, prefix, suffix);
+                if (contents != null) {
+                    IEmoji emoji = guild.getEmojiByName(contents);
+                    if (emoji != null) {
+                        from = from.replace(prefix + contents + suffix, emoji.toString());
+                    } else {
+                        from = from.replaceFirst(Pattern.quote(contents), "#ERROR#");
+                    }
+                }
+            } while (StringUtils.countMatches(from, prefix) > 0 && (!lastAttempt.equals(from)));
+        }
+        return from;
+    }
 }
