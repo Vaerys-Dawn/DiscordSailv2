@@ -9,6 +9,7 @@ import POGOs.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.impl.obj.Message;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
@@ -17,10 +18,13 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -71,6 +75,15 @@ public class MessageHandler {
         guildID = guild.getID();
         noAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.";
         guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+        if (guildConfig == null) {
+            logger.error("Guild config for guild with id : " + guildID + " returned null, sending data to Error files.");
+            MessageErrorObject messageError = new MessageErrorObject(message);
+            ZonedDateTime now = ZonedDateTime.now();
+            String timeNow = now.getYear() + "-" + now.getMonth() + "-" + now.getDayOfMonth() + "_" + now.getHour() + "-" + now.getMinute() + "-" + now.getSecond() + "-" + now.getNano();
+            FileHandler.writeToJson(Constants.DIRECTORY_ERROR + timeNow + "_MSG_" + guildID + "_" + ".json", messageError);
+            FileHandler.writeToJson(Constants.DIRECTORY_ERROR + timeNow + "_GCF_" + guildID + "_" + ".json", guildConfig);
+            return;
+        }
         checkBlacklist();
         checkMentionCount();
         if (author.isBot()) {
@@ -142,9 +155,11 @@ public class MessageHandler {
         Utility.sendMessage(builder.toString(), loggingChannel);
     }
 
-
     //BlackListed Phrase Remover
     private void checkBlacklist() {
+        if (guildConfig == null) {
+            return;
+        }
         if (guildConfig.getBlackList() == null) {
             return;
         }
@@ -426,7 +441,7 @@ public class MessageHandler {
             name = "Test", description = "Tests things.", usage = "[Lol this command has no usages XD]",
             type = Constants.TYPE_GENERAL, channel = Constants.CHANNEL_BOT_COMMANDS, perms = {Permissions.MANAGE_MESSAGES}, doAdminLogging = true)
     public String test() {
-        return "> Tested";
+        return "> tested";
     }
 
     @CommandAnnotation(
@@ -439,6 +454,99 @@ public class MessageHandler {
             builder.append(u.getDisplayName(guild) + ": " + u.getAvatarURL() + "\n");
         }
         return builder.toString();
+    }
+
+    @CommandAnnotation(
+            name = "GetGuildInfo", description = "Sends Information about the server to your Direct Messages.",
+            type = Constants.TYPE_GENERAL)
+    public String getGuildInfo() {
+        String guildName = guild.getName();
+        LocalDateTime creationDate = guild.getCreationDate();
+        IUser guildOwner = guild.getOwner();
+        IRegion region = guild.getRegion();
+        List<IRole> roles = guild.getRoles();
+        StringBuilder builder = new StringBuilder();
+        ArrayList<String> cosmeticRoleStats = new ArrayList<>();
+        ArrayList<String> modifierRoleStats = new ArrayList<>();
+        builder.append("***[" + guildName.toUpperCase() + "]***");
+        builder.append("\n\n> Guild ID : **" + guildID);
+        builder.append("**\n> Creation Date : **" + creationDate.getYear() + " " + creationDate.getMonth() + " " + creationDate.getDayOfMonth() + " - " + creationDate.getHour() + ":" + creationDate.getMinute());
+        builder.append("**\n> Guild Owner : **@" + guildOwner.getName() + "#" + guildOwner.getDiscriminator() + "**");
+        if (region != null) {
+            builder.append("\n> Region : **" + region.getName() + "**");
+        }
+        builder.append("\n> Total Members: **" + guild.getUsers().size()+ "**");
+        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild)) {
+            builder.append("\n\n***[GUILD CONFIG OPTIONS]***");
+            builder.append("\n> LoginMessage = **" + guildConfig.doLoginMessage());
+            builder.append("**\n> GeneralLogging = **" + guildConfig.doGeneralLogging());
+            builder.append("**\n> AdminLogging = **" + guildConfig.doAdminLogging());
+            builder.append("**\n> BlackListing = **" + guildConfig.doBlackListing());
+            builder.append("**\n> MaxMentions = **" + guildConfig.doMaxMentions());
+            builder.append("**\n> ShitPostFiltering = **" + guildConfig.doShitPostFiltering());
+            builder.append("**\n> MuteRepeatOffenders = **" + guildConfig.doMuteRepeatOffenders());
+            builder.append("**\n> Muted Role : **@" + guildConfig.getMutedRole().getRoleName());
+            builder.append("**\n> RoleToMention : **@" + guildConfig.getRoleToMention().getRoleName() +"**");
+        }
+        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild)) {
+            builder.append("\n\n***[ROLES]***");
+            ArrayList<RoleStatsObject> statsObjects = new ArrayList<>();
+            for (IRole r : roles) {
+                if (!r.isEveryoneRole()){
+                    statsObjects.add(new RoleStatsObject(r, guildConfig));
+                }
+            }
+            for (RoleStatsObject roleObject : statsObjects) {
+                for (IUser user : guild.getUsers()) {
+                    for (IRole r :user.getRolesForGuild(guild)){
+                        if(r.getID().equals(roleObject.getRoleID())){
+                            roleObject.addUser();
+                        }
+                    }
+                }
+            }
+            for (RoleStatsObject rso: statsObjects ){
+                String formated = "\n> **" + rso.getRoleName() + "** Colour : \"**" + rso.getColour() + "**\", Total Users: \"**"+ rso.getTotalUsers() + "**\"";
+                if (rso.isCosmetic()){
+                    cosmeticRoleStats.add(formated);
+                }
+                if (rso.isModifier()){
+                    modifierRoleStats.add(formated);
+                }
+            }
+            Collections.sort(cosmeticRoleStats);
+            Collections.sort(modifierRoleStats);
+            builder.append("\n\n**COSMETIC ROLES**");
+            for (String s: cosmeticRoleStats){
+                if (builder.length() > 1800){
+                    Utility.sendDM(builder.toString(),author.getID());
+                    builder.delete(0,builder.length());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                builder.append(s);
+            }
+            builder.append("\n\n**MODIFIER ROLES**");
+            for (String s: modifierRoleStats){
+                if (builder.length() > 1800){
+                    Utility.sendDM(builder.toString(),author.getID());
+                    builder.delete(0,builder.length());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                builder.append(s);
+            }
+        }
+        builder.append("\n\n------{END OF INFO}------");
+        Utility.sendDM(builder.toString(),author.getID());
+        return "> Info sent to you via Direct Message.";
     }
 
     @CommandAnnotation(
@@ -470,8 +578,8 @@ public class MessageHandler {
     //
     //admin commands
     @CommandAnnotation(
-            name = "Toggle", description = "Toggles logging within the logging channels.", usage = "[Toggle Type]",
-            type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_CHANNELS}, requiresArgs = true, doAdminLogging = true)
+            name = "Toggle", description = "Toggles Certain Parts of the Guild Config", usage = "[Toggle Type]",
+            type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_SERVER}, requiresArgs = true, doAdminLogging = true)
     public String toggles() {
         Method[] methods = GuildConfig.class.getMethods();
         for (Method m : methods) {

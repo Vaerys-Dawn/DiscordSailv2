@@ -101,24 +101,19 @@ public class GuildConfig {
         loginMessage = !loginMessage;
     }
 
-    @ToggleAnnotation(name = "BlackListing")
-    public void toggleDoBlackListing() {
-        blackListing = !blackListing;
-    }
-
     @ToggleAnnotation(name = "GeneralLogging")
     public void toggleLogging() {
         generalLogging = !generalLogging;
     }
 
-    @ToggleAnnotation(name = "ShitPostFiltering")
-    public void toggleShitPostFiltering() {
-        shitPostFiltering = !shitPostFiltering;
-    }
-
     @ToggleAnnotation(name = "AdminLogging")
     public void toggleAdminLogging() {
         adminLogging = !adminLogging;
+    }
+
+    @ToggleAnnotation(name = "BlackListing")
+    public void toggleDoBlackListing() {
+        blackListing = !blackListing;
     }
 
     @ToggleAnnotation(name = "MentionSpam")
@@ -129,6 +124,11 @@ public class GuildConfig {
     @ToggleAnnotation(name = "DailyMessage")
     public void toggleDailyMessage() {
         dailyMessage = !dailyMessage;
+    }
+
+    @ToggleAnnotation(name = "ShitPostFiltering")
+    public void toggleShitPostFiltering() {
+        shitPostFiltering = !shitPostFiltering;
     }
 
     @ToggleAnnotation(name = "MuteRepeatOffender")
@@ -356,5 +356,23 @@ public class GuildConfig {
 
     public ArrayList<RoleTypeObject> getTrustedRoles() {
         return trustedRoles;
+    }
+
+    public boolean isRoleCosmetic(String id) {
+        for (RoleTypeObject r: cosmeticRoles){
+            if (r.getRoleID().equals(id)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isRoleModifier(String id) {
+        for (RoleTypeObject r: modifierRoles){
+            if (r.getRoleID().equals(id)){
+                return true;
+            }
+        }
+        return false;
     }
 }

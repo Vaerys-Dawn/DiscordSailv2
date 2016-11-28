@@ -24,6 +24,8 @@ public class TagSystem {
         String response = contents;
         response = tagArgs(response, args);
         response = tagNoNL(response);
+        response = tagGetAuthor(response,message.getAuthor(),message.getGuild());
+        response = tagGetUsername(response,message.getAuthor());
         response = tagSpacer(response);
         response = tagSpecialArgs(response,args);
         response = tagRandom(response);
@@ -33,8 +35,6 @@ public class TagSystem {
         response = tagRegex(response, "#replace#{", "}", ";;");
         response = tagRegex(response, "#replace!#(", ")#!r#", "::");
         response = tagRandNum(response);
-        response = tagGetAuthor(response,message.getAuthor(),message.getGuild());
-        response = tagGetUsername(response,message.getAuthor());
         response = tagMentionRemover(response);
         return response;
     }

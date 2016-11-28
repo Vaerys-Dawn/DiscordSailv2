@@ -40,6 +40,7 @@ public class Main {
             handler.createDirectory(Constants.DIRECTORY_BACKUPS);
             handler.createDirectory(Constants.DIRECTORY_TEMP);
             handler.createDirectory(Constants.DIRECTORY_OLD_FILES);
+            handler.createDirectory(Constants.DIRECTORY_ERROR);
             Competition competition = new Competition();
             if (!Files.exists(Paths.get(Constants.FILE_COMPETITION))) {
                 competition.setProperlyInit(true);

@@ -60,6 +60,7 @@ public class Constants {
     public static final String DIRECTORY_GUILD_IMAGES = "Images/";
     public static final String DIRECTORY_TEMP = DIRECTORY_STORAGE + "Temp/";
     public static final String DIRECTORY_OLD_FILES = DIRECTORY_STORAGE + "Old_Files/";
+    public static final String DIRECTORY_ERROR = DIRECTORY_STORAGE + "Error/";
 
 
     //Files

@@ -27,17 +27,17 @@ public class DMHandler {
                     if (tagRespond == null){
                         return;
                     }
-                    if (Utility.sendDM(response, tagRespond, message.getClient()).get()) {
-                        Utility.sendDM("> An Error occurred while attempting to run this command.", Globals.creatorID, message.getClient());
+                    if (Utility.sendDM(response, tagRespond).get()) {
+                        Utility.sendDM("> An Error occurred while attempting to run this command.", Globals.creatorID);
                     }
                 } catch (PatternSyntaxException ex) {
-                    Utility.sendDM("> An Error occurred while attempting to run this command.", Globals.creatorID, message.getClient());
+                    Utility.sendDM("> An Error occurred while attempting to run this command.", Globals.creatorID);
                 }
             }
         } else {
             String logging = "[" + message.getAuthor().getID() + "] " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " : " + message.toString();
             logger.info(logging);
-            Utility.sendDM(logging, Globals.creatorID, message.getClient());
+            Utility.sendDM(logging, Globals.creatorID);
         }
     }
 }

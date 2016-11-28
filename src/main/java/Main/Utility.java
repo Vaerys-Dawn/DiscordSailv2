@@ -207,10 +207,10 @@ public class Utility {
         });
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> sendDM(String message, String userID, IDiscordClient client) {
+    public static RequestBuffer.RequestFuture<Boolean> sendDM(String message, String userID) {
         return RequestBuffer.request(() -> {
             try {
-                IChannel channel = client.getOrCreatePMChannel(client.getUserByID(userID));
+                IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
                 sendMessage(message, channel);
             } catch (DiscordException e) {
                 e.printStackTrace();

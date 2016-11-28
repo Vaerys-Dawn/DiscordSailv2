@@ -19,4 +19,8 @@ public class RoleTypeObject {
     public void updateRoleName(String roleName) {
         RoleName = roleName;
     }
+
+    public String getRoleName() {
+        return RoleName;
+    }
 }

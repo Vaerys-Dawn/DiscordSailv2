@@ -71,7 +71,8 @@ public class TimedEvents {
             public void run() {
                 ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
                 int day = midnightUTC.getDayOfWeek().getValue();
-                logger.info(midnightUTC.toString() + ": Running "+ midnightUTC.getDayOfWeek().toString()+ "'s Daily Tasks");
+                String time = midnightUTC.getYear() + "/" + midnightUTC.getMonth() + "/" + midnightUTC.getDayOfMonth();
+                logger.info(time + ": Running "+ midnightUTC.getDayOfWeek().toString()+ "'s Daily Tasks");
                 final Image avatar = Image.forFile(new File(Constants.DIRECTORY_GLOBAL_IMAGES + "avatarForDay_" + day + ".png"));
                 Utility.updateAvatar(avatar);
                 for (TimedObject g : TimerObjects) {
