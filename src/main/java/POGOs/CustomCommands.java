@@ -6,6 +6,7 @@ import Main.Globals;
 import Main.Utility;
 import Objects.BlackListObject;
 import Objects.CCommandObject;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
@@ -239,5 +240,25 @@ public class CustomCommands {
             }
         }
         return Constants.ERROR_CC_NOT_FOUND;
+    }
+
+    public String search(String args){
+        ArrayList<CCommandObject> searched = new ArrayList<>();
+        StringBuilder builder = new StringBuilder();
+        for (CCommandObject c: commands){
+            if ((c.getName() + c.getContents(false)).toLowerCase().contains(args.toLowerCase())){
+                searched.add(c);
+            }
+        }
+        builder.append("> Here is your search:\n`");
+        if (searched.size() < 40){
+            for (CCommandObject c: searched){
+                builder.append(Constants.PREFIX_CC + c.getName() + ", ");
+            }
+            builder.delete(builder.length() - 2, builder.length());
+            builder.append(".`");
+            return builder.toString();
+        }
+        return "> Too many results, Please narrow your search.";
     }
 }

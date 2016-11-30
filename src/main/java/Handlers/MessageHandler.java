@@ -468,6 +468,8 @@ public class MessageHandler {
         StringBuilder builder = new StringBuilder();
         ArrayList<String> cosmeticRoleStats = new ArrayList<>();
         ArrayList<String> modifierRoleStats = new ArrayList<>();
+        int totalCosmetic = 0;
+        int totalModified = 0;
         builder.append("***[" + guildName.toUpperCase() + "]***");
         builder.append("\n\n> Guild ID : **" + guildID);
         builder.append("**\n> Creation Date : **" + creationDate.getYear() + " " + creationDate.getMonth() + " " + creationDate.getDayOfMonth() + " - " + creationDate.getHour() + ":" + creationDate.getMinute());
@@ -476,7 +478,7 @@ public class MessageHandler {
             builder.append("\n> Region : **" + region.getName() + "**");
         }
         builder.append("\n> Total Members: **" + guild.getUsers().size()+ "**");
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild)) {
+        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getID().equals(Globals.creatorID)) {
             builder.append("\n\n***[GUILD CONFIG OPTIONS]***");
             builder.append("\n> LoginMessage = **" + guildConfig.doLoginMessage());
             builder.append("**\n> GeneralLogging = **" + guildConfig.doGeneralLogging());
@@ -488,7 +490,7 @@ public class MessageHandler {
             builder.append("**\n> Muted Role : **@" + guildConfig.getMutedRole().getRoleName());
             builder.append("**\n> RoleToMention : **@" + guildConfig.getRoleToMention().getRoleName() +"**");
         }
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild)) {
+        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getID().equals(Globals.creatorID)) {
             builder.append("\n\n***[ROLES]***");
             ArrayList<RoleStatsObject> statsObjects = new ArrayList<>();
             for (IRole r : roles) {
@@ -509,9 +511,11 @@ public class MessageHandler {
                 String formated = "\n> **" + rso.getRoleName() + "** Colour : \"**" + rso.getColour() + "**\", Total Users: \"**"+ rso.getTotalUsers() + "**\"";
                 if (rso.isCosmetic()){
                     cosmeticRoleStats.add(formated);
+                    totalCosmetic += rso.getTotalUsers();
                 }
                 if (rso.isModifier()){
                     modifierRoleStats.add(formated);
+                    totalModified += rso.getTotalUsers();
                 }
             }
             Collections.sort(cosmeticRoleStats);
@@ -529,6 +533,7 @@ public class MessageHandler {
                 }
                 builder.append(s);
             }
+            builder.append("\n > total users : \"**" + totalCosmetic + "**\"");
             builder.append("\n\n**MODIFIER ROLES**");
             for (String s: modifierRoleStats){
                 if (builder.length() > 1800){
@@ -543,6 +548,7 @@ public class MessageHandler {
                 }
                 builder.append(s);
             }
+            builder.append("\n > total users : \"**" + totalModified +"**\"");
         }
         builder.append("\n\n------{END OF INFO}------");
         Utility.sendDM(builder.toString(),author.getID());
@@ -1194,10 +1200,10 @@ public class MessageHandler {
     }
 
     @CommandAnnotation(
-            name = "SearchCCs", description = "Allows you to search the custom command list.", usage = "[Name/Contents/@User/Locked/ShitPost] [Search Params]",
+            name = "SearchCCs", description = "Allows you to search the custom command list.", usage = "[Search Params]",
             type = Constants.TYPE_CC, requiresArgs = true)
     public String searchCCs() {
-        return Constants.ERROR_NIH;
+        return customCommands.search(args);
     }
 
     @CommandAnnotation(
