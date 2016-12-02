@@ -9,7 +9,6 @@ import POGOs.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.impl.obj.Message;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
@@ -18,13 +17,11 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -156,7 +153,7 @@ public class MessageHandler {
     private void handleLogging(IChannel loggingChannel, CommandAnnotation commandAnno) {
         StringBuilder builder = new StringBuilder();
         builder.append("> **" + author.getDisplayName(guild) + "** Has Used Command `" + command + "`");
-        if (!args.equals("")) {
+        if (!commandAnno.usage().equals("") && !args.equals("")) {
             builder.append(" with args: `" + args + "`");
         }
         builder.append(" in channel " + channel.mention() + " .");
@@ -431,13 +428,28 @@ public class MessageHandler {
             String reason = args.replace("<@" + message.getMentions().get(0).getID() + ">", "");
             reason = reason.replace("<@!" + message.getMentions().get(0).getID() + ">", "");
             if (channelID != null) {
-                Utility.sendMessage("**User Report**\nReporter: " + author.mention() + "\nReported: " + mentionee + "\nReason: `" + reason + "`", guild.getChannelByID(channelID));
+                StringBuilder builder = new StringBuilder();
+                if (guildConfig.getRoleToMention().getRoleID() != null) {
+                    builder.append(guild.getRoleByID(guildConfig.getRoleToMention().getRoleID()).mention() + "\n");
+                }
+                builder.append("**User Report**\nReporter: " + author.mention() + "\nReported: " + mentionee + "\nReason: `" + reason + "`");
+                Utility.sendMessage(builder.toString(), guild.getChannelByID(channelID));
                 return "> User Report sent.";
             } else {
                 return "> Your report could not be sent as the server does not have an admin channel set up at this time.";
             }
         }
         return Utility.getCommandInfo("report");
+    }
+
+    @CommandAnnotation(
+            name = "SilentReport", description = "Can be used to send a user report to the server staff.\n"
+            + Constants.PREFIX_INDENT + " It will also remove the message used to call the command.", usage = "[@user] [Reason]",
+            type = Constants.TYPE_HELP, requiresArgs = true, doAdminLogging = true)
+    public String silentReport() {
+        Utility.deleteMessage(message);
+        report();
+        return "";
     }
 
     //

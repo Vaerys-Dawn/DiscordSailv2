@@ -3,16 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Handlers/MessageHandler.class" afterPath="$PROJECT_DIR$/target/classes/Handlers/MessageHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Listeners/AnnotationListener.class" afterPath="$PROJECT_DIR$/target/classes/Listeners/AnnotationListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/POGOs/CustomCommands.class" afterPath="$PROJECT_DIR$/target/classes/POGOs/CustomCommands.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/POGOs/GuildConfig.class" afterPath="$PROJECT_DIR$/target/classes/POGOs/GuildConfig.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bot.log" afterPath="$PROJECT_DIR$/bot.log" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" afterPath="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/Utility.java" afterPath="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" />
     </list>
     <ignored path="DiscordSailv2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,18 +28,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="159" column="57" selection-start-line="159" selection-start-column="57" selection-end-line="159" selection-end-column="57" />
+            <state relative-caret-position="435">
+              <caret line="436" column="45" selection-start-line="436" selection-start-column="45" selection-end-line="436" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#checkMentionCount#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#checkBlacklist#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#handleCommand#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#help#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#info#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#report#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#getGuildInfo#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#setReminder#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#toggles#0;class#MessageHandler#0" expanded="false" />
@@ -75,13 +68,34 @@
                 <element signature="method#updateChar#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#delChar#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#newCC#0;class#MessageHandler#0" expanded="false" />
-                <element signature="e#58818#58819#0" expanded="true" />
-                <element signature="e#58868#58869#0" expanded="true" />
+                <element signature="e#59526#59527#0" expanded="true" />
+                <element signature="e#59576#59577#0" expanded="true" />
                 <element signature="method#getCCData#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#transferCommand#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#competition#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#voting#0;class#MessageHandler#0" expanded="false" />
                 <element signature="method#finalVotes#0;class#MessageHandler#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GuildConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1518">
+              <caret line="39" column="19" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
+              <folding>
+                <element signature="method#setUpChannel#0;class#GuildConfig#0" expanded="false" />
+                <element signature="method#getChannelTypeID#0;class#GuildConfig#0" expanded="false" />
+                <element signature="method#removeBlackListItem#0;class#GuildConfig#0" expanded="false" />
+                <element signature="e#7981#7982#0" expanded="true" />
+                <element signature="e#8017#8018#0" expanded="true" />
+                <element signature="method#addRole#0;class#GuildConfig#0" expanded="false" />
+                <element signature="method#removeRole#0;class#GuildConfig#0" expanded="false" />
+                <element signature="method#addTrusted#0;class#GuildConfig#0" expanded="false" />
+                <element signature="method#delTrusted#0;class#GuildConfig#0" expanded="false" />
+                <element signature="method#addOffence#0;class#GuildConfig#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -117,7 +131,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Utility.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Utility.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="369">
@@ -136,31 +150,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="InfoHandler.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Characters.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Storage/176434793674833920/Characters.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-51">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Competition.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Storage/176434793674833920/Competition.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Custom_Commands.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Storage/176434793674833920/Custom_Commands.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="1834" column="26" selection-start-line="1834" selection-start-column="26" selection-end-line="1834" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -255,8 +259,8 @@
         <option value="$PROJECT_DIR$/Storage/211838033111023616/Guild_Config.json" />
         <option value="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" />
         <option value="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
       </list>
     </option>
   </component>
@@ -329,10 +333,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
+    <option name="x" value="1912" />
     <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="width" value="1296" />
+    <option name="height" value="1000" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -1041,7 +1045,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="1912" y="-8" width="1296" height="1000" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1050,13 +1054,13 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30565166" sideWeight="0.50323623" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.119936034" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18203883" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26760563" sideWeight="0.49676377" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2848904" sideWeight="0.49676377" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18230277" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27669904" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3261105" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1123,14 +1127,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Storage/Error/8_MSG_176434793674833920_.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Storage/Error/11_MSG_176434793674833920_.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1393,25 +1389,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="233" column="13" selection-start-line="233" selection-start-column="13" selection-end-line="233" selection-end-column="13" />
-          <folding>
-            <element signature="e#2107#2108#0" expanded="true" />
-            <element signature="e#2138#2139#0" expanded="true" />
-            <element signature="method#setUpChannel#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#getChannelTypeID#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#removeBlackListItem#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#addRole#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#removeRole#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#addTrusted#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#delTrusted#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#addOffence#0;class#GuildConfig#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Storage/211838033111023616/Guild_Config.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-243">
@@ -1532,17 +1509,77 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Storage/176434793674833920/Characters.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-51">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="355" column="60" selection-start-line="355" selection-start-column="60" selection-end-line="355" selection-end-column="60" />
+          <folding>
+            <element signature="method#getRoleIDFromName#0;class#Utility#0" expanded="false" />
+            <element signature="method#getCommandInfo#0;class#Utility#0" expanded="false" />
+            <element signature="method#getCommandInfo#1;class#Utility#0" expanded="false" />
+            <element signature="method#getFilePath#0;class#Utility#0" expanded="false" />
+            <element signature="method#getFilePath#1;class#Utility#0" expanded="false" />
+            <element signature="method#getDirectory#1;class#Utility#0" expanded="false" />
+            <element signature="method#updateAvatar#0;class#Utility#0" expanded="false" />
+            <element signature="method#formatTimeSeconds#0;class#Utility#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="112" column="24" selection-start-line="112" selection-start-column="24" selection-end-line="112" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1518">
+          <caret line="39" column="19" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
+          <folding>
+            <element signature="method#setUpChannel#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#getChannelTypeID#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#removeBlackListItem#0;class#GuildConfig#0" expanded="false" />
+            <element signature="e#7981#7982#0" expanded="true" />
+            <element signature="e#8017#8018#0" expanded="true" />
+            <element signature="method#addRole#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#removeRole#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#addTrusted#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#delTrusted#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#addOffence#0;class#GuildConfig#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="159" column="57" selection-start-line="159" selection-start-column="57" selection-end-line="159" selection-end-column="57" />
+        <state relative-caret-position="435">
+          <caret line="436" column="45" selection-start-line="436" selection-start-column="45" selection-end-line="436" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#checkMentionCount#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#checkBlacklist#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#handleCommand#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#help#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#info#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#report#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#getGuildInfo#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#setReminder#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#toggles#0;class#MessageHandler#0" expanded="false" />
@@ -1571,46 +1608,13 @@
             <element signature="method#updateChar#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#delChar#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#newCC#0;class#MessageHandler#0" expanded="false" />
-            <element signature="e#58818#58819#0" expanded="true" />
-            <element signature="e#58868#58869#0" expanded="true" />
+            <element signature="e#59526#59527#0" expanded="true" />
+            <element signature="e#59576#59577#0" expanded="true" />
             <element signature="method#getCCData#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#transferCommand#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#competition#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#voting#0;class#MessageHandler#0" expanded="false" />
             <element signature="method#finalVotes#0;class#MessageHandler#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Storage/176434793674833920/Characters.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="112" column="24" selection-start-line="112" selection-start-column="24" selection-end-line="112" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="355" column="60" selection-start-line="355" selection-start-column="60" selection-end-line="355" selection-end-column="60" />
-          <folding>
-            <element signature="method#getRoleIDFromName#0;class#Utility#0" expanded="false" />
-            <element signature="method#getCommandInfo#0;class#Utility#0" expanded="false" />
-            <element signature="method#getCommandInfo#1;class#Utility#0" expanded="false" />
-            <element signature="method#getFilePath#0;class#Utility#0" expanded="false" />
-            <element signature="method#getFilePath#1;class#Utility#0" expanded="false" />
-            <element signature="method#getDirectory#1;class#Utility#0" expanded="false" />
-            <element signature="method#updateAvatar#0;class#Utility#0" expanded="false" />
-            <element signature="method#formatTimeSeconds#0;class#Utility#0" expanded="false" />
           </folding>
         </state>
       </provider>

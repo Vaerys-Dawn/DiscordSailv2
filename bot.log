@@ -23961,3 +23961,76 @@ java.net.SocketTimeoutException: Read timed out
 2016-12-02 14:07:47.830 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
 2016-12-02 14:08:13.446 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
 2016-12-02 14:08:13.451 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-12-02 14:10:05.845 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @327ms
+2016-12-02 14:10:05.852 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-12-02 14:10:05.853 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-12-02 14:10:07.789 [WebSocketClient@7971377-20] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-12-02 14:10:08.122 [WebSocketClient@7971377-21] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 6 guilds.
+2016-12-02 14:10:12.486 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-12-02 14:10:12.494 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-12-02 14:10:17.525 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-12-02 14:10:17.529 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-12-02 14:10:31.106 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-12-02 14:10:31.110 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-12-02 14:10:37.778 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-12-02 14:10:37.780 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-12-02 14:10:39.807 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 177687530714562560
+2016-12-02 14:10:39.812 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 177687530714562560
+2016-12-02 14:10:45.834 [main] INFO  Main.Main - Console input initiated.
+2016-12-02 14:10:51.613 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-12-02 14:10:51.629 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-12-02 14:12:15.921 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @362ms
+2016-12-02 14:12:15.930 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-12-02 14:12:15.930 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-12-02 14:12:17.956 [WebSocketClient@7971377-20] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-12-02 14:12:18.282 [WebSocketClient@7971377-22] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 6 guilds.
+2016-12-02 14:12:22.282 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-12-02 14:12:22.290 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-12-02 14:12:27.720 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-12-02 14:12:27.723 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-12-02 14:12:40.844 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-12-02 14:12:40.849 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-12-02 14:12:43.024 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 177687530714562560
+2016-12-02 14:12:43.027 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 177687530714562560
+2016-12-02 14:12:49.933 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-12-02 14:12:49.938 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-12-02 14:12:51.234 [main] INFO  Main.Main - Console input initiated.
+2016-12-02 14:13:02.493 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-12-02 14:13:02.498 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-12-02 14:15:47.789 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @415ms
+2016-12-02 14:15:47.798 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-12-02 14:15:47.798 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-12-02 14:15:49.686 [WebSocketClient@7971377-22] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-12-02 14:15:49.961 [WebSocketClient@7971377-20] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 6 guilds.
+2016-12-02 14:15:54.255 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-12-02 14:15:54.264 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-12-02 14:15:59.010 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-12-02 14:15:59.014 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-12-02 14:16:12.667 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-12-02 14:16:12.675 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-12-02 14:16:14.855 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 177687530714562560
+2016-12-02 14:16:14.858 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 177687530714562560
+2016-12-02 14:16:21.933 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-12-02 14:16:21.936 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-12-02 14:16:22.927 [main] INFO  Main.Main - Console input initiated.
+2016-12-02 14:16:33.444 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-12-02 14:16:33.449 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
+2016-12-02 14:16:37.903 [WebSocketClient@7971377-21] ERROR sx.blah.discord.Discord4J - Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/channels/211839775898992640/messages/254083382336552960)
+2016-12-02 14:18:44.387 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @334ms
+2016-12-02 14:18:44.394 [main] INFO  sx.blah.discord.Discord4J - Discord4J v2.7.0-SNAPSHOT
+2016-12-02 14:18:44.394 [main] INFO  sx.blah.discord.Discord4J - A Java binding for the official Discord API, forked from https://github.com/nerd/Discord4J. Copyright (c) 2016, Licensed under GNU GPLv2
+2016-12-02 14:18:46.305 [WebSocketClient@16947034-24] INFO  sx.blah.discord.Discord4J - Websocket Connected.
+2016-12-02 14:18:46.572 [WebSocketClient@16947034-19] INFO  sx.blah.discord.Discord4J - Connected to Discord Gateway v5. Receiving 6 guilds.
+2016-12-02 14:18:50.601 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 153513567214108673
+2016-12-02 14:18:50.610 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 153513567214108673
+2016-12-02 14:18:55.659 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 160341443729162242
+2016-12-02 14:18:55.662 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 160341443729162242
+2016-12-02 14:19:09.057 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 201576777477390336
+2016-12-02 14:19:09.062 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 201576777477390336
+2016-12-02 14:19:11.075 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 177687530714562560
+2016-12-02 14:19:11.078 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 177687530714562560
+2016-12-02 14:19:17.824 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 211838033111023616
+2016-12-02 14:19:17.828 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 211838033111023616
+2016-12-02 14:19:25.844 [main] INFO  Main.Main - Console input initiated.
+2016-12-02 14:19:29.592 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Starting Guild init proccess for Guild with ID: 176434793674833920
+2016-12-02 14:19:29.603 [Event Dispatch Thread] INFO  Listeners.AnnotationListener - Finished Initialising Guild With ID: 176434793674833920
