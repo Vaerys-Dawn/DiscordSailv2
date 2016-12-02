@@ -26,6 +26,8 @@ public class GuildConfig {
     boolean dailyMessage = true;
     boolean shitPostFiltering = false;
     boolean muteRepeatOffenders = true;
+    boolean compEntries = false;
+    boolean compVoting = false;
     int maxMentionLimit = 8;
 
     // TODO: 04/10/2016 let the mention limit be customisable.
@@ -36,7 +38,8 @@ public class GuildConfig {
     ArrayList<BlackListObject> blackList = new ArrayList<>();
     ArrayList<OffenderObject> repeatOffenders = new ArrayList<>();
     RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", null);
-    RoleTypeObject mutedRole = new RoleTypeObject("No Role Set",null);
+    RoleTypeObject mutedRole = new RoleTypeObject("No Role Set", null);
+
 
     public boolean isProperlyInit() {
         return properlyInit;
@@ -57,6 +60,9 @@ public class GuildConfig {
         this.guildName = guildName;
     }
 
+    public ArrayList<ChannelTypeObject> getChannels() {
+        return channels;
+    }
 
     //Getters For the Toggles.
     public boolean doLoginMessage() {
@@ -93,6 +99,14 @@ public class GuildConfig {
 
     public boolean doMuteRepeatOffenders() {
         return muteRepeatOffenders;
+    }
+
+    public boolean doCompEntries() {
+        return compEntries;
+    }
+
+    public boolean doCompVoting() {
+        return compVoting;
     }
 
     //Togglers
@@ -134,6 +148,16 @@ public class GuildConfig {
     @ToggleAnnotation(name = "MuteRepeatOffender")
     public void toggleRepeatOffender() {
         muteRepeatOffenders = !muteRepeatOffenders;
+    }
+
+    @ToggleAnnotation(name = "CompEntries")
+    public void toggleCompEntries() {
+        compEntries = !compEntries;
+    }
+
+    @ToggleAnnotation(name = "Voting")
+    public void setCompVoting() {
+        compVoting = !compVoting;
     }
 
     public void setUpChannel(String channelType, String channelID) {
@@ -203,9 +227,11 @@ public class GuildConfig {
 
         //update repeat offenders.
         ArrayList<OffenderObject> newMentionSpammers = new ArrayList<>();
-        for (int i = 0;i < repeatOffenders.size();i++) {
+        for (int i = 0; i < repeatOffenders.size(); i++) {
             IUser offender = Globals.getClient().getUserByID(repeatOffenders.get(i).getID());
-            repeatOffenders.get(i).setDisplayName(offender.getName() + "#" + offender.getDiscriminator());
+            if (offender != null) {
+                repeatOffenders.get(i).setDisplayName(offender.getName() + "#" + offender.getDiscriminator());
+            }
         }
         repeatOffenders = newMentionSpammers;
     }
@@ -339,8 +365,8 @@ public class GuildConfig {
     }
 
     public void addOffence(String userID) {
-        for (int i = 0; i< repeatOffenders.size();i++){
-            if (repeatOffenders.get(i).getID().equals(userID)){
+        for (int i = 0; i < repeatOffenders.size(); i++) {
+            if (repeatOffenders.get(i).getID().equals(userID)) {
                 repeatOffenders.get(i).addOffence();
             }
         }
@@ -359,8 +385,8 @@ public class GuildConfig {
     }
 
     public boolean isRoleCosmetic(String id) {
-        for (RoleTypeObject r: cosmeticRoles){
-            if (r.getRoleID().equals(id)){
+        for (RoleTypeObject r : cosmeticRoles) {
+            if (r.getRoleID().equals(id)) {
                 return true;
             }
         }
@@ -368,8 +394,8 @@ public class GuildConfig {
     }
 
     public boolean isRoleModifier(String id) {
-        for (RoleTypeObject r: modifierRoles){
-            if (r.getRoleID().equals(id)){
+        for (RoleTypeObject r : modifierRoles) {
+            if (r.getRoleID().equals(id)) {
                 return true;
             }
         }

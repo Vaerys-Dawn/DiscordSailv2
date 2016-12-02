@@ -55,11 +55,11 @@ public class MessageHandler {
     private String args;
     private String noAllowed;
 
-    private GuildConfig guildConfig = new GuildConfig();
-    private CustomCommands customCommands = new CustomCommands();
-    private Servers servers = new Servers();
-    private Characters characters = new Characters();
-    private Competition competition = new Competition();
+    private GuildConfig guildConfig;
+    private CustomCommands customCommands;
+    private Servers servers;
+    private Characters characters;
+    private Competition competition;
 
     private FileHandler handler = new FileHandler();
 
@@ -74,15 +74,18 @@ public class MessageHandler {
         author = message.getAuthor();
         guildID = guild.getID();
         noAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.";
-        guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
-        if (guildConfig == null) {
-            logger.error("Guild config for guild with id : " + guildID + " returned null, sending data to Error files.");
+        int counter = 0;
+        while (guildConfig == null) {
+            guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+            counter++;
+        }
+        if (counter > 1) {
+            logger.error("Guild config for guild with id : " + guildID + " took " + counter + " tries to init. sending data to Error files.");
             MessageErrorObject messageError = new MessageErrorObject(message);
             ZonedDateTime now = ZonedDateTime.now();
             String timeNow = now.getYear() + "-" + now.getMonth() + "-" + now.getDayOfMonth() + "_" + now.getHour() + "-" + now.getMinute() + "-" + now.getSecond() + "-" + now.getNano();
             FileHandler.writeToJson(Constants.DIRECTORY_ERROR + timeNow + "_MSG_" + guildID + "_" + ".json", messageError);
             FileHandler.writeToJson(Constants.DIRECTORY_ERROR + timeNow + "_GCF_" + guildID + "_" + ".json", guildConfig);
-            return;
         }
         checkBlacklist();
         checkMentionCount();
@@ -138,17 +141,22 @@ public class MessageHandler {
     //File handlers
 
     private void flushFiles() {
-        Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
-        Utility.flushFile(guildID, Constants.FILE_CUSTOM, customCommands, customCommands.isProperlyInit());
-        Utility.flushFile(guildID, Constants.FILE_CHARACTERS, characters, characters.isProperlyInit());
-        Utility.flushFile(guildID, Constants.FILE_SERVERS, servers, servers.isProperlyInit());
-        Utility.flushFile(guildID, Constants.FILE_COMPETITION, competition, competition.isProperlyInit());
+        if (guildConfig != null)
+            Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
+        if (customCommands != null)
+            Utility.flushFile(guildID, Constants.FILE_CUSTOM, customCommands, customCommands.isProperlyInit());
+        if (characters != null)
+            Utility.flushFile(guildID, Constants.FILE_CHARACTERS, characters, characters.isProperlyInit());
+        if (servers != null)
+            Utility.flushFile(guildID, Constants.FILE_SERVERS, servers, servers.isProperlyInit());
+        if (competition != null)
+            Utility.flushFile(guildID, Constants.FILE_COMPETITION, competition, competition.isProperlyInit());
     }
 
     private void handleLogging(IChannel loggingChannel, CommandAnnotation commandAnno) {
         StringBuilder builder = new StringBuilder();
         builder.append("> **" + author.getDisplayName(guild) + "** Has Used Command `" + command + "`");
-        if (!commandAnno.usage().equals("")) {
+        if (!args.equals("")) {
             builder.append(" with args: `" + args + "`");
         }
         builder.append(" in channel " + channel.mention() + " .");
@@ -216,16 +224,24 @@ public class MessageHandler {
                         }
                         //init relevant files
                         if (commandAnno.type().equals(Constants.TYPE_SERVERS) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                            servers = (Servers) Utility.initFile(guildID, Constants.FILE_SERVERS, Servers.class);
+                            while (servers == null) {
+                                servers = (Servers) Utility.initFile(guildID, Constants.FILE_SERVERS, Servers.class);
+                            }
                         }
                         if (commandAnno.type().equals(Constants.TYPE_CHARACTER) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                            characters = (Characters) Utility.initFile(guildID, Constants.FILE_CHARACTERS, Characters.class);
+                            while (characters == null) {
+                                characters = (Characters) Utility.initFile(guildID, Constants.FILE_CHARACTERS, Characters.class);
+                            }
                         }
                         if (commandAnno.type().equals(Constants.TYPE_CC) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                            customCommands = (CustomCommands) Utility.initFile(guildID, Constants.FILE_CUSTOM, CustomCommands.class);
+                            while (customCommands == null) {
+                                customCommands = (CustomCommands) Utility.initFile(guildID, Constants.FILE_CUSTOM, CustomCommands.class);
+                            }
                         }
                         if (commandAnno.type().equals(Constants.TYPE_COMPETITION) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                            competition = (Competition) Utility.initFile(guildID, Constants.FILE_COMPETITION, Competition.class);
+                            while (competition == null) {
+                                competition = (Competition) Utility.initFile(guildID, Constants.FILE_COMPETITION, Competition.class);
+                            }
                         }
 
                         //Logging Handling
@@ -456,6 +472,8 @@ public class MessageHandler {
         return builder.toString();
     }
 
+
+    // TODO: 02/12/2016 move this into GuildConfig
     @CommandAnnotation(
             name = "GetGuildInfo", description = "Sends Information about the server to your Direct Messages.",
             type = Constants.TYPE_GENERAL)
@@ -477,7 +495,7 @@ public class MessageHandler {
         if (region != null) {
             builder.append("\n> Region : **" + region.getName() + "**");
         }
-        builder.append("\n> Total Members: **" + guild.getUsers().size()+ "**");
+        builder.append("\n> Total Members: **" + guild.getUsers().size() + "**");
         if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getID().equals(Globals.creatorID)) {
             builder.append("\n\n***[GUILD CONFIG OPTIONS]***");
             builder.append("\n> LoginMessage = **" + guildConfig.doLoginMessage());
@@ -487,33 +505,41 @@ public class MessageHandler {
             builder.append("**\n> MaxMentions = **" + guildConfig.doMaxMentions());
             builder.append("**\n> ShitPostFiltering = **" + guildConfig.doShitPostFiltering());
             builder.append("**\n> MuteRepeatOffenders = **" + guildConfig.doMuteRepeatOffenders());
+            builder.append("**\n> CompEntries = **" + guildConfig.doCompEntries());
+            builder.append("**\n> CompVoting = **" + guildConfig.doCompVoting());
             builder.append("**\n> Muted Role : **@" + guildConfig.getMutedRole().getRoleName());
-            builder.append("**\n> RoleToMention : **@" + guildConfig.getRoleToMention().getRoleName() +"**");
+            builder.append("**\n> RoleToMention : **@" + guildConfig.getRoleToMention().getRoleName() + "**");
+        }
+        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getID().equals(Globals.creatorID)) {
+            builder.append("\n\n***[CHANNELS]***");
+            for (ChannelTypeObject c : guildConfig.getChannels()) {
+                builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getID()).getName() + "**");
+            }
         }
         if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getID().equals(Globals.creatorID)) {
             builder.append("\n\n***[ROLES]***");
             ArrayList<RoleStatsObject> statsObjects = new ArrayList<>();
             for (IRole r : roles) {
-                if (!r.isEveryoneRole()){
+                if (!r.isEveryoneRole()) {
                     statsObjects.add(new RoleStatsObject(r, guildConfig));
                 }
             }
             for (RoleStatsObject roleObject : statsObjects) {
                 for (IUser user : guild.getUsers()) {
-                    for (IRole r :user.getRolesForGuild(guild)){
-                        if(r.getID().equals(roleObject.getRoleID())){
+                    for (IRole r : user.getRolesForGuild(guild)) {
+                        if (r.getID().equals(roleObject.getRoleID())) {
                             roleObject.addUser();
                         }
                     }
                 }
             }
-            for (RoleStatsObject rso: statsObjects ){
-                String formated = "\n> **" + rso.getRoleName() + "** Colour : \"**" + rso.getColour() + "**\", Total Users: \"**"+ rso.getTotalUsers() + "**\"";
-                if (rso.isCosmetic()){
+            for (RoleStatsObject rso : statsObjects) {
+                String formated = "\n> **" + rso.getRoleName() + "** Colour : \"**" + rso.getColour() + "**\", Total Users: \"**" + rso.getTotalUsers() + "**\"";
+                if (rso.isCosmetic()) {
                     cosmeticRoleStats.add(formated);
                     totalCosmetic += rso.getTotalUsers();
                 }
-                if (rso.isModifier()){
+                if (rso.isModifier()) {
                     modifierRoleStats.add(formated);
                     totalModified += rso.getTotalUsers();
                 }
@@ -521,10 +547,10 @@ public class MessageHandler {
             Collections.sort(cosmeticRoleStats);
             Collections.sort(modifierRoleStats);
             builder.append("\n\n**COSMETIC ROLES**");
-            for (String s: cosmeticRoleStats){
-                if (builder.length() > 1800){
-                    Utility.sendDM(builder.toString(),author.getID());
-                    builder.delete(0,builder.length());
+            for (String s : cosmeticRoleStats) {
+                if (builder.length() > 1800) {
+                    Utility.sendDM(builder.toString(), author.getID());
+                    builder.delete(0, builder.length());
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -533,12 +559,12 @@ public class MessageHandler {
                 }
                 builder.append(s);
             }
-            builder.append("\n > total users : \"**" + totalCosmetic + "**\"");
+            builder.append("\n > Total users : \"**" + totalCosmetic + "**\"");
             builder.append("\n\n**MODIFIER ROLES**");
-            for (String s: modifierRoleStats){
-                if (builder.length() > 1800){
-                    Utility.sendDM(builder.toString(),author.getID());
-                    builder.delete(0,builder.length());
+            for (String s : modifierRoleStats) {
+                if (builder.length() > 1800) {
+                    Utility.sendDM(builder.toString(), author.getID());
+                    builder.delete(0, builder.length());
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -548,10 +574,10 @@ public class MessageHandler {
                 }
                 builder.append(s);
             }
-            builder.append("\n > total users : \"**" + totalModified +"**\"");
+            builder.append("\n > Total users : \"**" + totalModified + "**\"");
         }
         builder.append("\n\n------{END OF INFO}------");
-        Utility.sendDM(builder.toString(),author.getID());
+        Utility.sendDM(builder.toString(), author.getID());
         return "> Info sent to you via Direct Message.";
     }
 
@@ -1270,32 +1296,40 @@ public class MessageHandler {
     @AliasAnnotation(alias = {"Comp", "Enter"})
     @CommandAnnotation(
             name = "Competition", description = "Enters your image into the Sail Competition", usage = "[Image Link or Image File]",
-            type = Constants.TYPE_COMPETITION, doAdminLogging = true, perms = {Permissions.MANAGE_SERVER})
+            type = Constants.TYPE_COMPETITION, doAdminLogging = true)
     public String competition() {
-        String fileName;
-        String fileUrl;
-        if (message.getAttachments().size() > 0) {
-            List<IMessage.Attachment> attatchments = message.getAttachments();
-            IMessage.Attachment a = attatchments.get(0);
-            fileName = a.getFilename();
-            fileUrl = a.getUrl();
-        } else if (!args.equals("")) {
-            fileName = author.getName() + "'s Entry";
-            fileUrl = args;
+        if (guildConfig.doCompEntries()) {
+            String fileName;
+            String fileUrl;
+            if (message.getAttachments().size() > 0) {
+                List<IMessage.Attachment> attatchments = message.getAttachments();
+                IMessage.Attachment a = attatchments.get(0);
+                fileName = a.getFilename();
+                fileUrl = a.getUrl();
+            } else if (!args.equals("")) {
+                fileName = author.getName() + "'s Entry";
+                fileUrl = args;
+            } else {
+                return "> Missing a File or Image link to enter into the competition.";
+            }
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy - HH:mm:ss");
+            Calendar cal = Calendar.getInstance();
+            competition.newEntry(new PollObject(author.getDisplayName(guild), author.getID(), fileName, fileUrl, dateFormat.format(cal.getTime())));
+            return "> Thank you " + author.getDisplayName(guild) + " For entering the Competition.";
         } else {
-            return "> Missing a File or Image link to enter into the competition.";
+            return "> Competition Entries are closed.";
         }
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy - HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-        competition.newEntry(new PollObject(author.getDisplayName(guild), author.getID(), fileName, fileUrl, dateFormat.format(cal.getTime())));
-        return "> Thank you " + author.getDisplayName(guild) + " For entering the Competition.";
     }
 
     @CommandAnnotation(
             name = "Vote", description = "Saves your vote.", usage = "[Vote...]",
-            type = Constants.TYPE_COMPETITION, channel = Constants.CHANNEL_BOT_COMMANDS, requiresArgs = true, perms = {Permissions.ADMINISTRATOR})
+            type = Constants.TYPE_COMPETITION, channel = Constants.CHANNEL_BOT_COMMANDS, requiresArgs = true)
     public String voting() {
-        return competition.addVote(author.getID(), args);
+        if (guildConfig.doCompVoting()) {
+            return competition.addVote(author.getID(), args);
+        } else {
+            return "> Competition Voting is closed.";
+        }
     }
 
     @CommandAnnotation(name = "FinalTally", description = "Posts the final scores",

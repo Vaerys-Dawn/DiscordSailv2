@@ -106,7 +106,7 @@ public class CustomCommands {
             blackList.add(new BlackListObject("@here", "Please go not put **mentions** in Custom Commands."));
             commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getID(), "Echo", "#args#", false));
             commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getID(), "Wiki", "http://starbounder.org/Special:Search/#args##regex#{ ;_}", false));
-            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getID(), "TotalCCs", "Base User **+10**\nTrusted Role **+20**\nManage Messages Perm **+40**\nAdministrator perms **+100**", false));
+            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getID(), "CCAllowance", "Base User **+10**\nTrusted Role **+20**\nManage Messages Perm **+40**\nAdministrator perms **+100**", false));
         }
     }
 
@@ -246,7 +246,16 @@ public class CustomCommands {
         ArrayList<CCommandObject> searched = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         for (CCommandObject c: commands){
-            if ((c.getName() + c.getContents(false)).toLowerCase().contains(args.toLowerCase())){
+            StringBuilder toSearch = new StringBuilder();
+            toSearch.append(c.getName().toLowerCase());
+            toSearch.append(c.getContents(false).toLowerCase());
+            if (c.isLocked()){
+                toSearch.append("#locked#");
+            }
+            if (c.isShitPost()){
+                toSearch.append("#shitpost#");
+            }
+            if ((toSearch.toString()).contains(args.toLowerCase())){
                 searched.add(c);
             }
         }

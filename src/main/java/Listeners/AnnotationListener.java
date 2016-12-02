@@ -156,7 +156,7 @@ public class AnnotationListener {
         }
         String guildID = guild.getID();
         GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
-        System.out.println("OnRoleUpdateEvent : " + guild.getID());
+//        System.out.println("OnRoleUpdateEvent : " + guild.getID());
         guildConfig.updateVariables(guild);
         Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
     }

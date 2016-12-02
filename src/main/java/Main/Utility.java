@@ -343,14 +343,18 @@ public class Utility {
 
     public static RequestBuffer.RequestFuture<Boolean> updateUserNickName(IUser author, IGuild guild, String nickname) {
         return RequestBuffer.request(() -> {
-            try{
-                guild.setUserNickname(author,nickname);
+            try {
+                guild.setUserNickname(author, nickname);
             } catch (MissingPermissionsException e) {
-                e.printStackTrace();
+                if (e.getMessage().toLowerCase().contains("hierarchy")){
+                    logger.error("Could not Update Nickname. User's position in hierarchy is higher than mine.");
+                }else {
+                    e.printStackTrace();
+                }
                 return true;
             } catch (DiscordException e) {
                 if (e.getMessage().contains("CloudFlare")) {
-                    updateUserNickName(author,guild,nickname);
+                    updateUserNickName(author, guild, nickname);
                 } else {
                     e.printStackTrace();
                     return true;
