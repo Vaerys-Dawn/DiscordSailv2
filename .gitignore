@@ -58,7 +58,7 @@ Token.txt
 *.png
 *.log
 *.txt
-Storage/Token.txt
+Storage
 *.txt
 *.json1
 *.json2
