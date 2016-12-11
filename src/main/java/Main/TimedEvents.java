@@ -13,6 +13,7 @@ import sx.blah.discord.util.Image;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -64,16 +65,21 @@ public class TimedEvents {
         logger.debug("Now UTC = " + Utility.formatTimeSeconds(nowUTC.toEpochSecond()));
         logger.debug("Midnight UTC = " + Utility.formatTimeSeconds(midnightUTC.toEpochSecond()));
         logger.debug("Delay = " + Utility.formatTimeSeconds(initialDelay));
-//        initialDelay = 60;
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
                 int day = midnightUTC.getDayOfWeek().getValue();
-                String time = midnightUTC.getYear() + "/" + midnightUTC.getMonth() + "/" + midnightUTC.getDayOfMonth();
+                String time = midnightUTC.getYear() + "-" + midnightUTC.getMonth() + "-" + midnightUTC.getDayOfMonth();
                 logger.info(time + ": Running "+ midnightUTC.getDayOfWeek().toString()+ "'s Daily Tasks");
-                final Image avatar = Image.forFile(new File(Constants.DIRECTORY_GLOBAL_IMAGES + "avatarForDay_" + day + ".png"));
+                StringBuilder file = new StringBuilder();
+                file.append(Constants.DIRECTORY_GLOBAL_IMAGES + "avatarForDay_" + day);
+                if (midnightUTC.getMonth().equals(Month.DECEMBER)){
+                    file.append("_Santa");
+                }
+                file.append(".png");
+                final Image avatar = Image.forFile(new File(file.toString()));
                 Utility.updateAvatar(avatar);
                 for (TimedObject g : TimerObjects) {
                     Utility.backupFile(g.getGuildID(), Constants.FILE_GUILD_CONFIG);

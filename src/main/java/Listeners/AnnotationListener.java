@@ -12,10 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.*;
+import sx.blah.discord.handle.impl.obj.Channel;
+import sx.blah.discord.handle.impl.obj.Message;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RateLimitException;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -89,7 +92,7 @@ public class AnnotationListener {
         try {
             Globals.isReady = true;
             event.getClient().changeStatus(Status.game("Starbound"));
-            if (!event.getClient().getOurUser().getName().equals(Globals.botName)){
+            if (!event.getClient().getOurUser().getName().equals(Globals.botName)) {
                 event.getClient().changeUsername(Globals.botName);
             }
 
@@ -112,13 +115,14 @@ public class AnnotationListener {
         String messageLC = message.toString().toLowerCase();
         String args = "";
         String command = "";
+        GuildConfig guildConfig = (GuildConfig) Utility.initFile(guild.getID(), Constants.FILE_GUILD_CONFIG, GuildConfig.class);
 
         //Set Console Response Channel.
         if (author.getID().equals(Globals.creatorID)) {
             Globals.consoleMessageCID = channel.getID();
         }
 
-        if (messageLC.startsWith(Constants.PREFIX_COMMAND.toLowerCase()) || messageLC.startsWith(Constants.PREFIX_CC.toLowerCase())) {
+        if (messageLC.startsWith(guildConfig.getPrefixCommand().toLowerCase()) || messageLC.startsWith(guildConfig.getPrefixCC().toLowerCase())) {
             String[] splitMessage = message.toString().split(" ");
             command = splitMessage[0];
             StringBuilder getArgs = new StringBuilder();
@@ -133,9 +137,22 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMentionEvent(MentionEvent event) {
-        if (event.getMessage().getChannel().isPrivate()) {
+        IGuild guild = event.getMessage().getGuild();
+        IUser author = event.getMessage().getAuthor();
+        String guildOwnerID = guild.getOwner().getID();
+        IChannel channel = event.getMessage().getChannel();
+        if (channel.isPrivate()) {
             new DMHandler(event.getMessage());
             return;
+        }
+        if (event.getMessage().mentionsEveryone() || event.getMessage().mentionsHere()) {
+            return;
+        }
+        if (author.getID().equals(Globals.getClient().getOurUser().getID())) {
+            return;
+        }
+        if (author.getID().equals(guildOwnerID)){
+
         }
     }
 
@@ -149,14 +166,10 @@ public class AnnotationListener {
     }
 
     @EventSubscriber
-    public void onRoleUpdateEvent(RoleUpdateEvent event){
+    public void onRoleUpdateEvent(RoleUpdateEvent event) {
         IGuild guild = event.getGuild();
-        if (guild == null){
-            return;
-        }
         String guildID = guild.getID();
         GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
-//        System.out.println("OnRoleUpdateEvent : " + guild.getID());
         guildConfig.updateVariables(guild);
         Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
     }

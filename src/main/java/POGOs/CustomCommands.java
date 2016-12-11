@@ -55,7 +55,7 @@ public class CustomCommands {
         this.properlyInit = properlyInit;
     }
 
-    public String addCommand(boolean isLocked, String userID, String commandName, String commandContents, boolean isShitPost, IGuild guild, boolean isTrusted) {
+    public String addCommand(boolean isLocked, String userID, String commandName, String commandContents, boolean isShitPost, IGuild guild, boolean isTrusted,GuildConfig guildConfig) {
         int counter = 0;
         int maxCCs = 10;
         String toCheck = commandName + commandContents;
@@ -88,7 +88,7 @@ public class CustomCommands {
             if (commandContents.length() < 1500) {
                 commands.add(new CCommandObject(isLocked, userID, commandName, commandContents, isShitPost));
                 return "> Command Added you have " + (maxCCs - counter - 1) + " custom command slots left.\n" +
-                        Constants.PREFIX_INDENT + "You can run your new command by performing `" + Constants.PREFIX_CC + commandName + "`.";
+                        Constants.PREFIX_INDENT + "You can run your new command by performing `" + guildConfig.getPrefixCommand() + commandName + "`.";
             } else {
                 return "> Command Contents to long. max length = 1500 chars.";
             }
@@ -178,13 +178,13 @@ public class CustomCommands {
         return Constants.ERROR_CC_NOT_FOUND;
     }
 
-    public String getUserCommands(String userID) {
+    public String getUserCommands(String userID,GuildConfig guildConfig) {
         IUser user = Globals.getClient().getUserByID(userID);
         StringBuilder builder = new StringBuilder();
         builder.append("> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.\n`");
         for (CCommandObject sA : commands) {
             if (sA.getUserID().equals(userID)) {
-                builder.append(Constants.PREFIX_CC + sA.getName() + ", ");
+                builder.append(guildConfig.getPrefixCC() + sA.getName() + ", ");
             }
         }
         builder.delete(builder.length() - 2, builder.length());
@@ -192,7 +192,7 @@ public class CustomCommands {
         return builder.toString();
     }
 
-    public String listCommands(int page) {
+    public String listCommands(int page,GuildConfig guildConfig) {
         StringBuilder builder = new StringBuilder();
         ArrayList<String> pages = new ArrayList<>();
         int counter = 0;
@@ -203,7 +203,7 @@ public class CustomCommands {
                 builder.delete(0, builder.length());
                 counter = 0;
             }
-            builder.append(Constants.PREFIX_CC + c.getName() + ", ");
+            builder.append(guildConfig.getPrefixCC() + c.getName() + ", ");
             totalCCs++;
             counter++;
         }
@@ -242,7 +242,7 @@ public class CustomCommands {
         return Constants.ERROR_CC_NOT_FOUND;
     }
 
-    public String search(String args){
+    public String search(String args,GuildConfig guildConfig){
         ArrayList<CCommandObject> searched = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         for (CCommandObject c: commands){
@@ -262,7 +262,7 @@ public class CustomCommands {
         builder.append("> Here is your search:\n`");
         if (searched.size() < 40){
             for (CCommandObject c: searched){
-                builder.append(Constants.PREFIX_CC + c.getName() + ", ");
+                builder.append(guildConfig.getPrefixCC() + c.getName() + ", ");
             }
             builder.delete(builder.length() - 2, builder.length());
             builder.append(".`");

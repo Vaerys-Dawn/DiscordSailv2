@@ -1,6 +1,7 @@
 package POGOs;
 
 import Annotations.ToggleAnnotation;
+import Main.Constants;
 import Main.Globals;
 import Objects.BlackListObject;
 import Objects.ChannelTypeObject;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
  * Created by Vaerys on 03/08/2016.
  */
 public class GuildConfig {
+    String prefixCommand = Constants.PREFIX_COMMAND;
+    String prefixCC = Constants.PREFIX_CC;
     boolean properlyInit = false;
     String guildName = "";
     boolean loginMessage = true;
@@ -40,6 +43,21 @@ public class GuildConfig {
     RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", null);
     RoleTypeObject mutedRole = new RoleTypeObject("No Role Set", null);
 
+    public String getPrefixCommand() {
+        return prefixCommand;
+    }
+
+    public void setPrefixCommand(String prefixCommand) {
+        this.prefixCommand = prefixCommand;
+    }
+
+    public String getPrefixCC() {
+        return prefixCC;
+    }
+
+    public void setPrefixCC(String prefixCC) {
+        this.prefixCC = prefixCC;
+    }
 
     public boolean isProperlyInit() {
         return properlyInit;

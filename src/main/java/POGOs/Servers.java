@@ -160,7 +160,7 @@ public class Servers {
         return "> Server with that name not found.";
     }
 
-    public String getServerList(){
+    public String getServerList(GuildConfig guildConfig){
         StringBuilder builder = new StringBuilder();
         builder.append("> Here are the Servers I have Listed:\n");
         ArrayList<String> serverNames = new ArrayList<>();
@@ -172,7 +172,7 @@ public class Servers {
             builder.append(Constants.PREFIX_INDENT + s + "\n");
         }
         builder.append("> You can get more info for a server by running:\n");
-        builder.append(Utility.getCommandInfo("server"));
+        builder.append(Utility.getCommandInfo("server",guildConfig));
         return builder.toString();
     }
 }

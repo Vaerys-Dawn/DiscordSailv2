@@ -65,7 +65,7 @@ public class Competition {
                     int entry = Integer.parseInt(newVotes.get(i));
                     if (entry > entries.size()) {
                         //builder.append("    **Vote Not Counted. Reason: Number too high**\n");
-                    } else if(entry == 0) {
+                    } else if(entry <= 0) {
                         //builder.append("    **Vote Not Counted. Reason: Number = 0\n");
                     }
                     else{

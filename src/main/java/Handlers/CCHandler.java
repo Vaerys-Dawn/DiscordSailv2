@@ -51,7 +51,7 @@ public class CCHandler {
         }
         String response;
         for (CCommandObject cc : customCommands.getCommandList()) {
-            if (command.equalsIgnoreCase(Constants.PREFIX_CC + cc.getName())) {
+            if (command.equalsIgnoreCase(guildConfig.getPrefixCC() + cc.getName())) {
                 if (cc.isShitPost() && guildConfig.doShitPostFiltering()) {
                     if (guildConfig.getChannelTypeID(Constants.CHANNEL_SHITPOST) != null) {
                         if (!channel.getID().equals(guildConfig.getChannelTypeID(Constants.CHANNEL_SHITPOST))) {
