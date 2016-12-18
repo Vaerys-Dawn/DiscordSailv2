@@ -5,7 +5,6 @@ import Main.Globals;
 import Main.Utility;
 import Objects.CharacterObject;
 import Objects.RoleTypeObject;
-import Objects.UserTypeObject;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;

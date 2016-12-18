@@ -3,16 +3,9 @@ package BadCode;
 import Main.Globals;
 import Objects.CharacterObject;
 import Objects.RoleTypeObject;
-import sx.blah.discord.handle.impl.obj.Guild;
-import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.MissingPermissionsException;
-import sx.blah.discord.util.RateLimitException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**

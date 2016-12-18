@@ -23,7 +23,7 @@ public class DMHandler {
                 try {
                     String response = message.toString();
                     String tagRespond = StringUtils.substringBetween(response, prefixResponse, "}");
-                    response = response.replace(prefixResponse + tagRespond + "}", "");
+                    response = response.replace(prefixResponse + tagRespond + "}", message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator());
                     if (tagRespond == null){
                         return;
                     }

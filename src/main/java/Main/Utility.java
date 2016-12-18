@@ -8,7 +8,6 @@ import POGOs.GuildConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.*;
@@ -126,7 +125,7 @@ public class Utility {
             }
         }
         if (counter > 1){
-            logger.error(filePath + " File for guild with id " + guildID + " took " + counter + " tries to Init");
+            logger.debug(filePath + " File for guild with id " + guildID + " took " + counter + " tries to Init");
         }
         return object;
     }
@@ -168,7 +167,7 @@ public class Utility {
                         channel.sendMessage(message);
                     }
                 } catch (MissingPermissionsException e) {
-                    logger.error("Error sending message to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                    logger.debug("Error sending message to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
                     return true;
                 } catch (DiscordException e) {
@@ -180,7 +179,7 @@ public class Utility {
                     }
                 }
             } else {
-                logger.error("Message to be sent to channel with id: " + channel.getID() + "on guild with id: " + channel.getGuild().getID() +
+                logger.debug("Message to be sent to channel with id: " + channel.getID() + "on guild with id: " + channel.getGuild().getID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Message to large.");
                 return true;
             }
@@ -195,7 +194,7 @@ public class Utility {
                     if (message != null) {
                         channel.sendFile(file);
                     } else {
-                        logger.error("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                        logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
                                 ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
                         return true;
                     }
@@ -217,7 +216,7 @@ public class Utility {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (MissingPermissionsException e) {
-                logger.error("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
                 return true;
             }
@@ -241,7 +240,7 @@ public class Utility {
                     return true;
                 }
             } catch (MissingPermissionsException e) {
-                logger.error("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
                 StringBuilder embedtoString = new StringBuilder();
                 if (embed.title != null) embedtoString.append("**" + embed.title + "**\n");
@@ -264,7 +263,7 @@ public class Utility {
                 e.printStackTrace();
                 return true;
             } catch (NullPointerException e) {
-                logger.error("[sendDM] " + e.getMessage());
+                logger.debug("[sendDM] " + e.getMessage());
                 return true;
             }
             return false;
@@ -285,7 +284,7 @@ public class Utility {
                 }
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("Edited roles hierarchy is too high.")) {
-                    logger.error("Error Editing roles of user with id: " + author.getID() + " on guild with id: " + guild.getID() +
+                    logger.debug("Error Editing roles of user with id: " + author.getID() + " on guild with id: " + guild.getID() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
                     return true;
                 } else {
@@ -316,7 +315,7 @@ public class Utility {
                 guild.editUserRoles(author, roles);
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("Edited roles hierarchy is too high.")) {
-                    logger.error("Error Editing roles of user with id: " + author.getID() + " on guild with id: " + guild.getID() +
+                    logger.debug("Error Editing roles of user with id: " + author.getID() + " on guild with id: " + guild.getID() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
                     return true;
                 } else {
@@ -395,7 +394,7 @@ public class Utility {
                 guild.setUserNickname(author, nickname);
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().toLowerCase().contains("hierarchy")) {
-                    logger.error("Could not Update Nickname. User's position in hierarchy is higher than mine.");
+                    logger.debug("Could not Update Nickname. User's position in hierarchy is higher than mine.");
                 } else {
                     e.printStackTrace();
                 }

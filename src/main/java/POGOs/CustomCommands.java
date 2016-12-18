@@ -6,7 +6,6 @@ import Main.Globals;
 import Main.Utility;
 import Objects.BlackListObject;
 import Objects.CCommandObject;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;

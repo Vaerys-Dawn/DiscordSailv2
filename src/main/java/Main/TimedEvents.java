@@ -12,11 +12,12 @@ import sx.blah.discord.util.Image;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.text.DateFormat;
 import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -57,6 +58,7 @@ public class TimedEvents {
             }
         }
     }
+
     private static void dailyTasks() {
         ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
         ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
@@ -72,10 +74,10 @@ public class TimedEvents {
                 ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
                 int day = midnightUTC.getDayOfWeek().getValue();
                 String time = midnightUTC.getYear() + "-" + midnightUTC.getMonth() + "-" + midnightUTC.getDayOfMonth();
-                logger.info(time + ": Running "+ midnightUTC.getDayOfWeek().toString()+ "'s Daily Tasks");
+                logger.info(time + ": Running " + midnightUTC.getDayOfWeek().toString() + "'s Daily Tasks");
                 StringBuilder file = new StringBuilder();
                 file.append(Constants.DIRECTORY_GLOBAL_IMAGES + "avatarForDay_" + day);
-                if (midnightUTC.getMonth().equals(Month.DECEMBER)){
+                if (midnightUTC.getMonth().equals(Month.DECEMBER)) {
                     file.append("_Santa");
                 }
                 file.append(".png");
@@ -89,27 +91,33 @@ public class TimedEvents {
                     Utility.backupFile(g.getGuildID(), Constants.FILE_INFO);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_COMPETITION);
                     GuildConfig guildConfig = (GuildConfig) Utility.initFile(g.getGuildID(), Constants.FILE_GUILD_CONFIG, GuildConfig.class);
-                    if (guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL) != null){
-                         if (guildConfig.doDailyMessage()){
-                             IChannel channel = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));
-                             for (Field f : Constants.class.getFields()){
-                                 if (f.getName().equals("DAILY_MESSAGE_" + day)){
-                                     try {
-                                         String response = TagSystem.tagRandom((String) f.get(null));
-                                         Thread.sleep(1000);
-                                         Utility.sendMessage(response,channel);
-                                     } catch (IllegalAccessException e) {
-                                         e.printStackTrace();
-                                     } catch (InterruptedException e) {
-                                         e.printStackTrace();
-                                     }
-                                 }
-                             }
-                         }
+                    if (guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL) != null) {
+                        if (guildConfig.doDailyMessage()) {
+                            IChannel channel = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));
+                            try {
+                                for (Field f : Constants.class.getFields()) {
+                                    if (midnightUTC.getDayOfMonth() == 25 && midnightUTC.getMonth().equals(Month.DECEMBER)) {
+                                        Thread.sleep(1000);
+                                        Utility.sendMessage("> ***MERRY CHRISTMAS***", channel);
+                                    } else if (midnightUTC.getDayOfMonth() == 1 && midnightUTC.getMonth().equals(Month.JANUARY)) {
+                                        Thread.sleep(1000);
+                                        Utility.sendMessage("> ***HAPPY NEW YEAR***",channel);
+                                    } else if (f.getName().equals("DAILY_MESSAGE_" + day)) {
+                                        String response = TagSystem.tagRandom((String) f.get(null));
+                                        Thread.sleep(1000);
+                                        Utility.sendMessage(response, channel);
+                                    }
+                                }
+                            }catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
             }
-        }, initialDelay*1000, 24 * 60 * 60 * 1000);
+        }, initialDelay * 1000, 24 * 60 * 60 * 1000);
     }
 
     public static void addWaiter(String userID, String guildID) {
@@ -130,7 +138,7 @@ public class TimedEvents {
     }
 
 
-    public static boolean addReminder(String guildID, String userID, String channelID, long timeMins, String message){
+    public static boolean addReminder(String guildID, String userID, String channelID, long timeMins, String message) {
         for (TimedObject g : TimerObjects) {
             if (g.getGuildID().equals(guildID)) {
                 return g.addReminderObject(new ReminderObject(userID, channelID, message, timeMins));
@@ -165,7 +173,7 @@ public class TimedEvents {
                     ArrayList<WaiterObject> waiterObjects = task.getWaiterObjects();
                     for (int i = 0; i < waiterObjects.size(); i++) {
                         if (waiterObjects.get(i).getRemainderSecs() > 0) {
-                            waiterObjects.get(i).setRemainderSecs(waiterObjects.get(i).getRemainderSecs()-1);
+                            waiterObjects.get(i).setRemainderSecs(waiterObjects.get(i).getRemainderSecs() - 1);
                             if (waiterObjects.get(i).getRemainderSecs() == 0) {
                                 waiterObjects.remove(i);
                                 logger.debug("User with ID: " + waiterObjects.get(i).getID() + " removed from waiting list.");
@@ -183,18 +191,18 @@ public class TimedEvents {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                for (TimedObject task: TimerObjects){
+                for (TimedObject task : TimerObjects) {
                     ArrayList<ReminderObject> reminderObjects = task.getReminderObjects();
                     for (int i = 0; i < reminderObjects.size(); i++) {
                         if (reminderObjects.get(i).getTimeMins() > 0) {
-                            reminderObjects.get(i).setTimeMins(reminderObjects.get(i).getTimeMins() -1);
+                            reminderObjects.get(i).setTimeMins(reminderObjects.get(i).getTimeMins() - 1);
                             if (reminderObjects.get(i).getTimeMins() == 0) {
                                 ReminderObject reminder = reminderObjects.get(i);
                                 IChannel channel = Globals.getClient().getChannelByID(reminder.getChannelID());
                                 String reminderMessage;
                                 reminderMessage = Globals.getClient().getUserByID(reminder.getUserID()).mention() + " " + reminder.getMessage();
                                 reminderMessage = TagSystem.tagMentionRemover(reminderMessage);
-                                Utility.sendMessage(reminderMessage,channel);
+                                Utility.sendMessage(reminderMessage, channel);
                                 logger.debug("User with ID: " + reminderObjects.get(i).getUserID() + " Sending reminder");
                                 reminderObjects.remove(i);
                             }

@@ -1,10 +1,7 @@
 package BadCode;
 
-import Main.Constants;
 import Main.Globals;
 import Objects.CCommandObject;
-import sx.blah.discord.handle.impl.obj.Guild;
-import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
 

@@ -9,18 +9,15 @@ import POGOs.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.api.internal.json.objects.MessageObject;
-import sx.blah.discord.handle.impl.obj.Embed;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.*;
+import sx.blah.discord.util.Image;
 
+import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +26,7 @@ import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.List;
 import java.util.regex.Pattern;
 
 // TODO: 02/09/2016 Add a Buncha Stuff
@@ -311,7 +309,10 @@ public class MessageHandler {
         String spacer = TagSystem.tagSpacer("#spacer#");
 
         //setting embed colour to match Bot's Colour
-        helpEmbed.withColor(Utility.getUsersColour(Globals.getClient().getOurUser(),guild));
+        Color color = Utility.getUsersColour(Globals.getClient().getOurUser(),guild);
+        if (color != null) {
+            helpEmbed.withColor(color);
+        }
 
         //getting Types of commands.
         for (Method m : methods) {
@@ -936,6 +937,7 @@ public class MessageHandler {
         }
     }
 
+    @AliasAnnotation(alias = {"Modif"})
     @CommandAnnotation(
             name = "Modifier", description = "Allows you to add or remove a modifier role from the list of modifier roles.", usage = "[add,remove] [Role Name]",
             type = Constants.TYPE_ROLE_SELECT, channel = Constants.CHANNEL_BOT_COMMANDS, requiresArgs = true)
@@ -1010,7 +1012,7 @@ public class MessageHandler {
         return builder.toString();
     }
 
-    @AliasAnnotation(alias = {"Modifiers"})
+    @AliasAnnotation(alias = {"Modifiers","Modifs"})
     @CommandAnnotation(
             name = "ListModifiers", description = "Shows the list of modifier roles you can choose from.",
             type = Constants.TYPE_ROLE_SELECT, channel = Constants.CHANNEL_BOT_COMMANDS)

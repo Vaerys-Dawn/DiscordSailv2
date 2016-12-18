@@ -3,8 +3,6 @@ package Objects;
 import POGOs.GuildConfig;
 import sx.blah.discord.handle.obj.IRole;
 
-import java.util.Arrays;
-
 /**
  * Created by Vaerys on 28/11/2016.
  */
