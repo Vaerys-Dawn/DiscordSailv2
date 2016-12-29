@@ -344,6 +344,7 @@ public class MessageHandler {
             builder.append("Support Discord - https://discord.gg/XSyQQrR\n");
             builder.append("[Bot's GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)");
             helpEmbed.withDescription(builder.toString());
+            helpEmbed.withFooterText("Bot Version: " + Globals.version);
         } else {
             boolean isFound = false;
             for (String s : types) {
@@ -527,6 +528,7 @@ public class MessageHandler {
         if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getID().equals(Globals.creatorID)) {
             builder.append("\n\n***[GUILD CONFIG OPTIONS]***");
             builder.append("\n> LoginMessage = **" + guildConfig.doLoginMessage());
+            builder.append("**\n> DailyMessage = **" + guildConfig.doDailyMessage());
             builder.append("**\n> GeneralLogging = **" + guildConfig.doGeneralLogging());
             builder.append("**\n> AdminLogging = **" + guildConfig.doAdminLogging());
             builder.append("**\n> BlackListing = **" + guildConfig.doBlackListing());

@@ -245,7 +245,7 @@ public class Utility {
                 StringBuilder embedtoString = new StringBuilder();
                 if (embed.title != null) embedtoString.append("**" + embed.title + "**\n");
                 if (embed.description != null) embedtoString.append(embed.description + "\n");
-                if (embed.footer != null) embedtoString.append(embed.footer);
+                if (embed.footer != null) embedtoString.append("*" + embed.footer.text +"*");
                 if (embed.image != null) embedtoString.append(embed.image.url);
                 sendMessage(embedtoString.toString(),channel);
                 return true;

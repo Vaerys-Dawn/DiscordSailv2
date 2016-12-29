@@ -12,9 +12,11 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RateLimitException;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.Scanner;
 
 /**
@@ -46,13 +48,14 @@ public class Main {
             }
             token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
             if (token == null){
-                logger.error("!!!BOT TOKEN NOT VALID PLEASE CHECK \"Storage/Token.txt\" and update the Token!!!");
+                logger.error("!!!BOT TOKEN NOT VALID PLEASE CHECK \"Storage/Token.txt\" AND UPDATE THE TOKEN!!!");
             }
             IDiscordClient client = Client.getClient(token, false);
             EventDispatcher dispatcher = client.getDispatcher();
             dispatcher.registerListener(new AnnotationListener());
             client.login();
             new TimedEvents();
+            Globals.setVersion();
             Globals.setClient(client);
             consoleInput();
             Runtime.getRuntime().addShutdownHook(new Thread() {
