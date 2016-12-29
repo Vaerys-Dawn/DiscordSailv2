@@ -78,6 +78,7 @@ public class FileHandler {
             File file = File.createTempFile(name,".json");
             FileWriter writer = new FileWriter(file);
             gson.toJson(object,writer);
+            writer.close();
             return file;
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,6 +92,7 @@ public class FileHandler {
         try (Reader reader = new InputStreamReader(new FileInputStream(new File(file)), StandardCharsets.UTF_8)) {
             Object newObject = gson.fromJson(reader, objClass);
             logger.debug("Reading Data from Json File: " + file + " applying to Object: " + objClass.getName());
+            reader.close();
             return newObject;
         } catch (IOException e) {
             logger.error(e.getCause().toString());
@@ -105,6 +107,7 @@ public class FileHandler {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             gson.toJson(object, writer);
             logger.debug("Saving Data to Json File: " + file);
+            writer.close();
         } catch (IOException e) {
             logger.error(e.getCause().toString());
         }

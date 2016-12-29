@@ -95,20 +95,22 @@ public class TimedEvents {
                         if (guildConfig.doDailyMessage()) {
                             IChannel channel = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));
                             try {
-                                for (Field f : Constants.class.getFields()) {
-                                    if (midnightUTC.getDayOfMonth() == 25 && midnightUTC.getMonth().equals(Month.DECEMBER)) {
-                                        Thread.sleep(1000);
-                                        Utility.sendMessage("> ***MERRY CHRISTMAS***", channel);
-                                    } else if (midnightUTC.getDayOfMonth() == 1 && midnightUTC.getMonth().equals(Month.JANUARY)) {
-                                        Thread.sleep(1000);
-                                        Utility.sendMessage("> ***HAPPY NEW YEAR***",channel);
-                                    } else if (f.getName().equals("DAILY_MESSAGE_" + day)) {
-                                        String response = TagSystem.tagRandom((String) f.get(null));
-                                        Thread.sleep(1000);
-                                        Utility.sendMessage(response, channel);
+                                if (midnightUTC.getDayOfMonth() == 25 && midnightUTC.getMonth().equals(Month.DECEMBER)) {
+                                    Thread.sleep(1000);
+                                    Utility.sendMessage("> ***MERRY CHRISTMAS***", channel);
+                                } else if (midnightUTC.getDayOfMonth() == 1 && midnightUTC.getMonth().equals(Month.JANUARY)) {
+                                    Thread.sleep(1000);
+                                    Utility.sendMessage("> ***HAPPY NEW YEAR***", channel);
+                                } else {
+                                    for (Field f : Constants.class.getFields()) {
+                                        if (f.getName().equals("DAILY_MESSAGE_" + day)) {
+                                            String response = TagSystem.tagRandom((String) f.get(null));
+                                            Thread.sleep(1000);
+                                            Utility.sendMessage(response, channel);
+                                        }
                                     }
                                 }
-                            }catch (InterruptedException e) {
+                            } catch (InterruptedException e) {
                                 e.printStackTrace();
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();

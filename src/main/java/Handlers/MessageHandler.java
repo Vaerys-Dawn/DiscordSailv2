@@ -98,7 +98,7 @@ public class MessageHandler {
     }
 
     private void checkMentionCount() {
-        if (Utility.testForPerms(new Permissions[]{Permissions.MENTION_EVERYONE}, author, guild)) {
+        if (message.toString().contains("@everyone") || message.toString().contains("@here")) {
             return;
         }
         if (guildConfig.doMaxMentions()) {
