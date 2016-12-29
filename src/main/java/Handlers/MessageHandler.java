@@ -1202,8 +1202,7 @@ public class MessageHandler {
             isLocked = true;
         }
         content = newContent;
-        boolean isTrusted = guildConfig.testIsTrusted(author, guild);
-        return customCommands.addCommand(isLocked, author.getID(), nameCC, content, isShitpost, guild, isTrusted, guildConfig);
+        return customCommands.addCommand(isLocked, author, nameCC, content, isShitpost, guild, guildConfig);
     }
 
     @CommandAnnotation(
@@ -1229,13 +1228,13 @@ public class MessageHandler {
         String tagUserSuffix = "}";
         String tagUser;
         if (message.getMentions().size() > 0) {
-            return customCommands.getUserCommands(message.getMentions().get(0).getID(), guildConfig);
+            return customCommands.getUserCommands(message.getMentions().get(0).getID(),guild, guildConfig);
         }
         if (args.contains(tagUserPrefix)) {
             tagUser = StringUtils.substringBetween(args, tagUserPrefix, tagUserSuffix);
             if (tagUser != null) {
                 if (Globals.getClient().getUserByID(tagUser) != null) {
-                    return customCommands.getUserCommands(tagUser, guildConfig);
+                    return customCommands.getUserCommands(tagUser,guild, guildConfig);
                 }
             }
         }
@@ -1316,7 +1315,7 @@ public class MessageHandler {
             } else {
                 trusted = guildConfig.testIsTrusted(Globals.getClient().getUserByID(userID), guild);
             }
-            return customCommands.addCommand(locked, userID, name, contents, shitpost, guild, trusted, guildConfig);
+            return customCommands.addCommand(locked, Globals.getClient().getUserByID(userID), name, contents, shitpost, guild, guildConfig);
         } else {
             return "> Your Server Has no Legacy commands to transfer.";
         }

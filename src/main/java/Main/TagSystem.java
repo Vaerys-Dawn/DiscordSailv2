@@ -291,7 +291,7 @@ public class TagSystem {
 
 
     public static String testForShit(String from) {
-        return from.replace("#isShitpost#", "");
+        return from.replace("#shitpost#", "");
     }
 
     public static String testForLock(String from, IUser author, IGuild guild) {

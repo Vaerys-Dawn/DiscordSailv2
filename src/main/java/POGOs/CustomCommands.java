@@ -54,9 +54,26 @@ public class CustomCommands {
         this.properlyInit = properlyInit;
     }
 
-    public String addCommand(boolean isLocked, String userID, String commandName, String commandContents, boolean isShitPost, IGuild guild, boolean isTrusted,GuildConfig guildConfig) {
+    private int maxCCs(IUser author, IGuild guild,GuildConfig guildConfig){
+        int total = 10;
+        boolean hasManagePerms = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild);
+        boolean hasAdminPerms = Utility.testForPerms(new Permissions[]{Permissions.ADMINISTRATOR}, author, guild);
+        boolean isTrusted = guildConfig.testIsTrusted(author, guild);
+        if (hasManagePerms) {
+            total += 40;
+        }
+        if (hasAdminPerms) {
+            total += 100;
+        }
+        if (isTrusted) {
+            total += 20;
+        }
+        return total;
+    }
+
+    public String addCommand(boolean isLocked, IUser author, String commandName, String commandContents, boolean isShitPost, IGuild guild,GuildConfig guildConfig) {
         int counter = 0;
-        int maxCCs = 10;
+        int limitCCs;
         String toCheck = commandName + commandContents;
         if (Utility.checkBlacklist(toCheck, blackList) != null) {
             return Utility.checkBlacklist(toCheck, blackList);
@@ -64,30 +81,21 @@ public class CustomCommands {
         if (commandName.length() > 50) {
             return "> Command name too long.";
         }
-        boolean hasManagePerms = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, Globals.getClient().getUserByID(userID), guild);
-        boolean hasAdminPerms = Utility.testForPerms(new Permissions[]{Permissions.ADMINISTRATOR}, Globals.getClient().getUserByID(userID), guild);
-        if (hasManagePerms) {
-            maxCCs += 40;
-        }
-        if (hasAdminPerms) {
-            maxCCs += 100;
-        }
-        if (isTrusted) {
-            maxCCs += 20;
-        }
+        limitCCs = maxCCs(author,guild,guildConfig);
+
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(commandName)) {
                 return "> Command name already in use.";
             }
-            if (c.getUserID().equals(userID)) {
+            if (c.getUserID().equals(author.getID())) {
                 counter++;
             }
         }
-        if (counter < maxCCs) {
+        if (counter < limitCCs) {
             if (commandContents.length() < 1500) {
-                commands.add(new CCommandObject(isLocked, userID, commandName, commandContents, isShitPost));
-                return "> Command Added you have " + (maxCCs - counter - 1) + " custom command slots left.\n" +
-                        Constants.PREFIX_INDENT + "You can run your new command by performing `" + guildConfig.getPrefixCommand() + commandName + "`.";
+                commands.add(new CCommandObject(isLocked, author.getID(), commandName, commandContents, isShitPost));
+                return "> Command Added you have " + (limitCCs - counter - 1) + " custom command slots left.\n" +
+                        Constants.PREFIX_INDENT + "You can run your new command by performing `" + guildConfig.getPrefixCC() + commandName + "`.";
             } else {
                 return "> Command Contents to long. max length = 1500 chars.";
             }
@@ -177,17 +185,20 @@ public class CustomCommands {
         return Constants.ERROR_CC_NOT_FOUND;
     }
 
-    public String getUserCommands(String userID,GuildConfig guildConfig) {
+    public String getUserCommands(String userID,IGuild guild,GuildConfig guildConfig) {
         IUser user = Globals.getClient().getUserByID(userID);
         StringBuilder builder = new StringBuilder();
+        int total = 0;
+        int max = maxCCs(user,guild,guildConfig);
         builder.append("> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.\n`");
         for (CCommandObject sA : commands) {
             if (sA.getUserID().equals(userID)) {
                 builder.append(guildConfig.getPrefixCC() + sA.getName() + ", ");
+                total++;
             }
         }
         builder.delete(builder.length() - 2, builder.length());
-        builder.append("`.");
+        builder.append("`.\nTotal Custom commands: " + total + "/" + max + ".");
         return builder.toString();
     }
 
