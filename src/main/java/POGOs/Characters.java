@@ -75,21 +75,21 @@ public class Characters {
                     Utility.roleManagement(author, guild, userRoles);
                     Utility.updateUserNickName(author, guild, c.getNickname());
                     return "> Loaded Character.";
+                } else {
+                    return "> That is not your character.";
                 }
-            }else {
-                return "> That is not your character.";
             }
         }
         return Constants.ERROR_CHAR_NOT_FOUND;
     }
 
-    public String delChar(String character, IUser author,IGuild guild,boolean bypass){
-        for (CharacterObject c:characters){
-            if (c.getName().equalsIgnoreCase(character)){
+    public String delChar(String character, IUser author, IGuild guild, boolean bypass) {
+        for (CharacterObject c : characters) {
+            if (c.getName().equalsIgnoreCase(character)) {
                 if (author.getID().equals(c.getUserID()) || bypass) {
                     characters.remove(c);
                     return "> Character Deleted.";
-                }else {
+                } else {
                     return "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.";
                 }
             }
@@ -97,17 +97,17 @@ public class Characters {
         return Constants.ERROR_CHAR_NOT_FOUND;
     }
 
-    public String listCharacters(String id,GuildConfig guildConfig) {
+    public String listCharacters(String id, GuildConfig guildConfig) {
         StringBuilder builder = new StringBuilder();
         builder.append("> Here are all of your characters.\n");
-        for (CharacterObject c: characters){
-            if (c.getUserID().equals(id)){
+        for (CharacterObject c : characters) {
+            if (c.getUserID().equals(id)) {
                 builder.append(c.getName() + ", ");
             }
         }
         builder.delete(builder.length() - 2, builder.length());
         builder.append(".\n> You can select a character with `" + guildConfig.getPrefixCommand() + "Char [Character name]`.\n" +
-                 Constants.PREFIX_INDENT + "Or create one with `" + guildConfig.getPrefixCommand() +"UpdateChar [Character Name]`.");
+                Constants.PREFIX_INDENT + "Or create one with `" + guildConfig.getPrefixCommand() + "UpdateChar [Character Name]`.");
         return builder.toString();
     }
 }
