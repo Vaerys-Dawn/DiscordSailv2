@@ -1181,8 +1181,9 @@ public class MessageHandler {
     public String selChar() {
         return characters.selChar(args.split(" ")[0], author, guild, guildConfig);
     }
+    @AliasAnnotation(alias = {"CharList","ListChars"})
     @CommandAnnotation(
-            name = "Char", description = "Shows you all of your characters.",
+            name = "Chars", description = "Shows you all of your characters.",
             type = Constants.TYPE_CHARACTER, channel = Constants.CHANNEL_BOT_COMMANDS)
     public String listChars() {
         return characters.listCharacters(author.getID(),guildConfig);
