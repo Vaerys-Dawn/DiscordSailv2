@@ -918,7 +918,7 @@ public class MessageHandler {
     //
     //role select commands
     @CommandAnnotation(
-            name = "Role", description = "Sets your cosmetic role from the list of cosmetic roles.", usage = "[Role Name]",
+            name = "Role", description = "Sets your cosmetic role from the list of cosmetic roles.", usage = "[Role Name]/Remove",
             type = Constants.TYPE_ROLE_SELECT, channel = Constants.CHANNEL_BOT_COMMANDS, requiresArgs = true)
     public String setRole() {
         ArrayList<RoleTypeObject> roles = guildConfig.getCosmeticRoles();
