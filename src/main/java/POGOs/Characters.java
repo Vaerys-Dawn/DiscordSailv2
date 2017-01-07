@@ -53,27 +53,31 @@ public class Characters {
         List<IRole> userRoles = author.getRolesForGuild(guild);
         for (CharacterObject c : characters) {
             if (c.getName().equalsIgnoreCase(character)) {
-                for (RoleTypeObject r : guildConfig.getCosmeticRoles()) {
-                    for (int i = 0;i < userRoles.size();i++) {
-                        if (r.getRoleID().equalsIgnoreCase(userRoles.get(i).getID())) {
-                            userRoles.remove(i);
+                if (author.getID().equals(c.getUserID())) {
+                    for (RoleTypeObject r : guildConfig.getCosmeticRoles()) {
+                        for (int i = 0; i < userRoles.size(); i++) {
+                            if (r.getRoleID().equalsIgnoreCase(userRoles.get(i).getID())) {
+                                userRoles.remove(i);
+                            }
                         }
+
                     }
+                    for (int i = 0; i < c.getRoles().size(); i++) {
 
-                }
-                for (int i = 0;i < c.getRoles().size();i++) {
-
-                    IRole newRole = guild.getRoleByID(c.getRoles().get(i).getRoleID());
-                    if (newRole != null) {
-                        userRoles.add(newRole);
-                    } /*else {
+                        IRole newRole = guild.getRoleByID(c.getRoles().get(i).getRoleID());
+                        if (newRole != null) {
+                            userRoles.add(newRole);
+                        } /*else {
                         c.getRoles().remove(i);
                     }*/
 
+                    }
+                    Utility.roleManagement(author, guild, userRoles);
+                    Utility.updateUserNickName(author, guild, c.getNickname());
+                    return "> Loaded Character.";
                 }
-                Utility.roleManagement(author,guild,userRoles);
-                Utility.updateUserNickName(author,guild,c.getNickname());
-                return "> Loaded Character.";
+            }else {
+                return "> That is not your character.";
             }
         }
         return Constants.ERROR_CHAR_NOT_FOUND;
@@ -91,5 +95,19 @@ public class Characters {
             }
         }
         return Constants.ERROR_CHAR_NOT_FOUND;
+    }
+
+    public String listCharacters(String id,GuildConfig guildConfig) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("> Here are all of your characters.\n");
+        for (CharacterObject c: characters){
+            if (c.getUserID().equals(id)){
+                builder.append(c.getName() + ", ");
+            }
+        }
+        builder.delete(builder.length() - 2, builder.length());
+        builder.append(".\n> You can select a character with `" + guildConfig.getPrefixCommand() + "Char [Character name]`.\n" +
+                 Constants.PREFIX_INDENT + "Or create one with `" + guildConfig.getPrefixCommand() +"UpdateChar [Character Name]`.");
+        return builder.toString();
     }
 }

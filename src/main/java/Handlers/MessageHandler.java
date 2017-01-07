@@ -309,7 +309,7 @@ public class MessageHandler {
         String spacer = TagSystem.tagSpacer("#spacer#");
 
         //setting embed colour to match Bot's Colour
-        Color color = Utility.getUsersColour(Globals.getClient().getOurUser(),guild);
+        Color color = Utility.getUsersColour(Globals.getClient().getOurUser(), guild);
         if (color != null) {
             helpEmbed.withColor(color);
         }
@@ -478,7 +478,7 @@ public class MessageHandler {
         helpEmbed.withDescription("[GITHUB](https://github.com/Vaerys-Dawn/DiscordSailv2)");
         helpEmbed.withDescription("Thing.");
         try {
-            channel.sendMessage("",helpEmbed.build(),false);
+            channel.sendMessage("", helpEmbed.build(), false);
         } catch (RateLimitException e) {
             e.printStackTrace();
         } catch (DiscordException e) {
@@ -897,9 +897,15 @@ public class MessageHandler {
                 file.append("_Santa");
             }
             file.append(".png");
-            final Image avatar = Image.forFile(new File(file.toString()));
-            Utility.updateAvatar(avatar);
-            return "> Avatar updated.";
+            File avatarFile = new File(file.toString());
+            if (avatarFile.exists()) {
+                final Image avatar = Image.forFile(new File(file.toString()));
+                System.out.println(file);
+                Utility.updateAvatar(avatar);
+                return "> Avatar updated.";
+            }else {
+                return "> Failed to update avatar, Image path invalid.";
+            }
         } else {
             return noAllowed;
         }
@@ -928,8 +934,10 @@ public class MessageHandler {
                 }
             }
         }
-        if (newRoleId != null) {
-            userRoles.add(guild.getRoleByID(newRoleId));
+        if (newRoleId != null || args.equalsIgnoreCase("remove")) {
+            if (!args.equalsIgnoreCase("remove")){
+                userRoles.add(guild.getRoleByID(newRoleId));
+            }
             if (Utility.roleManagement(author, guild, userRoles).get()) {
                 return Constants.ERROR_UPDATING_ROLE;
             }
@@ -1014,7 +1022,7 @@ public class MessageHandler {
         return builder.toString();
     }
 
-    @AliasAnnotation(alias = {"Modifiers","Modifs"})
+    @AliasAnnotation(alias = {"Modifiers", "Modifs"})
     @CommandAnnotation(
             name = "ListModifiers", description = "Shows the list of modifier roles you can choose from.",
             type = Constants.TYPE_ROLE_SELECT, channel = Constants.CHANNEL_BOT_COMMANDS)
@@ -1173,6 +1181,12 @@ public class MessageHandler {
     public String selChar() {
         return characters.selChar(args.split(" ")[0], author, guild, guildConfig);
     }
+    @CommandAnnotation(
+            name = "Char", description = "Shows you all of your characters.",
+            type = Constants.TYPE_CHARACTER, channel = Constants.CHANNEL_BOT_COMMANDS)
+    public String listChars() {
+        return characters.listCharacters(author.getID(),guildConfig);
+    }
 
     //
     //
@@ -1228,13 +1242,13 @@ public class MessageHandler {
         String tagUserSuffix = "}";
         String tagUser;
         if (message.getMentions().size() > 0) {
-            return customCommands.getUserCommands(message.getMentions().get(0).getID(),guild, guildConfig);
+            return customCommands.getUserCommands(message.getMentions().get(0).getID(), guild, guildConfig);
         }
         if (args.contains(tagUserPrefix)) {
             tagUser = StringUtils.substringBetween(args, tagUserPrefix, tagUserSuffix);
             if (tagUser != null) {
                 if (Globals.getClient().getUserByID(tagUser) != null) {
-                    return customCommands.getUserCommands(tagUser,guild, guildConfig);
+                    return customCommands.getUserCommands(tagUser, guild, guildConfig);
                 }
             }
         }
@@ -1402,9 +1416,9 @@ public class MessageHandler {
             type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_MESSAGES})
     public String getEntries() {
         int i = 1;
-        for (PollObject p:competition.getEntries()){
+        for (PollObject p : competition.getEntries()) {
             Utility.sendMessage("Entry " + i + " : " + guild.getUserByID(p.getUserID()).mention() + "\n" +
-                    p.getFileUrl(),channel);
+                    p.getFileUrl(), channel);
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {

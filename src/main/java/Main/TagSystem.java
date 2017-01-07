@@ -91,6 +91,9 @@ public class TagSystem {
                     try {
                         int position = Integer.parseInt(tag);
                         ArrayList<String> splitArgs = new ArrayList<>(Arrays.asList(args.split(" ")));
+                        if(splitArgs.size() == 0){
+                            from = from.replace(prefix + tag + suffix,"");
+                        }
                         if (splitArgs.get(position - 1) == null){
                             from = from.replace(prefix + tag + suffix,"");
                         }else {
