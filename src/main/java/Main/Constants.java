@@ -13,6 +13,10 @@ public class Constants {
 
     //-------Command Constants---------
 
+    public enum ComandType {
+        HELP, ADMIN, GENERAl, CC, ROLE, CHARACTERS, COMPETITION, SERVERS
+    }
+
     //Type Constants
     public static final String TYPE_GENERAL = "General";
     public static final String TYPE_ADMIN = "Admin";

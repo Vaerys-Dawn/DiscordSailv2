@@ -37,6 +37,11 @@ public class TimedEvents {
     }
 
     public static void addGuildCoolDown(String guildID) {
+        for(TimedObject t: TimerObjects){
+            if (t.getGuildID().equals(guildID)){
+                return;
+            }
+        }
         TimerObjects.add(new TimedObject(guildID));
         logger.debug("Timed Events initiated for guild with ID: " + guildID);
     }

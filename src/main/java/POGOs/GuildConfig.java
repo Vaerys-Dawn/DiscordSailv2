@@ -3,15 +3,15 @@ package POGOs;
 import Annotations.ToggleAnnotation;
 import Main.Constants;
 import Main.Globals;
-import Objects.BlackListObject;
-import Objects.ChannelTypeObject;
-import Objects.OffenderObject;
-import Objects.RoleTypeObject;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
+import Main.Utility;
+import Objects.*;
+import sx.blah.discord.handle.impl.obj.Guild;
+import sx.blah.discord.handle.obj.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Vaerys on 03/08/2016.
@@ -418,5 +418,105 @@ public class GuildConfig {
             }
         }
         return false;
+    }
+
+    public String getInfo(IGuild guild, IUser author) {
+        String guildName = guild.getName();
+        LocalDateTime creationDate = guild.getCreationDate();
+        IUser guildOwner = guild.getOwner();
+        IRegion region = guild.getRegion();
+        List<IRole> roles = guild.getRoles();
+        StringBuilder builder = new StringBuilder();
+        ArrayList<String> cosmeticRoleStats = new ArrayList<>();
+        ArrayList<String> modifierRoleStats = new ArrayList<>();
+        int totalCosmetic = 0;
+        int totalModified = 0;
+        builder.append("***[" + guildName.toUpperCase() + "]***");
+        builder.append("\n\n> Guild ID : **" + guild.getID());
+        builder.append("**\n> Creation Date : **" + creationDate.getYear() + " " + creationDate.getMonth() + " " + creationDate.getDayOfMonth() + " - " + creationDate.getHour() + ":" + creationDate.getMinute());
+        builder.append("**\n> Guild Owner : **@" + guildOwner.getName() + "#" + guildOwner.getDiscriminator() + "**");
+        if (region != null) {
+            builder.append("\n> Region : **" + region.getName() + "**");
+        }
+        builder.append("\n> Total Members: **" + guild.getUsers().size() + "**");
+        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getID().equals(Globals.creatorID)) {
+            builder.append("\n\n***[GUILD CONFIG OPTIONS]***");
+            builder.append("\n> LoginMessage = **" + doLoginMessage());
+            builder.append("**\n> DailyMessage = **" + doDailyMessage());
+            builder.append("**\n> GeneralLogging = **" + doGeneralLogging());
+            builder.append("**\n> AdminLogging = **" + doAdminLogging());
+            builder.append("**\n> BlackListing = **" + doBlackListing());
+            builder.append("**\n> MaxMentions = **" + doMaxMentions());
+            builder.append("**\n> ShitPostFiltering = **" + doShitPostFiltering());
+            builder.append("**\n> MuteRepeatOffenders = **" + doMuteRepeatOffenders());
+            builder.append("**\n> CompEntries = **" + doCompEntries());
+            builder.append("**\n> CompVoting = **" + doCompVoting());
+            builder.append("**\n> Muted Role : **@" + getMutedRole().getRoleName());
+            builder.append("**\n> RoleToMention : **@" + getRoleToMention().getRoleName() + "**");
+        }
+        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getID().equals(Globals.creatorID)) {
+            builder.append("\n\n***[CHANNELS]***");
+            for (ChannelTypeObject c : getChannels()) {
+                builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getID()).getName() + "**");
+            }
+        }
+
+        builder.append("\n\n***[ROLES]***");
+        ArrayList<RoleStatsObject> statsObjects = new ArrayList<>();
+        for (IRole r : roles) {
+            if (!r.isEveryoneRole()) {
+                statsObjects.add(new RoleStatsObject(r, this, guild.getUsersByRole(r).size()));
+            }
+        }
+        for (RoleStatsObject rso : statsObjects) {
+            StringBuilder formatted = new StringBuilder();
+            formatted.append("\n> **" + rso.getRoleName() + "**");
+            if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getID().equals(Globals.creatorID)) {
+                builder.append(" Colour : \"**\" + rso.getColour() + \"**\",");
+            }
+            builder.append(" Total Users: \"**" + rso.getTotalUsers() + "**\"");
+            if (rso.isCosmetic()) {
+                cosmeticRoleStats.add(formatted.toString());
+                totalCosmetic += rso.getTotalUsers();
+            }
+            if (rso.isModifier()) {
+                modifierRoleStats.add(formatted.toString());
+                totalModified += rso.getTotalUsers();
+            }
+        }
+        Collections.sort(cosmeticRoleStats);
+        Collections.sort(modifierRoleStats);
+        builder.append("\n\n**COSMETIC ROLES**");
+        for (String s : cosmeticRoleStats) {
+            if (builder.length() > 1800) {
+                Utility.sendDM(builder.toString(), author.getID());
+                builder.delete(0, builder.length());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            builder.append(s);
+        }
+        builder.append("\n > Total users : \"**" + totalCosmetic + "**\"");
+        builder.append("\n\n**MODIFIER ROLES**");
+        for (String s : modifierRoleStats) {
+            if (builder.length() > 1800) {
+                Utility.sendDM(builder.toString(), author.getID());
+                builder.delete(0, builder.length());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            builder.append(s);
+        }
+        builder.append("\n > Total users : \"**" + totalModified + "**\"");
+        builder.append("\n\n------{END OF INFO}------");
+        Utility.sendDM(builder.toString(), author.getID());
+        return "> Info sent to you via Direct Message.";
     }
 }
