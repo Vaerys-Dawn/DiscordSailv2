@@ -127,7 +127,9 @@ public class MessageHandler {
                 }
             }
         }
-        flushFiles();
+        if (checkforNulls()) {
+            flushFiles();
+        }
     }
 
     //File handlers
@@ -138,6 +140,18 @@ public class MessageHandler {
         Utility.flushFile(guildID, Constants.FILE_CHARACTERS, characters, characters.isProperlyInit());
         Utility.flushFile(guildID, Constants.FILE_SERVERS, servers, servers.isProperlyInit());
         Utility.flushFile(guildID, Constants.FILE_COMPETITION, competition, competition.isProperlyInit());
+    }
+
+    private boolean checkforNulls() {
+        if (guildConfig == null || customCommands == null || characters == null || servers == null || competition == null){
+            Utility.sendMessage("***!!! IMPORTANT !!! A FILE ON THIS SERVER HAS EITHER CORRUPTED OR IS EMPTY PLEASE CONTACT THE BOT DEVELOPER ON THE LINKED SERVER***\n" +
+                    "\nhttps://discord.gg/GQ5fUeE\n" +
+                    "\n" +
+                    "PLEASE SEND DETAILS OF WHAT COMMANDS WERE BEING RUN AT THE TIME OF THIS ERROR",channel);
+            Utility.sendDM("***!!! A FILE ON SERVER WITH ID: " + guild.getID() + " HAS RETURNED EMPTY CHECK GUILD FILES !!!***",Globals.creatorID);
+            return false;
+        }
+        return true;
     }
 
     private void handleLogging(IChannel loggingChannel, CommandAnnotation commandAnno) {
@@ -277,12 +291,15 @@ public class MessageHandler {
                         } else {
                             Utility.sendMessage("> Command must be performed in the " + guild.getChannelByID(guildConfig.getChannelTypeID(commandAnno.channel())).mention() + " channel.", channel);
                         }
-                        flushFiles();
+                        if (checkforNulls()) {
+                            flushFiles();
+                        }
                     }
                 }
             }
         }
     }
+
 
     //---------Beginning of commands-------------
 
@@ -468,20 +485,7 @@ public class MessageHandler {
             name = "Test", description = "Tests things.", usage = "[Lol this command has no usages XD]",
             type = Constants.TYPE_GENERAL, channel = Constants.CHANNEL_BOT_COMMANDS, perms = {Permissions.MANAGE_MESSAGES}, doAdminLogging = true)
     public String test() {
-        EmbedBuilder helpEmbed = new EmbedBuilder();
-        helpEmbed.withTitle("## > Here are the command types you can search from:");
-        helpEmbed.withDescription("[GITHUB](https://github.com/Vaerys-Dawn/DiscordSailv2)");
-        helpEmbed.withDescription("Thing.");
-        try {
-            channel.sendMessage("", helpEmbed.build(), false);
-        } catch (RateLimitException e) {
-            e.printStackTrace();
-        } catch (DiscordException e) {
-            e.printStackTrace();
-        } catch (MissingPermissionsException e) {
-            e.printStackTrace();
-        }
-        return "";
+        return addRole();
     }
 
     @CommandAnnotation(
@@ -636,7 +640,7 @@ public class MessageHandler {
     @CommandAnnotation(
             name = "AddRole", description = "Adds role to list of Cosmetic roles that can be selected.", usage = "[Role Name]",
             type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_ROLES}, requiresArgs = true, doAdminLogging = true)
-    public String addRace() {
+    public String addRole() {
         String roleID = Utility.getRoleIDFromName(args, guild);
         if (roleID == null) {
             return Constants.ERROR_ROLE_NOT_FOUND;

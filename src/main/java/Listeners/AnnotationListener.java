@@ -11,7 +11,16 @@ import POGOs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.*;
+import sx.blah.discord.api.internal.json.objects.EmojiObject;
+import sx.blah.discord.handle.impl.events.ReadyEvent;
+import sx.blah.discord.handle.impl.events.guild.*;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
+import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
+import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
+import sx.blah.discord.handle.impl.obj.Guild;
+import sx.blah.discord.handle.impl.obj.Reaction;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RateLimitException;
@@ -68,18 +77,6 @@ public class AnnotationListener {
         FileHandler.writeToJson(pathGuildConfig, guildConfig);
 
         logger.info("Finished Initialising Guild With ID: " + guildID);
-        //handling Login Message
-//        while (!Globals.isReady);
-//        logger.info("Attempting to Send Login Message For guild with id: " + guildID);
-//        if (guildConfig.doLoginMessage()) {
-//            IChannel channel;
-//            if (guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL) == null) {
-//                channel = guild.getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));
-//            } else {
-//                channel = guild.getChannelByID(guildID);
-//            }
-//            Utility.sendMessage("> I have finished booting and I am now listening for commands...", channel);
-//        }
     }
 
     @EventSubscriber
@@ -90,7 +87,6 @@ public class AnnotationListener {
             if (!event.getClient().getOurUser().getName().equals(Globals.botName)) {
                 event.getClient().changeUsername(Globals.botName);
             }
-
         } catch (DiscordException | RateLimitException e) {
             e.printStackTrace();
         }
@@ -167,5 +163,16 @@ public class AnnotationListener {
         GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
         guildConfig.updateVariables(guild);
         Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
+    }
+
+    @EventSubscriber
+    public void onReactionAddEvent(ReactionAddEvent event){
+        if (event.getChannel().isPrivate()){
+            if (event.getReaction().toString().equals("❌")){
+                if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())){
+                    Utility.deleteMessage(event.getMessage());
+                }
+            }
+        }
     }
 }

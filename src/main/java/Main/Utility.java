@@ -113,6 +113,11 @@ public class Utility {
     }
 
     public static Object initFile(String guildID, String filePath, Class<?> objClass) {
+        List<String> fileContents = FileHandler.readFromFile(Utility.getFilePath(guildID,filePath));
+        if (fileContents == null || fileContents.size() == 0 || fileContents.get(0).equals("null")){
+            logger.error(Utility.getFilePath(guildID,filePath) + ". FILE EMPTY PLEASE CHECK FILE OR LOAD BACKUP.");
+            return null;
+        }
         Object object = null;
         int counter = 0;
         while (object == null) {
