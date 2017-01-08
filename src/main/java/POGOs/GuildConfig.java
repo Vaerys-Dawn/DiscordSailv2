@@ -472,9 +472,9 @@ public class GuildConfig {
             StringBuilder formatted = new StringBuilder();
             formatted.append("\n> **" + rso.getRoleName() + "**");
             if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getID().equals(Globals.creatorID)) {
-                builder.append(" Colour : \"**" + rso.getColour() + "**\",");
+                formatted.append(" Colour : \"**" + rso.getColour() + "**\",");
             }
-            builder.append(" Total Users: \"**" + rso.getTotalUsers() + "**\"");
+            formatted.append(" Total Users: \"**" + rso.getTotalUsers() + "**\"");
             if (rso.isCosmetic()) {
                 cosmeticRoleStats.add(formatted.toString());
                 totalCosmetic += rso.getTotalUsers();
