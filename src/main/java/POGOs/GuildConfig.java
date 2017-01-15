@@ -1,11 +1,10 @@
 package POGOs;
 
 import Annotations.ToggleAnnotation;
-import Main.Constants;
 import Main.Globals;
+import Main.Constants;
 import Main.Utility;
 import Objects.*;
-import sx.blah.discord.handle.impl.obj.Guild;
 import sx.blah.discord.handle.obj.*;
 
 import java.time.LocalDateTime;
@@ -249,6 +248,14 @@ public class GuildConfig {
             IUser offender = Globals.getClient().getUserByID(repeatOffenders.get(i).getID());
             if (offender != null) {
                 repeatOffenders.get(i).setDisplayName(offender.getName() + "#" + offender.getDiscriminator());
+            }
+        }
+
+        //update channels
+        for (ChannelTypeObject c : channels){
+            IChannel channel = guild.getChannelByID(c.getID());
+            if (channel == null){
+                channels.remove(c);
             }
         }
         repeatOffenders = newMentionSpammers;

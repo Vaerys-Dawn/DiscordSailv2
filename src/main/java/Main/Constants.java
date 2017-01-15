@@ -11,6 +11,7 @@ public class Constants {
     public static final String PREFIX_INDENT = "    ";
     public static final String PREFIX_EDT_LOGGER_INDENT = "                                     ";
 
+
     //-------Command Constants---------
 
     public enum ComandType {
@@ -74,6 +75,8 @@ public class Constants {
     public static final String FILE_SERVERS = "Servers.json";
     public static final String FILE_CHARACTERS = "Characters.json";
     public static final String FILE_INFO = "Info.txt";
+    public static final String FILE_CONFIG = DIRECTORY_STORAGE + "Config.json";
+    public static final String FILE_CONFIG_BACKUP = DIRECTORY_BACKUPS + "Config.json";
 
     public static final String FILE_COMPETITION = "Competition.json";
 
@@ -83,7 +86,7 @@ public class Constants {
             "> #random#{Meow;;Feed MEEEE;;Pet me;;Get away from me}, #random#{*Licks self*;;***HISSSSSS***;;Wait no don't leave me..}.";
     public static final String DAILY_MESSAGE_2 = "> Well hello again, looks like its a brand new day.";
     public static final String DAILY_MESSAGE_3 = "> #random#{Protocol Avali initiated;;Loading Avali Settings;;OS S.A.V.A.L.I Loaded}." +
-            " #random#{Greetings;;Hello;;Salutations}, is seems that today is a new day. It looks like a great day for #random#{exploration;;discovery;;some cake;;**CIVILISATION**;;a picnic}.";
+            " #random#{Greetings;;Hello;;Salutations}, it appears that today is a new day. It looks like a great day for #random#{exploration;;discovery;;some cake;;**CIVILISATION**;;a picnic}.";
     public static final String DAILY_MESSAGE_4 = "LOADING PROTOCOL M.E.T.A" +
             "\n> #random#{" +
             "**PLAY OF THE GAME: S.A.I.L AS BASTION!**;;" +

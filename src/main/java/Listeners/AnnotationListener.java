@@ -3,31 +3,30 @@ package Listeners;
 import Handlers.DMHandler;
 import Handlers.FileHandler;
 import Handlers.MessageHandler;
-import Main.Constants;
 import Main.Globals;
+import Main.Constants;
 import Main.TimedEvents;
 import Main.Utility;
+import Objects.SplitFirstObject;
 import POGOs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.api.internal.json.objects.EmojiObject;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.handle.impl.events.guild.*;
+import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
-import sx.blah.discord.handle.impl.obj.Guild;
-import sx.blah.discord.handle.impl.obj.Reaction;
 import sx.blah.discord.handle.obj.*;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.RateLimitException;
 
 /**
  * Created by Vaerys on 03/08/2016.
  */
+
+@SuppressWarnings({"unused", "StringConcatenationInsideStringBufferAppend"})
 public class AnnotationListener {
 
     final static Logger logger = LoggerFactory.getLogger(AnnotationListener.class);
@@ -39,7 +38,7 @@ public class AnnotationListener {
     public void onGuildCreateEvent(GuildCreateEvent event) {
         IGuild guild = event.getGuild();
         String guildID = guild.getID();
-        logger.info("Starting Guild init proccess for Guild with ID: " + guildID);
+        logger.info("Starting Guild init process for Guild with ID: " + guildID);
 
         //Init Cooldowns
         TimedEvents.addGuildCoolDown(guildID);
@@ -81,15 +80,9 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onReadyEvent(ReadyEvent event) {
-        try {
-            Globals.isReady = true;
-            event.getClient().changeStatus(Status.game("Starbound"));
-            if (!event.getClient().getOurUser().getName().equals(Globals.botName)) {
-                event.getClient().changeUsername(Globals.botName);
-            }
-        } catch (DiscordException | RateLimitException e) {
-            e.printStackTrace();
-        }
+        Globals.isReady = true;
+        event.getClient().changeStatus(Status.game(Globals.playing));
+        Utility.updateUsername(Globals.botName);
     }
 
 
@@ -132,6 +125,11 @@ public class AnnotationListener {
         IUser author = event.getMessage().getAuthor();
         String guildOwnerID = guild.getOwner().getID();
         IChannel channel = event.getMessage().getChannel();
+        String sailMention = event.getClient().getOurUser().mention(false);
+        String sailMentionNick = event.getClient().getOurUser().mention(true);
+        String prefix;
+        String message = event.getMessage().toString();
+        String[] splitMessage;
         if (channel.isPrivate()) {
             new DMHandler(event.getMessage());
             return;
@@ -142,23 +140,64 @@ public class AnnotationListener {
         if (author.getID().equals(Globals.getClient().getOurUser().getID())) {
             return;
         }
-        if (author.getID().equals(guildOwnerID)){
 
+        /**This lets you set the guild's Prefix if you run "@Bot SetCommandPrefix [New Prefix]"*/
+        if (author.getID().equals(guildOwnerID) || author.getID().equals(Globals.creatorID)) {
+            SplitFirstObject mentionSplit = new SplitFirstObject(message);
+            SplitFirstObject getArgs = new SplitFirstObject(mentionSplit.getRest());
+            if (mentionSplit.getFirstWord() != null) {
+                if (mentionSplit.getFirstWord().equals(sailMention) || mentionSplit.getFirstWord().equals(sailMentionNick)) {
+                    String guildID = guild.getID();
+                    GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+                    try {
+                        if (getArgs.getRest() != null && !getArgs.getRest().contains(" ") && !getArgs.getRest().contains("\n")) {
+                            prefix = getArgs.getRest();
+                            if (getArgs.getFirstWord() != null && getArgs.getFirstWord().equalsIgnoreCase("setCommandPrefix")) {
+                                Globals.isModifingFiles = true;
+                                Utility.sendMessage("> Updated Command Prefix to be : " + prefix, channel);
+                                guildConfig.setPrefixCommand(prefix);
+                                Thread.sleep(50);
+                            } else if (getArgs.getFirstWord() != null && getArgs.getFirstWord().equalsIgnoreCase("setCCPrefix")) {
+                                Globals.isModifingFiles = true;
+                                Utility.sendMessage("> Updated CC Prefix to be : " + prefix, channel);
+                                guildConfig.setPrefixCC(prefix);
+                                Thread.sleep(50);
+                            }
+                        } else {
+                            Utility.sendMessage("> An error occurred trying to set Prefix\n" + Constants.PREFIX_INDENT + "Be sure that the prefix does not contain a newline or any spaces.", channel);
+                        }
+                        Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
+                        Thread.sleep(50);
+                        Globals.isModifingFiles = false;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
     @EventSubscriber
-    public void onRoleDeleteEvent(RoleDeleteEvent event) {
-        IGuild guild = event.getGuild();
-        String guildID = guild.getID();
-        GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
-        guildConfig.updateVariables(guild);
-        Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
-    }
-
-    @EventSubscriber
     public void onRoleUpdateEvent(RoleUpdateEvent event) {
-        IGuild guild = event.getGuild();
+        updateVariables(event.getGuild());
+    }
+
+    @EventSubscriber
+    public void onRoleDeleteEvent(RoleDeleteEvent event) {
+        updateVariables(event.getGuild());
+    }
+
+    @EventSubscriber
+    public void onChannelUpdateEvent(sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent event) {
+        updateVariables(event.getNewChannel().getGuild());
+    }
+
+    @EventSubscriber
+    public void onChannelDeleteEvent(ChannelDeleteEvent event) {
+        updateVariables(event.getChannel().getGuild());
+    }
+
+    private void updateVariables(IGuild guild) {
         String guildID = guild.getID();
         GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
         guildConfig.updateVariables(guild);
@@ -166,10 +205,10 @@ public class AnnotationListener {
     }
 
     @EventSubscriber
-    public void onReactionAddEvent(ReactionAddEvent event){
-        if (event.getChannel().isPrivate()){
-            if (event.getReaction().toString().equals("❌")){
-                if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())){
+    public void onReactionAddEvent(ReactionAddEvent event) {
+        if (event.getChannel().isPrivate()) {
+            if (event.getReaction().toString().equals("❌")) {
+                if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())) {
                     Utility.deleteMessage(event.getMessage());
                 }
             }

@@ -5,6 +5,7 @@ import Handlers.FileHandler;
 import Handlers.MessageHandler;
 import Objects.BlackListObject;
 import POGOs.GuildConfig;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +101,10 @@ public class Utility {
         return Constants.DIRECTORY_BACKUPS + guildID + "/" + type;
     }
 
+    public static String getFilePath(String file, boolean isBackup) {
+        return Constants.DIRECTORY_BACKUPS + file;
+    }
+
     public static String getDirectory(String guildID) {
         return Constants.DIRECTORY_STORAGE + guildID + "/";
     }
@@ -113,9 +118,9 @@ public class Utility {
     }
 
     public static Object initFile(String guildID, String filePath, Class<?> objClass) {
-        List<String> fileContents = FileHandler.readFromFile(Utility.getFilePath(guildID,filePath));
-        if (fileContents == null || fileContents.size() == 0 || fileContents.get(0).equals("null")){
-            logger.error(Utility.getFilePath(guildID,filePath) + ". FILE EMPTY PLEASE CHECK FILE OR LOAD BACKUP.");
+        List<String> fileContents = FileHandler.readFromFile(Utility.getFilePath(guildID, filePath));
+        if (fileContents == null || fileContents.size() == 0 || fileContents.get(0).equals("null")) {
+            logger.error(Utility.getFilePath(guildID, filePath) + ". FILE EMPTY PLEASE CHECK FILE OR LOAD BACKUP.");
             return null;
         }
         Object object = null;
@@ -129,7 +134,7 @@ public class Utility {
                 e.printStackTrace();
             }
         }
-        if (counter > 1){
+        if (counter > 1) {
             logger.debug(filePath + " File for guild with id " + guildID + " took " + counter + " tries to Init");
         }
         return object;
@@ -147,6 +152,22 @@ public class Utility {
             File backup2 = new File(getFilePath(guildID, type, true) + 2);
             File backup3 = new File(getFilePath(guildID, type, true) + 3);
             File toBackup = new File(getFilePath(guildID, type));
+            if (backup3.exists()) backup3.delete();
+            if (backup2.exists()) backup2.renameTo(backup3);
+            if (backup1.exists()) backup1.renameTo(backup2);
+            if (toBackup.exists())
+                Files.copy(Paths.get(toBackup.getPath()), backup1.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void backupConfigFile(String fileConfig) {
+        try {
+            File backup1 = new File(Constants.FILE_CONFIG_BACKUP + 1);
+            File backup2 = new File(Constants.FILE_CONFIG_BACKUP + 2);
+            File backup3 = new File(Constants.FILE_CONFIG_BACKUP + 3);
+            File toBackup = new File(Constants.FILE_CONFIG);
             if (backup3.exists()) backup3.delete();
             if (backup2.exists()) backup2.renameTo(backup3);
             if (backup1.exists()) backup1.renameTo(backup2);
@@ -233,10 +254,10 @@ public class Utility {
         return RequestBuffer.request(() -> {
             try {
                 String iMessage = message;
-                if (iMessage == null){
+                if (iMessage == null) {
                     iMessage = "";
                 }
-                channel.sendMessage(iMessage,embed,b);
+                channel.sendMessage(iMessage, embed, b);
             } catch (DiscordException e) {
                 if (e.getMessage().contains("CloudFlare")) {
                     sendMessage(message, channel);
@@ -248,11 +269,17 @@ public class Utility {
                 logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
                 StringBuilder embedtoString = new StringBuilder();
+                if (embed.author != null) embedtoString.append("**" + embed.author.name + "**\n");
                 if (embed.title != null) embedtoString.append("**" + embed.title + "**\n");
                 if (embed.description != null) embedtoString.append(embed.description + "\n");
-                if (embed.footer != null) embedtoString.append("*" + embed.footer.text +"*");
+                if (embed.fields != null) {
+                    for (EmbedObject.EmbedFieldObject field : embed.fields) {
+                        embedtoString.append("**" + field.name + "**\n"+ field.value + "\n");
+                    }
+                }
+                if (embed.footer != null) embedtoString.append("*" + embed.footer.text + "*");
                 if (embed.image != null) embedtoString.append(embed.image.url);
-                sendMessage(embedtoString.toString(),channel);
+                sendMessage(embedtoString.toString(), channel);
                 return true;
             }
             return false;
@@ -355,6 +382,22 @@ public class Utility {
         });
     }
 
+    public static RequestBuffer.RequestFuture<Boolean> updateUsername(String botName) {
+        return RequestBuffer.request(() -> {
+            try {
+                Globals.getClient().changeUsername(botName);
+            } catch (DiscordException e) {
+                if (e.getMessage().contains("CloudFlare")) {
+                    updateUsername(botName);
+                } else {
+                    e.printStackTrace();
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
     public static RequestBuffer.RequestFuture<Boolean> deleteMessage(IMessage message) {
         return RequestBuffer.request(() -> {
             try {
@@ -446,5 +489,19 @@ public class Utility {
         return time;
     }
 
+    public static Boolean testModifier(String modifier) {
+        switch (modifier.toLowerCase()) {
+            case "+":
+                return true;
+            case "-":
+                return false;
+            case "add":
+                return true;
+            case "del":
+                return false;
+            default:
+                return null;
+        }
+    }
 
 }

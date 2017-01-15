@@ -1,8 +1,8 @@
 package BadCode;
 
-import Main.Globals;
 import Objects.CharacterObject;
 import Objects.RoleTypeObject;
+import Main.Globals;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;

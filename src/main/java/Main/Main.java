@@ -2,7 +2,7 @@ package Main;
 
 import Handlers.FileHandler;
 import Listeners.AnnotationListener;
-import POGOs.Competition;
+import POGOs.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.Discord4J;
@@ -12,11 +12,9 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RateLimitException;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Properties;
 import java.util.Scanner;
 
 /**
@@ -41,22 +39,36 @@ public class Main {
             FileHandler.createDirectory(Constants.DIRECTORY_TEMP);
             FileHandler.createDirectory(Constants.DIRECTORY_OLD_FILES);
             FileHandler.createDirectory(Constants.DIRECTORY_ERROR);
-            Competition competition = new Competition();
-            if (!Files.exists(Paths.get(Constants.FILE_COMPETITION))) {
-                competition.setProperlyInit(true);
-                FileHandler.writeToJson(Constants.FILE_COMPETITION, competition);
+            if (!Files.exists(Paths.get(Constants.FILE_CONFIG))) {
+                FileHandler.writeToJson(Constants.FILE_CONFIG, new Config());
+            }
+            Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
+            if (config.initObject()) {
+                FileHandler.writeToJson(Constants.FILE_CONFIG, config);
             }
             token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
-            if (token == null){
+            if (token == null) {
                 logger.error("!!!BOT TOKEN NOT VALID PLEASE CHECK \"Storage/Token.txt\" AND UPDATE THE TOKEN!!!");
             }
             IDiscordClient client = Client.getClient(token, false);
+            Globals.initConfig(client, config);
             EventDispatcher dispatcher = client.getDispatcher();
             dispatcher.registerListener(new AnnotationListener());
             client.login();
+
+            //inits Timed events such as backups
             new TimedEvents();
-            Globals.setVersion();
-            Globals.setClient(client);
+
+            while (!client.isReady()) ;
+
+            //makes sure that nothing in the config file will cause an error
+            String configResult = Globals.checkConfig();
+            if (!configResult.isEmpty()) {
+                System.out.println("AN ERROR HAS OCCURRED WHEN LOADING \"" + Constants.FILE_CONFIG + "\" PLEASE CHECK BELOW TO SEE WHAT WENT WRONG.");
+                System.out.println(configResult);
+                client.logout();
+                Runtime.getRuntime().exit(0);
+            }
             consoleInput();
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
@@ -73,9 +85,10 @@ public class Main {
 
     private static void consoleInput() {
         Scanner scanner = new Scanner(System.in);
-        while (!Globals.isReady);
+        while (!Globals.isReady) ;
         logger.info("Console input initiated.");
-        while (scanner.hasNextLine()){
+        while (scanner.hasNextLine()) {
+            while (Globals.consoleMessageCID == null) ;
             IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
             String message = scanner.nextLine();
             message = message.replaceAll("#Dawn#", Globals.getClient().getUserByID("153159020528533505").toString());

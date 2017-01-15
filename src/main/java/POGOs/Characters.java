@@ -1,7 +1,7 @@
 package POGOs;
 
-import Main.Constants;
 import Main.Globals;
+import Main.Constants;
 import Main.Utility;
 import Objects.CharacterObject;
 import Objects.RoleTypeObject;

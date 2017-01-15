@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 public class TagSystem {
 
     // TODO: 12/11/2016 replace repetitive code for the IfTags
+    // TODO: 15/01/2017 actually use the annotations
 
     public static String tagSystem(String contents, IMessage message, String args) {
         String response = contents;
@@ -37,7 +38,6 @@ public class TagSystem {
         response = tagMentionRemover(response);
         return response;
     }
-
 
     public static String getTagList(String type) {
         Method[] methods = TagSystem.class.getMethods();
@@ -291,7 +291,6 @@ public class TagSystem {
         from = from.replace("@here", "**[REDACTED]**");
         return from;
     }
-
 
     public static String testForShit(String from) {
         return from.replace("#shitpost#", "");

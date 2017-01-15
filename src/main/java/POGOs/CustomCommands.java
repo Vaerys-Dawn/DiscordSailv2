@@ -1,8 +1,8 @@
 package POGOs;
 
 import Handlers.FileHandler;
-import Main.Constants;
 import Main.Globals;
+import Main.Constants;
 import Main.Utility;
 import Objects.BlackListObject;
 import Objects.CCommandObject;
@@ -14,23 +14,10 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.io.File;
 import java.util.ArrayList;
 
-// TODO: 31/08/2016 Add the ability to create custom commands -- done
-// TODO: 31/08/2016 Add the ability to delete custom commands -- done
 // TODO: 31/08/2016 Add the ability to edit custom commands -- later pls
-// TODO: 31/08/2016 Add the ability to list all custom commands
-// TODO: 31/08/2016 Add the ability to list all custom commands made by a certain user
 // TODO: 31/08/2016 Add the ability to search for a custom command based on name, contents, or ShitPost (use separate commands)
-// TODO: 31/08/2016 Add the ability to vote to remove a custom command (user must be trusted in order to initiate the vote) (must get 10 votes in 2 hour to remove)
 // TODO: 31/08/2016 Add blacklisting of phrases to custom command creation, editing and execution
-// TODO: 31/08/2016 Add the ability to see the amount of times the command is run
-// TODO: 04/09/2016 Add ShitPost filtering -- done
-// TODO: 04/09/2016 Add on creation tags
-// TODO: 04/09/2016 Add Command transferring.
-// TODO: 28/09/2016 200/100 char limit on #args#
-// TODO: 01/10/2016 cc limits 5 for non trusted 20 for trusted roles and unlimited for anyone with the #Mannage_Messages perm
-// TODO: 04/09/2016 Make it so that the command is default to ShitPost upon creation in the #shitpost channel
 // TODO: 04/09/2016 maye a helpful command list that those with manage messages can add to
-// TODO: 07/10/2016 add if tags 'ifRole' and 'ifName'.
 // TODO: 07/10/2016 add tag `variant` that allows people to use $addvariant [Commandname] to that (would use 'Random' tag as a base)
 // TODO: 28/09/2016 (Maybe) make a way to have auto shitposting (togalable, off by default requires an admin to turn it on)
 // TODO: 31/08/2016 (Maybe) Add Fweeee to CC.RewardBag (using VoiceBot functionality)
