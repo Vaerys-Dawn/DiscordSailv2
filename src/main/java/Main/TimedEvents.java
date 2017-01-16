@@ -12,10 +12,7 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.Image;
 
 import java.io.File;
-import java.time.Instant;
-import java.time.Month;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -69,7 +66,7 @@ public class TimedEvents {
         ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
         ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
         midnightUTC = midnightUTC.withHour(0).withSecond(0).withMinute(0).withNano(0).plusDays(1);
-        long initialDelay = midnightUTC.toEpochSecond() - nowUTC.toEpochSecond();
+        long initialDelay = midnightUTC.toEpochSecond() - nowUTC.toEpochSecond() + 4;
         logger.debug("Now UTC = " + Utility.formatTimeSeconds(nowUTC.toEpochSecond()));
         logger.debug("Midnight UTC = " + Utility.formatTimeSeconds(midnightUTC.toEpochSecond()));
         logger.debug("Delay = " + Utility.formatTimeSeconds(initialDelay));
@@ -79,7 +76,10 @@ public class TimedEvents {
             public void run() {
                 Instant now = Instant.ofEpochSecond(this.scheduledExecutionTime());
                 ZonedDateTime timeNow = ZonedDateTime.ofInstant(now, ZoneOffset.UTC);
-
+                String dailyFileName = Globals.defaultAvatarFile;
+                Utility.backupConfigFile(Constants.FILE_CONFIG);
+                DayOfWeek day = timeNow.getDayOfWeek();
+                logger.info("Running Daily tasks for " + day);
                 for (TimedObject g : TimerObjects) {
                     Utility.backupFile(g.getGuildID(), Constants.FILE_GUILD_CONFIG);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_CUSTOM);
@@ -87,13 +87,12 @@ public class TimedEvents {
                     Utility.backupFile(g.getGuildID(), Constants.FILE_SERVERS);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_INFO);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_COMPETITION);
-                    Utility.backupConfigFile(Constants.FILE_CONFIG);
                     GuildConfig guildConfig = (GuildConfig) Utility.initFile(g.getGuildID(), Constants.FILE_GUILD_CONFIG, GuildConfig.class);
                     if (guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL) != null) {
                         if (guildConfig.doDailyMessage()) {
                             IChannel channel = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));
                             for (DailyMessageObject d : Globals.dailyMessages) {
-                                if (timeNow.getDayOfWeek().equals(d.getDayOfWeek())) {
+                                if (day.equals(d.getDayOfWeek())) {
                                     if (timeNow.getDayOfMonth() == 25 && timeNow.getMonth().equals(Month.DECEMBER)) {
                                         Utility.sendMessage("> ***MERRY CHRISTMAS***", channel);
                                     } else if (timeNow.getDayOfMonth() == 1 && timeNow.getMonth().equals(Month.JANUARY)) {
@@ -101,19 +100,20 @@ public class TimedEvents {
                                     } else {
                                         Utility.sendMessage(d.getContents(),channel);
                                     }
-                                    File avatarFile;
-                                    if (Globals.doDailyAvatars){
-                                        avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + d.getFileName());
-                                    }else {
-                                        avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + Globals.defaultAvatarFile);
-                                    }
-                                    Image avatar = Image.forFile(avatarFile);
-                                    Utility.updateAvatar(avatar);
+                                    dailyFileName = d.getFileName();
                                 }
                             }
                         }
                     }
                 }
+                File avatarFile;
+                if (Globals.doDailyAvatars){
+                    avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + dailyFileName);
+                }else {
+                    avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + Globals.defaultAvatarFile);
+                }
+                Image avatar = Image.forFile(avatarFile);
+                Utility.updateAvatar(avatar);
             }
         }, initialDelay * 1000, 24 * 60 * 60 * 1000);
     }

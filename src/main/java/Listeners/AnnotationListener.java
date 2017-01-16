@@ -86,6 +86,12 @@ public class AnnotationListener {
     }
 
 
+    // TODO: 16/01/2017 add xp system 20 xp per min max, decay of 150 xp per day, level up to be exponential unsure at what rate tho
+    // TODO: 16/01/2017 roles removed when level threshold is no longer high enough, ability to set role to gain on level,
+    // TODO: 16/01/2017 min word limit to gain xp default = 10 words,
+    // TODO: 16/01/2017 create a list of users that have spoken in the current min, clear list at end of min
+    // TODO: 16/01/2017 send all level up and rank messages to DMS
+    // TODO: 16/01/2017 ability to toggle xp per channel
     @EventSubscriber
     public void onMessageRecivedEvent(MessageReceivedEvent event) {
         if (event.getMessage().getChannel().isPrivate()) {
@@ -189,11 +195,17 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onChannelUpdateEvent(sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent event) {
+        if (event.getChannel().isPrivate()){
+            return;
+        }
         updateVariables(event.getNewChannel().getGuild());
     }
 
     @EventSubscriber
     public void onChannelDeleteEvent(ChannelDeleteEvent event) {
+        if (event.getChannel().isPrivate()){
+            return;
+        }
         updateVariables(event.getChannel().getGuild());
     }
 

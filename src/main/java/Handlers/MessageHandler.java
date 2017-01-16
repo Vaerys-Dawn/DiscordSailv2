@@ -364,7 +364,7 @@ public class MessageHandler {
             helpEmbed.withTitle("Here are the Command Types I have available for use:");
             builder.append(">>**`" + spacer + Utility.getCommandInfo("help", guildConfig) + spacer + "`**<<\n");
             helpEmbed.withDescription(builder.toString());
-            helpEmbed.appendField("Helpful Links","[Suport Sail on Patreon](https://www.patreon.com/user?u=2924776)\n" +
+            helpEmbed.appendField("Helpful Links","[Suport Sail on Patreon](https://www.patreon.com/DawnFelstar)\n" +
                     "[Find Sail on GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)\n" +
                     "Support Discord - https://discord.gg/XSyQQrR",true);
             helpEmbed.withFooterText("Bot Version: " + Globals.version);
@@ -1120,12 +1120,16 @@ public class MessageHandler {
     public String newCC() {
         boolean isShitpost = false;
         boolean isLocked = false;
+        SplitFirstObject splitfirst = new SplitFirstObject(args);
         String newContent;
         if (channel.getID().equals(guildConfig.getChannelTypeID(Constants.CHANNEL_SHITPOST))) {
             isShitpost = true;
         }
-        String nameCC = args.split(" ")[0];
-        String content = args.replaceFirst(Pattern.quote(nameCC) + " ", "");
+        String nameCC = splitfirst.getFirstWord();
+        if (splitfirst.getRest() == null || splitfirst.getRest().isEmpty()){
+            return "> Custom command contents cannot be blank";
+        }
+        String content = splitfirst.getRest();
         newContent = TagSystem.testForShit(content);
         if (!newContent.equals(content)) {
             isShitpost = true;
