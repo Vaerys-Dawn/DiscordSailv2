@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/Utility.java" afterPath="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/JavaDiscordSAILv2.jar" afterPath="$PROJECT_DIR$/target/JavaDiscordSAILv2.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/original-JavaDiscordSAILv2.jar" afterPath="$PROJECT_DIR$/target/original-JavaDiscordSAILv2.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/project.properties" afterPath="$PROJECT_DIR$/target/classes/project.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
     </list>
     <ignored path="DiscordSailv2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,10 +46,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Utility.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Utility.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
+            <state relative-caret-position="150">
               <caret line="266" column="103" selection-start-line="266" selection-start-column="103" selection-end-line="266" selection-end-column="103" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -89,11 +93,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="529">
-              <caret line="91" column="21" selection-start-line="91" selection-start-column="21" selection-end-line="91" selection-end-column="21" />
+            <state relative-caret-position="136">
+              <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -239,12 +243,12 @@
         <option value="$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/BadCode/CustomCommands.java" />
         <option value="$PROJECT_DIR$/src/main/resources/logback.xml" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Main/Globals.java" />
         <option value="$PROJECT_DIR$/src/main/java/Objects/GuildContentObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" />
         <option value="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -1500,14 +1504,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="91" column="21" selection-start-line="91" selection-start-column="21" selection-end-line="91" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Main/Globals.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2482">
@@ -1575,7 +1571,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
+        <state relative-caret-position="150">
           <caret line="266" column="103" selection-start-line="266" selection-start-column="103" selection-end-line="266" selection-end-column="103" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1583,6 +1579,14 @@
             <element signature="method#getDirectory#1;class#Utility#0" expanded="false" />
             <element signature="method#formatTimeSeconds#0;class#Utility#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
