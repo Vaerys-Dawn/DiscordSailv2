@@ -5,51 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_findbugs_jsr305_1_3_9.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Objects/GuildContentObject.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/JavaDiscordSAILv2.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/original-JavaDiscordSAILv2.jar" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Handlers/CCHandler.class" afterPath="$PROJECT_DIR$/target/classes/Handlers/CCHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Handlers/InfoHandler.class" afterPath="$PROJECT_DIR$/target/classes/Handlers/InfoHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Handlers/MessageHandler.class" afterPath="$PROJECT_DIR$/target/classes/Handlers/MessageHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Listeners/AnnotationListener.class" afterPath="$PROJECT_DIR$/target/classes/Listeners/AnnotationListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/Globals.class" afterPath="$PROJECT_DIR$/target/classes/Main/Globals.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/Main$1.class" afterPath="$PROJECT_DIR$/target/classes/Main/Main$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/Main.class" afterPath="$PROJECT_DIR$/target/classes/Main/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/TagSystem.class" afterPath="$PROJECT_DIR$/target/classes/Main/TagSystem.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/TimedEvents$1.class" afterPath="$PROJECT_DIR$/target/classes/Main/TimedEvents$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/TimedEvents$2.class" afterPath="$PROJECT_DIR$/target/classes/Main/TimedEvents$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/TimedEvents$3.class" afterPath="$PROJECT_DIR$/target/classes/Main/TimedEvents$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/TimedEvents$4.class" afterPath="$PROJECT_DIR$/target/classes/Main/TimedEvents$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/TimedEvents.class" afterPath="$PROJECT_DIR$/target/classes/Main/TimedEvents.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/Utility.class" afterPath="$PROJECT_DIR$/target/classes/Main/Utility.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Objects/CCommandObject.class" afterPath="$PROJECT_DIR$/target/classes/Objects/CCommandObject.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Objects/SplitFirstObject.class" afterPath="$PROJECT_DIR$/target/classes/Objects/SplitFirstObject.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/POGOs/CustomCommands.class" afterPath="$PROJECT_DIR$/target/classes/POGOs/CustomCommands.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DiscordSAIL.iml" afterPath="$PROJECT_DIR$/DiscordSAIL.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Annotations/DualCommandAnnotation.java" afterPath="$PROJECT_DIR$/src/main/java/Annotations/DualCommandAnnotation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/BadCode/Characters.java" afterPath="$PROJECT_DIR$/src/main/java/BadCode/Characters.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" afterPath="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/Globals.java" afterPath="$PROJECT_DIR$/src/main/java/Main/Globals.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/Main.java" afterPath="$PROJECT_DIR$/src/main/java/Main/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/TagSystem.java" afterPath="$PROJECT_DIR$/src/main/java/Main/TagSystem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" afterPath="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/Utility.java" afterPath="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Objects/CCommandObject.java" afterPath="$PROJECT_DIR$/src/main/java/Objects/CCommandObject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Objects/SplitFirstObject.java" afterPath="$PROJECT_DIR$/src/main/java/Objects/SplitFirstObject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/Characters.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/Characters.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/Servers.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/Servers.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/project.properties" afterPath="$PROJECT_DIR$/target/classes/project.properties" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_austinv11_Discord4j_shaded_d23849a.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_austinv11_Discord4j_shaded_115632b.xml" />
     </list>
     <ignored path="DiscordSailv2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -84,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Utility.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Utility.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-6752">
-              <caret line="124" column="12" selection-start-line="124" selection-start-column="12" selection-end-line="124" selection-end-column="12" />
+            <state relative-caret-position="354">
+              <caret line="266" column="103" selection-start-line="266" selection-start-column="103" selection-end-line="266" selection-end-column="103" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#getRoleIDFromName#0;class#Utility#0" expanded="false" />
@@ -99,7 +57,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GuildContentObject.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GuildContentObject.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Objects/GuildContentObject.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="167">
@@ -116,16 +74,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="252">
               <caret line="78" column="38" selection-start-line="78" selection-start-column="38" selection-end-line="78" selection-end-column="38" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="logback.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/logback.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="431">
-              <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -151,6 +99,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="CustomCommands.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="310">
+              <caret line="250" column="21" selection-start-line="250" selection-start-column="21" selection-end-line="250" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Globals.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Main/Globals.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -158,6 +116,45 @@
               <caret line="148" column="12" selection-start-line="148" selection-start-column="12" selection-end-line="148" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1921">
+              <caret line="1180" column="78" selection-start-line="1180" selection-start-column="78" selection-end-line="1180" selection-end-column="78" />
+              <folding>
+                <element signature="method#checkBlacklist#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#info#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#report#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#silentReport#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#toggles#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#channelHere#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#setAdminRole#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#setMutedRole#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#trustedRoles#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#updateInfo#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#updateAvatar#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#manageCosmeticRoles#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#manageModifiers#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#listRoles#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#listModifiers#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#addServer#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#editServerIP#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#editServeDesc#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#editServeName#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#listCCs#0;class#MessageHandler#0" expanded="false" />
+                <element signature="e#55906#55907#0" expanded="true" />
+                <element signature="e#55993#55994#0" expanded="true" />
+                <element signature="method#getCCData#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#transferCommand#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#competition#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#voting#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#finalVotes#0;class#MessageHandler#0" expanded="false" />
+                <element signature="method#getEntries#0;class#MessageHandler#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -171,68 +168,6 @@
               <folding>
                 <element signature="method#onChannelUpdateEvent#0;class#AnnotationListener#0" expanded="false" />
                 <element signature="method#onChannelDeleteEvent#0;class#AnnotationListener#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1190">
-              <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="method#checkBlacklist#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#info#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#report#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#silentReport#0;class#MessageHandler#0" expanded="false" />
-                <element signature="e#24649#24650#0" expanded="false" />
-                <element signature="e#24719#24720#0" expanded="false" />
-                <element signature="e#26076#26077#0" expanded="false" />
-                <element signature="e#26133#26134#0" expanded="false" />
-                <element signature="method#toggles#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#channelHere#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#setAdminRole#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#setMutedRole#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#trustedRoles#0;class#MessageHandler#0" expanded="false" />
-                <element signature="e#33580#33581#0" expanded="false" />
-                <element signature="e#33638#33639#0" expanded="false" />
-                <element signature="e#33916#33917#0" expanded="false" />
-                <element signature="e#33970#33971#0" expanded="false" />
-                <element signature="method#updateInfo#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#updateAvatar#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#manageCosmeticRoles#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#manageModifiers#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#listRoles#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#listModifiers#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#addServer#0;class#MessageHandler#0" expanded="false" />
-                <element signature="e#46613#46614#0" expanded="false" />
-                <element signature="e#46685#46686#0" expanded="false" />
-                <element signature="method#editServerIP#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#editServeDesc#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#editServeName#0;class#MessageHandler#0" expanded="false" />
-                <element signature="e#48973#48974#0" expanded="false" />
-                <element signature="e#49026#49027#0" expanded="false" />
-                <element signature="e#49238#49239#0" expanded="false" />
-                <element signature="e#49295#49296#0" expanded="false" />
-                <element signature="e#51549#51550#0" expanded="false" />
-                <element signature="e#51638#51639#0" expanded="false" />
-                <element signature="e#51917#51918#0" expanded="false" />
-                <element signature="e#51994#51995#0" expanded="false" />
-                <element signature="e#53584#53585#0" expanded="false" />
-                <element signature="e#53653#53654#0" expanded="false" />
-                <element signature="method#listCCs#0;class#MessageHandler#0" expanded="false" />
-                <element signature="e#56217#56218#0" expanded="false" />
-                <element signature="e#56275#56276#0" expanded="false" />
-                <element signature="e#56483#56484#0" expanded="false" />
-                <element signature="e#56580#56581#0" expanded="false" />
-                <element signature="method#getCCData#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#transferCommand#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#competition#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#voting#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#finalVotes#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#getEntries#0;class#MessageHandler#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -302,14 +237,14 @@
         <option value="$PROJECT_DIR$/src/main/java/Objects/CCommandObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/Main/TagSystem.java" />
         <option value="$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" />
         <option value="$PROJECT_DIR$/src/main/java/BadCode/CustomCommands.java" />
         <option value="$PROJECT_DIR$/src/main/resources/logback.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Main/Globals.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
         <option value="$PROJECT_DIR$/src/main/java/Objects/GuildContentObject.java" />
+        <option value="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
       </list>
     </option>
   </component>
@@ -1191,8 +1126,14 @@
           <properties />
           <option name="timeStamp" value="468" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java</url>
+          <line>277</line>
+          <properties />
+          <option name="timeStamp" value="491" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="491" />
+      <option name="time" value="492" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -1501,25 +1442,7 @@
         <state relative-caret-position="136">
           <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
           <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4335">
-          <caret line="280" column="33" selection-start-line="280" selection-start-column="29" selection-end-line="280" selection-end-column="33" />
-          <folding>
             <element signature="imports" expanded="false" />
-            <element signature="e#1915#1916#0" expanded="false" />
-            <element signature="e#1950#1951#0" expanded="false" />
-            <element signature="e#2007#2008#0" expanded="false" />
-            <element signature="e#2055#2056#0" expanded="false" />
-            <element signature="e#5656#5657#0" expanded="false" />
-            <element signature="e#5687#5688#0" expanded="false" />
-            <element signature="e#5736#5737#0" expanded="false" />
-            <element signature="e#5798#5799#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1529,66 +1452,6 @@
         <state relative-caret-position="35207">
           <caret line="2150" column="22" selection-start-line="2150" selection-start-column="22" selection-end-line="2150" selection-end-column="22" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1190">
-          <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#checkBlacklist#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#info#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#report#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#silentReport#0;class#MessageHandler#0" expanded="false" />
-            <element signature="e#24649#24650#0" expanded="false" />
-            <element signature="e#24719#24720#0" expanded="false" />
-            <element signature="e#26076#26077#0" expanded="false" />
-            <element signature="e#26133#26134#0" expanded="false" />
-            <element signature="method#toggles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#channelHere#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#setAdminRole#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#setMutedRole#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#trustedRoles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="e#33580#33581#0" expanded="false" />
-            <element signature="e#33638#33639#0" expanded="false" />
-            <element signature="e#33916#33917#0" expanded="false" />
-            <element signature="e#33970#33971#0" expanded="false" />
-            <element signature="method#updateInfo#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#updateAvatar#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#manageCosmeticRoles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#manageModifiers#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#listRoles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#listModifiers#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#addServer#0;class#MessageHandler#0" expanded="false" />
-            <element signature="e#46613#46614#0" expanded="false" />
-            <element signature="e#46685#46686#0" expanded="false" />
-            <element signature="method#editServerIP#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#editServeDesc#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#editServeName#0;class#MessageHandler#0" expanded="false" />
-            <element signature="e#48973#48974#0" expanded="false" />
-            <element signature="e#49026#49027#0" expanded="false" />
-            <element signature="e#49238#49239#0" expanded="false" />
-            <element signature="e#49295#49296#0" expanded="false" />
-            <element signature="e#51549#51550#0" expanded="false" />
-            <element signature="e#51638#51639#0" expanded="false" />
-            <element signature="e#51917#51918#0" expanded="false" />
-            <element signature="e#51994#51995#0" expanded="false" />
-            <element signature="e#53584#53585#0" expanded="false" />
-            <element signature="e#53653#53654#0" expanded="false" />
-            <element signature="method#listCCs#0;class#MessageHandler#0" expanded="false" />
-            <element signature="e#56217#56218#0" expanded="false" />
-            <element signature="e#56275#56276#0" expanded="false" />
-            <element signature="e#56483#56484#0" expanded="false" />
-            <element signature="e#56580#56581#0" expanded="false" />
-            <element signature="method#getCCData#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#transferCommand#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#competition#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#voting#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#finalVotes#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#getEntries#0;class#MessageHandler#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1655,25 +1518,70 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6752">
-          <caret line="124" column="12" selection-start-line="124" selection-start-column="12" selection-end-line="124" selection-end-column="12" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#getRoleIDFromName#0;class#Utility#0" expanded="false" />
-            <element signature="method#getDirectory#1;class#Utility#0" expanded="false" />
-            <element signature="method#formatTimeSeconds#0;class#Utility#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Objects/GuildContentObject.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
           <caret line="12" column="10" selection-start-line="12" selection-start-column="10" selection-end-line="12" selection-end-column="10" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="250" column="21" selection-start-line="250" selection-start-column="21" selection-end-line="250" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1921">
+          <caret line="1180" column="78" selection-start-line="1180" selection-start-column="78" selection-end-line="1180" selection-end-column="78" />
+          <folding>
+            <element signature="method#checkBlacklist#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#info#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#report#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#silentReport#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#toggles#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#channelHere#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#setAdminRole#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#setMutedRole#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#trustedRoles#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#updateInfo#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#updateAvatar#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#manageCosmeticRoles#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#manageModifiers#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#listRoles#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#listModifiers#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#addServer#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#editServerIP#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#editServeDesc#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#editServeName#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#listCCs#0;class#MessageHandler#0" expanded="false" />
+            <element signature="e#55906#55907#0" expanded="true" />
+            <element signature="e#55993#55994#0" expanded="true" />
+            <element signature="method#getCCData#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#transferCommand#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#competition#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#voting#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#finalVotes#0;class#MessageHandler#0" expanded="false" />
+            <element signature="method#getEntries#0;class#MessageHandler#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="266" column="103" selection-start-line="266" selection-start-column="103" selection-end-line="266" selection-end-column="103" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#getRoleIDFromName#0;class#Utility#0" expanded="false" />
+            <element signature="method#getDirectory#1;class#Utility#0" expanded="false" />
+            <element signature="method#formatTimeSeconds#0;class#Utility#0" expanded="false" />
           </folding>
         </state>
       </provider>

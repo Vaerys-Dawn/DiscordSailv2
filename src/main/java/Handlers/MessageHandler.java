@@ -1178,7 +1178,7 @@ public class MessageHandler {
             name = "SearchCCs", description = "Allows you to search the custom command list.", usage = "[Search Params]",
             type = Constants.TYPE_CC, requiresArgs = true)
     public String searchCCs() {
-        return customCommands.search(args, guildConfig,channel);
+        return customCommands.search(args, guildConfig,channel,message.getID());
     }
 
     @CommandAnnotation(

@@ -7,6 +7,7 @@ import Main.Utility;
 import Objects.BlackListObject;
 import Objects.CCommandObject;
 import org.apache.commons.lang3.StringUtils;
+import sx.blah.discord.handle.impl.obj.Message;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
@@ -247,7 +248,7 @@ public class CustomCommands {
         return Constants.ERROR_CC_NOT_FOUND;
     }
 
-    public String search(String args, GuildConfig guildConfig,IChannel channel) {
+    public String search(String args, GuildConfig guildConfig, IChannel channel, String messageID) {
         ArrayList<CCommandObject> searched = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         for (CCommandObject c : commands) {

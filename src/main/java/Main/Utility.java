@@ -264,7 +264,7 @@ public class Utility {
                 InputStream stream = connection.getInputStream();
                 String[] urlSplit = imageURL.split(Pattern.quote("."));
                 String suffix = "." + urlSplit[urlSplit.length-1];
-                if (!suffix.contains(".png") && !suffix.contains(".jpg") && !suffix.contains(".gif")){
+                if (!suffix.contains(".png") && !suffix.contains(".jpg") && !suffix.contains(".gif") && !suffix.contains(".webp")){
                     sendMessage(message + " " + imageURL, channel);
                     return true;
                 }
