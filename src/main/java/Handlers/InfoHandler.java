@@ -82,7 +82,7 @@ public class InfoHandler {
             if (contents.contains(imagePrefix)){
                 image = StringUtils.substringBetween(contents, imagePrefix, imageSuffix);
                 File file = new File(Utility.getGuildImageDir(guild.getID()) + image);
-                Utility.sendFile("",channel,file);
+                Utility.sendFile("",file,channel);
             }else {
                 Utility.sendMessage(contents,channel);
             }

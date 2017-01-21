@@ -3,8 +3,8 @@ package Listeners;
 import Handlers.DMHandler;
 import Handlers.FileHandler;
 import Handlers.MessageHandler;
-import Main.Globals;
 import Main.Constants;
+import Main.Globals;
 import Main.TimedEvents;
 import Main.Utility;
 import Objects.SplitFirstObject;
@@ -68,12 +68,7 @@ public class AnnotationListener {
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_INFO));
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_COMPETITION), competition);
 
-        //Update Variables.
-        //Guild Config
-        String pathGuildConfig = Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG);
-        guildConfig = (GuildConfig) FileHandler.readFromJson(pathGuildConfig, GuildConfig.class);
-        guildConfig.updateVariables(guild);
-        FileHandler.writeToJson(pathGuildConfig, guildConfig);
+        Globals.initGuild(guildID);
 
         logger.info("Finished Initialising Guild With ID: " + guildID);
     }
@@ -92,6 +87,8 @@ public class AnnotationListener {
     // TODO: 16/01/2017 create a list of users that have spoken in the current min, clear list at end of min
     // TODO: 16/01/2017 send all level up and rank messages to DMS
     // TODO: 16/01/2017 ability to toggle xp per channel
+    // TODO: 16/01/2017 make level decay toggleable
+    // TODO: 16/01/2017 make everything optional/ modifiable
     @EventSubscriber
     public void onMessageRecivedEvent(MessageReceivedEvent event) {
         if (event.getMessage().getChannel().isPrivate()) {
@@ -105,7 +102,8 @@ public class AnnotationListener {
         String messageLC = message.toString().toLowerCase();
         String args = "";
         String command = "";
-        GuildConfig guildConfig = (GuildConfig) Utility.initFile(guild.getID(), Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+        while (!event.getClient().isReady());
+        GuildConfig guildConfig = Globals.getGuildContent(guild.getID()).getGuildConfig();
 
         //Set Console Response Channel.
         if (author.getID().equals(Globals.creatorID)) {
@@ -127,19 +125,20 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMentionEvent(MentionEvent event) {
+        IChannel channel = event.getMessage().getChannel();
+        if (channel.isPrivate()) {
+            new DMHandler(event.getMessage());
+            return;
+        }
         IGuild guild = event.getMessage().getGuild();
         IUser author = event.getMessage().getAuthor();
         String guildOwnerID = guild.getOwner().getID();
-        IChannel channel = event.getMessage().getChannel();
         String sailMention = event.getClient().getOurUser().mention(false);
         String sailMentionNick = event.getClient().getOurUser().mention(true);
         String prefix;
         String message = event.getMessage().toString();
         String[] splitMessage;
-        if (channel.isPrivate()) {
-            new DMHandler(event.getMessage());
-            return;
-        }
+
         if (event.getMessage().mentionsEveryone() || event.getMessage().mentionsHere()) {
             return;
         }
@@ -154,29 +153,18 @@ public class AnnotationListener {
             if (mentionSplit.getFirstWord() != null) {
                 if (mentionSplit.getFirstWord().equals(sailMention) || mentionSplit.getFirstWord().equals(sailMentionNick)) {
                     String guildID = guild.getID();
-                    GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
-                    try {
-                        if (getArgs.getRest() != null && !getArgs.getRest().contains(" ") && !getArgs.getRest().contains("\n")) {
-                            prefix = getArgs.getRest();
-                            if (getArgs.getFirstWord() != null && getArgs.getFirstWord().equalsIgnoreCase("setCommandPrefix")) {
-                                Globals.isModifingFiles = true;
-                                Utility.sendMessage("> Updated Command Prefix to be : " + prefix, channel);
-                                guildConfig.setPrefixCommand(prefix);
-                                Thread.sleep(50);
-                            } else if (getArgs.getFirstWord() != null && getArgs.getFirstWord().equalsIgnoreCase("setCCPrefix")) {
-                                Globals.isModifingFiles = true;
-                                Utility.sendMessage("> Updated CC Prefix to be : " + prefix, channel);
-                                guildConfig.setPrefixCC(prefix);
-                                Thread.sleep(50);
-                            }
-                        } else {
-                            Utility.sendMessage("> An error occurred trying to set Prefix\n" + Constants.PREFIX_INDENT + "Be sure that the prefix does not contain a newline or any spaces.", channel);
+                    GuildConfig guildConfig = Globals.getGuildContent(guildID).getGuildConfig();
+                    if (getArgs.getRest() != null && !getArgs.getRest().contains(" ") && !getArgs.getRest().contains("\n")) {
+                        prefix = getArgs.getRest();
+                        if (getArgs.getFirstWord() != null && getArgs.getFirstWord().equalsIgnoreCase("setCommandPrefix")) {
+                            Utility.sendMessage("> Updated Command Prefix to be : " + prefix, channel);
+                            guildConfig.setPrefixCommand(prefix);
+                        } else if (getArgs.getFirstWord() != null && getArgs.getFirstWord().equalsIgnoreCase("setCCPrefix")) {
+                            Utility.sendMessage("> Updated CC Prefix to be : " + prefix, channel);
+                            guildConfig.setPrefixCC(prefix);
                         }
-                        Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
-                        Thread.sleep(50);
-                        Globals.isModifingFiles = false;
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    } else {
+                        Utility.sendMessage("> An error occurred trying to set Prefix\n" + Constants.PREFIX_INDENT + "Be sure that the prefix does not contain a newline or any spaces.", channel);
                     }
                 }
             }
@@ -195,7 +183,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onChannelUpdateEvent(sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent event) {
-        if (event.getChannel().isPrivate()){
+        if (event.getChannel().isPrivate()) {
             return;
         }
         updateVariables(event.getNewChannel().getGuild());
@@ -203,7 +191,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onChannelDeleteEvent(ChannelDeleteEvent event) {
-        if (event.getChannel().isPrivate()){
+        if (event.getChannel().isPrivate()) {
             return;
         }
         updateVariables(event.getChannel().getGuild());
@@ -211,9 +199,8 @@ public class AnnotationListener {
 
     private void updateVariables(IGuild guild) {
         String guildID = guild.getID();
-        GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+        GuildConfig guildConfig = Globals.getGuildContent(guildID).getGuildConfig();
         guildConfig.updateVariables(guild);
-        Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
     }
 
     @EventSubscriber

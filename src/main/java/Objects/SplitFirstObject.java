@@ -6,13 +6,17 @@ import java.util.regex.Pattern;
  * Created by Vaerys on 15/01/2017.
  */
 public class SplitFirstObject {
-    String firstWord;
-    String rest;
+    String firstWord = null;
+    String rest = null;
     public SplitFirstObject(String from){
         String[] splitFrom = from.split(" ");
         if (splitFrom.length != 0 || splitFrom != null){
             firstWord = splitFrom[0];
-            rest = from.replaceFirst(Pattern.quote(firstWord + " "),"");
+            if (splitFrom.length == 1){
+                return;
+            }else {
+                rest = from.replaceFirst(Pattern.quote(firstWord + " "),"");
+            }
         }
     }
 

@@ -49,6 +49,7 @@ public class CCommandObject {
         for (String s: contents){
             builder.append(s + "\n");
         }
+        builder.delete(builder.length() -1, builder.length());
         return builder.toString();
     }
 

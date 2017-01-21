@@ -12,7 +12,10 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.Image;
 
 import java.io.File;
-import java.time.*;
+import java.time.DayOfWeek;
+import java.time.Month;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,6 +34,7 @@ public class TimedEvents {
         doRemovalOneSec();
         doRemovalThreeSec();
         doRemovalMin();
+        doTaskFiveMin();
         dailyTasks();
     }
 
@@ -74,9 +78,8 @@ public class TimedEvents {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Instant now = Instant.ofEpochSecond(this.scheduledExecutionTime());
-                ZonedDateTime timeNow = ZonedDateTime.ofInstant(now, ZoneOffset.UTC);
-                String dailyFileName = Globals.defaultAvatarFile;
+                ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
+                String dailyFileName = Globals.dailyAvatarName.replace("#day#",timeNow.getDayOfWeek().toString());
                 Utility.backupConfigFile(Constants.FILE_CONFIG);
                 DayOfWeek day = timeNow.getDayOfWeek();
                 logger.info("Running Daily tasks for " + day);
@@ -87,7 +90,15 @@ public class TimedEvents {
                     Utility.backupFile(g.getGuildID(), Constants.FILE_SERVERS);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_INFO);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_COMPETITION);
-                    GuildConfig guildConfig = (GuildConfig) Utility.initFile(g.getGuildID(), Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+                    GuildConfig guildConfig = Globals.getGuildContent(g.getGuildID()).getGuildConfig();
+                    File avatarFile;
+                    if (Globals.doDailyAvatars) {
+                        avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + dailyFileName);
+                    } else {
+                        avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + Globals.defaultAvatarFile);
+                    }
+                    Image avatar = Image.forFile(avatarFile);
+                    Utility.updateAvatar(avatar);
                     if (guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL) != null) {
                         if (guildConfig.doDailyMessage()) {
                             IChannel channel = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));
@@ -98,22 +109,13 @@ public class TimedEvents {
                                     } else if (timeNow.getDayOfMonth() == 1 && timeNow.getMonth().equals(Month.JANUARY)) {
                                         Utility.sendMessage("> ***HAPPY NEW YEAR***", channel);
                                     } else {
-                                        Utility.sendMessage(d.getContents(),channel);
+                                        Utility.sendMessage(d.getContents(), channel);
                                     }
-                                    dailyFileName = d.getFileName();
                                 }
                             }
                         }
                     }
                 }
-                File avatarFile;
-                if (Globals.doDailyAvatars){
-                    avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + dailyFileName);
-                }else {
-                    avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + Globals.defaultAvatarFile);
-                }
-                Image avatar = Image.forFile(avatarFile);
-                Utility.updateAvatar(avatar);
             }
         }, initialDelay * 1000, 24 * 60 * 60 * 1000);
     }
@@ -212,7 +214,13 @@ public class TimedEvents {
         }, 3000, 60000);
     }
 
-    public static void saveAndLogOff() {
-        //// TODO: 17/11/2016 this
+    private static void doTaskFiveMin() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Globals.saveFiles();
+            }
+        }, 2* 60 * 1000, 5 * 60 * 1000);
     }
 }

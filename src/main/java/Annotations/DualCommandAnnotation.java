@@ -1,6 +1,5 @@
 package Annotations;
 
-import Main.Constants;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.lang.annotation.*;

@@ -1,8 +1,8 @@
 package POGOs;
 
 import Annotations.ToggleAnnotation;
-import Main.Globals;
 import Main.Constants;
+import Main.Globals;
 import Main.Utility;
 import Objects.*;
 import sx.blah.discord.handle.obj.*;

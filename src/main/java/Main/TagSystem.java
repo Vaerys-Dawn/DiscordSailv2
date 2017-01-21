@@ -24,10 +24,10 @@ public class TagSystem {
         String response = contents;
         response = tagArgs(response, args);
         response = tagNoNL(response);
-        response = tagGetAuthor(response,message.getAuthor(),message.getGuild());
-        response = tagGetUsername(response,message.getAuthor());
+        response = tagGetAuthor(response, message.getAuthor(), message.getGuild());
+        response = tagGetUsername(response, message.getAuthor());
         response = tagSpacer(response);
-        response = tagSpecialArgs(response,args);
+        response = tagSpecialArgs(response, args);
         response = tagRandom(response);
         response = tagIfRole(response, message.getAuthor(), message.getGuild());
         response = tagIfName(response, message.getAuthor(), message.getGuild());
@@ -62,12 +62,12 @@ public class TagSystem {
         return builder.toString();
     }
 
-    @TagAnnotation(name = "Author",description = "Replaces this tag with the author's Display name.",usage = "#author#",priority = 9)
+    @TagAnnotation(name = "Author", description = "Replaces this tag with the author's Display name.", usage = "#author#", priority = 9)
     private static String tagGetAuthor(String from, IUser author, IGuild guild) {
         return from.replace("#author#", author.getDisplayName(guild));
     }
 
-    @TagAnnotation(name = "UserName",description = "Replaces this tag with the author's Display name.",usage = "#username#",priority = 9)
+    @TagAnnotation(name = "UserName", description = "Replaces this tag with the author's Display name.", usage = "#username#", priority = 9)
     private static String tagGetUsername(String from, IUser author) {
         return from.replace("#username#", author.getName());
     }
@@ -91,12 +91,12 @@ public class TagSystem {
                     try {
                         int position = Integer.parseInt(tag);
                         ArrayList<String> splitArgs = new ArrayList<>(Arrays.asList(args.split(" ")));
-                        if(splitArgs.size() == 0){
-                            from = from.replace(prefix + tag + suffix,"");
+                        if (splitArgs.size() == 0) {
+                            from = from.replace(prefix + tag + suffix, "");
                         }
-                        if (splitArgs.get(position - 1) == null){
-                            from = from.replace(prefix + tag + suffix,"");
-                        }else {
+                        if (splitArgs.get(position - 1) == null) {
+                            from = from.replace(prefix + tag + suffix, "");
+                        } else {
                             from = from.replace(prefix + tag + suffix, splitArgs.get(position - 1));
                         }
                     } catch (NumberFormatException e) {
@@ -270,11 +270,11 @@ public class TagSystem {
                         try {
                             long randMin = Long.parseLong(tag.split(";;")[0]);
                             long randMax = Long.parseLong(tag.split(";;")[1]);
-                            long randomNumber = ThreadLocalRandom.current().nextLong(randMin,randMax +1);
+                            long randomNumber = ThreadLocalRandom.current().nextLong(randMin, randMax + 1);
                             from = from.replaceFirst(Pattern.quote(prefix + tag + suffix), randomNumber + "");
-                        }catch (NumberFormatException e){
+                        } catch (NumberFormatException e) {
                             from = from.replace(prefix + tag + suffix, "#ERROR#");
-                        } catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             from = from.replace(prefix + tag + suffix, "#ERROR#");
                         }
                     } else {
@@ -349,7 +349,7 @@ public class TagSystem {
         return from;
     }
 
-    public static String tagEmoji(String from,IGuild guild) {
+    public static String tagEmoji(String from, IGuild guild) {
         String prefix = "#:";
         String suffix = ":#";
         String contents;
@@ -369,5 +369,17 @@ public class TagSystem {
             } while (StringUtils.countMatches(from, prefix) > 0 && (!lastAttempt.equals(from)));
         }
         return from;
+    }
+
+    public static String tagEmbedImage(String from, String prefix) {
+        String tag;
+        String suffix = "}";
+        if (from.contains(prefix)) {
+            tag = StringUtils.substringBetween(from, prefix, suffix);
+            if (tag != null) {
+                return tag;
+            }
+        }
+        return null;
     }
 }

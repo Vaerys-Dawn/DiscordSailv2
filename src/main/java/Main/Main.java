@@ -28,6 +28,14 @@ public class Main {
     public static void main(String[] args) throws UnknownHostException {
         System.out.println("Starting Program...");
 
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                logger.info(">>> Running Shutdown Process <<<");
+                Globals.saveFiles();
+            }
+        });
+
         String token;
         // you need to set a token in Token/Token.txt for the bot to run
         try {
@@ -70,12 +78,6 @@ public class Main {
                 Runtime.getRuntime().exit(0);
             }
             consoleInput();
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    TimedEvents.saveAndLogOff();
-                }
-            });
         } catch (DiscordException ex) {
             logger.error(ex.getErrorMessage());
         } catch (RateLimitException e) {

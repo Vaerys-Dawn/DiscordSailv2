@@ -9,10 +9,8 @@ import Objects.*;
 import POGOs.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.concurrent.ConstantInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.EmbedBuilder;
@@ -26,7 +24,6 @@ import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -62,18 +59,18 @@ public class MessageHandler {
     private String args;
     private String noAllowed;
 
-    private GuildConfig guildConfig = new GuildConfig();
-    private CustomCommands customCommands = new CustomCommands();
-    private Servers servers = new Servers();
-    private Characters characters = new Characters();
-    private Competition competition = new Competition();
+    private GuildConfig guildConfig;
+    private CustomCommands customCommands;
+    private Servers servers;
+    private Characters characters;
+    private Competition competition;
 
     private FileHandler handler = new FileHandler();
 
     private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
     public MessageHandler(String command, String args, IMessage message) {
-        if (Globals.isModifingFiles){
+        if (Globals.isModifingFiles) {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
@@ -87,8 +84,12 @@ public class MessageHandler {
         channel = message.getChannel();
         author = message.getAuthor();
         guildID = guild.getID();
+        guildConfig = Globals.getGuildContent(guildID).getGuildConfig();
+        customCommands = Globals.getGuildContent(guildID).getCustomCommands();
+        servers = Globals.getGuildContent(guildID).getServers();
+        characters = Globals.getGuildContent(guildID).getCharacters();
+        competition = Globals.getGuildContent(guildID).getCompetition();
         noAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.";
-        guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
         checkBlacklist();
         checkMentionCount();
         if (author.isBot()) {
@@ -137,20 +138,10 @@ public class MessageHandler {
                 }
             }
         }
-        if (checkforNulls()) {
-            flushFiles();
-        }
     }
 
     //File handlers
 
-    private void flushFiles() {
-        Utility.flushFile(guildID, Constants.FILE_GUILD_CONFIG, guildConfig, guildConfig.isProperlyInit());
-        Utility.flushFile(guildID, Constants.FILE_CUSTOM, customCommands, customCommands.isProperlyInit());
-        Utility.flushFile(guildID, Constants.FILE_CHARACTERS, characters, characters.isProperlyInit());
-        Utility.flushFile(guildID, Constants.FILE_SERVERS, servers, servers.isProperlyInit());
-        Utility.flushFile(guildID, Constants.FILE_COMPETITION, competition, competition.isProperlyInit());
-    }
 
     private boolean checkforNulls() {
         if (guildConfig == null || customCommands == null || characters == null || servers == null || competition == null) {
@@ -234,18 +225,6 @@ public class MessageHandler {
                             return;
                         }
                         //init relevant files
-                        if (commandAnno.type().equals(Constants.TYPE_SERVERS) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                            servers = (Servers) Utility.initFile(guildID, Constants.FILE_SERVERS, Servers.class);
-                        }
-                        if (commandAnno.type().equals(Constants.TYPE_CHARACTER) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                            characters = (Characters) Utility.initFile(guildID, Constants.FILE_CHARACTERS, Characters.class);
-                        }
-                        if (commandAnno.type().equals(Constants.TYPE_CC) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                            customCommands = (CustomCommands) Utility.initFile(guildID, Constants.FILE_CUSTOM, CustomCommands.class);
-                        }
-                        if (commandAnno.type().equals(Constants.TYPE_COMPETITION) || commandAnno.type().equals(Constants.TYPE_ADMIN)) {
-                            competition = (Competition) Utility.initFile(guildID, Constants.FILE_COMPETITION, Competition.class);
-                        }
 
                         //Logging Handling
                         if (guildConfig.doAdminLogging()) {
@@ -300,9 +279,6 @@ public class MessageHandler {
                                 Utility.sendMessage(noAllowed, channel);
                         } else {
                             Utility.sendMessage("> Command must be performed in the " + guild.getChannelByID(guildConfig.getChannelTypeID(commandAnno.channel())).mention() + " channel.", channel);
-                        }
-                        if (checkforNulls()) {
-                            flushFiles();
                         }
                     }
                 }
@@ -364,9 +340,9 @@ public class MessageHandler {
             helpEmbed.withTitle("Here are the Command Types I have available for use:");
             builder.append(">>**`" + spacer + Utility.getCommandInfo("help", guildConfig) + spacer + "`**<<\n");
             helpEmbed.withDescription(builder.toString());
-            helpEmbed.appendField("Helpful Links","[Suport Sail on Patreon](https://www.patreon.com/DawnFelstar)\n" +
+            helpEmbed.appendField("Helpful Links", "[Suport Sail on Patreon](https://www.patreon.com/DawnFelstar)\n" +
                     "[Find Sail on GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)\n" +
-                    "Support Discord - https://discord.gg/XSyQQrR",true);
+                    "Support Discord - https://discord.gg/XSyQQrR", true);
             helpEmbed.withFooterText("Bot Version: " + Globals.version);
         } else {
             boolean isFound = false;
@@ -378,15 +354,15 @@ public class MessageHandler {
                         if (m.isAnnotationPresent(CommandAnnotation.class)) {
                             CommandAnnotation anno = m.getAnnotation(CommandAnnotation.class);
                             if (anno.type().equalsIgnoreCase(s)) {
-                                if (m.isAnnotationPresent(DualCommandAnnotation.class)){
+                                if (m.isAnnotationPresent(DualCommandAnnotation.class)) {
                                     commands.add(guildConfig.getPrefixCommand() + anno.name() + Constants.PREFIX_INDENT + "*\n");
-                                }else {
+                                } else {
                                     commands.add(guildConfig.getPrefixCommand() + anno.name() + "\n");
                                 }
                             }
-                            if (m.isAnnotationPresent(DualCommandAnnotation.class)){
+                            if (m.isAnnotationPresent(DualCommandAnnotation.class)) {
                                 DualCommandAnnotation dualAnno = m.getAnnotation(DualCommandAnnotation.class);
-                                if (dualAnno.type().equalsIgnoreCase(s)){
+                                if (dualAnno.type().equalsIgnoreCase(s)) {
                                     commands.add(guildConfig.getPrefixCommand() + anno.name() + Constants.PREFIX_INDENT + "*\n");
                                 }
                             }
@@ -536,9 +512,12 @@ public class MessageHandler {
     @DualCommandAnnotation(description = "This is another test.", usage = "[Blep]", type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_CHANNELS})
     @CommandAnnotation(
             name = "Test", description = "Tests things.", usage = "[Lol this command has no usages XD]",
-            type = Constants.TYPE_GENERAL, channel = Constants.CHANNEL_BOT_COMMANDS, perms = {Permissions.MANAGE_MESSAGES}, doAdminLogging = true)
+            type = Constants.TYPE_GENERAL,channel = Constants.CHANNEL_BOT_COMMANDS, doAdminLogging = true)
     public String test() {
-        return "You tested the thing.";
+        EmbedBuilder imageEmbed = new EmbedBuilder();
+        imageEmbed.withImage(author.getAvatarURL());
+        Utility.sendFile("You tested the thing.",author.getAvatarURL(),channel);
+        return "";
     }
 
     @CommandAnnotation(
@@ -885,7 +864,7 @@ public class MessageHandler {
                     }
                 }
                 for (int i = 0; userRoles.size() > i; i++) {
-                    if (userRoles.get(i).getID().equals(newRoleId)){
+                    if (userRoles.get(i).getID().equals(newRoleId)) {
                         userRoles.remove(i);
                         rolefound = true;
                     }
@@ -1126,8 +1105,11 @@ public class MessageHandler {
             isShitpost = true;
         }
         String nameCC = splitfirst.getFirstWord();
-        if (splitfirst.getRest() == null || splitfirst.getRest().isEmpty()){
+        if (splitfirst.getRest() == null || splitfirst.getRest().isEmpty()) {
             return "> Custom command contents cannot be blank";
+        }
+        if (nameCC.contains("\n")) {
+            return "> Command name cannot contain Newlines";
         }
         String content = splitfirst.getRest();
         newContent = TagSystem.testForShit(content);
@@ -1151,10 +1133,12 @@ public class MessageHandler {
     }
 
     @CommandAnnotation(
-            name = "EditCC", description = "Allows you to edit a custom command.", usage = "[Command Name] [New Contents]",
+            name = "EditCC", description = "Allows you to edit a custom command.\nModes: Replace, Append, toEmbed\nMode is optional defaults to replace", usage = "[Command Name] (Mode) [New Contents]",
             type = Constants.TYPE_CC, requiresArgs = true)
     public String editCC() {
-        return Constants.ERROR_NIH;
+        SplitFirstObject getName = new SplitFirstObject(args);
+        SplitFirstObject getMode = new SplitFirstObject(getName.getRest());
+        return customCommands.editCC(getName.getFirstWord(),author,guild,getMode.getFirstWord(),getMode.getRest());
     }
 
     @AliasAnnotation(alias = {"ListCCs"})
@@ -1194,7 +1178,7 @@ public class MessageHandler {
             name = "SearchCCs", description = "Allows you to search the custom command list.", usage = "[Search Params]",
             type = Constants.TYPE_CC, requiresArgs = true)
     public String searchCCs() {
-        return customCommands.search(args, guildConfig);
+        return customCommands.search(args, guildConfig,channel);
     }
 
     @CommandAnnotation(

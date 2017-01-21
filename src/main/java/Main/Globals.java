@@ -1,10 +1,15 @@
 package Main;
 
-import POGOs.Config;
 import Objects.DailyMessageObject;
+import Objects.GuildContentObject;
+import POGOs.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
+import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -33,8 +38,11 @@ public class Globals {
     public static ArrayList<DailyMessageObject> dailyMessages = new ArrayList<>();
     public static IDiscordClient client;
     public static boolean isModifingFiles = false;
+    private static ArrayList<GuildContentObject> guildContentObjects = new ArrayList<>();
 
-    public static void initConfig(IDiscordClient ourClient, Config config){
+    final static Logger logger = LoggerFactory.getLogger(Globals.class);
+
+    public static void initConfig(IDiscordClient ourClient, Config config) {
         client = ourClient;
         botName = config.botName;
         creatorID = config.creatorID;
@@ -59,32 +67,32 @@ public class Globals {
         if (botName == null || botName.isEmpty()) {
             builder.append("> Bot name cannot be empty.\n");
         }
-        if (defaultPrefixCC.contains("\n")){
+        if (defaultPrefixCC.contains("\n")) {
             builder.append("> botName cannot contain Newlines.\n");
         }
-        if (defaultPrefixCC.length() > 32){
+        if (defaultPrefixCC.length() > 32) {
             builder.append("> botName cannot be longer than 32 chars.\n");
         }
-        if (defaultPrefixCommand == null || defaultPrefixCommand.isEmpty()){
+        if (defaultPrefixCommand == null || defaultPrefixCommand.isEmpty()) {
             builder.append("> defaultPrefixCommand cannot be empty.\n");
         }
-        if (defaultPrefixCC == null || defaultPrefixCC.isEmpty()){
+        if (defaultPrefixCC == null || defaultPrefixCC.isEmpty()) {
             builder.append("> defaultPrefixCC cannot be empty.\n");
         }
-        if (defaultPrefixCommand.contains(" ")){
+        if (defaultPrefixCommand.contains(" ")) {
             builder.append("> defaultPrefixCommand cannot contain spaces.\n");
         }
-        if (defaultPrefixCC.contains(" ")){
+        if (defaultPrefixCC.contains(" ")) {
             builder.append("> defaultPrefixCC cannot contain spaces.\n");
         }
-        if (defaultPrefixCommand.contains("\n")){
+        if (defaultPrefixCommand.contains("\n")) {
             builder.append("> defaultPrefixCommand cannot contain Newlines.\n");
         }
-        if (defaultPrefixCC.contains("\n")){
+        if (defaultPrefixCC.contains("\n")) {
             builder.append("> defaultPrefixCommand cannot contain Newlines.\n");
         }
         if (doDailyAvatars) {
-            if (!dailyAvatarName.contains("#day#")){
+            if (!dailyAvatarName.contains("#day#")) {
                 builder.append("> dailyAvatarName must contain #day# for the feature to work as intended.\n");
             }
             for (DailyMessageObject d : dailyMessages) {
@@ -92,18 +100,35 @@ public class Globals {
                     builder.append("> File " + Constants.DIRECTORY_GLOBAL_IMAGES + d.getFileName() + " does not exist.\n");
                 }
             }
-        }else {
-            if (!Files.exists(Paths.get(Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile))){
+        } else {
+            if (!Files.exists(Paths.get(Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile))) {
                 builder.append("> File" + Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile + " does not exist.\n");
             }
         }
         if (argsMax <= 0) {
             builder.append("> argsMax cannot be less than or equals 0.\n");
         }
-        if (maxWarnings <= 0){
+        if (maxWarnings <= 0) {
             builder.append("> maxWarnings cannot be less than or equals 0.\n");
         }
         return builder.toString();
+    }
+
+    public static void initGuild(String guildID) {
+        for (GuildContentObject contentObject : guildContentObjects){
+            if (guildID.equals(contentObject.getGuildID())){
+                return;
+            }
+        }
+        GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+        CustomCommands customCommands = (CustomCommands) Utility.initFile(guildID, Constants.FILE_CUSTOM, CustomCommands.class);
+        Servers servers = (Servers) Utility.initFile(guildID, Constants.FILE_SERVERS, Servers.class);
+        Characters characters = (Characters) Utility.initFile(guildID, Constants.FILE_CHARACTERS, Characters.class);
+        Competition competition = (Competition) Utility.initFile(guildID, Constants.FILE_COMPETITION, Competition.class);
+        IGuild guild = client.getGuildByID(guildID);
+        guildConfig.updateVariables(guild);
+        GuildContentObject guildContentObject = new GuildContentObject(guildID,guildConfig,customCommands,servers,characters,competition);
+        guildContentObjects.add(guildContentObject);
     }
 
     public static void setVersion() {
@@ -121,4 +146,22 @@ public class Globals {
         return client;
     }
 
+    @Nonnull
+    public static GuildContentObject getGuildContent(String guildID) {
+        for (GuildContentObject storage : guildContentObjects) {
+            if (storage.getGuildID().equals(guildID)) {
+                return storage;
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<GuildContentObject> getGuildContentObjects() {
+        return guildContentObjects;
+    }
+
+    public static void saveFiles() {
+        logger.debug("Saving Files.");
+        Globals.getGuildContentObjects().forEach(GuildContentObject::saveFiles);
+    }
 }

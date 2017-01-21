@@ -1,7 +1,7 @@
 package POGOs;
 
-import Main.Globals;
 import Main.Constants;
+import Main.Globals;
 import Main.Utility;
 import Objects.BlackListObject;
 import Objects.ServerObject;

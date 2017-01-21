@@ -1,17 +1,22 @@
 package POGOs;
 
 import Handlers.FileHandler;
-import Main.Globals;
 import Main.Constants;
+import Main.Globals;
 import Main.Utility;
 import Objects.BlackListObject;
 import Objects.CCommandObject;
+import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 // TODO: 31/08/2016 Add the ability to edit custom commands -- later pls
@@ -41,7 +46,7 @@ public class CustomCommands {
         this.properlyInit = properlyInit;
     }
 
-    private int maxCCs(IUser author, IGuild guild,GuildConfig guildConfig){
+    private int maxCCs(IUser author, IGuild guild, GuildConfig guildConfig) {
         int total = 10;
         boolean hasManagePerms = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild);
         boolean hasAdminPerms = Utility.testForPerms(new Permissions[]{Permissions.ADMINISTRATOR}, author, guild);
@@ -58,7 +63,7 @@ public class CustomCommands {
         return total;
     }
 
-    public String addCommand(boolean isLocked, IUser author, String commandName, String commandContents, boolean isShitPost, IGuild guild,GuildConfig guildConfig) {
+    public String addCommand(boolean isLocked, IUser author, String commandName, String commandContents, boolean isShitPost, IGuild guild, GuildConfig guildConfig) {
         int counter = 0;
         int limitCCs;
         String toCheck = commandName + commandContents;
@@ -68,7 +73,10 @@ public class CustomCommands {
         if (commandName.length() > 50) {
             return "> Command name too long.";
         }
-        limitCCs = maxCCs(author,guild,guildConfig);
+        if (StringUtils.countMatches(commandContents, "#embedImage#{") > 1) {
+            return "> Custom Commands Cannot have multiple #embedImage# tags";
+        }
+        limitCCs = maxCCs(author, guild, guildConfig);
 
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(commandName)) {
@@ -134,7 +142,7 @@ public class CustomCommands {
             if (c.getName().equalsIgnoreCase(commandName)) {
                 FileHandler.writeToJson(Constants.DIRECTORY_TEMP + c.getName() + ".json", c);
                 File file = new File(Constants.DIRECTORY_TEMP + c.getName() + ".json");
-                if (Utility.sendFile("> Here is the Raw Data for Custom Command: **" + c.getName() + "**", channel, file).get()) {
+                if (Utility.sendFile("> Here is the Raw Data for Custom Command: **" + c.getName() + "**", file, channel).get()) {
                     Utility.sendMessage("> An error occurred when attempting to get CC data.", channel);
                 }
                 try {
@@ -172,11 +180,11 @@ public class CustomCommands {
         return Constants.ERROR_CC_NOT_FOUND;
     }
 
-    public String getUserCommands(String userID,IGuild guild,GuildConfig guildConfig) {
+    public String getUserCommands(String userID, IGuild guild, GuildConfig guildConfig) {
         IUser user = Globals.getClient().getUserByID(userID);
         StringBuilder builder = new StringBuilder();
         int total = 0;
-        int max = maxCCs(user,guild,guildConfig);
+        int max = maxCCs(user, guild, guildConfig);
         builder.append("> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.\n`");
         for (CCommandObject sA : commands) {
             if (sA.getUserID().equals(userID)) {
@@ -189,7 +197,7 @@ public class CustomCommands {
         return builder.toString();
     }
 
-    public String listCommands(int page,GuildConfig guildConfig) {
+    public String listCommands(int page, GuildConfig guildConfig) {
         StringBuilder builder = new StringBuilder();
         ArrayList<String> pages = new ArrayList<>();
         int counter = 0;
@@ -239,32 +247,101 @@ public class CustomCommands {
         return Constants.ERROR_CC_NOT_FOUND;
     }
 
-    public String search(String args,GuildConfig guildConfig){
+    public String search(String args, GuildConfig guildConfig,IChannel channel) {
         ArrayList<CCommandObject> searched = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
-        for (CCommandObject c: commands){
+        for (CCommandObject c : commands) {
             StringBuilder toSearch = new StringBuilder();
             toSearch.append(c.getName().toLowerCase());
             toSearch.append(c.getContents(false).toLowerCase());
-            if (c.isLocked()){
+            if (c.isLocked()) {
                 toSearch.append("#locked#");
             }
-            if (c.isShitPost()){
+            if (c.isShitPost()) {
                 toSearch.append("#shitpost#");
             }
-            if ((toSearch.toString()).contains(args.toLowerCase())){
+            if ((toSearch.toString()).contains(args.toLowerCase())) {
                 searched.add(c);
             }
         }
         builder.append("> Here is your search:\n`");
-        if (searched.size() < 40){
-            for (CCommandObject c: searched){
-                builder.append(guildConfig.getPrefixCC() + c.getName() + ", ");
-            }
-            builder.delete(builder.length() - 2, builder.length());
-            builder.append(".`");
-            return builder.toString();
+        for (CCommandObject c : searched) {
+            builder.append(guildConfig.getPrefixCC() + c.getName() + ", ");
         }
-        return "> Too many results, Please narrow your search.";
+        builder.delete(builder.length() - 2, builder.length());
+        builder.append(".`");
+        if (searched.size() < 40) {
+            return builder.toString();
+        } else {
+            String path = Constants.DIRECTORY_TEMP + args + ".txt";
+            FileHandler.writeToFile(path,builder.toString());
+            File file = new File(path);
+            Utility.sendFile("> Here is your Search:",file,channel);
+            try {
+                Thread.sleep(4000);
+                Files.delete(Paths.get(path));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+    }
+
+    public String editCC(String name, IUser user, IGuild guild, String mode, String content) {
+        for (CCommandObject c : commands) {
+            if (c.getName().equalsIgnoreCase(name)) {
+                if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, user, guild) || user.getID().equals(c.getUserID()) && !c.isLocked()) {
+                    Method[] methods = this.getClass().getMethods();
+                    if (StringUtils.countMatches(mode + " " + content, "#embedImage#{") > 1) {
+                        return "> Custom Commands Cannot have multiple #embedImage# tags";
+                    }
+                    switch (mode.toLowerCase()) {
+                        case "replace":
+                            return editModeReplace(c, content);
+                        case "toembed":
+                            return editModeToEmbed(c);
+                        case "append":
+                            return editModeAppend(c, content);
+                        default:
+                            if (content == null || content.isEmpty()) {
+                                return editModeReplace(c, mode);
+                            } else {
+                                return editModeReplace(c, mode + " " + content);
+                            }
+                    }
+                } else {
+                    return "> You do not have permission to edit this command.";
+                }
+            }
+        }
+        return "> Command Not found.";
+    }
+
+
+    private String editModeReplace(CCommandObject command, String content) {
+        command.setContents(content);
+        return "> Command Edited.";
+    }
+
+    private String editModeToEmbed(CCommandObject commmand) {
+        String contents = commmand.getContents(false);
+        if (contents.contains(" ") || contents.contains("\n")) {
+            return "> Failed to add embed tag.";
+        }
+        if (contents.contains("#embedImage#{")) {
+            return "> Command already has an EmbedImage Tag, cannot add more than one.";
+        }
+        commmand.setContents("#embedImage#{" + contents + "}");
+        return "> Embed tag added.";
+    }
+
+    private String editModeAppend(CCommandObject command, String content) {
+        if ((command.getContents(false) + content).length() > 2000) {
+            return "> Cannot append content, would make command to large.";
+        }
+        command.setContents(command.getContents(false) + content);
+        return "> Content appended to end of command.";
     }
 }
