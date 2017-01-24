@@ -80,9 +80,22 @@ public class TimedEvents {
             public void run() {
                 ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
                 String dailyFileName = Globals.dailyAvatarName.replace("#day#",timeNow.getDayOfWeek().toString());
-                Utility.backupConfigFile(Constants.FILE_CONFIG);
                 DayOfWeek day = timeNow.getDayOfWeek();
+                File avatarFile;
+
                 logger.info("Running Daily tasks for " + day);
+
+                //sets Avatar.
+                if (Globals.doDailyAvatars) {
+                    avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + dailyFileName);
+                } else {
+                    avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + Globals.defaultAvatarFile);
+                }
+                Image avatar = Image.forFile(avatarFile);
+                Utility.updateAvatar(avatar);
+
+                //backups
+                Utility.backupConfigFile(Constants.FILE_CONFIG);
                 for (TimedObject g : TimerObjects) {
                     Utility.backupFile(g.getGuildID(), Constants.FILE_GUILD_CONFIG);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_CUSTOM);
@@ -91,14 +104,8 @@ public class TimedEvents {
                     Utility.backupFile(g.getGuildID(), Constants.FILE_INFO);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_COMPETITION);
                     GuildConfig guildConfig = Globals.getGuildContent(g.getGuildID()).getGuildConfig();
-                    File avatarFile;
-                    if (Globals.doDailyAvatars) {
-                        avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + dailyFileName);
-                    } else {
-                        avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + Globals.defaultAvatarFile);
-                    }
-                    Image avatar = Image.forFile(avatarFile);
-                    Utility.updateAvatar(avatar);
+
+                    //daily messages
                     if (guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL) != null) {
                         if (guildConfig.doDailyMessage()) {
                             IChannel channel = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_GENERAL));

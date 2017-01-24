@@ -93,8 +93,9 @@ public class TagSystem {
                         ArrayList<String> splitArgs = new ArrayList<>(Arrays.asList(args.split(" ")));
                         if (splitArgs.size() == 0) {
                             from = from.replace(prefix + tag + suffix, "");
-                        }
-                        if (splitArgs.get(position - 1) == null) {
+                        } else if (splitArgs.size() < position) {
+                            from = from.replace(prefix + tag + suffix, "");
+                        } else if (splitArgs.get(position - 1) == null) {
                             from = from.replace(prefix + tag + suffix, "");
                         } else {
                             from = from.replace(prefix + tag + suffix, splitArgs.get(position - 1));

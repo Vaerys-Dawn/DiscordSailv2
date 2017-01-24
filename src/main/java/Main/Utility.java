@@ -258,7 +258,9 @@ public class Utility {
 
     public static RequestBuffer.RequestFuture<Boolean> sendFile(String message, String imageURL, IChannel channel) {
         return RequestBuffer.request(() -> {
+            String messageID = "";
             try {
+                messageID = channel.sendMessage("`Loading...`").getID();
                 final HttpURLConnection connection = (HttpURLConnection) new URL(imageURL).openConnection();
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) " + "AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
                 InputStream stream = connection.getInputStream();
@@ -268,7 +270,6 @@ public class Utility {
                     sendMessage(message + " " + imageURL, channel);
                     return true;
                 }
-                String messageID = channel.sendMessage("`Loading...`").getID();
                 if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("")) {
                     if (imageURL != null) {
                         channel.sendFile("", stream, suffix);
@@ -289,15 +290,19 @@ public class Utility {
             } catch (DiscordException e) {
                 if (e.getMessage().contains("CloudFlare")) {
                     sendFile(message, imageURL, channel);
+                    deleteMessage(Globals.getClient().getMessageByID(messageID));
                 } else {
                     e.printStackTrace();
                     return true;
                 }
             } catch (MalformedURLException e) {
                 sendMessage(message + " " + imageURL, channel);
+                deleteMessage(Globals.getClient().getMessageByID(messageID));
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (MissingPermissionsException e) {
+                sendMessage(message + " <" + imageURL+">", channel);
+                deleteMessage(Globals.getClient().getMessageByID(messageID));
                 logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
                 return true;
@@ -306,14 +311,14 @@ public class Utility {
         });
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> sendEmbededMessage(String message, EmbedObject embed, IChannel channel, boolean b) {
+    public static RequestBuffer.RequestFuture<Boolean> sendEmbededMessage(String message, EmbedObject embed, IChannel channel) {
         return RequestBuffer.request(() -> {
             try {
                 String iMessage = message;
                 if (iMessage == null) {
                     iMessage = "";
                 }
-                channel.sendMessage(iMessage, embed, b);
+                channel.sendMessage(iMessage, embed, false);
             } catch (DiscordException e) {
                 if (e.getMessage().contains("CloudFlare")) {
                     sendMessage(message, channel);

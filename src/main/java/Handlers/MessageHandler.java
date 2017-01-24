@@ -380,7 +380,7 @@ public class MessageHandler {
                 return "> There are no commands with the type: " + args + ".\n" + Constants.PREFIX_INDENT + Utility.getCommandInfo("help", guildConfig);
             }
         }
-        Utility.sendEmbededMessage("", helpEmbed.build(), channel, true);
+        Utility.sendEmbededMessage("", helpEmbed.build(), channel);
         return "";
     }
 
@@ -453,7 +453,7 @@ public class MessageHandler {
                             aliasBuilder.append(".\n");
                             infoEmbed.appendField("Aliases:", aliasBuilder.toString(), false);
                         }
-                        Utility.sendEmbededMessage("", infoEmbed.build(), channel, true);
+                        Utility.sendEmbededMessage("", infoEmbed.build(), channel);
                         return "";
                     }
                 }
@@ -1137,6 +1137,9 @@ public class MessageHandler {
             type = Constants.TYPE_CC, requiresArgs = true)
     public String editCC() {
         SplitFirstObject getName = new SplitFirstObject(args);
+        if (getName.getRest() == null){
+            return Utility.getCommandInfo("editCC",guildConfig);
+        }
         SplitFirstObject getMode = new SplitFirstObject(getName.getRest());
         return customCommands.editCC(getName.getFirstWord(),author,guild,getMode.getFirstWord(),getMode.getRest());
     }

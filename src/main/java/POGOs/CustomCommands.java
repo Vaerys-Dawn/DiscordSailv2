@@ -274,7 +274,7 @@ public class CustomCommands {
         if (searched.size() < 40) {
             return builder.toString();
         } else {
-            String path = Constants.DIRECTORY_TEMP + args + ".txt";
+            String path = Constants.DIRECTORY_TEMP + messageID + ".txt";
             FileHandler.writeToFile(path,builder.toString());
             File file = new File(path);
             Utility.sendFile("> Here is your Search:",file,channel);
@@ -322,6 +322,9 @@ public class CustomCommands {
 
 
     private String editModeReplace(CCommandObject command, String content) {
+        if (content == null || content.isEmpty()){
+            return "> Missing content to replace with.";
+        }
         command.setContents(content);
         return "> Command Edited.";
     }
@@ -339,6 +342,9 @@ public class CustomCommands {
     }
 
     private String editModeAppend(CCommandObject command, String content) {
+        if (content == null || content.isEmpty()){
+            return "> Missing content to append.";
+        }
         if ((command.getContents(false) + content).length() > 2000) {
             return "> Cannot append content, would make command to large.";
         }
