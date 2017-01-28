@@ -164,4 +164,13 @@ public class Globals {
         logger.debug("Saving Files.");
         Globals.getGuildContentObjects().forEach(GuildContentObject::saveFiles);
     }
+
+    public static void unloadGuild(String id) {
+        for (GuildContentObject g: guildContentObjects){
+            if (g.getGuildID().equals(id)){
+                logger.info("> Disconnected from Guild with ID : " + id);
+                guildContentObjects.remove(g);
+            }
+        }
+    }
 }

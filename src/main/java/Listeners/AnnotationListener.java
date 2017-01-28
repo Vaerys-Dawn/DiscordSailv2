@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
+import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -71,6 +72,11 @@ public class AnnotationListener {
         Globals.initGuild(guildID);
 
         logger.info("Finished Initialising Guild With ID: " + guildID);
+    }
+
+    @EventSubscriber
+    public void onGuildLeaveEvent(GuildLeaveEvent event){
+        Globals.unloadGuild(event.getGuild().getID());
     }
 
     @EventSubscriber
@@ -206,6 +212,14 @@ public class AnnotationListener {
     @EventSubscriber
     public void onReactionAddEvent(ReactionAddEvent event) {
         if (event.getChannel().isPrivate()) {
+            if (event.getReaction().toString().equals("❌")) {
+                if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())) {
+                    Utility.deleteMessage(event.getMessage());
+                }
+            }
+            return;
+        }
+        if (Utility.canBypass(event.getAuthor(),event.getGuild())){
             if (event.getReaction().toString().equals("❌")) {
                 if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())) {
                     Utility.deleteMessage(event.getMessage());

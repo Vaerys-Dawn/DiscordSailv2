@@ -94,6 +94,12 @@ public class TimedEvents {
                 Image avatar = Image.forFile(avatarFile);
                 Utility.updateAvatar(avatar);
 
+                //wait for the avatar to update properly
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 //backups
                 Utility.backupConfigFile(Constants.FILE_CONFIG);
                 for (TimedObject g : TimerObjects) {

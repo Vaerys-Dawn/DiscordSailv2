@@ -293,7 +293,7 @@ public class CustomCommands {
     public String editCC(String name, IUser user, IGuild guild, String mode, String content) {
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(name)) {
-                if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, user, guild) || user.getID().equals(c.getUserID()) && !c.isLocked()) {
+                if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, user, guild) || user.getID().equals(c.getUserID()) && !c.isLocked() || Utility.canBypass(user,guild)) {
                     Method[] methods = this.getClass().getMethods();
                     if (StringUtils.countMatches(mode + " " + content, "#embedImage#{") > 1) {
                         return "> Custom Commands Cannot have multiple #embedImage# tags";

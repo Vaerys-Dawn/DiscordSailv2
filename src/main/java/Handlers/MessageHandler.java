@@ -512,11 +512,11 @@ public class MessageHandler {
     @DualCommandAnnotation(description = "This is another test.", usage = "[Blep]", type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_CHANNELS})
     @CommandAnnotation(
             name = "Test", description = "Tests things.", usage = "[Lol this command has no usages XD]",
-            type = Constants.TYPE_GENERAL,channel = Constants.CHANNEL_BOT_COMMANDS, doAdminLogging = true)
+            type = Constants.TYPE_GENERAL, channel = Constants.CHANNEL_BOT_COMMANDS, doAdminLogging = true)
     public String test() {
         EmbedBuilder imageEmbed = new EmbedBuilder();
         imageEmbed.withImage(author.getAvatarURL());
-        Utility.sendFile("You tested the thing.",author.getAvatarURL(),channel);
+        Utility.sendFile("You tested the thing.", author.getAvatarURL(), channel);
         return "";
     }
 
@@ -705,9 +705,9 @@ public class MessageHandler {
         return customCommands.toggleLock(args);
     }
 
-    //    @CommandAnnotation(
-    //            name = "UpdateInfo", description = "Posts the contents of the Guild's Info.TXT",
-    //            type = Constants.TYPE_ADMIN, channel = Constants.CHANNEL_INFO, perms = {Permissions.MANAGE_SERVER})
+    @CommandAnnotation(
+            name = "UpdateInfo", description = "Posts the contents of the Guild's Info.TXT",
+            type = Constants.TYPE_ADMIN, channel = Constants.CHANNEL_INFO, perms = {Permissions.MANAGE_SERVER})
     public String updateInfo() {
         if (guildConfig.getChannelTypeID(Constants.CHANNEL_INFO) == null) {
             return "> No Info channel set up yet, you need to set one up in order to run this command.\n" + Utility.getCommandInfo("channelHere", guildConfig);
@@ -1137,11 +1137,11 @@ public class MessageHandler {
             type = Constants.TYPE_CC, requiresArgs = true)
     public String editCC() {
         SplitFirstObject getName = new SplitFirstObject(args);
-        if (getName.getRest() == null){
-            return Utility.getCommandInfo("editCC",guildConfig);
+        if (getName.getRest() == null) {
+            return Utility.getCommandInfo("editCC", guildConfig);
         }
         SplitFirstObject getMode = new SplitFirstObject(getName.getRest());
-        return customCommands.editCC(getName.getFirstWord(),author,guild,getMode.getFirstWord(),getMode.getRest());
+        return customCommands.editCC(getName.getFirstWord(), author, guild, getMode.getFirstWord(), getMode.getRest());
     }
 
     @AliasAnnotation(alias = {"ListCCs"})
@@ -1181,7 +1181,7 @@ public class MessageHandler {
             name = "SearchCCs", description = "Allows you to search the custom command list.", usage = "[Search Params]",
             type = Constants.TYPE_CC, requiresArgs = true)
     public String searchCCs() {
-        return customCommands.search(args, guildConfig,channel,message.getID());
+        return customCommands.search(args, guildConfig, channel, message.getID());
     }
 
     @CommandAnnotation(

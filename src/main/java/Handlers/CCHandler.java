@@ -51,6 +51,7 @@ public class CCHandler {
         }
         String response;
         String prefixEmbedImage = "#embedImage#{";
+        String tagDeleteMessage = "#delCall#";
         for (CCommandObject cc : customCommands.getCommandList()) {
             if (command.equalsIgnoreCase(guildConfig.getPrefixCC() + cc.getName())) {
                 if (Utility.canBypass(author, guild)) ;
@@ -79,6 +80,10 @@ public class CCHandler {
                         Utility.sendFile(response,imageURL,channel);
                         return;
                     }
+                }
+                if (response.contains(tagDeleteMessage)){
+                    response = response.replace(tagDeleteMessage,"");
+                    Utility.deleteMessage(message);
                 }
                 Utility.sendMessage(response, channel);
             }

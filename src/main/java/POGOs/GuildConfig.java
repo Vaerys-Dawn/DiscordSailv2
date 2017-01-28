@@ -279,7 +279,7 @@ public class GuildConfig {
 
     public String setRoleToMention(String roleName, String roleID) {
         roleToMention = new RoleTypeObject(roleName, roleID);
-        return "> the Role `" + roleName + "` will now be mentioned when the tag #admin# is called withing the blacklisting process.";
+        return "> the Role `" + roleName + "` will now be mentioned when the tag #admin# is called within the blacklisting process.";
     }
 
     public RoleTypeObject getRoleToMention() {
