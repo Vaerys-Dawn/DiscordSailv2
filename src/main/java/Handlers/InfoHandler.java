@@ -29,14 +29,7 @@ public class InfoHandler {
     }
 
     private void updateChannel() {
-        for (IMessage message : channel.getMessages()){
-            try {
-                Utility.deleteMessage(message);
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        Utility.deleteMessage(channel.getMessages());
         StringBuilder builder = new StringBuilder();
         ArrayList<String> stringChunks = new ArrayList<>();
         String lastChunk;

@@ -1133,7 +1133,7 @@ public class MessageHandler {
     }
 
     @CommandAnnotation(
-            name = "EditCC", description = "Allows you to edit a custom command.\nModes: Replace, Append, toEmbed\nMode is optional defaults to replace", usage = "[Command Name] (Mode) [New Contents]",
+            name = "EditCC", description = "Allows you to edit a custom command.\nModes: Replace, Append, toEmbed,DelCall\nMode is optional defaults to replace", usage = "[Command Name] (Mode) [New Contents]",
             type = Constants.TYPE_CC, requiresArgs = true)
     public String editCC() {
         SplitFirstObject getName = new SplitFirstObject(args);

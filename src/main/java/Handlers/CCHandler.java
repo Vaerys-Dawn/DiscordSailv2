@@ -45,10 +45,6 @@ public class CCHandler {
     }
 
     private void handleCommand() {
-        if (customCommands.checkblackList(args) != null) {
-            Utility.sendMessage(customCommands.checkblackList(args), channel);
-            return;
-        }
         String response;
         String prefixEmbedImage = "#embedImage#{";
         String tagDeleteMessage = "#delCall#";
@@ -73,6 +69,10 @@ public class CCHandler {
                     }
                 }
                 response = TagSystem.tagSystem(response, message, args);
+                if (customCommands.checkblackList(response) != null) {
+                    Utility.sendMessage(customCommands.checkblackList(response), channel);
+                    return;
+                }
                 if (response.contains("#embedImage#{")){
                     String imageURL = TagSystem.tagEmbedImage(response,prefixEmbedImage);
                     if (imageURL != null ||!imageURL.isEmpty()){

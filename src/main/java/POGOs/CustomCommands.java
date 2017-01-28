@@ -7,7 +7,6 @@ import Main.Utility;
 import Objects.BlackListObject;
 import Objects.CCommandObject;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.impl.obj.Message;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
@@ -305,6 +304,10 @@ public class CustomCommands {
                             return editModeToEmbed(c);
                         case "append":
                             return editModeAppend(c, content);
+                        case "delet":
+                            return editModeDeleteTag(c);
+                        case "delcall":
+                            return editModeDeleteTag(c);
                         default:
                             if (content == null || content.isEmpty()) {
                                 return editModeReplace(c, mode);
@@ -318,6 +321,16 @@ public class CustomCommands {
             }
         }
         return "> Command Not found.";
+    }
+
+    private String editModeDeleteTag(CCommandObject c) {
+        String delCall = "#delCall#";
+        if (c.getContents(false).contains(delCall)){
+            return "> Command will already delete the calling message.";
+        }else {
+            c.setContents(c.getContents(false) + delCall);
+            return "> Tag added";
+        }
     }
 
 
