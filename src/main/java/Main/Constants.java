@@ -14,36 +14,12 @@ public class Constants {
 
     //-------Command Constants---------
 
-    public enum ComandType {
-        HELP, ADMIN, GENERAl, CC, ROLE, CHARACTERS, COMPETITION, SERVERS
-    }
-
-    //Type Constants
-    public static final String TYPE_GENERAL = "General";
-    public static final String TYPE_ADMIN = "Admin";
-    public static final String TYPE_ROLE_SELECT = "Role";
-    public static final String TYPE_CHARACTER = "Characters";
-    public static final String TYPE_SERVERS = "Servers";
-    public static final String TYPE_CC = "CC";
-    public static final String TYPE_HELP = "Help";
-    public static final String TYPE_COMPETITION = "Competition";
-
     //Tag Types
     public static final String TAG_TYPE_ALL = "all";
     public static final String TAG_TYPE_CC = "CC";
     public static final String TAG_TYPE_ADMIN = "Admin";
     public static final String TAG_TYPE_INFO = "Info";
 
-    //Channel Constants
-    public static final String CHANNEL_ANY = "Any";
-    public static final String CHANNEL_GENERAL = "General";
-    public static final String CHANNEL_SERVERS = "Servers";
-    public static final String CHANNEL_BOT_COMMANDS = "BotCommands";
-    public static final String CHANNEL_SERVER_LOG = "ServerLog";
-    public static final String CHANNEL_ADMIN_LOG = "AdminLog";
-    public static final String CHANNEL_ADMIN = "Admin";
-    public static final String CHANNEL_INFO = "Info";
-    public static final String CHANNEL_SHITPOST = "ShitPost";
     //------------------------------------
 
     //Error Constants

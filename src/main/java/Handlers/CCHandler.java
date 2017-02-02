@@ -1,6 +1,7 @@
 package Handlers;
 
-import Main.Constants;
+import Commands.Command;
+import Commands.CommandObject;
 import Main.Globals;
 import Main.TagSystem;
 import Main.Utility;
@@ -31,10 +32,10 @@ public class CCHandler {
     CustomCommands customCommands;
     GuildConfig guildConfig;
 
-    public CCHandler(String command, String args, IMessage message) {
+    public CCHandler(String command, String args, CommandObject commandObject) {
+        this.message = commandObject.message;
         this.command = command;
         this.args = args;
-        this.message = message;
         guild = message.getGuild();
         channel = message.getChannel();
         author = message.getAuthor();
@@ -52,9 +53,9 @@ public class CCHandler {
             if (command.equalsIgnoreCase(guildConfig.getPrefixCC() + cc.getName())) {
                 if (Utility.canBypass(author, guild)) ;
                 else if (cc.isShitPost() && guildConfig.doShitPostFiltering()) {
-                    if (guildConfig.getChannelTypeID(Constants.CHANNEL_SHITPOST) != null) {
-                        if (!channel.getID().equals(guildConfig.getChannelTypeID(Constants.CHANNEL_SHITPOST))) {
-                            IChannel shitpost = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Constants.CHANNEL_SHITPOST));
+                    if (guildConfig.getChannelTypeID(Command.CHANNEL_SHITPOST) != null) {
+                        if (!channel.getID().equals(guildConfig.getChannelTypeID(Command.CHANNEL_SHITPOST))) {
+                            IChannel shitpost = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_SHITPOST));
                             Utility.sendMessage("> Command must be performed in " + shitpost.mention(), channel);
                             return;
                         }
@@ -69,21 +70,24 @@ public class CCHandler {
                     }
                 }
                 response = TagSystem.tagSystem(response, message, args);
+                response = response.replace("#DELCALL#","#delCall#");
+                response = response.replace("#EMBEDIMAGE#","#embedImage#");
                 if (customCommands.checkblackList(response) != null) {
                     Utility.sendMessage(customCommands.checkblackList(response), channel);
                     return;
+                }
+                if (response.contains(tagDeleteMessage)){
+                    response = response.replace(tagDeleteMessage,"");
+                    Utility.deleteMessage(message);
                 }
                 if (response.contains("#embedImage#{")){
                     String imageURL = TagSystem.tagEmbedImage(response,prefixEmbedImage);
                     if (imageURL != null ||!imageURL.isEmpty()){
                         response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "");
+                        response = TagSystem.tagToCaps(response);
                         Utility.sendFile(response,imageURL,channel);
                         return;
                     }
-                }
-                if (response.contains(tagDeleteMessage)){
-                    response = response.replace(tagDeleteMessage,"");
-                    Utility.deleteMessage(message);
                 }
                 Utility.sendMessage(response, channel);
             }

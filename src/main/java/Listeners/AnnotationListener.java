@@ -1,5 +1,6 @@
 package Listeners;
 
+import Commands.CommandObject;
 import Handlers.DMHandler;
 import Handlers.FileHandler;
 import Handlers.MessageHandler;
@@ -126,7 +127,8 @@ public class AnnotationListener {
         }
 
         //message and command handling
-        new MessageHandler(command, args, message);
+        CommandObject commandObject = new CommandObject(message);
+        new MessageHandler(command, args, commandObject);
     }
 
     @EventSubscriber

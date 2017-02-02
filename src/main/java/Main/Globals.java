@@ -1,5 +1,25 @@
 package Main;
 
+import Commands.Admin.*;
+import Commands.Admin.Shutdown;
+import Commands.CC.*;
+import Commands.Characters.DelChar;
+import Commands.Characters.ListChars;
+import Commands.Characters.SelectChar;
+import Commands.Characters.UpdateChar;
+import Commands.Command;
+import Commands.Competition.EnterComp;
+import Commands.Competition.EnterVote;
+import Commands.General.GetAvatar;
+import Commands.General.Hello;
+import Commands.General.RemindMe;
+import Commands.General.Test;
+import Commands.Help.*;
+import Commands.RoleSelect.CosmeticRoles;
+import Commands.RoleSelect.ListModifs;
+import Commands.RoleSelect.ListRoles;
+import Commands.RoleSelect.ModifierRoles;
+import Commands.Servers.*;
 import Objects.DailyMessageObject;
 import Objects.GuildContentObject;
 import POGOs.*;
@@ -21,7 +41,6 @@ import java.util.Properties;
  */
 public class Globals {
 
-    public static boolean resetToDefault = true;
     public static String botName = null;
     public static String creatorID = null;
     public static String defaultPrefixCommand = null;
@@ -39,6 +58,7 @@ public class Globals {
     public static IDiscordClient client;
     public static boolean isModifingFiles = false;
     private static ArrayList<GuildContentObject> guildContentObjects = new ArrayList<>();
+    public static ArrayList<Command> commands = new ArrayList<>();
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
 
@@ -55,6 +75,114 @@ public class Globals {
         argsMax = config.argsMax;
         maxWarnings = config.maxWarnings;
         dailyMessages = config.dailyMessages;
+        initCommands();
+    }
+
+    private static void initCommands() {
+        boolean properlyInit = true;
+
+        //Admin commands
+        commands.add(new ChannelHere());
+        commands.add(new FinalTally());
+        commands.add(new GetCompEntries());
+        commands.add(new SetAdminRole());
+        commands.add(new SetMutedRole());
+        commands.add(new SetTrustedRoles());
+        commands.add(new Shutdown());
+        commands.add(new Sudo());
+        commands.add(new Toggle());
+        commands.add(new ToggleLock());
+        commands.add(new ToggleShitPost());
+        commands.add(new UpdateAvatar());
+        commands.add(new UpdateInfo());
+        //General commands
+        commands.add(new GetAvatar());
+        commands.add(new Hello());
+        commands.add(new RemindMe());
+        commands.add(new Test());
+        //Help commands
+        commands.add(new GetGuildInfo());
+        commands.add(new Help());
+        commands.add(new HelpTags());
+        commands.add(new Info());
+        commands.add(new Report());
+        commands.add(new SilentReport());
+        //RoleSelect commands
+        commands.add(new CosmeticRoles());
+        commands.add(new ModifierRoles());
+        commands.add(new ListRoles());
+        commands.add(new ListModifs());
+        //Server commands
+        commands.add(new AddServer());
+        commands.add(new DelServer());
+        commands.add(new EditServerDesc());
+        commands.add(new EditServerIP());
+        commands.add(new EditServerName());
+        commands.add(new ListServers());
+        commands.add(new Server());
+        //Character Commands
+        commands.add(new DelChar());
+        commands.add(new ListChars());
+        commands.add(new SelectChar());
+        commands.add(new UpdateChar());
+        //CC commands
+        commands.add(new DelCC());
+        commands.add(new EditCC());
+        commands.add(new GetCCData());
+        commands.add(new InfoCC());
+        commands.add(new ListCCs());
+        commands.add(new NewCC());
+        commands.add(new SearchCCs());
+        commands.add(new TransferCC());
+        //Competition commands
+        commands.add(new EnterComp());
+        commands.add(new EnterVote());
+        logger.info(commands.size() + " Commands Loaded.");
+
+        for (Command c: commands){
+            logger.debug("Initialising Command: " + c.getClass().getName());
+            if (c.names().length == 0){
+                logger.error(c.getClass().getName() + " Command Name cannot be null.");
+                properlyInit = false;
+            }
+            if (c.type() == null ||c.type().isEmpty()){
+                logger.error(c.getClass().getName() + " Command Type cannot be null.");
+                properlyInit = false;
+            }
+            if (c.description() == null || c.description().isEmpty()){
+                logger.error(c.getClass().getName() + " Command Desc cannot be null.");
+                properlyInit = false;
+            }
+            if (c.requiresArgs() && (c.usage() == null || c.usage().isEmpty())){
+                logger.error(c.getClass().getName() + " Command Usage cannot be null if RequiresArgs is true.");
+                properlyInit = false;
+            }
+            if (c.dualDescription() != null || c.dualType() != null){
+                if (c.dualType() == null || c.dualType().isEmpty()){
+                    logger.error(c.getClass().getName() + " Command Dual Type cannot be null.");
+                    properlyInit = false;
+                }
+                if (c.dualType().equalsIgnoreCase(c.type())){
+                    logger.error(c.getClass().getName() + " Command Type cannot be equal to Dual Type.");
+                    properlyInit = false;
+                }
+                if (c.dualDescription() == null || c.dualDescription().isEmpty()){
+                    logger.error(c.getClass().getName() + " Command Dual Desc cannot be null.");
+                    properlyInit = false;
+                }
+                if (c.dualDescription().equalsIgnoreCase(c.description())){
+                    logger.error(c.getClass().getName() + " Command Desc cannot be equal to Dual Desc.");
+                    properlyInit = false;
+                }
+                if (c.usage() != null && c.usage().equalsIgnoreCase(c.dualUsage())){
+                    logger.error(c.getClass().getName() + " Command Usage cannot be equal to Dual Usage.");
+                    properlyInit = false;
+                }
+            }
+        }
+        if (!properlyInit){
+            Runtime.getRuntime().exit(0);
+        }
     }
 
     public static String checkConfig() {
@@ -125,8 +253,10 @@ public class Globals {
         Servers servers = (Servers) Utility.initFile(guildID, Constants.FILE_SERVERS, Servers.class);
         Characters characters = (Characters) Utility.initFile(guildID, Constants.FILE_CHARACTERS, Characters.class);
         Competition competition = (Competition) Utility.initFile(guildID, Constants.FILE_COMPETITION, Competition.class);
+
         IGuild guild = client.getGuildByID(guildID);
         guildConfig.updateVariables(guild);
+
         GuildContentObject guildContentObject = new GuildContentObject(guildID,guildConfig,customCommands,servers,characters,competition);
         guildContentObjects.add(guildContentObject);
     }
@@ -172,5 +302,9 @@ public class Globals {
                 guildContentObjects.remove(g);
             }
         }
+    }
+
+    public static ArrayList<Command> getCommands() {
+        return commands;
     }
 }

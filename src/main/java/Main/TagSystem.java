@@ -36,6 +36,7 @@ public class TagSystem {
         response = tagRegex(response, "#replace!#(", ")#!r#", "::");
         response = tagRandNum(response);
         response = tagMentionRemover(response);
+        response = tagToCaps(response);
         return response;
     }
 
@@ -382,5 +383,33 @@ public class TagSystem {
             }
         }
         return null;
+    }
+
+    public static IUser tagUser(String args) {
+        String prefix = "#user#{";
+        String suffix = "}";
+        String contents;
+        if (args.contains(prefix)) {
+            contents = StringUtils.substringBetween(args, prefix, suffix);
+            if (contents != null) {
+                IUser user = Globals.getClient().getUserByID(contents);
+                if (user != null) {
+                    return user;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } else return null;
+    }
+
+    public static String tagToCaps(String from) {
+        String tag = "#toCaps#";
+        String toEmbed = "#embedImage#{";
+        if (from.contains(tag) && !from.contains(toEmbed)) {
+            return from.replace(tag, "").toUpperCase();
+        }
+        return from;
     }
 }

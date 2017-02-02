@@ -6,7 +6,6 @@ import Main.Utility;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,20 +28,20 @@ public class InfoHandler {
     }
 
     private void updateChannel() {
-        Utility.deleteMessage(channel.getMessages());
+        if (channel.getMessages().size() > 1) {
+            Utility.deleteMessage(channel.getMessages());
+        }
         StringBuilder builder = new StringBuilder();
         ArrayList<String> stringChunks = new ArrayList<>();
         String lastChunk;
         String nextChunk;
         String imageTag;
         String[] splited;
-        String lastAttepmt;
         String imagePrefix = "#image#{";
         String imageSuffix = "}";
         String tagBreak = "#split#";
         String image;
 
-        String[] contentsSplit;
         //prep for the everything...
         for (String s: infoContents){
             //this ignores commented out code.

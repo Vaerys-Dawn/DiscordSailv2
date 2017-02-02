@@ -1,10 +1,9 @@
 package Main;
 
-import Annotations.CommandAnnotation;
+import Commands.Command;
+import Commands.CommandObject;
 import Handlers.FileHandler;
-import Handlers.MessageHandler;
 import Objects.BlackListObject;
-import POGOs.GuildConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -71,22 +69,9 @@ public class Utility {
     }
 
     //Command Utils
-    public static String getCommandInfo(CommandAnnotation annotation, GuildConfig guildConfig) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("`" + guildConfig.getPrefixCommand() + annotation.name() + " " + annotation.usage() + "`");
-        return builder.toString();
+    public static String getCommandInfo(Command command,CommandObject commandObject) {
+        return ">> **" + commandObject.guildConfig.getPrefixCommand() + command.names()[0] + " " + command.usage() + "** <<";
     }
-
-    public static String getCommandInfo(String methodName, GuildConfig guildConfig) {
-        try {
-            Method method = MessageHandler.class.getMethod(methodName);
-            return getCommandInfo(method.getAnnotation(CommandAnnotation.class), guildConfig);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     public static String checkBlacklist(String message, ArrayList<BlackListObject> blacklist) {
         for (BlackListObject b : blacklist) {
@@ -104,10 +89,6 @@ public class Utility {
 
     public static String getFilePath(String guildID, String type, boolean isBackup) {
         return Constants.DIRECTORY_BACKUPS + guildID + "/" + type;
-    }
-
-    public static String getFilePath(String file, boolean isBackup) {
-        return Constants.DIRECTORY_BACKUPS + file;
     }
 
     public static String getDirectory(String guildID) {

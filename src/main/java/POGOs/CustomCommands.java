@@ -136,7 +136,7 @@ public class CustomCommands {
         return Constants.ERROR_CC_NOT_FOUND;
     }
 
-    public void sendCCasJSON(String channelID, String commandName) {
+    public String sendCCasJSON(String channelID, String commandName) {
         IChannel channel = Globals.getClient().getChannelByID(channelID);
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(commandName)) {
@@ -151,11 +151,11 @@ public class CustomCommands {
                     e.printStackTrace();
                 }
                 file.delete();
-                return;
+                return null;
             }
         }
         Utility.sendMessage(Constants.ERROR_CC_NOT_FOUND, channel);
-        return;
+        return null;
     }
 
     public String delCommand(String args, IUser author, IGuild guild) {

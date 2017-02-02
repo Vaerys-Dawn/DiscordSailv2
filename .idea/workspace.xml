@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/main/java/Main/Utility.java" line="174" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/java/Main/Utility.java" line="155" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/JavaDiscordSAILv2.jar" afterPath="$PROJECT_DIR$/target/JavaDiscordSAILv2.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Handlers/CCHandler.class" afterPath="$PROJECT_DIR$/target/classes/Handlers/CCHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Handlers/InfoHandler.class" afterPath="$PROJECT_DIR$/target/classes/Handlers/InfoHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Handlers/MessageHandler.class" afterPath="$PROJECT_DIR$/target/classes/Handlers/MessageHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/POGOs/CustomCommands.class" afterPath="$PROJECT_DIR$/target/classes/POGOs/CustomCommands.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/original-JavaDiscordSAILv2.jar" afterPath="$PROJECT_DIR$/target/original-JavaDiscordSAILv2.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/project.properties" afterPath="$PROJECT_DIR$/target/classes/project.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
-    </list>
+    <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="" />
     <ignored path="DiscordSailv2.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -33,6 +17,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/DiscordSailv2$Main.coverage" NAME="Main Coverage Results" MODIFIED="1485846427786" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>Handlers.*</FILTER>
+    </SUITE>
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
@@ -42,82 +31,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TagSystem.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Main/TagSystem.java">
+      <file leaf-file-name="bot.log" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Storage/bot.log">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1343">
-              <caret line="97" column="31" selection-start-line="97" selection-start-column="31" selection-end-line="97" selection-end-column="31" />
+            <state relative-caret-position="18859">
+              <caret line="1600" column="68" selection-start-line="1600" selection-start-column="68" selection-end-line="1600" selection-end-column="68" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Globals.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Main/Globals.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="691">
-              <caret line="170" column="72" selection-start-line="170" selection-start-column="72" selection-end-line="170" selection-end-column="72" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+            <state relative-caret-position="-1298">
+              <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CCHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="49" column="40" selection-start-line="49" selection-start-column="34" selection-end-line="49" selection-end-column="45" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InfoHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CustomCommands.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="309" column="56" selection-start-line="309" selection-start-column="56" selection-end-line="309" selection-end-column="56" />
-              <folding>
-                <element signature="e#5736#5737#0" expanded="true" />
-                <element signature="e#5798#5799#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Utility.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="481" column="81" selection-start-line="481" selection-start-column="81" selection-end-line="481" selection-end-column="81" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#getRoleIDFromName#0;class#Utility#0" expanded="false" />
-                <element signature="method#getDirectory#1;class#Utility#0" expanded="false" />
-                <element signature="method#formatTimeSeconds#0;class#Utility#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -125,12 +54,9 @@
       <file leaf-file-name="AnnotationListener.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="521">
-              <caret line="78" column="23" selection-start-line="78" selection-start-column="23" selection-end-line="78" selection-end-column="23" />
+            <state relative-caret-position="1003">
+              <caret line="85" column="39" selection-start-line="85" selection-start-column="39" selection-end-line="85" selection-end-column="39" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3264#3265#0" expanded="true" />
-                <element signature="e#3325#3326#0" expanded="true" />
                 <element signature="method#onChannelUpdateEvent#0;class#AnnotationListener#0" expanded="false" />
                 <element signature="method#onChannelDeleteEvent#0;class#AnnotationListener#0" expanded="false" />
               </folding>
@@ -138,47 +64,78 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
+      <file leaf-file-name="CCHandler.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="1135" column="119" selection-start-line="1135" selection-start-column="119" selection-end-line="1135" selection-end-column="119" />
+            <state relative-caret-position="460">
+              <caret line="86" column="65" selection-start-line="86" selection-start-column="65" selection-end-line="86" selection-end-column="65" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HelpTags.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Help/HelpTags.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="37">
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Status.java" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/115632b/Discord4j-115632b-sources.jar!/sx/blah/discord/handle/obj/Status.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="205">
+              <caret line="118" column="16" selection-start-line="118" selection-start-column="16" selection-end-line="118" selection-end-column="16" />
               <folding>
-                <element signature="method#checkBlacklist#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#info#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#report#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#silentReport#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#toggles#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#channelHere#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#setMutedRole#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#trustedRoles#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#updateAvatar#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#manageCosmeticRoles#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#manageModifiers#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#listRoles#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#listModifiers#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#addServer#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#editServerIP#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#editServeDesc#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#editServeName#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#listCCs#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#getCCData#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#transferCommand#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#competition#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#voting#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#finalVotes#0;class#MessageHandler#0" expanded="false" />
-                <element signature="method#getEntries#0;class#MessageHandler#0" expanded="false" />
+                <element signature="e#601#602#0" expanded="true" />
+                <element signature="e#624#625#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TimedEvents.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Main/TimedEvents.java">
+      <file leaf-file-name="logback.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/logback.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1006">
-              <caret line="225" column="13" selection-start-line="225" selection-start-column="13" selection-end-line="225" selection-end-column="13" />
+            <state relative-caret-position="283">
+              <caret line="27" column="43" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="43" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1819">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TagSystem.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Main/TagSystem.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="448">
+              <caret line="408" column="41" selection-start-line="408" selection-start-column="41" selection-end-line="408" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Sudo.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Admin/Sudo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="27" column="73" selection-start-line="27" selection-start-column="73" selection-end-line="27" selection-end-column="73" />
+              <folding>
+                <element signature="e#1428#1429#0" expanded="true" />
+                <element signature="e#1514#1515#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -188,8 +145,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="AnnotationType" />
+        <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -204,57 +162,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Storage/176434793674833920/Competition.json" />
-        <option value="$PROJECT_DIR$/src/main/java/Handlers/DMHandler.java" />
-        <option value="$PROJECT_DIR$/Storage/201576777477390336/Custom_Commands.json" />
-        <option value="$PROJECT_DIR$/src/main/java/Handlers/RSSHANDLER.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Objects/RSSObject.java" />
-        <option value="$PROJECT_DIR$/src/main/java/POGOs/RSSFeed.java" />
-        <option value="$PROJECT_DIR$/Storage/176434793674833920/Servers.json" />
-        <option value="$PROJECT_DIR$/Storage/176434793674833920/Info.txt" />
-        <option value="$PROJECT_DIR$/Storage/176434793674833920/Characters.json" />
-        <option value="$PROJECT_DIR$/Storage/258739122263425024/Guild_Config.json" />
-        <option value="$PROJECT_DIR$/src/main/java/Handlers/FileHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/Bot.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/POGOs/Characters.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Annotations/CommandAnnotation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Handlers/RSSHandler.java" />
-        <option value="$PROJECT_DIR$/Storage/254790152851816458/Characters.json" />
-        <option value="$PROJECT_DIR$/src/main/java/POGOs/Globals.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Handlers/TimerTaskExtended.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Objects/DailyMessageObject.java" />
-        <option value="$PROJECT_DIR$/Storage/Token.txt" />
-        <option value="$PROJECT_DIR$/src/main/java/Objects/ConfigObject.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Main/Config.java" />
-        <option value="$PROJECT_DIR$/src/main/java/POGOs/Config.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Main/Constants.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Annotations/DualCommandAnnotation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Objects/GetFirstObject.java" />
-        <option value="$PROJECT_DIR$/Storage/254790152851816458/Guild_Config.json" />
-        <option value="$PROJECT_DIR$/src/main/java/Objects/SplitFirstObject.java" />
-        <option value="$PROJECT_DIR$/Storage/254790152851816458/Custom_Commands.json" />
-        <option value="$PROJECT_DIR$/Storage/bot.log" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Characters/SelectChar.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Characters/ListChars.java" />
         <option value="$PROJECT_DIR$/src/main/java/Main/Main.java" />
-        <option value="$PROJECT_DIR$/Storage/176434793674833920/Guild_Config.json" />
-        <option value="$PROJECT_DIR$/Storage/Config.json" />
-        <option value="$PROJECT_DIR$/target/classes/logback.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/Annotations/EditModeAnnotation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Objects/CCommandObject.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BadCode/CustomCommands.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/logback.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/Objects/GuildContentObject.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/project.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Main/TagSystem.java" />
-        <option value="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Main/Globals.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/CC/DelCC.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/CC/ListCCs.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/CC/SearchCCs.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/CC/InfoCC.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/CC/HelpTags.java" />
         <option value="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/CC/GetCCData.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Help/HelpTags.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Objects/ReminderObject.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Competition/EnterComp.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Competition/EnterVote.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Admin/FinalTally.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Admin/GetCompEntries.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Admin/SetTrustedRoles.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Admin/Toggle.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/CC/EditCC.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/General/Test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Servers/ListServers.java" />
+        <option value="$PROJECT_DIR$/Storage/176434793674833920/Custom_Commands.json" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/CC/TransferCC.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/General/RemindMe.java" />
+        <option value="$PROJECT_DIR$/Storage/254790152851816458/Guild_Config.json" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Help/Info.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/RoleSelect/ListModifs.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Help/SilentReport.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Help/Report.java" />
+        <option value="$PROJECT_DIR$/src/main/java/POGOs/Servers.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Admin/UpdateAvatar.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Admin/Shutdown.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Command.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Admin/ChannelHere.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Admin/UpdateInfo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/CC/NewCC.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Main/Constants.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Annotations/CommandAnnotation.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Main/Globals.java" />
+        <option value="$PROJECT_DIR$/Storage/Token.txt" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Help/Help.java" />
+        <option value="$PROJECT_DIR$/Storage/bot.log" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/logback.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Main/TagSystem.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Admin/Sudo.java" />
         <option value="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java" />
       </list>
     </option>
   </component>
@@ -326,9 +284,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane />
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -393,24 +348,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Storage" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="176434793674833920" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DiscordSailv2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DiscordSailv2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -430,6 +367,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -452,36 +393,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="POGOs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DiscordSailv2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DiscordSailv2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Objects" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -533,32 +444,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Listeners" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DiscordSailv2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DiscordSailv2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="Handlers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -584,11 +469,18 @@
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Commands" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="Scope">
         <subPane subId="Project Files" />
+      </pane>
+      <pane id="PackagesPane">
+        <subPane />
       </pane>
       <pane id="Scratches" />
     </panes>
@@ -623,10 +515,12 @@
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="discordsailv2" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="Objects" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Repositories\DiscordSailv2\Storage\176434793674833920" />
+      <recent name="E:\Repositories\DiscordSailv2\Storage\Images" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="Commands" />
       <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -639,9 +533,12 @@
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\Repositories\DiscordSailv2\Storage\176434793674833920" />
-      <recent name="E:\Repositories\DiscordSailv2\Storage\Images" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="Commands.Servers" />
+      <recent name="Commands.RoleSelect" />
+      <recent name="Commands.Admin" />
+      <recent name="Commands" />
+      <recent name="Objects" />
     </key>
   </component>
   <component name="RunManager" selected="Maven.build">
@@ -1016,32 +913,33 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24675325" sideWeight="0.49676377" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36078006" sideWeight="0.4935275" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34019503" sideWeight="0.5074627" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33090615" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25568798" sideWeight="0.5117271" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3304904" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32871974" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3217768" sideWeight="0.49253732" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35861322" sideWeight="0.48827294" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32871974" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.195629" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20628998" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.219935" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3954496" sideWeight="0.49200428" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22426869" sideWeight="0.4935275" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="true" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.40800866" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1060,25 +958,19 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java</url>
-          <line>207</line>
-          <properties />
-          <option name="timeStamp" value="466" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java</url>
-          <line>161</line>
-          <properties />
-          <option name="timeStamp" value="467" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main/Utility.java</url>
-          <line>490</line>
+          <line>471</line>
           <properties />
           <option name="timeStamp" value="493" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Commands/Admin/Sudo.java</url>
+          <line>27</line>
+          <properties />
+          <option name="timeStamp" value="535" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="494" />
+      <option name="time" value="536" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -1098,401 +990,91 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/d23849a/Discord4j-d23849a-sources.jar!/sx/blah/discord/api/internal/json/objects/EmbedObject.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/2426fff/Discord4j-2426fff-shaded.jar!/sx/blah/discord/api/DiscordStatus.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="300" column="22" selection-start-line="300" selection-start-column="22" selection-end-line="300" selection-end-column="22" />
+        <state relative-caret-position="-652">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/d23849a/Discord4j-d23849a-sources.jar!/sx/blah/discord/util/RequestBuffer.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/2426fff/Discord4j-2426fff-shaded.jar!/sx/blah/discord/Discord4J.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+        <state relative-caret-position="246">
+          <caret line="125" column="23" selection-start-line="125" selection-start-column="23" selection-end-line="125" selection-end-column="23" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/d23849a/Discord4j-d23849a-shaded.jar!/com/google/gson/internal/ConstructorConstructor.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/d23849a/Discord4j-d23849a-shaded.jar!/com/google/gson/internal/bind/TypeAdapters.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="144" column="0" selection-start-line="144" selection-start-column="0" selection-end-line="144" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/d23849a/Discord4j-d23849a-shaded.jar!/com/google/gson/TypeAdapter.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/d23849a/Discord4j-d23849a-shaded.jar!/com/google/gson/Gson.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="160" column="92" selection-start-line="160" selection-start-column="92" selection-end-line="160" selection-end-column="92" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/d23849a/Discord4j-d23849a-shaded.jar!/com/google/gson/GsonBuilder.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="220" column="0" selection-start-line="220" selection-start-column="0" selection-end-line="220" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Main/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1496">
-          <caret line="88" column="66" selection-start-line="88" selection-start-column="66" selection-end-line="88" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Storage/Backups/Config.json1">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Objects/SplitFirstObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="27" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/Servers.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/Config.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
-          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Storage/254790152851816458/Guild_Config.json">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/2426fff/Discord4j-2426fff-shaded.jar!/sx/blah/discord/api/IDiscordClient.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+        <state relative-caret-position="178">
+          <caret line="62" column="9" selection-start-line="62" selection-start-column="9" selection-end-line="62" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/Characters.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/Competition.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-691">
-          <caret line="39" column="34" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Storage/bot.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Storage/bot.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-142471">
-          <caret line="183" column="0" selection-start-line="183" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Storage/176434793674833920/Guild_Config.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="32" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/target/classes/project.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Storage/Images/Avatar_For_SATURDAY.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Storage/Config.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="25" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/target/classes/logback.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Annotations/TagAnnotation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="12" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Annotations/EditModeAnnotation.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/FileHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
-          <caret line="119" column="23" selection-start-line="119" selection-start-column="23" selection-end-line="119" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/f2432ef/Discord4j-f2432ef-shaded.jar!/sx/blah/discord/handle/obj/IChannel.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="60" column="13" selection-start-line="60" selection-start-column="13" selection-end-line="60" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Annotations/AliasAnnotation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="18" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BadCode/Characters.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BadCode/CustomCommands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="7" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Objects/RoleStatsObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/f2432ef/Discord4j-f2432ef-shaded.jar!/org/apache/commons/lang3/StringUtils.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="35207">
-          <caret line="2150" column="22" selection-start-line="2150" selection-start-column="22" selection-end-line="2150" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/logback.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://E:/Program Files/Java/Jdk1.8.0_91/src.zip!/java/net/URLClassLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="333" column="0" selection-start-line="333" selection-start-column="0" selection-end-line="333" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Objects/GuildContentObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="12" column="10" selection-start-line="12" selection-start-column="10" selection-end-line="12" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Objects/CCommandObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Main/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-238">
-          <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://E:/Program Files/Java/Jdk1.8.0_91/src.zip!/java/lang/Thread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11679">
-          <caret line="744" column="0" selection-start-line="744" selection-start-column="0" selection-end-line="744" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/115632b/Discord4j-115632b-sources.jar!/sx/blah/discord/handle/obj/IChannel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2159">
-          <caret line="136" column="13" selection-start-line="136" selection-start-column="13" selection-end-line="136" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/project.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="26" />
+        <state relative-caret-position="142">
+          <caret line="92" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Storage/254790152851816458/Custom_Commands.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1411">
-          <caret line="83" column="7" selection-start-line="83" selection-start-column="6" selection-end-line="83" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Storage/254790152851816458/Competition.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state relative-caret-position="-51">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java">
+    <entry file="file://$PROJECT_DIR$/Storage/Backups/176434793674833920/Custom_Commands.json1">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="604">
-          <caret line="299" column="31" selection-start-line="299" selection-start-column="31" selection-end-line="299" selection-end-column="31" />
-          <folding />
+        <state relative-caret-position="-28351">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java">
+    <entry file="file://$PROJECT_DIR$/Storage/Backups/176434793674833920/Custom_Commands.json2">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="521">
-          <caret line="78" column="23" selection-start-line="78" selection-start-column="23" selection-end-line="78" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3264#3265#0" expanded="true" />
-            <element signature="e#3325#3326#0" expanded="true" />
-            <element signature="method#onChannelUpdateEvent#0;class#AnnotationListener#0" expanded="false" />
-            <element signature="method#onChannelDeleteEvent#0;class#AnnotationListener#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="-46762">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Main/Globals.java">
+    <entry file="file://$PROJECT_DIR$/Storage/Backups/176434793674833920/Custom_Commands.json3">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="691">
-          <caret line="170" column="72" selection-start-line="170" selection-start-column="72" selection-end-line="170" selection-end-column="72" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="-35100">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Main/TimedEvents.java">
+    <entry file="file://$PROJECT_DIR$/Storage/Backups/160341443729162242/Custom_Commands.json3">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1006">
-          <caret line="225" column="13" selection-start-line="225" selection-start-column="13" selection-end-line="225" selection-end-column="13" />
-          <folding />
+        <state relative-caret-position="274">
+          <caret line="45" column="4" selection-start-line="45" selection-start-column="4" selection-end-line="56" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java">
+    <entry file="file://$PROJECT_DIR$/Storage/176434793674833920/Custom_Commands.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="49" column="40" selection-start-line="49" selection-start-column="34" selection-end-line="49" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="309" column="56" selection-start-line="309" selection-start-column="56" selection-end-line="309" selection-end-column="56" />
-          <folding>
-            <element signature="e#5736#5737#0" expanded="true" />
-            <element signature="e#5798#5799#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="1135" column="119" selection-start-line="1135" selection-start-column="119" selection-end-line="1135" selection-end-column="119" />
-          <folding>
-            <element signature="method#checkBlacklist#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#info#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#report#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#silentReport#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#toggles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#channelHere#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#setMutedRole#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#trustedRoles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#updateAvatar#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#manageCosmeticRoles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#manageModifiers#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#listRoles#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#listModifiers#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#addServer#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#editServerIP#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#editServeDesc#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#editServeName#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#listCCs#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#getCCData#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#transferCommand#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#competition#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#voting#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#finalVotes#0;class#MessageHandler#0" expanded="false" />
-            <element signature="method#getEntries#0;class#MessageHandler#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Main/TagSystem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1343">
-          <caret line="97" column="31" selection-start-line="97" selection-start-column="31" selection-end-line="97" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
-          <folding />
+        <state relative-caret-position="285">
+          <caret line="2271" column="5" selection-start-line="2271" selection-start-column="5" selection-end-line="2271" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="481" column="81" selection-start-line="481" selection-start-column="81" selection-end-line="481" selection-end-column="81" />
+        <state relative-caret-position="414">
+          <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
             <element signature="method#getRoleIDFromName#0;class#Utility#0" expanded="false" />
             <element signature="method#getDirectory#1;class#Utility#0" expanded="false" />
             <element signature="method#formatTimeSeconds#0;class#Utility#0" expanded="false" />
@@ -1500,10 +1082,334 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="file://$PROJECT_DIR$/Storage/bot.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/CC/TransferCC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="58" column="9" selection-start-line="58" selection-start-column="9" selection-end-line="58" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/General/RemindMe.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="479">
+          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Storage/254790152851816458/Guild_Config.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="36" column="6" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/General/GetAvatar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="30" column="51" selection-start-line="30" selection-start-column="50" selection-end-line="30" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/RoleSelect/ListModifs.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Help/SilentReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="16" column="20" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Help/Report.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="30" column="84" selection-start-line="30" selection-start-column="84" selection-end-line="30" selection-end-column="84" />
+          <folding>
+            <element signature="e#385#386#0" expanded="false" />
+            <element signature="e#436#437#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/CommandObject.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Servers/EditServerIP.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Servers/AddServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="23" column="35" selection-start-line="23" selection-start-column="35" selection-end-line="23" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/Servers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="644">
+          <caret line="80" column="21" selection-start-line="80" selection-start-column="21" selection-end-line="80" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Admin/Toggle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="52" column="84" selection-start-line="52" selection-start-column="84" selection-end-line="52" selection-end-column="84" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Admin/UpdateAvatar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="47" column="57" selection-start-line="47" selection-start-column="57" selection-end-line="47" selection-end-column="57" />
+          <folding>
+            <element signature="e#1503#1504#0" expanded="false" />
+            <element signature="e#1568#1569#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Admin/Shutdown.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="39" column="57" selection-start-line="39" selection-start-column="57" selection-end-line="39" selection-end-column="57" />
+          <folding>
+            <element signature="e#1070#1071#0" expanded="false" />
+            <element signature="e#1135#1136#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Main/TimedEvents.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1479">
+          <caret line="106" column="61" selection-start-line="106" selection-start-column="61" selection-end-line="106" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Admin/ChannelHere.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="32" column="34" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/CC/NewCC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="18" column="82" selection-start-line="18" selection-start-column="82" selection-end-line="18" selection-end-column="82" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Command.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Main/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Annotations/CommandAnnotation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Admin/UpdateInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="14" column="56" selection-start-line="14" selection-start-column="56" selection-end-line="14" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Competition/EnterComp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Competition/EnterVote.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Main/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Main/Globals.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2384">
+          <caret line="86" column="41" selection-start-line="86" selection-start-column="41" selection-end-line="86" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Storage/Token.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="59" selection-start-line="0" selection-start-column="59" selection-end-line="0" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Help/Info.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="79" column="73" selection-start-line="79" selection-start-column="73" selection-end-line="79" selection-end-column="73" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Help/Help.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="137">
+          <caret line="69" column="47" selection-start-line="69" selection-start-column="47" selection-end-line="69" selection-end-column="47" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Storage/bot.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18859">
+          <caret line="1600" column="68" selection-start-line="1600" selection-start-column="68" selection-end-line="1600" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/115632b/Discord4j-115632b-sources.jar!/sx/blah/discord/handle/obj/Status.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="118" column="16" selection-start-line="118" selection-start-column="16" selection-end-line="118" selection-end-column="16" />
+          <folding>
+            <element signature="e#601#602#0" expanded="true" />
+            <element signature="e#624#625#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1003">
+          <caret line="85" column="39" selection-start-line="85" selection-start-column="39" selection-end-line="85" selection-end-column="39" />
+          <folding>
+            <element signature="method#onChannelUpdateEvent#0;class#AnnotationListener#0" expanded="false" />
+            <element signature="method#onChannelDeleteEvent#0;class#AnnotationListener#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Help/HelpTags.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="37">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/logback.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="27" column="43" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1298">
+          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="86" column="65" selection-start-line="86" selection-start-column="65" selection-end-line="86" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Main/TagSystem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="448">
+          <caret line="408" column="41" selection-start-line="408" selection-start-column="41" selection-end-line="408" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Admin/Sudo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="27" column="73" selection-start-line="27" selection-start-column="73" selection-end-line="27" selection-end-column="73" />
+          <folding>
+            <element signature="e#1428#1429#0" expanded="true" />
+            <element signature="e#1514#1515#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1819">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
         </state>
       </provider>

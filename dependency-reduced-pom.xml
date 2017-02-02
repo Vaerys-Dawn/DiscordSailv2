@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.vaerys</groupId>
   <artifactId>DiscordSAIL</artifactId>
-  <version>2.2.5</version>
+  <version>2.3.0</version>
   <build>
     <resources>
       <resource>

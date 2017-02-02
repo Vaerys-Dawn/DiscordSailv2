@@ -5,7 +5,6 @@ package Objects;
  */
 public class ReminderObject {
     String userID;
-    String guildID;
     String channelID;
     String message;
     long timeMins;
