@@ -5,84 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/Vaerys.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_vdurmont_emoji_java_3_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/Admin/UpdateRolePerms.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/DMCommand.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/DMCommandObject.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/DMCommands/HelpDM.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/DMCommands/InfoDM.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/DMCommands/Respond.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/POGOs/GuildUsers.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/Commands/Admin/ToggleLock.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/Commands/Admin/ToggleShitPost.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/Commands/Admin/ToggleLock.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/Commands/Admin/ToggleShitPost.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/Admin/ChannelHere.class" afterPath="$PROJECT_DIR$/target/classes/Commands/Admin/ChannelHere.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/Admin/FinalTally.class" afterPath="$PROJECT_DIR$/target/classes/Commands/Admin/FinalTally.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/Admin/Toggle.class" afterPath="$PROJECT_DIR$/target/classes/Commands/Admin/Toggle.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/CC/EditCC.class" afterPath="$PROJECT_DIR$/target/classes/Commands/CC/EditCC.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/CC/InfoCC.class" afterPath="$PROJECT_DIR$/target/classes/Commands/CC/InfoCC.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/CC/ListCCs.class" afterPath="$PROJECT_DIR$/target/classes/Commands/CC/ListCCs.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/CC/SearchCCs.class" afterPath="$PROJECT_DIR$/target/classes/Commands/CC/SearchCCs.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/General/Test.class" afterPath="$PROJECT_DIR$/target/classes/Commands/General/Test.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/Help/Help.class" afterPath="$PROJECT_DIR$/target/classes/Commands/Help/Help.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/Help/Info.class" afterPath="$PROJECT_DIR$/target/classes/Commands/Help/Info.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/Help/Report.class" afterPath="$PROJECT_DIR$/target/classes/Commands/Help/Report.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/RoleSelect/CosmeticRoles.class" afterPath="$PROJECT_DIR$/target/classes/Commands/RoleSelect/CosmeticRoles.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/RoleSelect/ListModifs.class" afterPath="$PROJECT_DIR$/target/classes/Commands/RoleSelect/ListModifs.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/RoleSelect/ListRoles.class" afterPath="$PROJECT_DIR$/target/classes/Commands/RoleSelect/ListRoles.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Commands/RoleSelect/ModifierRoles.class" afterPath="$PROJECT_DIR$/target/classes/Commands/RoleSelect/ModifierRoles.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Handlers/CCHandler.class" afterPath="$PROJECT_DIR$/target/classes/Handlers/CCHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Handlers/DMHandler.class" afterPath="$PROJECT_DIR$/target/classes/Handlers/DMHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Handlers/MessageHandler.class" afterPath="$PROJECT_DIR$/target/classes/Handlers/MessageHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Listeners/AnnotationListener.class" afterPath="$PROJECT_DIR$/target/classes/Listeners/AnnotationListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/Globals.class" afterPath="$PROJECT_DIR$/target/classes/Main/Globals.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Main/Utility.class" afterPath="$PROJECT_DIR$/target/classes/Main/Utility.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Objects/CCommandObject.class" afterPath="$PROJECT_DIR$/target/classes/Objects/CCommandObject.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Objects/OffenderObject.class" afterPath="$PROJECT_DIR$/target/classes/Objects/OffenderObject.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Objects/SplitFirstObject.class" afterPath="$PROJECT_DIR$/target/classes/Objects/SplitFirstObject.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Objects/UserTypeObject.class" afterPath="$PROJECT_DIR$/target/classes/Objects/UserTypeObject.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/POGOs/CustomCommands.class" afterPath="$PROJECT_DIR$/target/classes/POGOs/CustomCommands.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/POGOs/GuildConfig.class" afterPath="$PROJECT_DIR$/target/classes/POGOs/GuildConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DiscordSAIL.iml" afterPath="$PROJECT_DIR$/DiscordSAIL.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Admin/ChannelHere.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Admin/ChannelHere.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Admin/FinalTally.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Admin/FinalTally.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Admin/Toggle.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Admin/Toggle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/CC/EditCC.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/CC/EditCC.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/CC/InfoCC.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/CC/InfoCC.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/CC/ListCCs.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/CC/ListCCs.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/CC/SearchCCs.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/CC/SearchCCs.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Characters/ListChars.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Characters/ListChars.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/General/Test.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/General/Test.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Help/Help.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Help/Help.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Help/Info.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Help/Info.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Help/Report.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Help/Report.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/RoleSelect/CosmeticRoles.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/RoleSelect/CosmeticRoles.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/RoleSelect/ListModifs.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/RoleSelect/ListModifs.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/RoleSelect/ListRoles.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/RoleSelect/ListRoles.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/RoleSelect/ModifierRoles.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/RoleSelect/ModifierRoles.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Servers/ListServers.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Servers/ListServers.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/CCHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/DMHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/DMHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" afterPath="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/Globals.java" afterPath="$PROJECT_DIR$/src/main/java/Main/Globals.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/Utility.java" afterPath="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Objects/CCommandObject.java" afterPath="$PROJECT_DIR$/src/main/java/Objects/CCommandObject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Objects/OffenderObject.java" afterPath="$PROJECT_DIR$/src/main/java/Objects/OffenderObject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Objects/SplitFirstObject.java" afterPath="$PROJECT_DIR$/src/main/java/Objects/SplitFirstObject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Objects/UserTypeObject.java" afterPath="$PROJECT_DIR$/src/main/java/Objects/UserTypeObject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/Characters.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/Characters.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/CustomCommands.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/Servers.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/Servers.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/logback.xml" afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/logback.xml" afterPath="$PROJECT_DIR$/target/classes/logback.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/project.properties" afterPath="$PROJECT_DIR$/target/classes/project.properties" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_austinv11_Discord4j_shaded_115632b.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_austinv11_Discord4j_shaded_5d4c4db.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" />
     </list>
     <ignored path="DiscordSailv2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -798,7 +721,7 @@
       <recent name="Commands.Admin" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Maven.build">
     <configuration default="false" name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -1181,7 +1104,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25568798" sideWeight="0.5117271" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3304904" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32871974" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3347779" sideWeight="0.48827294" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3347779" sideWeight="0.48827294" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32871974" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
