@@ -57,12 +57,12 @@ public class CCommandObject {
         return timesRun;
     }
 
-    public void toggleShitPost(){
-        shitPost = !shitPost;
+    public boolean toggleShitPost(){
+        return shitPost = !shitPost;
     }
 
-    public void toggleLocked() {
-        isLocked = !isLocked();
+    public boolean toggleLocked() {
+        return isLocked = !isLocked();
     }
 
     public boolean isShitPost() {

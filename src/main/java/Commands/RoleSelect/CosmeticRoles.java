@@ -84,13 +84,6 @@ public class CosmeticRoles implements Command {
     public String[] names() {
         return new String[]{"Role"};
     }
-    /*
-    @DualCommandAnnotation(description = "Used to manage the selectable cosmetic roles.", usage = " +/-/add/del [Role Name]",
-            type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_ROLES})
-    @CommandAnnotation(
-            name = "Role", description = "Sets your cosmetic role from the list of cosmetic roles.", usage = "[Role Name]/Remove",
-            type = Constants.TYPE_ROLE_SELECT, channel = Constants.CHANNEL_BOT_COMMANDS, requiresArgs = true)
-     */
 
     @Override
     public String description() {

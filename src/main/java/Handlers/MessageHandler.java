@@ -26,7 +26,6 @@ import java.util.ArrayList;
  */
 
 
-
 @SuppressWarnings({"unused", "StringConcatenationInsideStringBufferAppend"})
 public class MessageHandler {
 
@@ -50,11 +49,71 @@ public class MessageHandler {
             return;
         }
         if (command.toLowerCase().startsWith(commandObject.guildConfig.getPrefixCommand().toLowerCase())) {
-            handleCommand(commandObject,command,args);
+            handleCommand(commandObject, command, args);
+            return;
         }
         if (command.toLowerCase().startsWith(commandObject.guildConfig.getPrefixCC().toLowerCase())) {
             new CCHandler(command, args, commandObject);
+            return;
         }
+    }
+
+    //Command Handler
+    private void handleCommand(CommandObject commandObject, String command, String args) {
+        IChannel channel = commandObject.channel;
+        GuildConfig guildConfig = commandObject.guildConfig;
+        ArrayList<Command> commands = Globals.getCommands();
+        IDiscordClient client = commandObject.client;
+        for (Command c : commands) {
+            for (String name : c.names()) {
+                if (command.equalsIgnoreCase(guildConfig.getPrefixCommand() + name)) {
+                    //command logging
+                    logger.debug(Utility.loggingFormatter("COMMAND",command,args,commandObject));
+
+                    if (c.requiresArgs() && args.isEmpty()) {
+                        Utility.sendMessage(Utility.getCommandInfo(c, commandObject), channel);
+                        return;
+                    }
+                    if (c.channel() != null && !Utility.canBypass(commandObject.author, commandObject.guild)) {
+                        IChannel correctChannel = client.getChannelByID(guildConfig.getChannelTypeID(c.channel()));
+                        if (correctChannel != null) {
+                            if (!channel.getID().equals(guildConfig.getChannelTypeID(c.channel()))) {
+                                Utility.sendMessage("> Command must be performed in: " + correctChannel.mention(), channel);
+                                return;
+                            }
+                        }
+                    }
+                    if (c.perms().length != 0 && !Utility.canBypass(commandObject.author, commandObject.guild)) {
+                        if (!Utility.testForPerms(c.perms(), commandObject.author, commandObject.guild)) {
+                            Utility.sendMessage(commandObject.notAllowed, channel);
+                            return;
+                        }
+                    }
+                    if (c.doAdminLogging()) {
+                        if (guildConfig.doAdminLogging()) {
+                            IChannel logging = client.getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_ADMIN_LOG));
+                            handleLogging(logging, commandObject, args, c);
+                        }
+                    } else {
+                        if (guildConfig.doGeneralLogging()) {
+                            IChannel logging = client.getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG));
+                            handleLogging(logging, commandObject, args, c);
+                        }
+                    }
+                    Utility.sendMessage(c.execute(args, commandObject), channel);
+                }
+            }
+        }
+    }
+
+    private void handleLogging(IChannel loggingChannel, CommandObject commandObject, String args, Command command) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("> **@" + commandObject.authorUserName + "** Has Used Command `" + command.names()[0] + "`");
+        if (!args.isEmpty()) {
+            builder.append(" with args: `" + args + "`");
+        }
+        builder.append(" in channel " + commandObject.channel.mention() + " .");
+        Utility.sendMessage(builder.toString(), loggingChannel);
     }
 
     private void checkMentionCount(CommandObject command) {
@@ -139,60 +198,5 @@ public class MessageHandler {
                 }
             }
         }
-    }
-
-    //Command Handler
-    private void handleCommand(CommandObject commandObject, String command, String args) {
-        IChannel channel = commandObject.channel;
-        GuildConfig guildConfig = commandObject.guildConfig;
-        ArrayList<Command> commands = Globals.getCommands();
-        IDiscordClient client = commandObject.client;
-        for (Command c: commands){
-            for (String name: c.names()){
-                if (command.equalsIgnoreCase(guildConfig.getPrefixCommand() + name)){
-                    if (c.requiresArgs() && args.isEmpty()){
-                        Utility.sendMessage(Utility.getCommandInfo(c,commandObject),channel);
-                        return;
-                    }
-                    if (c.channel() != null && !Utility.canBypass(commandObject.author,commandObject.guild)){
-                        IChannel correctChannel = client.getChannelByID(guildConfig.getChannelTypeID(c.channel()));
-                        if (correctChannel != null) {
-                            if (!channel.getID().equals(guildConfig.getChannelTypeID(c.channel()))) {
-                                Utility.sendMessage("> Command must be performed in: " + correctChannel.mention(), channel);
-                                return;
-                            }
-                        }
-                    }
-                    if (c.perms().length != 0 && !Utility.canBypass(commandObject.author,commandObject.guild)){
-                        if (!Utility.testForPerms(c.perms(),commandObject.author,commandObject.guild)){
-                            Utility.sendMessage(commandObject.notAllowed,channel);
-                            return;
-                        }
-                    }
-                    if(c.doAdminLogging()){
-                        if (guildConfig.doAdminLogging()) {
-                            IChannel logging = client.getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_ADMIN_LOG));
-                            handleLogging(logging,commandObject,args,c);
-                        }
-                    }else {
-                        if (guildConfig.doGeneralLogging()){
-                            IChannel logging = client.getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG));
-                            handleLogging(logging,commandObject,args,c);
-                        }
-                    }
-                    Utility.sendMessage(c.execute(args,commandObject),channel);
-                }
-            }
-        }
-    }
-
-    private void handleLogging(IChannel loggingChannel, CommandObject commandObject,String args, Command command) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("> **@" + commandObject.authorUserName + "** Has Used Command `" + command.names()[0] + "`");
-        if (!args.isEmpty()) {
-            builder.append(" with args: `" + args + "`");
-        }
-        builder.append(" in channel " + commandObject.channel.mention() + " .");
-        Utility.sendMessage(builder.toString(), loggingChannel);
     }
 }

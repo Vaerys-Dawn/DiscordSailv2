@@ -29,7 +29,7 @@
         </triggeringPolicy>
     </appender>
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
         <!-- Uncomment the next line to also log to a file -->
          <appender-ref ref="FILE"/>

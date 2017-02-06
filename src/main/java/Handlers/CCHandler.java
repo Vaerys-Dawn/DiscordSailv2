@@ -9,6 +9,8 @@ import Objects.CCommandObject;
 import POGOs.CustomCommands;
 import POGOs.GuildConfig;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
@@ -28,14 +30,17 @@ public class CCHandler {
     private IUser author;
     private IChannel channel;
     private String guildID;
-
+    private CommandObject commandObject;
     CustomCommands customCommands;
     GuildConfig guildConfig;
+
+    private final static Logger logger = LoggerFactory.getLogger(CCHandler.class);
 
     public CCHandler(String command, String args, CommandObject commandObject) {
         this.message = commandObject.message;
         this.command = command;
         this.args = args;
+        this.commandObject = commandObject;
         guild = message.getGuild();
         channel = message.getChannel();
         author = message.getAuthor();
@@ -51,6 +56,10 @@ public class CCHandler {
         String tagDeleteMessage = "#delCall#";
         for (CCommandObject cc : customCommands.getCommandList()) {
             if (command.equalsIgnoreCase(guildConfig.getPrefixCC() + cc.getName())) {
+
+                //command logging
+                logger.debug(Utility.loggingFormatter("CUSTOM_COMMAND",command,args,commandObject));
+
                 if (Utility.canBypass(author, guild)) ;
                 else if (cc.isShitPost() && guildConfig.doShitPostFiltering()) {
                     if (guildConfig.getChannelTypeID(Command.CHANNEL_SHITPOST) != null) {
@@ -70,22 +79,22 @@ public class CCHandler {
                     }
                 }
                 response = TagSystem.tagSystem(response, message, args);
-                response = response.replace("#DELCALL#","#delCall#");
-                response = response.replace("#EMBEDIMAGE#","#embedImage#");
+                response = response.replace("#DELCALL#", "#delCall#");
+                response = response.replace("#EMBEDIMAGE#", "#embedImage#");
                 if (customCommands.checkblackList(response) != null) {
                     Utility.sendMessage(customCommands.checkblackList(response), channel);
                     return;
                 }
-                if (response.contains(tagDeleteMessage)){
-                    response = response.replace(tagDeleteMessage,"");
+                if (response.contains(tagDeleteMessage)) {
+                    response = response.replace(tagDeleteMessage, "");
                     Utility.deleteMessage(message);
                 }
-                if (response.contains("#embedImage#{")){
-                    String imageURL = TagSystem.tagEmbedImage(response,prefixEmbedImage);
-                    if (imageURL != null ||!imageURL.isEmpty()){
+                if (response.contains("#embedImage#{")) {
+                    String imageURL = TagSystem.tagEmbedImage(response, prefixEmbedImage);
+                    if (imageURL != null || !imageURL.isEmpty()) {
                         response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "");
                         response = TagSystem.tagToCaps(response);
-                        Utility.sendFile(response,imageURL,channel);
+                        Utility.sendFile(response, imageURL, channel);
                         return;
                     }
                 }

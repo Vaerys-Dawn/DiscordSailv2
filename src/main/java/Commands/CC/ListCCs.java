@@ -4,12 +4,20 @@ import Commands.Command;
 import Commands.CommandObject;
 import Main.Constants;
 import Main.Globals;
+import Main.Utility;
+import Objects.CCommandObject;
 import POGOs.CustomCommands;
 import POGOs.GuildConfig;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
+import static Main.Globals.commands;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -18,15 +26,12 @@ public class ListCCs implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         IMessage message = command.message;
-        CustomCommands customCommands = command.customCommands;
-        IGuild guild = command.guild;
-        GuildConfig guildConfig = command.guildConfig;
         if (message.getMentions().size() > 0) {
-            return customCommands.getUserCommands(message.getMentions().get(0).getID(), guild, guildConfig);
+            return getUserCommands(command, command.message.getMentions().get(0).getID());
         }
         IUser mentionedUser = Globals.getClient().getUserByID(args);
         if (mentionedUser != null) {
-            return customCommands.getUserCommands(mentionedUser.getID(), guild, guildConfig);
+            return getUserCommands(command, mentionedUser.getID());
         }
         try {
             int page;
@@ -35,10 +40,59 @@ public class ListCCs implements Command {
             } else {
                 page = Integer.parseInt(args.split(" ")[0]);
             }
-            return customCommands.listCommands(page, guildConfig);
+            return listCommands(page, command);
         } catch (NumberFormatException e) {
             return "> what are you doing, why are you trying to search for the " + args + " page... \n" +
                     Constants.PREFIX_INDENT + "pretty sure you cant do that...";
+        }
+    }
+
+    public String getUserCommands(CommandObject command, String userID) {
+        IUser user = Globals.getClient().getUserByID(userID);
+        int total = 0;
+        int max = command.customCommands.maxCCs(user, command.guild, command.guildConfig);
+        EmbedBuilder builder = new EmbedBuilder();
+        String title = "> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.";
+        ArrayList<String> list = new ArrayList<>();
+        for (CCommandObject c: command.customCommands.getCommandList()){
+            if (c.getUserID().equals(userID)){
+                list.add(command.guildConfig.getPrefixCC() + c.getName());
+                total ++;
+            }
+        }
+        Utility.listFormatterEmbed(title,builder,list,true);
+        builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
+        builder.withFooterText("Total Custom commands: " + total + "/" + max + ".");
+        Utility.sendEmbededMessage("", builder.build(), command.channel);
+        return null;
+    }
+
+    public String listCommands(int page, CommandObject command) {
+        ArrayList<String> pages = new ArrayList<>();
+        int counter = 0;
+        int totalCCs = 0;
+        ArrayList<String> list = new ArrayList<>();
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
+
+        for (CCommandObject c : command.customCommands.getCommandList()) {
+            if (counter > 15) {
+                pages.add(Utility.listFormatter(list, true));
+                list.clear();
+            }
+            list.add(command.guildConfig.getPrefixCC() + c.getName());
+            totalCCs++;
+            counter++;
+        }
+        pages.add("`" + Utility.listFormatter(list, true) + "`");
+        try {
+            String title = "> Here is Page **" + page + "/" + pages.size() + "** of Custom Commands:";
+            builder.appendField(title, pages.get(page - 1), false);
+            builder.withFooterText("Total Custom Commands stored on this Server: " + totalCCs);
+            Utility.sendEmbededMessage("", builder.build(), command.channel);
+            return null;
+        } catch (IndexOutOfBoundsException e) {
+            return "> That Page does not exist.";
         }
     }
 

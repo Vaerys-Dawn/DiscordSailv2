@@ -6,6 +6,9 @@ import Main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Created by Vaerys on 30/01/2017.
  */
@@ -13,15 +16,12 @@ public class Test implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        EmbedBuilder imageEmbed = new EmbedBuilder();
-        imageEmbed.withImage(command.author.getAvatarURL());
-        Utility.sendFile("You tested the thing.", command.author.getAvatarURL(), command.channel);
-        return "";
+        return "> Nothing to test at the moment come back later.";
     }
 
     @Override
     public String[] names() {
-        return new String[]{"Test","Testing"};
+        return new String[]{"Test", "Testing"};
     }
 
     @Override

@@ -2,9 +2,13 @@ package Commands.Admin;
 
 import Commands.Command;
 import Commands.CommandObject;
+import Main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -28,19 +32,25 @@ public class ChannelHere implements Command {
                 e.printStackTrace();
             }
         }
-        builder.append("> Here is a list of available channel types:\n`");
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        String title = "> Here is a list of available Channel Types:\n";
+        ArrayList<String> channels = new ArrayList<>();
         try {
             for (Field f : Command.class.getDeclaredFields()) {
                 if (f.getName().contains("CHANNEL_") && f.getType() == String.class) {
-                    builder.append(f.get(null) + ", ");
+                    channels.add((String) f.get(null));
                 }
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        builder.delete(builder.length() - 2, builder.length());
-        builder.append("`.");
-        return builder.toString();
+        Collections.sort(channels);
+        Utility.listFormatterEmbed(title,embedBuilder,channels,true);
+        embedBuilder.appendField(title,builder.toString(),false);
+        embedBuilder.appendField(spacer,Utility.getCommandInfo(this,command),false);
+        embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(),command.guild));
+        Utility.sendEmbededMessage("",embedBuilder.build(),command.channel);
+        return null;
     }
 
     @Override

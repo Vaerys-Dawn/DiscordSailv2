@@ -27,4 +27,10 @@ public class SplitFirstObject {
     public String getRest() {
         return rest;
     }
+
+    public void editRestReplace(String from, String to) {
+        if (rest != null){
+            rest = rest.replace(from,to);
+        }
+    }
 }

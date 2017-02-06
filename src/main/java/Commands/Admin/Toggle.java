@@ -7,6 +7,7 @@ import Main.Constants;
 import Main.Utility;
 import POGOs.GuildConfig;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,8 +28,8 @@ public class Toggle implements Command {
                     ToggleAnnotation toggleAnno = m.getAnnotation(ToggleAnnotation.class);
                     if (args.equalsIgnoreCase(toggleAnno.name())) {
                         try {
-                            m.invoke(command.guildConfig);
-                            return "> Toggled **" + toggleAnno.name() + "**.";
+                            Boolean state = (Boolean) m.invoke(command.guildConfig);
+                            return "> **" + toggleAnno.name() + " is now " + state + "**.";
                         } catch (IllegalAccessException | InvocationTargetException e) {
                             e.printStackTrace();
                         }
@@ -38,7 +39,8 @@ public class Toggle implements Command {
             builder.append("> Could not find toggle \"" + args + "\".\n");
         }
         Method[] methods = GuildConfig.class.getMethods();
-        builder.append("> Here is a list of available Guild Toggles:\n");
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        String title = "> Here is a list of available Guild Toggles:\n";
         ArrayList<String> types = new ArrayList<>();
         for (Method m : methods) {
             if (m.isAnnotationPresent(ToggleAnnotation.class)) {
@@ -47,11 +49,12 @@ public class Toggle implements Command {
             }
         }
         Collections.sort(types);
-        for (String s : types) {
-            builder.append(Constants.PREFIX_INDENT + s + "\n");
-        }
-        builder.append(Constants.PREFIX_INDENT + Utility.getCommandInfo(this,command));
-        return builder.toString();
+        Utility.listFormatterEmbed(title,embedBuilder,types,true);
+        embedBuilder.appendField(title, builder.toString(), false);
+        embedBuilder.appendField(spacer,Utility.getCommandInfo(this,command),false);
+        embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
+        Utility.sendEmbededMessage("", embedBuilder.build(), command.channel);
+        return null;
     }
 
     @Override

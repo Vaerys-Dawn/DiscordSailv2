@@ -83,7 +83,7 @@ public class AnnotationListener {
     @EventSubscriber
     public void onReadyEvent(ReadyEvent event) {
         Globals.isReady = true;
-        event.getClient().changeStatus(Status.game(Globals.playing));
+        event.getClient().changePlayingText(Globals.playing);
         Utility.updateUsername(Globals.botName);
     }
 
@@ -221,7 +221,7 @@ public class AnnotationListener {
             }
             return;
         }
-        if (Utility.canBypass(event.getAuthor(),event.getGuild())){
+        if (Utility.canBypass(event.getUser(),event.getGuild())){
             if (event.getReaction().toString().equals("❌")) {
                 if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())) {
                     Utility.deleteMessage(event.getMessage());

@@ -3,48 +3,38 @@ package Commands.RoleSelect;
 import Commands.Command;
 import Commands.CommandObject;
 import Main.Constants;
+import Main.Utility;
 import Objects.RoleTypeObject;
 import POGOs.GuildConfig;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class ListRoles implements Command{
+public class ListRoles implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        IGuild guild = command.guild;
         GuildConfig guildConfig = command.guildConfig;
-        StringBuilder builder = new StringBuilder();
-        builder.append("> Here are the **Cosmetic** roles you can choose from:\n");
-        int i = 0;
-        int counter = 0;
-        for (RoleTypeObject r : guildConfig.getCosmeticRoles()) {
-            counter++;
-            if (counter == guildConfig.getCosmeticRoles().size()) {
-                if (i != 0) {
-                    builder.append(guild.getRoleByID(r.getRoleID()).getName() + ".\n");
-                } else {
-                    builder.append(Constants.PREFIX_INDENT + guild.getRoleByID(r.getRoleID()).getName() + ".\n");
-                }
-            } else if (i == 0) {
-                builder.append(Constants.PREFIX_INDENT + guild.getRoleByID(r.getRoleID()).getName() + ", ");
-            } else if (i == 7) {
-                builder.append(guild.getRoleByID(r.getRoleID()).getName() + ",\n");
-                i = -1;
-            } else {
-                builder.append(guild.getRoleByID(r.getRoleID()).getName() + ", ");
-            }
-            i++;
-        }
-        return builder.toString();
+        String title = "> Here are the **Cosmetic** roles you can choose from:\n";
+        ArrayList<String> list = new ArrayList<>();
+        EmbedBuilder builder = new EmbedBuilder();
+        list.addAll(guildConfig.getCosmeticRoles().stream().map(RoleTypeObject::getRoleName).collect(Collectors.toList()));
+        Utility.listFormatterEmbed(title,builder,list,true);
+        builder.appendField(spacer, Utility.getCommandInfo(new CosmeticRoles(), command),false);
+        builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
+        Utility.sendEmbededMessage("", builder.build(), command.channel);
+        return null;
     }
 
     @Override
     public String[] names() {
-        return new String[]{"ListRoles","Roles","RoleList"};
+        return new String[]{"ListRoles", "Roles", "RoleList"};
     }
 
     @Override

@@ -67,7 +67,7 @@ public class FinalTally implements Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES};
+        return new Permissions[]{Permissions.MANAGE_MESSAGES,Permissions.MANAGE_ROLES};
     }
 
     @Override

@@ -10,6 +10,10 @@ import Commands.Characters.UpdateChar;
 import Commands.Command;
 import Commands.Competition.EnterComp;
 import Commands.Competition.EnterVote;
+import Commands.DMCommand;
+import Commands.DMCommands.HelpDM;
+import Commands.DMCommands.InfoDM;
+import Commands.DMCommands.Respond;
 import Commands.General.GetAvatar;
 import Commands.General.Hello;
 import Commands.General.RemindMe;
@@ -59,6 +63,7 @@ public class Globals {
     public static boolean isModifingFiles = false;
     private static ArrayList<GuildContentObject> guildContentObjects = new ArrayList<>();
     public static ArrayList<Command> commands = new ArrayList<>();
+    public static ArrayList<DMCommand> commandsDM = new ArrayList<>();
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
 
@@ -91,10 +96,9 @@ public class Globals {
         commands.add(new Shutdown());
         commands.add(new Sudo());
         commands.add(new Toggle());
-        commands.add(new ToggleLock());
-        commands.add(new ToggleShitPost());
         commands.add(new UpdateAvatar());
         commands.add(new UpdateInfo());
+        commands.add(new UpdateRolePerms());
         //General commands
         commands.add(new GetAvatar());
         commands.add(new Hello());
@@ -139,48 +143,72 @@ public class Globals {
         commands.add(new EnterVote());
         logger.info(commands.size() + " Commands Loaded.");
 
-        for (Command c: commands){
+        //DM commands
+        commandsDM.add(new Respond());
+        commandsDM.add(new HelpDM());
+        commandsDM.add(new InfoDM());
+        logger.info(commandsDM.size() + " DM Commands Loaded.");
+
+        for (Command c : commands) {
             logger.debug("Initialising Command: " + c.getClass().getName());
-            if (c.names().length == 0){
+            if (c.names().length == 0) {
                 logger.error(c.getClass().getName() + " Command Name cannot be null.");
                 properlyInit = false;
             }
-            if (c.type() == null ||c.type().isEmpty()){
+            if (c.type() == null || c.type().isEmpty()) {
                 logger.error(c.getClass().getName() + " Command Type cannot be null.");
                 properlyInit = false;
             }
-            if (c.description() == null || c.description().isEmpty()){
+            if (c.description() == null || c.description().isEmpty()) {
                 logger.error(c.getClass().getName() + " Command Desc cannot be null.");
                 properlyInit = false;
             }
-            if (c.requiresArgs() && (c.usage() == null || c.usage().isEmpty())){
+            if (c.requiresArgs() && (c.usage() == null || c.usage().isEmpty())) {
                 logger.error(c.getClass().getName() + " Command Usage cannot be null if RequiresArgs is true.");
                 properlyInit = false;
             }
-            if (c.dualDescription() != null || c.dualType() != null){
-                if (c.dualType() == null || c.dualType().isEmpty()){
+            if (c.dualDescription() != null || c.dualType() != null) {
+                if (c.dualType() == null || c.dualType().isEmpty()) {
                     logger.error(c.getClass().getName() + " Command Dual Type cannot be null.");
                     properlyInit = false;
                 }
-                if (c.dualType().equalsIgnoreCase(c.type())){
+                if (c.dualType().equalsIgnoreCase(c.type())) {
                     logger.error(c.getClass().getName() + " Command Type cannot be equal to Dual Type.");
                     properlyInit = false;
                 }
-                if (c.dualDescription() == null || c.dualDescription().isEmpty()){
+                if (c.dualDescription() == null || c.dualDescription().isEmpty()) {
                     logger.error(c.getClass().getName() + " Command Dual Desc cannot be null.");
                     properlyInit = false;
                 }
-                if (c.dualDescription().equalsIgnoreCase(c.description())){
+                if (c.dualDescription().equalsIgnoreCase(c.description())) {
                     logger.error(c.getClass().getName() + " Command Desc cannot be equal to Dual Desc.");
                     properlyInit = false;
                 }
-                if (c.usage() != null && c.usage().equalsIgnoreCase(c.dualUsage())){
+                if (c.usage() != null && c.usage().equalsIgnoreCase(c.dualUsage())) {
                     logger.error(c.getClass().getName() + " Command Usage cannot be equal to Dual Usage.");
                     properlyInit = false;
                 }
             }
         }
-        if (!properlyInit){
+        for (DMCommand c : commandsDM) {
+            if (c.names().length == 0) {
+                logger.error(c.getClass().getName() + " Command Name cannot be null");
+                properlyInit = false;
+            }
+            if (c.description() == null || c.description().isEmpty()) {
+                logger.error(c.getClass().getName() + " Command Desc cannot be null.");
+                properlyInit = false;
+            }
+            if (c.type() == null || c.type().isEmpty()) {
+                logger.error(c.getClass().getName() + " Command Type cannot be null.");
+                properlyInit = false;
+            }
+            if (c.requiresArgs() && (c.usage() == null || c.usage().isEmpty())) {
+                logger.error(c.getClass().getName() + " Command Usage cannot be null if RequiresArgs is true.");
+                properlyInit = false;
+            }
+        }
+        if (!properlyInit) {
             Runtime.getRuntime().exit(0);
         }
     }
@@ -243,8 +271,8 @@ public class Globals {
     }
 
     public static void initGuild(String guildID) {
-        for (GuildContentObject contentObject : guildContentObjects){
-            if (guildID.equals(contentObject.getGuildID())){
+        for (GuildContentObject contentObject : guildContentObjects) {
+            if (guildID.equals(contentObject.getGuildID())) {
                 return;
             }
         }
@@ -257,7 +285,7 @@ public class Globals {
         IGuild guild = client.getGuildByID(guildID);
         guildConfig.updateVariables(guild);
 
-        GuildContentObject guildContentObject = new GuildContentObject(guildID,guildConfig,customCommands,servers,characters,competition);
+        GuildContentObject guildContentObject = new GuildContentObject(guildID, guildConfig, customCommands, servers, characters, competition);
         guildContentObjects.add(guildContentObject);
     }
 
@@ -292,14 +320,16 @@ public class Globals {
 
     public static void saveFiles() {
         logger.debug("Saving Files.");
+        Globals.isModifingFiles = true;
         Globals.getGuildContentObjects().forEach(GuildContentObject::saveFiles);
+        Globals.isModifingFiles = false;
     }
 
     public static void unloadGuild(String id) {
-        for (GuildContentObject g: guildContentObjects){
-            if (g.getGuildID().equals(id)){
+        for (int i = 0; i < guildContentObjects.size(); i++) {
+            if (guildContentObjects.get(i).getGuildID().equals(id)) {
                 logger.info("> Disconnected from Guild with ID : " + id);
-                guildContentObjects.remove(g);
+                guildContentObjects.remove(i);
             }
         }
     }

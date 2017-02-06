@@ -70,6 +70,10 @@ public class Servers {
 
     }
 
+    public ArrayList<ServerObject> getServers() {
+        return servers;
+    }
+
     public String editServerDesc(String userID, String serverName, String desc, IGuild guild) {
         for (ServerObject s : servers) {
             if (s.getName().equalsIgnoreCase(serverName)) {
@@ -161,22 +165,6 @@ public class Servers {
             }
         }
         return "> Server with that name not found.";
-    }
-
-    public String getServerList(CommandObject command) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("> Here are the Servers I have Listed:\n");
-        ArrayList<String> serverNames = new ArrayList<>();
-        for (ServerObject s : servers) {
-            serverNames.add(s.getName());
-        }
-        Collections.sort(serverNames);
-        for (String s : serverNames) {
-            builder.append(Constants.PREFIX_INDENT + s + "\n");
-        }
-        builder.append("> You can get more info for a server by running:\n");
-        builder.append(Utility.getCommandInfo(new Server(), command));
-        return builder.toString();
     }
 }
 

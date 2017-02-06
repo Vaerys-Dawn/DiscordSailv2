@@ -21,13 +21,6 @@ import java.util.List;
 public class ModifierRoles implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-//        @AliasAnnotation(alias = {"Modif"})
-//        @DualCommandAnnotation(description = "Used to manage the selectable modifier roles.", usage = " +/-/add/del [Role Name]",
-//                type = Constants.TYPE_ADMIN, perms = {Permissions.MANAGE_ROLES})
-//        @CommandAnnotation(
-//                name = "Modifier", description = "Allows you to toggle a modifier role.", usage = "[Role Name]",
-//                type = Constants.TYPE_ROLE_SELECT, channel = Constants.CHANNEL_BOT_COMMANDS, requiresArgs = true)
-//        public String manageModifiers() {
         IGuild guild = command.guild;
         IUser author = command.author;
         GuildConfig guildConfig = command.guildConfig;
@@ -55,6 +48,11 @@ public class ModifierRoles implements Command {
                 ArrayList<RoleTypeObject> roles = guildConfig.getModifierRoles();
                 String newRoleId = null;
                 List<IRole> userRoles = guild.getRolesForUser(author);
+                ArrayList<String> roleNames1 = new ArrayList<>();
+                for (IRole r : userRoles) {
+                    roleNames1.add(r.getName());
+                }
+                int userRoleCount = userRoles.size();
                 for (RoleTypeObject role : roles) {
                     if (args.equalsIgnoreCase(guild.getRoleByID(role.getRoleID()).getName())) {
                         newRoleId = role.getRoleID();
@@ -72,8 +70,31 @@ public class ModifierRoles implements Command {
                     }
                     return "> Role with name: **" + args + "** not found in **Modifier Role** list.";
                 } else {
+                    //adding
                     if (!rolefound) {
                         userRoles.add(guild.getRoleByID(newRoleId));
+                        if (userRoleCount >= userRoles.size()) {
+                            ArrayList<String> roleNames2 = new ArrayList<>();
+                            for (IRole r : userRoles) {
+                                roleNames2.add(r.getName());
+                            }
+                            return "> An Error Occurred while attempting to update your roles.\n" +
+                                    "please send this to the Bot Developer.\n" +
+                                    "```Old Roles: " + Utility.listFormatter(roleNames1, true).replace("@everyone","#everyone") + "\n" +
+                                    "New Roles: " + Utility.listFormatter(roleNames2, true).replace("@everyone","#everyone") + "```";
+                        }
+                    } else {
+                        //removing
+                        if (userRoleCount - 2 >= userRoles.size()) {
+                            ArrayList<String> roleNames2 = new ArrayList<>();
+                            for (IRole r : userRoles) {
+                                roleNames2.add(r.getName());
+                            }
+                            return "> An Error Occurred while attempting to update your roles.\n" +
+                                    "please send this to the Bot Developer.\n" +
+                                    "```Old Roles." + Utility.listFormatter(roleNames1, true) + "\n" +
+                                    "New Roles." + Utility.listFormatter(roleNames2, true) + "```";
+                        }
                     }
                     response = "> You have toggled the Modifier role: **" + guild.getRoleByID(newRoleId).getName() + "**.";
                 }
@@ -89,7 +110,7 @@ public class ModifierRoles implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"Modifier","Modif"};
+        return new String[]{"Modifier", "Modif"};
     }
 
     @Override

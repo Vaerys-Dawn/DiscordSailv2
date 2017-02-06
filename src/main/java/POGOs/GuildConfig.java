@@ -128,53 +128,53 @@ public class GuildConfig {
 
     //Togglers
     @ToggleAnnotation(name = "LoginMessage")
-    public void toggleDoLoginMessage() {
-        loginMessage = !loginMessage;
+    public boolean toggleDoLoginMessage() {
+        return loginMessage = !loginMessage;
     }
 
     @ToggleAnnotation(name = "GeneralLogging")
-    public void toggleLogging() {
-        generalLogging = !generalLogging;
+    public boolean toggleLogging() {
+        return generalLogging = !generalLogging;
     }
 
     @ToggleAnnotation(name = "AdminLogging")
-    public void toggleAdminLogging() {
-        adminLogging = !adminLogging;
+    public boolean toggleAdminLogging() {
+        return adminLogging = !adminLogging;
     }
 
     @ToggleAnnotation(name = "BlackListing")
-    public void toggleDoBlackListing() {
-        blackListing = !blackListing;
+    public boolean toggleDoBlackListing() {
+        return blackListing = !blackListing;
     }
 
     @ToggleAnnotation(name = "MentionSpam")
-    public void toggelMaxMentions() {
-        maxMentions = !maxMentions;
+    public boolean toggelMaxMentions() {
+        return maxMentions = !maxMentions;
     }
 
     @ToggleAnnotation(name = "DailyMessage")
-    public void toggleDailyMessage() {
-        dailyMessage = !dailyMessage;
+    public boolean toggleDailyMessage() {
+        return dailyMessage = !dailyMessage;
     }
 
     @ToggleAnnotation(name = "ShitPostFiltering")
-    public void toggleShitPostFiltering() {
-        shitPostFiltering = !shitPostFiltering;
+    public boolean toggleShitPostFiltering() {
+        return shitPostFiltering = !shitPostFiltering;
     }
 
     @ToggleAnnotation(name = "MuteRepeatOffender")
-    public void toggleRepeatOffender() {
-        muteRepeatOffenders = !muteRepeatOffenders;
+    public boolean toggleRepeatOffender() {
+        return muteRepeatOffenders = !muteRepeatOffenders;
     }
 
     @ToggleAnnotation(name = "CompEntries")
-    public void toggleCompEntries() {
-        compEntries = !compEntries;
+    public boolean toggleCompEntries() {
+        return compEntries = !compEntries;
     }
 
     @ToggleAnnotation(name = "Voting")
-    public void setCompVoting() {
-        compVoting = !compVoting;
+    public boolean setCompVoting() {
+        return compVoting = !compVoting;
     }
 
     public void setUpChannel(String channelType, String channelID) {
@@ -252,9 +252,9 @@ public class GuildConfig {
         }
 
         //update channels
-        for (ChannelTypeObject c : channels){
+        for (ChannelTypeObject c : channels) {
             IChannel channel = guild.getChannelByID(c.getID());
-            if (channel == null){
+            if (channel == null) {
                 channels.remove(c);
             }
         }

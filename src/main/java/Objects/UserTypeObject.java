@@ -6,17 +6,17 @@ package Objects;
 public class UserTypeObject {
     String displayName;
     String ID;
+    long xp;
+    long level;
 
-    public UserTypeObject(String displayName, String ID) {
-        this.displayName = displayName;
+    public UserTypeObject(String ID) {
         this.ID = ID;
+        xp = 0;
+        level = 1;
     }
 
     public String getID() {
         return ID;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
 }

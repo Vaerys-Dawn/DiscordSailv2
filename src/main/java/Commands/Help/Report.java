@@ -18,15 +18,15 @@ public class Report implements Command {
     }
 
     public static String report(String args, CommandObject command, boolean isSilent) {
-        String mentionee;
+        String reported;
         String channelID = command.guildConfig.getChannelTypeID(CHANNEL_ADMIN);
         SplitFirstObject user = new SplitFirstObject(args);
         IUser reportedUser = command.client.getUserByID(user.getFirstWord());
 
         if (reportedUser != null) {
-            mentionee = reportedUser.mention();
+            reported = reportedUser.mention();
         } else if (command.message.getMentions().size() > 0) {
-            mentionee = command.message.getMentions().get(0).mention();
+            reported = command.message.getMentions().get(0).mention();
         } else {
             return "> User Report could not be sent as you did not specify a user.";
         }
@@ -41,7 +41,8 @@ public class Report implements Command {
             } else {
                 builder.append("**User Report**\n");
             }
-            builder.append("Reporter: " + command.author.mention() + "\nReported: " + mentionee + "\nReason: `" + user.getRest() + "`");
+            user.editRestReplace(user.getRest(),Utility.convertMentionToText(user.getRest()));
+            builder.append("Reporter: " + command.author.mention() + "\nReported: " + reported + "\nReason: `" + user.getRest() + "`");
             builder.append("\n" + command.channel.mention());
             Utility.sendMessage(builder.toString(), command.guild.getChannelByID(channelID));
             return "> User Report sent.";

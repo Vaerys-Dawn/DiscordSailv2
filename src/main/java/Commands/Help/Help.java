@@ -50,15 +50,14 @@ public class Help implements Command {
         //building the embed
         if (args.isEmpty()) {
             builder.append(codeBlock + "\n");
-            for (String s : types) {
-                builder.append(s + "\n");
-            }
+            builder.append(Utility.listFormatter(types,false));
+            builder.append(codeBlock + "\n");
             String desc = "[Suport Sail on Patreon](https://www.patreon.com/DawnFelstar)\n" +
                     "[Find Sail on GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)";
             if (!command.guildID.equals("206792432560373761")) {
                 desc += "\nSupport Discord - https://discord.gg/XSyQQrR";
             }
-            builder.append(codeBlock + "\n");
+
             helpEmbed.withTitle("Here are the Command Types I have available for use:");
             builder.append(Utility.getCommandInfo(this, command) + "\n");
             helpEmbed.withDescription(builder.toString());
@@ -73,9 +72,9 @@ public class Help implements Command {
                     for (Command c : commands) {
                         if (c.type().equalsIgnoreCase(s)) {
                             if (c.dualType() != null) {
-                                commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0] + indent + "*\n");
+                                commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0] + indent + "*");
                             } else {
-                                commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0] + "\n");
+                                commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0]);
                             }
                         }
                     }
@@ -83,7 +82,7 @@ public class Help implements Command {
             }
             Collections.sort(commandList);
             builder.append(codeBlock + "\n");
-            commandList.forEach(builder::append);
+            builder.append(Utility.listFormatter(commandList,false));
             builder.append(codeBlock + "\n");
             builder.append(Utility.getCommandInfo(new Info(), command));
             helpEmbed.withDescription(builder.toString());

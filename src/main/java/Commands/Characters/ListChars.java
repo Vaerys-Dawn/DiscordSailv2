@@ -2,7 +2,14 @@ package Commands.Characters;
 
 import Commands.Command;
 import Commands.CommandObject;
+import Main.Constants;
+import Main.Utility;
+import Objects.CharacterObject;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -10,7 +17,14 @@ import sx.blah.discord.handle.obj.Permissions;
 public class ListChars implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        return command.characters.listCharacters(command.author.getID(), command.guildConfig);
+        EmbedBuilder builder = new EmbedBuilder();
+        String title = "> Here are all of your characters.";
+        ArrayList<String> list = command.characters.getCharacters().stream().filter(c -> c.getUserID().equals(command.authorID)).map(CharacterObject::getName).collect(Collectors.toCollection(ArrayList::new));
+        Utility.listFormatterEmbed(title,builder,list,true);
+        builder.appendField(spacer,Utility.getCommandInfo(new SelectChar(),command),false);
+        builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
+        Utility.sendEmbededMessage("",builder.build(),command.channel);
+        return null;
     }
 
     @Override

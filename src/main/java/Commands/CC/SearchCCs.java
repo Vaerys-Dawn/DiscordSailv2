@@ -2,7 +2,18 @@ package Commands.CC;
 
 import Commands.Command;
 import Commands.CommandObject;
+import Handlers.FileHandler;
+import Main.Constants;
+import Main.Utility;
+import Objects.CCommandObject;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -10,7 +21,48 @@ import sx.blah.discord.handle.obj.Permissions;
 public class SearchCCs implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        return command.customCommands.search(args, command.guildConfig, command.channel, command.messageID);
+        ArrayList<CCommandObject> searched = new ArrayList<>();
+        StringBuilder builder = new StringBuilder();
+        for (CCommandObject c : command.customCommands.getCommandList()) {
+            StringBuilder toSearch = new StringBuilder();
+            toSearch.append(c.getName().toLowerCase());
+            toSearch.append(c.getContents(false).toLowerCase());
+            if (c.isLocked()) {
+                toSearch.append("#locked#");
+            }
+            if (c.isShitPost()) {
+                toSearch.append("#shitpost#");
+            }
+            if ((toSearch.toString()).contains(args.toLowerCase())) {
+                searched.add(c);
+            }
+        }
+        String title = "> Here is your search:";
+        ArrayList<String> list = new ArrayList<>();
+        for (CCommandObject c : searched) {
+            list.add(command.guildConfig.getPrefixCC() + c.getName());
+        }
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        Utility.listFormatterEmbed(title,embedBuilder,list,true);
+        embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(),command.guild));
+        if (searched.size() < 40) {
+            Utility.sendEmbededMessage("",embedBuilder.build(),command.channel);
+            return null;
+        } else {
+            String path = Constants.DIRECTORY_TEMP + command.messageID + ".txt";
+            FileHandler.writeToFile(path, Utility.listFormatter(list,true));
+            File file = new File(path);
+            Utility.sendFile(title, file, command.channel);
+            try {
+                Thread.sleep(4000);
+                Files.delete(Paths.get(path));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
     @Override

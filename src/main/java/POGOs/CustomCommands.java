@@ -1,5 +1,6 @@
 package POGOs;
 
+import Commands.Command;
 import Handlers.FileHandler;
 import Main.Constants;
 import Main.Globals;
@@ -46,7 +47,7 @@ public class CustomCommands {
         this.properlyInit = properlyInit;
     }
 
-    private int maxCCs(IUser author, IGuild guild, GuildConfig guildConfig) {
+    public int maxCCs(IUser author, IGuild guild, GuildConfig guildConfig) {
         int total = 10;
         boolean hasManagePerms = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild);
         boolean hasAdminPerms = Utility.testForPerms(new Permissions[]{Permissions.ADMINISTRATOR}, author, guild);
@@ -120,22 +121,6 @@ public class CustomCommands {
         return Utility.checkBlacklist(args, blackList);
     }
 
-    public String getCommandInfo(String args) {
-        for (CCommandObject c : commands) {
-            if (c.getName().equalsIgnoreCase(args)) {
-                StringBuilder builder = new StringBuilder();
-                IUser author = Globals.getClient().getUserByID(c.getUserID());
-                builder.append("> Here is the information for command: **" + c.getName() + "**\n");
-                builder.append(Constants.PREFIX_INDENT + "Creator: **@" + author.getName() + "#" + author.getDiscriminator() + "**\n");
-                builder.append(Constants.PREFIX_INDENT + "Time Run: **" + c.getTimesRun() + "**\n");
-                builder.append(Constants.PREFIX_INDENT + "Is Locked: **" + c.isLocked() + "**\n");
-                builder.append(Constants.PREFIX_INDENT + "Is ShitPost: **" + c.isShitPost() + "**");
-                return builder.toString();
-            }
-        }
-        return Constants.ERROR_CC_NOT_FOUND;
-    }
-
     public String sendCCasJSON(String channelID, String commandName) {
         IChannel channel = Globals.getClient().getChannelByID(channelID);
         for (CCommandObject c : commands) {
@@ -180,50 +165,6 @@ public class CustomCommands {
         return Constants.ERROR_CC_NOT_FOUND;
     }
 
-    public String getUserCommands(String userID, IGuild guild, GuildConfig guildConfig) {
-        IUser user = Globals.getClient().getUserByID(userID);
-        StringBuilder builder = new StringBuilder();
-        int total = 0;
-        int max = maxCCs(user, guild, guildConfig);
-        builder.append("> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.\n`");
-        for (CCommandObject sA : commands) {
-            if (sA.getUserID().equals(userID)) {
-                builder.append(guildConfig.getPrefixCC() + sA.getName() + ", ");
-                total++;
-            }
-        }
-        builder.delete(builder.length() - 2, builder.length());
-        builder.append("`.\nTotal Custom commands: " + total + "/" + max + ".");
-        return builder.toString();
-    }
-
-    public String listCommands(int page, GuildConfig guildConfig) {
-        StringBuilder builder = new StringBuilder();
-        ArrayList<String> pages = new ArrayList<>();
-        int counter = 0;
-        int totalCCs = 0;
-        for (CCommandObject c : commands) {
-            if (counter > 15) {
-                pages.add(builder.toString());
-                builder.delete(0, builder.length());
-                counter = 0;
-            }
-            builder.append(guildConfig.getPrefixCC() + c.getName() + ", ");
-            totalCCs++;
-            counter++;
-        }
-        pages.add(builder.toString());
-        builder.delete(0, builder.length());
-        try {
-            builder.append("> Here is Page `" + page + "/" + pages.size() + "` of Custom Commands:\n`");
-            builder.append(pages.get(page - 1));
-            builder.delete(builder.length() - 2, builder.length());
-            builder.append(".`\n> Total Custom Commands stored on this Server: " + totalCCs);
-            return builder.toString();
-        } catch (IndexOutOfBoundsException e) {
-            return "> That Page does not exist.";
-        }
-    }
 
     public String toggleShitPost(String args) {
         for (CCommandObject c : commands) {
@@ -245,123 +186,5 @@ public class CustomCommands {
             }
         }
         return Constants.ERROR_CC_NOT_FOUND;
-    }
-
-    public String search(String args, GuildConfig guildConfig, IChannel channel, String messageID) {
-        ArrayList<CCommandObject> searched = new ArrayList<>();
-        StringBuilder builder = new StringBuilder();
-        for (CCommandObject c : commands) {
-            StringBuilder toSearch = new StringBuilder();
-            toSearch.append(c.getName().toLowerCase());
-            toSearch.append(c.getContents(false).toLowerCase());
-            if (c.isLocked()) {
-                toSearch.append("#locked#");
-            }
-            if (c.isShitPost()) {
-                toSearch.append("#shitpost#");
-            }
-            if ((toSearch.toString()).contains(args.toLowerCase())) {
-                searched.add(c);
-            }
-        }
-        builder.append("> Here is your search:\n`");
-        for (CCommandObject c : searched) {
-            builder.append(guildConfig.getPrefixCC() + c.getName() + ", ");
-        }
-        builder.delete(builder.length() - 2, builder.length());
-        builder.append(".`");
-        if (searched.size() < 40) {
-            return builder.toString();
-        } else {
-            String path = Constants.DIRECTORY_TEMP + messageID + ".txt";
-            FileHandler.writeToFile(path,builder.toString());
-            File file = new File(path);
-            Utility.sendFile("> Here is your Search:",file,channel);
-            try {
-                Thread.sleep(4000);
-                Files.delete(Paths.get(path));
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return "";
-        }
-    }
-
-    public String editCC(String name, IUser user, IGuild guild, String mode, String content) {
-        for (CCommandObject c : commands) {
-            if (c.getName().equalsIgnoreCase(name)) {
-                if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, user, guild) || user.getID().equals(c.getUserID()) && !c.isLocked() || Utility.canBypass(user,guild)) {
-                    Method[] methods = this.getClass().getMethods();
-                    if (StringUtils.countMatches(mode + " " + content, "#embedImage#{") > 1) {
-                        return "> Custom Commands Cannot have multiple #embedImage# tags";
-                    }
-                    switch (mode.toLowerCase()) {
-                        case "replace":
-                            return editModeReplace(c, content);
-                        case "toembed":
-                            return editModeToEmbed(c);
-                        case "append":
-                            return editModeAppend(c, content);
-                        case "delet":
-                            return editModeDeleteTag(c);
-                        case "delcall":
-                            return editModeDeleteTag(c);
-                        default:
-                            if (content == null || content.isEmpty()) {
-                                return editModeReplace(c, mode);
-                            } else {
-                                return editModeReplace(c, mode + " " + content);
-                            }
-                    }
-                } else {
-                    return "> You do not have permission to edit this command.";
-                }
-            }
-        }
-        return "> Command Not found.";
-    }
-
-    private String editModeDeleteTag(CCommandObject c) {
-        String delCall = "#delCall#";
-        if (c.getContents(false).contains(delCall)){
-            return "> Command will already delete the calling message.";
-        }else {
-            c.setContents(c.getContents(false) + delCall);
-            return "> Tag added";
-        }
-    }
-
-
-    private String editModeReplace(CCommandObject command, String content) {
-        if (content == null || content.isEmpty()){
-            return "> Missing content to replace with.";
-        }
-        command.setContents(content);
-        return "> Command Edited.";
-    }
-
-    private String editModeToEmbed(CCommandObject commmand) {
-        String contents = commmand.getContents(false);
-        if (contents.contains(" ") || contents.contains("\n")) {
-            return "> Failed to add embed tag.";
-        }
-        if (contents.contains("#embedImage#{")) {
-            return "> Command already has an EmbedImage Tag, cannot add more than one.";
-        }
-        commmand.setContents("#embedImage#{" + contents + "}");
-        return "> Embed tag added.";
-    }
-
-    private String editModeAppend(CCommandObject command, String content) {
-        if (content == null || content.isEmpty()){
-            return "> Missing content to append.";
-        }
-        if ((command.getContents(false) + content).length() > 2000) {
-            return "> Cannot append content, would make command to large.";
-        }
-        command.setContents(command.getContents(false) + content);
-        return "> Content appended to end of command.";
     }
 }
