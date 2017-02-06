@@ -77,7 +77,7 @@ public class ListCCs implements Command {
 
         for (CCommandObject c : command.customCommands.getCommandList()) {
             if (counter > 15) {
-                pages.add(Utility.listFormatter(list, true));
+                pages.add("`" + Utility.listFormatter(list, true) + "`");
                 list.clear();
             }
             list.add(command.guildConfig.getPrefixCC() + c.getName());
