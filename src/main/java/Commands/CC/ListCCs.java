@@ -79,6 +79,7 @@ public class ListCCs implements Command {
             if (counter > 15) {
                 pages.add("`" + Utility.listFormatter(list, true) + "`");
                 list.clear();
+                counter = 0;
             }
             list.add(command.guildConfig.getPrefixCC() + c.getName());
             totalCCs++;
