@@ -1,11 +1,13 @@
 package Main;
 
+import Commands.Admin.Shutdown;
 import Commands.Command;
 import Commands.CommandObject;
 import Commands.DMCommand;
 import Commands.DMCommandObject;
 import Handlers.FileHandler;
 import Objects.BlackListObject;
+import Objects.GuildContentObject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ import sx.blah.discord.util.Image;
 import javax.annotation.Nonnull;
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -74,7 +77,7 @@ public class Utility {
     //Command Utils
     public static String getCommandInfo(Command command, CommandObject commandObject) {
         String response = ">> **" + commandObject.guildConfig.getPrefixCommand() + command.names()[0];
-        if (command.usage() != null){
+        if (command.usage() != null) {
             response += " " + command.usage();
         }
         response += "** <<";
@@ -83,7 +86,7 @@ public class Utility {
 
     public static String getCommandInfo(DMCommand command) {
         String response = ">> **" + Globals.defaultPrefixCommand + command.names()[0];
-        if (command.usage() != null){
+        if (command.usage() != null) {
             response += " " + command.usage();
         }
         response += "** <<";
@@ -296,6 +299,9 @@ public class Utility {
                 }
             } catch (MalformedURLException e) {
                 sendMessage(message + " " + imageURL, channel);
+                deleteMessage(Globals.getClient().getMessageByID(messageID));
+            } catch (FileNotFoundException e) {
+                Utility.sendMessage("> Image Not Found : " + imageURL, channel);
                 deleteMessage(Globals.getClient().getMessageByID(messageID));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -617,40 +623,41 @@ public class Utility {
         return from;
     }
 
-    public static void listFormatterEmbed(String title,EmbedBuilder builder, ArrayList<String> list, boolean horizontal) {
-        String formattedList = listFormatter(list,horizontal);
-        if (title == null || title.isEmpty()){
+    public static void listFormatterEmbed(String title, EmbedBuilder builder, ArrayList<String> list, boolean horizontal) {
+        String formattedList = listFormatter(list, horizontal);
+        if (title == null || title.isEmpty()) {
             title = Command.spacer;
         }
-        if (formattedList.isEmpty()){
-            builder.appendField(title,Command.spacer,false);
+        if (formattedList.isEmpty()) {
+            builder.appendField(title, Command.spacer, false);
             return;
         }
         if (horizontal) {
-            builder.appendField(title, "`" + formattedList + "`",false);
-        }else {
-            builder.appendField(title, "```" + formattedList + "```",false);
+            builder.appendField(title, "`" + formattedList + "`", false);
+        } else {
+            builder.appendField(title, "```" + formattedList + "```", false);
         }
     }
 
     public static void listFormatterEmbed(String title, EmbedBuilder builder, ArrayList<String> list, boolean horizontal, String suffix) {
-        String formattedList = listFormatter(list,horizontal);
-        if (title == null || title.isEmpty()){
+        String formattedList = listFormatter(list, horizontal);
+        if (title == null || title.isEmpty()) {
             title = Command.spacer;
         }
-        if (formattedList.isEmpty()){
-            builder.appendField(title,Command.spacer + suffix,false);
+        if (formattedList.isEmpty()) {
+            builder.appendField(title, Command.spacer + suffix, false);
             return;
         }
         if (horizontal) {
-            builder.appendField(title, "`" + formattedList + "`\n" + suffix,false);
-        }else {
-            builder.appendField(title, "```" + formattedList + "```\n" + suffix,false);
+            builder.appendField(title, "`" + formattedList + "`\n" + suffix, false);
+        } else {
+            builder.appendField(title, "```" + formattedList + "```\n" + suffix, false);
         }
     }
+
     public static String listFormatter(ArrayList<String> list, boolean horizontal) {
         StringBuilder formattedList = new StringBuilder();
-        if (list.size() == 0){
+        if (list.size() == 0) {
             return "";
         }
         if (horizontal) {
@@ -690,5 +697,24 @@ public class Utility {
                 "\", USER : \"" + commandObject.authorID +
                 "\", MESSAGE : \"" + commandObject.messageID +
                 "\".";
+    }
+
+    public static void sendGlobalAdminLogging(Command command, String args, CommandObject commandObject) {
+        for (GuildContentObject c : Globals.getGuildContentObjects()) {
+            String message = "***GLOBAL LOGGING***\n> **@" + commandObject.authorUserName + "** Has Used Command `" + command.names()[0] + "`";
+            IChannel channel = null;
+            if (args != null || !args.isEmpty()){
+                message += " with args: `" + args + "`";
+            }
+            if (c.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG) != null) {
+                channel = commandObject.client.getChannelByID(c.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG));
+            }
+            if (c.getGuildConfig().getChannelTypeID(Command.CHANNEL_ADMIN_LOG) != null) {
+                channel = commandObject.client.getChannelByID(c.getGuildConfig().getChannelTypeID(Command.CHANNEL_ADMIN_LOG));
+            }
+            if (channel != null){
+                sendMessage(message,channel);
+            }
+        }
     }
 }

@@ -11,7 +11,6 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Vaerys on 29/01/2017.

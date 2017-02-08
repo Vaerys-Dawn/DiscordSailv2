@@ -3,7 +3,6 @@ package Commands.Admin;
 import Annotations.ToggleAnnotation;
 import Commands.Command;
 import Commands.CommandObject;
-import Main.Constants;
 import Main.Utility;
 import POGOs.GuildConfig;
 import sx.blah.discord.handle.obj.Permissions;
@@ -49,8 +48,8 @@ public class Toggle implements Command {
             }
         }
         Collections.sort(types);
+        embedBuilder.withDesc(builder.toString());
         Utility.listFormatterEmbed(title,embedBuilder,types,true);
-        embedBuilder.appendField(title, builder.toString(), false);
         embedBuilder.appendField(spacer,Utility.getCommandInfo(this,command),false);
         embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
         Utility.sendEmbededMessage("", embedBuilder.build(), command.channel);
@@ -69,7 +68,7 @@ public class Toggle implements Command {
 
     @Override
     public String usage() {
-        return "[Toggle Type]";
+        return "(Toggle Type)";
     }
 
     @Override

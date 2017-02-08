@@ -106,7 +106,7 @@ public class FileHandler {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             gson.toJson(object, writer);
-            logger.debug("Saving Data to Json File: " + file);
+//            logger.debug("Saving Data to Json File: " + file);
             writer.close();
         } catch (IOException e) {
             logger.error(e.getCause().toString());

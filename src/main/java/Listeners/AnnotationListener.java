@@ -22,7 +22,10 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
-import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
 
 /**
  * Created by Vaerys on 03/08/2016.

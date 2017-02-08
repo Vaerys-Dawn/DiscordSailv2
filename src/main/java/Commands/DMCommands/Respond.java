@@ -2,12 +2,9 @@ package Commands.DMCommands;
 
 import Commands.DMCommand;
 import Commands.DMCommandObject;
-import Main.Globals;
 import Main.Utility;
 import Objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.IUser;
-
-import java.util.regex.PatternSyntaxException;
 
 /**
  * Created by Vaerys on 05/02/2017.

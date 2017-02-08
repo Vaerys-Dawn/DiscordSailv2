@@ -2,11 +2,9 @@ package Commands.RoleSelect;
 
 import Commands.Command;
 import Commands.CommandObject;
-import Main.Constants;
 import Main.Utility;
 import Objects.RoleTypeObject;
 import POGOs.GuildConfig;
-import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 

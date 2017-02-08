@@ -2,6 +2,7 @@ package Commands.Admin;
 
 import Commands.Command;
 import Commands.CommandObject;
+import Handlers.MessageHandler;
 import Main.Globals;
 import Main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
@@ -15,6 +16,7 @@ public class Shutdown implements Command {
     public String execute(String args, CommandObject command) {
         if (command.authorID.equals(Globals.creatorID)) {
             Utility.sendMessage("> Shutting Down.", command.channel);
+            Utility.sendGlobalAdminLogging(this,args,command);
             try {
                 Thread.sleep(4000);
                 Globals.getClient().logout();

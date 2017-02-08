@@ -5,13 +5,9 @@ import Commands.DMCommandObject;
 import Main.Globals;
 import Main.Utility;
 import Objects.SplitFirstObject;
-import POGOs.GuildConfig;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;
-
-import java.util.regex.PatternSyntaxException;
 
 /**
  * Created by Vaerys on 27/08/2016.

@@ -18,8 +18,6 @@ import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
 
-// TODO: 08/01/2017 Merge Role commands "Role", "AddRole", "DelRole"
-// TODO: 08/01/2017 Merge Modifier commands "AddModif", "DelModif", "Modifier"
 
 /**
  * This Class Handles all of the commands that the bot can run not incluting custom commands.

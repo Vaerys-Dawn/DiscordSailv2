@@ -1,17 +1,11 @@
 package Commands.DMCommands;
 
-import Commands.Command;
 import Commands.DMCommand;
 import Commands.DMCommandObject;
-import Commands.Help.Info;
 import Main.Globals;
 import Main.Utility;
-import org.apache.commons.lang3.ArrayUtils;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**

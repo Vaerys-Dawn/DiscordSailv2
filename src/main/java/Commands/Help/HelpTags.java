@@ -10,8 +10,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class HelpTags implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-            return "> https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide";
-
+        return "> https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide";
     }
 
     @Override

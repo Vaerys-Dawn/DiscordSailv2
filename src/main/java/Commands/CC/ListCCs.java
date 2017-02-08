@@ -6,18 +6,12 @@ import Main.Constants;
 import Main.Globals;
 import Main.Utility;
 import Objects.CCommandObject;
-import POGOs.CustomCommands;
-import POGOs.GuildConfig;
-import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
-
-import static Main.Globals.commands;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -109,7 +103,7 @@ public class ListCCs implements Command {
 
     @Override
     public String usage() {
-        return "[Page Number]/@User/[UserID]";
+        return "(Page Number/@User/UserID)";
     }
 
     @Override

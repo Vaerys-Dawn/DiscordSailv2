@@ -1,7 +1,5 @@
 package Commands;
 
-import sx.blah.discord.handle.obj.Permissions;
-
 /**
  * Created by Vaerys on 05/02/2017.
  */

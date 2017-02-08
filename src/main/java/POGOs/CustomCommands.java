@@ -1,6 +1,5 @@
 package POGOs;
 
-import Commands.Command;
 import Handlers.FileHandler;
 import Main.Constants;
 import Main.Globals;
@@ -14,20 +13,13 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
-// TODO: 31/08/2016 Add the ability to edit custom commands -- later pls
-// TODO: 31/08/2016 Add the ability to search for a custom command based on name, contents, or ShitPost (use separate commands)
+// TODO: 31/08/2016 Add the ability to search for a custom command based on name, contents, or ShitPost (use separate commands) -- partially complete.
 // TODO: 31/08/2016 Add blacklisting of phrases to custom command creation, editing and execution
-// TODO: 04/09/2016 maye a helpful command list that those with manage messages can add to
 // TODO: 07/10/2016 add tag `variant` that allows people to use $addvariant [Commandname] to that (would use 'Random' tag as a base)
-// TODO: 28/09/2016 (Maybe) make a way to have auto shitposting (togalable, off by default requires an admin to turn it on)
 // TODO: 31/08/2016 (Maybe) Add Fweeee to CC.RewardBag (using VoiceBot functionality)
-// TODO: 31/08/2016 (Maybe) Add the ability to have images uploaded to the guild rather than posting a link (maybe)
+// TODO: 04/09/2016 (Maybe) a helpful command list that those with manage messages can add to
 // TODO: 06/10/2016 (maybe) Add a way to create a CC variant. using $AddCCVariant jeez this is going to be interesting...
 
 /**

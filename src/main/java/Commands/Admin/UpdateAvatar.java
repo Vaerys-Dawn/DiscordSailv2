@@ -32,6 +32,7 @@ public class UpdateAvatar implements Command {
                 Image avatar = Image.forFile(new File(Constants.DIRECTORY_GLOBAL_IMAGES + Globals.defaultAvatarFile));
                 Utility.updateAvatar(avatar);
             }
+            Utility.sendGlobalAdminLogging(this,args,command);
             return "> Avatar Updated.";
         } else {
             return command.notAllowed;

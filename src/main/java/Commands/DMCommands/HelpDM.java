@@ -4,12 +4,10 @@ import Commands.DMCommand;
 import Commands.DMCommandObject;
 import Main.Globals;
 import Main.Utility;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**

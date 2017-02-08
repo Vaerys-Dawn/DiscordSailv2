@@ -427,6 +427,15 @@ public class GuildConfig {
         return false;
     }
 
+    public boolean isRoleTrusted(String id) {
+        for (RoleTypeObject r: trustedRoles){
+            if (r.getRoleID().equals(id)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getInfo(IGuild guild, IUser author) {
         String guildName = guild.getName();
         LocalDateTime creationDate = guild.getCreationDate();
@@ -526,4 +535,6 @@ public class GuildConfig {
         Utility.sendDM(builder.toString(), author.getID());
         return "> Info sent to you via Direct Message.";
     }
+
+
 }

@@ -10,6 +10,7 @@ import sx.blah.discord.util.EmbedBuilder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 29/01/2017.
@@ -33,6 +34,7 @@ public class Help implements Command {
         }
 
         //getting Types of commands.
+        types.add(TYPE_DM);
         for (Command c : commands) {
             boolean typeFound = false;
             for (String s : types) {
@@ -50,7 +52,7 @@ public class Help implements Command {
         //building the embed
         if (args.isEmpty()) {
             builder.append(codeBlock + "\n");
-            builder.append(Utility.listFormatter(types,false));
+            builder.append(Utility.listFormatter(types, false));
             builder.append(codeBlock + "\n");
             String desc = "[Suport Sail on Patreon](https://www.patreon.com/DawnFelstar)\n" +
                     "[Find Sail on GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)";
@@ -61,31 +63,34 @@ public class Help implements Command {
             helpEmbed.withTitle("Here are the Command Types I have available for use:");
             builder.append(Utility.getCommandInfo(this, command) + "\n");
             helpEmbed.withDescription(builder.toString());
-            helpEmbed.appendField("Helpful Links",desc, true);
+            helpEmbed.appendField("Helpful Links", desc, true);
             helpEmbed.withFooterText("Bot Version: " + Globals.version);
         } else {
             boolean isFound = false;
+            String title = "ERROR";
+            String suffix = Utility.getCommandInfo(new Info(),command);
             for (String s : types) {
                 if (args.equalsIgnoreCase(s)) {
+                    title = "> Here are all of the " + s + " Commands I have available.";
                     isFound = true;
-                    helpEmbed.withTitle("> Here are all of the " + s + " Commands I have available.");
-                    for (Command c : commands) {
-                        if (c.type().equalsIgnoreCase(s)) {
-                            if (c.dualType() != null) {
-                                commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0] + indent + "*");
-                            } else {
-                                commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0]);
+                    if (s.equalsIgnoreCase(TYPE_DM)) {
+                        commandList.addAll(Globals.commandsDM.stream().map(c -> Globals.defaultPrefixCommand + c.names()[0]).collect(Collectors.toList()));
+                        suffix = "These commands can only be performed in DMs.\n" + suffix;
+                    } else {
+                        for (Command c : commands) {
+                            if (c.type().equalsIgnoreCase(s)) {
+                                if (c.dualType() != null) {
+                                    commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0] + indent + "*");
+                                } else {
+                                    commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0]);
+                                }
                             }
                         }
                     }
                 }
             }
             Collections.sort(commandList);
-            builder.append(codeBlock + "\n");
-            builder.append(Utility.listFormatter(commandList,false));
-            builder.append(codeBlock + "\n");
-            builder.append(Utility.getCommandInfo(new Info(), command));
-            helpEmbed.withDescription(builder.toString());
+            Utility.listFormatterEmbed(title,helpEmbed,commandList,false,suffix);
             if (!isFound) {
                 return "> There are no commands with the type: " + args + ".\n" + Utility.getCommandInfo(this, command);
             }
@@ -106,7 +111,7 @@ public class Help implements Command {
 
     @Override
     public String usage() {
-        return "[Command Type]";
+        return "(Command Type)";
     }
 
     @Override

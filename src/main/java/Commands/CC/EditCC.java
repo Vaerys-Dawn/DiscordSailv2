@@ -10,8 +10,6 @@ import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.lang.reflect.Method;
-
 /**
  * Created by Vaerys on 01/02/2017.
  */

@@ -2,12 +2,7 @@ package Commands.General;
 
 import Commands.Command;
 import Commands.CommandObject;
-import Main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Vaerys on 30/01/2017.

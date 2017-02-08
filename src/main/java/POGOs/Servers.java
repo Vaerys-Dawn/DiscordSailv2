@@ -1,7 +1,5 @@
 package POGOs;
 
-import Commands.CommandObject;
-import Commands.Servers.Server;
 import Main.Constants;
 import Main.Globals;
 import Main.Utility;
@@ -13,7 +11,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Created by Vaerys on 14/08/2016.

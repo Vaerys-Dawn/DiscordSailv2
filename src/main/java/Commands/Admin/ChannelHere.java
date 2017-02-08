@@ -45,8 +45,8 @@ public class ChannelHere implements Command {
             e.printStackTrace();
         }
         Collections.sort(channels);
+        embedBuilder.withDesc(builder.toString());
         Utility.listFormatterEmbed(title,embedBuilder,channels,true);
-        embedBuilder.appendField(title,builder.toString(),false);
         embedBuilder.appendField(spacer,Utility.getCommandInfo(this,command),false);
         embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(),command.guild));
         Utility.sendEmbededMessage("",embedBuilder.build(),command.channel);
@@ -65,7 +65,7 @@ public class ChannelHere implements Command {
 
     @Override
     public String usage() {
-        return "[Channel Type]";
+        return "(Channel Type)";
     }
 
     @Override

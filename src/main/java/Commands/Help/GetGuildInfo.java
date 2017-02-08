@@ -36,13 +36,17 @@ public class GetGuildInfo implements Command{
         StringBuilder builder = new StringBuilder();
         ArrayList<String> cosmeticRoleStats = new ArrayList<>();
         ArrayList<String> modifierRoleStats = new ArrayList<>();
+        ArrayList<String> trustedRoleStats = new ArrayList<>();
         int totalCosmetic = 0;
         int totalModified = 0;
+        int totalTrusted = 0;
 
         builder.append("***[" + guildName.toUpperCase() + "]***");
         builder.append("\n\n> Guild ID : **" + guild.getID());
         builder.append("**\n> Creation Date : **" + creationDate.getYear() + " " + creationDate.getMonth() + " " + creationDate.getDayOfMonth() + " - " + creationDate.getHour() + ":" + creationDate.getMinute());
-        builder.append("**\n> Guild Owner : **@" + guildOwner.getName() + "#" + guildOwner.getDiscriminator() + "**");
+        builder.append("**\n> Guild Owner : **@" + guildOwner.getName() + "#" + guildOwner.getDiscriminator());
+        builder.append("**\n> Command Prefix: **"+  config.getPrefixCommand());
+        builder.append("**\n> Custom Command Prefix: **" + config.getPrefixCC() + "**");
         if (region != null) {
             builder.append("\n> Region : **" + region.getName() + "**");
         }
@@ -91,9 +95,27 @@ public class GetGuildInfo implements Command{
                 modifierRoleStats.add(formatted.toString());
                 totalModified += rso.getTotalUsers();
             }
+            if (rso.isTrusted()){
+                trustedRoleStats.add(formatted.toString());
+                totalTrusted += rso.getTotalUsers();
+            }
         }
         Collections.sort(cosmeticRoleStats);
         Collections.sort(modifierRoleStats);
+        builder.append("\n\n**TRUSTED ROLES**");
+        for (String s : trustedRoleStats) {
+            if (builder.length() > 1800) {
+                Utility.sendDM(builder.toString(), author.getID());
+                builder.delete(0, builder.length());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            builder.append(s);
+        }
+        builder.append("\n > Total users : \"**" + totalTrusted + "**\"");
         builder.append("\n\n**COSMETIC ROLES**");
         for (String s : cosmeticRoleStats) {
             if (builder.length() > 1800) {

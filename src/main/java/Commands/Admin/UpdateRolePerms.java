@@ -2,11 +2,8 @@ package Commands.Admin;
 
 import Commands.Command;
 import Commands.CommandObject;
-import Main.Globals;
 import Main.Utility;
 import Objects.RoleTypeObject;
-import com.sun.jna.Union;
-import sx.blah.discord.handle.impl.obj.Guild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -54,12 +51,12 @@ public class UpdateRolePerms implements Command
 
     @Override
     public String description() {
-        return "Sets all Cosmetic roles to only give certain perms.";
+        return "Sets permissions of all Cosmetic roles to mach those of a specific role.\nDefaults to Everyone Role.";
     }
 
     @Override
     public String usage() {
-        return "[Parent Role Name]";
+        return "(Parent Role Name)";
     }
 
     @Override

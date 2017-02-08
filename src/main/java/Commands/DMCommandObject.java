@@ -1,12 +1,10 @@
 package Commands;
 
 import Main.Globals;
-import Main.Utility;
-import POGOs.*;
 import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.*;
-
-import java.awt.*;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
 
 /**
  * Created by Vaerys on 05/02/2017.
