@@ -11,6 +11,7 @@ import Commands.Command;
 import Commands.Competition.EnterComp;
 import Commands.Competition.EnterVote;
 import Commands.DMCommand;
+import Commands.DMCommands.BlockUser;
 import Commands.DMCommands.HelpDM;
 import Commands.DMCommands.InfoDM;
 import Commands.DMCommands.Respond;
@@ -24,6 +25,7 @@ import Commands.RoleSelect.ListModifs;
 import Commands.RoleSelect.ListRoles;
 import Commands.RoleSelect.ModifierRoles;
 import Commands.Servers.*;
+import Handlers.FileHandler;
 import Objects.DailyMessageObject;
 import Objects.GuildContentObject;
 import POGOs.*;
@@ -66,8 +68,12 @@ public class Globals {
     public static ArrayList<DMCommand> commandsDM = new ArrayList<>();
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
+    private static GlobalData globalData;
 
-    public static void initConfig(IDiscordClient ourClient, Config config) {
+    public static void initConfig(IDiscordClient ourClient, Config config,GlobalData newGlobalData) {
+        if (newGlobalData != null){
+            globalData = newGlobalData;
+        }
         client = ourClient;
         botName = config.botName;
         creatorID = config.creatorID;
@@ -144,6 +150,7 @@ public class Globals {
         logger.info(commands.size() + " Commands Loaded.");
 
         //DM commands
+        commandsDM.add(new BlockUser());
         commandsDM.add(new Respond());
         commandsDM.add(new HelpDM());
         commandsDM.add(new InfoDM());
@@ -322,6 +329,7 @@ public class Globals {
         logger.debug("Saving Files.");
         Globals.isModifingFiles = true;
         Globals.getGuildContentObjects().forEach(GuildContentObject::saveFiles);
+        FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA,getGlobalData());
         Globals.isModifingFiles = false;
     }
 
@@ -336,5 +344,13 @@ public class Globals {
 
     public static ArrayList<Command> getCommands() {
         return commands;
+    }
+
+    public static GlobalData getGlobalData() {
+        if (globalData != null) {
+            return globalData;
+        }else {
+            return null;
+        }
     }
 }

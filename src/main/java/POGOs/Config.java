@@ -23,10 +23,6 @@ public class Config {
     public int maxWarnings;
     public ArrayList<DailyMessageObject> dailyMessages;
 
-    public Config() {
-        initObject();
-    }
-
     public boolean initObject() {
         if (resetToDefault) {
             resetToDefault = false;
@@ -50,6 +46,9 @@ public class Config {
                 add(new DailyMessageObject(DayOfWeek.SUNDAY, Constants.DAILY_MESSAGE_7, dailyAvatarName));
             }};
             return true;
+        }
+        for (DailyMessageObject d: dailyMessages){
+            d.updateFilePath(dailyAvatarName);
         }
         return false;
     }

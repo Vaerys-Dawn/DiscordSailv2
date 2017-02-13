@@ -21,9 +21,19 @@ public class Info implements Command {
     public String execute(String args, CommandObject command) {
         ArrayList<Command> commands = Globals.getCommands();
 
+        String error = "> Command with the name " + args + " not found.";
         for (Command c : commands) {
-            for (String s : c.names())
+            for (String s : c.names()) {
                 if (args.equalsIgnoreCase(s)) {
+                    if ((c.type().equalsIgnoreCase(Command.TYPE_SERVERS) && !command.guildConfig.doModuleServers())) {
+                        return error;
+                    }
+                    if (c.type().equalsIgnoreCase(Command.TYPE_CHARACTER) && !command.guildConfig.doModuleChars()){
+                        return error;
+                    }
+                    if (c.type().equalsIgnoreCase(Command.TYPE_COMPETITION) && !command.guildConfig.doModuleComp()){
+                        return error;
+                    }
                     EmbedBuilder infoEmbed = new EmbedBuilder();
                     Color color = Utility.getUsersColour(Globals.getClient().getOurUser(), command.guild);
                     if (color != null) {
@@ -45,7 +55,7 @@ public class Info implements Command {
                         for (Permissions p : c.perms()) {
                             permList.add(p.toString());
                         }
-                        builder.append(Utility.listFormatter(permList,true));
+                        builder.append(Utility.listFormatter(permList, true));
                     }
                     //dual command info
                     if (c.dualType() != null) {
@@ -65,12 +75,12 @@ public class Info implements Command {
                             for (Permissions p : perms) {
                                 permList.add(p.toString());
                             }
-                            builder.append(Utility.listFormatter(permList,true));
+                            builder.append(Utility.listFormatter(permList, true));
                             builderDual.append("**");
                         }
                         builder.append(builderDual.toString());
                     }
-                    infoEmbed.appendField("> Info - " + c.names()[0],builder.toString(),false);
+                    infoEmbed.appendField("> Info - " + c.names()[0], builder.toString(), false);
                     IChannel commandChannel = command.client.getChannelByID(command.guildConfig.getChannelTypeID(c.channel()));
                     //channel
                     if (commandChannel != null) {
@@ -90,8 +100,10 @@ public class Info implements Command {
                     Utility.sendEmbededMessage("", infoEmbed.build(), command.channel);
                     return "";
                 }
+            }
+
         }
-        return "> Command with the name " + args + " not found.";
+        return error;
     }
 
     @Override

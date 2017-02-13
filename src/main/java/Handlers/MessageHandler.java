@@ -63,6 +63,15 @@ public class MessageHandler {
         for (Command c : commands) {
             for (String name : c.names()) {
                 if (command.equalsIgnoreCase(guildConfig.getPrefixCommand() + name)) {
+                    if ((c.type().equalsIgnoreCase(Command.TYPE_SERVERS) && !commandObject.guildConfig.doModuleServers())) {
+                        return;
+                    }
+                    if (c.type().equalsIgnoreCase(Command.TYPE_CHARACTER) && !commandObject.guildConfig.doModuleChars()){
+                        return;
+                    }
+                    if (c.type().equalsIgnoreCase(Command.TYPE_COMPETITION) && !commandObject.guildConfig.doModuleComp()){
+                        return;
+                    }
                     //command logging
                     logger.debug(Utility.loggingFormatter("COMMAND",command,args,commandObject));
 

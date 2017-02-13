@@ -102,7 +102,8 @@ public class TimedEvents {
                     e.printStackTrace();
                 }
                 //backups
-                Utility.backupConfigFile(Constants.FILE_CONFIG);
+                Utility.backupConfigFile(Constants.FILE_CONFIG, Constants.FILE_CONFIG_BACKUP);
+                Utility.backupConfigFile(Constants.FILE_GLOBAL_DATA, Constants.FILE_GLOBAL_DATA_BACKUP);
                 for (TimedObject g : TimerObjects) {
                     Utility.backupFile(g.getGuildID(), Constants.FILE_GUILD_CONFIG);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_CUSTOM);

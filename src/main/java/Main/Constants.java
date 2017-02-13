@@ -53,6 +53,8 @@ public class Constants {
     public static final String FILE_INFO = "Info.txt";
     public static final String FILE_CONFIG = DIRECTORY_STORAGE + "Config.json";
     public static final String FILE_CONFIG_BACKUP = DIRECTORY_BACKUPS + "Config.json";
+    public static final String FILE_GLOBAL_DATA = DIRECTORY_STORAGE + "Global_Data.json";
+    public static final String FILE_GLOBAL_DATA_BACKUP = DIRECTORY_BACKUPS + "Global_Data.json";
 
     public static final String FILE_COMPETITION = "Competition.json";
 

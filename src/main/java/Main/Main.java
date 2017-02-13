@@ -3,6 +3,7 @@ package Main;
 import Handlers.FileHandler;
 import Listeners.AnnotationListener;
 import POGOs.Config;
+import POGOs.GlobalData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.Discord4J;
@@ -51,21 +52,33 @@ public class Main {
             if (!Files.exists(Paths.get(Constants.FILE_CONFIG))) {
                 FileHandler.writeToJson(Constants.FILE_CONFIG, new Config());
             }
-            Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
-            if (config.initObject()) {
-                FileHandler.writeToJson(Constants.FILE_CONFIG, config);
+            if (!Files.exists(Paths.get(Constants.FILE_GLOBAL_DATA))) {
+                FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, new GlobalData());
             }
+
+            //load config phase 1
+            Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
+            GlobalData globalData = (GlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, GlobalData.class);
+            config.initObject();
+            FileHandler.writeToJson(Constants.FILE_CONFIG, config);
+
+            //getting bot token
             token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
             if (token == null) {
                 logger.error("!!!BOT TOKEN NOT VALID PLEASE CHECK \"Storage/Token.txt\" AND UPDATE THE TOKEN!!!");
             }
+
             IDiscordClient client = Client.getClient(token, false);
-            Globals.initConfig(client, config);
+
+            //load config phase 2
+            Globals.initConfig(client, config, globalData);
+
+            //login + register listener.
             EventDispatcher dispatcher = client.getDispatcher();
             dispatcher.registerListener(new AnnotationListener());
             client.login();
 
-            //inits Timed events such as backups
+            //timed events init
             new TimedEvents();
 
             while (!client.isReady()) ;

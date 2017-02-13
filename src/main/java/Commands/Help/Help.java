@@ -26,7 +26,7 @@ public class Help implements Command {
         StringBuilder builder = new StringBuilder();
         ArrayList<String> commandList = new ArrayList<>();
         ArrayList<Command> commands = Globals.getCommands();
-
+        String error = "> There are no commands with the type: " + args + ".\n" + Utility.getCommandInfo(this, command);
         //setting embed colour to match Bot's Colour
         Color color = Utility.getUsersColour(Globals.getClient().getOurUser(), command.guild);
         if (color != null) {
@@ -42,9 +42,13 @@ public class Help implements Command {
                     typeFound = true;
                 }
             }
-            if (!typeFound) {
+            if (c.type().equalsIgnoreCase(Command.TYPE_SERVERS) && !command.guildConfig.doModuleServers()) {
+            } else if (c.type().equalsIgnoreCase(Command.TYPE_CHARACTER) && !command.guildConfig.doModuleChars()) {
+            } else if (c.type().equalsIgnoreCase(Command.TYPE_COMPETITION) && !command.guildConfig.doModuleComp()) {
+            } else if (!typeFound) {
                 types.add(c.type());
             }
+
         }
         //sort types
         Collections.sort(types);
@@ -66,9 +70,16 @@ public class Help implements Command {
             helpEmbed.appendField("Helpful Links", desc, true);
             helpEmbed.withFooterText("Bot Version: " + Globals.version);
         } else {
+            if (args.equalsIgnoreCase(Command.TYPE_SERVERS) && !command.guildConfig.doModuleServers()) {
+                return error;
+            } else if (args.equalsIgnoreCase(Command.TYPE_CHARACTER) && !command.guildConfig.doModuleChars()) {
+                return error;
+            } else if (args.equalsIgnoreCase(Command.TYPE_COMPETITION) && !command.guildConfig.doModuleComp()) {
+                return error;
+            }
             boolean isFound = false;
             String title = "ERROR";
-            String suffix = Utility.getCommandInfo(new Info(),command);
+            String suffix = Utility.getCommandInfo(new Info(), command);
             for (String s : types) {
                 if (args.equalsIgnoreCase(s)) {
                     title = "> Here are all of the " + s + " Commands I have available.";
@@ -90,9 +101,9 @@ public class Help implements Command {
                 }
             }
             Collections.sort(commandList);
-            Utility.listFormatterEmbed(title,helpEmbed,commandList,false,suffix);
+            Utility.listFormatterEmbed(title, helpEmbed, commandList, false, suffix);
             if (!isFound) {
-                return "> There are no commands with the type: " + args + ".\n" + Utility.getCommandInfo(this, command);
+                return error;
             }
         }
         Utility.sendEmbededMessage("", helpEmbed.build(), command.channel);

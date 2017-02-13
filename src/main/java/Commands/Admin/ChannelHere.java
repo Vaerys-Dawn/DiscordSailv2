@@ -18,18 +18,22 @@ public class ChannelHere implements Command {
     public String execute(String args, CommandObject command) {
         StringBuilder builder = new StringBuilder();
         if (!args.isEmpty()) {
-            try {
-                for (Field f : Command.class.getDeclaredFields()) {
-                    if (f.getName().contains("CHANNEL_") && f.getType() == String.class) {
-                        if (args.equalsIgnoreCase((String) f.get(null))) {
-                            command.guildConfig.setUpChannel((String) f.get(null), command.channelID);
-                            return "> This channel is now the Server's **" + f.get(null) + "** channel.";
+            if (!(args.equalsIgnoreCase(Command.CHANNEL_SERVERS) && !command.guildConfig.doModuleServers())) {
+                builder.append("> Could not find channel type \"" + args + "\"\n");
+            } else {
+                try {
+                    for (Field f : Command.class.getDeclaredFields()) {
+                        if (f.getName().contains("CHANNEL_") && f.getType() == String.class) {
+                            if (args.equalsIgnoreCase((String) f.get(null))) {
+                                command.guildConfig.setUpChannel((String) f.get(null), command.channelID);
+                                return "> This channel is now the Server's **" + f.get(null) + "** channel.";
+                            }
                         }
                     }
+                    builder.append("> Could not find channel type \"" + args + "\"\n");
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
-                builder.append("> Could not find channel type \"" + args + "\"\n");
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
             }
         }
         EmbedBuilder embedBuilder = new EmbedBuilder();
@@ -38,7 +42,9 @@ public class ChannelHere implements Command {
         try {
             for (Field f : Command.class.getDeclaredFields()) {
                 if (f.getName().contains("CHANNEL_") && f.getType() == String.class) {
-                    channels.add((String) f.get(null));
+                    if (!(f.get(null).equals(Command.CHANNEL_SERVERS) && !command.guildConfig.doModuleServers())) {
+                        channels.add((String) f.get(null));
+                    }
                 }
             }
         } catch (IllegalAccessException e) {
@@ -46,10 +52,10 @@ public class ChannelHere implements Command {
         }
         Collections.sort(channels);
         embedBuilder.withDesc(builder.toString());
-        Utility.listFormatterEmbed(title,embedBuilder,channels,true);
-        embedBuilder.appendField(spacer,Utility.getCommandInfo(this,command),false);
-        embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(),command.guild));
-        Utility.sendEmbededMessage("",embedBuilder.build(),command.channel);
+        Utility.listFormatterEmbed(title, embedBuilder, channels, true);
+        embedBuilder.appendField(spacer, Utility.getCommandInfo(this, command), false);
+        embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
+        Utility.sendEmbededMessage("", embedBuilder.build(), command.channel);
         return null;
     }
 

@@ -37,4 +37,8 @@ public class DailyMessageObject {
     public String getFileName() {
         return fileName;
     }
+
+    public void updateFilePath(String newFileName) {
+        this.fileName = newFileName.replace("#day#", dayOfWeek.toString());
+    }
 }

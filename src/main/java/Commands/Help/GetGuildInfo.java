@@ -40,6 +40,9 @@ public class GetGuildInfo implements Command{
         int totalCosmetic = 0;
         int totalModified = 0;
         int totalTrusted = 0;
+        boolean manageRoles = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getID().equals(Globals.creatorID);
+        boolean manageServer = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getID().equals(Globals.creatorID);
+        boolean manageChannels = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getID().equals(Globals.creatorID);
 
         builder.append("***[" + guildName.toUpperCase() + "]***");
         builder.append("\n\n> Guild ID : **" + guild.getID());
@@ -51,7 +54,7 @@ public class GetGuildInfo implements Command{
             builder.append("\n> Region : **" + region.getName() + "**");
         }
         builder.append("\n> Total Members: **" + guild.getUsers().size() + "**");
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getID().equals(Globals.creatorID)) {
+        if (manageServer) {
             builder.append("\n\n***[GUILD CONFIG OPTIONS]***");
             builder.append("\n> LoginMessage = **" + config.doLoginMessage());
             builder.append("**\n> DailyMessage = **" + config.doDailyMessage());
@@ -63,10 +66,13 @@ public class GetGuildInfo implements Command{
             builder.append("**\n> MuteRepeatOffenders = **" + config.doMuteRepeatOffenders());
             builder.append("**\n> CompEntries = **" + config.doCompEntries());
             builder.append("**\n> CompVoting = **" + config.doCompVoting());
+            builder.append("**\n> ModuleComp = **" + config.doModuleComp());
+            builder.append("**\n> ModuleChars = **" + config.doModuleChars());
+            builder.append("**\n> ModuleServers = **" + config.doModuleServers());
             builder.append("**\n> Muted Role : **@" + config.getMutedRole().getRoleName());
             builder.append("**\n> RoleToMention : **@" + config.getRoleToMention().getRoleName() + "**");
         }
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getID().equals(Globals.creatorID)) {
+        if (manageChannels) {
             builder.append("\n\n***[CHANNELS]***");
             for (ChannelTypeObject c : config.getChannels()) {
                 builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getID()).getName() + "**");
@@ -83,7 +89,7 @@ public class GetGuildInfo implements Command{
         for (RoleStatsObject rso : statsObjects) {
             StringBuilder formatted = new StringBuilder();
             formatted.append("\n> **" + rso.getRoleName() + "**");
-            if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getID().equals(Globals.creatorID)) {
+            if (manageRoles) {
                 formatted.append(" Colour : \"**" + rso.getColour() + "**\",");
             }
             formatted.append(" Total Users: \"**" + rso.getTotalUsers() + "**\"");

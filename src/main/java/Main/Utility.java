@@ -169,12 +169,12 @@ public class Utility {
         }
     }
 
-    public static void backupConfigFile(String fileConfig) {
+    public static void backupConfigFile(String file,String fileBackup) {
         try {
-            File backup1 = new File(Constants.FILE_CONFIG_BACKUP + 1);
-            File backup2 = new File(Constants.FILE_CONFIG_BACKUP + 2);
-            File backup3 = new File(Constants.FILE_CONFIG_BACKUP + 3);
-            File toBackup = new File(Constants.FILE_CONFIG);
+            File backup1 = new File(fileBackup + 1);
+            File backup2 = new File(fileBackup + 2);
+            File backup3 = new File(fileBackup + 3);
+            File toBackup = new File(file);
             if (backup3.exists()) backup3.delete();
             if (backup2.exists()) backup2.renameTo(backup3);
             if (backup1.exists()) backup1.renameTo(backup2);
@@ -703,7 +703,7 @@ public class Utility {
         for (GuildContentObject c : Globals.getGuildContentObjects()) {
             String message = "***GLOBAL LOGGING***\n> **@" + commandObject.authorUserName + "** Has Used Command `" + command.names()[0] + "`";
             IChannel channel = null;
-            if (args != null || !args.isEmpty()){
+            if (!(args == null || args.isEmpty())){
                 message += " with args: `" + args + "`";
             }
             if (c.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG) != null) {
@@ -717,4 +717,6 @@ public class Utility {
             }
         }
     }
+
+
 }
