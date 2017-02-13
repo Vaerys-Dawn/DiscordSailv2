@@ -24,6 +24,7 @@ public class GuildConfig {
     boolean loginMessage = true;
     boolean generalLogging = false;
     boolean adminLogging = false;
+    boolean deleteLogging = false;
     boolean blackListing = false;
     boolean maxMentions = true;
     boolean dailyMessage = true;
@@ -110,6 +111,10 @@ public class GuildConfig {
         return adminLogging;
     }
 
+    public boolean doDeleteLogging() {
+        return deleteLogging;
+    }
+
     public boolean doMaxMentions() {
         return maxMentions;
     }
@@ -156,6 +161,11 @@ public class GuildConfig {
     @ToggleAnnotation(name = "AdminLogging")
     public boolean toggleAdminLogging() {
         return adminLogging = !adminLogging;
+    }
+
+    @ToggleAnnotation(name = "DeleteLogging")
+    public boolean toggleDeleteLogging() {
+        return deleteLogging = !deleteLogging;
     }
 
     @ToggleAnnotation(name = "BlackListing")
@@ -209,7 +219,7 @@ public class GuildConfig {
     }
 
     public void setUpChannel(String channelType, String channelID) {
-        if (channelType.equals(Command.CHANNEL_SERVERS) && !moduleServers){
+        if (channelType.equals(Command.CHANNEL_SERVERS) && !moduleServers) {
             return;
         }
         if (channels.size() == 0) {
@@ -228,7 +238,7 @@ public class GuildConfig {
     public String getChannelTypeID(String channelType) {
         for (ChannelTypeObject c : channels) {
             if (c.getType().equals(channelType)) {
-                if (channelType.equalsIgnoreCase(Command.CHANNEL_SERVERS) && !moduleServers){
+                if (channelType.equalsIgnoreCase(Command.CHANNEL_SERVERS) && !moduleServers) {
                     return null;
                 }
                 return c.getID();

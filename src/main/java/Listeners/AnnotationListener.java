@@ -1,5 +1,6 @@
 package Listeners;
 
+import Commands.Command;
 import Commands.CommandObject;
 import Handlers.DMHandler;
 import Handlers.FileHandler;
@@ -13,11 +14,13 @@ import POGOs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
+import sx.blah.discord.api.internal.json.event.MessageDeleteEventResponse;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
@@ -230,6 +233,41 @@ public class AnnotationListener {
                     Utility.deleteMessage(event.getMessage());
                 }
             }
+        }
+    }
+
+    @EventSubscriber
+    public void onMessageDeleteEvent(MessageDeleteEvent event){
+        if (event.getChannel().isPrivate()){
+            return;
+        }
+        CommandObject command = new CommandObject(event.getMessage());
+        String content;
+        IChannel logging = command.client.getChannelByID(command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG));
+        IUser ourUser = command.client.getOurUser();
+        if (command.guildConfig.getChannelTypeID(Command.CHANNEL_INFO).equals(command.channelID) && ourUser.getID().equals(command.authorID)){
+            return;
+        }
+        if (command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG).equals(command.channelID) && ourUser.getID().equals(command.authorID)){
+            return;
+        }
+        if (command.guildConfig.getChannelTypeID(Command.CHANNEL_ADMIN_LOG).equals(command.channelID) && ourUser.getID().equals(command.authorID)){
+            return;
+        }
+        if (logging != null && command.guildConfig.doDeleteLogging()){
+            if (command.message.getContent().isEmpty()){
+                return;
+            }
+            int charlimit = 1800;
+            if (command.message.getContent().length() > charlimit){
+                content = command.message.getContent().substring(0,1800);
+            }else {
+                content = command.message.getContent();
+            }
+            if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.authorID.equals(command.client.getOurUser().getID())){
+                return;
+            }
+            Utility.sendMessage("> **@" + command.authorUserName+ "'s** Message was deleted in channel: " + command.channel.mention() + " with contents:\n" + content,logging);
         }
     }
 }
