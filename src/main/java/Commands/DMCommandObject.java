@@ -29,14 +29,14 @@ public class DMCommandObject {
         authorID = author.getID();
         authorUserName = author.getName() + "#" + author.getDiscriminator();
         client = Globals.getClient();
-        notAllowed = "> I'm sorry " + author.getName() + ", I'm afraid I can't do that.";
+        notAllowed = "> I'm sorry " + author.getName() + ", I'm afraid I can't let you do that.";
     }
 
     public void setAuthor(IUser author) {
         this.author = author;
         authorID = author.getID();
         authorUserName = author.getName() + "#" + author.getDiscriminator();
-        notAllowed = "> I'm sorry " + author.getName() + ", I'm afraid I can't do that.";
+        notAllowed = "> I'm sorry " + author.getName() + ", I'm afraid I can't let you do that.";
     }
 
     public void setChannel(IChannel channel) {

@@ -59,7 +59,7 @@ public class CommandObject {
         competition = guildFiles.getCompetition();
         client = Globals.getClient();
 
-        notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.";
+        notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't let you do that.";
     }
 
     public void setAuthor(IUser author) {
@@ -69,7 +69,7 @@ public class CommandObject {
         authorDisplayName = author.getDisplayName(guild);
         authorColour = Utility.getUsersColour(author, guild);
         authorRoles = author.getRolesForGuild(guild);
-        notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.";
+        notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't let you do that.";
     }
 
     public void setChannel(IChannel channel) {
@@ -90,7 +90,7 @@ public class CommandObject {
             authorColour = Utility.getUsersColour(author, guild);
             authorRoles = author.getRolesForGuild(guild);
             authorDisplayName = author.getDisplayName(guild);
-            notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.";
+            notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't let you do that.";
         }
     }
 
