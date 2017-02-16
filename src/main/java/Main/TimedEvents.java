@@ -5,11 +5,14 @@ import Objects.DailyMessageObject;
 import Objects.ReminderObject;
 import Objects.TimedObject;
 import Objects.WaiterObject;
+import POGOs.GlobalData;
 import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
 
 import java.io.File;
@@ -80,7 +83,7 @@ public class TimedEvents {
             @Override
             public void run() {
                 ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
-                String dailyFileName = Globals.dailyAvatarName.replace("#day#",timeNow.getDayOfWeek().toString());
+                String dailyFileName = Globals.dailyAvatarName.replace("#day#", timeNow.getDayOfWeek().toString());
                 DayOfWeek day = timeNow.getDayOfWeek();
                 File avatarFile;
 
@@ -234,8 +237,22 @@ public class TimedEvents {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                //Sending isAlive Check.
+                try {
+                    Globals.getClient().checkLoggedIn("IsAlive");
+                } catch (DiscordException e) {
+                    logger.error(e.getErrorMessage());
+                    logger.info("Logging back in.");
+                    try {
+                        Globals.getClient().login();
+                        return;
+                    } catch (IllegalStateException ex) {
+                        //ignore exception
+                    }
+                }
                 Globals.saveFiles();
             }
-        }, 2* 60 * 1000, 5 * 60 * 1000);
+        }, 2 * 60 * 1000, 5 * 60 * 1000);
     }
+
 }

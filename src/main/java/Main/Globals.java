@@ -10,6 +10,8 @@ import Commands.Characters.UpdateChar;
 import Commands.Command;
 import Commands.Competition.EnterComp;
 import Commands.Competition.EnterVote;
+import Commands.Competition.FinalTally;
+import Commands.Competition.GetCompEntries;
 import Commands.DMCommand;
 import Commands.DMCommands.BlockUser;
 import Commands.DMCommands.HelpDM;

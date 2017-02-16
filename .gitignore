@@ -64,3 +64,4 @@ Storage
 *.json2
 *.json3
 bot.log
+*.class
