@@ -303,9 +303,9 @@ public class AnnotationListener {
             IChannel logging = Globals.getClient().getChannelByID(content.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG));
             if (logging != null) {
                 if (joining) {
-                    Utility.sendMessage("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + " Has Joined the Server.", logging);
+                    Utility.sendMessage("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** Has Joined the Server.", logging);
                 } else {
-                    Utility.sendMessage("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + " Has Left the Server.", logging);
+                    Utility.sendMessage("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** Has Left the Server.", logging);
                 }
             }
         }
