@@ -36,8 +36,8 @@ public class GuildConfig {
     public boolean moduleServers = true;
     public boolean moduleChars = true;
     public boolean moduleComp = false;
-    int maxMentionLimit = 8;
-    public int MessageLimit = 10;
+    public int maxMentionLimit = 8;
+    public int messageLimit = 10;
 
 
     // TODO: 04/10/2016 let the mention limit be customisable.
@@ -349,6 +349,6 @@ public class GuildConfig {
     }
 
     public void setRateLimit(int rateLimit) {
-        MessageLimit = rateLimit;
+        messageLimit = rateLimit;
     }
 }

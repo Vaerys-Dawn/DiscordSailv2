@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/JavaDiscordSAILv2.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/logback.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/project.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/original-JavaDiscordSAILv2.jar" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Help/GetGuildInfo.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Help/GetGuildInfo.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Objects/GuildContentObject.java" afterPath="$PROJECT_DIR$/src/main/java/Objects/GuildContentObject.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" />
     </list>
     <ignored path="DiscordSailv2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,8 +39,8 @@
       <file leaf-file-name="GuildConfig.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="39" column="32" selection-start-line="39" selection-start-column="32" selection-end-line="39" selection-end-column="32" />
+            <state relative-caret-position="398">
+              <caret line="38" column="11" selection-start-line="38" selection-start-column="11" selection-end-line="38" selection-end-column="11" />
               <folding>
                 <element signature="method#initConfig#0;class#GuildConfig#0" expanded="false" />
                 <element signature="method#setUpChannel#0;class#GuildConfig#0" expanded="false" />
@@ -58,9 +56,29 @@
                 <element signature="method#isRoleCosmetic#0;class#GuildConfig#0" expanded="false" />
                 <element signature="method#isRoleModifier#0;class#GuildConfig#0" expanded="false" />
                 <element signature="method#isRoleTrusted#0;class#GuildConfig#0" expanded="false" />
-                <element signature="e#11172#11173#0" expanded="true" />
-                <element signature="e#11212#11213#0" expanded="true" />
+                <element signature="e#11179#11180#0" expanded="true" />
+                <element signature="e#11219#11220#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Info.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Help/Info.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GetGuildInfo.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Help/GetGuildInfo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="77" column="77" selection-start-line="77" selection-start-column="77" selection-end-line="77" selection-end-column="77" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -75,11 +93,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+            <state relative-caret-position="814">
+              <caret line="49" column="60" selection-start-line="49" selection-start-column="60" selection-end-line="49" selection-end-column="60" />
               <folding />
             </state>
           </provider>
@@ -151,26 +169,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommandInit.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Commands/CommandInit.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-187">
-              <caret line="45" column="38" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="38" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Competition.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/Competition.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-281">
-              <caret line="37" column="18" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Utility.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Main/Utility.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -235,7 +233,6 @@
         <option value="$PROJECT_DIR$/src/main/java/Commands/Creator/Sudo.java" />
         <option value="$PROJECT_DIR$/src/main/java/Commands/Creator/UpdateAvatar.java" />
         <option value="$PROJECT_DIR$/src/main/java/Commands/Command.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Commands/Help/GetGuildInfo.java" />
         <option value="$PROJECT_DIR$/src/main/resources/logback.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/Commands/Help/Help.java" />
@@ -254,10 +251,11 @@
         <option value="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
         <option value="$PROJECT_DIR$/src/main/java/Objects/GuildContentObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" />
-        <option value="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" />
         <option value="$PROJECT_DIR$/src/main/java/Commands/Admin/MaxMessages.java" />
         <option value="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Help/GetGuildInfo.java" />
       </list>
     </option>
   </component>
@@ -549,6 +547,36 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Commands" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DiscordSailv2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DiscordSailv2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Commands" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Help" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1101,22 +1129,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/Objects/CharacterObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Objects/DailyMessageObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Objects/MessageErrorObject.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -1483,31 +1495,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="39" column="32" selection-start-line="39" selection-start-column="32" selection-end-line="39" selection-end-column="32" />
-          <folding>
-            <element signature="method#initConfig#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#setUpChannel#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#getChannelTypeID#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#updateVariables#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#setRoleToMention#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#addRole#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#removeRole#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#testIsTrusted#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#addTrusted#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#delTrusted#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#addOffence#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#isRoleCosmetic#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#isRoleModifier#0;class#GuildConfig#0" expanded="false" />
-            <element signature="method#isRoleTrusted#0;class#GuildConfig#0" expanded="false" />
-            <element signature="e#11172#11173#0" expanded="true" />
-            <element signature="e#11212#11213#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Admin/MaxMessages.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -1550,8 +1537,49 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+        <state relative-caret-position="814">
+          <caret line="49" column="60" selection-start-line="49" selection-start-column="60" selection-end-line="49" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Help/Info.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/POGOs/GuildConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="398">
+          <caret line="38" column="11" selection-start-line="38" selection-start-column="11" selection-end-line="38" selection-end-column="11" />
+          <folding>
+            <element signature="method#initConfig#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#setUpChannel#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#getChannelTypeID#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#updateVariables#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#setRoleToMention#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#addRole#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#removeRole#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#testIsTrusted#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#addTrusted#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#delTrusted#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#addOffence#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#isRoleCosmetic#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#isRoleModifier#0;class#GuildConfig#0" expanded="false" />
+            <element signature="method#isRoleTrusted#0;class#GuildConfig#0" expanded="false" />
+            <element signature="e#11179#11180#0" expanded="true" />
+            <element signature="e#11219#11220#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Help/GetGuildInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="77" column="77" selection-start-line="77" selection-start-column="77" selection-end-line="77" selection-end-column="77" />
           <folding />
         </state>
       </provider>

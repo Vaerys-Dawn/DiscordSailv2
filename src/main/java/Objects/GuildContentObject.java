@@ -28,7 +28,7 @@ public class GuildContentObject {
     }
 
     public boolean rateLimit(String userID){
-        int max = guildConfig.MessageLimit;
+        int max = guildConfig.messageLimit;
         if (max == -1){
             return false;
         }

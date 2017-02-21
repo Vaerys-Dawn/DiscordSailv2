@@ -68,11 +68,14 @@ public class GetGuildInfo implements Command{
             }
             Collections.sort(toggles);
             Collections.sort(modules);
-            builder.append("\n\n***[TOGGLES]***");
+            builder.append("\n\n***[ADMIN INFO]***");
             builder.append("\n\n**GUILD TOGGLES**");
             toggles.forEach(builder::append);
             builder.append("\n\n**GUILD MODULES**");
             modules.forEach(builder::append);
+            builder.append("\n\n**GUILD DATA**");
+            builder.append("\n> Max Mentions: **" + config.maxMentionLimit + "**");
+            builder.append("\n> Rate Limit: **" + config.messageLimit + "/10s**");
         }
         if (manageChannels) {
             builder.append("\n\n***[CHANNELS]***");
