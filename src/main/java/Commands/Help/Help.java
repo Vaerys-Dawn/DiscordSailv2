@@ -21,11 +21,11 @@ public class Help implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        ArrayList<String> types = new ArrayList<>();
+        ArrayList<String> types = command.commandTypes;
         EmbedBuilder helpEmbed = new EmbedBuilder();
         StringBuilder builder = new StringBuilder();
         ArrayList<String> commandList = new ArrayList<>();
-        ArrayList<Command> commands = Globals.getCommands();
+        ArrayList<Command> commands = command.commands;
         String error = "> There are no commands with the type: " + args + ".\n" + Utility.getCommandInfo(this, command);
         //setting embed colour to match Bot's Colour
         Color color = Utility.getUsersColour(Globals.getClient().getOurUser(), command.guild);
@@ -34,22 +34,15 @@ public class Help implements Command {
         }
 
         //getting Types of commands.
-        types.add(TYPE_DM);
-        for (Command c : commands) {
-            boolean typeFound = false;
-            for (String s : types) {
-                if (c.type().equals(s)) {
-                    typeFound = true;
+
+        if (!command.authorID.equalsIgnoreCase(Globals.creatorID)){
+            for (int i = 0; i < types.size();i++){
+                if (types.get(i).equals(TYPE_CREATOR)){
+                    types.remove(i);
                 }
             }
-            if (c.type().equalsIgnoreCase(Command.TYPE_SERVERS) && !command.guildConfig.doModuleServers()) {
-            } else if (c.type().equalsIgnoreCase(Command.TYPE_CHARACTER) && !command.guildConfig.doModuleChars()) {
-            } else if (c.type().equalsIgnoreCase(Command.TYPE_COMPETITION) && !command.guildConfig.doModuleComp()) {
-            } else if (!typeFound) {
-                types.add(c.type());
-            }
-
         }
+
         //sort types
         Collections.sort(types);
 
@@ -70,13 +63,6 @@ public class Help implements Command {
             helpEmbed.appendField("Helpful Links", desc, true);
             helpEmbed.withFooterText("Bot Version: " + Globals.version);
         } else {
-            if (args.equalsIgnoreCase(Command.TYPE_SERVERS) && !command.guildConfig.doModuleServers()) {
-                return error;
-            } else if (args.equalsIgnoreCase(Command.TYPE_CHARACTER) && !command.guildConfig.doModuleChars()) {
-                return error;
-            } else if (args.equalsIgnoreCase(Command.TYPE_COMPETITION) && !command.guildConfig.doModuleComp()) {
-                return error;
-            }
             boolean isFound = false;
             String title = "ERROR";
             String suffix = Utility.getCommandInfo(new Info(), command);
@@ -85,8 +71,8 @@ public class Help implements Command {
                     title = "> Here are all of the " + s + " Commands I have available.";
                     isFound = true;
                     if (s.equalsIgnoreCase(TYPE_DM)) {
-                        commandList.addAll(Globals.commandsDM.stream().map(c -> Globals.defaultPrefixCommand + c.names()[0]).collect(Collectors.toList()));
-                        suffix = "These commands can only be performed in DMs.\n" + suffix;
+                        commandList.addAll(Globals.getCommandsDM().stream().map(c -> Globals.defaultPrefixCommand + c.names()[0]).collect(Collectors.toList()));
+                        suffix = "These commands can only be performed in DMs.";
                     } else {
                         for (Command c : commands) {
                             if (c.type().equalsIgnoreCase(s)) {

@@ -23,7 +23,7 @@ public class EnterComp implements Command {
         IMessage message = command.message;
         IUser author = command.author;
 
-        if (guildConfig.doCompEntries()) {
+        if (guildConfig.compEntries) {
             String fileName;
             String fileUrl;
             if (message.getAttachments().size() > 0) {

@@ -5,21 +5,16 @@ import Objects.DailyMessageObject;
 import Objects.ReminderObject;
 import Objects.TimedObject;
 import Objects.WaiterObject;
-import POGOs.GlobalData;
 import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
 
 import java.io.File;
-import java.time.DayOfWeek;
-import java.time.Month;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,16 +25,16 @@ import java.util.TimerTask;
 public class TimedEvents {
 
     static ArrayList<TimedObject> TimerObjects = new ArrayList<>();
-    static IDiscordClient client;
 
     final static Logger logger = LoggerFactory.getLogger(TimedEvents.class);
 
     public TimedEvents() {
-        doRemovalOneSec();
-        doRemovalThreeSec();
-        doRemovalMin();
-        doTaskFiveMin();
-        dailyTasks();
+        ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
+        doEventSec();
+        doEventThreeSec();
+        doEventMin(nowUTC);
+        doEventFiveMin(nowUTC);
+        doEventDaily(nowUTC);
     }
 
     public static void addGuildCoolDown(String guildID) {
@@ -70,8 +65,7 @@ public class TimedEvents {
         }
     }
 
-    private static void dailyTasks() {
-        ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
+    private static void doEventDaily(ZonedDateTime nowUTC) {
         ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
         midnightUTC = midnightUTC.withHour(0).withSecond(0).withMinute(0).withNano(0).plusDays(1);
         long initialDelay = midnightUTC.toEpochSecond() - nowUTC.toEpochSecond() + 4;
@@ -118,7 +112,7 @@ public class TimedEvents {
 
                     //daily messages
                     if (guildConfig.getChannelTypeID(Command.CHANNEL_GENERAL) != null) {
-                        if (guildConfig.doDailyMessage()) {
+                        if (guildConfig.dailyMessage) {
                             IChannel channel = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_GENERAL));
                             for (DailyMessageObject d : Globals.dailyMessages) {
                                 if (day.equals(d.getDayOfWeek())) {
@@ -165,7 +159,7 @@ public class TimedEvents {
         return true;
     }
 
-    private static void doRemovalOneSec() {
+    private static void doEventSec() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -182,7 +176,7 @@ public class TimedEvents {
         }, 1000, 1000);
     }
 
-    private static void doRemovalThreeSec() {
+    private static void doEventThreeSec() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -201,10 +195,13 @@ public class TimedEvents {
                     task.setWaiterObjects(waiterObjects);
                 }
             }
-        }, 3000, 3000);
+        }, 3 * 1000, 3000);
     }
 
-    private static void doRemovalMin() {
+    private static void doEventMin(ZonedDateTime nowUTC) {
+        ZonedDateTime nextTimeUTC;
+        nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
+        long initialDelay = (nextTimeUTC.toEpochSecond() - nowUTC.toEpochSecond());
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -229,10 +226,14 @@ public class TimedEvents {
                     task.setReminderObjects(reminderObjects);
                 }
             }
-        }, 3000, 60000);
+        }, initialDelay * 1000, 1000 * 60);
     }
 
-    private static void doTaskFiveMin() {
+    private static void doEventFiveMin(ZonedDateTime nowUTC) {
+        while (!Globals.getClient().isReady());
+        ZonedDateTime nextTimeUTC;
+        nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
+        long initialDelay = (nextTimeUTC.toEpochSecond() - nowUTC.toEpochSecond());
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -252,7 +253,7 @@ public class TimedEvents {
                 }
                 Globals.saveFiles();
             }
-        }, 2 * 60 * 1000, 5 * 60 * 1000);
+        }, initialDelay * 1000, 5 * 60 * 1000);
     }
 
 }

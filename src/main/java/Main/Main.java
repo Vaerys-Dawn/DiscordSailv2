@@ -84,13 +84,8 @@ public class Main {
             while (!client.isReady()) ;
 
             //makes sure that nothing in the config file will cause an error
-            String configResult = Globals.checkConfig();
-            if (!configResult.isEmpty()) {
-                System.out.println("AN ERROR HAS OCCURRED WHEN LOADING \"" + Constants.FILE_CONFIG + "\" PLEASE CHECK BELOW TO SEE WHAT WENT WRONG.");
-                System.out.println(configResult);
-                client.logout();
-                Runtime.getRuntime().exit(0);
-            }
+            Globals.validateConfig();
+            Globals.setVersion();
             consoleInput();
         } catch (DiscordException ex) {
             logger.error(ex.getErrorMessage());

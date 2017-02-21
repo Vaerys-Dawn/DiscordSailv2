@@ -260,7 +260,7 @@ public class AnnotationListener {
         if (adminLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)){
             return;
         }
-        if (logging != null && command.guildConfig.doDeleteLogging()){
+        if (logging != null && command.guildConfig.deleteLogging){
             if (command.message.getContent().isEmpty()){
                 return;
             }

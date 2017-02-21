@@ -37,7 +37,6 @@ public class GuildContentObject {
     }
 
     public GuildConfig getGuildConfig() {
-
         return guildConfig;
     }
 

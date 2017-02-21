@@ -29,7 +29,6 @@ public class CustomCommands {
     boolean properlyInit = false;
     ArrayList<BlackListObject> blackList = new ArrayList<>();
     ArrayList<CCommandObject> commands = new ArrayList<>();
-    final CCommandObject commandNotFound = new CCommandObject(true, "Error", "404", "> Command not found.", false);
 
     public boolean isProperlyInit() {
         return properlyInit;
@@ -65,6 +64,9 @@ public class CustomCommands {
         }
         if (commandName.length() > 50) {
             return "> Command name too long.";
+        }
+        if (commandName.isEmpty()){
+            return "> Command name cannot be empty.";
         }
         if (StringUtils.countMatches(commandContents, "#embedImage#{") > 1) {
             return "> Custom Commands Cannot have multiple #embedImage# tags";
@@ -153,29 +155,6 @@ public class CustomCommands {
                 }
             }
             i++;
-        }
-        return Constants.ERROR_CC_NOT_FOUND;
-    }
-
-
-    public String toggleShitPost(String args) {
-        for (CCommandObject c : commands) {
-            if (c.getName().equalsIgnoreCase(args)) {
-                if (!c.isLocked()) {
-                    c.toggleShitPost();
-                    return "> Toggled Shitpost for that command.";
-                } else return "> That command is locked and cannot be edited.";
-            }
-        }
-        return Constants.ERROR_CC_NOT_FOUND;
-    }
-
-    public String toggleLock(String args) {
-        for (CCommandObject c : commands) {
-            if (c.getName().equalsIgnoreCase(args)) {
-                c.toggleLocked();
-                return "> Toggled Lock for that command.";
-            }
         }
         return Constants.ERROR_CC_NOT_FOUND;
     }

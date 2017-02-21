@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class InfoDM implements DMCommand {
     @Override
     public String execute(String args, DMCommandObject command) {
-        ArrayList<DMCommand> commands = Globals.commandsDM;
+        ArrayList<DMCommand> commands = Globals.getCommandsDM();
 
         for (DMCommand c : commands) {
             for (String s : c.names()) {

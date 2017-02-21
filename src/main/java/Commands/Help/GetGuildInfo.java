@@ -2,6 +2,7 @@ package Commands.Help;
 
 import Commands.Command;
 import Commands.CommandObject;
+import GuildToggles.GuildToggle;
 import Main.Globals;
 import Main.Utility;
 import Objects.ChannelTypeObject;
@@ -55,22 +56,23 @@ public class GetGuildInfo implements Command{
         }
         builder.append("\n> Total Members: **" + guild.getUsers().size() + "**");
         if (manageServer) {
-            builder.append("\n\n***[GUILD CONFIG OPTIONS]***");
-            builder.append("\n> LoginMessage = **" + config.doLoginMessage());
-            builder.append("**\n> DailyMessage = **" + config.doDailyMessage());
-            builder.append("**\n> GeneralLogging = **" + config.doGeneralLogging());
-            builder.append("**\n> AdminLogging = **" + config.doAdminLogging());
-            builder.append("**\n> BlackListing = **" + config.doBlackListing());
-            builder.append("**\n> MaxMentions = **" + config.doMaxMentions());
-            builder.append("**\n> ShitPostFiltering = **" + config.doShitPostFiltering());
-            builder.append("**\n> MuteRepeatOffenders = **" + config.doMuteRepeatOffenders());
-            builder.append("**\n> CompEntries = **" + config.doCompEntries());
-            builder.append("**\n> CompVoting = **" + config.doCompVoting());
-            builder.append("**\n> ModuleComp = **" + config.doModuleComp());
-            builder.append("**\n> ModuleChars = **" + config.doModuleChars());
-            builder.append("**\n> ModuleServers = **" + config.doModuleServers());
-            builder.append("**\n> Muted Role : **@" + config.getMutedRole().getRoleName());
-            builder.append("**\n> RoleToMention : **@" + config.getRoleToMention().getRoleName() + "**");
+            ArrayList<String> toggles = new ArrayList<>();
+            ArrayList<String> modules = new ArrayList<>();
+            for (GuildToggle t : command.guildToggles){
+                String formatted = "\n> " + t.name() + " = **" + t.get(command.guildConfig) + "**";
+                if (t.isModule()){
+                    modules.add(formatted);
+                }else {
+                    toggles.add(formatted);
+                }
+            }
+            Collections.sort(toggles);
+            Collections.sort(modules);
+            builder.append("\n\n***[TOGGLES]***");
+            builder.append("\n\n**GUILD TOGGLES**");
+            toggles.forEach(builder::append);
+            builder.append("\n\n**GUILD MODULES**");
+            modules.forEach(builder::append);
         }
         if (manageChannels) {
             builder.append("\n\n***[CHANNELS]***");

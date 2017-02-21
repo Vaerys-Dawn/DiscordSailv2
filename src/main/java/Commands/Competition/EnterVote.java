@@ -10,7 +10,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class EnterVote implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        if (command.guildConfig.doCompVoting()) {
+        if (command.guildConfig.compVoting) {
             return command.competition.addVote(command.authorID, args);
         } else {
             return "> Competition Voting is closed.";

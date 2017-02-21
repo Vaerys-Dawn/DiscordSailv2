@@ -1,6 +1,7 @@
 package POGOs;
 
 import Annotations.ToggleAnnotation;
+import Commands.Admin.Toggle;
 import Commands.Command;
 import Main.Constants;
 import Main.Globals;
@@ -17,25 +18,26 @@ import java.util.List;
  * Created by Vaerys on 03/08/2016.
  */
 public class GuildConfig {
-    String prefixCommand = Constants.PREFIX_COMMAND;
-    String prefixCC = Constants.PREFIX_CC;
+    String prefixCommand = Globals.defaultPrefixCommand;
+    String prefixCC = Globals.defaultPrefixCC;
     boolean properlyInit = false;
     String guildName = "";
-    boolean loginMessage = true;
-    boolean generalLogging = false;
-    boolean adminLogging = false;
-    boolean deleteLogging = false;
-    boolean blackListing = false;
-    boolean maxMentions = true;
-    boolean dailyMessage = true;
-    boolean shitPostFiltering = false;
-    boolean muteRepeatOffenders = true;
-    boolean compEntries = false;
-    boolean compVoting = false;
-    boolean moduleServers = true;
-    boolean moduleChars = true;
-    boolean moduleComp = false;
+    public boolean loginMessage = true;
+    public boolean generalLogging = false;
+    public boolean adminLogging = false;
+    public boolean deleteLogging = false;
+    public boolean denyInvites = false;
+    public boolean maxMentions = true;
+    public boolean dailyMessage = true;
+    public boolean shitPostFiltering = false;
+    public boolean muteRepeatOffenders = true;
+    public boolean compEntries = false;
+    public boolean compVoting = false;
+    public boolean moduleServers = true;
+    public boolean moduleChars = true;
+    public boolean moduleComp = false;
     int maxMentionLimit = 8;
+
 
     // TODO: 04/10/2016 let the mention limit be customisable.
     ArrayList<ChannelTypeObject> channels = new ArrayList<>();
@@ -84,138 +86,6 @@ public class GuildConfig {
 
     public ArrayList<ChannelTypeObject> getChannels() {
         return channels;
-    }
-
-    //Getters For the Toggles.
-    public boolean doLoginMessage() {
-        return loginMessage;
-    }
-
-    public int getMaxMentionLimit() {
-        return maxMentionLimit;
-    }
-
-    public boolean doGeneralLogging() {
-        return generalLogging;
-    }
-
-    public boolean doBlackListing() {
-        return blackListing;
-    }
-
-    public boolean doShitPostFiltering() {
-        return shitPostFiltering;
-    }
-
-    public boolean doAdminLogging() {
-        return adminLogging;
-    }
-
-    public boolean doDeleteLogging() {
-        return deleteLogging;
-    }
-
-    public boolean doMaxMentions() {
-        return maxMentions;
-    }
-
-    public boolean doDailyMessage() {
-        return dailyMessage;
-    }
-
-    public boolean doMuteRepeatOffenders() {
-        return muteRepeatOffenders;
-    }
-
-    public boolean doCompEntries() {
-        return compEntries;
-    }
-
-    public boolean doCompVoting() {
-        return compVoting;
-    }
-
-    public boolean doModuleServers() {
-        return moduleServers;
-    }
-
-    public boolean doModuleChars() {
-        return moduleChars;
-    }
-
-    public boolean doModuleComp() {
-        return moduleComp;
-    }
-
-    //Togglers
-    @ToggleAnnotation(name = "LoginMessage")
-    public boolean toggleDoLoginMessage() {
-        return loginMessage = !loginMessage;
-    }
-
-    @ToggleAnnotation(name = "GeneralLogging")
-    public boolean toggleLogging() {
-        return generalLogging = !generalLogging;
-    }
-
-    @ToggleAnnotation(name = "AdminLogging")
-    public boolean toggleAdminLogging() {
-        return adminLogging = !adminLogging;
-    }
-
-    @ToggleAnnotation(name = "DeleteLogging")
-    public boolean toggleDeleteLogging() {
-        return deleteLogging = !deleteLogging;
-    }
-
-    @ToggleAnnotation(name = "BlackListing")
-    public boolean toggleDoBlackListing() {
-        return blackListing = !blackListing;
-    }
-
-    @ToggleAnnotation(name = "MentionSpam")
-    public boolean toggelMaxMentions() {
-        return maxMentions = !maxMentions;
-    }
-
-    @ToggleAnnotation(name = "DailyMessage")
-    public boolean toggleDailyMessage() {
-        return dailyMessage = !dailyMessage;
-    }
-
-    @ToggleAnnotation(name = "ShitPostFiltering")
-    public boolean toggleShitPostFiltering() {
-        return shitPostFiltering = !shitPostFiltering;
-    }
-
-    @ToggleAnnotation(name = "MuteRepeatOffender")
-    public boolean toggleRepeatOffender() {
-        return muteRepeatOffenders = !muteRepeatOffenders;
-    }
-
-    @ToggleAnnotation(name = "CompEntries")
-    public boolean toggleCompEntries() {
-        return compEntries = !compEntries;
-    }
-
-    @ToggleAnnotation(name = "Voting")
-    public boolean toggleCompVoting() {
-        return compVoting = !compVoting;
-    }
-
-    @ToggleAnnotation(name = "ModuleComp")
-    public boolean toggleModuleComp() {
-        return moduleComp = !moduleComp;
-    }
-
-    @ToggleAnnotation(name = "ModuleChars")
-    public boolean toggleModuleChars() {
-        return moduleChars = !moduleChars;
-    }
-
-    @ToggleAnnotation(name = "ModuleServers")
-    public boolean toggleModuleServers() {
-        return moduleServers = !moduleServers;
     }
 
     public void setUpChannel(String channelType, String channelID) {
@@ -310,18 +180,6 @@ public class GuildConfig {
 
     public ArrayList<BlackListObject> getBlackList() {
         return blackList;
-    }
-
-    public void addBlacklistItem(String phrase, String reason) {
-        blackList.add(new BlackListObject(phrase, reason));
-    }
-
-    public void removeBlackListItem(String phrase) {
-        for (int i = 0; i < blackList.size(); i++) {
-            if (blackList.get(1).getPhrase().equalsIgnoreCase(phrase)) {
-                blackList.remove(i);
-            }
-        }
     }
 
     public String setRoleToMention(String roleName, String roleID) {
@@ -483,105 +341,7 @@ public class GuildConfig {
         return false;
     }
 
-    public String getInfo(IGuild guild, IUser author) {
-        String guildName = guild.getName();
-        LocalDateTime creationDate = guild.getCreationDate();
-        IUser guildOwner = guild.getOwner();
-        IRegion region = guild.getRegion();
-        List<IRole> roles = guild.getRoles();
-        StringBuilder builder = new StringBuilder();
-        ArrayList<String> cosmeticRoleStats = new ArrayList<>();
-        ArrayList<String> modifierRoleStats = new ArrayList<>();
-        int totalCosmetic = 0;
-        int totalModified = 0;
-        builder.append("***[" + guildName.toUpperCase() + "]***");
-        builder.append("\n\n> Guild ID : **" + guild.getID());
-        builder.append("**\n> Creation Date : **" + creationDate.getYear() + " " + creationDate.getMonth() + " " + creationDate.getDayOfMonth() + " - " + creationDate.getHour() + ":" + creationDate.getMinute());
-        builder.append("**\n> Guild Owner : **@" + guildOwner.getName() + "#" + guildOwner.getDiscriminator() + "**");
-        if (region != null) {
-            builder.append("\n> Region : **" + region.getName() + "**");
-        }
-        builder.append("\n> Total Members: **" + guild.getUsers().size() + "**");
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getID().equals(Globals.creatorID)) {
-            builder.append("\n\n***[GUILD CONFIG OPTIONS]***");
-            builder.append("\n> LoginMessage = **" + doLoginMessage());
-            builder.append("**\n> DailyMessage = **" + doDailyMessage());
-            builder.append("**\n> GeneralLogging = **" + doGeneralLogging());
-            builder.append("**\n> AdminLogging = **" + doAdminLogging());
-            builder.append("**\n> BlackListing = **" + doBlackListing());
-            builder.append("**\n> MaxMentions = **" + doMaxMentions());
-            builder.append("**\n> ShitPostFiltering = **" + doShitPostFiltering());
-            builder.append("**\n> MuteRepeatOffenders = **" + doMuteRepeatOffenders());
-            builder.append("**\n> CompEntries = **" + doCompEntries());
-            builder.append("**\n> CompVoting = **" + doCompVoting());
-            builder.append("**\n> Muted Role : **@" + getMutedRole().getRoleName());
-            builder.append("**\n> RoleToMention : **@" + getRoleToMention().getRoleName() + "**");
-        }
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getID().equals(Globals.creatorID)) {
-            builder.append("\n\n***[CHANNELS]***");
-            for (ChannelTypeObject c : getChannels()) {
-                builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getID()).getName() + "**");
-            }
-        }
-
-        builder.append("\n\n***[ROLES]***");
-        ArrayList<RoleStatsObject> statsObjects = new ArrayList<>();
-        for (IRole r : roles) {
-            if (!r.isEveryoneRole()) {
-                statsObjects.add(new RoleStatsObject(r, this, guild.getUsersByRole(r).size()));
-            }
-        }
-        for (RoleStatsObject rso : statsObjects) {
-            StringBuilder formatted = new StringBuilder();
-            formatted.append("\n> **" + rso.getRoleName() + "**");
-            if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getID().equals(Globals.creatorID)) {
-                formatted.append(" Colour : \"**" + rso.getColour() + "**\",");
-            }
-            formatted.append(" Total Users: \"**" + rso.getTotalUsers() + "**\"");
-            if (rso.isCosmetic()) {
-                cosmeticRoleStats.add(formatted.toString());
-                totalCosmetic += rso.getTotalUsers();
-            }
-            if (rso.isModifier()) {
-                modifierRoleStats.add(formatted.toString());
-                totalModified += rso.getTotalUsers();
-            }
-        }
-        Collections.sort(cosmeticRoleStats);
-        Collections.sort(modifierRoleStats);
-        builder.append("\n\n**COSMETIC ROLES**");
-        for (String s : cosmeticRoleStats) {
-            if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getID());
-                builder.delete(0, builder.length());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            builder.append(s);
-        }
-        builder.append("\n > Total users : \"**" + totalCosmetic + "**\"");
-        builder.append("\n\n**MODIFIER ROLES**");
-        for (String s : modifierRoleStats) {
-            if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getID());
-                builder.delete(0, builder.length());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            builder.append(s);
-        }
-        builder.append("\n > Total users : \"**" + totalModified + "**\"");
-        builder.append("\n\n------{END OF INFO}------");
-        Utility.sendDM(builder.toString(), author.getID());
-        return "> Info sent to you via Direct Message.";
+    public int getMaxMentionLimit() {
+        return maxMentionLimit;
     }
-
-
 }

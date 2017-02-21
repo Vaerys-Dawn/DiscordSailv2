@@ -3,6 +3,7 @@ package Commands.Admin;
 import Annotations.ToggleAnnotation;
 import Commands.Command;
 import Commands.CommandObject;
+import GuildToggles.GuildToggle;
 import Main.Utility;
 import POGOs.GuildConfig;
 import sx.blah.discord.handle.obj.Permissions;
@@ -12,6 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -21,36 +23,21 @@ public class Toggle implements Command {
     public String execute(String args, CommandObject command) {
         StringBuilder builder = new StringBuilder();
         if (!args.isEmpty()) {
-            Method[] methods = GuildConfig.class.getMethods();
-            for (Method m : methods) {
-                if (m.isAnnotationPresent(ToggleAnnotation.class)) {
-                    ToggleAnnotation toggleAnno = m.getAnnotation(ToggleAnnotation.class);
-                    if (args.equalsIgnoreCase(toggleAnno.name())) {
-                        try {
-                            Boolean state = (Boolean) m.invoke(command.guildConfig);
-                            return "> **" + toggleAnno.name() + " is now " + state + "**.";
-                        } catch (IllegalAccessException | InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
-                    }
+            for (GuildToggle t : command.guildToggles) {
+                if (args.equalsIgnoreCase(t.name())) {
+                    t.toggle(command.guildConfig);
+                    return "> **" + t.name() + " is now " + t.get(command.guildConfig) + "**.";
                 }
             }
             builder.append("> Could not find toggle \"" + args + "\".\n");
         }
-        Method[] methods = GuildConfig.class.getMethods();
         EmbedBuilder embedBuilder = new EmbedBuilder();
         String title = "> Here is a list of available Guild Toggles:\n";
-        ArrayList<String> types = new ArrayList<>();
-        for (Method m : methods) {
-            if (m.isAnnotationPresent(ToggleAnnotation.class)) {
-                ToggleAnnotation toggleAnno = m.getAnnotation(ToggleAnnotation.class);
-                types.add(toggleAnno.name());
-            }
-        }
+        ArrayList<String> types = command.guildToggles.stream().map(GuildToggle::name).collect(Collectors.toCollection(ArrayList::new));
         Collections.sort(types);
         embedBuilder.withDesc(builder.toString());
-        Utility.listFormatterEmbed(title,embedBuilder,types,true);
-        embedBuilder.appendField(spacer,Utility.getCommandInfo(this,command),false);
+        Utility.listFormatterEmbed(title, embedBuilder, types, true);
+        embedBuilder.appendField(spacer, Utility.getCommandInfo(this, command), false);
         embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
         Utility.sendEmbededMessage("", embedBuilder.build(), command.channel);
         return null;

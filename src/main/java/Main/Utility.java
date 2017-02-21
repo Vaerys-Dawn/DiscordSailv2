@@ -1,6 +1,5 @@
 package Main;
 
-import Commands.Admin.Shutdown;
 import Commands.Command;
 import Commands.CommandObject;
 import Commands.DMCommand;
@@ -314,6 +313,15 @@ public class Utility {
             }
             return false;
         });
+    }
+
+    public static boolean sendDMEmbed(String message, EmbedObject embed, String userID) {
+        IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
+        if (channel != null){
+            return sendEmbededMessage(message,embed,channel).get();
+        }else {
+            return true;
+        }
     }
 
     public static RequestBuffer.RequestFuture<Boolean> sendEmbededMessage(String message, EmbedObject embed, IChannel channel) {
@@ -635,7 +643,7 @@ public class Utility {
         if (horizontal) {
             builder.appendField(title, "`" + formattedList + "`", false);
         } else {
-            builder.appendField(title, "```" + formattedList + "```", false);
+            builder.appendField(title, "```\n" + formattedList + "```", false);
         }
     }
 
@@ -651,7 +659,7 @@ public class Utility {
         if (horizontal) {
             builder.appendField(title, "`" + formattedList + "`\n" + suffix, false);
         } else {
-            builder.appendField(title, "```" + formattedList + "```\n" + suffix, false);
+            builder.appendField(title, "```\n" + formattedList + "```\n" + suffix, false);
         }
     }
 
@@ -717,6 +725,4 @@ public class Utility {
             }
         }
     }
-
-
 }

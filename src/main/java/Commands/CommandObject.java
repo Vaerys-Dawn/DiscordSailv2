@@ -1,13 +1,17 @@
 package Commands;
 
+import GuildToggles.GuildToggle;
 import Main.Globals;
 import Main.Utility;
 import Objects.GuildContentObject;
 import POGOs.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.*;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,16 +39,39 @@ public class CommandObject {
     public Characters characters;
     public Servers servers;
     public Competition competition;
+
+    public ArrayList<Command> commands = new ArrayList<>();
+    public ArrayList<DMCommand> dmCommands = new ArrayList<>();
+    public ArrayList<String> channelTypes = new ArrayList<>();
+    public ArrayList<String> commandTypes = new ArrayList<>();
+    public ArrayList<GuildToggle> guildToggles = new ArrayList<>();
+
     public IDiscordClient client;
+
+
+    final static Logger logger = LoggerFactory.getLogger(CommandObject.class);
 
     public CommandObject(IMessage message) {
         this.message = message;
-        messageID = message.getID();
         guild = message.getGuild();
-        guildID = guild.getID();
         channel = message.getChannel();
-        channelID = channel.getID();
         author = message.getAuthor();
+        init();
+    }
+
+    public CommandObject(IMessage message, IGuild guild, IChannel channel, IUser author) {
+        this.message = message;
+        this.guild = guild;
+        this.channel = channel;
+        this.author = author;
+        validate();
+        init();
+    }
+
+    private void init() {
+        messageID = message.getID();
+        guildID = guild.getID();
+        channelID = channel.getID();
         authorID = author.getID();
         authorUserName = author.getName() + "#" + author.getDiscriminator();
         authorDisplayName = author.getDisplayName(guild);
@@ -59,7 +86,28 @@ public class CommandObject {
         competition = guildFiles.getCompetition();
         client = Globals.getClient();
 
+        commands = Globals.getCommands();
+        commandTypes = Globals.getCommandTypes();
+        channelTypes = Globals.getChannelTypes();
+        guildToggles = Globals.getGuildGuildToggles();
+
+        for (GuildToggle t: guildToggles){
+            if (t.isModule()){
+                if (!t.get(guildConfig)){
+                    t.execute(this);
+                }
+            }
+        }
+        dmCommands = Globals.getCommandsDM();
+
         notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't let you do that.";
+    }
+
+    private void validate() throws IllegalStateException {
+        if (message == null) throw new IllegalStateException("message can't be null");
+        if (guild == null) throw new IllegalStateException("guild can't be null");
+        if (channel == null) throw new IllegalStateException("channel can't be null");
+        if (author == null) throw new IllegalStateException("author can't be null");
     }
 
     public void setAuthor(IUser author) {
@@ -97,5 +145,28 @@ public class CommandObject {
     public void setMessage(IMessage message) {
         this.message = message;
         messageID = message.getID();
+    }
+
+    public void removeCommandsByType(String type) {
+        for (int i = 0; i < commands.size(); i++){
+            if (commands.get(i).type().equalsIgnoreCase(type)){
+                logger.debug(type +" - "+  commands.get(i).names()[0] + " - removed");
+                commands.remove(i);
+            }
+        }
+        for (int i = 0;i < commandTypes.size(); i++){
+            if (commandTypes.get(i).equalsIgnoreCase(type)){
+                commandTypes.remove(i);
+                logger.debug(type + " - removed");
+            }
+        }
+    }
+
+    public void removeChannel(String channel){
+        for (int i = 0; i< channelTypes.size(); i++){
+            if (channelTypes.get(i).equalsIgnoreCase(channel)){
+                channelTypes.remove(i);
+            }
+        }
     }
 }

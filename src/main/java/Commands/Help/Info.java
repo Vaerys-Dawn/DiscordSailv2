@@ -19,21 +19,16 @@ public class Info implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        ArrayList<Command> commands = Globals.getCommands();
+        ArrayList<Command> commands = command.commands;
 
         String error = "> Command with the name " + args + " not found.";
         for (Command c : commands) {
             for (String s : c.names()) {
                 if (args.equalsIgnoreCase(s)) {
-                    if ((c.type().equalsIgnoreCase(Command.TYPE_SERVERS) && !command.guildConfig.doModuleServers())) {
+                    if (c.type().equalsIgnoreCase(TYPE_CREATOR) && !command.authorID.equalsIgnoreCase(Globals.creatorID)){
                         return error;
                     }
-                    if (c.type().equalsIgnoreCase(Command.TYPE_CHARACTER) && !command.guildConfig.doModuleChars()){
-                        return error;
-                    }
-                    if (c.type().equalsIgnoreCase(Command.TYPE_COMPETITION) && !command.guildConfig.doModuleComp()){
-                        return error;
-                    }
+
                     EmbedBuilder infoEmbed = new EmbedBuilder();
                     Color color = Utility.getUsersColour(Globals.getClient().getOurUser(), command.guild);
                     if (color != null) {

@@ -17,6 +17,7 @@ public class DMHandler {
     final static Logger logger = LoggerFactory.getLogger(DMHandler.class);
 
     public DMHandler(IMessage message) {
+        message.getTimestamp();
         if (message.getAuthor().isBot()){
             return;
         }
@@ -29,7 +30,7 @@ public class DMHandler {
         if (message.toString().startsWith(Globals.defaultPrefixCommand)) {
             DMCommandObject commandObject = new DMCommandObject(message);
             SplitFirstObject args = new SplitFirstObject(message.toString());
-            for (DMCommand command : Globals.commandsDM){
+            for (DMCommand command : Globals.getCommandsDM()){
                 for (String name : command.names()){
                     if (args.getFirstWord().equalsIgnoreCase(Globals.defaultPrefixCommand + name)){
                         //logging

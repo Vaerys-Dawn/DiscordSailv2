@@ -1,32 +1,11 @@
 package Main;
 
-import Commands.Admin.*;
-import Commands.Admin.Shutdown;
-import Commands.CC.*;
-import Commands.Characters.DelChar;
-import Commands.Characters.ListChars;
-import Commands.Characters.SelectChar;
-import Commands.Characters.UpdateChar;
+import Commands.Admin.ChannelHere;
 import Commands.Command;
-import Commands.Competition.EnterComp;
-import Commands.Competition.EnterVote;
-import Commands.Competition.FinalTally;
-import Commands.Competition.GetCompEntries;
+import Commands.CommandInit;
 import Commands.DMCommand;
-import Commands.DMCommands.BlockUser;
-import Commands.DMCommands.HelpDM;
-import Commands.DMCommands.InfoDM;
-import Commands.DMCommands.Respond;
-import Commands.General.GetAvatar;
-import Commands.General.Hello;
-import Commands.General.RemindMe;
-import Commands.General.Test;
-import Commands.Help.*;
-import Commands.RoleSelect.CosmeticRoles;
-import Commands.RoleSelect.ListModifs;
-import Commands.RoleSelect.ListRoles;
-import Commands.RoleSelect.ModifierRoles;
-import Commands.Servers.*;
+import GuildToggles.GuildToggle;
+import GuildToggles.ToggleInit;
 import Handlers.FileHandler;
 import Objects.DailyMessageObject;
 import Objects.GuildContentObject;
@@ -66,14 +45,17 @@ public class Globals {
     public static IDiscordClient client;
     public static boolean isModifingFiles = false;
     private static ArrayList<GuildContentObject> guildContentObjects = new ArrayList<>();
-    public static ArrayList<Command> commands = new ArrayList<>();
-    public static ArrayList<DMCommand> commandsDM = new ArrayList<>();
+    private static ArrayList<Command> commands = new ArrayList<>();
+    private static ArrayList<DMCommand> commandsDM = new ArrayList<>();
+    private static ArrayList<String> channelTypes = new ArrayList<>();
+    private static ArrayList<String> commandTypes = new ArrayList<>();
+    private static ArrayList<GuildToggle> guildGuildToggles = new ArrayList<>();
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
     private static GlobalData globalData;
 
-    public static void initConfig(IDiscordClient ourClient, Config config,GlobalData newGlobalData) {
-        if (newGlobalData != null){
+    public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
+        if (newGlobalData != null) {
             globalData = newGlobalData;
         }
         client = ourClient;
@@ -92,191 +74,155 @@ public class Globals {
     }
 
     private static void initCommands() {
-        boolean properlyInit = true;
+        //Load Commands
+        commands = CommandInit.get();
+        //Load DM Commands
+        commandsDM = CommandInit.getDM();
+        //Load Guild Toggles
+        guildGuildToggles = ToggleInit.get();
 
-        //Admin commands
-        commands.add(new ChannelHere());
-        commands.add(new FinalTally());
-        commands.add(new GetCompEntries());
-        commands.add(new SetAdminRole());
-        commands.add(new SetMutedRole());
-        commands.add(new SetTrustedRoles());
-        commands.add(new Shutdown());
-        commands.add(new Sudo());
-        commands.add(new Toggle());
-        commands.add(new UpdateAvatar());
-        commands.add(new UpdateInfo());
-        commands.add(new UpdateRolePerms());
-        //General commands
-        commands.add(new GetAvatar());
-        commands.add(new Hello());
-        commands.add(new RemindMe());
-        commands.add(new Test());
-        //Help commands
-        commands.add(new GetGuildInfo());
-        commands.add(new Help());
-        commands.add(new HelpTags());
-        commands.add(new Info());
-        commands.add(new Report());
-        commands.add(new SilentReport());
-        //RoleSelect commands
-        commands.add(new CosmeticRoles());
-        commands.add(new ModifierRoles());
-        commands.add(new ListRoles());
-        commands.add(new ListModifs());
-        //Server commands
-        commands.add(new AddServer());
-        commands.add(new DelServer());
-        commands.add(new EditServerDesc());
-        commands.add(new EditServerIP());
-        commands.add(new EditServerName());
-        commands.add(new ListServers());
-        commands.add(new Server());
-        //Character Commands
-        commands.add(new DelChar());
-        commands.add(new ListChars());
-        commands.add(new SelectChar());
-        commands.add(new UpdateChar());
-        //CC commands
-        commands.add(new DelCC());
-        commands.add(new EditCC());
-        commands.add(new GetCCData());
-        commands.add(new InfoCC());
-        commands.add(new ListCCs());
-        commands.add(new NewCC());
-        commands.add(new SearchCCs());
-        commands.add(new TransferCC());
-        //Competition commands
-        commands.add(new EnterComp());
-        commands.add(new EnterVote());
-        logger.info(commands.size() + " Commands Loaded.");
+        //validate commands
+        validate();
 
-        //DM commands
-        commandsDM.add(new BlockUser());
-        commandsDM.add(new Respond());
-        commandsDM.add(new HelpDM());
-        commandsDM.add(new InfoDM());
-        logger.info(commandsDM.size() + " DM Commands Loaded.");
+        //init Command Types
+        commandTypes.add(Command.TYPE_DM);
 
+        //Init Channel Types
+        //Manually added Channels (ones not used in any commands)
+        channelTypes.add(Command.CHANNEL_SERVER_LOG);
+        channelTypes.add(Command.CHANNEL_ADMIN_LOG);
+        channelTypes.add(Command.CHANNEL_ADMIN);
+        channelTypes.add(Command.CHANNEL_SHITPOST);
+        channelTypes.add(Command.CHANNEL_GENERAL);
+
+
+        //automatically added Channels (these are added if they are used in any command)
         for (Command c : commands) {
-            logger.debug("Initialising Command: " + c.getClass().getName());
-            if (c.names().length == 0) {
-                logger.error(c.getClass().getName() + " Command Name cannot be null.");
-                properlyInit = false;
+            if (c.channel() != null)
+            {
+                boolean channelFound = false;
+                for (String s : channelTypes) {
+                    if (c.channel().equals(s)) {
+                        channelFound = true;
+                    }
+                }
+                if (!channelFound && c.channel() != null) {
+                    channelTypes.add(c.channel());
+                }
             }
-            if (c.type() == null || c.type().isEmpty()) {
-                logger.error(c.getClass().getName() + " Command Type cannot be null.");
-                properlyInit = false;
+        }
+        //auto remover code for Commands.Admin.ChannelHere, will remove if channels are not in use.
+        if (channelTypes.size() == 0) {
+            for (int i = 0; i < commands.size(); i++) {
+                if (commands.get(i).names()[0].equalsIgnoreCase(new ChannelHere().names()[0])) {
+                    commands.remove(i);
+                }
             }
-            if (c.description() == null || c.description().isEmpty()) {
-                logger.error(c.getClass().getName() + " Command Desc cannot be null.");
-                properlyInit = false;
+        }
+
+        //Init Command Types.
+        for (Command c : commands) {
+            boolean typeFound = false;
+            for (String s : commandTypes) {
+                if (c.type().equals(s)) {
+                    typeFound = true;
+                }
             }
-            if (c.requiresArgs() && (c.usage() == null || c.usage().isEmpty())) {
-                logger.error(c.getClass().getName() + " Command Usage cannot be null if RequiresArgs is true.");
-                properlyInit = false;
+            if (!typeFound) {
+                commandTypes.add(c.type());
             }
+        }
+
+        logger.info(commands.size() + " Commands Loaded.");
+        logger.info(commandsDM.size() + " DM Commands Loaded.");
+        logger.info(commandTypes.size() + " Command Types Loaded");
+        logger.info(channelTypes.size() + " Channel Types Loaded");
+        logger.info(guildGuildToggles.size() + " Guild Toggles Loaded");
+    }
+
+    private static void validate() throws IllegalArgumentException {
+        for (Command c : commands) {
+            logger.debug("Validating Command: " + c.getClass().getName());
+            if (c.names().length == 0)
+                throw new IllegalArgumentException(c.getClass().getName() + " Command Name cannot be null.");
+            if (c.type() == null || c.type().isEmpty())
+                throw new IllegalArgumentException(c.getClass().getName() + " Command Type cannot be null.");
+            if (c.description() == null || c.description().isEmpty())
+                throw new IllegalArgumentException(c.getClass().getName() + " Command Desc cannot be null.");
+            if (c.requiresArgs() && (c.usage() == null || c.usage().isEmpty()))
+                throw new IllegalArgumentException(c.getClass().getName() + " Command Usage cannot be null if RequiresArgs is true.");
             if (c.dualDescription() != null || c.dualType() != null) {
-                if (c.dualType() == null || c.dualType().isEmpty()) {
-                    logger.error(c.getClass().getName() + " Command Dual Type cannot be null.");
-                    properlyInit = false;
-                }
-                if (c.dualType().equalsIgnoreCase(c.type())) {
-                    logger.error(c.getClass().getName() + " Command Type cannot be equal to Dual Type.");
-                    properlyInit = false;
-                }
-                if (c.dualDescription() == null || c.dualDescription().isEmpty()) {
-                    logger.error(c.getClass().getName() + " Command Dual Desc cannot be null.");
-                    properlyInit = false;
-                }
-                if (c.dualDescription().equalsIgnoreCase(c.description())) {
-                    logger.error(c.getClass().getName() + " Command Desc cannot be equal to Dual Desc.");
-                    properlyInit = false;
-                }
-                if (c.usage() != null && c.usage().equalsIgnoreCase(c.dualUsage())) {
-                    logger.error(c.getClass().getName() + " Command Usage cannot be equal to Dual Usage.");
-                    properlyInit = false;
-                }
+                if (c.dualType() == null || c.dualType().isEmpty())
+                    throw new IllegalArgumentException(c.getClass().getName() + " Command Dual Type cannot be null.");
+                if (c.dualType().equalsIgnoreCase(c.type()))
+                    throw new IllegalArgumentException(c.getClass().getName() + " Command Type cannot be equal to Dual Type.");
+                if (c.dualDescription() == null || c.dualDescription().isEmpty())
+                    throw new IllegalArgumentException(c.getClass().getName() + " Command Dual Desc cannot be null.");
+                if (c.dualDescription().equalsIgnoreCase(c.description()))
+                    throw new IllegalArgumentException(c.getClass().getName() + " Command Desc cannot be equal to Dual Desc.");
+                if (c.usage() != null && c.usage().equalsIgnoreCase(c.dualUsage()))
+                    throw new IllegalArgumentException(c.getClass().getName() + " Command Usage cannot be equal to Dual Usage.");
             }
         }
         for (DMCommand c : commandsDM) {
-            if (c.names().length == 0) {
-                logger.error(c.getClass().getName() + " Command Name cannot be null");
-                properlyInit = false;
-            }
-            if (c.description() == null || c.description().isEmpty()) {
-                logger.error(c.getClass().getName() + " Command Desc cannot be null.");
-                properlyInit = false;
-            }
-            if (c.type() == null || c.type().isEmpty()) {
-                logger.error(c.getClass().getName() + " Command Type cannot be null.");
-                properlyInit = false;
-            }
-            if (c.requiresArgs() && (c.usage() == null || c.usage().isEmpty())) {
-                logger.error(c.getClass().getName() + " Command Usage cannot be null if RequiresArgs is true.");
-                properlyInit = false;
-            }
+            logger.debug("Validating DM Command: " + c.getClass().getName());
+            if (c.names().length == 0)
+                throw new IllegalArgumentException(c.getClass().getName() + " Command Name cannot be null");
+            if (c.description() == null || c.description().isEmpty())
+                throw new IllegalArgumentException(c.getClass().getName() + " Command Desc cannot be null.");
+            if (c.type() == null || c.type().isEmpty())
+                throw new IllegalArgumentException(c.getClass().getName() + " Command Type cannot be null.");
+            if (c.requiresArgs() && (c.usage() == null || c.usage().isEmpty()))
+                throw new IllegalArgumentException(c.getClass().getName() + " Command Usage cannot be null if RequiresArgs is true.");
         }
-        if (!properlyInit) {
-            Runtime.getRuntime().exit(0);
+
+        for (GuildToggle g : guildGuildToggles) {
+            logger.debug("Validating Toggle: " + g.getClass().getName());
+            if (g.name() == null || g.name().isEmpty())
+                throw new IllegalArgumentException(g.getClass().getName() + " Toggle Name cannot be null.");
+            if (g.name().contains(" "))
+                throw new IllegalArgumentException(g.getClass().getName() + "Toggle Name cannot contain spaces.");
+            if (g.name().contains("\n"))
+                throw new IllegalArgumentException(g.getClass().getName() + "Toggle Name cannot contain Newlines.");
         }
     }
 
-    public static String checkConfig() {
-        setVersion();
-        StringBuilder builder = new StringBuilder();
+    public static void validateConfig() throws IllegalArgumentException {
         IUser creator = client.getUserByID(creatorID);
-        if (creator == null) {
-            builder.append("> Creator ID is invalid.\n");
-        }
-        if (botName == null || botName.isEmpty()) {
-            builder.append("> Bot name cannot be empty.\n");
-        }
-        if (defaultPrefixCC.contains("\n")) {
-            builder.append("> botName cannot contain Newlines.\n");
-        }
-        if (defaultPrefixCC.length() > 32) {
-            builder.append("> botName cannot be longer than 32 chars.\n");
-        }
-        if (defaultPrefixCommand == null || defaultPrefixCommand.isEmpty()) {
-            builder.append("> defaultPrefixCommand cannot be empty.\n");
-        }
-        if (defaultPrefixCC == null || defaultPrefixCC.isEmpty()) {
-            builder.append("> defaultPrefixCC cannot be empty.\n");
-        }
-        if (defaultPrefixCommand.contains(" ")) {
-            builder.append("> defaultPrefixCommand cannot contain spaces.\n");
-        }
-        if (defaultPrefixCC.contains(" ")) {
-            builder.append("> defaultPrefixCC cannot contain spaces.\n");
-        }
-        if (defaultPrefixCommand.contains("\n")) {
-            builder.append("> defaultPrefixCommand cannot contain Newlines.\n");
-        }
-        if (defaultPrefixCC.contains("\n")) {
-            builder.append("> defaultPrefixCommand cannot contain Newlines.\n");
-        }
+        if (creator == null)
+            throw new IllegalArgumentException("Creator ID is invalid.");
+        if (botName == null || botName.isEmpty())
+            throw new IllegalArgumentException("Bot name cannot be empty.");
+        if (botName.contains("\n"))
+            throw new IllegalArgumentException("botName cannot contain Newlines.");
+        if (botName.length() > 32)
+            throw new IllegalArgumentException("botName cannot be longer than 32 chars.");
+        if (defaultPrefixCommand == null || defaultPrefixCommand.isEmpty())
+            throw new IllegalArgumentException("defaultPrefixCommand cannot be empty.");
+        if (defaultPrefixCC == null || defaultPrefixCC.isEmpty())
+            throw new IllegalArgumentException("defaultPrefixCC cannot be empty.");
+        if (defaultPrefixCommand.contains(" "))
+            throw new IllegalArgumentException("defaultPrefixCommand cannot contain spaces.");
+        if (defaultPrefixCC.contains(" "))
+            throw new IllegalArgumentException("defaultPrefixCC cannot contain spaces.");
+        if (defaultPrefixCommand.contains("\n"))
+            throw new IllegalArgumentException("defaultPrefixCommand cannot contain Newlines.");
+        if (defaultPrefixCC.contains("\n"))
+            throw new IllegalArgumentException("defaultPrefixCommand cannot contain Newlines.");
         if (doDailyAvatars) {
-            if (!dailyAvatarName.contains("#day#")) {
-                builder.append("> dailyAvatarName must contain #day# for the feature to work as intended.\n");
-            }
+            if (!dailyAvatarName.contains("#day#"))
+                throw new IllegalArgumentException("dailyAvatarName must contain #day# for the feature to work as intended.");
             for (DailyMessageObject d : dailyMessages) {
-                if (!Files.exists(Paths.get(Constants.DIRECTORY_GLOBAL_IMAGES + d.getFileName()))) {
-                    builder.append("> File " + Constants.DIRECTORY_GLOBAL_IMAGES + d.getFileName() + " does not exist.\n");
-                }
-            }
-        } else {
-            if (!Files.exists(Paths.get(Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile))) {
-                builder.append("> File" + Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile + " does not exist.\n");
+                if (!Files.exists(Paths.get(Constants.DIRECTORY_GLOBAL_IMAGES + d.getFileName())))
+                    throw new IllegalArgumentException("File " + Constants.DIRECTORY_GLOBAL_IMAGES + d.getFileName() + " does not exist.");
+                else if (!Files.exists(Paths.get(Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile)))
+                    throw new IllegalArgumentException("File" + Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile + " does not exist.");
             }
         }
-        if (argsMax <= 0) {
-            builder.append("> argsMax cannot be less than or equals 0.\n");
-        }
-        if (maxWarnings <= 0) {
-            builder.append("> maxWarnings cannot be less than or equals 0.\n");
-        }
-        return builder.toString();
+        if (argsMax <= 0)
+            throw new IllegalArgumentException("argsMax cannot be less than or equals 0.");
+        if (maxWarnings <= 0)
+            throw new IllegalArgumentException("maxWarnings cannot be less than or equals 0");
     }
 
     public static void initGuild(String guildID) {
@@ -303,7 +249,7 @@ public class Globals {
             final Properties properties = new Properties();
             properties.load(Main.class.getClassLoader().getResourceAsStream("project.properties"));
             version = properties.getProperty("version");
-            System.out.println("Bot version : " + version);
+            logger.info("Bot version : " + version);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -313,7 +259,6 @@ public class Globals {
         return client;
     }
 
-    @Nonnull
     public static GuildContentObject getGuildContent(String guildID) {
         for (GuildContentObject storage : guildContentObjects) {
             if (storage.getGuildID().equals(guildID)) {
@@ -331,7 +276,7 @@ public class Globals {
         logger.debug("Saving Files.");
         Globals.isModifingFiles = true;
         Globals.getGuildContentObjects().forEach(GuildContentObject::saveFiles);
-        FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA,getGlobalData());
+        FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, getGlobalData());
         Globals.isModifingFiles = false;
     }
 
@@ -351,8 +296,24 @@ public class Globals {
     public static GlobalData getGlobalData() {
         if (globalData != null) {
             return globalData;
-        }else {
+        } else {
             return null;
         }
+    }
+
+    public static ArrayList<DMCommand> getCommandsDM() {
+        return commandsDM;
+    }
+
+    public static ArrayList<String> getCommandTypes() {
+        return commandTypes;
+    }
+
+    public static ArrayList<String> getChannelTypes() {
+        return channelTypes;
+    }
+
+    public static ArrayList<GuildToggle> getGuildGuildToggles() {
+        return guildGuildToggles;
     }
 }

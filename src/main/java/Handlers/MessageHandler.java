@@ -58,22 +58,18 @@ public class MessageHandler {
     private void handleCommand(CommandObject commandObject, String command, String args) {
         IChannel channel = commandObject.channel;
         GuildConfig guildConfig = commandObject.guildConfig;
-        ArrayList<Command> commands = Globals.getCommands();
+        ArrayList<Command> commands = commandObject.commands;
         IDiscordClient client = commandObject.client;
         for (Command c : commands) {
             for (String name : c.names()) {
                 if (command.equalsIgnoreCase(guildConfig.getPrefixCommand() + name)) {
-                    if ((c.type().equalsIgnoreCase(Command.TYPE_SERVERS) && !commandObject.guildConfig.doModuleServers())) {
-                        return;
-                    }
-                    if (c.type().equalsIgnoreCase(Command.TYPE_CHARACTER) && !commandObject.guildConfig.doModuleChars()){
-                        return;
-                    }
-                    if (c.type().equalsIgnoreCase(Command.TYPE_COMPETITION) && !commandObject.guildConfig.doModuleComp()){
-                        return;
-                    }
                     //command logging
-                    logger.debug(Utility.loggingFormatter("COMMAND",command,args,commandObject));
+
+                    if (c.type().equals(Command.TYPE_CREATOR) && !commandObject.authorID.equalsIgnoreCase(Globals.creatorID)) {
+                        return;
+                    }
+
+                    logger.debug(Utility.loggingFormatter("COMMAND", command, args, commandObject));
 
                     if (c.requiresArgs() && args.isEmpty()) {
                         Utility.sendMessage(Utility.getCommandInfo(c, commandObject), channel);
@@ -95,12 +91,12 @@ public class MessageHandler {
                         }
                     }
                     if (c.doAdminLogging()) {
-                        if (guildConfig.doAdminLogging()) {
+                        if (guildConfig.adminLogging) {
                             IChannel logging = client.getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_ADMIN_LOG));
                             handleLogging(logging, commandObject, args, c);
                         }
                     } else {
-                        if (guildConfig.doGeneralLogging()) {
+                        if (guildConfig.generalLogging) {
                             IChannel logging = client.getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG));
                             handleLogging(logging, commandObject, args, c);
                         }
@@ -130,7 +126,7 @@ public class MessageHandler {
         if (message.toString().contains("@everyone") || message.toString().contains("@here")) {
             return;
         }
-        if (guildConfig.doMaxMentions()) {
+        if (guildConfig.maxMentions) {
             if (message.getMentions().size() > 8) {
                 Utility.deleteMessage(message);
                 int i = 0;
@@ -178,7 +174,7 @@ public class MessageHandler {
         if (guildConfig.getBlackList() == null) {
             return;
         }
-        if (guildConfig.doBlackListing()) {
+        if (guildConfig.denyInvites) {
             for (BlackListObject bLP : guildConfig.getBlackList()) {
                 if (message.toString().toLowerCase().contains(bLP.getPhrase().toLowerCase())) {
                     if (guildConfig.testIsTrusted(author, guild)) {

@@ -61,7 +61,7 @@ public class CCHandler {
                 logger.debug(Utility.loggingFormatter("CUSTOM_COMMAND",command,args,commandObject));
 
                 if (Utility.canBypass(author, guild)) ;
-                else if (cc.isShitPost() && guildConfig.doShitPostFiltering()) {
+                else if (cc.isShitPost() && guildConfig.shitPostFiltering) {
                     if (guildConfig.getChannelTypeID(Command.CHANNEL_SHITPOST) != null) {
                         if (!channel.getID().equals(guildConfig.getChannelTypeID(Command.CHANNEL_SHITPOST))) {
                             IChannel shitpost = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_SHITPOST));

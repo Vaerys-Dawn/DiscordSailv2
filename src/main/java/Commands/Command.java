@@ -17,6 +17,7 @@ public interface Command {
     String TYPE_HELP = "Help";
     String TYPE_COMPETITION = "Competition";
     String TYPE_DM = "DM";
+    String TYPE_CREATOR = "Creator";
 
     //Channel Constants
     String CHANNEL_GENERAL = "General";
