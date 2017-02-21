@@ -202,7 +202,7 @@ public class Utility {
                         return null;
                     }
                     if (message != null || !message.equals("")) {
-                        return channel.sendMessage(message).getID();
+                        return channel.sendMessage(message.replace("@everyone","").replace("@here","")).getID();
                     }
                 } catch (MissingPermissionsException e) {
                     logger.debug("Error sending message to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +

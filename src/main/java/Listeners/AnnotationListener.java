@@ -352,6 +352,16 @@ public class AnnotationListener {
                 ArrayList<String> newRoles = new ArrayList<>();
                 oldRoles.addAll(event.getOldRoles().stream().map(IRole::getName).collect(Collectors.toList()));
                 newRoles.addAll(event.getNewRoles().stream().map(IRole::getName).collect(Collectors.toList()));
+                for (int i = 0; i < oldRoles.size();i++){
+                    if (oldRoles.get(i).equalsIgnoreCase("@everyone")){
+                        oldRoles.remove(i);
+                    }
+                }
+                for (int i = 0; i < newRoles.size();i++){
+                    if (newRoles.get(i).equalsIgnoreCase("@everyone")){
+                        newRoles.remove(i);
+                    }
+                }
                 String prefix = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "'s** Role have been Updated.";
 
                 Utility.sendMessage(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), logging);
