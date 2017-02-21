@@ -87,14 +87,15 @@ public class CommandObject {
         competition = guildContent.getCompetition();
         client = Globals.getClient();
 
-        commands = Globals.getCommands();
-        commandTypes = Globals.getCommandTypes();
-        channelTypes = Globals.getChannelTypes();
+        commands = (ArrayList<Command>) Globals.getCommands().clone();
+        commandTypes = (ArrayList<String>) Globals.getCommandTypes().clone();
+        channelTypes = (ArrayList<String>) Globals.getChannelTypes().clone();
         guildToggles = Globals.getGuildGuildToggles();
 
-        for (GuildToggle t: guildToggles){
-            if (t.isModule()){
-                if (!t.get(guildConfig)){
+        for (GuildToggle t : guildToggles) {
+            if (t.isModule()) {
+                if (!t.get(guildConfig)) {
+                    logger.info(t.name() + " - " + t.get(guildConfig) + "");
                     t.execute(this);
                 }
             }
@@ -149,23 +150,23 @@ public class CommandObject {
     }
 
     public void removeCommandsByType(String type) {
-        for (int i = 0; i < commands.size(); i++){
-            if (commands.get(i).type().equalsIgnoreCase(type)){
-                logger.debug(type +" - "+  commands.get(i).names()[0] + " - removed");
+        for (int i = 0; i < commands.size(); i++) {
+            if (commands.get(i).type().equalsIgnoreCase(type)) {
+                logger.debug(type + " - " + commands.get(i).names()[0] + " - removed");
                 commands.remove(i);
             }
         }
-        for (int i = 0;i < commandTypes.size(); i++){
-            if (commandTypes.get(i).equalsIgnoreCase(type)){
+        for (int i = 0; i < commandTypes.size(); i++) {
+            if (commandTypes.get(i).equalsIgnoreCase(type)) {
                 commandTypes.remove(i);
                 logger.debug(type + " - removed");
             }
         }
     }
 
-    public void removeChannel(String channel){
-        for (int i = 0; i< channelTypes.size(); i++){
-            if (channelTypes.get(i).equalsIgnoreCase(channel)){
+    public void removeChannel(String channel) {
+        for (int i = 0; i < channelTypes.size(); i++) {
+            if (channelTypes.get(i).equalsIgnoreCase(channel)) {
                 channelTypes.remove(i);
             }
         }

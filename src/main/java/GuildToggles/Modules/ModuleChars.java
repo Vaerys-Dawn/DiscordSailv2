@@ -10,8 +10,6 @@ import POGOs.GuildConfig;
  */
 public class ModuleChars implements GuildToggle {
 
-    boolean state = false;
-
     @Override
     public String name() {
         return "ModuleChars";
@@ -29,7 +27,11 @@ public class ModuleChars implements GuildToggle {
 
     @Override
     public void execute(CommandObject command) {
-        command.removeCommandsByType(Command.TYPE_CHARACTER);
+        if (command.guildConfig.moduleChars){
+            return;
+        }else {
+            command.removeCommandsByType(Command.TYPE_CHARACTER);
+        }
     }
 
     @Override

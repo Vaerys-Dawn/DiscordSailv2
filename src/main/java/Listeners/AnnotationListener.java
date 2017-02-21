@@ -267,6 +267,9 @@ public class AnnotationListener {
             return;
         }
         if (logging != null && command.guildConfig.deleteLogging) {
+            if (command.message.getContent() == null){
+                return;
+            }
             if (command.message.getContent().isEmpty()) {
                 return;
             }
@@ -310,6 +313,12 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMessageUpdateEvent(MessageUpdateEvent event) {
+        if (event.getNewMessage().getContent() == null || event.getOldMessage().getContent() == null){
+            return;
+        }
+        if (event.getNewMessage().getContent().isEmpty() || event.getOldMessage().getContent().isEmpty()){
+            return;
+        }
         if (event.getNewMessage().getContent().equals(event.getOldMessage().getContent())) {
             return;
         }

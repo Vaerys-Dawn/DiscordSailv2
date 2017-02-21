@@ -9,8 +9,6 @@ import POGOs.GuildConfig;
  */
 public class AdminLogging implements GuildToggle {
 
-    boolean state = false;
-
     @Override
     public String name() {
         return "AdminLogging";
