@@ -25,6 +25,9 @@ public class GuildConfig {
     public boolean generalLogging = false;
     public boolean adminLogging = false;
     public boolean deleteLogging = false;
+    public boolean joinLeaveLogging = false;
+    public boolean userRoleUpdatelogging = false;
+    public boolean editLogging = false;
     public boolean denyInvites = false;
     public boolean maxMentions = true;
     public boolean dailyMessage = true;
@@ -50,6 +53,7 @@ public class GuildConfig {
     RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", null);
     RoleTypeObject mutedRole = new RoleTypeObject("No Role Set", null);
     private int rateLimit;
+
 
 
     public String getPrefixCommand() {

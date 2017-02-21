@@ -9,6 +9,7 @@ import Main.Constants;
 import Main.Globals;
 import Main.TimedEvents;
 import Main.Utility;
+import Objects.GuildContentObject;
 import Objects.SplitFirstObject;
 import POGOs.*;
 import org.slf4j.Logger;
@@ -21,13 +22,19 @@ import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
+import sx.blah.discord.handle.impl.events.guild.member.GuildMemberEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserLeaveEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.impl.obj.Channel;
+import sx.blah.discord.handle.obj.*;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 03/08/2016.
@@ -81,7 +88,7 @@ public class AnnotationListener {
     }
 
     @EventSubscriber
-    public void onGuildLeaveEvent(GuildLeaveEvent event){
+    public void onGuildLeaveEvent(GuildLeaveEvent event) {
         Globals.unloadGuild(event.getGuild().getID());
     }
 
@@ -102,7 +109,7 @@ public class AnnotationListener {
     // TODO: 16/01/2017 make level decay toggleable
     // TODO: 16/01/2017 make everything optional/ modifiable
     @EventSubscriber
-    public void onMessageRecivedEvent(MessageReceivedEvent event) {
+    public void onMessageReceivedEvent(MessageReceivedEvent event) {
         if (event.getMessage().getChannel().isPrivate()) {
             new DMHandler(event.getMessage());
             return;
@@ -114,7 +121,7 @@ public class AnnotationListener {
         String messageLC = message.toString().toLowerCase();
         String args = "";
         String command = "";
-        while (!event.getClient().isReady());
+        while (!event.getClient().isReady()) ;
         GuildConfig guildConfig = Globals.getGuildContent(guild.getID()).getGuildConfig();
 
         //Set Console Response Channel.
@@ -226,7 +233,7 @@ public class AnnotationListener {
             }
             return;
         }
-        if (Utility.canBypass(event.getUser(),event.getGuild())){
+        if (Utility.canBypass(event.getUser(), event.getGuild())) {
             if (event.getReaction().toString().equals("❌")) {
                 if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())) {
                     Utility.deleteMessage(event.getMessage());
@@ -236,8 +243,8 @@ public class AnnotationListener {
     }
 
     @EventSubscriber
-    public void onMessageDeleteEvent(MessageDeleteEvent event){
-        if (event.getChannel().isPrivate()){
+    public void onMessageDeleteEvent(MessageDeleteEvent event) {
+        if (event.getChannel().isPrivate()) {
             return;
         }
         CommandObject command = new CommandObject(event.getMessage());
@@ -247,32 +254,108 @@ public class AnnotationListener {
         String infoID = command.guildConfig.getChannelTypeID(Command.CHANNEL_INFO);
         String serverLogID = command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG);
         String adminLogID = command.guildConfig.getChannelTypeID(Command.CHANNEL_ADMIN_LOG);
-        if (event.getMessage() == null){
+        if (event.getMessage() == null) {
             return;
         }
-        if (serverLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)){
+        if (serverLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
             return;
         }
-        if (infoID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)){
+        if (infoID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
             return;
         }
-        if (adminLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)){
+        if (adminLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
             return;
         }
-        if (logging != null && command.guildConfig.deleteLogging){
-            if (command.message.getContent().isEmpty()){
+        if (logging != null && command.guildConfig.deleteLogging) {
+            if (command.message.getContent().isEmpty()) {
                 return;
             }
             int charLimit = 1800;
-            if (command.message.getContent().length() > charLimit){
-                content = command.message.getContent().substring(0,1800);
-            }else {
+            if (command.message.getContent().length() > charLimit) {
+                content = command.message.getContent().substring(0, 1800);
+            } else {
                 content = command.message.getContent();
             }
-            if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.authorID.equals(command.client.getOurUser().getID())){
+            if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.authorID.equals(command.client.getOurUser().getID())) {
                 return;
             }
-            Utility.sendMessage("> **@" + command.authorUserName+ "'s** Message was deleted in channel: " + command.channel.mention() + " with contents:\n" + content,logging);
+            Utility.sendMessage("> **@" + command.authorUserName + "'s** Message was deleted in channel: " + command.channel.mention() + " with contents:\n" + content, logging);
+        }
+    }
+
+    @EventSubscriber
+    public void onUserJoinEvent(UserJoinEvent event) {
+        joinLeaveLogging(event, true);
+    }
+
+    @EventSubscriber
+    public void onUserLeaveEvent(UserLeaveEvent event) {
+        joinLeaveLogging(event, false);
+    }
+
+    public void joinLeaveLogging(GuildMemberEvent event, boolean joining) {
+        IGuild guild = event.getGuild();
+        GuildContentObject content = Globals.getGuildContent(guild.getID());
+        if (content.getGuildConfig().joinLeaveLogging) {
+            IChannel logging = Globals.getClient().getChannelByID(content.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG));
+            if (logging != null) {
+                if (joining) {
+                    Utility.sendMessage("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + " Has Joined the Server.", logging);
+                } else {
+                    Utility.sendMessage("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + " Has Left the Server.", logging);
+                }
+            }
+        }
+    }
+
+    @EventSubscriber
+    public void onMessageUpdateEvent(MessageUpdateEvent event) {
+        if (event.getNewMessage().getContent().equals(event.getOldMessage().getContent())) {
+            return;
+        }
+        if (event.getChannel().isPrivate()) {
+            return;
+        }
+        CommandObject command = new CommandObject(event.getMessage());
+        String content;
+        IChannel logging = command.client.getChannelByID(command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG));
+        IUser ourUser = command.client.getOurUser();
+        String serverLogID = command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG);
+        if (event.getMessage() == null) {
+            return;
+        }
+        if (serverLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
+            return;
+        }
+        if (logging != null && command.guildConfig.editLogging) {
+            if (command.message.getContent().isEmpty()) {
+                return;
+            }
+            int charLimit = 1800;
+            if (command.message.getContent().length() > charLimit) {
+                content = command.message.getContent().substring(0, 1800);
+            } else {
+                content = command.message.getContent();
+            }
+            Utility.sendMessage("> **@" + command.authorUserName + "'s** Message was Edited in channel: " + command.channel.mention() + " Old Contents:\n" + content, logging);
+        }
+    }
+
+    @EventSubscriber
+    public void onUserRoleUpdateEvent(UserRoleUpdateEvent event) {
+        IGuild guild = event.getGuild();
+        GuildContentObject content = Globals.getGuildContent(guild.getID());
+        if (content.getGuildConfig().userRoleUpdatelogging) {
+            IChannel logging = Globals.getClient().getChannelByID(content.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG));
+            if (logging != null) {
+                ArrayList<String> oldRoles = new ArrayList<>();
+                ArrayList<String> newRoles = new ArrayList<>();
+                oldRoles.addAll(event.getOldRoles().stream().map(IRole::getName).collect(Collectors.toList()));
+                newRoles.addAll(event.getNewRoles().stream().map(IRole::getName).collect(Collectors.toList()));
+                String prefix = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "'s** Role have been Updated.";
+
+                Utility.sendMessage(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), logging);
+            }
         }
     }
 }
