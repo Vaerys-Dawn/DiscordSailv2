@@ -98,13 +98,15 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         while (!Globals.isReady) ;
         logger.info("Console input initiated.");
+
         while (scanner.hasNextLine()) {
             while (Globals.consoleMessageCID == null) ;
             IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
             String message = scanner.nextLine();
-            message = message.replaceAll("#Dawn#", Globals.getClient().getUserByID("153159020528533505").toString());
-            message = message.replaceAll("teh", "the");
-            message = message.replaceAll("Teh", "The");
+            message = message.replace("#Dawn#", Globals.getClient().getUserByID("153159020528533505").getName());
+            message = message.replace("teh", "the");
+            message = message.replace("Teh", "The");
+            System.out.println(message);
             if (!message.equals("")) {
                 Utility.sendMessage(message, channel);
             }

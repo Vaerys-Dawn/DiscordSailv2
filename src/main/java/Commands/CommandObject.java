@@ -34,6 +34,7 @@ public class CommandObject {
     public List<IRole> authorRoles;
     public String notAllowed;
 
+    public GuildContentObject guildContent;
     public GuildConfig guildConfig;
     public CustomCommands customCommands;
     public Characters characters;
@@ -78,12 +79,12 @@ public class CommandObject {
         authorColour = Utility.getUsersColour(author, guild);
         authorRoles = author.getRolesForGuild(guild);
 
-        GuildContentObject guildFiles = Globals.getGuildContent(guildID);
-        guildConfig = guildFiles.getGuildConfig();
-        customCommands = guildFiles.getCustomCommands();
-        characters = guildFiles.getCharacters();
-        servers = guildFiles.getServers();
-        competition = guildFiles.getCompetition();
+        guildContent = Globals.getGuildContent(guildID);
+        guildConfig = guildContent.getGuildConfig();
+        customCommands = guildContent.getCustomCommands();
+        characters = guildContent.getCharacters();
+        servers = guildContent.getServers();
+        competition = guildContent.getCompetition();
         client = Globals.getClient();
 
         commands = Globals.getCommands();

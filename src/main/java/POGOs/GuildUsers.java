@@ -1,5 +1,6 @@
 package POGOs;
 
+import Objects.UserRateObject;
 import Objects.UserTypeObject;
 
 import java.util.ArrayList;

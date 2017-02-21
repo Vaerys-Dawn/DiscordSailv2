@@ -11,10 +11,7 @@ import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.*;
 
 import java.util.ArrayList;
 
@@ -42,6 +39,9 @@ public class MessageHandler {
 
         checkBlacklist(commandObject);
         checkMentionCount(commandObject);
+        if (rateLimiting(commandObject)) {
+            return;
+        }
 
         if (commandObject.message.getAuthor().isBot()) {
             return;
@@ -156,6 +156,45 @@ public class MessageHandler {
                     TimedEvents.setDoAdminMention(command.guildID, 60);
                 }
             }
+        }
+    }
+
+    private boolean rateLimiting(CommandObject command) {
+        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, command.author, command.guild, false) ||
+                Utility.canBypass(command.author, command.guild, false)) {
+            return false;
+        }
+        if (command.guildConfig.rateLimiting) {
+            if (command.guildContent.rateLimit(command.authorID)) {
+                command.message.delete();
+                Utility.sendDM("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guildConfig.MessageLimit, command.authorID);
+                if (command.guildConfig.muteRepeatOffenders) {
+                    int rate = command.guildContent.getUserRate(command.authorID);
+                    if (rate - 3 > command.guildConfig.MessageLimit) {
+                        //mutes users if they abuse it.
+                        boolean failed = Utility.roleManagement(command.author, command.guild, command.guildConfig.getMutedRole().getRoleID(), true).get();
+                        if (!failed) {
+                            IChannel adminChannel = command.client.getChannelByID(command.guildConfig.getChannelTypeID(Command.CHANNEL_ADMIN));
+                            if (adminChannel == null){
+                                adminChannel = command.channel;
+                            }
+                            Utility.sendDM("You have been muted for abusing the Guild rate limit.", command.authorID);
+                            Utility.sendMessage("> " + command.author.mention() + " has been muted for repetitively abusing Guild rateLimit.", adminChannel);
+                        }
+                    }
+                }
+                if (command.guildConfig.deleteLogging) {
+                    if (command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG) != null) {
+                        IChannel logging = command.client.getChannelByID(command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG));
+                        Utility.sendMessage("> **@" + command.authorUserName + "** is being rate limited", logging);
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 

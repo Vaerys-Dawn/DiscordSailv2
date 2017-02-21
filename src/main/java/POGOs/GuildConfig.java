@@ -1,18 +1,17 @@
 package POGOs;
 
-import Annotations.ToggleAnnotation;
-import Commands.Admin.Toggle;
 import Commands.Command;
-import Main.Constants;
 import Main.Globals;
-import Main.Utility;
-import Objects.*;
-import sx.blah.discord.handle.obj.*;
+import Objects.BlackListObject;
+import Objects.ChannelTypeObject;
+import Objects.OffenderObject;
+import Objects.RoleTypeObject;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Vaerys on 03/08/2016.
@@ -33,10 +32,12 @@ public class GuildConfig {
     public boolean muteRepeatOffenders = true;
     public boolean compEntries = false;
     public boolean compVoting = false;
+    public boolean rateLimiting = false;
     public boolean moduleServers = true;
     public boolean moduleChars = true;
     public boolean moduleComp = false;
     int maxMentionLimit = 8;
+    public int MessageLimit = 10;
 
 
     // TODO: 04/10/2016 let the mention limit be customisable.
@@ -48,6 +49,8 @@ public class GuildConfig {
     ArrayList<OffenderObject> repeatOffenders = new ArrayList<>();
     RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", null);
     RoleTypeObject mutedRole = new RoleTypeObject("No Role Set", null);
+    private int rateLimit;
+
 
     public String getPrefixCommand() {
         return prefixCommand;
@@ -343,5 +346,9 @@ public class GuildConfig {
 
     public int getMaxMentionLimit() {
         return maxMentionLimit;
+    }
+
+    public void setRateLimit(int rateLimit) {
+        MessageLimit = rateLimit;
     }
 }

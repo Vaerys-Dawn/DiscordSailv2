@@ -26,6 +26,7 @@ public class ToggleInit {
         guildToggles.add(new MuteRepeatOffender());
         guildToggles.add(new ShitpostFiltering());
         guildToggles.add(new Voting());
+        guildToggles.add(new RateLimiting());
 
         //modules
         guildToggles.add(new ModuleChars());

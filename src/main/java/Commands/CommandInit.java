@@ -18,8 +18,8 @@ import Commands.General.GetAvatar;
 import Commands.General.Hello;
 import Commands.General.RemindMe;
 import Commands.General.Test;
-import Commands.Help.*;
 import Commands.Help.GetGuildInfo;
+import Commands.Help.*;
 import Commands.RoleSelect.CosmeticRoles;
 import Commands.RoleSelect.ListModifs;
 import Commands.RoleSelect.ListRoles;
@@ -43,6 +43,7 @@ public class CommandInit {
 
         //Admin commands
         commands.add(new ChannelHere());
+        commands.add(new MaxMessages());
         commands.add(new FinalTally());
         commands.add(new GetCompEntries());
         commands.add(new SetAdminRole());

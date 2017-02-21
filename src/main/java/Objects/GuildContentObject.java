@@ -4,24 +4,19 @@ import Main.Constants;
 import Main.Utility;
 import POGOs.*;
 
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 20/01/2017.
  */
 public class GuildContentObject {
-    @Nonnull
     private String guildID;
-    @Nonnull
     private GuildConfig guildConfig;
-    @Nonnull
     private CustomCommands customCommands;
-    @Nonnull
     private Servers servers;
-    @Nonnull
     private Characters characters;
-    @Nonnull
     private Competition competition;
+    public ArrayList<UserRateObject> ratelimiting = new ArrayList<>();
 
     public GuildContentObject(String guildID, GuildConfig guildConfig, CustomCommands customCommands, Servers servers, Characters characters, Competition competition) {
         this.guildID = guildID;
@@ -30,6 +25,31 @@ public class GuildContentObject {
         this.servers = servers;
         this.characters = characters;
         this.competition = competition;
+    }
+
+    public boolean rateLimit(String userID){
+        int max = guildConfig.MessageLimit;
+        if (max == -1){
+            return false;
+        }
+        boolean isfound = false;
+        for (UserRateObject r: ratelimiting){
+            if (r.userID.equals(userID)){
+                r.counterUp();
+                isfound = true;
+                if (r.counter > max){
+                    return true;
+                }
+            }
+        }
+        if (!isfound){
+            ratelimiting.add(new UserRateObject(userID));
+        }
+        return false;
+    }
+
+    public void resetRateLimit(){
+        ratelimiting.clear();
     }
 
     public String getGuildID() {
@@ -82,5 +102,14 @@ public class GuildContentObject {
         Utility.flushFile(guildID, Constants.FILE_CHARACTERS, characters, characters.isProperlyInit());
         Utility.flushFile(guildID, Constants.FILE_SERVERS, servers, servers.isProperlyInit());
         Utility.flushFile(guildID, Constants.FILE_COMPETITION, competition, competition.isProperlyInit());
+    }
+
+    public int getUserRate(String userID) {
+        for (UserRateObject u : ratelimiting){
+            if (u.userID.equals(userID)){
+                return u.counter;
+            }
+        }
+        return 0;
     }
 }

@@ -8,13 +8,15 @@ import Objects.WaiterObject;
 import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
 
 import java.io.File;
-import java.time.*;
+import java.time.DayOfWeek;
+import java.time.Month;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +34,7 @@ public class TimedEvents {
         ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
         doEventSec();
         doEventThreeSec();
+        doEventTenSec();
         doEventMin(nowUTC);
         doEventFiveMin(nowUTC);
         doEventDaily(nowUTC);
@@ -196,6 +199,18 @@ public class TimedEvents {
                 }
             }
         }, 3 * 1000, 3000);
+    }
+
+    private void doEventTenSec() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                for (TimedObject task : TimerObjects) {
+                    Globals.getGuildContent(task.getGuildID()).resetRateLimit();
+                }
+            }
+        }, 1000, 10 * 1000);
     }
 
     private static void doEventMin(ZonedDateTime nowUTC) {
