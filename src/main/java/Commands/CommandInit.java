@@ -64,6 +64,7 @@ public class CommandInit {
         commands.add(new Info());
         commands.add(new Report());
         commands.add(new SilentReport());
+        commands.add(new StartUpGuide());
         //RoleSelect commands
         commands.add(new CosmeticRoles());
         commands.add(new ModifierRoles());

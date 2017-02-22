@@ -341,10 +341,10 @@ public class AnnotationListener {
                 return;
             }
             int charLimit = 1800;
-            if (command.message.getContent().length() > charLimit) {
-                content = command.message.getContent().substring(0, 1800);
+            if (event.getOldMessage().getContent().length() > charLimit) {
+                content = event.getOldMessage().getContent().substring(0, 1800);
             } else {
-                content = command.message.getContent();
+                content = event.getOldMessage().getContent();
             }
             Utility.sendMessage("> **@" + command.authorUserName + "'s** Message was Edited in channel: " + command.channel.mention() + " Old Contents:\n" + content, logging);
         }
