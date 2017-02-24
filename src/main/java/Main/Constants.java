@@ -49,6 +49,7 @@ public class Constants {
     public static final String FILE_GUILD_CONFIG = "Guild_Config.json";
     public static final String FILE_SERVERS = "Servers.json";
     public static final String FILE_CHARACTERS = "Characters.json";
+    public static final String FILE_GUILD_USERS = "Guild_Users.json";
     public static final String FILE_INFO = "Info.txt";
     public static final String FILE_CONFIG = DIRECTORY_STORAGE + "Config.json";
     public static final String FILE_CONFIG_BACKUP = DIRECTORY_BACKUPS + "Config.json";
@@ -87,6 +88,4 @@ public class Constants {
             "Goodness what have you all done to the place since I was last here?;;" +
             "My My My Its a brand new day isn't it? looks like we're all still here.}";
     public static final String DAILY_MESSAGE_7 = "> A new Day arrives, Prepare for fun.";
-
-
 }

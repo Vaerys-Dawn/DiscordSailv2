@@ -9,6 +9,7 @@ import GuildToggles.ToggleInit;
 import Handlers.FileHandler;
 import Objects.DailyMessageObject;
 import Objects.GuildContentObject;
+import Objects.UserTypeObject;
 import POGOs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,8 @@ public class Globals {
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
     private static GlobalData globalData;
+    public static int baseXPModifier;
+    public static int xpForLevelOne;
 
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
         if (newGlobalData != null) {
@@ -69,6 +72,8 @@ public class Globals {
         argsMax = config.argsMax;
         maxWarnings = config.maxWarnings;
         dailyMessages = config.dailyMessages;
+        baseXPModifier = config.baseXpModifier;
+        xpForLevelOne = config.xpForLevelOne;
         initCommands();
     }
 
@@ -224,22 +229,17 @@ public class Globals {
             throw new IllegalArgumentException("maxWarnings cannot be less than or equals 0");
     }
 
-    public static void initGuild(String guildID) {
+    public static void initGuild(String guildID, GuildConfig guildConfig, Servers servers, CustomCommands customCommands, Characters characters, Competition competition, GuildUsers guildUsers) {
         for (GuildContentObject contentObject : guildContentObjects) {
             if (guildID.equals(contentObject.getGuildID())) {
                 return;
             }
         }
-        GuildConfig guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
-        CustomCommands customCommands = (CustomCommands) Utility.initFile(guildID, Constants.FILE_CUSTOM, CustomCommands.class);
-        Servers servers = (Servers) Utility.initFile(guildID, Constants.FILE_SERVERS, Servers.class);
-        Characters characters = (Characters) Utility.initFile(guildID, Constants.FILE_CHARACTERS, Characters.class);
-        Competition competition = (Competition) Utility.initFile(guildID, Constants.FILE_COMPETITION, Competition.class);
 
         IGuild guild = client.getGuildByID(guildID);
         guildConfig.updateVariables(guild);
 
-        GuildContentObject guildContentObject = new GuildContentObject(guildID, guildConfig, customCommands, servers, characters, competition);
+        GuildContentObject guildContentObject = new GuildContentObject(guildID, guildConfig, customCommands, servers, characters, competition,guildUsers);
         guildContentObjects.add(guildContentObject);
     }
 

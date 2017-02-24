@@ -40,6 +40,7 @@ public class CommandObject {
     public Characters characters;
     public Servers servers;
     public Competition competition;
+    public GuildUsers guildUsers;
 
     public ArrayList<Command> commands = new ArrayList<>();
     public ArrayList<DMCommand> dmCommands = new ArrayList<>();
@@ -51,6 +52,7 @@ public class CommandObject {
 
 
     final static Logger logger = LoggerFactory.getLogger(CommandObject.class);
+
 
     public CommandObject(IMessage message) {
         this.message = message;
@@ -85,6 +87,7 @@ public class CommandObject {
         characters = guildContent.getCharacters();
         servers = guildContent.getServers();
         competition = guildContent.getCompetition();
+        guildUsers = guildContent.getGuildUsers();
         client = Globals.getClient();
 
         commands = (ArrayList<Command>) Globals.getCommands().clone();

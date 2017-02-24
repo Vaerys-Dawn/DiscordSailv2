@@ -19,9 +19,11 @@ public class Config {
     public boolean doDailyAvatars;
     public String dailyAvatarName;
     public String playing;
-    public int argsMax;
-    public int maxWarnings;
+    public int argsMax = 500;
+    public int maxWarnings = 3;
     public ArrayList<DailyMessageObject> dailyMessages;
+    public int baseXpModifier = 5;
+    public int xpForLevelOne = 100;
 
     public boolean initObject() {
         if (resetToDefault) {
@@ -36,6 +38,8 @@ public class Config {
             playing = "Starbound";
             argsMax = 500;
             maxWarnings = 3;
+            baseXpModifier = 5;
+            xpForLevelOne = 100;
             dailyMessages = new ArrayList<DailyMessageObject>() {{
                 add(new DailyMessageObject(DayOfWeek.MONDAY, Constants.DAILY_MESSAGE_1, dailyAvatarName));
                 add(new DailyMessageObject(DayOfWeek.TUESDAY, Constants.DAILY_MESSAGE_2, dailyAvatarName));

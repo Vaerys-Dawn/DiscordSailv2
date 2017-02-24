@@ -15,12 +15,12 @@ public class UserRoleLogging implements GuildToggle {
 
     @Override
     public boolean toggle(GuildConfig config) {
-        return config.userRoleUpdatelogging = !config.userRoleUpdatelogging;
+        return config.userRoleLogging = !config.userRoleLogging;
     }
 
     @Override
     public boolean get(GuildConfig config) {
-        return config.userRoleUpdatelogging;
+        return config.userRoleLogging;
     }
 
     @Override

@@ -30,9 +30,10 @@ import sx.blah.discord.handle.impl.events.guild.member.UserLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
-import sx.blah.discord.handle.impl.obj.Channel;
 import sx.blah.discord.handle.obj.*;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -63,26 +64,43 @@ public class AnnotationListener {
         CustomCommands customCommands = new CustomCommands();
         Characters characters = new Characters();
         Competition competition = new Competition();
+        GuildUsers guildUsers = new GuildUsers();
 
-        //Init Files
-        customCommands.initCustomCommands();
+        //Preps Objects for initial load
         guildConfig.initConfig();
+        customCommands.initCustomCommands();
+
+        //null prevention code. unsure if needed still.
         guildConfig.setProperlyInit(true);
         servers.setProperlyInit(true);
         customCommands.setProperlyInit(true);
         characters.setProperlyInit(true);
         competition.setProperlyInit(true);
+        guildUsers.setProperlyInit(true);
+
         FileHandler.createDirectory(Utility.getDirectory(guildID));
         FileHandler.createDirectory(Utility.getDirectory(guildID, true));
         FileHandler.createDirectory(Utility.getGuildImageDir(guildID));
+
+        //initial load of all files, creates files if they don't already exist
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_GUILD_CONFIG), guildConfig);
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_SERVERS), servers);
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_CUSTOM), customCommands);
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_CHARACTERS), characters);
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_INFO));
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_COMPETITION), competition);
+        FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_GUILD_USERS), guildUsers);
 
-        Globals.initGuild(guildID);
+        //loads all Files for the guild;
+        guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+        customCommands = (CustomCommands) Utility.initFile(guildID, Constants.FILE_CUSTOM, CustomCommands.class);
+        servers = (Servers) Utility.initFile(guildID, Constants.FILE_SERVERS, Servers.class);
+        characters = (Characters) Utility.initFile(guildID, Constants.FILE_CHARACTERS, Characters.class);
+        competition = (Competition) Utility.initFile(guildID, Constants.FILE_COMPETITION, Competition.class);
+        guildUsers = (GuildUsers) Utility.initFile(guildID,Constants.FILE_GUILD_USERS, GuildUsers.class);
+
+        //sends objects to globals
+        Globals.initGuild(guildID,guildConfig,servers,customCommands,characters,competition,guildUsers);
 
         logger.info("Finished Initialising Guild With ID: " + guildID);
     }
@@ -267,7 +285,7 @@ public class AnnotationListener {
             return;
         }
         if (logging != null && command.guildConfig.deleteLogging) {
-            if (command.message.getContent() == null){
+            if (command.message.getContent() == null) {
                 return;
             }
             if (command.message.getContent().isEmpty()) {
@@ -282,7 +300,10 @@ public class AnnotationListener {
             if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.authorID.equals(command.client.getOurUser().getID())) {
                 return;
             }
-            Utility.sendMessage("> **@" + command.authorUserName + "'s** Message was deleted in channel: " + command.channel.mention() + " with contents:\n" + content, logging);
+            long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - event.getMessage().getTimestamp().atZone(ZoneOffset.UTC).toEpochSecond();
+            System.out.println(difference);
+            String formatted = Utility.formatTimeDifference(difference);
+            Utility.sendMessage("> **@" + command.authorUserName + "'s** Message from " + formatted + " was **Deleted** in channel: " + command.channel.mention() + " with contents:\n" + content, logging);
         }
     }
 
@@ -303,9 +324,9 @@ public class AnnotationListener {
             IChannel logging = Globals.getClient().getChannelByID(content.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG));
             if (logging != null) {
                 if (joining) {
-                    Utility.sendMessage("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** Has Joined the Server.", logging);
+                    Utility.sendMessage("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **Joined** the server.", logging);
                 } else {
-                    Utility.sendMessage("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** Has Left the Server.", logging);
+                    Utility.sendMessage("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **Left** the server.", logging);
                 }
             }
         }
@@ -313,10 +334,10 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMessageUpdateEvent(MessageUpdateEvent event) {
-        if (event.getNewMessage().getContent() == null || event.getOldMessage().getContent() == null){
+        if (event.getNewMessage().getContent() == null || event.getOldMessage().getContent() == null) {
             return;
         }
-        if (event.getNewMessage().getContent().isEmpty() || event.getOldMessage().getContent().isEmpty()){
+        if (event.getNewMessage().getContent().isEmpty() || event.getOldMessage().getContent().isEmpty()) {
             return;
         }
         if (event.getNewMessage().getContent().equals(event.getOldMessage().getContent())) {
@@ -337,6 +358,13 @@ public class AnnotationListener {
             return;
         }
         if (logging != null && command.guildConfig.editLogging) {
+            //formats how long ago this was.
+            ZonedDateTime oldMessageTime = event.getOldMessage().getTimestamp().atZone(ZoneOffset.UTC);
+            ZonedDateTime newMessageTime = event.getNewMessage().getEditedTimestamp().get().atZone(ZoneOffset.UTC);
+            long difference = newMessageTime.toEpochSecond() - oldMessageTime.toEpochSecond();
+            String formatted = Utility.formatTimeDifference(difference);
+
+            //remove excess text that would cause a max char limit error.
             if (command.message.getContent().isEmpty()) {
                 return;
             }
@@ -346,7 +374,7 @@ public class AnnotationListener {
             } else {
                 content = event.getOldMessage().getContent();
             }
-            Utility.sendMessage("> **@" + command.authorUserName + "'s** Message was Edited in channel: " + command.channel.mention() + " Old Contents:\n" + content, logging);
+            Utility.sendMessage("> **@" + command.authorUserName + "'s** Message from " + formatted + " was **Edited** in channel: " + command.channel.mention() + ".\n**Message's Old Contents:**\n" + content, logging);
         }
     }
 
@@ -354,20 +382,20 @@ public class AnnotationListener {
     public void onUserRoleUpdateEvent(UserRoleUpdateEvent event) {
         IGuild guild = event.getGuild();
         GuildContentObject content = Globals.getGuildContent(guild.getID());
-        if (content.getGuildConfig().userRoleUpdatelogging) {
+        if (content.getGuildConfig().userRoleLogging) {
             IChannel logging = Globals.getClient().getChannelByID(content.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG));
             if (logging != null) {
                 ArrayList<String> oldRoles = new ArrayList<>();
                 ArrayList<String> newRoles = new ArrayList<>();
                 oldRoles.addAll(event.getOldRoles().stream().map(IRole::getName).collect(Collectors.toList()));
                 newRoles.addAll(event.getNewRoles().stream().map(IRole::getName).collect(Collectors.toList()));
-                for (int i = 0; i < oldRoles.size();i++){
-                    if (oldRoles.get(i).equalsIgnoreCase("@everyone")){
+                for (int i = 0; i < oldRoles.size(); i++) {
+                    if (oldRoles.get(i).equalsIgnoreCase("@everyone")) {
                         oldRoles.remove(i);
                     }
                 }
-                for (int i = 0; i < newRoles.size();i++){
-                    if (newRoles.get(i).equalsIgnoreCase("@everyone")){
+                for (int i = 0; i < newRoles.size(); i++) {
+                    if (newRoles.get(i).equalsIgnoreCase("@everyone")) {
                         newRoles.remove(i);
                     }
                 }

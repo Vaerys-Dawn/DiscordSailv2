@@ -1,10 +1,7 @@
 package Main;
 
 import Commands.Command;
-import Objects.DailyMessageObject;
-import Objects.ReminderObject;
-import Objects.TimedObject;
-import Objects.WaiterObject;
+import Objects.*;
 import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +72,9 @@ public class TimedEvents {
         logger.debug("Now UTC = " + Utility.formatTimeSeconds(nowUTC.toEpochSecond()));
         logger.debug("Midnight UTC = " + Utility.formatTimeSeconds(midnightUTC.toEpochSecond()));
         logger.debug("Delay = " + Utility.formatTimeSeconds(initialDelay));
+        if (initialDelay < 120) {
+            initialDelay += 24 * 60 * 60;
+        }
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -112,6 +112,8 @@ public class TimedEvents {
                     Utility.backupFile(g.getGuildID(), Constants.FILE_INFO);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_COMPETITION);
                     GuildConfig guildConfig = Globals.getGuildContent(g.getGuildID()).getGuildConfig();
+                    GuildContentObject contentObject = Globals.getGuildContent(g.getGuildID());
+                    contentObject.getGuildUsers().addLevels();
 
                     //daily messages
                     if (guildConfig.getChannelTypeID(Command.CHANNEL_GENERAL) != null) {
@@ -215,8 +217,16 @@ public class TimedEvents {
 
     private static void doEventMin(ZonedDateTime nowUTC) {
         ZonedDateTime nextTimeUTC;
-        nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
-        long initialDelay = (nextTimeUTC.toEpochSecond() - nowUTC.toEpochSecond());
+        long initialDelay = 0;
+        if (nowUTC.getMinute() != 60) {
+            nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
+        } else {
+            nextTimeUTC = nowUTC.withSecond(0).withHour(nowUTC.getHour() + 1).withMinute(0);
+        }
+        initialDelay = (nextTimeUTC.toEpochSecond() - nowUTC.toEpochSecond());
+        if (initialDelay < 30) {
+            initialDelay += 60;
+        }
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -245,10 +255,18 @@ public class TimedEvents {
     }
 
     private static void doEventFiveMin(ZonedDateTime nowUTC) {
-        while (!Globals.getClient().isReady());
+        while (!Globals.getClient().isReady()) ;
         ZonedDateTime nextTimeUTC;
-        nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
-        long initialDelay = (nextTimeUTC.toEpochSecond() - nowUTC.toEpochSecond());
+        long initialDelay = 0;
+        if (nowUTC.getMinute() != 60) {
+            nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
+        } else {
+            nextTimeUTC = nowUTC.withSecond(0).withHour(nowUTC.getHour() + 1).withMinute(0);
+        }
+        initialDelay = (nextTimeUTC.toEpochSecond() - nowUTC.toEpochSecond());
+        if (initialDelay < 30) {
+            initialDelay += 60;
+        }
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override

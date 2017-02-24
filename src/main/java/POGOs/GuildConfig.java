@@ -26,7 +26,7 @@ public class GuildConfig {
     public boolean adminLogging = false;
     public boolean deleteLogging = false;
     public boolean joinLeaveLogging = false;
-    public boolean userRoleUpdatelogging = false;
+    public boolean userRoleLogging = false;
     public boolean editLogging = false;
     public boolean denyInvites = false;
     public boolean maxMentions = true;
@@ -42,6 +42,8 @@ public class GuildConfig {
     public int maxMentionLimit = 8;
     public int messageLimit = 10;
 
+    public int xpRate = 20;
+    public float xpModifier = 1;
 
     // TODO: 04/10/2016 let the mention limit be customisable.
     ArrayList<ChannelTypeObject> channels = new ArrayList<>();
@@ -52,8 +54,6 @@ public class GuildConfig {
     ArrayList<OffenderObject> repeatOffenders = new ArrayList<>();
     RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", null);
     RoleTypeObject mutedRole = new RoleTypeObject("No Role Set", null);
-    private int rateLimit;
-
 
 
     public String getPrefixCommand() {

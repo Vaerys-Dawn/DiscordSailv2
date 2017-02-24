@@ -27,10 +27,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
+import java.util.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -56,7 +55,7 @@ public class Utility {
         return roleID;
     }
 
-    public static boolean testForPerms(Permissions[] perms, IUser user, IGuild guild,boolean logging) {
+    public static boolean testForPerms(Permissions[] perms, IUser user, IGuild guild, boolean logging) {
         EnumSet<Permissions> toMatch = EnumSet.noneOf(Permissions.class);
         toMatch.addAll(Arrays.asList(perms));
         //Debug code.
@@ -76,10 +75,10 @@ public class Utility {
     }
 
     public static boolean testForPerms(Permissions[] perms, IUser user, IGuild guild) {
-        return testForPerms(perms,user,guild,true);
+        return testForPerms(perms, user, guild, true);
     }
 
-        //Command Utils
+    //Command Utils
     public static String getCommandInfo(Command command, CommandObject commandObject) {
         String response = ">> **" + commandObject.guildConfig.getPrefixCommand() + command.names()[0];
         if (command.usage() != null) {
@@ -174,7 +173,7 @@ public class Utility {
         }
     }
 
-    public static void backupConfigFile(String file,String fileBackup) {
+    public static void backupConfigFile(String file, String fileBackup) {
         try {
             File backup1 = new File(fileBackup + 1);
             File backup2 = new File(fileBackup + 2);
@@ -202,7 +201,7 @@ public class Utility {
                         return null;
                     }
                     if (message != null || !message.equals("")) {
-                        return channel.sendMessage(message.replace("@everyone","").replace("@here","")).getID();
+                        return channel.sendMessage(message.replace("@everyone", "").replace("@here", "")).getID();
                     }
                 } catch (MissingPermissionsException e) {
                     logger.debug("Error sending message to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
@@ -323,9 +322,9 @@ public class Utility {
 
     public static boolean sendDMEmbed(String message, EmbedObject embed, String userID) {
         IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
-        if (channel != null){
-            return sendEmbededMessage(message,embed,channel).get();
-        }else {
+        if (channel != null) {
+            return sendEmbededMessage(message, embed, channel).get();
+        } else {
             return true;
         }
     }
@@ -396,13 +395,13 @@ public class Utility {
                 if (isAdding) {
                     if (guild.getRoleByID(newRoleID) != null) {
                         author.addRole(guild.getRoleByID(newRoleID));
-                    }else {
+                    } else {
                         return true;
                     }
                 } else {
                     if (guild.getRoleByID(newRoleID) != null) {
                         author.removeRole(guild.getRoleByID(newRoleID));
-                    }else {
+                    } else {
                         return true;
                     }
                 }
@@ -596,7 +595,7 @@ public class Utility {
         }
     }
 
-    public static boolean canBypass(IUser author, IGuild guild,boolean logging) {
+    public static boolean canBypass(IUser author, IGuild guild, boolean logging) {
         if (author.getID().equals(Globals.creatorID)) {
             if (logging) {
                 logger.debug("User is Creator, BYPASSING.");
@@ -609,13 +608,14 @@ public class Utility {
             }
             return true;
         }
-        return testForPerms(new Permissions[]{Permissions.ADMINISTRATOR}, author, guild,logging);
+        return testForPerms(new Permissions[]{Permissions.ADMINISTRATOR}, author, guild, logging);
     }
 
     public static boolean canBypass(IUser author, IGuild guild) {
-        return canBypass(author,guild,true);
+        return canBypass(author, guild, true);
     }
-        public static String getMentionUserID(String content) {
+
+    public static String getMentionUserID(String content) {
         if (content.contains("<@")) {
             String userID = StringUtils.substringBetween(content, "<@!", ">");
             if (userID == null) {
@@ -728,7 +728,7 @@ public class Utility {
         for (GuildContentObject c : Globals.getGuildContentObjects()) {
             String message = "***GLOBAL LOGGING***\n> **@" + commandObject.authorUserName + "** Has Used Command `" + command.names()[0] + "`";
             IChannel channel = null;
-            if (!(args == null || args.isEmpty())){
+            if (!(args == null || args.isEmpty())) {
                 message += " with args: `" + args + "`";
             }
             if (c.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG) != null) {
@@ -737,9 +737,98 @@ public class Utility {
             if (c.getGuildConfig().getChannelTypeID(Command.CHANNEL_ADMIN_LOG) != null) {
                 channel = commandObject.client.getChannelByID(c.getGuildConfig().getChannelTypeID(Command.CHANNEL_ADMIN_LOG));
             }
-            if (channel != null){
-                sendMessage(message,channel);
+            if (channel != null) {
+                sendMessage(message, channel);
             }
         }
     }
+
+    public static String formatTimeDifference(long difference) {
+        String formatted = "";
+        try {
+            long days = TimeUnit.SECONDS.toDays(difference);
+            long hours = TimeUnit.SECONDS.toHours(difference);
+            hours -= days * 24;
+            long mins = TimeUnit.SECONDS.toMinutes(difference);
+            mins -= (days * 24 + hours) * 60;
+            long secs = difference;
+
+            if (days > 0) {
+                if (days > 1) {
+                    formatted = formatted + days + " days, ";
+                } else {
+                    formatted = formatted + days + " day, ";
+                }
+            }
+            if (hours > 0) {
+                if (hours > 1) {
+                    formatted = formatted + hours + " hours and ";
+                } else {
+                    formatted = formatted + hours + " hour and ";
+                }
+            }
+            if (mins > 1) {
+                formatted = formatted + mins + " minutes ago";
+            } else {
+                formatted = formatted + mins + " minute ago";
+            }
+            if (difference < 60) {
+                formatted = "less than a minute ago";
+            }
+        } catch (NoSuchElementException e) {
+            logger.error("Error getting Edited Message Timestamp.");
+        }
+        return formatted;
+    }
+
+    public static String removeFun(String from) {
+        String last;
+        boolean exit;
+        do {
+            last = from;
+            exit = false;
+            System.out.println(from);
+            if (from.contains("***")) {
+                from = replaceFun(from, "***");
+                exit = true;
+            }
+            if (from.contains("**") && !exit) {
+                from = replaceFun(from, "**");
+                exit = true;
+            }
+            if (from.contains("*") && !exit) {
+                from = replaceFun(from, "*");
+            }
+            exit = false;
+            if (from.contains("```")) {
+                from = replaceFun(from, "```");
+                exit = true;
+            }
+            if (from.contains("`") && !exit) {
+                from = replaceFun(from, "`");
+            }
+            exit = false;
+            if (from.contains("~~")) {
+                from = replaceFun(from, "~~");
+            }
+            if (from.contains("__")) {
+                from = replaceFun(from, "__");
+                exit = true;
+            }
+            if (from.contains("_") && !exit) {
+                from = replaceFun(from, "_");
+            }
+            System.out.println(from);
+        } while (last != from);
+        return from;
+    }
+
+    public static String replaceFun(String from, String fun) {
+        String noFun = StringUtils.substringBetween(from, fun, fun);
+        if (noFun != null) {
+            from = from.replace(fun + noFun + fun, noFun);
+        }
+        return from;
+    }
 }
+

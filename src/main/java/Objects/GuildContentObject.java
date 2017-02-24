@@ -16,15 +16,17 @@ public class GuildContentObject {
     private Servers servers;
     private Characters characters;
     private Competition competition;
+    private GuildUsers guildUsers;
     public ArrayList<UserRateObject> ratelimiting = new ArrayList<>();
 
-    public GuildContentObject(String guildID, GuildConfig guildConfig, CustomCommands customCommands, Servers servers, Characters characters, Competition competition) {
+    public GuildContentObject(String guildID, GuildConfig guildConfig, CustomCommands customCommands, Servers servers, Characters characters, Competition competition,GuildUsers guildUsers) {
         this.guildID = guildID;
         this.guildConfig = guildConfig;
         this.customCommands = customCommands;
         this.servers = servers;
         this.characters = characters;
         this.competition = competition;
+        this.guildUsers = guildUsers;
     }
 
     public boolean rateLimit(String userID){
@@ -102,6 +104,7 @@ public class GuildContentObject {
         Utility.flushFile(guildID, Constants.FILE_CHARACTERS, characters, characters.isProperlyInit());
         Utility.flushFile(guildID, Constants.FILE_SERVERS, servers, servers.isProperlyInit());
         Utility.flushFile(guildID, Constants.FILE_COMPETITION, competition, competition.isProperlyInit());
+        Utility.flushFile(guildID,Constants.FILE_GUILD_USERS,guildUsers, guildUsers.isProperlyInit());
     }
 
     public int getUserRate(String userID) {
@@ -111,5 +114,9 @@ public class GuildContentObject {
             }
         }
         return 0;
+    }
+
+    public GuildUsers getGuildUsers() {
+        return guildUsers;
     }
 }
