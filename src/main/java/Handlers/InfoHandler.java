@@ -28,8 +28,8 @@ public class InfoHandler {
     }
 
     private void updateChannel() {
-        if (channel.getMessages().size() > 1) {
-            Utility.deleteMessage(channel.getMessages());
+        if (channel.getMessageHistory().size() > 1) {
+            Utility.deleteMessage(channel.getMessageHistory());
         }
         StringBuilder builder = new StringBuilder();
         ArrayList<String> stringChunks = new ArrayList<>();

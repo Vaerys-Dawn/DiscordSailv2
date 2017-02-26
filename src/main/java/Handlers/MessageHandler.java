@@ -114,7 +114,7 @@ public class MessageHandler {
         if (!args.isEmpty()) {
             builder.append(" with args: `" + args + "`");
         }
-        builder.append(" in channel " + commandObject.channel.mention() + " .");
+        builder.append(" in channel " + commandObject.channel.mention() + ".");
         Utility.sendMessage(builder.toString(), loggingChannel);
     }
 

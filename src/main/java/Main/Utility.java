@@ -153,6 +153,7 @@ public class Utility {
 
     public static void flushFile(String guildID, String filePath, Object object, boolean wasInit) {
         if (wasInit) {
+            logger.trace(filePath + " - Saved.");
             handler.writeToJson(Utility.getFilePath(guildID, filePath), object);
         } else ;
     }
@@ -272,7 +273,7 @@ public class Utility {
                 InputStream stream = connection.getInputStream();
                 String[] urlSplit = imageURL.split(Pattern.quote("."));
                 String suffix = "." + urlSplit[urlSplit.length - 1];
-                if (!suffix.contains(".png") && !suffix.contains(".jpg") && !suffix.contains(".gif") && !suffix.contains(".webp")) {
+                if (isImageLink(suffix)) {
                     sendMessage(message + " " + imageURL, channel);
                     return true;
                 }
@@ -432,6 +433,9 @@ public class Utility {
                 IRole[] roles = new IRole[userRoles.size()];
                 int i = 0;
                 for (IRole r : userRoles) {
+                    if( r == null){
+                        logger.error("ROLE RETURNED NULL");
+                    }
                     roles[i] = r;
                     i++;
                 }
@@ -508,10 +512,10 @@ public class Utility {
         });
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> deleteMessage(MessageList messages) {
+    public static RequestBuffer.RequestFuture<Boolean> deleteMessage(MessageHistory messages) {
         return RequestBuffer.request(() -> {
             try {
-                messages.bulkDelete(messages);
+                messages.bulkDelete();
             } catch (MissingPermissionsException e) {
                 e.printStackTrace();
                 return true;
@@ -551,10 +555,30 @@ public class Utility {
     }
 
     public static Color getUsersColour(IUser user, IGuild guild) {
-        List<IRole> botRoles = guild.getRolesForUser(Globals.getClient().getOurUser());
+        List<IRole> userRoles = guild.getRolesForUser(user);
         IRole topColour = null;
         String defaultColour = "0,0,0";
-        for (IRole role : botRoles) {
+        for (IRole role : userRoles) {
+            if (!(role.getColor().getRed() + "," + role.getColor().getGreen() + "," + role.getColor().getBlue()).equals(defaultColour)) {
+                if (topColour != null) {
+                    if (role.getPosition() > topColour.getPosition()) {
+                        topColour = role;
+                    }
+                } else {
+                    topColour = role;
+                }
+            }
+        }
+        if (topColour != null) {
+            return topColour.getColor();
+        }
+        return null;
+    }
+
+    public static Color getUsersColour(ArrayList<IRole> userRoles, IGuild guild) {
+        IRole topColour = null;
+        String defaultColour = "0,0,0";
+        for (IRole role : userRoles) {
             if (!(role.getColor().getRed() + "," + role.getColor().getGreen() + "," + role.getColor().getBlue()).equals(defaultColour)) {
                 if (topColour != null) {
                     if (role.getPosition() > topColour.getPosition()) {
@@ -829,6 +853,21 @@ public class Utility {
             from = from.replace(fun + noFun + fun, noFun);
         }
         return from;
+    }
+
+    public static boolean isImageLink(String suffix){
+        ArrayList<String> suffixes = new ArrayList<String>(){{
+            add(".png");
+            add(".gif");
+            add(".jpg");
+            add(".webp");
+        }};
+        for (String s: suffixes) {
+            if (suffix.toLowerCase().endsWith(s)){
+                return true;
+            }
+        }
+        return false;
     }
 }
 

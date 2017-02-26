@@ -1,16 +1,22 @@
 package Objects;
 
+import Handlers.MessageHandler;
 import Main.Globals;
 import POGOs.GuildConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Vaerys on 27/08/2016.
  */
 public class UserTypeObject {
-    String displayName;
     String ID;
     float xp = 0;
     long level = 0;
+    String rewardRoleID = "";
+
+    private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
+    private float XP;
 
     public UserTypeObject(String ID) {
         this.ID = ID;
@@ -22,6 +28,7 @@ public class UserTypeObject {
 
     public void addXP(GuildConfig config) {
         xp += 1;
+        logger.trace(Globals.getClient().getUserByID(ID)+ " - Xp gained");
     }
 
     public void addLevel(){
@@ -41,5 +48,9 @@ public class UserTypeObject {
 
     public long getLevel() {
         return level;
+    }
+
+    public int getXP() {
+        return Math.round(xp);
     }
 }

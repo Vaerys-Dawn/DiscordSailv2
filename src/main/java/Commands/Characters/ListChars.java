@@ -4,6 +4,7 @@ import Commands.Command;
 import Commands.CommandObject;
 import Main.Utility;
 import Objects.CharacterObject;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -17,8 +18,19 @@ public class ListChars implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         EmbedBuilder builder = new EmbedBuilder();
+        String id = command.authorID;
         String title = "> Here are all of your characters.";
-        ArrayList<String> list = command.characters.getCharacters().stream().filter(c -> c.getUserID().equals(command.authorID)).map(CharacterObject::getName).collect(Collectors.toCollection(ArrayList::new));
+        if (command.message.getMentions().size() > 0){
+            IUser mentioned = command.message.getMentions().get(0);
+            id = mentioned.getID();
+            title = "> Here are all of **@" + mentioned.getName() + "#" + mentioned.getDiscriminator() + "'s** Characters.";
+        }
+        ArrayList<String> list = new ArrayList<>();
+        for (CharacterObject c: command.characters.getCharacters()){
+            if (c.getUserID().equals(id)){
+                list.add(c.getName());
+            }
+        }
         Utility.listFormatterEmbed(title,builder,list,true);
         builder.appendField(spacer,Utility.getCommandInfo(new SelectChar(),command),false);
         builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
@@ -38,7 +50,7 @@ public class ListChars implements Command {
 
     @Override
     public String usage() {
-        return null;
+        return "(@User)";
     }
 
     @Override

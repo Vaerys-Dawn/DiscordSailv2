@@ -40,7 +40,6 @@ public class Main {
         String token;
         // you need to set a token in Token/Token.txt for the bot to run
         try {
-            Discord4J.disableChannelWarnings();
             Discord4J.disableAudio();
             FileHandler.createDirectory(Constants.DIRECTORY_STORAGE);
             FileHandler.createDirectory(Constants.DIRECTORY_GLOBAL_IMAGES);

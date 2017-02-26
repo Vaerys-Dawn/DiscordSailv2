@@ -98,7 +98,7 @@ public class CommandObject {
         for (GuildToggle t : guildToggles) {
             if (t.isModule()) {
                 if (!t.get(guildConfig)) {
-                    logger.info(t.name() + " - " + t.get(guildConfig) + "");
+                    logger.trace(t.name() + " - " + t.get(guildConfig) + "");
                     t.execute(this);
                 }
             }
@@ -155,14 +155,14 @@ public class CommandObject {
     public void removeCommandsByType(String type) {
         for (int i = 0; i < commands.size(); i++) {
             if (commands.get(i).type().equalsIgnoreCase(type)) {
-                logger.debug(type + " - " + commands.get(i).names()[0] + " - removed");
+                logger.trace(type + " - " + commands.get(i).names()[0] + " - removed");
                 commands.remove(i);
             }
         }
         for (int i = 0; i < commandTypes.size(); i++) {
             if (commandTypes.get(i).equalsIgnoreCase(type)) {
                 commandTypes.remove(i);
-                logger.debug(type + " - removed");
+                logger.trace(type + " - removed");
             }
         }
     }

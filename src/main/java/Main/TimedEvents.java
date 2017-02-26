@@ -69,9 +69,9 @@ public class TimedEvents {
         ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
         midnightUTC = midnightUTC.withHour(0).withSecond(0).withMinute(0).withNano(0).plusDays(1);
         long initialDelay = midnightUTC.toEpochSecond() - nowUTC.toEpochSecond() + 4;
-        logger.debug("Now UTC = " + Utility.formatTimeSeconds(nowUTC.toEpochSecond()));
-        logger.debug("Midnight UTC = " + Utility.formatTimeSeconds(midnightUTC.toEpochSecond()));
-        logger.debug("Delay = " + Utility.formatTimeSeconds(initialDelay));
+        logger.trace("Now UTC = " + Utility.formatTimeSeconds(nowUTC.toEpochSecond()));
+        logger.trace("Midnight UTC = " + Utility.formatTimeSeconds(midnightUTC.toEpochSecond()));
+        logger.trace("Delay = " + Utility.formatTimeSeconds(initialDelay));
         if (initialDelay < 120) {
             initialDelay += 24 * 60 * 60;
         }
@@ -111,6 +111,7 @@ public class TimedEvents {
                     Utility.backupFile(g.getGuildID(), Constants.FILE_SERVERS);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_INFO);
                     Utility.backupFile(g.getGuildID(), Constants.FILE_COMPETITION);
+                    Utility.backupFile(g.getGuildID(), Constants.FILE_GUILD_USERS);
                     GuildConfig guildConfig = Globals.getGuildContent(g.getGuildID()).getGuildConfig();
                     GuildContentObject contentObject = Globals.getGuildContent(g.getGuildID());
                     contentObject.getGuildUsers().addLevels();
@@ -218,7 +219,7 @@ public class TimedEvents {
     private static void doEventMin(ZonedDateTime nowUTC) {
         ZonedDateTime nextTimeUTC;
         long initialDelay = 0;
-        if (nowUTC.getMinute() != 60) {
+        if (nowUTC.getMinute() < 59) {
             nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
         } else {
             nextTimeUTC = nowUTC.withSecond(0).withHour(nowUTC.getHour() + 1).withMinute(0);

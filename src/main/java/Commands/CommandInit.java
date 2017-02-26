@@ -2,14 +2,13 @@ package Commands;
 
 import Commands.Admin.*;
 import Commands.CC.*;
-import Commands.Characters.DelChar;
-import Commands.Characters.ListChars;
-import Commands.Characters.SelectChar;
-import Commands.Characters.UpdateChar;
+import Commands.Characters.*;
+import Commands.Characters.EditModes.CharAvatar;
 import Commands.Competition.EnterComp;
 import Commands.Competition.EnterVote;
 import Commands.Competition.FinalTally;
 import Commands.Competition.GetCompEntries;
+import Commands.Creator.GetMessageData;
 import Commands.Creator.Shutdown;
 import Commands.Creator.Sudo;
 import Commands.Creator.UpdateAvatar;
@@ -40,6 +39,7 @@ public class CommandInit {
         commands.add(new Shutdown());
         commands.add(new Sudo());
         commands.add(new UpdateAvatar());
+        commands.add(new GetMessageData());
 
         //Admin commands
         commands.add(new ChannelHere());
@@ -79,7 +79,9 @@ public class CommandInit {
         commands.add(new ListServers());
         commands.add(new Server());
         //Character Commands
+        commands.add(new CharInfo());
         commands.add(new DelChar());
+        commands.add(new EditChar());
         commands.add(new ListChars());
         commands.add(new SelectChar());
         commands.add(new UpdateChar());

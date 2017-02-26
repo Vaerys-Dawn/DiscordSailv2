@@ -19,19 +19,33 @@ public class CharacterObject {
     String userID; //author's authorID
     String nickname; //character's name;
     ArrayList<RoleTypeObject> roles = new ArrayList<>(); // these are the cosmetic and modifier roles the author has;
-    String gender; //limit = 20 chars.
-    String age; // limit = 20 chars.
-    String shortBio; //limit to 140 chars.
-    ArrayList<String> longBio = new ArrayList<>(); //can only be seen via a .txt File because of length limit of almost 2k.
+    String gender = "N/a"; //limit = 20 chars.
+    String age = "Unknown"; // limit = 20 chars.
+    String shortBio = ""; //limit to 140 chars.
+    String avatarURL = "";
+    String longBioURL = ""; //URL link linking to Character Bios
 
     public CharacterObject(String name, String userID, String nickname, ArrayList<RoleTypeObject> roles) {
         this.name = name;
         this.userID = userID;
         this.nickname = nickname;
         this.roles = roles;
-        gender = "Unknown";
-        age = "Unknown";
-        shortBio = "N/a";
+    }
+
+    public void setLongBioURL(String longBioURL) {
+        this.longBioURL = longBioURL;
+    }
+
+    public String getLongBioURL() {
+        return longBioURL;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
 
     public void setUsername(String nickname) {
@@ -44,10 +58,6 @@ public class CharacterObject {
 
     public void setShortBio(String shortBio) {
         this.shortBio = shortBio;
-    }
-
-    public void setLongBio(ArrayList<String> longBio) {
-        this.longBio = longBio;
     }
 
     public void setGender(String gender) {
@@ -63,7 +73,6 @@ public class CharacterObject {
     }
 
     public String getUserID() {
-
         return userID;
     }
 
@@ -85,9 +94,5 @@ public class CharacterObject {
 
     public String getShortBio() {
         return shortBio;
-    }
-
-    public ArrayList<String> getLongBio() {
-        return longBio;
     }
 }

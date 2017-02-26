@@ -12,6 +12,8 @@ import Main.Utility;
 import Objects.GuildContentObject;
 import Objects.SplitFirstObject;
 import POGOs.*;
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -19,6 +21,7 @@ import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -220,7 +223,7 @@ public class AnnotationListener {
     }
 
     @EventSubscriber
-    public void onChannelUpdateEvent(sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent event) {
+    public void onChannelUpdateEvent(ChannelUpdateEvent event) {
         if (event.getChannel().isPrivate()) {
             return;
         }
@@ -243,8 +246,9 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onReactionAddEvent(ReactionAddEvent event) {
+        Emoji x = EmojiManager.getForAlias("x");
         if (event.getChannel().isPrivate()) {
-            if (event.getReaction().toString().equals("❌")) {
+            if (event.getReaction().getUnicodeEmoji().equals(x)) {
                 if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())) {
                     Utility.deleteMessage(event.getMessage());
                 }
@@ -252,7 +256,7 @@ public class AnnotationListener {
             return;
         }
         if (Utility.canBypass(event.getUser(), event.getGuild())) {
-            if (event.getReaction().toString().equals("❌")) {
+            if (event.getReaction().getUnicodeEmoji().equals(x)) {
                 if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())) {
                     Utility.deleteMessage(event.getMessage());
                 }
@@ -301,7 +305,6 @@ public class AnnotationListener {
                 return;
             }
             long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - event.getMessage().getTimestamp().atZone(ZoneOffset.UTC).toEpochSecond();
-            System.out.println(difference);
             String formatted = Utility.formatTimeDifference(difference);
             Utility.sendMessage("> **@" + command.authorUserName + "'s** Message from " + formatted + " was **Deleted** in channel: " + command.channel.mention() + " with contents:\n" + content, logging);
         }
@@ -387,18 +390,20 @@ public class AnnotationListener {
             if (logging != null) {
                 ArrayList<String> oldRoles = new ArrayList<>();
                 ArrayList<String> newRoles = new ArrayList<>();
-                oldRoles.addAll(event.getOldRoles().stream().map(IRole::getName).collect(Collectors.toList()));
-                newRoles.addAll(event.getNewRoles().stream().map(IRole::getName).collect(Collectors.toList()));
-                for (int i = 0; i < oldRoles.size(); i++) {
-                    if (oldRoles.get(i).equalsIgnoreCase("@everyone")) {
-                        oldRoles.remove(i);
-                    }
+                oldRoles.addAll(event.getOldRoles().stream().filter(r -> !r.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
+                newRoles.addAll(event.getNewRoles().stream().filter(r -> !r.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
+                String oldRoleList = "";
+                String newRoleList = "";
+                for (String r : oldRoles){
+                    oldRoleList += r +", ";
                 }
-                for (int i = 0; i < newRoles.size(); i++) {
-                    if (newRoles.get(i).equalsIgnoreCase("@everyone")) {
-                        newRoles.remove(i);
-                    }
+                for (String r : newRoles){
+                    newRoleList += r +", ";
                 }
+                logger.info("Old Roles:");
+                logger.info(oldRoleList);
+                logger.info("New Roles:");
+                logger.info(newRoleList);
                 String prefix = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "'s** Role have been Updated.";
 
                 Utility.sendMessage(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), logging);

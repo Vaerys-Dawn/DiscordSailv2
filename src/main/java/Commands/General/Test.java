@@ -2,7 +2,15 @@ package Commands.General;
 
 import Commands.Command;
 import Commands.CommandObject;
+import Main.Utility;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
+
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -11,7 +19,25 @@ public class Test implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return "> Nothing to test at the moment come back later.";
+        EmbedBuilder builder = new EmbedBuilder();
+        ArrayList<IRole> cosmeticRoles = new ArrayList<>();
+        ArrayList<String> roleNames = new ArrayList<>();
+        builder.withTitle(command.authorDisplayName);
+        builder.withThumbnail(command.author.getAvatarURL());
+        long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - command.author.getCreationDate().atZone(ZoneOffset.UTC).toEpochSecond();
+        cosmeticRoles.addAll(command.authorRoles.stream().filter(role -> command.guildConfig.isRoleCosmetic(role.getID())).collect(Collectors.toList()));
+        if (cosmeticRoles.size() > 0){
+            builder.withColor(Utility.getUsersColour(cosmeticRoles,command.guild));
+        }else {
+            builder.withColor(command.authorColour);
+        }
+        roleNames.addAll(cosmeticRoles.stream().map(IRole::getName).collect(Collectors.toList()));
+        builder.withDesc("Age: " + Utility.formatTimeDifference(difference) +
+                "\nGender: ERROR\n" +
+                Utility.listFormatter(roleNames,true) +
+                "\nDesc: "+ args);
+        Utility.sendEmbededMessage("",builder.build(),command.channel);
+        return null;
     }
 
     @Override

@@ -1,10 +1,7 @@
 package POGOs;
 
 import Commands.CommandObject;
-import Objects.ReminderObject;
-import Objects.UserRateObject;
 import Objects.UserTypeObject;
-import Objects.WaiterObject;
 
 import java.util.ArrayList;
 

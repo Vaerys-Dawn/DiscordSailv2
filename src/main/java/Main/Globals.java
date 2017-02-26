@@ -146,7 +146,7 @@ public class Globals {
 
     private static void validate() throws IllegalArgumentException {
         for (Command c : commands) {
-            logger.debug("Validating Command: " + c.getClass().getName());
+            logger.trace("Validating Command: " + c.getClass().getName());
             if (c.names().length == 0)
                 throw new IllegalArgumentException(c.getClass().getName() + " Command Name cannot be null.");
             if (c.type() == null || c.type().isEmpty())
@@ -169,7 +169,7 @@ public class Globals {
             }
         }
         for (DMCommand c : commandsDM) {
-            logger.debug("Validating DM Command: " + c.getClass().getName());
+            logger.trace("Validating DM Command: " + c.getClass().getName());
             if (c.names().length == 0)
                 throw new IllegalArgumentException(c.getClass().getName() + " Command Name cannot be null");
             if (c.description() == null || c.description().isEmpty())
@@ -181,7 +181,7 @@ public class Globals {
         }
 
         for (GuildToggle g : guildGuildToggles) {
-            logger.debug("Validating Toggle: " + g.getClass().getName());
+            logger.trace("Validating Toggle: " + g.getClass().getName());
             if (g.name() == null || g.name().isEmpty())
                 throw new IllegalArgumentException(g.getClass().getName() + " Toggle Name cannot be null.");
             if (g.name().contains(" "))
