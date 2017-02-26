@@ -7,8 +7,8 @@ import Objects.CharacterObject;
  */
 public class CharDesc {
     public static String execute(String args, CharacterObject character){
-        if (args.length() > 140){
-            return "> Character Description must be under 140 characters.";
+        if (args.length() > 300){
+            return "> Character Description must be under 300 characters.";
         }else {
             character.setShortBio(args);
             return "> Description Updated.";

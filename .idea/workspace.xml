@@ -5,37 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/Characters/CharInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/Characters/EditChar.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharAge.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharAvatar.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharDesc.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharGender.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharLongDesc.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Commands/Creator/GetMessageData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/JavaDiscordSAILv2.jar" afterPath="$PROJECT_DIR$/target/JavaDiscordSAILv2.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/original-JavaDiscordSAILv2.jar" afterPath="$PROJECT_DIR$/target/original-JavaDiscordSAILv2.jar" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/JavaDiscordSAILv2.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/logback.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/project.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/original-JavaDiscordSAILv2.jar" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DiscordSAIL.iml" afterPath="$PROJECT_DIR$/DiscordSAIL.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Characters/ListChars.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Characters/ListChars.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/CommandInit.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/CommandInit.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/CommandObject.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/CommandObject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/General/Test.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/General/Test.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/InfoHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" afterPath="$PROJECT_DIR$/src/main/java/Handlers/MessageHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" afterPath="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/Globals.java" afterPath="$PROJECT_DIR$/src/main/java/Main/Globals.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/Main.java" afterPath="$PROJECT_DIR$/src/main/java/Main/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" afterPath="$PROJECT_DIR$/src/main/java/Main/TimedEvents.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main/Utility.java" afterPath="$PROJECT_DIR$/src/main/java/Main/Utility.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Objects/CharacterObject.java" afterPath="$PROJECT_DIR$/src/main/java/Objects/CharacterObject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Objects/UserTypeObject.java" afterPath="$PROJECT_DIR$/src/main/java/Objects/UserTypeObject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/POGOs/GuildUsers.java" afterPath="$PROJECT_DIR$/src/main/java/POGOs/GuildUsers.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/project.properties" afterPath="$PROJECT_DIR$/target/classes/project.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_austinv11_Discord4j_shaded_5213b02.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_austinv11_Discord4j_shaded_ef410ed.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharDesc.java" afterPath="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharDesc.java" />
     </list>
     <ignored path="DiscordSailv2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -83,11 +59,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CharDesc.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CharDesc.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharDesc.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+            <state relative-caret-position="170">
+              <caret line="10" column="61" selection-start-line="10" selection-start-column="61" selection-end-line="10" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -103,7 +79,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AnnotationListener.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AnnotationListener.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="267">
@@ -256,7 +232,6 @@
         <option value="$PROJECT_DIR$/src/main/java/Objects/CharacterObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharAge.java" />
         <option value="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharAvatar.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharDesc.java" />
         <option value="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharGender.java" />
         <option value="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharLongDesc.java" />
         <option value="$PROJECT_DIR$/src/main/java/Commands/Characters/EditChar.java" />
@@ -264,6 +239,7 @@
         <option value="$PROJECT_DIR$/src/main/java/Commands/Characters/CharInfo.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Listeners/AnnotationListener.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharDesc.java" />
       </list>
     </option>
   </component>
@@ -1224,7 +1200,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27952328" sideWeight="0.49676377" order="6" side_tool="false" content_ui="tabs" />
@@ -1659,14 +1635,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharDesc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharGender.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -1762,6 +1730,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="267">
           <caret line="229" column="58" selection-start-line="229" selection-start-column="58" selection-end-line="229" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Commands/Characters/EditModes/CharDesc.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="61" selection-start-line="10" selection-start-column="61" selection-end-line="10" selection-end-column="61" />
           <folding />
         </state>
       </provider>
