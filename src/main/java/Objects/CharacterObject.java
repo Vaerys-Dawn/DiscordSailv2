@@ -80,7 +80,7 @@ public class CharacterObject {
         return name;
     }
 
-    public List<RoleTypeObject> getRoles() {
+    public ArrayList<RoleTypeObject> getRoles() {
         return roles;
     }
 
@@ -94,5 +94,10 @@ public class CharacterObject {
 
     public String getShortBio() {
         return shortBio;
+    }
+
+    public void update(CharacterObject newCharacter) {
+        this.nickname = newCharacter.getNickname();
+        this.roles = newCharacter.getRoles();
     }
 }

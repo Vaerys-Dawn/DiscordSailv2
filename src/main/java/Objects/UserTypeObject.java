@@ -14,9 +14,40 @@ public class UserTypeObject {
     float xp = 0;
     long level = 0;
     String rewardRoleID = "";
+    String gender = "Unknown";
+    String quote = "This person doesn't seem to have much to say for themselves.";
 
     private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
-    private float XP;
+
+    public String getQuote() {
+        if (quote == null){
+            quote = "This person doesn't seem to have much to say for themselves.";
+        }
+        return quote;
+    }
+
+    public void setQuote(String quote) {
+        this.quote = quote;
+    }
+
+    public String getGender() {
+        if (gender == null){
+            gender = "Unknown";
+        }
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getRewardRoleID() {
+        return rewardRoleID;
+    }
+
+    public void setRewardRoleID(String rewardRoleID) {
+        this.rewardRoleID = rewardRoleID;
+    }
 
     public UserTypeObject(String ID) {
         this.ID = ID;

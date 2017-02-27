@@ -37,7 +37,7 @@ public class Characters {
             if (c.getName().equalsIgnoreCase(newCharacter.getName())) {
                 IUser author = Globals.getClient().getUserByID(newCharacter.getUserID());
                 if (c.getUserID().equals(author.getID())) {
-                    characters.set(position, newCharacter);
+                    characters.get(position).update(newCharacter);
                     return "> Character Updated.";
                 } else {
                     return "> " + author.getName() + "#" + author.getDiscriminator() + "'s Character: \"" + newCharacter.getName() + "\" Could not be added as that name is already in use.";
@@ -63,14 +63,10 @@ public class Characters {
 
                     }
                     for (int i = 0; i < c.getRoles().size(); i++) {
-
                         IRole newRole = guild.getRoleByID(c.getRoles().get(i).getRoleID());
                         if (newRole != null) {
                             userRoles.add(newRole);
-                        } /*else {
-                        c.getRoles().remove(i);
-                    }*/
-
+                        }
                     }
                     Utility.roleManagement(author, guild, userRoles);
                     Utility.updateUserNickName(author, guild, c.getNickname());

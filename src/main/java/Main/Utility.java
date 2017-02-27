@@ -273,8 +273,9 @@ public class Utility {
                 InputStream stream = connection.getInputStream();
                 String[] urlSplit = imageURL.split(Pattern.quote("."));
                 String suffix = "." + urlSplit[urlSplit.length - 1];
-                if (isImageLink(suffix)) {
+                if (!isImageLink(suffix)) {
                     sendMessage(message + " " + imageURL, channel);
+                    deleteMessage(Globals.getClient().getMessageByID(messageID));
                     return true;
                 }
                 if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("")) {

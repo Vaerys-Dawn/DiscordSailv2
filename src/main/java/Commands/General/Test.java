@@ -3,6 +3,7 @@ package Commands.General;
 import Commands.Command;
 import Commands.CommandObject;
 import Main.Utility;
+import Objects.UserTypeObject;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
@@ -10,6 +11,7 @@ import sx.blah.discord.util.EmbedBuilder;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -19,25 +21,46 @@ public class Test implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        EmbedBuilder builder = new EmbedBuilder();
-        ArrayList<IRole> cosmeticRoles = new ArrayList<>();
-        ArrayList<String> roleNames = new ArrayList<>();
-        builder.withTitle(command.authorDisplayName);
-        builder.withThumbnail(command.author.getAvatarURL());
-        long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - command.author.getCreationDate().atZone(ZoneOffset.UTC).toEpochSecond();
-        cosmeticRoles.addAll(command.authorRoles.stream().filter(role -> command.guildConfig.isRoleCosmetic(role.getID())).collect(Collectors.toList()));
-        if (cosmeticRoles.size() > 0){
-            builder.withColor(Utility.getUsersColour(cosmeticRoles,command.guild));
-        }else {
-            builder.withColor(command.authorColour);
+        for (UserTypeObject u : command.guildUsers.getUsers()) {
+            if (u.getID().equals(command.authorID)) {
+
+                EmbedBuilder builder = new EmbedBuilder();
+                List<IRole> roles = command.authorRoles;
+                ArrayList<String> roleNames = new ArrayList<>();
+
+                //sets title to user Display Name;
+                builder.withTitle(command.authorDisplayName);
+
+                //sets thumbnail to user Avatar.
+                builder.withThumbnail(command.author.getAvatarURL());
+
+                //gets the age of the account.
+                long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - command.author.getCreationDate().atZone(ZoneOffset.UTC).toEpochSecond();
+
+
+                //sets sidebar colour
+                builder.withColor(command.authorColour);
+
+                //collect role names;
+                roleNames.addAll(roles.stream().filter(role -> !role.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
+
+                //builds desc
+                builder.withDesc("Account Created: " + Utility.formatTimeDifference(difference) +
+                        "\nGender: " + u.getGender() +
+                        "\nRoles : " + Utility.listFormatter(roleNames, true) +
+                        "\n\n*" + u.getQuote() + "*");
+
+                // TODO: 27/02/2017 when xp system is implemented put xp and rank on the user card.
+
+                //adds ID
+                builder.withFooterText("User ID: " + u.getID());
+
+                //sends Message
+                Utility.sendEmbededMessage("", builder.build(), command.channel);
+                return null;
+            }
         }
-        roleNames.addAll(cosmeticRoles.stream().map(IRole::getName).collect(Collectors.toList()));
-        builder.withDesc("Age: " + Utility.formatTimeDifference(difference) +
-                "\nGender: ERROR\n" +
-                Utility.listFormatter(roleNames,true) +
-                "\nDesc: "+ args);
-        Utility.sendEmbededMessage("",builder.build(),command.channel);
-        return null;
+        return "> An Error occurred.";
     }
 
     @Override

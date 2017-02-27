@@ -13,10 +13,7 @@ import Commands.Creator.Shutdown;
 import Commands.Creator.Sudo;
 import Commands.Creator.UpdateAvatar;
 import Commands.DMCommands.*;
-import Commands.General.GetAvatar;
-import Commands.General.Hello;
-import Commands.General.RemindMe;
-import Commands.General.Test;
+import Commands.General.*;
 import Commands.Help.GetGuildInfo;
 import Commands.Help.*;
 import Commands.RoleSelect.CosmeticRoles;
@@ -56,7 +53,10 @@ public class CommandInit {
         commands.add(new GetAvatar());
         commands.add(new Hello());
         commands.add(new RemindMe());
+        commands.add(new SetGender());
+        commands.add(new SetQuote());
         commands.add(new Test());
+        commands.add(new UserInfo());
         //Help commands
         commands.add(new GetGuildInfo());
         commands.add(new Help());
