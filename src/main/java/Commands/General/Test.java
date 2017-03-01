@@ -21,46 +21,7 @@ public class Test implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        for (UserTypeObject u : command.guildUsers.getUsers()) {
-            if (u.getID().equals(command.authorID)) {
-
-                EmbedBuilder builder = new EmbedBuilder();
-                List<IRole> roles = command.authorRoles;
-                ArrayList<String> roleNames = new ArrayList<>();
-
-                //sets title to user Display Name;
-                builder.withTitle(command.authorDisplayName);
-
-                //sets thumbnail to user Avatar.
-                builder.withThumbnail(command.author.getAvatarURL());
-
-                //gets the age of the account.
-                long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - command.author.getCreationDate().atZone(ZoneOffset.UTC).toEpochSecond();
-
-
-                //sets sidebar colour
-                builder.withColor(command.authorColour);
-
-                //collect role names;
-                roleNames.addAll(roles.stream().filter(role -> !role.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
-
-                //builds desc
-                builder.withDesc("Account Created: " + Utility.formatTimeDifference(difference) +
-                        "\nGender: " + u.getGender() +
-                        "\nRoles : " + Utility.listFormatter(roleNames, true) +
-                        "\n\n*" + u.getQuote() + "*");
-
-                // TODO: 27/02/2017 when xp system is implemented put xp and rank on the user card.
-
-                //adds ID
-                builder.withFooterText("User ID: " + u.getID());
-
-                //sends Message
-                Utility.sendEmbededMessage("", builder.build(), command.channel);
-                return null;
-            }
-        }
-        return "> An Error occurred.";
+        return "> Nothing to test right now come back later.";
     }
 
     @Override

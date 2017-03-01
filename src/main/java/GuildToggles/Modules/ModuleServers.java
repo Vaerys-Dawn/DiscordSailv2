@@ -12,7 +12,7 @@ public class ModuleServers implements GuildToggle {
 
     @Override
     public String name() {
-        return "ModuleServers";
+        return "Servers";
     }
 
     @Override

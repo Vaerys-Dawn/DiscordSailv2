@@ -66,7 +66,7 @@ public class SetGender implements Command {
 
     @Override
     public String channel() {
-        return null;
+        return CHANNEL_BOT_COMMANDS;
     }
 
     @Override

@@ -20,16 +20,18 @@ public class Toggle implements Command {
         StringBuilder builder = new StringBuilder();
         if (!args.isEmpty()) {
             for (GuildToggle t : command.guildToggles) {
-                if (args.equalsIgnoreCase(t.name())) {
-                    t.toggle(command.guildConfig);
-                    return "> **" + t.name() + " is now " + t.get(command.guildConfig) + "**.";
+                if (!t.isModule()) {
+                    if (args.equalsIgnoreCase(t.name())) {
+                        t.toggle(command.guildConfig);
+                        return "> **" + t.name() + " is now " + t.get(command.guildConfig) + "**.";
+                    }
                 }
             }
             builder.append("> Could not find toggle \"" + args + "\".\n");
         }
         EmbedBuilder embedBuilder = new EmbedBuilder();
         String title = "> Here is a list of available Guild Toggles:\n";
-        ArrayList<String> types = command.guildToggles.stream().map(GuildToggle::name).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<String> types = command.guildToggles.stream().filter(t -> !t.isModule()).map(GuildToggle::name).collect(Collectors.toCollection(ArrayList::new));
         Collections.sort(types);
         embedBuilder.withDesc(builder.toString());
         Utility.listFormatterEmbed(title, embedBuilder, types, true);

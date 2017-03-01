@@ -39,6 +39,9 @@ public class GuildConfig {
     public boolean moduleServers = true;
     public boolean moduleChars = true;
     public boolean moduleComp = false;
+    public boolean moduleRoles = true;
+    public boolean moduleCC = true;
+    public boolean moduleMe = true;
     public int maxMentionLimit = 8;
     public int messageLimit = 10;
 

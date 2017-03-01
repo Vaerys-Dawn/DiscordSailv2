@@ -12,7 +12,7 @@ public class ModuleChars implements GuildToggle {
 
     @Override
     public String name() {
-        return "ModuleChars";
+        return "Chars";
     }
 
     @Override

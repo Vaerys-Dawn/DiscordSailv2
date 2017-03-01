@@ -93,13 +93,13 @@ public class CommandObject {
         commands = (ArrayList<Command>) Globals.getCommands().clone();
         commandTypes = (ArrayList<String>) Globals.getCommandTypes().clone();
         channelTypes = (ArrayList<String>) Globals.getChannelTypes().clone();
-        guildToggles = Globals.getGuildGuildToggles();
+        guildToggles = (ArrayList<GuildToggle>) Globals.getGuildGuildToggles().clone();
 
-        for (GuildToggle t : guildToggles) {
-            if (t.isModule()) {
-                if (!t.get(guildConfig)) {
-                    logger.trace(t.name() + " - " + t.get(guildConfig) + "");
-                    t.execute(this);
+        for (int i = 0; i < guildToggles.size();i++) {
+            if (guildToggles.get(i).isModule()) {
+                if (!guildToggles.get(i).get(guildConfig)) {
+                    logger.trace(guildToggles.get(i).name() + " - " + guildToggles.get(i).get(guildConfig) + "");
+                    guildToggles.get(i).execute(this);
                 }
             }
         }
@@ -171,6 +171,22 @@ public class CommandObject {
         for (int i = 0; i < channelTypes.size(); i++) {
             if (channelTypes.get(i).equalsIgnoreCase(channel)) {
                 channelTypes.remove(i);
+            }
+        }
+    }
+
+    public void removeCommand(String[] names) {
+        for (int i = 0;i < commands.size(); i++){
+            if (commands.get(i).names()[0].equals(names[0])){
+                commands.remove(i);
+            }
+        }
+    }
+
+    public void removeToggle(String name) {
+        for (int i = 0; i < guildToggles.size();i++){
+            if (guildToggles.get(i).name().equals(name)){
+                guildToggles.remove(i);
             }
         }
     }

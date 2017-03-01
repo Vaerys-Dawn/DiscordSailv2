@@ -24,8 +24,8 @@ public class SetQuote implements Command {
                 adminEdit = true;
             }
         }
-
         for (UserTypeObject u : command.guildUsers.getUsers()) {
+            args = Utility.removeFun(args);
             if (args.length() > 140) {
                 return "> Your Quote is too long...\n(must be under 140 chars)";
             }
@@ -66,7 +66,7 @@ public class SetQuote implements Command {
 
     @Override
     public String channel() {
-        return null;
+        return CHANNEL_BOT_COMMANDS;
     }
 
     @Override

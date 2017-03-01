@@ -41,6 +41,7 @@ public class CommandInit {
         //Admin commands
         commands.add(new ChannelHere());
         commands.add(new MaxMessages());
+        commands.add(new Module());
         commands.add(new FinalTally());
         commands.add(new GetCompEntries());
         commands.add(new SetAdminRole());

@@ -1,8 +1,6 @@
 package GuildToggles;
 
-import GuildToggles.Modules.ModuleChars;
-import GuildToggles.Modules.ModuleComp;
-import GuildToggles.Modules.ModuleServers;
+import GuildToggles.Modules.*;
 import GuildToggles.Toggles.*;
 
 import java.util.ArrayList;
@@ -35,6 +33,9 @@ public class ToggleInit {
         guildToggles.add(new ModuleChars());
         guildToggles.add(new ModuleComp());
         guildToggles.add(new ModuleServers());
+        guildToggles.add(new ModuleRoles());
+        guildToggles.add(new ModuleCC());
+        guildToggles.add(new ModuleMe());
 
         return guildToggles;
     }

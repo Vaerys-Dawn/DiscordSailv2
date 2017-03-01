@@ -50,8 +50,10 @@ public class MessageHandler {
         if (command.toLowerCase().startsWith(commandObject.guildConfig.getPrefixCommand().toLowerCase())) {
             handleCommand(commandObject, command, args);
         }
-        if (command.toLowerCase().startsWith(commandObject.guildConfig.getPrefixCC().toLowerCase())) {
-            new CCHandler(command, args, commandObject);
+        if (commandObject.guildConfig.moduleCC) {
+            if (command.toLowerCase().startsWith(commandObject.guildConfig.getPrefixCC().toLowerCase())) {
+                new CCHandler(command, args, commandObject);
+            }
         }
     }
 

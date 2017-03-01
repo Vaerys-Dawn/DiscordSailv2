@@ -3,6 +3,8 @@ package GuildToggles.Modules;
 import Commands.Command;
 import Commands.CommandObject;
 import GuildToggles.GuildToggle;
+import GuildToggles.Toggles.CompEntries;
+import GuildToggles.Toggles.Voting;
 import POGOs.GuildConfig;
 
 /**
@@ -14,7 +16,7 @@ public class ModuleComp implements GuildToggle {
 
     @Override
     public String name() {
-        return "ModuleComp";
+        return "Comp";
     }
 
     @Override
@@ -33,6 +35,8 @@ public class ModuleComp implements GuildToggle {
             return;
         }else {
             command.removeCommandsByType(Command.TYPE_COMPETITION);
+            command.removeToggle(new Voting().name());
+            command.removeToggle(new CompEntries().name());
         }
     }
 
