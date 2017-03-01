@@ -7,6 +7,7 @@ import Main.Utility;
 import Objects.RoleTypeObject;
 import Objects.SplitFirstObject;
 import POGOs.GuildConfig;
+import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
@@ -23,6 +24,7 @@ public class ModifierRoles implements Command {
     public String execute(String args, CommandObject command) {
         IGuild guild = command.guild;
         IUser author = command.author;
+        List<IRole> oldRoles = new ArrayList<>(command.author.getRolesForGuild(guild));
         GuildConfig guildConfig = command.guildConfig;
         String response;
         SplitFirstObject splitFirst = new SplitFirstObject(args);
@@ -95,7 +97,7 @@ public class ModifierRoles implements Command {
                                     "```Old Roles." + Utility.listFormatter(roleNames1, true) + "\n" +
                                     "New Roles." + Utility.listFormatter(roleNames2, true) + "```";
                         }
-                    }
+                    }command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(guild,author,oldRoles,userRoles));
                     response = "> You have toggled the Modifier role: **" + guild.getRoleByID(newRoleId).getName() + "**.";
                 }
                 if (Utility.roleManagement(author, guild, userRoles).get()) {
