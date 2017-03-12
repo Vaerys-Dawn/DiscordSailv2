@@ -1,19 +1,13 @@
 package Commands.RoleSelect;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
-import GuildToggles.GuildToggle;
 import Main.Constants;
-import Main.Globals;
 import Main.Utility;
 import Objects.RoleTypeObject;
 import Objects.SplitFirstObject;
 import POGOs.GuildConfig;
-import sx.blah.discord.Discord4J;
-import sx.blah.discord.api.events.EventDispatcher;
-import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
-import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;

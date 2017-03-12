@@ -1,7 +1,7 @@
 package Commands.Characters;
 
 import Commands.Characters.EditModes.*;
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Utility;
 import Objects.CharacterObject;

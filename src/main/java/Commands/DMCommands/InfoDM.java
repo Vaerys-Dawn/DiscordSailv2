@@ -1,10 +1,10 @@
 package Commands.DMCommands;
 
-import Commands.DMCommand;
+import Interfaces.DMCommand;
 import Commands.DMCommandObject;
 import Main.Globals;
 import Main.Utility;
-import sx.blah.discord.util.EmbedBuilder;
+import Objects.XEmbedBuilder;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class InfoDM implements DMCommand {
         for (DMCommand c : commands) {
             for (String s : c.names()) {
                 if (args.equalsIgnoreCase(s)) {
-                    EmbedBuilder infoEmbed = new EmbedBuilder();
+                    XEmbedBuilder infoEmbed = new XEmbedBuilder();
 
                     //command info
                     StringBuilder builder = new StringBuilder();
@@ -44,7 +44,7 @@ public class InfoDM implements DMCommand {
                         aliasBuilder.append(".\n");
                         infoEmbed.appendField("Aliases:", aliasBuilder.toString(), false);
                     }
-                    Utility.sendEmbededMessage("", infoEmbed.build(), command.channel);
+                    Utility.sendEmbedMessage("", infoEmbed, command.channel);
                     return "";
                 }
             }

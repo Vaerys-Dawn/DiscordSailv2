@@ -1,7 +1,6 @@
 package Main;
 
 import Handlers.FileHandler;
-import Listeners.AnnotationListener;
 import POGOs.Config;
 import POGOs.GlobalData;
 import org.slf4j.Logger;
@@ -77,7 +76,7 @@ public class Main {
             dispatcher.registerListener(new AnnotationListener());
             client.login();
 
-            //timed events init
+            //timed events get
             new TimedEvents();
 
             while (!client.isReady()) ;

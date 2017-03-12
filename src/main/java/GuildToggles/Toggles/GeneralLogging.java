@@ -1,15 +1,13 @@
 package GuildToggles.Toggles;
 
 import Commands.CommandObject;
-import GuildToggles.GuildToggle;
+import Interfaces.GuildToggle;
 import POGOs.GuildConfig;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
 public class GeneralLogging implements GuildToggle {
-
-    boolean state = true;
 
     @Override
     public String name() {

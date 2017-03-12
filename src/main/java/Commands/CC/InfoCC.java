@@ -1,14 +1,14 @@
 package Commands.CC;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Constants;
 import Main.Globals;
 import Main.Utility;
 import Objects.CCommandObject;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -20,7 +20,7 @@ public class InfoCC implements Command {
             if (c.getName().equalsIgnoreCase(args)) {
                 StringBuilder builder = new StringBuilder();
                 IUser author = Globals.getClient().getUserByID(c.getUserID());
-                EmbedBuilder embedBuilder = new EmbedBuilder();
+                XEmbedBuilder embedBuilder = new XEmbedBuilder();
                 embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(),command.guild));
                 String title = "> Here is the information for command: **" + c.getName() + "**\n";
                 builder.append("Creator: **@" + author.getName() + "#" + author.getDiscriminator() + "**\n");
@@ -28,7 +28,7 @@ public class InfoCC implements Command {
                 builder.append("Is Locked: **" + c.isLocked() + "**\n");
                 builder.append("Is ShitPost: **" + c.isShitPost() + "**");
                 embedBuilder.appendField(title,builder.toString(),false);
-                Utility.sendEmbededMessage("",embedBuilder.build(),command.channel);
+                Utility.sendEmbedMessage("",embedBuilder,command.channel);
                 return null;
             }
         }

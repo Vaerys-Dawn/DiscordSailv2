@@ -1,6 +1,6 @@
 package Main;
 
-import Commands.Command;
+import Interfaces.Command;
 import Objects.*;
 import POGOs.GuildConfig;
 import org.slf4j.Logger;
@@ -146,7 +146,7 @@ public class TimedEvents {
         }
     }
 
-    public static ArrayList<WaiterObject> getWaiterObjects(String guildID) {
+    public static ArrayList<UserCountDown> getWaiterObjects(String guildID) {
         for (TimedObject g : TimerObjects) {
             if (g.getGuildID().equals(guildID)) {
                 return g.getWaiterObjects();
@@ -188,7 +188,7 @@ public class TimedEvents {
             @Override
             public void run() {
                 for (TimedObject task : TimerObjects) {
-                    ArrayList<WaiterObject> waiterObjects = task.getWaiterObjects();
+                    ArrayList<UserCountDown> waiterObjects = task.getWaiterObjects();
                     for (int i = 0; i < waiterObjects.size(); i++) {
                         if (waiterObjects.get(i).getRemainderSecs() > 0) {
                             waiterObjects.get(i).setRemainderSecs(waiterObjects.get(i).getRemainderSecs() - 1);
@@ -211,6 +211,18 @@ public class TimedEvents {
             public void run() {
                 for (TimedObject task : TimerObjects) {
                     Globals.getGuildContent(task.getGuildID()).resetRateLimit();
+
+                    //Mutes.
+                    GuildContentObject content = Globals.getGuildContent(task.getGuildID());
+                    ArrayList<UserCountDown> mutedUsers = content.getGuildUsers().getMutedUsers();
+                    for (int i = 0; i < mutedUsers.size();i++) {
+                        if (mutedUsers.get(i).getRemainderSecs() != -1) {
+                            mutedUsers.get(i).tickDown(10);
+                            if (mutedUsers.get(i).getRemainderSecs() == 0) {
+                                content.getGuildUsers().unMuteUser(mutedUsers.get(i).getID(), content.getGuildID());
+                            }
+                        }
+                    }
                 }
             }
         }, 1000, 10 * 1000);
@@ -259,7 +271,7 @@ public class TimedEvents {
         while (!Globals.getClient().isReady()) ;
         ZonedDateTime nextTimeUTC;
         long initialDelay = 0;
-        if (nowUTC.getMinute() != 60) {
+        if (nowUTC.getMinute() != 59) {
             nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
         } else {
             nextTimeUTC = nowUTC.withSecond(0).withHour(nowUTC.getHour() + 1).withMinute(0);
@@ -274,6 +286,8 @@ public class TimedEvents {
             public void run() {
                 //Sending isAlive Check.
                 try {
+                    logger.debug("Backup in 5 seconds do not restart.");
+                    Thread.sleep(5000);
                     Globals.getClient().checkLoggedIn("IsAlive");
                 } catch (DiscordException e) {
                     logger.error(e.getErrorMessage());
@@ -284,8 +298,11 @@ public class TimedEvents {
                     } catch (IllegalStateException ex) {
                         //ignore exception
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 Globals.saveFiles();
+                logger.debug("Files Saved.");
             }
         }, initialDelay * 1000, 5 * 60 * 1000);
     }

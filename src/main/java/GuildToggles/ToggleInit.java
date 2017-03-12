@@ -2,6 +2,7 @@ package GuildToggles;
 
 import GuildToggles.Modules.*;
 import GuildToggles.Toggles.*;
+import Interfaces.GuildToggle;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,10 @@ public class ToggleInit {
         guildToggles.add(new JoinLeaveLgging());
         guildToggles.add(new EditLogging());
         guildToggles.add(new UserRoleLogging());
+        guildToggles.add(new UseTimeStamps());
+        guildToggles.add(new ExtendEditLog());
+        guildToggles.add(new ChannelLogging());
+        guildToggles.add(new SlashCommands());
 
         //modules
         guildToggles.add(new ModuleChars());
@@ -36,6 +41,7 @@ public class ToggleInit {
         guildToggles.add(new ModuleRoles());
         guildToggles.add(new ModuleCC());
         guildToggles.add(new ModuleMe());
+        guildToggles.add(new ModuleModMuting());
 
         return guildToggles;
     }

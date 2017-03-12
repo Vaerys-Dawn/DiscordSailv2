@@ -1,13 +1,13 @@
 package Commands.Characters;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Utility;
 import Objects.CharacterObject;
 import Objects.RoleTypeObject;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class CharInfo implements Command {
     public String execute(String args, CommandObject command) {
         for (CharacterObject object: command.characters.getCharacters()){
             if (object.getName().equalsIgnoreCase(args)){
-                EmbedBuilder builder = new EmbedBuilder();
+                XEmbedBuilder builder = new XEmbedBuilder();
                 builder.withTitle(object.getNickname());
 
                 ArrayList<IRole> roles = new ArrayList<>();
@@ -46,7 +46,7 @@ public class CharInfo implements Command {
                 if (object.getAvatarURL() != null && !object.getAvatarURL().isEmpty()) {
                     builder.withThumbnail(object.getAvatarURL());
                 }
-                Utility.sendEmbededMessage("",builder.build(),command.channel);
+                Utility.sendEmbedMessage("",builder,command.channel);
                 return null;
             }
         }

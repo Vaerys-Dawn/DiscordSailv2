@@ -24,7 +24,6 @@ public class CCommandObject {
         timesRun = 0;
     }
 
-
     public void setContents(String contents) {
         this.contents = Arrays.asList(contents.split("\n"));
     }

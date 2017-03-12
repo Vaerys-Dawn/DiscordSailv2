@@ -1,6 +1,8 @@
 package Commands;
 
-import GuildToggles.GuildToggle;
+import Interfaces.Command;
+import Interfaces.DMCommand;
+import Interfaces.GuildToggle;
 import Main.Globals;
 import Main.Utility;
 import Objects.GuildContentObject;
@@ -95,12 +97,10 @@ public class CommandObject {
         channelTypes = (ArrayList<String>) Globals.getChannelTypes().clone();
         guildToggles = (ArrayList<GuildToggle>) Globals.getGuildGuildToggles().clone();
 
-        for (int i = 0; i < guildToggles.size();i++) {
-            if (guildToggles.get(i).isModule()) {
-                if (!guildToggles.get(i).get(guildConfig)) {
-                    logger.trace(guildToggles.get(i).name() + " - " + guildToggles.get(i).get(guildConfig) + "");
-                    guildToggles.get(i).execute(this);
-                }
+        for (int i = 0; i < guildToggles.size(); i++) {
+            if (!guildToggles.get(i).get(guildConfig)) {
+                logger.trace(guildToggles.get(i).name() + " - " + guildToggles.get(i).get(guildConfig) + "");
+                guildToggles.get(i).execute(this);
             }
         }
         dmCommands = Globals.getCommandsDM();
@@ -176,16 +176,16 @@ public class CommandObject {
     }
 
     public void removeCommand(String[] names) {
-        for (int i = 0;i < commands.size(); i++){
-            if (commands.get(i).names()[0].equals(names[0])){
+        for (int i = 0; i < commands.size(); i++) {
+            if (commands.get(i).names()[0].equals(names[0])) {
                 commands.remove(i);
             }
         }
     }
 
     public void removeToggle(String name) {
-        for (int i = 0; i < guildToggles.size();i++){
-            if (guildToggles.get(i).name().equals(name)){
+        for (int i = 0; i < guildToggles.size(); i++) {
+            if (guildToggles.get(i).name().equals(name)) {
                 guildToggles.remove(i);
             }
         }

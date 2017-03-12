@@ -1,6 +1,6 @@
 package Handlers;
 
-import Commands.DMCommand;
+import Interfaces.DMCommand;
 import Commands.DMCommandObject;
 import Main.Globals;
 import Main.Utility;

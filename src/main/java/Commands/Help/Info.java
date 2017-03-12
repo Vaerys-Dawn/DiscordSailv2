@@ -1,13 +1,13 @@
 package Commands.Help;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Globals;
 import Main.Utility;
+import Objects.XEmbedBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class Info implements Command {
                         return error;
                     }
 
-                    EmbedBuilder infoEmbed = new EmbedBuilder();
+                    XEmbedBuilder infoEmbed = new XEmbedBuilder();
                     Color color = Utility.getUsersColour(Globals.getClient().getOurUser(), command.guild);
                     if (color != null) {
                         infoEmbed.withColor(color);
@@ -92,7 +92,7 @@ public class Info implements Command {
                         aliasBuilder.append(".\n");
                         infoEmbed.appendField("Aliases:", aliasBuilder.toString(), false);
                     }
-                    Utility.sendEmbededMessage("", infoEmbed.build(), command.channel);
+                    Utility.sendEmbedMessage("", infoEmbed, command.channel);
                     return "";
                 }
             }

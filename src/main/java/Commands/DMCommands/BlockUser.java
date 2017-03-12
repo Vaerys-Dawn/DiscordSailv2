@@ -1,6 +1,6 @@
 package Commands.DMCommands;
 
-import Commands.DMCommand;
+import Interfaces.DMCommand;
 import Commands.DMCommandObject;
 import Main.Globals;
 import POGOs.GlobalData;

@@ -1,21 +1,21 @@
 package Main;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
-import Commands.DMCommand;
+import Interfaces.DMCommand;
 import Commands.DMCommandObject;
 import Handlers.FileHandler;
-import Objects.BlackListObject;
-import Objects.GuildContentObject;
+import Objects.*;
+import POGOs.GuildConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
+import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.*;
 import sx.blah.discord.util.Image;
 
-import javax.annotation.Nonnull;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,6 +27,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -127,7 +128,6 @@ public class Utility {
         return Constants.DIRECTORY_BACKUPS + guildID + "/";
     }
 
-    @Nonnull
     public static Object initFile(String guildID, String filePath, Class<?> objClass) {
         List<String> fileContents = FileHandler.readFromFile(Utility.getFilePath(guildID, filePath));
         if (fileContents == null || fileContents.size() == 0 || fileContents.get(0).equals("null")) {
@@ -202,7 +202,7 @@ public class Utility {
                         return null;
                     }
                     if (message != null || !message.equals("")) {
-                        return channel.sendMessage(message.replace("@everyone", "").replace("@here", "")).getID();
+                        return channel.sendMessage(removeMentions(message)).getID();
                     }
                 } catch (MissingPermissionsException e) {
                     logger.debug("Error sending message to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
@@ -230,7 +230,7 @@ public class Utility {
         return RequestBuffer.request(() -> {
             try {
                 if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("")) {
-                    if (message != null) {
+                    if (file != null) {
                         channel.sendFile(file);
                     } else {
                         logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
@@ -239,7 +239,7 @@ public class Utility {
                     }
                 } else {
                     if (message != null) {
-                        channel.sendFile(message, file);
+                        channel.sendFile(removeMentions(message), file);
                     } else {
                         sendMessage(message, channel);
                         return true;
@@ -288,7 +288,7 @@ public class Utility {
                     }
                 } else {
                     if (imageURL != null) {
-                        channel.sendFile(message, true, stream, suffix);
+                        channel.sendFile(removeMentions(message), true, stream, suffix);
                     } else {
                         sendMessage(message, channel);
                         return true;
@@ -322,23 +322,26 @@ public class Utility {
         });
     }
 
-    public static boolean sendDMEmbed(String message, EmbedObject embed, String userID) {
+    public static boolean sendDMEmbed(String message, XEmbedBuilder embed, String userID) {
         IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
         if (channel != null) {
-            return sendEmbededMessage(message, embed, channel).get();
+            return sendEmbedMessage(message, embed, channel).get();
         } else {
             return true;
         }
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> sendEmbededMessage(String message, EmbedObject embed, IChannel channel) {
+    public static RequestBuffer.RequestFuture<Boolean> sendEmbedMessage(String message, XEmbedBuilder builder, IChannel channel) {
+
+        //removal of @everyone and @here Mentions.
+        EmbedObject embed = builder.build();
         return RequestBuffer.request(() -> {
             try {
                 String iMessage = message;
                 if (iMessage == null) {
                     iMessage = "";
                 }
-                channel.sendMessage(iMessage, embed, false);
+                channel.sendMessage(iMessage, builder.build(), false);
             } catch (DiscordException e) {
                 if (e.getMessage().contains("CloudFlare")) {
                     sendMessage(message, channel);
@@ -365,6 +368,10 @@ public class Utility {
             }
             return false;
         });
+    }
+
+    public static String removeMentions(String from) {
+        return from.replaceAll("(?i)@everyone", "").replaceAll("(?i)@here", "");
     }
 
 
@@ -434,7 +441,7 @@ public class Utility {
                 IRole[] roles = new IRole[userRoles.size()];
                 int i = 0;
                 for (IRole r : userRoles) {
-                    if( r == null){
+                    if (r == null) {
                         logger.error("ROLE RETURNED NULL");
                     }
                     roles[i] = r;
@@ -673,7 +680,7 @@ public class Utility {
         return from;
     }
 
-    public static void listFormatterEmbed(String title, EmbedBuilder builder, ArrayList<String> list, boolean horizontal) {
+    public static void listFormatterEmbed(String title, XEmbedBuilder builder, ArrayList<String> list, boolean horizontal) {
         String formattedList = listFormatter(list, horizontal);
         if (title == null || title.isEmpty()) {
             title = Command.spacer;
@@ -776,7 +783,6 @@ public class Utility {
             hours -= days * 24;
             long mins = TimeUnit.SECONDS.toMinutes(difference);
             mins -= (days * 24 + hours) * 60;
-            long secs = difference;
 
             if (days > 0) {
                 if (days > 1) {
@@ -812,7 +818,6 @@ public class Utility {
         do {
             last = from;
             exit = false;
-            System.out.println(from);
             if (from.contains("***")) {
                 from = replaceFun(from, "***");
                 exit = true;
@@ -843,7 +848,6 @@ public class Utility {
             if (from.contains("_") && !exit) {
                 from = replaceFun(from, "_");
             }
-            System.out.println(from);
         } while (last != from);
         return from;
     }
@@ -856,19 +860,113 @@ public class Utility {
         return from;
     }
 
-    public static boolean isImageLink(String suffix){
-        ArrayList<String> suffixes = new ArrayList<String>(){{
+    public static boolean isImageLink(String suffix) {
+        ArrayList<String> suffixes = new ArrayList<String>() {{
             add(".png");
             add(".gif");
             add(".jpg");
             add(".webp");
         }};
-        for (String s: suffixes) {
-            if (suffix.toLowerCase().endsWith(s)){
+        for (String s : suffixes) {
+            if (suffix.toLowerCase().endsWith(s)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public static boolean muteUser(String guildID, String userID, boolean isMuting) {
+        GuildContentObject content = Globals.getGuildContent(guildID);
+        IUser user = Globals.getClient().getUserByID(userID);
+        IGuild guild = Globals.getClient().getGuildByID(guildID);
+        IRole mutedRole = Globals.client.getRoleByID(content.getGuildConfig().getMutedRole().getRoleID());
+        List<IRole> oldRoles = user.getRolesForGuild(guild);
+        if (mutedRole != null) {
+            roleManagement(Globals.getClient().getUserByID(userID), Globals.client.getGuildByID(guildID), mutedRole.getID(), isMuting);
+            List<IRole> newRoles = user.getRolesForGuild(guild);
+            Globals.getClient().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, user, oldRoles, newRoles));
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean testUserHierarchy(IUser author, IUser toTest, IGuild guild) {
+        List<IRole> userRoles = author.getRolesForGuild(guild);
+        List<IRole> testRoles = author.getRolesForGuild(guild);
+        IRole topRole = null;
+        int topRolePos = 0;
+        for (IRole role : userRoles) {
+            if (topRole == null) {
+                topRole = role;
+                topRolePos = role.getPosition();
+            } else {
+                if (role.getPosition() > topRolePos) {
+                    topRole = role;
+                    topRolePos = role.getPosition();
+                }
+            }
+        }
+        for (IRole role : testRoles) {
+            if (role.getPosition() > topRolePos) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static long textToSeconds(String time) {
+        try {
+            String sub = time.substring(0, time.length() - 1);
+            long timeSecs = Long.parseLong(sub);
+            if (time.endsWith("s")) {
+                return timeSecs;
+            } else if (time.endsWith("m")) {
+                return timeSecs * 60;
+            } else if (time.endsWith("d")) {
+                return timeSecs * 60 * 24;
+            } else {
+                timeSecs = Long.parseLong(time);
+                return timeSecs;
+            }
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public static void sendLog(String content, GuildConfig config, boolean isAdmin) {
+        IChannel logChannel;
+        if (isAdmin) {
+            logChannel = Globals.getClient().getChannelByID(config.getChannelTypeID(Command.CHANNEL_ADMIN_LOG));
+        } else {
+            logChannel = Globals.getClient().getChannelByID(config.getChannelTypeID(Command.CHANNEL_SERVER_LOG));
+        }
+        if (logChannel == null) {
+            return;
+        } else {
+            sendMessage(content, logChannel);
+        }
+    }
+
+    public static String unFormatMentions(IMessage message) {
+        String from = message.getContent();
+        for (IUser user : message.getMentions()) {
+            String mention = "<@" + user.getID() + ">";
+            String mentionNic = "<@!" + user.getID() + ">";
+            from = from.replace(mention, "__@" + user.getDisplayName(message.getGuild()) + "__");
+            from = from.replace(mentionNic, "__@" + user.getDisplayName(message.getGuild()) + "__");
+        }
+        return from;
+    }
+
+    public static String formatTimestamp(ZonedDateTime time) {
+        String content = "";
+        content += time.getYear();
+        content += "/" + time.getMonthValue();
+        content += "/" + time.getDayOfMonth();
+        content += " - " + time.getHour();
+        content += ":" + time.getMinute();
+        content += ":" + time.getSecond();
+        return content;
     }
 }
 

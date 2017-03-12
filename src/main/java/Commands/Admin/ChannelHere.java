@@ -1,10 +1,10 @@
 package Commands.Admin;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Utility;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +26,7 @@ public class ChannelHere implements Command {
             }
             builder.append("> Could not find channel type \"" + args + "\"\n");
         }
-        EmbedBuilder embedBuilder = new EmbedBuilder();
+        XEmbedBuilder embedBuilder = new XEmbedBuilder();
         String title = "> Here is a list of available Channel Types:\n";
         ArrayList<String> channels = command.channelTypes;
         Collections.sort(channels);
@@ -34,7 +34,7 @@ public class ChannelHere implements Command {
         Utility.listFormatterEmbed(title, embedBuilder, channels, true);
         embedBuilder.appendField(spacer, Utility.getCommandInfo(this, command), false);
         embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
-        Utility.sendEmbededMessage("", embedBuilder.build(), command.channel);
+        Utility.sendEmbedMessage("", embedBuilder, command.channel);
         return null;
     }
 

@@ -1,6 +1,6 @@
 package Commands.Admin;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Handlers.InfoHandler;
 import Main.Utility;

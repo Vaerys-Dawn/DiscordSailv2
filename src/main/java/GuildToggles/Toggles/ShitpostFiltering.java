@@ -1,15 +1,13 @@
 package GuildToggles.Toggles;
 
 import Commands.CommandObject;
-import GuildToggles.GuildToggle;
+import Interfaces.GuildToggle;
 import POGOs.GuildConfig;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
 public class ShitpostFiltering implements GuildToggle {
-
-    boolean state = false;
 
     @Override
     public String name() {

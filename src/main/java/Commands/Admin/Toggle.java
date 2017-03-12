@@ -1,11 +1,11 @@
 package Commands.Admin;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
-import GuildToggles.GuildToggle;
+import Interfaces.GuildToggle;
 import Main.Utility;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class Toggle implements Command {
             }
             builder.append("> Could not find toggle \"" + args + "\".\n");
         }
-        EmbedBuilder embedBuilder = new EmbedBuilder();
+        XEmbedBuilder embedBuilder = new XEmbedBuilder();
         String title = "> Here is a list of available Guild Toggles:\n";
         ArrayList<String> types = command.guildToggles.stream().filter(t -> !t.isModule()).map(GuildToggle::name).collect(Collectors.toCollection(ArrayList::new));
         Collections.sort(types);
@@ -37,7 +37,7 @@ public class Toggle implements Command {
         Utility.listFormatterEmbed(title, embedBuilder, types, true);
         embedBuilder.appendField(spacer, Utility.getCommandInfo(this, command), false);
         embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
-        Utility.sendEmbededMessage("", embedBuilder.build(), command.channel);
+        Utility.sendEmbedMessage("", embedBuilder, command.channel);
         return null;
     }
 

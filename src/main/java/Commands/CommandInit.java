@@ -3,15 +3,12 @@ package Commands;
 import Commands.Admin.*;
 import Commands.CC.*;
 import Commands.Characters.*;
-import Commands.Characters.EditModes.CharAvatar;
 import Commands.Competition.EnterComp;
 import Commands.Competition.EnterVote;
 import Commands.Competition.FinalTally;
 import Commands.Competition.GetCompEntries;
-import Commands.Creator.GetMessageData;
+import Commands.Creator.*;
 import Commands.Creator.Shutdown;
-import Commands.Creator.Sudo;
-import Commands.Creator.UpdateAvatar;
 import Commands.DMCommands.*;
 import Commands.General.*;
 import Commands.Help.GetGuildInfo;
@@ -21,6 +18,8 @@ import Commands.RoleSelect.ListModifs;
 import Commands.RoleSelect.ListRoles;
 import Commands.RoleSelect.ModifierRoles;
 import Commands.Servers.*;
+import Interfaces.Command;
+import Interfaces.DMCommand;
 
 import java.util.ArrayList;
 
@@ -37,11 +36,13 @@ public class CommandInit {
         commands.add(new Sudo());
         commands.add(new UpdateAvatar());
         commands.add(new GetMessageData());
+        commands.add(new TempCommand());
 
         //Admin commands
         commands.add(new ChannelHere());
         commands.add(new MaxMessages());
         commands.add(new Module());
+        commands.add(new Mute());
         commands.add(new FinalTally());
         commands.add(new GetCompEntries());
         commands.add(new SetAdminRole());
@@ -58,6 +59,7 @@ public class CommandInit {
         commands.add(new SetQuote());
         commands.add(new Test());
         commands.add(new UserInfo());
+        commands.add(new SlashList());
         //Help commands
         commands.add(new GetGuildInfo());
         commands.add(new Help());

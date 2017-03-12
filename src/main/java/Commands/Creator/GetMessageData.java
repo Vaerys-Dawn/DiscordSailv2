@@ -1,9 +1,8 @@
 package Commands.Creator;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Globals;
-import Main.Main;
 import Main.Utility;
 import Objects.GuildContentObject;
 import Objects.UserTypeObject;

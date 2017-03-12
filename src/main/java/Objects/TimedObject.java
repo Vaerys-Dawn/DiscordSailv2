@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class TimedObject {
     public int doAdminMention = 0;
     String guildID;
-    ArrayList<WaiterObject> waiterObjects = new ArrayList<>();
+    ArrayList<UserCountDown> waiterObjects = new ArrayList<>();
     ArrayList<ReminderObject> reminderObjects = new ArrayList<>();
 
     public TimedObject(String guildID) {
@@ -28,24 +28,24 @@ public class TimedObject {
         this.doAdminMention = doAdminMention;
     }
 
-    public ArrayList<WaiterObject> getWaiterObjects() {
+    public ArrayList<UserCountDown> getWaiterObjects() {
         return waiterObjects;
     }
 
-    public void setWaiterObjects(ArrayList<WaiterObject> waiterObjects) {
+    public void setWaiterObjects(ArrayList<UserCountDown> waiterObjects) {
         this.waiterObjects = waiterObjects;
     }
 
     public boolean mannageWaiter(String userID) {
         int i = 0;
-        for(WaiterObject w: waiterObjects){
+        for(UserCountDown w: waiterObjects){
             if (w.getID().equals(userID)){
                 waiterObjects.remove(i);
                 return true;
             }
             i++;
         }
-        waiterObjects.add(new WaiterObject(userID));
+        waiterObjects.add(new UserCountDown(userID,60));
         return false;
     }
 

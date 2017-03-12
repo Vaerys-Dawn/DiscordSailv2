@@ -1,10 +1,10 @@
 package Commands.DMCommands;
 
-import Commands.DMCommand;
+import Interfaces.DMCommand;
 import Commands.DMCommandObject;
 import Main.Utility;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
 
@@ -18,9 +18,9 @@ public class GetGuildList implements DMCommand {
         for (IGuild g: command.client.getGuilds()){
             guilds.add(g.getName() +": " + g.getID());
         }
-        EmbedBuilder builder = new EmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder();
         Utility.listFormatterEmbed("List Of Guilds", builder, guilds, false);
-        Utility.sendDMEmbed("",builder.build(),command.authorID);
+        Utility.sendDMEmbed("",builder,command.authorID);
         return null;
     }
 

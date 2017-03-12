@@ -1,6 +1,6 @@
 package Commands.Competition;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import sx.blah.discord.handle.obj.Permissions;
 

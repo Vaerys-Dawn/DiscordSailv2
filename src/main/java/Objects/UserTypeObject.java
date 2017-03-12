@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UserTypeObject {
     String ID;
-    float xp = 0;
+    long xp = 0;
     long level = 0;
     String rewardRoleID = "";
     String gender = "Unknown";
@@ -66,7 +66,7 @@ public class UserTypeObject {
         level += 1;
     }
 
-    public void setXp(float xp) {
+    public void setXp(long xp) {
         this.xp = xp;
         calculateLevel();
     }

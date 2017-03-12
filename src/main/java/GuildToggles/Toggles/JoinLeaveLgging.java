@@ -1,13 +1,14 @@
 package GuildToggles.Toggles;
 
 import Commands.CommandObject;
-import GuildToggles.GuildToggle;
+import Interfaces.GuildToggle;
 import POGOs.GuildConfig;
 
 /**
  * Created by Vaerys on 21/02/2017.
  */
 public class JoinLeaveLgging implements GuildToggle{
+
     @Override
     public String name() {
         return "JoinLeaveLogging";

@@ -24,6 +24,7 @@ public class Config {
     public ArrayList<DailyMessageObject> dailyMessages;
     public int baseXpModifier = 5;
     public int xpForLevelOne = 100;
+    public int avgMessagesPerDay = 20;
 
     public boolean initObject() {
         if (resetToDefault) {
@@ -40,6 +41,7 @@ public class Config {
             maxWarnings = 3;
             baseXpModifier = 5;
             xpForLevelOne = 100;
+            avgMessagesPerDay = 20;
             dailyMessages = new ArrayList<DailyMessageObject>() {{
                 add(new DailyMessageObject(DayOfWeek.MONDAY, Constants.DAILY_MESSAGE_1, dailyAvatarName));
                 add(new DailyMessageObject(DayOfWeek.TUESDAY, Constants.DAILY_MESSAGE_2, dailyAvatarName));

@@ -1,6 +1,6 @@
 package Commands.RoleSelect;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Constants;
 import Main.Utility;

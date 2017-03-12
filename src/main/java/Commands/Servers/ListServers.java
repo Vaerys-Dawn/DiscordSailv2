@@ -1,11 +1,11 @@
 package Commands.Servers;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Utility;
+import Objects.XEmbedBuilder;
 import Objects.ServerObject;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,14 +18,14 @@ public class ListServers implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        EmbedBuilder builder = new EmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder();
         String title = "> Here are the Servers I have Listed:";
         ArrayList<String> serverNames = command.servers.getServers().stream().map(ServerObject::getName).collect(Collectors.toCollection(ArrayList::new));
         Collections.sort(serverNames);
         String suffix = Utility.getCommandInfo(new Server(), command);
         Utility.listFormatterEmbed(title,builder,serverNames,false,suffix);
         builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
-        Utility.sendEmbededMessage("",builder.build(),command.channel);
+        Utility.sendEmbedMessage("",builder,command.channel);
         return null;
     }
 

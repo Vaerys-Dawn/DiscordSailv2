@@ -1,13 +1,13 @@
 package Commands.CC;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Handlers.FileHandler;
 import Main.Constants;
 import Main.Utility;
 import Objects.CCommandObject;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,11 +42,11 @@ public class SearchCCs implements Command {
         for (CCommandObject c : searched) {
             list.add(command.guildConfig.getPrefixCC() + c.getName());
         }
-        EmbedBuilder embedBuilder = new EmbedBuilder();
+        XEmbedBuilder embedBuilder = new XEmbedBuilder();
         Utility.listFormatterEmbed(title,embedBuilder,list,true);
         embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(),command.guild));
         if (searched.size() < 40) {
-            Utility.sendEmbededMessage("",embedBuilder.build(),command.channel);
+            Utility.sendEmbedMessage("",embedBuilder,command.channel);
             return null;
         } else {
             String path = Constants.DIRECTORY_TEMP + command.messageID + ".txt";

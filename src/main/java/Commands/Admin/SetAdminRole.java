@@ -1,6 +1,6 @@
 package Commands.Admin;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Constants;
 import Main.Utility;
@@ -12,6 +12,10 @@ import sx.blah.discord.handle.obj.Permissions;
 public class SetAdminRole implements Command{
     @Override
     public String execute(String args, CommandObject command) {
+        if (args.equalsIgnoreCase("Remove")){
+            command.guildConfig.setRoleToMention("NoRoleSetUp","null");
+            return "> Admin Role Removed.";
+        }
         String roleID = Utility.getRoleIDFromName(args, command.guild);
         if (roleID == null) {
             return Constants.ERROR_ROLE_NOT_FOUND;
@@ -32,7 +36,7 @@ public class SetAdminRole implements Command{
 
     @Override
     public String usage() {
-        return "[Role Name]";
+        return "[Role Name/Remove]";
     }
 
     @Override

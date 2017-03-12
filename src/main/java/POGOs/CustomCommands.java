@@ -52,6 +52,9 @@ public class CustomCommands {
         if (isTrusted) {
             total += 20;
         }
+        if (guild.getOwner().getID().equals(author.getID())) {
+            total = 170;
+        }
         return total;
     }
 

@@ -1,15 +1,14 @@
 package Commands.Characters;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Utility;
 import Objects.CharacterObject;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 public class ListChars implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        EmbedBuilder builder = new EmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder();
         String id = command.authorID;
         String title = "> Here are all of your characters.";
         if (command.message.getMentions().size() > 0){
@@ -34,7 +33,7 @@ public class ListChars implements Command {
         Utility.listFormatterEmbed(title,builder,list,true);
         builder.appendField(spacer,Utility.getCommandInfo(new SelectChar(),command),false);
         builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
-        Utility.sendEmbededMessage("",builder.build(),command.channel);
+        Utility.sendEmbedMessage("",builder,command.channel);
         return null;
     }
 

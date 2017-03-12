@@ -1,13 +1,15 @@
 package Handlers;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.SlashCommand;
 import Main.Globals;
 import Main.TimedEvents;
 import Main.Utility;
 import Objects.BlackListObject;
 import Objects.OffenderObject;
 import POGOs.GuildConfig;
+import SlashCommands.SlashInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
@@ -41,13 +43,22 @@ public class MessageHandler {
 
         checkBlacklist(commandObject);
         checkMentionCount(commandObject);
-        commandObject.guildUsers.addXP(commandObject);
+//        commandObject.guildUsers.addXP(commandObject);
         if (rateLimiting(commandObject)) {
             return;
         }
 
         if (commandObject.message.getAuthor().isBot()) {
             return;
+        }
+        if (commandObject.guildConfig.slashCommands){
+            for (SlashCommand s: Globals.getSlashCommands()){
+                if (commandObject.message.getContent().equalsIgnoreCase(s.call())){
+                    Utility.deleteMessage(commandObject.message);
+                    Utility.sendMessage(s.response(),commandObject.channel);
+                    return;
+                }
+            }
         }
         if (command.toLowerCase().startsWith(commandObject.guildConfig.getPrefixCommand().toLowerCase())) {
             handleCommand(commandObject, command, args);
@@ -97,13 +108,11 @@ public class MessageHandler {
                     }
                     if (c.doAdminLogging()) {
                         if (guildConfig.adminLogging) {
-                            IChannel logging = client.getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_ADMIN_LOG));
-                            handleLogging(logging, commandObject, args, c);
+                            handleLogging(commandObject, args, c,true);
                         }
                     } else {
                         if (guildConfig.generalLogging) {
-                            IChannel logging = client.getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG));
-                            handleLogging(logging, commandObject, args, c);
+                            handleLogging(commandObject, args, c,false);
                         }
                     }
                     Utility.sendMessage(c.execute(args, commandObject), channel);
@@ -112,14 +121,14 @@ public class MessageHandler {
         }
     }
 
-    private void handleLogging(IChannel loggingChannel, CommandObject commandObject, String args, Command command) {
+    private void handleLogging(CommandObject commandObject, String args, Command command, boolean isAdmin) {
         StringBuilder builder = new StringBuilder();
         builder.append("> **@" + commandObject.authorUserName + "** Has Used Command `" + command.names()[0] + "`");
         if (!args.isEmpty()) {
             builder.append(" with args: `" + args + "`");
         }
         builder.append(" in channel " + commandObject.channel.mention() + ".");
-        Utility.sendMessage(builder.toString(), loggingChannel);
+        Utility.sendLog(builder.toString(), commandObject.guildConfig, isAdmin);
     }
 
     private void checkMentionCount(CommandObject command) {
@@ -144,7 +153,7 @@ public class MessageHandler {
                         i++;
                         if (o.getCount() > Globals.maxWarnings) {
                             Utility.roleManagement(author, guild, guildConfig.getMutedRole().getRoleID(), true);
-                            command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(guild,author,oldRoles,command.author.getRolesForGuild(guild)));
+                            command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(guild, author, oldRoles, command.author.getRolesForGuild(guild)));
                             Utility.sendMessage("> " + author.mention() + " Has been Muted for repeat offences of spamming Mentions.", command.channel);
                         }
                     }
@@ -181,10 +190,10 @@ public class MessageHandler {
                     if (rate - 3 > command.guildConfig.messageLimit) {
                         //mutes users if they abuse it.
                         boolean failed = Utility.roleManagement(command.author, command.guild, command.guildConfig.getMutedRole().getRoleID(), true).get();
-                        command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(command.guild,command.author,oldRoles,command.author.getRolesForGuild(command.guild)));
+                        command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(command.guild, command.author, oldRoles, command.author.getRolesForGuild(command.guild)));
                         if (!failed) {
                             IChannel adminChannel = command.client.getChannelByID(command.guildConfig.getChannelTypeID(Command.CHANNEL_ADMIN));
-                            if (adminChannel == null){
+                            if (adminChannel == null) {
                                 adminChannel = command.channel;
                             }
                             Utility.sendDM("You have been muted for abusing the Guild rate limit.", command.authorID);
@@ -193,18 +202,14 @@ public class MessageHandler {
                     }
                 }
                 if (command.guildConfig.deleteLogging) {
-                    if (command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG) != null) {
-                        IChannel logging = command.client.getChannelByID(command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG));
-                        Utility.sendMessage("> **@" + command.authorUserName + "** is being rate limited", logging);
-                    }
+                    Utility.sendLog("> **@" + command.authorUserName + "** is being rate limited", command.guildConfig, false);
                 }
-                return true;
-            } else {
-                return false;
             }
+            return true;
         } else {
             return false;
         }
+
     }
 
     //File handlers
@@ -233,8 +238,9 @@ public class MessageHandler {
                         if (guildConfig.getRoleToMention().getRoleID() != null) {
                             response = response.replaceAll("#mentionAdmin#", guild.getRoleByID(guildConfig.getRoleToMention().getRoleID()).mention());
                         } else {
-                            response = response.replaceAll("#mentionAdmin#", "Admin");
+                            response = response.replaceAll("#mentionAdmin#", "");
                         }
+                        response = response.replace("#user#", author.mention());
                         if (TimedEvents.getDoAdminMention(command.guildID) == 0) {
                             Utility.sendMessage(response, command.channel);
                             TimedEvents.setDoAdminMention(command.guildID, 60);

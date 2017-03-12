@@ -1,10 +1,10 @@
 package Commands.DMCommands;
 
-import Commands.DMCommand;
+import Interfaces.DMCommand;
 import Commands.DMCommandObject;
 import Main.Globals;
 import Main.Utility;
-import sx.blah.discord.util.EmbedBuilder;
+import Objects.XEmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
 public class HelpDM implements DMCommand {
     @Override
     public String execute(String args, DMCommandObject command) {
-        EmbedBuilder builder = new EmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder();
         ArrayList<String> list = (ArrayList) Globals.getCommandsDM().stream().map(c -> Globals.defaultPrefixCommand + c.names()[0]).collect(Collectors.toList());
         Collections.sort(list);
         String desc = "**> Direct Message Commands.**```"  + Utility.listFormatter(list,false) + "```\n";
         desc += Utility.getCommandInfo(new InfoDM());
         builder.withDescription(desc);
-        Utility.sendEmbededMessage("",builder.build(),command.channel);
+        Utility.sendEmbedMessage("",builder,command.channel);
         return null;
     }
 

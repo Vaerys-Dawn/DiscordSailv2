@@ -1,13 +1,14 @@
 package GuildToggles.Toggles;
 
 import Commands.CommandObject;
-import GuildToggles.GuildToggle;
+import Interfaces.GuildToggle;
 import POGOs.GuildConfig;
 
 /**
  * Created by Vaerys on 21/02/2017.
  */
 public class EditLogging implements GuildToggle {
+
     @Override
     public String name() {
         return "EditLogging";
@@ -25,7 +26,7 @@ public class EditLogging implements GuildToggle {
 
     @Override
     public void execute(CommandObject command) {
-
+        command.removeToggle(new ExtendEditLog().name());
     }
 
     @Override

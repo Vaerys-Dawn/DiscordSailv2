@@ -1,11 +1,10 @@
 package GuildToggles.Modules;
 
-import Commands.Command;
 import Commands.CommandObject;
 import Commands.General.SetGender;
 import Commands.General.SetQuote;
 import Commands.General.UserInfo;
-import GuildToggles.GuildToggle;
+import Interfaces.GuildToggle;
 import POGOs.GuildConfig;
 
 /**

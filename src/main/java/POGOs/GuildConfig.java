@@ -1,6 +1,6 @@
 package POGOs;
 
-import Commands.Command;
+import Interfaces.Command;
 import Main.Globals;
 import Objects.BlackListObject;
 import Objects.ChannelTypeObject;
@@ -21,27 +21,38 @@ public class GuildConfig {
     String prefixCC = Globals.defaultPrefixCC;
     boolean properlyInit = false;
     String guildName = "";
+    //toggles
+    //--AutoMessages
     public boolean loginMessage = true;
+    public boolean dailyMessage = true;
+    //--Logging
     public boolean generalLogging = false;
     public boolean adminLogging = false;
     public boolean deleteLogging = false;
     public boolean joinLeaveLogging = false;
     public boolean userRoleLogging = false;
     public boolean editLogging = false;
+    public boolean extendEditLog = false;
+    public boolean channelLogging = false;
+    public boolean useTimeStamps = false;
+    //--Admin
     public boolean denyInvites = false;
     public boolean maxMentions = true;
-    public boolean dailyMessage = true;
     public boolean shitPostFiltering = false;
     public boolean muteRepeatOffenders = true;
+    public boolean rateLimiting = false;
+    public boolean slashCommands = false;
+    //--Competition
     public boolean compEntries = false;
     public boolean compVoting = false;
-    public boolean rateLimiting = false;
+    //modules
     public boolean moduleServers = true;
     public boolean moduleChars = true;
     public boolean moduleComp = false;
     public boolean moduleRoles = true;
     public boolean moduleCC = true;
     public boolean moduleMe = true;
+    public boolean moduleModMute = true;
     public int maxMentionLimit = 8;
     public int messageLimit = 10;
 
@@ -57,6 +68,7 @@ public class GuildConfig {
     ArrayList<OffenderObject> repeatOffenders = new ArrayList<>();
     RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", null);
     RoleTypeObject mutedRole = new RoleTypeObject("No Role Set", null);
+
 
 
     public String getPrefixCommand() {
@@ -84,9 +96,16 @@ public class GuildConfig {
     }
 
     public void initConfig() {
-        if (!properlyInit) {
-            blackList.add(new BlackListObject("discord.gg", "Please do not put **invites** in Custom Commands."));
-            blackList.add(new BlackListObject("discordapp.com/Invite/", "Please do not put **invites** in Custom Commands."));
+        for (BlackListObject b: blackList){
+            if (b.getReason().contains("**invites**")){
+                blackList.clear();
+                blackList.add(new BlackListObject("discord.gg", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
+                blackList.add(new BlackListObject("discordapp.com/Invite/", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
+            }
+        }
+        if (!properlyInit){
+            blackList.add(new BlackListObject("discord.gg", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
+            blackList.add(new BlackListObject("discordapp.com/Invite/", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
         }
     }
 

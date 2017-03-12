@@ -1,12 +1,12 @@
 package Commands.RoleSelect;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Utility;
 import Objects.RoleTypeObject;
+import Objects.XEmbedBuilder;
 import POGOs.GuildConfig;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -20,12 +20,12 @@ public class ListModifs implements Command {
         GuildConfig guildConfig = command.guildConfig;
         String title = "> Here are the **Modifier** roles you can choose from:\n";
         ArrayList<String> list = new ArrayList<>();
-        EmbedBuilder builder = new EmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder();
         list.addAll(guildConfig.getModifierRoles().stream().map(RoleTypeObject::getRoleName).collect(Collectors.toList()));
         Utility.listFormatterEmbed(title,builder,list,true);
         builder.appendField(spacer, Utility.getCommandInfo(new ModifierRoles(), command),false);
         builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
-        Utility.sendEmbededMessage("", builder.build(), command.channel);
+        Utility.sendEmbedMessage("", builder, command.channel);
         return null;
     }
 

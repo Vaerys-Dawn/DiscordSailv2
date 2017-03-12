@@ -1,15 +1,15 @@
 package Commands.CC;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Constants;
 import Main.Globals;
 import Main.Utility;
 import Objects.CCommandObject;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
 
@@ -45,7 +45,7 @@ public class ListCCs implements Command {
         IUser user = Globals.getClient().getUserByID(userID);
         int total = 0;
         int max = command.customCommands.maxCCs(user, command.guild, command.guildConfig);
-        EmbedBuilder builder = new EmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder();
         String title = "> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.";
         ArrayList<String> list = new ArrayList<>();
         for (CCommandObject c: command.customCommands.getCommandList()){
@@ -57,7 +57,7 @@ public class ListCCs implements Command {
         Utility.listFormatterEmbed(title,builder,list,true);
         builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
         builder.withFooterText("Total Custom commands: " + total + "/" + max + ".");
-        Utility.sendEmbededMessage("", builder.build(), command.channel);
+        Utility.sendEmbedMessage("", builder, command.channel);
         return null;
     }
 
@@ -66,7 +66,7 @@ public class ListCCs implements Command {
         int counter = 0;
         int totalCCs = 0;
         ArrayList<String> list = new ArrayList<>();
-        EmbedBuilder builder = new EmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder();
         builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
 
         for (CCommandObject c : command.customCommands.getCommandList()) {
@@ -84,7 +84,7 @@ public class ListCCs implements Command {
             String title = "> Here is Page **" + page + "/" + pages.size() + "** of Custom Commands:";
             builder.appendField(title, pages.get(page - 1), false);
             builder.withFooterText("Total Custom Commands stored on this Server: " + totalCCs);
-            Utility.sendEmbededMessage("", builder.build(), command.channel);
+            Utility.sendEmbedMessage("", builder, command.channel);
             return null;
         } catch (IndexOutOfBoundsException e) {
             return "> That Page does not exist.";

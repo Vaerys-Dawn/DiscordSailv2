@@ -1,8 +1,8 @@
 package Commands.Help;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
-import GuildToggles.GuildToggle;
+import Interfaces.GuildToggle;
 import Main.Globals;
 import Main.Utility;
 import Objects.ChannelTypeObject;

@@ -1,18 +1,8 @@
 package Commands.General;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
-import Main.Utility;
-import Objects.UserTypeObject;
-import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
-
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 30/01/2017.

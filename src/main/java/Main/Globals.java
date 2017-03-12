@@ -1,16 +1,17 @@
 package Main;
 
 import Commands.Admin.ChannelHere;
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandInit;
-import Commands.DMCommand;
-import GuildToggles.GuildToggle;
+import Interfaces.DMCommand;
+import Interfaces.GuildToggle;
 import GuildToggles.ToggleInit;
 import Handlers.FileHandler;
+import Interfaces.SlashCommand;
 import Objects.DailyMessageObject;
 import Objects.GuildContentObject;
-import Objects.UserTypeObject;
 import POGOs.*;
+import SlashCommands.SlashInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
@@ -38,6 +39,7 @@ public class Globals {
     public static String playing = null;
     public static int argsMax = 0;
     public static int maxWarnings = 0;
+    public static int avgMessagesPerDay = 0;
     public static boolean isReady = false;
     public static String version;
     public static String consoleMessageCID = null;
@@ -50,6 +52,7 @@ public class Globals {
     private static ArrayList<String> channelTypes = new ArrayList<>();
     private static ArrayList<String> commandTypes = new ArrayList<>();
     private static ArrayList<GuildToggle> guildGuildToggles = new ArrayList<>();
+    private static ArrayList<SlashCommand> slashCommands = new ArrayList<>();
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
     private static GlobalData globalData;
@@ -74,6 +77,7 @@ public class Globals {
         dailyMessages = config.dailyMessages;
         baseXPModifier = config.baseXpModifier;
         xpForLevelOne = config.xpForLevelOne;
+        avgMessagesPerDay = config.avgMessagesPerDay;
         initCommands();
     }
 
@@ -85,10 +89,12 @@ public class Globals {
         //Load Guild Toggles
         guildGuildToggles = ToggleInit.get();
 
+        slashCommands = SlashInit.get();
+
         //validate commands
         validate();
 
-        //init Command Types
+        //get Command Types
         commandTypes.add(Command.TYPE_DM);
 
         //Init Channel Types
@@ -102,8 +108,7 @@ public class Globals {
 
         //automatically added Channels (these are added if they are used in any command)
         for (Command c : commands) {
-            if (c.channel() != null)
-            {
+            if (c.channel() != null) {
                 boolean channelFound = false;
                 for (String s : channelTypes) {
                     if (c.channel().equals(s)) {
@@ -139,9 +144,10 @@ public class Globals {
 
         logger.info(commands.size() + " Commands Loaded.");
         logger.info(commandsDM.size() + " DM Commands Loaded.");
-        logger.info(commandTypes.size() + " Command Types Loaded");
-        logger.info(channelTypes.size() + " Channel Types Loaded");
-        logger.info(guildGuildToggles.size() + " Guild Toggles Loaded");
+        logger.info(commandTypes.size() + " Command Types Loaded.");
+        logger.info(channelTypes.size() + " Channel Types Loaded.");
+        logger.info(guildGuildToggles.size() + " Guild Toggles Loaded.");
+        logger.info(slashCommands.size() + " Slash Commands Loaded.");
     }
 
     private static void validate() throws IllegalArgumentException {
@@ -189,6 +195,14 @@ public class Globals {
             if (g.name().contains("\n"))
                 throw new IllegalArgumentException(g.getClass().getName() + "Toggle Name cannot contain Newlines.");
         }
+        for (SlashCommand s : slashCommands) {
+            if (s.call() == null || s.call().isEmpty())
+                throw new IllegalArgumentException(s.getClass().getName() + " Slash Command Call must not be null.");
+            if (s.response() == null || s.response().isEmpty())
+                throw new IllegalArgumentException(s.getClass().getName() + " Slash Command Response must not be null.");
+            if (!s.call().startsWith("/"))
+                throw new IllegalArgumentException(s.getClass().getName() + " Slash Command call must Start with \"/\"");
+        }
     }
 
     public static void validateConfig() throws IllegalArgumentException {
@@ -224,9 +238,12 @@ public class Globals {
             }
         }
         if (argsMax <= 0)
-            throw new IllegalArgumentException("argsMax cannot be less than or equals 0.");
+            throw new IllegalArgumentException("argsMax cannot be less than or equal 0.");
         if (maxWarnings <= 0)
-            throw new IllegalArgumentException("maxWarnings cannot be less than or equals 0");
+            throw new IllegalArgumentException("maxWarnings cannot be less than or equal 0");
+        if (avgMessagesPerDay <= 0) {
+            throw new IllegalArgumentException("avgMessagesPerDay cannot be less than or equal 0");
+        }
     }
 
     public static void initGuild(String guildID, GuildConfig guildConfig, Servers servers, CustomCommands customCommands, Characters characters, Competition competition, GuildUsers guildUsers) {
@@ -239,7 +256,7 @@ public class Globals {
         IGuild guild = client.getGuildByID(guildID);
         guildConfig.updateVariables(guild);
 
-        GuildContentObject guildContentObject = new GuildContentObject(guildID, guildConfig, customCommands, servers, characters, competition,guildUsers);
+        GuildContentObject guildContentObject = new GuildContentObject(guildID, guildConfig, customCommands, servers, characters, competition, guildUsers);
         guildContentObjects.add(guildContentObject);
     }
 
@@ -314,5 +331,9 @@ public class Globals {
 
     public static ArrayList<GuildToggle> getGuildGuildToggles() {
         return guildGuildToggles;
+    }
+
+    public static ArrayList<SlashCommand> getSlashCommands() {
+        return slashCommands;
     }
 }

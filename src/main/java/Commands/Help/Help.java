@@ -1,11 +1,11 @@
 package Commands.Help;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Globals;
 import Main.Utility;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class Help implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<String> types = command.commandTypes;
-        EmbedBuilder helpEmbed = new EmbedBuilder();
+        XEmbedBuilder helpEmbed = new XEmbedBuilder();
         StringBuilder builder = new StringBuilder();
         ArrayList<String> commandList = new ArrayList<>();
         ArrayList<Command> commands = command.commands;
@@ -92,7 +92,7 @@ public class Help implements Command {
                 return error;
             }
         }
-        Utility.sendEmbededMessage("", helpEmbed.build(), command.channel);
+        Utility.sendEmbedMessage("", helpEmbed, command.channel);
         return null;
     }
 

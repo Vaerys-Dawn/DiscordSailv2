@@ -1,5 +1,8 @@
 package Handlers;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
@@ -35,7 +38,7 @@ public class FileHandler {
             }
             List<String> fileContents;
             fileContents = Files.readAllLines(Paths.get(file));
-            logger.debug("Reading from file: " + file);
+            logger.trace("Reading from file: " + file);
             return fileContents;
         } catch (IOException e) {
             logger.error(e.getCause().toString());
@@ -49,7 +52,7 @@ public class FileHandler {
             List<String> fileContents = readFromFile(file);
             fileContents.set(line, text);
             Files.write(Paths.get(file), fileContents);
-            logger.debug("Writing to file: " + file + " at line: " + line);
+            logger.trace("Writing to file: " + file + " at line: " + line);
         } catch (IOException e) {
             logger.error(e.getCause().toString());
         }
@@ -65,7 +68,7 @@ public class FileHandler {
             fileWriter.append(text + "\n");
             fileWriter.flush();
             fileWriter.close();
-            logger.debug("Writing to file: " + file);
+            logger.trace("Writing to file: " + file);
         } catch (IOException e) {
             logger.error(e.getCause().toString());
         }
@@ -73,6 +76,7 @@ public class FileHandler {
 
     /**saves data from POGO of type "object" to temp file using String "name".*/
     public static File createTempFile(Object object, String name){
+
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             File file = File.createTempFile(name,".json");
@@ -91,7 +95,7 @@ public class FileHandler {
         Gson gson = new Gson();
         try (Reader reader = new InputStreamReader(new FileInputStream(new File(file)), StandardCharsets.UTF_8)) {
             Object newObject = gson.fromJson(reader, objClass);
-            logger.debug("Reading Data from Json File: " + file + " applying to Object: " + objClass.getName());
+            logger.trace("Reading Data from Json File: " + file + " applying to Object: " + objClass.getName());
             reader.close();
             return newObject;
         } catch (IOException e) {
@@ -106,7 +110,7 @@ public class FileHandler {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             gson.toJson(object, writer);
-//            logger.debug("Saving Data to Json File: " + file);
+            logger.trace("Saving Data to Json File: " + file);
             writer.close();
         } catch (IOException e) {
             logger.error(e.getCause().toString());

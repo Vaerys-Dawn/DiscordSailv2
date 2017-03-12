@@ -1,14 +1,13 @@
 package Commands.General;
 
-import Commands.Command;
+import Interfaces.Command;
 import Commands.CommandObject;
 import Main.Utility;
-import Objects.SplitFirstObject;
+import Objects.XEmbedBuilder;
 import Objects.UserTypeObject;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -29,7 +28,7 @@ public class UserInfo implements Command {
         for (UserTypeObject u : command.guildUsers.getUsers()) {
             if (u.getID().equals(user.getID())) {
 
-                EmbedBuilder builder = new EmbedBuilder();
+                XEmbedBuilder builder = new XEmbedBuilder();
                 List<IRole> roles = user.getRolesForGuild(command.guild);
                 ArrayList<String> roleNames = new ArrayList<>();
 
@@ -61,7 +60,7 @@ public class UserInfo implements Command {
                 builder.withFooterText("User ID: " + u.getID());
 
                 //sends Message
-                Utility.sendEmbededMessage("", builder.build(), command.channel);
+                Utility.sendEmbedMessage("", builder, command.channel);
                 return null;
             }
         }
