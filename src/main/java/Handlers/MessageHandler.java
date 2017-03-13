@@ -51,11 +51,11 @@ public class MessageHandler {
         if (commandObject.message.getAuthor().isBot()) {
             return;
         }
-        if (commandObject.guildConfig.slashCommands){
-            for (SlashCommand s: Globals.getSlashCommands()){
-                if (commandObject.message.getContent().equalsIgnoreCase(s.call())){
+        if (commandObject.guildConfig.slashCommands) {
+            for (SlashCommand s : Globals.getSlashCommands()) {
+                if (commandObject.message.getContent().equalsIgnoreCase(s.call())) {
                     Utility.deleteMessage(commandObject.message);
-                    Utility.sendMessage(s.response(),commandObject.channel);
+                    Utility.sendMessage(s.response(), commandObject.channel);
                     return;
                 }
             }
@@ -108,11 +108,11 @@ public class MessageHandler {
                     }
                     if (c.doAdminLogging()) {
                         if (guildConfig.adminLogging) {
-                            handleLogging(commandObject, args, c,true);
+                            handleLogging(commandObject, args, c, true);
                         }
                     } else {
                         if (guildConfig.generalLogging) {
-                            handleLogging(commandObject, args, c,false);
+                            handleLogging(commandObject, args, c, false);
                         }
                     }
                     Utility.sendMessage(c.execute(args, commandObject), channel);
@@ -204,12 +204,12 @@ public class MessageHandler {
                 if (command.guildConfig.deleteLogging) {
                     Utility.sendLog("> **@" + command.authorUserName + "** is being rate limited", command.guildConfig, false);
                 }
+                return true;
             }
-            return true;
+            return false;
         } else {
             return false;
         }
-
     }
 
     //File handlers
