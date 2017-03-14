@@ -128,6 +128,9 @@ public class AnnotationListener {
     // TODO: 16/01/2017 make everything optional/ modifiable
     @EventSubscriber
     public void onMessageReceivedEvent(MessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) {
+            return;
+        }
         if (event.getMessage().getChannel().isPrivate()) {
             new DMHandler(event.getMessage());
             return;
@@ -141,6 +144,8 @@ public class AnnotationListener {
         String command = "";
         while (!event.getClient().isReady()) ;
         GuildConfig guildConfig = Globals.getGuildContent(guild.getID()).getGuildConfig();
+
+
 
         //Set Console Response Channel.
         if (author.getID().equals(Globals.creatorID)) {

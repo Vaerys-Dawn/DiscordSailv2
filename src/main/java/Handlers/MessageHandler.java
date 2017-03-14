@@ -41,6 +41,8 @@ public class MessageHandler {
             }
         }
 
+
+
         checkBlacklist(commandObject);
         checkMentionCount(commandObject);
 //        commandObject.guildUsers.addXP(commandObject);
@@ -48,13 +50,10 @@ public class MessageHandler {
             return;
         }
 
-        if (commandObject.message.getAuthor().isBot()) {
-            return;
-        }
+
         if (commandObject.guildConfig.slashCommands) {
             for (SlashCommand s : Globals.getSlashCommands()) {
                 if (commandObject.message.getContent().equalsIgnoreCase(s.call())) {
-                    Utility.deleteMessage(commandObject.message);
                     Utility.sendMessage(s.response(), commandObject.channel);
                     return;
                 }
