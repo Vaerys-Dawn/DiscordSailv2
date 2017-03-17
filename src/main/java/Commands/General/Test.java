@@ -11,7 +11,7 @@ public class Test implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return "> Nothing to test right now come back later.";
+        return "test";
     }
 
     @Override
@@ -31,7 +31,7 @@ public class Test implements Command {
 
     @Override
     public String type() {
-        return TYPE_GENERAL;
+        return TYPE_ADMIN;
     }
 
     @Override
@@ -56,21 +56,21 @@ public class Test implements Command {
 
     @Override
     public String dualDescription() {
-        return "This is another test.";
+        return null;
     }
 
     @Override
     public String dualUsage() {
-        return "[Blep]";
+        return null;
     }
 
     @Override
     public String dualType() {
-        return TYPE_ADMIN;
+        return null;
     }
 
     @Override
     public Permissions[] dualPerms() {
-        return new Permissions[]{Permissions.MANAGE_CHANNELS};
+        return new Permissions[0];
     }
 }

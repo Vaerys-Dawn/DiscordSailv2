@@ -32,8 +32,13 @@ public class UserInfo implements Command {
                 List<IRole> roles = user.getRolesForGuild(command.guild);
                 ArrayList<String> roleNames = new ArrayList<>();
 
+                //If user is a bot it will display the image below as the user avatar icon.
+                if (user.isBot()) {
+                    builder.withAuthorIcon("http://i.imgur.com/aRJpAP4.png");
+                }
                 //sets title to user Display Name;
-                builder.withTitle(user.getDisplayName(command.guild));
+                builder.withAuthorName(user.getDisplayName(command.guild));
+
 
                 //sets thumbnail to user Avatar.
                 builder.withThumbnail(user.getAvatarURL());
@@ -63,6 +68,10 @@ public class UserInfo implements Command {
                 Utility.sendEmbedMessage("", builder, command.channel);
                 return null;
             }
+        }
+        if (user.isBot()){
+            command.guildUsers.addUser(user.getID());
+            return execute(args,command);
         }
         return "> Unfortunately that user doesn't seem to have a user info right now.";
     }

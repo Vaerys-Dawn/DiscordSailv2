@@ -26,15 +26,19 @@ public class SetQuote implements Command {
         }
         for (UserTypeObject u : command.guildUsers.getUsers()) {
             args = Utility.removeFun(args);
-            if (args.length() > 140) {
-                return "> Your Quote is too long...\n(must be under 140 chars)";
-            }
+
             if (adminEdit) {
+                if (userID.getRest().length() > 140){
+                    return "> User Quote is too long...\n(must be under 140 chars)";
+                }
                 if (u.getID().equals(user.getID())) {
                     u.setQuote(userID.getRest());
                     return "> User's Quote Edited.";
                 }
             }else {
+                if (args.length() > 140) {
+                    return "> Your Quote is too long...\n(must be under 140 chars)";
+                }
                 if (u.getID().equals(command.authorID)) {
                     u.setQuote(args);
                     return "> Quote Edited.";

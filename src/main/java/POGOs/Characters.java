@@ -50,7 +50,16 @@ public class Characters {
     }
 
     public String selChar(String character, IUser author, IGuild guild, GuildConfig guildConfig) {
+        List<IRole> oldRoles = author.getRolesForGuild(guild);
+        int nonCosCount = 0;
+        int postCosCount = 0;
         List<IRole> userRoles = author.getRolesForGuild(guild);
+
+        for (IRole role : userRoles){
+            if (!guildConfig.isRoleCosmetic(role.getID())){
+                nonCosCount++;
+            }
+        }
         for (CharacterObject c : characters) {
             if (c.getName().equalsIgnoreCase(character)) {
                 if (author.getID().equals(c.getUserID())) {
@@ -70,6 +79,16 @@ public class Characters {
                     }
                     Utility.roleManagement(author, guild, userRoles);
                     Utility.updateUserNickName(author, guild, c.getNickname());
+
+                    for (IRole role: author.getRolesForGuild(guild)){
+                        if (!guildConfig.isRoleCosmetic(role.getID())){
+                            postCosCount++;
+                        }
+                    }
+                    if (postCosCount != nonCosCount){
+                        Utility.roleManagement(author,guild,oldRoles);
+                        return "> An error occurred trying to update your character.";
+                    }
                     return "> Loaded Character.";
                 } else {
                     return "> That is not your character.";

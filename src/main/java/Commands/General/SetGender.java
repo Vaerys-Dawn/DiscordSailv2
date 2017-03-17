@@ -25,15 +25,19 @@ public class SetGender implements Command {
         }
 
         for (UserTypeObject u : command.guildUsers.getUsers()) {
-            if (args.length() > 20) {
-                return "> Your Gender's Length is too long...\n(Must be under 20 chars)";
-            }
+
             if (adminEdit) {
+                if (userID.getRest().length() > 20){
+                    return "> User Gender's Length is too long...\n(Must be under 20 chars)";
+                }
                 if (u.getID().equals(user.getID())) {
                     u.setGender(userID.getRest());
                     return "> User's Gender Edited";
                 }
             } else {
+                if (args.length() > 20) {
+                    return "> Your Gender's Length is too long...\n(Must be under 20 chars)";
+                }
                 if (u.getID().equals(command.authorID)) {
                     u.setGender(args);
                     return "> Gender Edited";

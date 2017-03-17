@@ -8,6 +8,11 @@
     <logger name="org.eclipse.jetty" level="INFO"/>
     <!-- Configure Discord4J logger level -->
     <logger name="sx.blah.discord.Discord4J" level="INFO"/>
+
+    <!--<logger name="org.apache.http" level="DEBUG"/>-->
+
+    <!--<logger name="org.apache.http.wire" level="ERROR"/>-->
+
     <!-- Configure bot logger level -->
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -32,6 +37,6 @@
     <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
         <!-- Uncomment the next line to also log to a file -->
-         <appender-ref ref="FILE"/>
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>

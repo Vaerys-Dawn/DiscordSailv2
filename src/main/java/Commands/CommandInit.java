@@ -43,8 +43,6 @@ public class CommandInit {
         commands.add(new MaxMessages());
         commands.add(new Module());
         commands.add(new Mute());
-        commands.add(new FinalTally());
-        commands.add(new GetCompEntries());
         commands.add(new SetAdminRole());
         commands.add(new SetMutedRole());
         commands.add(new SetTrustedRoles());
@@ -98,6 +96,8 @@ public class CommandInit {
         commands.add(new SearchCCs());
         commands.add(new TransferCC());
         //Competition commands
+        commands.add(new FinalTally());
+        commands.add(new GetCompEntries());
         commands.add(new EnterComp());
         commands.add(new EnterVote());
 

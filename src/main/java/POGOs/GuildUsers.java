@@ -29,22 +29,22 @@ public class GuildUsers {
         return users;
     }
 
-    public void addXP(CommandObject object) {
+    public void  addXP(CommandObject object) {
         if (object.author.isBot()){
             return;
         }
-        boolean isfound = false;
+        boolean isFound = false;
         UserTypeObject user = new UserTypeObject(object.authorID);
         for (UserTypeObject u: users){
             if (u.getID().equals(object.authorID)){
-                isfound = true;
+                isFound = true;
                 user = u;
             }
         }
-        if (!isfound) {
+        if (!isFound) {
             users.add(user);
         }
-        user.addXP(object.guildConfig);
+//        user.addXP(object.guildConfig);
     }
 
     public void addLevels(){
@@ -86,6 +86,11 @@ public class GuildUsers {
 
     public ArrayList<UserCountDown> getMutedUsers() {
         return mutedUsers;
+    }
+
+    public void addUser(String id) {
+        UserTypeObject user = new UserTypeObject(id);
+        users.add(user);
     }
 //
 //
