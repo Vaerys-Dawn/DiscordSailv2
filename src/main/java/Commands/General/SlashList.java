@@ -6,7 +6,6 @@ import Interfaces.SlashCommand;
 import Main.Globals;
 import Main.Utility;
 import Objects.XEmbedBuilder;
-import SlashCommands.SlashInit;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;

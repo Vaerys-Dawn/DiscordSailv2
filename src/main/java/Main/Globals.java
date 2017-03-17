@@ -1,12 +1,12 @@
 package Main;
 
 import Commands.Admin.ChannelHere;
-import Interfaces.Command;
 import Commands.CommandInit;
-import Interfaces.DMCommand;
-import Interfaces.GuildToggle;
 import GuildToggles.ToggleInit;
 import Handlers.FileHandler;
+import Interfaces.Command;
+import Interfaces.DMCommand;
+import Interfaces.GuildToggle;
 import Interfaces.SlashCommand;
 import Objects.DailyMessageObject;
 import Objects.GuildContentObject;

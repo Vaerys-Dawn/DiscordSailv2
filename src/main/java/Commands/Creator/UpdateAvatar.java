@@ -1,7 +1,7 @@
 package Commands.Creator;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Main.Constants;
 import Main.Globals;
 import Main.Utility;

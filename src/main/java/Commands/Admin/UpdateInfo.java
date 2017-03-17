@@ -1,8 +1,8 @@
 package Commands.Admin;
 
-import Interfaces.Command;
 import Commands.CommandObject;
 import Handlers.InfoHandler;
+import Interfaces.Command;
 import Main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
 

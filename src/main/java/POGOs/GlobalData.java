@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 public class GlobalData {
     ArrayList<String> blockedFromDMS = new ArrayList<>();
+    private boolean taskComplete = false;
 
     public ArrayList<String> getBlockedFromDMS() {
         return blockedFromDMS;
@@ -16,5 +17,14 @@ public class GlobalData {
     public boolean blockUserFromDMS(String userID) {
         blockedFromDMS.add(userID);
         return true;
+    }
+
+
+    public boolean isTaskComplete() {
+        return taskComplete;
+    }
+
+    public void taskComplete() {
+        taskComplete = true;
     }
 }

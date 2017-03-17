@@ -1,10 +1,10 @@
 package Commands.Servers;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Main.Utility;
-import Objects.XEmbedBuilder;
 import Objects.ServerObject;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;

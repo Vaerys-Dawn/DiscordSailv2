@@ -1,7 +1,7 @@
 package Commands.Help;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Interfaces.GuildToggle;
 import Main.Globals;
 import Main.Utility;

@@ -23,7 +23,7 @@ import java.util.TimerTask;
  */
 public class TimedEvents {
 
-    static ArrayList<TimedObject> TimerObjects = new ArrayList<>();
+//    static ArrayList<TimedObject> TimerObjects = new ArrayList<>();
 
     final static Logger logger = LoggerFactory.getLogger(TimedEvents.class);
 
@@ -37,29 +37,29 @@ public class TimedEvents {
         doEventDaily(nowUTC);
     }
 
-    public static void addGuildCoolDown(String guildID) {
-        for (TimedObject t : TimerObjects) {
-            if (t.getGuildID().equals(guildID)) {
-                return;
-            }
-        }
-        TimerObjects.add(new TimedObject(guildID));
-        logger.debug("Timed Events initiated for guild with ID: " + guildID);
-    }
+//    public static void addGuildCoolDown(String guildID) {
+//        for (TimedObject t : TimerObjects) {
+//            if (t.getGuildID().equals(guildID)) {
+//                return;
+//            }
+//        }
+//        TimerObjects.add(new TimedObject(guildID));
+//        logger.debug("Timed Events initiated for guild with ID: " + guildID);
+//    }
 
     public static int getDoAdminMention(String guildID) {
-        for (TimedObject g : TimerObjects) {
-            if (g.getGuildID().equals(guildID)) {
-                return g.getDoAdminMention();
+        for (GuildContentObject task : Globals.getGuildContentObjects()) {
+            if (task.getGuildID().equals(guildID)) {
+                return task.getDoAdminMention();
             }
         }
         return -1;
     }
 
     public static void setDoAdminMention(String guildID, int i) {
-        for (TimedObject g : TimerObjects) {
-            if (g.getGuildID().equals(guildID)) {
-                g.setDoAdminMention(i);
+        for (GuildContentObject task : Globals.getGuildContentObjects()) {
+            if (task.getGuildID().equals(guildID)) {
+                task.setDoAdminMention(i);
                 return;
             }
         }
@@ -104,16 +104,16 @@ public class TimedEvents {
                 //backups
                 Utility.backupConfigFile(Constants.FILE_CONFIG, Constants.FILE_CONFIG_BACKUP);
                 Utility.backupConfigFile(Constants.FILE_GLOBAL_DATA, Constants.FILE_GLOBAL_DATA_BACKUP);
-                for (TimedObject g : TimerObjects) {
-                    Utility.backupFile(g.getGuildID(), Constants.FILE_GUILD_CONFIG);
-                    Utility.backupFile(g.getGuildID(), Constants.FILE_CUSTOM);
-                    Utility.backupFile(g.getGuildID(), Constants.FILE_CHARACTERS);
-                    Utility.backupFile(g.getGuildID(), Constants.FILE_SERVERS);
-                    Utility.backupFile(g.getGuildID(), Constants.FILE_INFO);
-                    Utility.backupFile(g.getGuildID(), Constants.FILE_COMPETITION);
-                    Utility.backupFile(g.getGuildID(), Constants.FILE_GUILD_USERS);
-                    GuildConfig guildConfig = Globals.getGuildContent(g.getGuildID()).getGuildConfig();
-                    GuildContentObject contentObject = Globals.getGuildContent(g.getGuildID());
+                for (GuildContentObject task : Globals.getGuildContentObjects()) {
+                    Utility.backupFile(task.getGuildID(), Constants.FILE_GUILD_CONFIG);
+                    Utility.backupFile(task.getGuildID(), Constants.FILE_CUSTOM);
+                    Utility.backupFile(task.getGuildID(), Constants.FILE_CHARACTERS);
+                    Utility.backupFile(task.getGuildID(), Constants.FILE_SERVERS);
+                    Utility.backupFile(task.getGuildID(), Constants.FILE_INFO);
+                    Utility.backupFile(task.getGuildID(), Constants.FILE_COMPETITION);
+                    Utility.backupFile(task.getGuildID(), Constants.FILE_GUILD_USERS);
+                    GuildConfig guildConfig = Globals.getGuildContent(task.getGuildID()).getGuildConfig();
+                    GuildContentObject contentObject = Globals.getGuildContent(task.getGuildID());
                     contentObject.getGuildUsers().addLevels();
 
                     //daily messages
@@ -138,28 +138,28 @@ public class TimedEvents {
         }, initialDelay * 1000, 24 * 60 * 60 * 1000);
     }
 
-    public static void addWaiter(String userID, String guildID) {
-        for (TimedObject g : TimerObjects) {
-            if (g.getGuildID().equals(guildID)) {
-                g.mannageWaiter(userID);
-            }
-        }
-    }
+//    public static void addWaiter(String userID, String guildID) {
+//        for (TimedObject g : TimerObjects) {
+//            if (g.getGuildID().equals(guildID)) {
+//                g.mannageWaiter(userID);
+//            }
+//        }
+//    }
 
-    public static ArrayList<UserCountDown> getWaiterObjects(String guildID) {
-        for (TimedObject g : TimerObjects) {
-            if (g.getGuildID().equals(guildID)) {
-                return g.getWaiterObjects();
-            }
-        }
-        return null;
-    }
+//    public static ArrayList<UserCountDown> getWaiterObjects(String guildID) {
+//        for (TimedObject g : TimerObjects) {
+//            if (g.getGuildID().equals(guildID)) {
+//                return g.getWaiterObjects();
+//            }
+//        }
+//        return null;
+//    }
 
 
     public static boolean addReminder(String guildID, String userID, String channelID, long timeMins, String message) {
-        for (TimedObject g : TimerObjects) {
-            if (g.getGuildID().equals(guildID)) {
-                return g.addReminderObject(new ReminderObject(userID, channelID, message, timeMins));
+        for (GuildContentObject task : Globals.getGuildContentObjects()) {
+            if (task.getGuildID().equals(guildID)) {
+                return task.getGuildUsers().addReminderObject(new ReminderObject(userID, channelID, message, timeMins));
             }
         }
         return true;
@@ -170,7 +170,7 @@ public class TimedEvents {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                for (TimedObject task : TimerObjects) {
+                for (GuildContentObject task : Globals.getGuildContentObjects()) {
                     if (task.getDoAdminMention() > 0) {
                         task.setDoAdminMention(task.getDoAdminMention() - 1);
                         if (task.getDoAdminMention() == 0) {
@@ -187,19 +187,19 @@ public class TimedEvents {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                for (TimedObject task : TimerObjects) {
-                    ArrayList<UserCountDown> waiterObjects = task.getWaiterObjects();
-                    for (int i = 0; i < waiterObjects.size(); i++) {
-                        if (waiterObjects.get(i).getRemainderSecs() > 0) {
-                            waiterObjects.get(i).setRemainderSecs(waiterObjects.get(i).getRemainderSecs() - 1);
-                            if (waiterObjects.get(i).getRemainderSecs() == 0) {
-                                waiterObjects.remove(i);
-                                logger.debug("User with ID: " + waiterObjects.get(i).getID() + " removed from waiting list.");
-                            }
-                        }
-                    }
-                    task.setWaiterObjects(waiterObjects);
-                }
+//                for (GuildContentObject task : Globals.getGuildContentObjects()) {
+//                    ArrayList<UserCountDown> waiterObjects = task.getWaiterObjects();
+//                    for (int i = 0; i < waiterObjects.size(); i++) {
+//                        if (waiterObjects.get(i).getRemainderSecs() > 0) {
+//                            waiterObjects.get(i).setRemainderSecs(waiterObjects.get(i).getRemainderSecs() - 1);
+//                            if (waiterObjects.get(i).getRemainderSecs() == 0) {
+//                                waiterObjects.remove(i);
+//                                logger.debug("User with ID: " + waiterObjects.get(i).getID() + " removed from waiting list.");
+//                            }
+//                        }
+//                    }
+//                    task.setWaiterObjects(waiterObjects);
+//                }
             }
         }, 3 * 1000, 3000);
     }
@@ -209,23 +209,22 @@ public class TimedEvents {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                for (TimedObject task : TimerObjects) {
-                    Globals.getGuildContent(task.getGuildID()).resetRateLimit();
+                for (GuildContentObject task : Globals.getGuildContentObjects()) {
+                    task.resetRateLimit();
 
                     //Mutes.
-                    GuildContentObject content = Globals.getGuildContent(task.getGuildID());
-                    ArrayList<UserCountDown> mutedUsers = content.getGuildUsers().getMutedUsers();
+                    ArrayList<UserCountDown> mutedUsers = task.getGuildUsers().getMutedUsers();
                     for (int i = 0; i < mutedUsers.size();i++) {
                         if (mutedUsers.get(i).getRemainderSecs() != -1) {
                             mutedUsers.get(i).tickDown(10);
                             if (mutedUsers.get(i).getRemainderSecs() == 0) {
-                                content.getGuildUsers().unMuteUser(mutedUsers.get(i).getID(), content.getGuildID());
+                                task.getGuildUsers().unMuteUser(mutedUsers.get(i).getID(), task.getGuildID());
                             }
                         }
                     }
                 }
             }
-        }, 1000, 10 * 1000);
+        }, 1000 * 10, 10 * 1000);
     }
 
     private static void doEventMin(ZonedDateTime nowUTC) {
@@ -244,8 +243,8 @@ public class TimedEvents {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                for (TimedObject task : TimerObjects) {
-                    ArrayList<ReminderObject> reminderObjects = task.getReminderObjects();
+                for (GuildContentObject task : Globals.getGuildContentObjects()) {
+                    ArrayList<ReminderObject> reminderObjects = task.getGuildUsers().getReminderObjects();
                     for (int i = 0; i < reminderObjects.size(); i++) {
                         if (reminderObjects.get(i).getTimeMins() > 0) {
                             reminderObjects.get(i).setTimeMins(reminderObjects.get(i).getTimeMins() - 1);
@@ -261,7 +260,7 @@ public class TimedEvents {
                             }
                         }
                     }
-                    task.setReminderObjects(reminderObjects);
+                    task.getGuildUsers().setReminderObjects(reminderObjects);
                 }
             }
         }, initialDelay * 1000, 1000 * 60);
@@ -284,6 +283,25 @@ public class TimedEvents {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+
+
+                //Doing some Magic
+                if (!Globals.getGlobalData().isTaskComplete()) {
+                    logger.info("Performing Magical Wizardry.");
+                    for (GuildContentObject task : Globals.getGuildContentObjects()) {
+                        for (CCommandObject c : task.getCustomCommands().getCommandList()) {
+                            if (c.getContents(false).contains("#ifArgs#{;;")) {
+                                logger.info("converting code in $$" + c.getName() + " to new system");
+                                c.setContents(c.getContents(false).replace("#ifArgs#{;;", "#ifArgsEmpty#{"));
+                            }
+                        }
+                    }
+                    Globals.getGlobalData().taskComplete();
+                }
+
+
+
+
                 //Sending isAlive Check.
                 try {
                     logger.debug("Backup in 5 seconds do not restart.");

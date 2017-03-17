@@ -1,7 +1,7 @@
 package Commands.Creator;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Main.Globals;
 import Main.Utility;
 import sx.blah.discord.handle.obj.Permissions;

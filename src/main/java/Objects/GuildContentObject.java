@@ -18,6 +18,7 @@ public class GuildContentObject {
     private Competition competition;
     private GuildUsers guildUsers;
     public ArrayList<UserRateObject> ratelimiting = new ArrayList<>();
+    private int doAdminMention;
 
     public GuildContentObject(String guildID, GuildConfig guildConfig, CustomCommands customCommands, Servers servers, Characters characters, Competition competition,GuildUsers guildUsers) {
         this.guildID = guildID;
@@ -118,5 +119,13 @@ public class GuildContentObject {
 
     public GuildUsers getGuildUsers() {
         return guildUsers;
+    }
+
+    public int getDoAdminMention() {
+        return doAdminMention;
+    }
+
+    public void setDoAdminMention(int doAdminMention) {
+        this.doAdminMention = doAdminMention;
     }
 }

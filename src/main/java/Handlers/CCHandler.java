@@ -1,7 +1,7 @@
 package Handlers;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Main.Globals;
 import Main.TagSystem;
 import Main.Utility;
@@ -94,7 +94,7 @@ public class CCHandler {
                     if (imageURL != null || !imageURL.isEmpty()) {
                         response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "");
                         response = TagSystem.tagToCaps(response);
-                        Utility.sendFile(response, imageURL, channel);
+                        Utility.sendFileURL(response, imageURL, channel);
                         return;
                     }
                 }

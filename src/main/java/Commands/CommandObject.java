@@ -155,15 +155,12 @@ public class CommandObject {
     }
 
     public void removeCommandsByType(String type) {
-        ArrayList<Integer> positions = new ArrayList<>();
         for (int i = 0; i < commands.size(); i++) {
             if (commands.get(i).type().equalsIgnoreCase(type)) {
-                positions.add(i);
+                logger.trace(type + " - " + commands.get(i).names()[0] + " - removed");
+                commands.remove(i);
+                i--;
             }
-        }
-        for (Integer i : positions){
-            logger.trace(type + " - " + commands.get(i).names()[0] + " - removed");
-            commands.remove(i);
         }
         for (int i = 0; i < commandTypes.size(); i++) {
             if (commandTypes.get(i).equalsIgnoreCase(type)) {

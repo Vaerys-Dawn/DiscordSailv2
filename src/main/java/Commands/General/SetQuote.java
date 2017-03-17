@@ -1,7 +1,7 @@
 package Commands.General;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Main.Utility;
 import Objects.SplitFirstObject;
 import Objects.UserTypeObject;

@@ -1,10 +1,10 @@
 package Main;
 
-import Interfaces.Command;
 import Commands.CommandObject;
 import Handlers.DMHandler;
 import Handlers.FileHandler;
 import Handlers.MessageHandler;
+import Interfaces.Command;
 import Objects.GuildContentObject;
 import Objects.SplitFirstObject;
 import POGOs.*;
@@ -54,9 +54,6 @@ public class AnnotationListener {
         IGuild guild = event.getGuild();
         String guildID = guild.getID();
         logger.info("Starting Guild get process for Guild with ID: " + guildID);
-
-        //Init Cooldowns
-        TimedEvents.addGuildCoolDown(guildID);
 
         //Create POGO templates
         GuildConfig guildConfig = new GuildConfig();

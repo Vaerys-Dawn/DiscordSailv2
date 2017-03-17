@@ -1,7 +1,7 @@
 package Commands.RoleSelect;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Main.Utility;
 import Objects.RoleTypeObject;
 import Objects.XEmbedBuilder;

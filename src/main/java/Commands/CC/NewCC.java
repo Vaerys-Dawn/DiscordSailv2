@@ -1,7 +1,7 @@
 package Commands.CC;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Main.TagSystem;
 import Objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.Permissions;

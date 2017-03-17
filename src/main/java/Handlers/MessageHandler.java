@@ -1,7 +1,7 @@
 package Handlers;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Interfaces.SlashCommand;
 import Main.Globals;
 import Main.TimedEvents;
@@ -9,7 +9,6 @@ import Main.Utility;
 import Objects.BlackListObject;
 import Objects.OffenderObject;
 import POGOs.GuildConfig;
-import SlashCommands.SlashInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;

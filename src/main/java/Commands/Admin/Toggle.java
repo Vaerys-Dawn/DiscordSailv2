@@ -1,7 +1,7 @@
 package Commands.Admin;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Interfaces.GuildToggle;
 import Main.Utility;
 import Objects.XEmbedBuilder;

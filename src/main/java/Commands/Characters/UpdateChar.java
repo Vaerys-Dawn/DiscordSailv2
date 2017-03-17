@@ -1,7 +1,7 @@
 package Commands.Characters;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Objects.CharacterObject;
 import Objects.RoleTypeObject;
 import sx.blah.discord.handle.obj.IRole;

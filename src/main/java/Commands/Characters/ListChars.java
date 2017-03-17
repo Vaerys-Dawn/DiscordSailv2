@@ -1,7 +1,7 @@
 package Commands.Characters;
 
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Main.Utility;
 import Objects.CharacterObject;
 import Objects.XEmbedBuilder;

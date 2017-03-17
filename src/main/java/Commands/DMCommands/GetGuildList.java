@@ -1,7 +1,7 @@
 package Commands.DMCommands;
 
-import Interfaces.DMCommand;
 import Commands.DMCommandObject;
+import Interfaces.DMCommand;
 import Main.Utility;
 import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IGuild;

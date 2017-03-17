@@ -1,6 +1,7 @@
 package Main;
 
 import Annotations.TagAnnotation;
+import Interfaces.Command;
 import Objects.ReplaceObject;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.*;
@@ -31,6 +32,7 @@ public class TagSystem {
         response = tagRandom(response);
         response = tagIfRole(response, message.getAuthor(), message.getGuild());
         response = tagIfName(response, message.getAuthor(), message.getGuild());
+        response = tagEmptyArgs(response,args);
         response = tagIfArgs(response, args);
         response = tagRegex(response, "#replace#{", "}", ";;");
         response = tagRegex(response, "#replace!#(", ")#!r#", "::");
@@ -242,10 +244,37 @@ public class TagSystem {
                     ArrayList<String> splitString = new ArrayList<>(Arrays.asList(tag.split(";;")));
                     String toRegex = prefix + tag + suffix;
                     if (splitString.size() == 3) {
-                        if (splitString.get(0).equalsIgnoreCase(args)) {
+                        if (args.toLowerCase().contains(splitString.get(0).toLowerCase())) {
                             from = from.replace(toRegex, splitString.get(1));
                         } else {
                             from = from.replace(toRegex, splitString.get(2));
+                        }
+                    } else {
+                        from = from.replace(tag, "#ERROR#");
+                    }
+                }
+            } while (StringUtils.countMatches(from, prefix) > 0 && (!lastAttempt.equals(from)));
+        }
+        return from;
+    }
+
+    public static String tagEmptyArgs(String from, String args){
+        String prefix = "#ifArgsEmpty#{";
+        String suffix = "}";
+        String tag;
+        String lastAttempt;
+        if (from.contains(prefix)) {
+            do {
+                lastAttempt = from;
+                tag = StringUtils.substringBetween(from, prefix, suffix);
+                if (tag != null) {
+                    ArrayList<String> splitString = new ArrayList<>(Arrays.asList(tag.split(";;")));
+                    String toRegex = prefix + tag + suffix;
+                    if (splitString.size() == 2) {
+                        if (args == null || args.isEmpty()) {
+                            from = from.replace(toRegex, splitString.get(0));
+                        } else {
+                            from = from.replace(toRegex, splitString.get(1));
                         }
                     } else {
                         from = from.replace(tag, "#ERROR#");

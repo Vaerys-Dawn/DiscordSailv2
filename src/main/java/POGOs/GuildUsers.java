@@ -2,11 +2,10 @@ package POGOs;
 
 import Commands.CommandObject;
 import Main.Utility;
-import Objects.UserTypeObject;
+import Objects.ReminderObject;
 import Objects.UserCountDown;
-import sx.blah.discord.handle.obj.IGuild;
+import Objects.UserTypeObject;
 
-import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 
 /**
@@ -19,6 +18,7 @@ public class GuildUsers {
 //    public ArrayList<ReminderObject> soonToExecute = new ArrayList<>();
 //    public ArrayList<WaiterObject> groupedUp = new ArrayList<>();
     public ArrayList<UserCountDown> mutedUsers = new ArrayList<>();
+    private ArrayList<ReminderObject> reminderObjects = new ArrayList<>();
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
@@ -91,6 +91,24 @@ public class GuildUsers {
     public void addUser(String id) {
         UserTypeObject user = new UserTypeObject(id);
         users.add(user);
+    }
+
+    public boolean addReminderObject(ReminderObject object){
+        for (ReminderObject r: reminderObjects) {
+            if (object.getUserID().equals(r.getUserID())){
+                return true;
+            }
+        }
+        reminderObjects.add(object);
+        return false;
+    }
+
+    public ArrayList<ReminderObject> getReminderObjects() {
+        return reminderObjects;
+    }
+
+    public void setReminderObjects(ArrayList<ReminderObject> reminderObjects) {
+        this.reminderObjects = reminderObjects;
     }
 //
 //

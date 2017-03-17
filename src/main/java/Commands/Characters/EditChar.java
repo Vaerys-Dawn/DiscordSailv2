@@ -1,8 +1,8 @@
 package Commands.Characters;
 
 import Commands.Characters.EditModes.*;
-import Interfaces.Command;
 import Commands.CommandObject;
+import Interfaces.Command;
 import Main.Utility;
 import Objects.CharacterObject;
 import Objects.SplitFirstObject;

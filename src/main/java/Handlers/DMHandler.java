@@ -1,7 +1,7 @@
 package Handlers;
 
-import Interfaces.DMCommand;
 import Commands.DMCommandObject;
+import Interfaces.DMCommand;
 import Main.Globals;
 import Main.Utility;
 import Objects.SplitFirstObject;
