@@ -37,6 +37,7 @@ public class CommandInit {
         commands.add(new UpdateAvatar());
         commands.add(new GetMessageData());
         commands.add(new TempCommand());
+        commands.add(new ResetPlayingStatus());
 
         //Admin commands
         commands.add(new ChannelHere());

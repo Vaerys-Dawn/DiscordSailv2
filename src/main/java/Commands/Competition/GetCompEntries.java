@@ -3,7 +3,7 @@ package Commands.Competition;
 import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Utility;
-import Objects.PollObject;
+import Objects.CompObject;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -13,7 +13,7 @@ public class GetCompEntries implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         int i = 1;
-        for (PollObject p : command.competition.getEntries()) {
+        for (CompObject p : command.competition.getEntries()) {
             Utility.sendMessage("Entry " + i + " : " + command.guild.getUserByID(p.getUserID()).mention() + "\n" +
                     p.getFileUrl(), command.channel);
             try {

@@ -94,7 +94,7 @@ public class CCHandler {
                     if (imageURL != null || !imageURL.isEmpty()) {
                         response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "");
                         response = TagSystem.tagToCaps(response);
-                        Utility.sendFileURL(response, imageURL, channel);
+                        Utility.sendFileURL(response, imageURL, channel,true);
                         return;
                     }
                 }

@@ -50,6 +50,7 @@ public class Info implements Command {
                         for (Permissions p : c.perms()) {
                             permList.add(p.toString());
                         }
+                        builder.append("**");
                         builder.append(Utility.listFormatter(permList, true));
                     }
                     //dual command info

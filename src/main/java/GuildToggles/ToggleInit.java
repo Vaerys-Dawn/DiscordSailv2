@@ -33,6 +33,7 @@ public class ToggleInit {
         guildToggles.add(new ExtendEditLog());
         guildToggles.add(new ChannelLogging());
         guildToggles.add(new SlashCommands());
+        guildToggles.add(new RoleIsToggle());
 
         //modules
         guildToggles.add(new ModuleChars());

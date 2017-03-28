@@ -1,5 +1,6 @@
 package Commands;
 
+import GuildToggles.Modules.ModuleServers;
 import Interfaces.Command;
 import Interfaces.DMCommand;
 import Interfaces.GuildToggle;
@@ -49,6 +50,7 @@ public class CommandObject {
     public ArrayList<String> channelTypes = new ArrayList<>();
     public ArrayList<String> commandTypes = new ArrayList<>();
     public ArrayList<GuildToggle> guildToggles = new ArrayList<>();
+    private ArrayList<GuildToggle> toRemove = new ArrayList<>();
 
     public IDiscordClient client;
 
@@ -97,14 +99,38 @@ public class CommandObject {
         channelTypes = (ArrayList<String>) Globals.getChannelTypes().clone();
         guildToggles = (ArrayList<GuildToggle>) Globals.getGuildGuildToggles().clone();
 
+        logger.trace("Nodules:" + (" CC = " + guildConfig.moduleCC +
+                ", ROLES = " + guildConfig.moduleRoles +
+                ", COMP = " + guildConfig.moduleComp +
+                ", SERVERS = " + guildConfig.moduleServers +
+                ", CHARS = " + guildConfig.moduleChars +
+                ", ME = " + guildConfig.moduleMe +
+                ", MODMUTE = " + guildConfig.moduleModMute + ".").toUpperCase());
+        String testToggles = "";
+        for (GuildToggle g : guildToggles) {
+            testToggles += g.name() + ", ";
+        }
+        if (testToggles.contains(new ModuleServers().name())) {
+            logger.debug("Module Servers found.");
+        }
         for (int i = 0; i < guildToggles.size(); i++) {
+            logger.info("this - " + guildToggles.get(i).name());
             if (!guildToggles.get(i).get(guildConfig)) {
                 if (guildToggles.get(i).isModule()) {
-                    logger.trace(guildToggles.get(i).name() + " - " + guildToggles.get(i).get(guildConfig) + "");
+                    logger.trace(guildToggles.get(i).name() + " - " + guildToggles.get(i).get(guildConfig));
                 }
                 guildToggles.get(i).execute(this);
             }
         }
+        //well this works I guess.
+        for (GuildToggle t : toRemove) {
+            for (int i = 0; i < guildToggles.size(); i++) {
+                if (t.name().equalsIgnoreCase(guildToggles.get(i).name())){
+                    guildToggles.remove(i);
+                }
+            }
+        }
+
         dmCommands = Globals.getCommandsDM();
 
         notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't let you do that.";
@@ -164,8 +190,8 @@ public class CommandObject {
         }
         for (int i = 0; i < commandTypes.size(); i++) {
             if (commandTypes.get(i).equalsIgnoreCase(type)) {
+                logger.trace("Type - " + commandTypes.get(i) + " - removed");
                 commandTypes.remove(i);
-                logger.trace(type + " - removed");
             }
         }
     }
@@ -189,7 +215,7 @@ public class CommandObject {
     public void removeToggle(String name) {
         for (int i = 0; i < guildToggles.size(); i++) {
             if (guildToggles.get(i).name().equals(name)) {
-                guildToggles.remove(i);
+                toRemove.add(guildToggles.get(i));
             }
         }
     }

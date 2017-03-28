@@ -49,14 +49,23 @@ public class CosmeticRoles implements Command {
                 ArrayList<RoleTypeObject> roles = guildConfig.getCosmeticRoles();
                 String newRoleId = null;
                 List<IRole> userRoles = guild.getRolesForUser(author);
+                boolean toggle = false;
                 for (RoleTypeObject role : roles) {
                     for (int i = 0; userRoles.size() > i; i++) {
-                        if (role.getRoleID().equals(userRoles.get(i).getID())) {
-                            userRoles.remove(i);
+                        if (command.guildConfig.roleIsToggle) {
+                            if (userRoles.get(i).getName().equalsIgnoreCase(args)){
+                                userRoles.remove(i);
+                                toggle = true;
+                            }
+                        } else {
+                            if (role.getRoleID().equals(userRoles.get(i).getID())) {
+                                userRoles.remove(i);
+                            }
                         }
                         if (args.equalsIgnoreCase(guild.getRoleByID(role.getRoleID()).getName())) {
                             newRoleId = role.getRoleID();
                         }
+
                     }
                 }
                 if (splitFirst.getFirstWord().equalsIgnoreCase("remove")) {
@@ -68,11 +77,20 @@ public class CosmeticRoles implements Command {
                         }
                         return "> Role with name: **" + args + "** not found in **Cosmetic Role** list.";
                     } else {
-                        userRoles.add(guild.getRoleByID(newRoleId));
-                        response = "> You have selected the cosmetic role: **" + guild.getRoleByID(newRoleId).getName() + "**.";
+                        if (!toggle) {
+                            userRoles.add(guild.getRoleByID(newRoleId));
+                            if (command.guildConfig.roleIsToggle){
+                                response = "> You have enabled the cosmetic role: **" + guild.getRoleByID(newRoleId).getName() + "**.";
+                            }else {
+                                response = "> You have selected the cosmetic role: **" + guild.getRoleByID(newRoleId).getName() + "**.";
+                            }
+                        }else {
+                            response = "> You have disabled the cosmetic role: **" + guild.getRoleByID(newRoleId).getName() + "**.";
+                        }
+
                     }
                 }
-                command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(guild,author,oldRoles,userRoles));
+                command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(guild, author, oldRoles, userRoles));
                 if (Utility.roleManagement(author, guild, userRoles).get()) {
                     return Constants.ERROR_UPDATING_ROLE;
                 } else {

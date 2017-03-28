@@ -27,12 +27,8 @@ public class ModuleServers implements GuildToggle {
 
     @Override
     public void execute(CommandObject command) {
-        if (command.guildConfig.moduleServers){
-            return;
-        }else {
-            command.removeCommandsByType(Command.TYPE_SERVERS);
-            command.removeChannel(Command.CHANNEL_SERVERS);
-        }
+        command.removeCommandsByType(Command.TYPE_SERVERS);
+        command.removeChannel(Command.CHANNEL_SERVERS);
     }
 
     @Override

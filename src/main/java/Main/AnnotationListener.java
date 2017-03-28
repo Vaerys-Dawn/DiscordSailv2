@@ -123,6 +123,7 @@ public class AnnotationListener {
     // TODO: 16/01/2017 ability to toggle xp per channel
     // TODO: 16/01/2017 make level decay toggleable
     // TODO: 16/01/2017 make everything optional/ modifiable
+    // TODO: 18/03/2017 make a toggle that will Hide UserXp on their profile and hide the server rank list.
     @EventSubscriber
     public void onMessageReceivedEvent(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) {

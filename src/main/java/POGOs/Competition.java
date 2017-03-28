@@ -1,6 +1,7 @@
 package POGOs;
 
 import Main.Constants;
+import Objects.CompObject;
 import Objects.PollObject;
 
 import java.util.ArrayList;
@@ -11,9 +12,10 @@ import java.util.Arrays;
  */
 public class Competition {
     boolean properlyInit = false;
-    ArrayList<PollObject> entries = new ArrayList<>();
+    ArrayList<CompObject> entries = new ArrayList<>();
     ArrayList<String> voting = new ArrayList<>();
     int voteLimit = 1;
+    ArrayList<PollObject> polls = new ArrayList<>();
 
     public boolean isProperlyInit() {
         return properlyInit;
@@ -23,11 +25,11 @@ public class Competition {
         this.properlyInit = properlyInit;
     }
 
-    public void newEntry(PollObject entry) {
+    public void newEntry(CompObject entry) {
         entries.add(entry);
     }
 
-    public ArrayList<PollObject> getEntries() {
+    public ArrayList<CompObject> getEntries() {
         return entries;
     }
 

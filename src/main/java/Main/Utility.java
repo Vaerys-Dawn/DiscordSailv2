@@ -955,6 +955,10 @@ public class Utility {
             from = from.replace(mention, "__@" + user.getDisplayName(message.getGuild()) + "__");
             from = from.replace(mentionNic, "__@" + user.getDisplayName(message.getGuild()) + "__");
         }
+        for (IRole role : message.getRoleMentions()){
+            String roleMention = "<@&" + role.getID() + ">";
+            from = from.replace(roleMention,"__**@" + role.getName() + "**__");
+        }
         return from;
     }
 

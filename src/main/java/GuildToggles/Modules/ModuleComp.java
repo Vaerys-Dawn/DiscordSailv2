@@ -31,13 +31,9 @@ public class ModuleComp implements GuildToggle {
 
     @Override
     public void execute(CommandObject command) {
-        if (command.guildConfig.moduleComp){
-            return;
-        }else {
-            command.removeCommandsByType(Command.TYPE_COMPETITION);
-            command.removeToggle(new Voting().name());
-            command.removeToggle(new CompEntries().name());
-        }
+        command.removeCommandsByType(Command.TYPE_COMPETITION);
+        command.removeToggle(new Voting().name());
+        command.removeToggle(new CompEntries().name());
     }
 
     @Override

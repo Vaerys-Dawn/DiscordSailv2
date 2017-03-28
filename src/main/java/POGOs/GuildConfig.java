@@ -42,6 +42,7 @@ public class GuildConfig {
     public boolean muteRepeatOffenders = true;
     public boolean rateLimiting = false;
     public boolean slashCommands = false;
+    public boolean roleIsToggle = false;
     //--Competition
     public boolean compEntries = false;
     public boolean compVoting = false;

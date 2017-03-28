@@ -52,7 +52,7 @@ public class MessageHandler {
 
         if (commandObject.guildConfig.slashCommands) {
             for (SlashCommand s : Globals.getSlashCommands()) {
-                if (commandObject.message.getContent().equalsIgnoreCase(s.call())) {
+                if (commandObject.message.getContent().toLowerCase().startsWith(s.call().toLowerCase())) {
                     Utility.sendMessage(s.response(), commandObject.channel);
                     return;
                 }
