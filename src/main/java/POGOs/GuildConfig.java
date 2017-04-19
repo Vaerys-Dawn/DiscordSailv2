@@ -1,11 +1,9 @@
 package POGOs;
 
+import Interfaces.ChannelSetting;
 import Interfaces.Command;
 import Main.Globals;
-import Objects.BlackListObject;
-import Objects.ChannelTypeObject;
-import Objects.OffenderObject;
-import Objects.RoleTypeObject;
+import Objects.*;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
@@ -35,6 +33,7 @@ public class GuildConfig {
     public boolean extendEditLog = false;
     public boolean channelLogging = false;
     public boolean useTimeStamps = false;
+    public boolean dontLogBot = false;
     //--Admin
     public boolean denyInvites = false;
     public boolean maxMentions = true;
@@ -61,7 +60,8 @@ public class GuildConfig {
     public float xpModifier = 1;
 
     // TODO: 04/10/2016 let the mention limit be customisable.
-    ArrayList<ChannelTypeObject> channels = new ArrayList<>();
+//    ArrayList<ChannelTypeObject> channels = new ArrayList<>();
+    ArrayList<ChannelSettingObject> channelSettings = new ArrayList<>();
     ArrayList<RoleTypeObject> cosmeticRoles = new ArrayList<>();
     ArrayList<RoleTypeObject> modifierRoles = new ArrayList<>();
     ArrayList<RoleTypeObject> trustedRoles = new ArrayList<>();
@@ -96,6 +96,10 @@ public class GuildConfig {
         this.properlyInit = properlyInit;
     }
 
+    public void addChannelSetting(String type, String id){
+        channelSettings.add(new ChannelSettingObject(type,id));
+    }
+
     public void initConfig() {
         for (BlackListObject b: blackList){
             if (b.getReason().contains("**invites**")){
@@ -114,37 +118,42 @@ public class GuildConfig {
         this.guildName = guildName;
     }
 
-    public ArrayList<ChannelTypeObject> getChannels() {
-        return channels;
-    }
+//    public ArrayList<ChannelTypeObject> getChannels() {
+//        return channels;
+//    }
 
-    public void setUpChannel(String channelType, String channelID) {
-        if (channelType.equals(Command.CHANNEL_SERVERS) && !moduleServers) {
-            return;
-        }
-        if (channels.size() == 0) {
-            channels.add(new ChannelTypeObject(channelType, channelID));
-            return;
-        }
-        for (int i = 0; i < channels.size(); i++) {
-            if (channels.get(i).getType().equals(channelType)) {
-                channels.set(i, new ChannelTypeObject(channelType, channelID));
-                return;
-            }
-        }
-        channels.add(new ChannelTypeObject(channelType, channelID));
-    }
+//    public void setUpChannel(String channelType, String channelID) {
+//        if (channelType.equals(Command.CHANNEL_SERVERS) && !moduleServers) {
+//            return;
+//        }
+//        if (channels.size() == 0) {
+//            channels.add(new ChannelTypeObject(channelType, channelID));
+//            return;
+//        }
+//        for (int i = 0; i < channels.size(); i++) {
+//            if (channels.get(i).getType().equals(channelType)) {
+//                channels.set(i, new ChannelTypeObject(channelType, channelID));
+//                return;
+//            }
+//        }
+//        channels.add(new ChannelTypeObject(channelType, channelID));
+//    }
 
-    public String getChannelTypeID(String channelType) {
-        for (ChannelTypeObject c : channels) {
+    public ArrayList<String> getChannelIDsByType(String channelType) {
+        for (ChannelSettingObject c : channelSettings) {
             if (c.getType().equals(channelType)) {
-                if (channelType.equalsIgnoreCase(Command.CHANNEL_SERVERS) && !moduleServers) {
+                if (c.getChannelIDs().size() >= 1) {
+                    return c.getChannelIDs();
+                }else {
                     return null;
                 }
-                return c.getID();
             }
         }
         return null;
+    }
+
+    public ArrayList<ChannelSettingObject> getChannelSettings() {
+        return channelSettings;
     }
 
     public void updateVariables(IGuild guild) {
@@ -199,10 +208,20 @@ public class GuildConfig {
         }
 
         //update channels
-        for (ChannelTypeObject c : channels) {
-            IChannel channel = guild.getChannelByID(c.getID());
-            if (channel == null) {
-                channels.remove(c);
+        for (ChannelSettingObject c : channelSettings) {
+            ArrayList<String> toRemove = new ArrayList<>();
+            for (String id: c.getChannelIDs()){
+                IChannel channel = Globals.getClient().getChannelByID(id);
+                if (channel == null){
+                    toRemove.add(id);
+                }
+            }
+            for (String removing : toRemove){
+                for (int i = 0;i <  c.getChannelIDs().size();i++){
+                    if (removing.equals(c.getChannelIDs().get(i))){
+                        c.getChannelIDs().remove(i);
+                    }
+                }
             }
         }
         repeatOffenders = newMentionSpammers;

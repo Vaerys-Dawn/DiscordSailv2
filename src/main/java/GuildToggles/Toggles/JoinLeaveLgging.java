@@ -25,6 +25,11 @@ public class JoinLeaveLgging implements GuildToggle{
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().joinLeaveLogging;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

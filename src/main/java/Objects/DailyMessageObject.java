@@ -5,6 +5,7 @@ import Main.TagSystem;
 import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -40,5 +41,13 @@ public class DailyMessageObject {
 
     public void updateFilePath(String newFileName) {
         this.fileName = newFileName.replace("#day#", dayOfWeek.toString());
+    }
+
+    public void setContents(String contents) {
+        this.contents = Arrays.asList(contents.split("\n"));
+    }
+
+    public List<String> getData() {
+        return contents;
     }
 }

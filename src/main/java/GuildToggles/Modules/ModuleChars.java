@@ -26,6 +26,11 @@ public class ModuleChars implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().moduleChars;
+    }
+
+    @Override
     public void execute(CommandObject command) {
         command.removeCommandsByType(Command.TYPE_CHARACTER);
     }

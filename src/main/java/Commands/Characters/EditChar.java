@@ -1,6 +1,5 @@
 package Commands.Characters;
 
-import Commands.Characters.EditModes.*;
 import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Utility;
@@ -27,15 +26,15 @@ public class EditChar implements Command {
                     }
                     switch (mode.getFirstWord().toLowerCase()){
                         case "age":
-                            return CharAge.execute(mode.getRest(),c);
+                            return CharEditModes.age(mode.getRest(),c);
                         case "gender":
-                            return CharGender.execute(mode.getRest(),c);
+                            return CharEditModes.gender(mode.getRest(),c);
                         case "avatar":
-                            return CharAvatar.execute(mode.getRest(),c);
+                            return CharEditModes.avatar(mode.getRest(),c);
                         case "desc":
-                            return CharDesc.execute(mode.getRest(),c);
+                            return CharEditModes.desc(mode.getRest(),c);
                         case "longdesc":
-                            return CharLongDesc.execute(mode.getRest(),c);
+                            return CharEditModes.longDesc(mode.getRest(),c);
                         default:
                             return "> Mode not Valid.";
                     }
@@ -55,7 +54,7 @@ public class EditChar implements Command {
     @Override
     public String description() {
         return "Allows the User to edit their Character.\n" +
-                "Modes: Age, Avatar, Desc, Gender, LongDesc\n" +
+                "Modes: age, Avatar, Desc, Gender, LongDesc\n" +
                 "\nAvatar and LongDesc need valid URLS.";
     }
 

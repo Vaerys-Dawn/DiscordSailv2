@@ -10,6 +10,7 @@ public interface GuildToggle {
     String name();
     boolean toggle(GuildConfig config);
     boolean get(GuildConfig config);
+    boolean getDefault();
     void execute(CommandObject command);
     boolean isModule();
 }

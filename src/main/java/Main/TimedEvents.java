@@ -10,42 +10,45 @@ import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
 
 import java.io.File;
-import java.time.DayOfWeek;
-import java.time.Month;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Created by Vaerys on 14/08/2016.
  */
 public class TimedEvents {
 
-//    static ArrayList<TimedObject> TimerObjects = new ArrayList<>();
-
     final static Logger logger = LoggerFactory.getLogger(TimedEvents.class);
 
     public TimedEvents() {
         ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
         doEventSec();
-        doEventThreeSec();
         doEventTenSec();
-        doEventMin(nowUTC);
         doEventFiveMin(nowUTC);
         doEventDaily(nowUTC);
     }
 
-//    public static void addGuildCoolDown(String guildID) {
-//        for (TimedObject t : TimerObjects) {
-//            if (t.getGuildID().equals(guildID)) {
-//                return;
-//            }
-//        }
-//        TimerObjects.add(new TimedObject(guildID));
-//        logger.debug("Timed Events initiated for guild with ID: " + guildID);
-//    }
+    //Reminder new setup.
+    public static void sendReminder(ReminderObject object) {
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        long initialDelay = object.getExecuteTime() - now.toEpochSecond();
+        System.out.println(initialDelay + "");
+        if (initialDelay < 0) {
+            initialDelay = 5;
+        }
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Utility.sendMessage(object.getMessage(), Globals.getClient().getChannelByID(object.getChannelID()));
+                Globals.getGlobalData().removeReminder(object.getUserID(),object.getMessage());
+            }
+        }, initialDelay * 1000);
+    }
 
     public static int getDoAdminMention(String guildID) {
         for (GuildContentObject task : Globals.getGuildContentObjects()) {
@@ -117,9 +120,9 @@ public class TimedEvents {
                     contentObject.getGuildUsers().addLevels();
 
                     //daily messages
-                    if (guildConfig.getChannelTypeID(Command.CHANNEL_GENERAL) != null) {
+                    if (guildConfig.getChannelIDsByType(Command.CHANNEL_GENERAL) != null) {
                         if (guildConfig.dailyMessage) {
-                            IChannel channel = Globals.getClient().getChannelByID(guildConfig.getChannelTypeID(Command.CHANNEL_GENERAL));
+                            IChannel channel = Globals.getClient().getChannelByID(guildConfig.getChannelIDsByType(Command.CHANNEL_GENERAL).get(0));
                             for (DailyMessageObject d : Globals.dailyMessages) {
                                 if (day.equals(d.getDayOfWeek())) {
                                     if (timeNow.getDayOfMonth() == 25 && timeNow.getMonth().equals(Month.DECEMBER)) {
@@ -138,30 +141,19 @@ public class TimedEvents {
         }, initialDelay * 1000, 24 * 60 * 60 * 1000);
     }
 
-//    public static void addWaiter(String userID, String guildID) {
-//        for (TimedObject g : TimerObjects) {
-//            if (g.getGuildID().equals(guildID)) {
-//                g.mannageWaiter(userID);
-//            }
-//        }
-//    }
-
-//    public static ArrayList<UserCountDown> getWaiterObjects(String guildID) {
-//        for (TimedObject g : TimerObjects) {
-//            if (g.getGuildID().equals(guildID)) {
-//                return g.getWaiterObjects();
-//            }
-//        }
-//        return null;
-//    }
-
-
-    public static boolean addReminder(String guildID, String userID, String channelID, long timeMins, String message) {
-        for (GuildContentObject task : Globals.getGuildContentObjects()) {
-            if (task.getGuildID().equals(guildID)) {
-                return task.getGuildUsers().addReminderObject(new ReminderObject(userID, channelID, message, timeMins));
+    public static boolean addReminder(String userID, String channelID, long timeSecs, String message) {
+        for (ReminderObject object : Globals.getGlobalData().getReminders()) {
+            if (object.getUserID().equals(userID)) {
+                return false;
             }
         }
+        ReminderObject object = new ReminderObject(userID, channelID, message, timeSecs);
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        if (object.getExecuteTime() - now.toEpochSecond() < 300) {
+            sendReminder(object);
+            object.setSent(true);
+        }
+        Globals.getGlobalData().addReminder(object);
         return true;
     }
 
@@ -182,28 +174,6 @@ public class TimedEvents {
         }, 1000, 1000);
     }
 
-    private static void doEventThreeSec() {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-//                for (GuildContentObject task : Globals.getGuildContentObjects()) {
-//                    ArrayList<UserCountDown> waiterObjects = task.getWaiterObjects();
-//                    for (int i = 0; i < waiterObjects.size(); i++) {
-//                        if (waiterObjects.get(i).getRemainderSecs() > 0) {
-//                            waiterObjects.get(i).setRemainderSecs(waiterObjects.get(i).getRemainderSecs() - 1);
-//                            if (waiterObjects.get(i).getRemainderSecs() == 0) {
-//                                waiterObjects.remove(i);
-//                                logger.debug("User with ID: " + waiterObjects.get(i).getID() + " removed from waiting list.");
-//                            }
-//                        }
-//                    }
-//                    task.setWaiterObjects(waiterObjects);
-//                }
-            }
-        }, 3 * 1000, 3000);
-    }
-
     private void doEventTenSec() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -214,7 +184,7 @@ public class TimedEvents {
 
                     //Mutes.
                     ArrayList<UserCountDown> mutedUsers = task.getGuildUsers().getMutedUsers();
-                    for (int i = 0; i < mutedUsers.size();i++) {
+                    for (int i = 0; i < mutedUsers.size(); i++) {
                         if (mutedUsers.get(i).getRemainderSecs() != -1) {
                             mutedUsers.get(i).tickDown(10);
                             if (mutedUsers.get(i).getRemainderSecs() == 0) {
@@ -227,49 +197,10 @@ public class TimedEvents {
         }, 1000 * 10, 10 * 1000);
     }
 
-    private static void doEventMin(ZonedDateTime nowUTC) {
-        ZonedDateTime nextTimeUTC;
-        long initialDelay = 0;
-        if (nowUTC.getMinute() < 59) {
-            nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
-        } else {
-            nextTimeUTC = nowUTC.withSecond(0).withHour(nowUTC.getHour() + 1).withMinute(0);
-        }
-        initialDelay = (nextTimeUTC.toEpochSecond() - nowUTC.toEpochSecond());
-        if (initialDelay < 30) {
-            initialDelay += 60;
-        }
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                for (GuildContentObject task : Globals.getGuildContentObjects()) {
-                    ArrayList<ReminderObject> reminderObjects = task.getGuildUsers().getReminderObjects();
-                    for (int i = 0; i < reminderObjects.size(); i++) {
-                        if (reminderObjects.get(i).getTimeMins() > 0) {
-                            reminderObjects.get(i).setTimeMins(reminderObjects.get(i).getTimeMins() - 1);
-                            if (reminderObjects.get(i).getTimeMins() == 0) {
-                                ReminderObject reminder = reminderObjects.get(i);
-                                IChannel channel = Globals.getClient().getChannelByID(reminder.getChannelID());
-                                String reminderMessage;
-                                reminderMessage = Globals.getClient().getUserByID(reminder.getUserID()).mention() + " " + reminder.getMessage();
-                                reminderMessage = TagSystem.tagMentionRemover(reminderMessage);
-                                Utility.sendMessage(reminderMessage, channel);
-                                logger.debug("User with ID: " + reminderObjects.get(i).getUserID() + " Sending reminder");
-                                reminderObjects.remove(i);
-                            }
-                        }
-                    }
-                    task.getGuildUsers().setReminderObjects(reminderObjects);
-                }
-            }
-        }, initialDelay * 1000, 1000 * 60);
-    }
-
     private static void doEventFiveMin(ZonedDateTime nowUTC) {
         while (!Globals.getClient().isReady()) ;
         ZonedDateTime nextTimeUTC;
-        long initialDelay = 0;
+        long initialDelay;
         if (nowUTC.getMinute() != 59) {
             nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
         } else {
@@ -283,24 +214,20 @@ public class TimedEvents {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
 
-
-                //Doing some Magic
-                if (!Globals.getGlobalData().isTaskComplete()) {
-                    logger.info("Performing Magical Wizardry.");
-                    for (GuildContentObject task : Globals.getGuildContentObjects()) {
-                        for (CCommandObject c : task.getCustomCommands().getCommandList()) {
-                            if (c.getContents(false).contains("#ifArgs#{;;")) {
-                                logger.info("converting code in $$" + c.getName() + " to new system");
-                                c.setContents(c.getContents(false).replace("#ifArgs#{;;", "#ifArgsEmpty#{"));
+                for (ReminderObject object : Globals.getGlobalData().getReminders()) {
+                    if (object.getExecuteTime() - now.toEpochSecond() < 350) {
+                        if (!object.isSent()){
+                            sendReminder(object);
+                            object.setSent(true);
+                        }else {
+                            if (object.getExecuteTime() - now.toEpochSecond() < 0){
+                                sendReminder(object);
                             }
                         }
                     }
-                    Globals.getGlobalData().taskComplete();
                 }
-
-
-
 
                 //Sending isAlive Check.
                 try {

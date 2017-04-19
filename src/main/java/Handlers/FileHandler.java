@@ -71,22 +71,6 @@ public class FileHandler {
         }
     }
 
-    /**saves data from POGO of type "object" to temp file using String "name".*/
-    public static File createTempFile(Object object, String name){
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try {
-            File file = File.createTempFile(name,".json");
-            FileWriter writer = new FileWriter(file);
-            gson.toJson(object,writer);
-            writer.close();
-            return file;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     /**Reads from a .Json File using path "file" and returns a POGO based on "objClass".*/
     public static Object readFromJson(String file, Class<?> objClass){
         Gson gson = new Gson();

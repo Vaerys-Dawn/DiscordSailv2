@@ -37,9 +37,9 @@ public class InfoHandler {
         String nextChunk;
         String imageTag;
         String[] splited;
-        String imagePrefix = "#image#{";
+        String imagePrefix = "<image>{";
         String imageSuffix = "}";
-        String tagBreak = "#split#";
+        String tagBreak = "<split>";
         String image;
 
         //prep for the everything...

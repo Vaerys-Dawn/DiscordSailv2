@@ -45,6 +45,7 @@ public class GetGuildInfo implements Command{
         boolean manageServer = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getID().equals(Globals.creatorID);
         boolean manageChannels = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getID().equals(Globals.creatorID);
 
+        Utility.sendFileURL("",guild.getIconURL(),command.client.getOrCreatePMChannel(command.author),true);
         builder.append("***[" + guildName.toUpperCase() + "]***");
         builder.append("\n\n> Guild ID : **" + guild.getID());
         builder.append("**\n> Creation Date : **" + creationDate.getYear() + " " + creationDate.getMonth() + " " + creationDate.getDayOfMonth() + " - " + creationDate.getHour() + ":" + creationDate.getMinute());
@@ -77,12 +78,13 @@ public class GetGuildInfo implements Command{
             builder.append("\n> Max Mentions: **" + config.maxMentionLimit + "**");
             builder.append("\n> Rate Limit: **" + config.messageLimit + "/10s**");
         }
-        if (manageChannels) {
-            builder.append("\n\n***[CHANNELS]***");
-            for (ChannelTypeObject c : config.getChannels()) {
-                builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getID()).getName() + "**");
-            }
-        }
+        // TODO: 09/04/2017 add this back in, make it display channels better.
+//        if (manageChannels) {
+//            builder.append("\n\n***[CHANNELS]***");
+//            for (ChannelTypeObject c : config.getChannels()) {
+//                builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getID()).getName() + "**");
+//            }
+//        }
 
         builder.append("\n\n***[ROLES]***");
         ArrayList<RoleStatsObject> statsObjects = new ArrayList<>();

@@ -25,6 +25,11 @@ public class RateLimiting implements GuildToggle{
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().rateLimiting;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

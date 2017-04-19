@@ -1,6 +1,7 @@
 package Main;
 
 import Handlers.FileHandler;
+import Handlers.PatchHandler;
 import POGOs.Config;
 import POGOs.GlobalData;
 import org.slf4j.Logger;
@@ -36,6 +37,8 @@ public class Main {
             }
         });
 
+
+
         String token;
         // you need to set a token in Token/Token.txt for the bot to run
         try {
@@ -57,6 +60,8 @@ public class Main {
             //load config phase 1
             Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
             GlobalData globalData = (GlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, GlobalData.class);
+
+
             config.initObject();
             FileHandler.writeToJson(Constants.FILE_CONFIG, config);
 
@@ -71,10 +76,15 @@ public class Main {
             //load config phase 2
             Globals.initConfig(client, config, globalData);
 
+            PatchHandler.globalPatches();
+
             //login + register listener.
             EventDispatcher dispatcher = client.getDispatcher();
             dispatcher.registerListener(new AnnotationListener());
             client.login();
+
+            //Init Patch system.
+
 
             //timed events get
             new TimedEvents();

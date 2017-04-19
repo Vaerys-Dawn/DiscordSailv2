@@ -25,6 +25,11 @@ public class ModuleModMuting implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().moduleModMute;
+    }
+
+    @Override
     public void execute(CommandObject command) {
         command.removeCommand(new Mute().names());
     }

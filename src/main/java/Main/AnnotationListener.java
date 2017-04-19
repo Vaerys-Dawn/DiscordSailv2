@@ -4,6 +4,7 @@ import Commands.CommandObject;
 import Handlers.DMHandler;
 import Handlers.FileHandler;
 import Handlers.MessageHandler;
+import Handlers.PatchHandler;
 import Interfaces.Command;
 import Objects.GuildContentObject;
 import Objects.SplitFirstObject;
@@ -32,9 +33,11 @@ import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -54,6 +57,8 @@ public class AnnotationListener {
         IGuild guild = event.getGuild();
         String guildID = guild.getID();
         logger.info("Starting Guild get process for Guild with ID: " + guildID);
+
+        PatchHandler.guildPatches(guild);
 
         //Create POGO templates
         GuildConfig guildConfig = new GuildConfig();
@@ -142,7 +147,6 @@ public class AnnotationListener {
         String command = "";
         while (!event.getClient().isReady()) ;
         GuildConfig guildConfig = Globals.getGuildContent(guild.getID()).getGuildConfig();
-
 
 
         //Set Console Response Channel.
@@ -309,19 +313,23 @@ public class AnnotationListener {
         CommandObject command = new CommandObject(event.getMessage());
         String content;
         IUser ourUser = command.client.getOurUser();
-        String infoID = command.guildConfig.getChannelTypeID(Command.CHANNEL_INFO);
-        String serverLogID = command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG);
-        String adminLogID = command.guildConfig.getChannelTypeID(Command.CHANNEL_ADMIN_LOG);
+
+        List<String> infoID = command.guildConfig.getChannelIDsByType(Command.CHANNEL_INFO);
+        List<String> serverLogID = command.guildConfig.getChannelIDsByType(Command.CHANNEL_SERVER_LOG);
+        List<String> adminLogID = command.guildConfig.getChannelIDsByType(Command.CHANNEL_ADMIN_LOG);
+        if (command.guildConfig.dontLogBot && command.author.isBot()) {
+            return;
+        }
         if (event.getMessage() == null) {
             return;
         }
-        if (serverLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
+        if (serverLogID != null && serverLogID.get(0).equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
             return;
         }
-        if (infoID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
+        if (infoID != null && infoID.get(0).equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
             return;
         }
-        if (adminLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
+        if (adminLogID != null && adminLogID.get(0).equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
             return;
         }
         if (command.guildConfig.deleteLogging) {
@@ -390,53 +398,60 @@ public class AnnotationListener {
         CommandObject command = new CommandObject(event.getMessage());
 
         IUser ourUser = command.client.getOurUser();
-        String serverLogID = command.guildConfig.getChannelTypeID(Command.CHANNEL_SERVER_LOG);
-        if (event.getMessage() == null) {
-            return;
-        }
-        if (serverLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
-            return;
-        }
-        if (command.guildConfig.editLogging) {
-            //formats how long ago this was.
-            String formatted;
-            String oldContent;
-            String newContent;
-            String response = "";
-            ZonedDateTime oldMessageTime = event.getOldMessage().getTimestamp().atZone(ZoneOffset.UTC);
-            ZonedDateTime newMessageTime = event.getNewMessage().getEditedTimestamp().get().atZone(ZoneOffset.UTC);
-            int charLimit;
-            long difference = newMessageTime.toEpochSecond() - oldMessageTime.toEpochSecond();
-            if (command.guildConfig.useTimeStamps) {
-                formatted = "at `" + Utility.formatTimestamp(oldMessageTime) + " - UTC`";
-            } else {
-                formatted = "from " + Utility.formatTimeDifference(difference);
-            }
-            response += "> **@" + command.authorUserName + "'s** Message " + formatted + " was **Edited** in channel: " + command.channel.mention() + ". ";
-            //remove excess text that would cause a max char limit error.
-            if (command.message.getContent().isEmpty()) {
+        List<String> logID = command.guildConfig.getChannelIDsByType(Command.CHANNEL_SERVER_LOG);
+        if (logID != null) {
+            String serverLogID = logID.get(0);
+
+            if (command.guildConfig.dontLogBot && command.author.isBot()) {
                 return;
             }
-            if (command.guildConfig.extendEditLog) {
-                charLimit = 900;
-            } else {
-                charLimit = 1800;
+            if (event.getMessage() == null) {
+                return;
             }
-            if (event.getOldMessage().getContent().length() > charLimit) {
-                oldContent = Utility.unFormatMentions(event.getOldMessage()).substring(0, charLimit) + "...";
-            } else {
-                oldContent = Utility.unFormatMentions(event.getOldMessage());
+            if (serverLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
+                return;
             }
-            if (event.getNewMessage().getContent().length() > charLimit) {
-                newContent = Utility.unFormatMentions(event.getNewMessage()).substring(0, charLimit) + "...";
-            } else {
-                newContent = Utility.unFormatMentions(event.getNewMessage());
+            if (command.guildConfig.editLogging) {
+                //formats how long ago this was.
+                String formatted;
+                String oldContent;
+                String newContent;
+                String response = "";
+                ZonedDateTime oldMessageTime = event.getOldMessage().getTimestamp().atZone(ZoneOffset.UTC);
+                ZonedDateTime newMessageTime = event.getNewMessage().getEditedTimestamp().get().atZone(ZoneOffset.UTC);
+                int charLimit;
+                long difference = newMessageTime.toEpochSecond() - oldMessageTime.toEpochSecond();
+                if (command.guildConfig.useTimeStamps) {
+                    formatted = "at `" + Utility.formatTimestamp(oldMessageTime) + " - UTC`";
+                } else {
+                    formatted = "from " + Utility.formatTimeDifference(difference);
+                }
+                response += "> **@" + command.authorUserName + "'s** Message " + formatted + " was **Edited** in channel: " + command.channel.mention() + ". ";
+                //remove excess text that would cause a max char limit error.
+                if (command.message.getContent().isEmpty()) {
+                    return;
+                }
+                if (command.guildConfig.extendEditLog) {
+                    charLimit = 900;
+                } else {
+                    charLimit = 1800;
+                }
+                if (event.getOldMessage().getContent().length() > charLimit) {
+                    oldContent = Utility.unFormatMentions(event.getOldMessage()).substring(0, charLimit) + "...";
+                } else {
+                    oldContent = Utility.unFormatMentions(event.getOldMessage());
+                }
+                if (event.getNewMessage().getContent().length() > charLimit) {
+                    newContent = Utility.unFormatMentions(event.getNewMessage()).substring(0, charLimit) + "...";
+                } else {
+                    newContent = Utility.unFormatMentions(event.getNewMessage());
+                }
+                response += "**\nMessage's Old Contents:**\n" + oldContent;
+                if (command.guildConfig.extendEditLog) {
+                    response += "\n**Message's New Contents:**\n" + newContent;
+                }
+                Utility.sendLog(response, command.guildConfig, false);
             }
-            response += "**\nMessage's Old Contents:**\n" + oldContent;
-            if (command.guildConfig.extendEditLog) {
-                response += "\n**Message's New Contents:**\n" + newContent;
-            }
-            Utility.sendLog(response, command.guildConfig, false);
         }
     }
 

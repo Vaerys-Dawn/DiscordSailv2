@@ -25,6 +25,11 @@ public class DeleteLogging implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().deleteLogging;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

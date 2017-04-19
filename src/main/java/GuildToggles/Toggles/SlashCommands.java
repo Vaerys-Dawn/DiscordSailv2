@@ -25,6 +25,11 @@ public class SlashCommands implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().slashCommands;
+    }
+
+    @Override
     public void execute(CommandObject command) {
         command.removeCommand(new SlashList().names());
     }

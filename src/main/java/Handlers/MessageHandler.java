@@ -1,6 +1,7 @@
 package Handlers;
 
 import Commands.CommandObject;
+import Interfaces.ChannelSetting;
 import Interfaces.Command;
 import Interfaces.SlashCommand;
 import Main.Globals;
@@ -39,8 +40,6 @@ public class MessageHandler {
                 e.printStackTrace();
             }
         }
-
-
 
         checkBlacklist(commandObject);
         checkMentionCount(commandObject);
@@ -90,12 +89,29 @@ public class MessageHandler {
                         return;
                     }
                     if (c.channel() != null && !Utility.canBypass(commandObject.author, commandObject.guild)) {
-                        IChannel correctChannel = client.getChannelByID(guildConfig.getChannelTypeID(c.channel()));
-                        if (correctChannel != null) {
-                            if (!channel.getID().equals(guildConfig.getChannelTypeID(c.channel()))) {
-                                Utility.sendMessage("> Command must be performed in: " + correctChannel.mention(), channel);
-                                return;
+                        boolean channelFound = false;
+                        ArrayList<String> channelMentions = new ArrayList<>();
+                        for (ChannelSetting s: commandObject.channelSettings){
+                            if (s.type().equals(c.channel())){
+                                if (s.getIDs(commandObject.guildConfig) != null){
+                                    for (String id : s.getIDs(commandObject.guildConfig)){
+                                        if (id.equals(commandObject.channelID)){
+                                            channelFound = true;
+                                        }
+                                        channelMentions.add(commandObject.client.getChannelByID(id).mention());
+                                    }
+                                }else {
+                                    channelFound = true;
+                                }
                             }
+                        }
+                        if (!channelFound){
+                            if (channelMentions.size() > 1){
+                                Utility.sendMessage("> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true), channel);
+                            }else {
+                                Utility.sendMessage("> Command must be performed in: " + channelMentions.get(0), channel);
+                            }
+                            return;
                         }
                     }
                     if (c.perms().length != 0 && !Utility.canBypass(commandObject.author, commandObject.guild)) {
@@ -190,7 +206,10 @@ public class MessageHandler {
                         boolean failed = Utility.roleManagement(command.author, command.guild, command.guildConfig.getMutedRole().getRoleID(), true).get();
                         command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(command.guild, command.author, oldRoles, command.author.getRolesForGuild(command.guild)));
                         if (!failed) {
-                            IChannel adminChannel = command.client.getChannelByID(command.guildConfig.getChannelTypeID(Command.CHANNEL_ADMIN));
+                            IChannel adminChannel = null;
+                            if (command.guildConfig.getChannelIDsByType(Command.CHANNEL_ADMIN) != null) {
+                                adminChannel = command.client.getChannelByID(command.guildConfig.getChannelIDsByType(Command.CHANNEL_ADMIN).get(0));
+                            }
                             if (adminChannel == null) {
                                 adminChannel = command.channel;
                             }

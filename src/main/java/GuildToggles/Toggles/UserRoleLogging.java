@@ -25,6 +25,11 @@ public class UserRoleLogging implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().userRoleLogging;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

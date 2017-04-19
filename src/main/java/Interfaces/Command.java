@@ -29,11 +29,13 @@ public interface Command {
     String CHANNEL_ADMIN = "Admin";
     String CHANNEL_INFO = "Info";
     String CHANNEL_SHITPOST = "ShitPost";
+    String CHANNEL_DONT_LOG = "DontLog";
 
     String spacer = "\u200B";
     String indent = "    ";
     String codeBlock = "```";
     String ownerOnly = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
+
 
     String execute(String args, CommandObject command);
 

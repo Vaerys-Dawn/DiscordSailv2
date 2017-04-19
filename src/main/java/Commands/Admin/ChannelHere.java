@@ -1,6 +1,7 @@
 package Commands.Admin;
 
 import Commands.CommandObject;
+import Interfaces.ChannelSetting;
 import Interfaces.Command;
 import Main.Utility;
 import Objects.XEmbedBuilder;
@@ -8,6 +9,8 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -15,23 +18,24 @@ import java.util.Collections;
 public class ChannelHere implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        StringBuilder builder = new StringBuilder();
+        String desc = "";
         if (!args.isEmpty()) {
-            for (String channelType : command.channelTypes) {
-                if (args.equalsIgnoreCase(channelType)) {
-                    command.guildConfig.setUpChannel(channelType, command.channelID);
-                    return "> This channel is now the Server's **" + channelType + "** channel.";
+            for (ChannelSetting s : command.channelSettings) {
+                if (args.equalsIgnoreCase(s.type())) {
+                    return s.toggleSetting(command.guildConfig,command.channelID);
                 }
 
             }
-            builder.append("> Could not find channel type \"" + args + "\"\n");
+            desc = "> Could not find channel type \"" + args + "\"\n";
         }
         XEmbedBuilder embedBuilder = new XEmbedBuilder();
         String title = "> Here is a list of available Channel Types:\n";
-        ArrayList<String> channels = command.channelTypes;
-        Collections.sort(channels);
-        embedBuilder.withDesc(builder.toString());
-        Utility.listFormatterEmbed(title, embedBuilder, channels, true);
+
+        ArrayList<ChannelSetting> channelSettings = command.channelSettings;
+        List<String> types = channelSettings.stream().map(ChannelSetting::type).collect(Collectors.toList());
+        Collections.sort(types);
+        embedBuilder.withDesc(desc);
+        Utility.listFormatterEmbed(title, embedBuilder, (ArrayList<String>) types, true);
         embedBuilder.appendField(spacer, Utility.getCommandInfo(this, command), false);
         embedBuilder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
         Utility.sendEmbedMessage("", embedBuilder, command.channel);
@@ -40,7 +44,7 @@ public class ChannelHere implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"ChannelHere", "SetupChannel"};
+        return new String[]{"Channel", "ChannelHere", "ChannelSetting"};
     }
 
     @Override

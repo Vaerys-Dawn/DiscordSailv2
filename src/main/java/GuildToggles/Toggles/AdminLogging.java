@@ -25,6 +25,11 @@ public class AdminLogging implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().adminLogging;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

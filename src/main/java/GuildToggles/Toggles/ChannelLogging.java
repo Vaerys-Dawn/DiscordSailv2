@@ -25,6 +25,11 @@ public class ChannelLogging implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().channelLogging;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

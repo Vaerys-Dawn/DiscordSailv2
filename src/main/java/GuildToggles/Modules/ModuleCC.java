@@ -27,6 +27,11 @@ public class ModuleCC implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().moduleCC;
+    }
+
+    @Override
     public void execute(CommandObject command) {
         command.removeCommandsByType(Command.TYPE_CC);
         command.removeChannel(Command.CHANNEL_SHITPOST);

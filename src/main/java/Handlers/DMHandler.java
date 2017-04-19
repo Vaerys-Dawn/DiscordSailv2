@@ -58,7 +58,15 @@ public class DMHandler {
         }else if (!message.getAuthor().getID().equals(Globals.creatorID)){
             String logging = "[" + message.getAuthor().getID() + "] " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + ": " + message.toString();
             logger.info(logging);
-            Utility.sendDM(logging, Globals.creatorID);
+            if(message.getAttachments().size() > 0){
+                String attachmemts = "";
+                for (IMessage.Attachment a: message.getAttachments()){
+                    attachmemts += "\n" + a.getUrl();
+                }
+                Utility.sendDM(logging + attachmemts, Globals.creatorID);
+            }else {
+                Utility.sendDM(logging, Globals.creatorID);
+            }
         }
     }
 }

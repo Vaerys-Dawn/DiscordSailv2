@@ -25,6 +25,11 @@ public class UseTimeStamps implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().useTimeStamps;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

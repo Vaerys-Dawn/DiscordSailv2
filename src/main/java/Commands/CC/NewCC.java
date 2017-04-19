@@ -6,18 +6,25 @@ import Main.TagSystem;
 import Objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.List;
+
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class NewCC implements Command{
+public class NewCC implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         boolean isShitpost = false;
         boolean isLocked = false;
         SplitFirstObject splitfirst = new SplitFirstObject(args);
         String newContent;
-        if (command.channel.getID().equals(command.guildConfig.getChannelTypeID(Command.CHANNEL_SHITPOST))) {
-            isShitpost = true;
+        List<String> shitpostChannels = command.guildConfig.getChannelIDsByType(Command.CHANNEL_SHITPOST);
+        if (shitpostChannels != null) {
+            for (String id : shitpostChannels) {
+                if (command.channelID.equals(id)) {
+                    isShitpost = true;
+                }
+            }
         }
         String nameCC = splitfirst.getFirstWord();
         if (splitfirst.getRest() == null || splitfirst.getRest().isEmpty()) {

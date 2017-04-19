@@ -25,6 +25,11 @@ public class EditLogging implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().editLogging;
+    }
+
+    @Override
     public void execute(CommandObject command) {
         command.removeToggle(new ExtendEditLog().name());
     }

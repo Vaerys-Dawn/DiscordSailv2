@@ -26,6 +26,11 @@ public class ModuleRoles implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().moduleRoles;
+    }
+
+    @Override
     public void execute(CommandObject command) {
         command.removeCommandsByType(Command.TYPE_ROLE_SELECT);
     }

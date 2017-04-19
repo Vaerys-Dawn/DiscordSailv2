@@ -35,9 +35,9 @@ public class Help implements Command {
 
         //getting Types of commands.
 
-        if (!command.authorID.equalsIgnoreCase(Globals.creatorID)){
-            for (int i = 0; i < types.size();i++){
-                if (types.get(i).equals(TYPE_CREATOR)){
+        if (!command.authorID.equalsIgnoreCase(Globals.creatorID)) {
+            for (int i = 0; i < types.size(); i++) {
+                if (types.get(i).equals(TYPE_CREATOR)) {
                     types.remove(i);
                 }
             }
@@ -72,7 +72,8 @@ public class Help implements Command {
                     isFound = true;
                     if (s.equalsIgnoreCase(TYPE_DM)) {
                         commandList.addAll(Globals.getCommandsDM().stream().map(c -> Globals.defaultPrefixCommand + c.names()[0]).collect(Collectors.toList()));
-                        suffix = "These commands can only be performed in DMs.";
+                        suffix = "**These commands can only be performed in DMs.**\n" +
+                                "> If you send a non command message to my DMs it will send it to my creator.";
                     } else {
                         for (Command c : commands) {
                             if (c.type().equalsIgnoreCase(s)) {

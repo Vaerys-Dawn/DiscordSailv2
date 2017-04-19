@@ -1,4 +1,4 @@
-package BadCode;
+package OldCode;
 
 import Main.Globals;
 import Objects.CCommandObject;
@@ -15,8 +15,8 @@ public class CustomCommands {
     //0 = User ID
     //2 = Contents
 
-    ArrayList<String[]> commands = new ArrayList<String[]>();
-    final String[] commandNotFound = {"noUser", "404", "No Command with that name found."};
+    ArrayList<String[]> commands = new ArrayList<>();
+//    final String[] commandNotFound = {"noUser", "404", "No Command with that name found."};
 
     public CCommandObject convertCommand(String command){
         boolean islocked = false;

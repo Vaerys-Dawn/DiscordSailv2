@@ -1,13 +1,11 @@
 package Main;
 
+import ChannelSettings.InitChannels;
 import Commands.Admin.ChannelHere;
 import Commands.CommandInit;
 import GuildToggles.ToggleInit;
 import Handlers.FileHandler;
-import Interfaces.Command;
-import Interfaces.DMCommand;
-import Interfaces.GuildToggle;
-import Interfaces.SlashCommand;
+import Interfaces.*;
 import Objects.DailyMessageObject;
 import Objects.GuildContentObject;
 import POGOs.*;
@@ -18,6 +16,7 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
+import javax.swing.plaf.PanelUI;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -49,8 +48,8 @@ public class Globals {
     private static ArrayList<GuildContentObject> guildContentObjects = new ArrayList<>();
     private static ArrayList<Command> commands = new ArrayList<>();
     private static ArrayList<DMCommand> commandsDM = new ArrayList<>();
-    private static ArrayList<String> channelTypes = new ArrayList<>();
     private static ArrayList<String> commandTypes = new ArrayList<>();
+    private static ArrayList<ChannelSetting> channelSettings = new ArrayList<>();
     private static ArrayList<GuildToggle> guildGuildToggles = new ArrayList<>();
     private static ArrayList<SlashCommand> slashCommands = new ArrayList<>();
 
@@ -91,37 +90,16 @@ public class Globals {
 
         slashCommands = SlashInit.get();
 
+        channelSettings = InitChannels.get();
+
         //validate commands
         validate();
 
         //get Command Types
         commandTypes.add(Command.TYPE_DM);
 
-        //Init Channel Types
-        //Manually added Channels (ones not used in any commands)
-        channelTypes.add(Command.CHANNEL_SERVER_LOG);
-        channelTypes.add(Command.CHANNEL_ADMIN_LOG);
-        channelTypes.add(Command.CHANNEL_ADMIN);
-        channelTypes.add(Command.CHANNEL_SHITPOST);
-        channelTypes.add(Command.CHANNEL_GENERAL);
-
-
-        //automatically added Channels (these are added if they are used in any command)
-        for (Command c : commands) {
-            if (c.channel() != null) {
-                boolean channelFound = false;
-                for (String s : channelTypes) {
-                    if (c.channel().equals(s)) {
-                        channelFound = true;
-                    }
-                }
-                if (!channelFound && c.channel() != null) {
-                    channelTypes.add(c.channel());
-                }
-            }
-        }
         //auto remover code for Commands.Admin.ChannelHere, will remove if channels are not in use.
-        if (channelTypes.size() == 0) {
+        if (channelSettings.size() == 0) {
             for (int i = 0; i < commands.size(); i++) {
                 if (commands.get(i).names()[0].equalsIgnoreCase(new ChannelHere().names()[0])) {
                     commands.remove(i);
@@ -145,7 +123,7 @@ public class Globals {
         logger.info(commands.size() + " Commands Loaded.");
         logger.info(commandsDM.size() + " DM Commands Loaded.");
         logger.info(commandTypes.size() + " Command Types Loaded.");
-        logger.info(channelTypes.size() + " Channel Types Loaded.");
+        logger.info(channelSettings.size() + " Channel Types Loaded.");
         logger.info(guildGuildToggles.size() + " Guild Toggles Loaded.");
         logger.info(slashCommands.size() + " Slash Commands Loaded.");
     }
@@ -202,6 +180,12 @@ public class Globals {
                 throw new IllegalArgumentException(s.getClass().getName() + " Slash Command Response must not be null.");
             if (!s.call().startsWith("/"))
                 throw new IllegalArgumentException(s.getClass().getName() + " Slash Command call must Start with \"/\"");
+        }
+
+        for (ChannelSetting s: channelSettings){
+            if (s.type() == null || s.type().isEmpty()){
+                throw new IllegalArgumentException(s.getClass().getName() + " Channel Type cannot be null.");
+            }
         }
     }
 
@@ -325,8 +309,8 @@ public class Globals {
         return commandTypes;
     }
 
-    public static ArrayList<String> getChannelTypes() {
-        return channelTypes;
+    public static ArrayList<ChannelSetting> getChannelSettings() {
+        return channelSettings;
     }
 
     public static ArrayList<GuildToggle> getGuildGuildToggles() {

@@ -257,6 +257,7 @@ public class Utility {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (MissingPermissionsException e) {
+                sendMessage("> Could not send File, missing permissions.",channel);
                 logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
                 return true;
@@ -386,6 +387,29 @@ public class Utility {
             } catch (DiscordException e) {
                 if (e.getMessage().contains("CloudFlare")) {
                     sendDM(message, userID);
+                } else {
+                    e.printStackTrace();
+                    return true;
+                }
+            } catch (NullPointerException e) {
+                logger.debug("[sendDM] " + e.getMessage());
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public static RequestBuffer.RequestFuture<Boolean> sendFileDM(String message, File attatchment, String userID) {
+        return RequestBuffer.request(() -> {
+            try {
+                IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
+                if (message == null || message.isEmpty()) {
+                    return true;
+                }
+                sendFile(message, attatchment, channel);
+            } catch (DiscordException e) {
+                if (e.getMessage().contains("CloudFlare")) {
+                    sendFileDM(message,attatchment, userID);
                 } else {
                     e.printStackTrace();
                     return true;
@@ -763,11 +787,11 @@ public class Utility {
             if (!(args == null || args.isEmpty())) {
                 message += " with args: `" + args + "`";
             }
-            if (c.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG) != null) {
-                channel = commandObject.client.getChannelByID(c.getGuildConfig().getChannelTypeID(Command.CHANNEL_SERVER_LOG));
+            if (c.getGuildConfig().getChannelIDsByType(Command.CHANNEL_SERVER_LOG) != null) {
+                channel = commandObject.client.getChannelByID(c.getGuildConfig().getChannelIDsByType(Command.CHANNEL_SERVER_LOG).get(0));
             }
-            if (c.getGuildConfig().getChannelTypeID(Command.CHANNEL_ADMIN_LOG) != null) {
-                channel = commandObject.client.getChannelByID(c.getGuildConfig().getChannelTypeID(Command.CHANNEL_ADMIN_LOG));
+            if (c.getGuildConfig().getChannelIDsByType(Command.CHANNEL_ADMIN_LOG) != null) {
+                channel = commandObject.client.getChannelByID(c.getGuildConfig().getChannelIDsByType(Command.CHANNEL_ADMIN_LOG).get(0));
             }
             if (channel != null) {
                 sendMessage(message, channel);
@@ -860,15 +884,18 @@ public class Utility {
         return from;
     }
 
-    public static boolean isImageLink(String suffix) {
+    public static boolean isImageLink(String link) {
         ArrayList<String> suffixes = new ArrayList<String>() {{
             add(".png");
             add(".gif");
             add(".jpg");
             add(".webp");
         }};
+        if (link.contains("\n") || link.contains(" ")){
+            return false;
+        }
         for (String s : suffixes) {
-            if (suffix.toLowerCase().endsWith(s)) {
+            if (link.toLowerCase().endsWith(s)) {
                 return true;
             }
         }
@@ -936,9 +963,15 @@ public class Utility {
     public static void sendLog(String content, GuildConfig config, boolean isAdmin) {
         IChannel logChannel;
         if (isAdmin) {
-            logChannel = Globals.getClient().getChannelByID(config.getChannelTypeID(Command.CHANNEL_ADMIN_LOG));
+            if (config.getChannelIDsByType(Command.CHANNEL_ADMIN_LOG) == null){
+                return;
+            }
+            logChannel = Globals.getClient().getChannelByID(config.getChannelIDsByType(Command.CHANNEL_ADMIN_LOG).get(0));
         } else {
-            logChannel = Globals.getClient().getChannelByID(config.getChannelTypeID(Command.CHANNEL_SERVER_LOG));
+            if (config.getChannelIDsByType(Command.CHANNEL_SERVER_LOG) == null){
+                return;
+            }
+            logChannel = Globals.getClient().getChannelByID(config.getChannelIDsByType(Command.CHANNEL_SERVER_LOG).get(0));
         }
         if (logChannel == null) {
             return;

@@ -25,6 +25,11 @@ public class ExtendEditLog implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().extendEditLog;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

@@ -25,6 +25,11 @@ public class ShitpostFiltering implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().shitPostFiltering;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

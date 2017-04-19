@@ -2,6 +2,7 @@ package Commands.Characters;
 
 import Commands.CommandObject;
 import Interfaces.Command;
+import Main.Client;
 import Main.Utility;
 import Objects.CharacterObject;
 import Objects.RoleTypeObject;
@@ -17,36 +18,43 @@ import java.util.ArrayList;
 public class CharInfo implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        for (CharacterObject object: command.characters.getCharacters()){
-            if (object.getName().equalsIgnoreCase(args)){
+        for (CharacterObject object : command.characters.getCharacters()) {
+            if (object.getName().equalsIgnoreCase(args)) {
                 XEmbedBuilder builder = new XEmbedBuilder();
                 builder.withTitle(object.getNickname());
 
                 ArrayList<IRole> roles = new ArrayList<>();
                 ArrayList<String> roleNames = new ArrayList<>();
-                for (RoleTypeObject role : object.getRoles()){
-                    roles.add(command.client.getRoleByID(role.getRoleID()));
-                    roleNames.add(command.client.getRoleByID(role.getRoleID()).getName());
+                for (RoleTypeObject role : object.getRoles()) {
+                    if (command.client.getRoleByID(role.getRoleID()) != null) {
+                        roles.add(command.client.getRoleByID(role.getRoleID()));
+                        roleNames.add(command.client.getRoleByID(role.getRoleID()).getName());
+                    }
                 }
-                if (roles.size() > 0) {
+                if (roles.size() != 0) {
                     builder.withColor(Utility.getUsersColour(roles, command.guild));
-                }else {
-                    builder.withColor(Utility.getUsersColour(command.client.getOurUser(),command.guild));
+                } else {
+                    builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
                 }
 
                 String description = "";
-                description += "Age: " + object.getAge();
+                description += "age: " + object.getAge();
                 description += "\nGender: " + object.getGender();
-                description += "\n" + Utility.listFormatter(roleNames,true);
+                if (roleNames.size() != 0) {
+                    description += "\n" + Utility.listFormatter(roleNames, true);
+                }
                 description += "\nBio: " + object.getShortBio();
                 if (object.getLongBioURL() != null && !object.getLongBioURL().isEmpty()) {
                     description += "\n\n[Long Description Link...](" + object.getLongBioURL() + ")";
                 }
                 builder.withDesc(description);
                 if (object.getAvatarURL() != null && !object.getAvatarURL().isEmpty()) {
+                    if (object.getAvatarURL().contains("\n") || object.getAvatarURL().contains(" ")){
+                        return "> An Error Occurred. Avatar url needs to be reset.";
+                    }
                     builder.withThumbnail(object.getAvatarURL());
                 }
-                Utility.sendEmbedMessage("",builder,command.channel);
+                Utility.sendEmbedMessage("", builder, command.channel);
                 return null;
             }
         }
@@ -55,7 +63,7 @@ public class CharInfo implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"CharInfo","InfoChar"};
+        return new String[]{"CharInfo", "InfoChar"};
     }
 
     @Override

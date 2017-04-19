@@ -25,6 +25,11 @@ public class CompEntries implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().compEntries;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

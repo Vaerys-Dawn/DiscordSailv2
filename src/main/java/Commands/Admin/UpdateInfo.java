@@ -12,7 +12,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class UpdateInfo implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        if (command.guildConfig.getChannelTypeID(Command.CHANNEL_INFO) == null) {
+        if (command.guildConfig.getChannelIDsByType(Command.CHANNEL_INFO) == null) {
             return "> No Info channel set up yet, you need to set one up in order to run this command.\n" + Utility.getCommandInfo(this,command);
         } else {
             new InfoHandler(command.channel, command.guild);

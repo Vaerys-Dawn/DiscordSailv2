@@ -25,6 +25,11 @@ public class DailyMessage implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().dailyMessage;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

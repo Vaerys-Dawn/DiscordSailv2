@@ -98,4 +98,11 @@ public class Competition {
         return builder.toString();
     }
 
+    public void purgeVotes() {
+        voting = new ArrayList<>();
+    }
+
+    public void purgeEntries() {
+        entries = new ArrayList<>();
+    }
 }

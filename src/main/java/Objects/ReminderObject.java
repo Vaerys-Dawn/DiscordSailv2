@@ -1,19 +1,22 @@
 package Objects;
 
+import Main.Globals;
+
 /**
- * Created by Vaerys on 13/10/2016.
+ * Created by Vaerys on 05/04/2017.
  */
 public class ReminderObject {
     String userID;
     String channelID;
     String message;
-    long timeMins;
+    boolean sent = false;
+    long executeTime;
 
-    public ReminderObject(String userID, String channelID, String message, long timeMins) {
+    public ReminderObject(String userID, String channelID, String message, long reminderTime) {
         this.userID = userID;
         this.channelID = channelID;
-        this.message = message;
-        this.timeMins = timeMins;
+        this.message = Globals.getClient().getUserByID(userID).mention() + message;
+        this.executeTime = reminderTime;
     }
 
     public String getUserID() {
@@ -28,11 +31,15 @@ public class ReminderObject {
         return message;
     }
 
-    public long getTimeMins() {
-        return timeMins;
+    public long getExecuteTime() {
+        return executeTime;
     }
 
-    public void setTimeMins(long timeMins) {
-        this.timeMins = timeMins;
+    public void setSent(boolean sent) {
+        this.sent = sent;
+    }
+
+    public boolean isSent() {
+        return sent;
     }
 }

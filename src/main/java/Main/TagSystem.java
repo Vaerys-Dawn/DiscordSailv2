@@ -1,7 +1,6 @@
 package Main;
 
 import Annotations.TagAnnotation;
-import Interfaces.Command;
 import Objects.ReplaceObject;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.*;
@@ -34,8 +33,8 @@ public class TagSystem {
         response = tagIfName(response, message.getAuthor(), message.getGuild());
         response = tagEmptyArgs(response,args);
         response = tagIfArgs(response, args);
-        response = tagRegex(response, "#replace#{", "}", ";;");
-        response = tagRegex(response, "#replace!#(", ")#!r#", "::");
+        response = tagRegex(response, "<replace>{", "}", ";;");
+        response = tagRegex(response, "<replace!>(", ")</r>", "::");
         response = tagRandNum(response);
         response = tagMentionRemover(response);
         response = tagToCaps(response);
@@ -67,23 +66,23 @@ public class TagSystem {
 
     @TagAnnotation(name = "Author", description = "Replaces this tag with the author's Display name.", usage = "#author#", priority = 9)
     private static String tagGetAuthor(String from, IUser author, IGuild guild) {
-        return from.replace("#author#", author.getDisplayName(guild));
+        return from.replace("<author>", author.getDisplayName(guild));
     }
 
     @TagAnnotation(name = "UserName", description = "Replaces this tag with the author's Display name.", usage = "#username#", priority = 9)
     private static String tagGetUsername(String from, IUser author) {
-        return from.replace("#username#", author.getName());
+        return from.replace("<username>", author.getName());
     }
 
     @TagAnnotation(name = "Args", description = "This tag replaces the tag with anything after the custom command.", usage = "#args#", priority = 1)
     public static String tagArgs(String from, String args) {
-        return from.replace("#args#", args);
+        return from.replace("<args>", args);
     }
 
     @TagAnnotation(name = "Args!", description = "This tag replaces with the word with the position of the number in the tag's arguments.", usage = "#args!#{[Position]}", priority = 2)
     public static String tagSpecialArgs(String from, String args) {
         String tag;
-        String prefix = "#args!#{";
+        String prefix = "<args!>{";
         String suffix = "}";
         String lastAttempt;
         if (from.contains(prefix)) {
@@ -116,7 +115,7 @@ public class TagSystem {
             type = Constants.TAG_TYPE_CC)
     public static String tagRandom(String from) {
         String tagRandom;
-        String prefixRandom = "#random#{";
+        String prefixRandom = "<random>{";
         String suffixRandom = "}";
         String lastAttempt;
         if (from.contains(prefixRandom)) {
@@ -166,7 +165,7 @@ public class TagSystem {
             type = Constants.TAG_TYPE_CC)
     public static String tagIfRole(String from, IUser author, IGuild guild) {
         String tag;
-        String prefix = "#ifRole#{";
+        String prefix = "<ifRole>{";
         String suffix = "}";
         String lastAttempt;
         if (from.contains(prefix)) {
@@ -195,7 +194,7 @@ public class TagSystem {
             type = Constants.TAG_TYPE_CC)
     public static String tagIfName(String from, IUser author, IGuild guild) {
         String tag;
-        String prefix = "#ifName#{";
+        String prefix = "<ifName>{";
         String suffix = "}";
         String lastAttempt;
         if (from.contains(prefix)) {
@@ -206,7 +205,7 @@ public class TagSystem {
                     ArrayList<String> splitString = new ArrayList<>(Arrays.asList(tag.split(";;")));
                     String toRegex = prefix + tag + suffix;
                     if (splitString.size() == 3) {
-                        if (author.getDisplayName(guild).toString().toLowerCase().contains(splitString.get(0).toLowerCase())) {
+                        if (author.getDisplayName(guild).toLowerCase().contains(splitString.get(0).toLowerCase())) {
                             from = from.replace(toRegex, splitString.get(1));
                         } else {
                             from = from.replace(toRegex, splitString.get(2));
@@ -222,18 +221,18 @@ public class TagSystem {
 
     @TagAnnotation(name = "Spacer", description = "Creates a blank character in place of this tag, the blank character does not take up space.", usage = "#spacer#")
     public static String tagSpacer(String from) {
-        return from.replace("#spacer#", "\u200b");
+        return from.replace("<spacer>", "\u200b");
     }
 
     @TagAnnotation(name = "NoBreak", description = "Removes a \\n from the command if you put this tag at the end of the line.", usage = "#!break#")
     public static String tagNoNL(String from) {
-        return from.replace("#!break#\n", "");
+        return from.replace("<!break>\n", "");
     }
 
     @TagAnnotation(name = "IfArgs", description = "Replaces the tag with a certain response based if #args# contains something or not.", usage = "#ifArgs#{[Test];;[ResponseTrue];;[ResponseFalse]}", priority = 3)
     public static String tagIfArgs(String from, String args) {
         String tag;
-        String prefix = "#ifArgs#{";
+        String prefix = "<ifArgs>{";
         String suffix = "}";
         String lastAttempt;
         if (from.contains(prefix)) {
@@ -259,7 +258,7 @@ public class TagSystem {
     }
 
     public static String tagEmptyArgs(String from, String args){
-        String prefix = "#ifArgsEmpty#{";
+        String prefix = "<ifArgsEmpty>{";
         String suffix = "}";
         String tag;
         String lastAttempt;
@@ -288,7 +287,7 @@ public class TagSystem {
     @TagAnnotation(name = "RandNum", description = "Replaces the tag with a random number between the first number and the second number(inclusive).", usage = "#randNum#{[RandMin];;[RandMax]}", priority = 5)
     public static String tagRandNum(String from) {
         String tag;
-        String prefix = "#randNum#{";
+        String prefix = "<randNum>{";
         String suffix = "}";
         String lastAttempt;
         if (from.contains(prefix)) {
@@ -324,19 +323,19 @@ public class TagSystem {
     }
 
     public static String testForShit(String from) {
-        return from.replace("#shitpost#", "");
+        return from.replace("<shitpost>", "");
     }
 
     public static String testForLock(String from, IUser author, IGuild guild) {
         if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild)) {
-            return from.replace("#lock#", "");
+            return from.replace("<lock>", "");
         }
         return from;
     }
 
     @TagAnnotation(name = "Channel", description = "Replaces tag with channel mention of the same ID", usage = "#channel#{[ChannelID]}", type = Constants.TAG_TYPE_INFO)
     public static String tagChannel(String from) {
-        String prefix = "#channel#{";
+        String prefix = "<channel>{";
         String suffix = "}";
         String contents;
         String lastAttempt;
@@ -359,7 +358,7 @@ public class TagSystem {
 
     @TagAnnotation(name = "DisplayName", description = "Replaces tag with DisplayName of the user with the same ID", usage = "#displayName#{[UserID]}", type = Constants.TAG_TYPE_INFO)
     public static String tagDisplayName(String from, IGuild guild) {
-        String prefix = "#displayName#{";
+        String prefix = "<displayName>{";
         String suffix = "}";
         String contents;
         String lastAttempt;
@@ -415,7 +414,7 @@ public class TagSystem {
     }
 
     public static IUser tagUser(String args) {
-        String prefix = "#user#{";
+        String prefix = "<user>{";
         String suffix = "}";
         String contents;
         if (args.contains(prefix)) {
@@ -434,8 +433,8 @@ public class TagSystem {
     }
 
     public static String tagToCaps(String from) {
-        String tag = "#toCaps#";
-        String toEmbed = "#embedImage#{";
+        String tag = "<toCaps>";
+        String toEmbed = "<embedImage>{";
         if (from.contains(tag) && !from.contains(toEmbed)) {
             return from.replace(tag, "").toUpperCase();
         }

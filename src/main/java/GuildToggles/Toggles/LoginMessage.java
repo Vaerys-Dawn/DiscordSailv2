@@ -25,6 +25,11 @@ public class LoginMessage implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().loginMessage;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

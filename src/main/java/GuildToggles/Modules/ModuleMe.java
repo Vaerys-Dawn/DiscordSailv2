@@ -28,6 +28,11 @@ public class ModuleMe implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().moduleMe;
+    }
+
+    @Override
     public void execute(CommandObject command) {
         command.removeCommand(new UserInfo().names());
         command.removeCommand(new SetGender().names());

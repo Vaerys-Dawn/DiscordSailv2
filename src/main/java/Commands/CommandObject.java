@@ -1,6 +1,7 @@
 package Commands;
 
 import GuildToggles.Modules.ModuleServers;
+import Interfaces.ChannelSetting;
 import Interfaces.Command;
 import Interfaces.DMCommand;
 import Interfaces.GuildToggle;
@@ -51,11 +52,13 @@ public class CommandObject {
     public ArrayList<String> commandTypes = new ArrayList<>();
     public ArrayList<GuildToggle> guildToggles = new ArrayList<>();
     private ArrayList<GuildToggle> toRemove = new ArrayList<>();
+    public ArrayList<ChannelSetting> channelSettings = new ArrayList<>();
 
     public IDiscordClient client;
 
 
     final static Logger logger = LoggerFactory.getLogger(CommandObject.class);
+
 
 
     public CommandObject(IMessage message) {
@@ -71,6 +74,19 @@ public class CommandObject {
         this.guild = guild;
         this.channel = channel;
         this.author = author;
+        validate();
+        init();
+    }
+
+    public CommandObject(DMCommandObject command) {
+        this.message = command.message;
+        this.channel = command.channel;
+        this.author = command.author;
+        for (IGuild g: command.client.getGuilds()){
+            if (g.getUsers().contains(command.author)){
+                this.guild = g;
+            }
+        }
         validate();
         init();
     }
@@ -96,7 +112,8 @@ public class CommandObject {
 
         commands = (ArrayList<Command>) Globals.getCommands().clone();
         commandTypes = (ArrayList<String>) Globals.getCommandTypes().clone();
-        channelTypes = (ArrayList<String>) Globals.getChannelTypes().clone();
+//        channelTypes = (ArrayList<String>) Globals.getChannelTypes().clone();
+        channelSettings = (ArrayList<ChannelSetting>) Globals.getChannelSettings().clone();
         guildToggles = (ArrayList<GuildToggle>) Globals.getGuildGuildToggles().clone();
 
         logger.trace("Nodules:" + (" CC = " + guildConfig.moduleCC +
@@ -114,7 +131,6 @@ public class CommandObject {
             logger.debug("Module Servers found.");
         }
         for (int i = 0; i < guildToggles.size(); i++) {
-            logger.info("this - " + guildToggles.get(i).name());
             if (!guildToggles.get(i).get(guildConfig)) {
                 if (guildToggles.get(i).isModule()) {
                     logger.trace(guildToggles.get(i).name() + " - " + guildToggles.get(i).get(guildConfig));

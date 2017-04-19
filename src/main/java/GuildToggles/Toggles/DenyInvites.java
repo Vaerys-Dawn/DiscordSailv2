@@ -25,6 +25,11 @@ public class DenyInvites implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().denyInvites;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

@@ -25,6 +25,11 @@ public class MentionSpam implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().maxMentions;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

@@ -77,7 +77,10 @@ public class Info implements Command {
                         builder.append(builderDual.toString());
                     }
                     infoEmbed.appendField("> Info - " + c.names()[0], builder.toString(), false);
-                    IChannel commandChannel = command.client.getChannelByID(command.guildConfig.getChannelTypeID(c.channel()));
+                    IChannel commandChannel = null;
+                    if (command.guildConfig.getChannelIDsByType(c.channel()) != null){
+                        command.client.getChannelByID(command.guildConfig.getChannelIDsByType(c.channel()).get(0));
+                    }
                     //channel
                     if (commandChannel != null) {
                         infoEmbed.appendField("Channel: ", commandChannel.mention(), false);

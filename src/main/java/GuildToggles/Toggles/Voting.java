@@ -25,6 +25,11 @@ public class Voting implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().compVoting;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

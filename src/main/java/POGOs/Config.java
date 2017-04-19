@@ -59,4 +59,7 @@ public class Config {
         return false;
     }
 
+    public void setDailyMessages(ArrayList<DailyMessageObject> dailyMessages) {
+        this.dailyMessages = dailyMessages;
+    }
 }

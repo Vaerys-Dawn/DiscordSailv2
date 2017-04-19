@@ -25,6 +25,11 @@ public class MuteRepeatOffender implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().muteRepeatOffenders;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

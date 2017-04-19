@@ -24,6 +24,11 @@ public class RoleIsToggle implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().roleIsToggle;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }

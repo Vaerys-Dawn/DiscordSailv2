@@ -25,6 +25,11 @@ public class GeneralLogging implements GuildToggle {
     }
 
     @Override
+    public boolean getDefault() {
+        return new GuildConfig().generalLogging;
+    }
+
+    @Override
     public void execute(CommandObject command) {
 
     }
