@@ -36,7 +36,7 @@ public class Characters {
         for (CharacterObject c : characters) {
             if (c.getName().equalsIgnoreCase(newCharacter.getName())) {
                 IUser author = Globals.getClient().getUserByID(newCharacter.getUserID());
-                if (c.getUserID().equals(author.getID())) {
+                if (c.getUserID().equals(author.getStringID())) {
                     characters.get(position).update(newCharacter);
                     return "> Character Updated.";
                 } else {
@@ -56,7 +56,7 @@ public class Characters {
     public String delChar(String character, IUser author, IGuild guild, boolean bypass) {
         for (CharacterObject c : characters) {
             if (c.getName().equalsIgnoreCase(character)) {
-                if (author.getID().equals(c.getUserID()) || bypass) {
+                if (author.getStringID().equals(c.getUserID()) || bypass) {
                     characters.remove(c);
                     return "> Character Deleted.";
                 } else {

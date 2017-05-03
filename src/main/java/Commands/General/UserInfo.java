@@ -26,7 +26,7 @@ public class UserInfo implements Command {
             user = command.message.getMentions().get(0);
         }
         for (UserTypeObject u : command.guildUsers.getUsers()) {
-            if (u.getID().equals(user.getID())) {
+            if (u.getID().equals(user.getStringID())) {
 
                 XEmbedBuilder builder = new XEmbedBuilder();
                 List<IRole> roles = user.getRolesForGuild(command.guild);
@@ -70,7 +70,7 @@ public class UserInfo implements Command {
             }
         }
         if (user.isBot()){
-            command.guildUsers.addUser(user.getID());
+            command.guildUsers.addUser(user.getStringID());
             return execute(args,command);
         }
         return "> Unfortunately that user doesn't seem to have a user info right now.";

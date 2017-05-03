@@ -22,11 +22,11 @@ public class DMCommandObject {
 
     public DMCommandObject(IMessage message) {
         this.message = message;
-        messageID = message.getID();
+        messageID = message.getStringID();
         channel = message.getChannel();
-        channelID = channel.getID();
+        channelID = channel.getStringID();
         author = message.getAuthor();
-        authorID = author.getID();
+        authorID = author.getStringID();
         authorUserName = author.getName() + "#" + author.getDiscriminator();
         client = Globals.getClient();
         notAllowed = "> I'm sorry " + author.getName() + ", I'm afraid I can't let you do that.";
@@ -34,18 +34,18 @@ public class DMCommandObject {
 
     public void setAuthor(IUser author) {
         this.author = author;
-        authorID = author.getID();
+        authorID = author.getStringID();
         authorUserName = author.getName() + "#" + author.getDiscriminator();
         notAllowed = "> I'm sorry " + author.getName() + ", I'm afraid I can't let you do that.";
     }
 
     public void setChannel(IChannel channel) {
         this.channel = channel;
-        channelID = channel.getID();
+        channelID = channel.getStringID();
     }
 
     public void setMessage(IMessage message) {
         this.message = message;
-        messageID = message.getID();
+        messageID = message.getStringID();
     }
 }

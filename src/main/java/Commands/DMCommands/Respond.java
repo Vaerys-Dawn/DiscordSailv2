@@ -21,7 +21,7 @@ public class Respond implements DMCommand {
         if (response.getRest() == null) {
             return "> Could Not Send Response, Contents cannot be empty.";
         }
-        if (Utility.sendDM(command.authorUserName + ": " + response.getRest(), recipient.getID()).get()) {
+        if (Utility.sendDM(command.authorUserName + ": " + response.getRest(), recipient.getStringID()).get()) {
             return "> An Error occurred while attempting to run this command.";
         } else {
             return "> Message Sent.";

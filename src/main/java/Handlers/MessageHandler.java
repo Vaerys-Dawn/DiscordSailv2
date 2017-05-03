@@ -161,7 +161,7 @@ public class MessageHandler {
                 int i = 0;
                 boolean offenderFound = false;
                 for (OffenderObject o : guildConfig.getRepeatOffenders()) {
-                    if (author.getID().equals(o.getID())) {
+                    if (author.getStringID().equals(o.getID())) {
                         guildConfig.addOffence(o.getID());
                         offenderFound = true;
                         i++;
@@ -173,7 +173,7 @@ public class MessageHandler {
                     }
                 }
                 if (!offenderFound) {
-                    guildConfig.addOffender(new OffenderObject(author.getID()));
+                    guildConfig.addOffender(new OffenderObject(author.getStringID()));
                 }
                 String response = "> #mentionAdmin# " + author.mention() + "  has attempted to post more than " + guildConfig.getMaxMentionLimit() + " Mentions in a single message.";
                 if (guildConfig.getRoleToMention().getRoleID() != null) {

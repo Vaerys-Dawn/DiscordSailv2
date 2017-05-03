@@ -46,7 +46,7 @@ public class CCHandler {
         guild = message.getGuild();
         channel = message.getChannel();
         author = message.getAuthor();
-        guildID = guild.getID();
+        guildID = guild.getStringID();
         customCommands = Globals.getGuildContent(guildID).getCustomCommands();
         guildConfig = Globals.getGuildContent(guildID).getGuildConfig();
         handleCommand();

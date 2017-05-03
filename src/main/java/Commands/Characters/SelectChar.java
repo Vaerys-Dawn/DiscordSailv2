@@ -30,7 +30,7 @@ public class SelectChar implements Command {
                     int postRoleCount = 0;
                     //resets User roles back to scratch.
                     for (int i = 0; i < userRoles.size(); i++) {
-                        if (command.guildConfig.isRoleCosmetic(userRoles.get(i).getID())) {
+                        if (command.guildConfig.isRoleCosmetic(userRoles.get(i).getStringID())) {
                             userRoles.remove(i);
                         }
                     }

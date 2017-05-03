@@ -14,6 +14,6 @@ public class DontLog implements ChannelSetting {
 
     @Override
     public boolean isSetting() {
-        return false;
+        return true;
     }
 }

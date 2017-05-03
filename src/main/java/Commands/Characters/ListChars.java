@@ -21,7 +21,7 @@ public class ListChars implements Command {
         String title = "> Here are all of your characters.";
         if (command.message.getMentions().size() > 0){
             IUser mentioned = command.message.getMentions().get(0);
-            id = mentioned.getID();
+            id = mentioned.getStringID();
             title = "> Here are all of **@" + mentioned.getName() + "#" + mentioned.getDiscriminator() + "'s** Characters.";
         }
         ArrayList<String> list = new ArrayList<>();

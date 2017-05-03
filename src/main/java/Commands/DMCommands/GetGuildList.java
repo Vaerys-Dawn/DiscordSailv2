@@ -16,7 +16,7 @@ public class GetGuildList implements DMCommand {
     public String execute(String args, DMCommandObject command) {
         ArrayList<String> guilds = new ArrayList<>();
         for (IGuild g: command.client.getGuilds()){
-            guilds.add(g.getName() +": " + g.getID());
+            guilds.add(g.getName() +": " + g.getStringID());
         }
         XEmbedBuilder builder = new XEmbedBuilder();
         Utility.listFormatterEmbed("List Of Guilds", builder, guilds, false);

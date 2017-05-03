@@ -31,7 +31,7 @@ public class SetQuote implements Command {
                 if (userID.getRest().length() > 140){
                     return "> User Quote is too long...\n(must be under 140 chars)";
                 }
-                if (u.getID().equals(user.getID())) {
+                if (u.getID().equals(user.getStringID())) {
                     u.setQuote(userID.getRest());
                     return "> User's Quote Edited.";
                 }

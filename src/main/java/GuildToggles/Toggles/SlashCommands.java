@@ -11,7 +11,7 @@ import POGOs.GuildConfig;
 public class SlashCommands implements GuildToggle {
     @Override
     public String name() {
-        return "SlashCommands";
+        return "Commands/Slash";
     }
 
     @Override

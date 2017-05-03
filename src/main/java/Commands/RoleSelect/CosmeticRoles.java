@@ -58,7 +58,7 @@ public class CosmeticRoles implements Command {
                                 toggle = true;
                             }
                         } else {
-                            if (role.getRoleID().equals(userRoles.get(i).getID())) {
+                            if (role.getRoleID().equals(userRoles.get(i).getStringID())) {
                                 userRoles.remove(i);
                             }
                         }

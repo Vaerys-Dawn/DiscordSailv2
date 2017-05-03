@@ -22,7 +22,7 @@ public class DMHandler {
             return;
         }
         for (String blocked: Globals.getGlobalData().getBlockedFromDMS()){
-            if (message.getAuthor().getID().equals(blocked)){
+            if (message.getAuthor().getStringID().equals(blocked)){
                 Utility.sendDM("> You have been blocked from sending DMs to S.A.I.L by the Bot Creator.",blocked);
                 return;
             }
@@ -55,8 +55,8 @@ public class DMHandler {
                     }
                 }
             }
-        }else if (!message.getAuthor().getID().equals(Globals.creatorID)){
-            String logging = "[" + message.getAuthor().getID() + "] " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + ": " + message.toString();
+        }else if (!message.getAuthor().getStringID().equals(Globals.creatorID)){
+            String logging = "[" + message.getAuthor().getStringID() + "] " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + ": " + message.toString();
             logger.info(logging);
             if(message.getAttachments().size() > 0){
                 String attachmemts = "";

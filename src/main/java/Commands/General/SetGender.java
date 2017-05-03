@@ -30,7 +30,7 @@ public class SetGender implements Command {
                 if (userID.getRest().length() > 20){
                     return "> User Gender's Length is too long...\n(Must be under 20 chars)";
                 }
-                if (u.getID().equals(user.getID())) {
+                if (u.getID().equals(user.getStringID())) {
                     u.setGender(userID.getRest());
                     return "> User's Gender Edited";
                 }

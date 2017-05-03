@@ -28,6 +28,9 @@ public class EditCC implements Command {
                 if (canBypass ||
                         command.authorID.equals(c.getUserID()) && !c.isLocked() ||
                         Utility.canBypass(command.author, command.guild)) {
+                    if (command.customCommands.checkblackList(args) != null) {
+                        return command.customCommands.checkblackList(args);
+                    }
                     if (StringUtils.countMatches(mode + " " + content, "#embedImage#{") > 1) {
                         return "> Custom Commands Cannot have multiple #embedImage# tags";
                     }

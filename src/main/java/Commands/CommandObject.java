@@ -48,7 +48,6 @@ public class CommandObject {
 
     public ArrayList<Command> commands = new ArrayList<>();
     public ArrayList<DMCommand> dmCommands = new ArrayList<>();
-    public ArrayList<String> channelTypes = new ArrayList<>();
     public ArrayList<String> commandTypes = new ArrayList<>();
     public ArrayList<GuildToggle> guildToggles = new ArrayList<>();
     private ArrayList<GuildToggle> toRemove = new ArrayList<>();
@@ -92,10 +91,10 @@ public class CommandObject {
     }
 
     private void init() {
-        messageID = message.getID();
-        guildID = guild.getID();
-        channelID = channel.getID();
-        authorID = author.getID();
+        messageID = message.getStringID();
+        guildID = guild.getStringID();
+        channelID = channel.getStringID();
+        authorID = author.getStringID();
         authorUserName = author.getName() + "#" + author.getDiscriminator();
         authorDisplayName = author.getDisplayName(guild);
         authorColour = Utility.getUsersColour(author, guild);
@@ -161,7 +160,7 @@ public class CommandObject {
 
     public void setAuthor(IUser author) {
         this.author = author;
-        authorID = author.getID();
+        authorID = author.getStringID();
         authorUserName = author.getName() + "#" + author.getDiscriminator();
         authorDisplayName = author.getDisplayName(guild);
         authorColour = Utility.getUsersColour(author, guild);
@@ -171,12 +170,12 @@ public class CommandObject {
 
     public void setChannel(IChannel channel) {
         this.channel = channel;
-        channelID = channel.getID();
+        channelID = channel.getStringID();
     }
 
     public void setGuild(IGuild guild) {
         this.guild = guild;
-        guildID = guild.getID();
+        guildID = guild.getStringID();
         GuildContentObject contentObject = Globals.getGuildContent(guildID);
         guildConfig = contentObject.getGuildConfig();
         customCommands = contentObject.getCustomCommands();
@@ -193,7 +192,7 @@ public class CommandObject {
 
     public void setMessage(IMessage message) {
         this.message = message;
-        messageID = message.getID();
+        messageID = message.getStringID();
     }
 
     public void removeCommandsByType(String type) {
@@ -213,9 +212,9 @@ public class CommandObject {
     }
 
     public void removeChannel(String channel) {
-        for (int i = 0; i < channelTypes.size(); i++) {
-            if (channelTypes.get(i).equalsIgnoreCase(channel)) {
-                channelTypes.remove(i);
+        for (int i = 0; i < channelSettings.size(); i++) {
+            if (channelSettings.get(i).type().equalsIgnoreCase(channel)) {
+                channelSettings.remove(i);
             }
         }
     }

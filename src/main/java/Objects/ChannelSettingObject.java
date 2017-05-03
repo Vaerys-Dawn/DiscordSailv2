@@ -24,9 +24,15 @@ public class ChannelSettingObject {
         return type;
     }
 
-
-
     public ArrayList<String> getChannelIDs() {
         return channelIDs;
+    }
+
+    public ArrayList<String> mentionChannelIDs(){
+        ArrayList<String> mentioned = new ArrayList<>();
+        for (String s: channelIDs){
+            mentioned.add(Globals.client.getChannelByID(s).mention());
+        }
+        return mentioned;
     }
 }

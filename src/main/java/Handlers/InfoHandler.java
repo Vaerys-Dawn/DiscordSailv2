@@ -23,7 +23,7 @@ public class InfoHandler {
     public InfoHandler(IChannel channel, IGuild guild) {
         this.channel = channel;
         this.guild = guild;
-        infoContents = FileHandler.readFromFile(Utility.getFilePath(guild.getID(), Constants.FILE_INFO));
+        infoContents = FileHandler.readFromFile(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO));
         updateChannel();
     }
 
@@ -81,7 +81,7 @@ public class InfoHandler {
             contents = TagSystem.tagEmoji(contents,guild);
             if (contents.contains(imagePrefix)){
                 image = StringUtils.substringBetween(contents, imagePrefix, imageSuffix);
-                File file = new File(Utility.getGuildImageDir(guild.getID()) + image);
+                File file = new File(Utility.getGuildImageDir(guild.getStringID()) + image);
                 Utility.sendFile("",file,channel);
             }else {
                 Utility.sendMessage(contents,channel);

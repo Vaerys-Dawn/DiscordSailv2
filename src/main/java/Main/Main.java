@@ -86,7 +86,7 @@ public class Main {
             //Init Patch system.
 
 
-            //timed events get
+            //timed events getSlashCommands
             new TimedEvents();
 
             while (!client.isReady()) ;

@@ -44,7 +44,7 @@ public class TransferCC implements Command {
                 Utility.sendMessage("> This command's old owner no longer is part of this server.\n" + Constants.PREFIX_INDENT +
                         author.getDisplayName(guild) + " will become the new owner of this command.\n" +
                         "> I am now attempting to transfer the command over.", channel);
-                userID = author.getID();
+                userID = author.getStringID();
             } else {
                 Utility.sendMessage("> I am now attempting to transfer " + guild.getUserByID(userID).getDisplayName(guild) + "'s command.", channel);
             }

@@ -15,12 +15,12 @@ public class RoleStatsObject extends RoleTypeObject {
     boolean isTrusted;
 
     public RoleStatsObject(IRole role, GuildConfig guildConfig, int totalUsers) {
-        super(role.getName(), role.getID());
+        super(role.getName(), role.getStringID());
         this.colour = "#" + Integer.toHexString(role.getColor().getRGB()).substring(2).toUpperCase();
         this.totalUsers = totalUsers;
-        isCosmetic = guildConfig.isRoleCosmetic(role.getID());
-        isModifier = guildConfig.isRoleModifier(role.getID());
-        isTrusted = guildConfig.isRoleTrusted(role.getID());
+        isCosmetic = guildConfig.isRoleCosmetic(role.getStringID());
+        isModifier = guildConfig.isRoleModifier(role.getStringID());
+        isTrusted = guildConfig.isRoleTrusted(role.getStringID());
     }
 
 

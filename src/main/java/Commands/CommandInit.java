@@ -15,8 +15,10 @@ import Commands.RoleSelect.ListModifs;
 import Commands.RoleSelect.ListRoles;
 import Commands.RoleSelect.ModifierRoles;
 import Commands.Servers.*;
+import Commands.Slash.*;
 import Interfaces.Command;
 import Interfaces.DMCommand;
+import Interfaces.SlashCommand;
 
 import java.util.ArrayList;
 
@@ -116,6 +118,22 @@ public class CommandInit {
         commands.add(new InfoDM());
         commands.add(new ReminderDM());
         commands.add(new ClearReminderDM());
+        commands.add(new ShutdownDM());
+        return commands;
+    }
+
+    public static ArrayList<SlashCommand> getSlashCommands(){
+        ArrayList<SlashCommand> commands = new ArrayList<>();
+
+        commands.add(new Disapproval());
+        commands.add(new Lenny());
+        commands.add(new TableFlip());
+        commands.add(new UnFlip());
+        commands.add(new Shrug());
+        commands.add(new Gib());
+        commands.add(new Fite());
+        commands.add(new DealWithIt());
+
         return commands;
     }
 }

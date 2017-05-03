@@ -18,7 +18,7 @@ public class UpdateChar implements Command {
         ArrayList<RoleTypeObject> charRoles = new ArrayList<>();
         for (IRole r : command.authorRoles) {
             for (RoleTypeObject ro : command.guildConfig.getCosmeticRoles()) {
-                if (r.getID().equals(ro.getRoleID())) {
+                if (r.getStringID().equals(ro.getRoleID())) {
                     charRoles.add(ro);
                 }
             }

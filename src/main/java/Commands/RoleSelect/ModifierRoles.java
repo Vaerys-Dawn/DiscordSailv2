@@ -61,7 +61,7 @@ public class ModifierRoles implements Command {
                     }
                 }
                 for (int i = 0; userRoles.size() > i; i++) {
-                    if (userRoles.get(i).getID().equals(newRoleId)) {
+                    if (userRoles.get(i).getStringID().equals(newRoleId)) {
                         userRoles.remove(i);
                         rolefound = true;
                     }

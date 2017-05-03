@@ -39,7 +39,7 @@ public class EnterComp implements Command {
             }
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy - HH:mm:ss");
             Calendar cal = Calendar.getInstance();
-            command.competition.newEntry(new CompObject(author.getDisplayName(command.guild), author.getID(), fileName, fileUrl, dateFormat.format(cal.getTime())));
+            command.competition.newEntry(new CompObject(author.getDisplayName(command.guild), author.getStringID(), fileName, fileUrl, dateFormat.format(cal.getTime())));
             return "> Thank you " + author.getDisplayName(command.guild) + " For entering the Competition.";
         } else {
             return "> Competition Entries are closed.";

@@ -52,7 +52,7 @@ public class CustomCommands {
         if (isTrusted) {
             total += 20;
         }
-        if (guild.getOwner().getID().equals(author.getID())) {
+        if (guild.getOwner().getStringID().equals(author.getStringID())) {
             total = 170;
         }
         return total;
@@ -80,13 +80,13 @@ public class CustomCommands {
             if (c.getName().equalsIgnoreCase(commandName)) {
                 return "> Command name already in use.";
             }
-            if (c.getUserID().equals(author.getID())) {
+            if (c.getUserID().equals(author.getStringID())) {
                 counter++;
             }
         }
         if (counter < limitCCs) {
             if (commandContents.length() < 1500) {
-                commands.add(new CCommandObject(isLocked, author.getID(), commandName, commandContents, isShitPost));
+                commands.add(new CCommandObject(isLocked, author.getStringID(), commandName, commandContents, isShitPost));
                 return "> Command Added you have " + (limitCCs - counter - 1) + " custom command slots left.\n" +
                         Constants.PREFIX_INDENT + "You can run your new command by performing `" + guildConfig.getPrefixCC() + commandName + "`.";
             } else {
@@ -104,9 +104,9 @@ public class CustomCommands {
             blackList.add(new BlackListObject("discordapp.com/Invite/", "Please do not put **invites** in Custom Commands."));
             blackList.add(new BlackListObject("@everyone", "Please go not put **mentions** in Custom Commands."));
             blackList.add(new BlackListObject("@here", "Please go not put **mentions** in Custom Commands."));
-            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getID(), "Echo", "#args#", false));
-            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getID(), "Wiki", "http://starbounder.org/Special:Search/#args##regex#{ ;_}", false));
-            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getID(), "CCAllowance", "Base User **+10**\nTrusted Role **+20**\nManage Messages Perm **+40**\nAdministrator perms **+100**", false));
+            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getStringID(), "Echo", "#args#", false));
+            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getStringID(), "Wiki", "http://starbounder.org/Special:Search/#args##regex#{ ;_}", false));
+            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getStringID(), "CCAllowance", "Base User **+10**\nTrusted Role **+20**\nManage Messages Perm **+40**\nAdministrator perms **+100**", false));
         }
     }
 
@@ -125,7 +125,7 @@ public class CustomCommands {
                 FileHandler.writeToJson(Constants.DIRECTORY_TEMP + c.getName() + ".json", c);
                 File file = new File(Constants.DIRECTORY_TEMP + c.getName() + ".json");
                 if (Utility.sendFile("> Here is the Raw Data for Custom Command: **" + c.getName() + "**", file, channel).get()) {
-                    Utility.sendMessage("> An error occurred when attempting to get CC data.", channel);
+                    Utility.sendMessage("> An error occurred when attempting to getSlashCommands CC data.", channel);
                 }
                 try {
                     Thread.sleep(5000);
@@ -145,10 +145,10 @@ public class CustomCommands {
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(args)) {
                 boolean canBypass = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild);
-                if (author.getID().equals(guild.getOwnerID()) || author.getID().equals(Globals.creatorID)) {
+                if (author.getStringID().equals(guild.getOwnerID()) || author.getStringID().equals(Globals.creatorID)) {
                     canBypass = true;
                 }
-                if (author.getID().equals(c.getUserID()) || canBypass) {
+                if (author.getStringID().equals(c.getUserID()) || canBypass) {
                     if (c.isLocked()) {
                         return "> This command is locked and must be unlocked to be deleted.";
                     } else {

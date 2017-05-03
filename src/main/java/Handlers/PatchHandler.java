@@ -41,16 +41,16 @@ public class PatchHandler {
         for (PatchObject p : patches) {
             boolean exit = false;
             for (String guildID : p.getPatchedGuildIDs()) {
-                if (guild.getID().equals(guildID)) {
+                if (guild.getStringID().equals(guildID)) {
                     exit = true;
                 }
             }
             if (!exit) {
-                logger.info("Performing Patch " + p.getPatchLevel() + " For guild with ID: " + guild.getID() + ". This may take a while.");
+                logger.info("Performing Patch " + p.getPatchLevel() + " For guild with ID: " + guild.getStringID() + ". This may take a while.");
             }
             //patch 1
             if (!exit && p.getPatchLevel().equals(Constants.PATCH_1)) {
-                CustomCommands customCommands = (CustomCommands) Utility.initFile(guild.getID(), Constants.FILE_CUSTOM, CustomCommands.class);
+                CustomCommands customCommands = (CustomCommands) Utility.initFile(guild.getStringID(), Constants.FILE_CUSTOM, CustomCommands.class);
                 if (customCommands != null) {
                     if (customCommands != null) {
                         for (CCommandObject c : customCommands.getCommandList()) {
@@ -61,24 +61,24 @@ public class PatchHandler {
                         }
                     }
                 }
-                FileHandler.writeToJson(Utility.getFilePath(guild.getID(), Constants.FILE_CUSTOM), customCommands);
-                p.getPatchedGuildIDs().add(guild.getID());
+                FileHandler.writeToJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_CUSTOM), customCommands);
+                p.getPatchedGuildIDs().add(guild.getStringID());
             }
             //patch 2
             if (!exit && p.getPatchLevel().equals(Constants.PATCH_2)) {
-                ChannelData channelData = (ChannelData) Utility.initFile(guild.getID(), Constants.FILE_GUILD_CONFIG, ChannelData.class);
-                GuildConfig guildConfig = (GuildConfig) Utility.initFile(guild.getID(), Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+                ChannelData channelData = (ChannelData) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, ChannelData.class);
+                GuildConfig guildConfig = (GuildConfig) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, GuildConfig.class);
                 if (channelData != null) {
                     for (ChannelTypeObject c : channelData.getChannels()) {
                         guildConfig.addChannelSetting(c.getType(), c.getID());
                     }
                 }
-                FileHandler.writeToJson(Utility.getFilePath(guild.getID(), Constants.FILE_GUILD_CONFIG), guildConfig);
-                p.getPatchedGuildIDs().add(guild.getID());
+                FileHandler.writeToJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_GUILD_CONFIG), guildConfig);
+                p.getPatchedGuildIDs().add(guild.getStringID());
             }
             //patch 3 - rename all of the toggles to used <tag> instead of #tag# (lots of code that cant be simplified ;_;)
             if (!exit && p.getPatchLevel().equals(Constants.PATCH_3)) {
-                CustomCommands customCommands = (CustomCommands) Utility.initFile(guild.getID(), Constants.FILE_CUSTOM, CustomCommands.class);
+                CustomCommands customCommands = (CustomCommands) Utility.initFile(guild.getStringID(), Constants.FILE_CUSTOM, CustomCommands.class);
                 if (customCommands != null) {
                     if (customCommands != null) {
                         for (CCommandObject c : customCommands.getCommandList()) {
@@ -86,10 +86,10 @@ public class PatchHandler {
                         }
                     }
                 }
-                FileHandler.writeToJson(Utility.getFilePath(guild.getID(), Constants.FILE_CUSTOM), customCommands);
+                FileHandler.writeToJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_CUSTOM), customCommands);
 
 
-                List<String> contents = FileHandler.readFromFile(Utility.getFilePath(guild.getID(), Constants.FILE_INFO));
+                List<String> contents = FileHandler.readFromFile(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO));
                 String content = "";
                 for (String c : contents) {
                     c = c.replace("#displayName#", "<displayName>");
@@ -100,13 +100,13 @@ public class PatchHandler {
                     c = c.replace("#split#", "<split>");
                     content += c + "\n";
                 }
-                File newFile = new File(Utility.getFilePath(guild.getID(), Constants.FILE_INFO + "x"));
-                File oldFile = new File(Utility.getFilePath(guild.getID(), Constants.FILE_INFO));
+                File newFile = new File(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO + "x"));
+                File oldFile = new File(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO));
                 FileHandler.writeToFile(newFile.getPath(), content);
                 oldFile.delete();
                 newFile.renameTo(oldFile);
 
-                p.getPatchedGuildIDs().add(guild.getID());
+                p.getPatchedGuildIDs().add(guild.getStringID());
             }
         }
     }
@@ -146,6 +146,7 @@ public class PatchHandler {
         from = from.replace("#!break#", "<!break>");
         from = from.replace("#toCaps#", "<toCaps>");
         from = from.replace("#embedImage#", "<embedImage>");
+        from = from.replace("#randNum#","<randNum>");
         from = from.replace("#delCall#", "<delCall>");
         return from;
     }

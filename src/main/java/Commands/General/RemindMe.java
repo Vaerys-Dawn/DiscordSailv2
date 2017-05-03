@@ -32,7 +32,7 @@ public class RemindMe implements Command {
             now = now.plusMinutes(timeMins);
             StringBuilder builder = new StringBuilder(args);
             builder.delete(0,(timeMins + "").length());
-            if (TimedEvents.addReminder(command.author.getID(), command.channel.getID(), now.toEpochSecond(), builder.toString())) {
+            if (TimedEvents.addReminder(command.author.getStringID(), command.channel.getStringID(), now.toEpochSecond(), builder.toString())) {
                 return "> Reminder set for " + timeString + " Minute(s) from now.";
             } else {
                 return "> You already have a reminder set.";

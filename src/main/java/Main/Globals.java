@@ -9,14 +9,12 @@ import Interfaces.*;
 import Objects.DailyMessageObject;
 import Objects.GuildContentObject;
 import POGOs.*;
-import SlashCommands.SlashInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
-import javax.swing.plaf.PanelUI;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -88,14 +86,14 @@ public class Globals {
         //Load Guild Toggles
         guildGuildToggles = ToggleInit.get();
 
-        slashCommands = SlashInit.get();
+        slashCommands = CommandInit.getSlashCommands();
 
         channelSettings = InitChannels.get();
 
         //validate commands
         validate();
 
-        //get Command Types
+        //getSlashCommands Command Types
         commandTypes.add(Command.TYPE_DM);
 
         //auto remover code for Commands.Admin.ChannelHere, will remove if channels are not in use.

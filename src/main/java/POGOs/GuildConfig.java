@@ -131,7 +131,7 @@ public class GuildConfig {
 //            return;
 //        }
 //        for (int i = 0; i < channels.size(); i++) {
-//            if (channels.get(i).getType().equals(channelType)) {
+//            if (channels.getSlashCommands(i).getType().equals(channelType)) {
 //                channels.set(i, new ChannelTypeObject(channelType, channelID));
 //                return;
 //            }
@@ -302,7 +302,7 @@ public class GuildConfig {
         } else {
             for (RoleTypeObject task : trustedRoles) {
                 for (IRole role : author.getRolesForGuild(guild)) {
-                    if (role.getID().equals(task.getRoleID())) {
+                    if (role.getStringID().equals(task.getRoleID())) {
                         return true;
                     }
                 }

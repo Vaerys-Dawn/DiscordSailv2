@@ -27,7 +27,7 @@ public class GetMessageData implements Command {
             int bottomGuild = 0;
             String topUser = null;
             String bottomUser = null;
-            GuildContentObject content = Globals.getGuildContent(guild.getID());
+            GuildContentObject content = Globals.getGuildContent(guild.getStringID());
             for (UserTypeObject user : content.getGuildUsers().getUsers()) {
                 if (bottomGuild == 0) {
                     bottomGuild = user.getXP();

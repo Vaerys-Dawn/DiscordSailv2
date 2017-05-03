@@ -41,13 +41,13 @@ public class GetGuildInfo implements Command{
         int totalCosmetic = 0;
         int totalModified = 0;
         int totalTrusted = 0;
-        boolean manageRoles = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getID().equals(Globals.creatorID);
-        boolean manageServer = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getID().equals(Globals.creatorID);
-        boolean manageChannels = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getID().equals(Globals.creatorID);
+        boolean manageRoles = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getStringID().equals(Globals.creatorID);
+        boolean manageServer = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getStringID().equals(Globals.creatorID);
+        boolean manageChannels = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getStringID().equals(Globals.creatorID);
 
         Utility.sendFileURL("",guild.getIconURL(),command.client.getOrCreatePMChannel(command.author),true);
         builder.append("***[" + guildName.toUpperCase() + "]***");
-        builder.append("\n\n> Guild ID : **" + guild.getID());
+        builder.append("\n\n> Guild ID : **" + guild.getStringID());
         builder.append("**\n> Creation Date : **" + creationDate.getYear() + " " + creationDate.getMonth() + " " + creationDate.getDayOfMonth() + " - " + creationDate.getHour() + ":" + creationDate.getMinute());
         builder.append("**\n> Guild Owner : **@" + guildOwner.getName() + "#" + guildOwner.getDiscriminator());
         builder.append("**\n> Command Prefix: **"+  config.getPrefixCommand());
@@ -82,7 +82,7 @@ public class GetGuildInfo implements Command{
 //        if (manageChannels) {
 //            builder.append("\n\n***[CHANNELS]***");
 //            for (ChannelTypeObject c : config.getChannels()) {
-//                builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getID()).getName() + "**");
+//                builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getStringID()).getName() + "**");
 //            }
 //        }
 
@@ -118,7 +118,7 @@ public class GetGuildInfo implements Command{
         builder.append("\n\n**TRUSTED ROLES**");
         for (String s : trustedRoleStats) {
             if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getID());
+                Utility.sendDM(builder.toString(), author.getStringID());
                 builder.delete(0, builder.length());
                 try {
                     Thread.sleep(1000);
@@ -132,7 +132,7 @@ public class GetGuildInfo implements Command{
         builder.append("\n\n**COSMETIC ROLES**");
         for (String s : cosmeticRoleStats) {
             if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getID());
+                Utility.sendDM(builder.toString(), author.getStringID());
                 builder.delete(0, builder.length());
                 try {
                     Thread.sleep(1000);
@@ -146,7 +146,7 @@ public class GetGuildInfo implements Command{
         builder.append("\n\n**MODIFIER ROLES**");
         for (String s : modifierRoleStats) {
             if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getID());
+                Utility.sendDM(builder.toString(), author.getStringID());
                 builder.delete(0, builder.length());
                 try {
                     Thread.sleep(1000);
@@ -159,7 +159,7 @@ public class GetGuildInfo implements Command{
         }
         builder.append("\n > Total users : \"**" + totalModified + "**\"");
         builder.append("\n\n------{END OF INFO}------");
-        Utility.sendDM(builder.toString(), author.getID());
+        Utility.sendDM(builder.toString(), author.getStringID());
         return "> Info sent to you via Direct Message.";
     }
 

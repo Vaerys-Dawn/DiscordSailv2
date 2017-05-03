@@ -27,7 +27,7 @@ public class UpdateRolePerms implements Command
         }
         for (IRole r: command.guild.getRoles()){
             for (RoleTypeObject to: command.guildConfig.getCosmeticRoles()){
-                if (r.getID().equals(to.getRoleID())){
+                if (r.getStringID().equals(to.getRoleID())){
                     r.changePermissions(parentPerms);
                     try {
                         Thread.sleep(1000);

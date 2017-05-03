@@ -20,7 +20,7 @@ public class EditServerDesc implements Command{
             return "> Cannot edit server description, missing arguments.";
         }
         desc = args.replaceFirst(Pattern.quote(splitArgs.get(0) + " "), "");
-        return command.servers.editServerDesc(command.author.getID(), splitArgs.get(0), desc, command.guild);
+        return command.servers.editServerDesc(command.author.getStringID(), splitArgs.get(0), desc, command.guild);
     }
 
     @Override

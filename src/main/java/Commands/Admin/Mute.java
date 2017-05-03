@@ -31,7 +31,7 @@ public class Mute implements Command {
                     return "> Cannot Mute/UnMute user. User ID invalid.";
                 }
             }
-            if (muted.getID().equals(command.authorID)){
+            if (muted.getStringID().equals(command.authorID)){
                 return "> Don't try to mute yourself you numpty.";
             }
             if (Utility.testModifier(modifier.getFirstWord()) != null) {
@@ -42,14 +42,14 @@ public class Mute implements Command {
                             SplitFirstObject time = new SplitFirstObject(modifier.getRest());
                             timeSecs = Utility.textToSeconds(time.getFirstWord());
                         }
-                        command.guildUsers.muteUser(muted.getID(), timeSecs, command.guildID);
+                        command.guildUsers.muteUser(muted.getStringID(), timeSecs, command.guildID);
                         if (timeSecs == -1) {
                             return "> User Was Muted.";
                         } else {
                             return "> User Was Muted for " + timeSecs + " Seconds.";
                         }
                     }else {
-                        command.guildUsers.unMuteUser(muted.getID(),command.guildID);
+                        command.guildUsers.unMuteUser(muted.getStringID(),command.guildID);
                         return "> User UnMuted.";
                     }
                 } else {

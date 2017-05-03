@@ -18,7 +18,7 @@ public class Test implements Command {
     public String execute(String args, CommandObject command) {
         String channels = "Channel Settings: \n";
         for (ChannelSettingObject c: command.guildConfig.getChannelSettings()){
-            channels += c.getType() + ": "  + Utility.listFormatter(c.getChannelIDs(),true) + "\n";
+            channels += c.getType() + ": "  + Utility.listFormatter(c.mentionChannelIDs(),true) + "\n";
         }
         return channels;
     }

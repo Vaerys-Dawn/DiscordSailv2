@@ -55,8 +55,8 @@ public class AnnotationListener {
     @EventSubscriber
     public void onGuildCreateEvent(GuildCreateEvent event) {
         IGuild guild = event.getGuild();
-        String guildID = guild.getID();
-        logger.info("Starting Guild get process for Guild with ID: " + guildID);
+        String guildID = guild.getStringID();
+        logger.info("Starting Guild getSlashCommands process for Guild with ID: " + guildID);
 
         PatchHandler.guildPatches(guild);
 
@@ -109,7 +109,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onGuildLeaveEvent(GuildLeaveEvent event) {
-        Globals.unloadGuild(event.getGuild().getID());
+        Globals.unloadGuild(event.getGuild().getStringID());
     }
 
     @EventSubscriber
@@ -146,12 +146,12 @@ public class AnnotationListener {
         String args = "";
         String command = "";
         while (!event.getClient().isReady()) ;
-        GuildConfig guildConfig = Globals.getGuildContent(guild.getID()).getGuildConfig();
+        GuildConfig guildConfig = Globals.getGuildContent(guild.getStringID()).getGuildConfig();
 
 
         //Set Console Response Channel.
-        if (author.getID().equals(Globals.creatorID)) {
-            Globals.consoleMessageCID = channel.getID();
+        if (author.getStringID().equals(Globals.creatorID)) {
+            Globals.consoleMessageCID = channel.getStringID();
         }
 
         if (messageLC.startsWith(guildConfig.getPrefixCommand().toLowerCase()) || messageLC.startsWith(guildConfig.getPrefixCC().toLowerCase())) {
@@ -177,7 +177,7 @@ public class AnnotationListener {
         }
         IGuild guild = event.getMessage().getGuild();
         IUser author = event.getMessage().getAuthor();
-        String guildOwnerID = guild.getOwner().getID();
+        String guildOwnerID = guild.getOwner().getStringID();
         String sailMention = event.getClient().getOurUser().mention(false);
         String sailMentionNick = event.getClient().getOurUser().mention(true);
         String prefix;
@@ -187,17 +187,17 @@ public class AnnotationListener {
         if (event.getMessage().mentionsEveryone() || event.getMessage().mentionsHere()) {
             return;
         }
-        if (author.getID().equals(Globals.getClient().getOurUser().getID())) {
+        if (author.getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
             return;
         }
 
         /**This lets you set the guild's Prefix if you run "@Bot SetCommandPrefix [New Prefix]"*/
-        if (author.getID().equals(guildOwnerID) || author.getID().equals(Globals.creatorID)) {
+        if (author.getStringID().equals(guildOwnerID) || author.getStringID().equals(Globals.creatorID)) {
             SplitFirstObject mentionSplit = new SplitFirstObject(message);
             SplitFirstObject getArgs = new SplitFirstObject(mentionSplit.getRest());
             if (mentionSplit.getFirstWord() != null) {
                 if (mentionSplit.getFirstWord().equals(sailMention) || mentionSplit.getFirstWord().equals(sailMentionNick)) {
-                    String guildID = guild.getID();
+                    String guildID = guild.getStringID();
                     GuildConfig guildConfig = Globals.getGuildContent(guildID).getGuildConfig();
                     if (getArgs.getRest() != null && !getArgs.getRest().contains(" ") && !getArgs.getRest().contains("\n")) {
                         prefix = getArgs.getRest();
@@ -233,7 +233,7 @@ public class AnnotationListener {
         }
         updateVariables(event.getNewChannel().getGuild());
 
-        GuildContentObject content = Globals.getGuildContent(event.getGuild().getID());
+        GuildContentObject content = Globals.getGuildContent(event.getGuild().getStringID());
         if (content.getGuildConfig().channelLogging) {
             if (!event.getOldChannel().getName().equalsIgnoreCase(event.getNewChannel().getName())) {
                 String log = "> Channel " + event.getNewChannel().mention() + "'s name was changed.\nOld name : #" + event.getOldChannel().getName() + ".";
@@ -262,7 +262,7 @@ public class AnnotationListener {
         if (event.getChannel().isPrivate()) {
             return;
         }
-        GuildContentObject content = Globals.getGuildContent(event.getGuild().getID());
+        GuildContentObject content = Globals.getGuildContent(event.getGuild().getStringID());
         if (content.getGuildConfig().channelLogging) {
             String log = "> Channel #" + event.getChannel().getName() + " was deleted.";
             Utility.sendLog(log, content.getGuildConfig(), false);
@@ -272,7 +272,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onChannelCreateEvent(ChannelCreateEvent event) {
-        GuildContentObject content = Globals.getGuildContent(event.getGuild().getID());
+        GuildContentObject content = Globals.getGuildContent(event.getGuild().getStringID());
         if (content.getGuildConfig().channelLogging) {
             String log = "> Channel " + event.getChannel().mention() + " was created.";
             Utility.sendLog(log, content.getGuildConfig(), false);
@@ -280,7 +280,7 @@ public class AnnotationListener {
     }
 
     private void updateVariables(IGuild guild) {
-        String guildID = guild.getID();
+        String guildID = guild.getStringID();
         GuildConfig guildConfig = Globals.getGuildContent(guildID).getGuildConfig();
         guildConfig.updateVariables(guild);
     }
@@ -290,7 +290,7 @@ public class AnnotationListener {
         Emoji x = EmojiManager.getForAlias("x");
         if (event.getChannel().isPrivate()) {
             if (event.getReaction().getUnicodeEmoji().equals(x)) {
-                if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())) {
+                if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
                     Utility.deleteMessage(event.getMessage());
                 }
             }
@@ -298,7 +298,7 @@ public class AnnotationListener {
         }
         if (Utility.canBypass(event.getUser(), event.getGuild())) {
             if (event.getReaction().getUnicodeEmoji().equals(x)) {
-                if (event.getMessage().getAuthor().getID().equals(Globals.getClient().getOurUser().getID())) {
+                if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
                     Utility.deleteMessage(event.getMessage());
                 }
             }
@@ -317,19 +317,27 @@ public class AnnotationListener {
         List<String> infoID = command.guildConfig.getChannelIDsByType(Command.CHANNEL_INFO);
         List<String> serverLogID = command.guildConfig.getChannelIDsByType(Command.CHANNEL_SERVER_LOG);
         List<String> adminLogID = command.guildConfig.getChannelIDsByType(Command.CHANNEL_ADMIN_LOG);
+        List<String> dontLog = command.guildConfig.getChannelIDsByType(Command.CHANNEL_DONT_LOG);
+        if (dontLog != null) {
+            for (String id : dontLog) {
+                if (command.channelID.equals(id)) {
+                    return;
+                }
+            }
+        }
         if (command.guildConfig.dontLogBot && command.author.isBot()) {
             return;
         }
         if (event.getMessage() == null) {
             return;
         }
-        if (serverLogID != null && serverLogID.get(0).equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
+        if (serverLogID != null && serverLogID.get(0).equals(command.channelID) && ourUser.getStringID().equals(command.authorID)) {
             return;
         }
-        if (infoID != null && infoID.get(0).equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
+        if (infoID != null && infoID.get(0).equals(command.channelID) && ourUser.getStringID().equals(command.authorID)) {
             return;
         }
-        if (adminLogID != null && adminLogID.get(0).equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
+        if (adminLogID != null && adminLogID.get(0).equals(command.channelID) && ourUser.getStringID().equals(command.authorID)) {
             return;
         }
         if (command.guildConfig.deleteLogging) {
@@ -345,7 +353,7 @@ public class AnnotationListener {
             } else {
                 content = Utility.unFormatMentions(command.message);
             }
-            if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.authorID.equals(command.client.getOurUser().getID())) {
+            if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.authorID.equals(command.client.getOurUser().getStringID())) {
                 return;
             }
             long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - event.getMessage().getTimestamp().atZone(ZoneOffset.UTC).toEpochSecond();
@@ -371,7 +379,7 @@ public class AnnotationListener {
 
     public void joinLeaveLogging(GuildMemberEvent event, boolean joining) {
         IGuild guild = event.getGuild();
-        GuildContentObject content = Globals.getGuildContent(guild.getID());
+        GuildContentObject content = Globals.getGuildContent(guild.getStringID());
         if (content.getGuildConfig().joinLeaveLogging) {
             if (joining) {
                 Utility.sendLog("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **Joined** the server.", content.getGuildConfig(), false);
@@ -399,6 +407,14 @@ public class AnnotationListener {
 
         IUser ourUser = command.client.getOurUser();
         List<String> logID = command.guildConfig.getChannelIDsByType(Command.CHANNEL_SERVER_LOG);
+        List<String> dontLog = command.guildConfig.getChannelIDsByType(Command.CHANNEL_DONT_LOG);
+        if (dontLog != null) {
+            for (String id : dontLog) {
+                if (command.channelID.equals(id)) {
+                    return;
+                }
+            }
+        }
         if (logID != null) {
             String serverLogID = logID.get(0);
 
@@ -408,7 +424,7 @@ public class AnnotationListener {
             if (event.getMessage() == null) {
                 return;
             }
-            if (serverLogID != null && serverLogID.equals(command.channelID) && ourUser.getID().equals(command.authorID)) {
+            if (serverLogID != null && serverLogID.equals(command.channelID) && ourUser.getStringID().equals(command.authorID)) {
                 return;
             }
             if (command.guildConfig.editLogging) {
@@ -458,7 +474,7 @@ public class AnnotationListener {
     @EventSubscriber
     public void onUserRoleUpdateEvent(UserRoleUpdateEvent event) {
         IGuild guild = event.getGuild();
-        GuildContentObject content = Globals.getGuildContent(guild.getID());
+        GuildContentObject content = Globals.getGuildContent(guild.getStringID());
         if (content.getGuildConfig().userRoleLogging) {
             ArrayList<String> oldRoles = new ArrayList<>();
             ArrayList<String> newRoles = new ArrayList<>();

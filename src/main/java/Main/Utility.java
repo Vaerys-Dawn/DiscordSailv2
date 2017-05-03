@@ -52,7 +52,7 @@ public class Utility {
         List<IRole> guildRoles = guild.getRoles();
         for (IRole r : guildRoles) {
             if (r.getName().equalsIgnoreCase(roleName)) {
-                roleID = r.getID();
+                roleID = r.getStringID();
             }
         }
         return roleID;
@@ -204,10 +204,10 @@ public class Utility {
                         return null;
                     }
                     if (message != null || !message.equals("")) {
-                        return channel.sendMessage(removeMentions(message)).getID();
+                        return channel.sendMessage(removeMentions(message)).getStringID();
                     }
                 } catch (MissingPermissionsException e) {
-                    logger.debug("Error sending message to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                    logger.debug("Error sending message to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
                     return null;
                 } catch (DiscordException e) {
@@ -220,7 +220,7 @@ public class Utility {
                     }
                 }
             } else {
-                logger.debug("Message to be sent to channel with id: " + channel.getID() + "on guild with id: " + channel.getGuild().getID() +
+                logger.debug("Message to be sent to channel with id: " + channel.getStringID() + "on guild with id: " + channel.getGuild().getStringID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Message to large.");
                 return null;
             }
@@ -235,7 +235,7 @@ public class Utility {
                     if (file != null) {
                         channel.sendFile(file);
                     } else {
-                        logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                        logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
                                 ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
                         return true;
                     }
@@ -258,7 +258,7 @@ public class Utility {
                 e.printStackTrace();
             } catch (MissingPermissionsException e) {
                 sendMessage("> Could not send File, missing permissions.",channel);
-                logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
                 return true;
             }
@@ -293,7 +293,7 @@ public class Utility {
                 } else if (message != null && !message.isEmpty() && imageURL != null) {
                     channel.sendFile(removeMentions(message), false, stream, suffix);
                 } else {
-                    logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                    logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
                 }
             } catch (DiscordException e) {
@@ -312,7 +312,7 @@ public class Utility {
                 return true;
             } catch (MissingPermissionsException e) {
                 sendMessage(message + " <" + imageURL + ">", channel);
-                logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
             }
             return false;
@@ -351,7 +351,7 @@ public class Utility {
                     return true;
                 }
             } catch (MissingPermissionsException e) {
-                logger.debug("Error sending File to channel with id: " + channel.getID() + " on guild with id: " + channel.getGuild().getID() +
+                logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
                 StringBuilder embedToString = new StringBuilder();
                 if (embed.author != null) embedToString.append("**" + embed.author.name + "**\n");
@@ -440,7 +440,7 @@ public class Utility {
                 }
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("Edited roles hierarchy is too high.")) {
-                    logger.debug("Error Editing roles of user with id: " + author.getID() + " on guild with id: " + guild.getID() +
+                    logger.debug("Error Editing roles of user with id: " + author.getStringID() + " on guild with id: " + guild.getStringID() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
                     return true;
                 } else {
@@ -474,7 +474,7 @@ public class Utility {
                 guild.editUserRoles(author, roles);
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("Edited roles hierarchy is too high.")) {
-                    logger.debug("Error Editing roles of user with id: " + author.getID() + " on guild with id: " + guild.getID() +
+                    logger.debug("Error Editing roles of user with id: " + author.getStringID() + " on guild with id: " + guild.getStringID() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
                     return true;
                 } else {
@@ -652,15 +652,15 @@ public class Utility {
     }
 
     public static boolean canBypass(IUser author, IGuild guild, boolean logging) {
-        if (author.getID().equals(Globals.creatorID)) {
+        if (author.getStringID().equals(Globals.creatorID)) {
             if (logging) {
                 logger.debug("User is Creator, BYPASSING.");
             }
             return true;
         }
-        if (author.getID().equals(guild.getOwnerID())) {
+        if (author.getStringID().equals(guild.getOwnerID())) {
             if (logging) {
-                logger.debug("User is Guild Owner, GUILD : \"" + guild.getID() + "\", BYPASSING.");
+                logger.debug("User is Guild Owner, GUILD : \"" + guild.getStringID() + "\", BYPASSING.");
             }
             return true;
         }
@@ -909,7 +909,7 @@ public class Utility {
         IRole mutedRole = Globals.client.getRoleByID(content.getGuildConfig().getMutedRole().getRoleID());
         List<IRole> oldRoles = user.getRolesForGuild(guild);
         if (mutedRole != null) {
-            roleManagement(Globals.getClient().getUserByID(userID), Globals.client.getGuildByID(guildID), mutedRole.getID(), isMuting);
+            roleManagement(Globals.getClient().getUserByID(userID), Globals.client.getGuildByID(guildID), mutedRole.getStringID(), isMuting);
             List<IRole> newRoles = user.getRolesForGuild(guild);
             Globals.getClient().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, user, oldRoles, newRoles));
             return true;
@@ -983,13 +983,13 @@ public class Utility {
     public static String unFormatMentions(IMessage message) {
         String from = message.getContent();
         for (IUser user : message.getMentions()) {
-            String mention = "<@" + user.getID() + ">";
-            String mentionNic = "<@!" + user.getID() + ">";
+            String mention = "<@" + user.getStringID() + ">";
+            String mentionNic = "<@!" + user.getStringID() + ">";
             from = from.replace(mention, "__@" + user.getDisplayName(message.getGuild()) + "__");
             from = from.replace(mentionNic, "__@" + user.getDisplayName(message.getGuild()) + "__");
         }
         for (IRole role : message.getRoleMentions()){
-            String roleMention = "<@&" + role.getID() + ">";
+            String roleMention = "<@&" + role.getStringID() + ">";
             from = from.replace(roleMention,"__**@" + role.getName() + "**__");
         }
         return from;

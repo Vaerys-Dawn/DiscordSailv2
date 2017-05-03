@@ -21,11 +21,11 @@ public class ListCCs implements Command {
     public String execute(String args, CommandObject command) {
         IMessage message = command.message;
         if (message.getMentions().size() > 0) {
-            return getUserCommands(command, command.message.getMentions().get(0).getID());
+            return getUserCommands(command, command.message.getMentions().get(0).getStringID());
         }
         IUser mentionedUser = Globals.getClient().getUserByID(args);
         if (mentionedUser != null) {
-            return getUserCommands(command, mentionedUser.getID());
+            return getUserCommands(command, mentionedUser.getStringID());
         }
         try {
             int page;
