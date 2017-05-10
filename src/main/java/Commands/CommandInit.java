@@ -37,7 +37,7 @@ public class CommandInit {
         commands.add(new GetMessageData());
         commands.add(new TempCommand());
         commands.add(new ResetPlayingStatus());
-
+        commands.add(new ToggleTypingStatus());
         //Admin commands
         commands.add(new ChannelHere());
         commands.add(new MaxMessages());

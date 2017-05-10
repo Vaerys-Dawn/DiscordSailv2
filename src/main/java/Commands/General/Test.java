@@ -7,6 +7,7 @@ import Objects.ChannelSettingObject;
 import Objects.ChannelTypeObject;
 import sx.blah.discord.api.internal.json.objects.WebhookObject;
 import sx.blah.discord.handle.impl.obj.Webhook;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -17,8 +18,8 @@ public class Test implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         String channels = "Channel Settings: \n";
-        for (ChannelSettingObject c: command.guildConfig.getChannelSettings()){
-            channels += c.getType() + ": "  + Utility.listFormatter(c.mentionChannelIDs(),true) + "\n";
+        for (ChannelSettingObject c : command.guildConfig.getChannelSettings()) {
+            channels += c.getType() + ": " + Utility.listFormatter(c.mentionChannelIDs(), true) + "\n";
         }
         return channels;
     }

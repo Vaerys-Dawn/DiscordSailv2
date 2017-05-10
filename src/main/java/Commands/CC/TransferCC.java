@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 public class TransferCC implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        String filePath = Constants.DIRECTORY_OLD_FILES + command.guildID + "_CustomCommands.json";
+        String filePath = Constants.DIRECTORY_OLD_FILES + command.guildSID + "_CustomCommands.json";
         IGuild guild = command.guild;
         IUser author = command.author;
         IChannel channel = command.channel;

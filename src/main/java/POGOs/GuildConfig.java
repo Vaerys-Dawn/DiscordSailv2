@@ -122,21 +122,21 @@ public class GuildConfig {
 //        return channels;
 //    }
 
-//    public void setUpChannel(String channelType, String channelID) {
+//    public void setUpChannel(String channelType, String channelSID) {
 //        if (channelType.equals(Command.CHANNEL_SERVERS) && !moduleServers) {
 //            return;
 //        }
 //        if (channels.size() == 0) {
-//            channels.add(new ChannelTypeObject(channelType, channelID));
+//            channels.add(new ChannelTypeObject(channelType, channelSID));
 //            return;
 //        }
 //        for (int i = 0; i < channels.size(); i++) {
 //            if (channels.getSlashCommands(i).getType().equals(channelType)) {
-//                channels.set(i, new ChannelTypeObject(channelType, channelID));
+//                channels.set(i, new ChannelTypeObject(channelType, channelSID));
 //                return;
 //            }
 //        }
-//        channels.add(new ChannelTypeObject(channelType, channelID));
+//        channels.add(new ChannelTypeObject(channelType, channelSID));
 //    }
 
     public ArrayList<String> getChannelIDsByType(String channelType) {

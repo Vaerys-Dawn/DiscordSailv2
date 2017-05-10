@@ -20,12 +20,19 @@ public class ListCCs implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         IMessage message = command.message;
+        long uID;
+        IUser mentionedUser = null;
         if (message.getMentions().size() > 0) {
-            return getUserCommands(command, command.message.getMentions().get(0).getStringID());
+            return getUserCommands(command, command.message.getMentions().get(0).getLongID());
         }
-        IUser mentionedUser = Globals.getClient().getUserByID(args);
+        try {
+            uID = Long.parseLong(args);
+            mentionedUser = Globals.getClient().getUserByID(uID);
+        } catch (NumberFormatException e) {
+            //do nothing
+        }
         if (mentionedUser != null) {
-            return getUserCommands(command, mentionedUser.getStringID());
+            return getUserCommands(command, mentionedUser.getLongID());
         }
         try {
             int page;
@@ -41,20 +48,20 @@ public class ListCCs implements Command {
         }
     }
 
-    public String getUserCommands(CommandObject command, String userID) {
+    public String getUserCommands(CommandObject command, long userID) {
         IUser user = Globals.getClient().getUserByID(userID);
         int total = 0;
         int max = command.customCommands.maxCCs(user, command.guild, command.guildConfig);
         XEmbedBuilder builder = new XEmbedBuilder();
         String title = "> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.";
         ArrayList<String> list = new ArrayList<>();
-        for (CCommandObject c: command.customCommands.getCommandList()){
-            if (c.getUserID().equals(userID)){
+        for (CCommandObject c : command.customCommands.getCommandList()) {
+            if (c.getUserID().equals(userID)) {
                 list.add(command.guildConfig.getPrefixCC() + c.getName());
-                total ++;
+                total++;
             }
         }
-        Utility.listFormatterEmbed(title,builder,list,true);
+        Utility.listFormatterEmbed(title, builder, list, true);
         builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
         builder.withFooterText("Total Custom commands: " + total + "/" + max + ".");
         Utility.sendEmbedMessage("", builder, command.channel);

@@ -22,7 +22,7 @@ public class ChannelHere implements Command {
         if (!args.isEmpty()) {
             for (ChannelSetting s : command.channelSettings) {
                 if (args.equalsIgnoreCase(s.type())) {
-                    return s.toggleSetting(command.guildConfig,command.channelID);
+                    return s.toggleSetting(command.guildConfig,command.channelSID);
                 }
 
             }

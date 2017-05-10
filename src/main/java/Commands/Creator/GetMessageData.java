@@ -60,7 +60,7 @@ public class GetMessageData implements Command {
                 builder += "\nGuild Avg = " + totalMessageAvg / totalUsers;
                 builder += "\nTotal Guild Messages = " + totalMessage;
                 builder += "\nTotal Users = " + totalUsers;
-                Utility.sendDM(builder, command.authorID);
+                Utility.sendDM(builder, command.authorSID);
             }
             try {
                 Thread.sleep(2000);
@@ -71,7 +71,7 @@ public class GetMessageData implements Command {
         String builder = "**Global Stats**";
         builder += "\nGlobal users = " + totalGlobalUsers;
         builder += "\nGlobal Avg = " + totalAvg / totalGlobalUsers;
-        Utility.sendDM(builder,command.authorID);
+        Utility.sendDM(builder,command.authorSID);
         return null;
     }
 

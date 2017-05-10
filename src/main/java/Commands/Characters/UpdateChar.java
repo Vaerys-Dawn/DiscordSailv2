@@ -23,7 +23,7 @@ public class UpdateChar implements Command {
                 }
             }
         }
-        return command.characters.updateChar(new CharacterObject(args.split(" ")[0], command.authorID, command.authorDisplayName, charRoles));
+        return command.characters.updateChar(new CharacterObject(args.split(" ")[0], command.authorSID, command.authorDisplayName, charRoles));
     }
 
     @Override

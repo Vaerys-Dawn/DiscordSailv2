@@ -2,7 +2,6 @@ package POGOs;
 
 import Commands.CommandObject;
 import Main.Utility;
-import Objects.ReminderObject;
 import Objects.UserCountDown;
 import Objects.UserTypeObject;
 
@@ -28,9 +27,9 @@ public class GuildUsers {
             return;
         }
         boolean isFound = false;
-        UserTypeObject user = new UserTypeObject(object.authorID);
+        UserTypeObject user = new UserTypeObject(object.authorSID);
         for (UserTypeObject u : users) {
-            if (u.getID().equals(object.authorID)) {
+            if (u.getID().equals(object.authorSID)) {
                 isFound = true;
                 user = u;
             }

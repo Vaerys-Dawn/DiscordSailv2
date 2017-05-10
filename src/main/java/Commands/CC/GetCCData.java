@@ -22,7 +22,7 @@ public class GetCCData implements Command {
                 content += "\nCreated by: \"" + command.client.getUserByID(c.getUserID()).getDisplayName(command.guild) + "\"";
                 content += "\nTimes run: \"" + c.getTimesRun() + "\"";
                 content += "\nContents: \"" + c.getContents(false) + "\"";
-                String filePath = Constants.DIRECTORY_TEMP + command.messageID + ".txt";
+                String filePath = Constants.DIRECTORY_TEMP + command.messageSID + ".txt";
                 FileHandler.writeToFile(filePath, content);
                 Utility.sendFile("> Here is the raw data for Custom Command: **" + c.getName() + "**", new File(filePath), command.channel);
                 try {
@@ -35,7 +35,7 @@ public class GetCCData implements Command {
             }
         }
         return "> Custom command " + args + " could not be found.";
-//        return command.customCommands.sendCCasJSON(command.channelID, args);
+//        return command.customCommands.sendCCasJSON(command.channelSID, args);
     }
 
     @Override

@@ -25,13 +25,17 @@ import java.util.List;
 public class CommandObject {
 
     public IMessage message;
-    public String messageID;
+    public String messageSID;
+    public long messageID;
     public IGuild guild;
-    public String guildID;
+    public String guildSID;
+    public long guildID;
     public IChannel channel;
-    public String channelID;
+    public String channelSID;
+    public long channelID;
     public IUser author;
-    public String authorID;
+    public String authorSID;
+    public long authorID;
     public String authorDisplayName;
     public String authorUserName;
     public Color authorColour;
@@ -91,16 +95,20 @@ public class CommandObject {
     }
 
     private void init() {
-        messageID = message.getStringID();
-        guildID = guild.getStringID();
-        channelID = channel.getStringID();
-        authorID = author.getStringID();
+        messageSID = message.getStringID();
+        guildSID = guild.getStringID();
+        channelSID = channel.getStringID();
+        authorSID = author.getStringID();
+        messageID = author.getLongID();
+        guildID = guild.getLongID();
+        channelID = channel.getLongID();
+        authorID = author.getLongID();
         authorUserName = author.getName() + "#" + author.getDiscriminator();
         authorDisplayName = author.getDisplayName(guild);
         authorColour = Utility.getUsersColour(author, guild);
         authorRoles = author.getRolesForGuild(guild);
 
-        guildContent = Globals.getGuildContent(guildID);
+        guildContent = Globals.getGuildContent(guildSID);
         guildConfig = guildContent.getGuildConfig();
         customCommands = guildContent.getCustomCommands();
         characters = guildContent.getCharacters();
@@ -160,7 +168,7 @@ public class CommandObject {
 
     public void setAuthor(IUser author) {
         this.author = author;
-        authorID = author.getStringID();
+        authorSID = author.getStringID();
         authorUserName = author.getName() + "#" + author.getDiscriminator();
         authorDisplayName = author.getDisplayName(guild);
         authorColour = Utility.getUsersColour(author, guild);
@@ -170,19 +178,19 @@ public class CommandObject {
 
     public void setChannel(IChannel channel) {
         this.channel = channel;
-        channelID = channel.getStringID();
+        channelSID = channel.getStringID();
     }
 
     public void setGuild(IGuild guild) {
         this.guild = guild;
-        guildID = guild.getStringID();
-        GuildContentObject contentObject = Globals.getGuildContent(guildID);
+        guildSID = guild.getStringID();
+        GuildContentObject contentObject = Globals.getGuildContent(guildSID);
         guildConfig = contentObject.getGuildConfig();
         customCommands = contentObject.getCustomCommands();
         servers = contentObject.getServers();
         characters = contentObject.getCharacters();
         competition = contentObject.getCompetition();
-        if (guild.getUserByID(authorID) != null) {
+        if (guild.getUserByID(authorSID) != null) {
             authorColour = Utility.getUsersColour(author, guild);
             authorRoles = author.getRolesForGuild(guild);
             authorDisplayName = author.getDisplayName(guild);
@@ -192,7 +200,7 @@ public class CommandObject {
 
     public void setMessage(IMessage message) {
         this.message = message;
-        messageID = message.getStringID();
+        messageSID = message.getStringID();
     }
 
     public void removeCommandsByType(String type) {

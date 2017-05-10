@@ -193,38 +193,39 @@ public class Utility {
     }
 
     //Discord Request Processors
-    public static RequestBuffer.RequestFuture<String> sendMessage(String message, IChannel channel) {
+    public static RequestBuffer.RequestFuture<IMessage> sendMessage(String message, IChannel channel) {
         return RequestBuffer.request(() -> {
+            IMessage error = null;
             if (message == null) {
-                return null;
+                return error;
             }
             if (message.length() < 2000) {
                 try {
                     if (StringUtils.containsOnly(message, "\n")) {
-                        return null;
+                        return error;
                     }
                     if (message != null || !message.equals("")) {
-                        return channel.sendMessage(removeMentions(message)).getStringID();
+                        return channel.sendMessage(removeMentions(message));
                     }
                 } catch (MissingPermissionsException e) {
                     logger.debug("Error sending message to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
-                    return null;
+                    return error;
                 } catch (DiscordException e) {
                     if (e.getMessage().contains("CloudFlare")) {
                         return sendMessage(message, channel).get();
                     } else {
                         e.printStackTrace();
                         logger.error(message);
-                        return null;
+                        return error;
                     }
                 }
             } else {
                 logger.debug("Message to be sent to channel with id: " + channel.getStringID() + "on guild with id: " + channel.getGuild().getStringID() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Message to large.");
-                return null;
+                return error;
             }
-            return null;
+            return error;
         });
     }
 
@@ -267,9 +268,9 @@ public class Utility {
     }
 
     public static boolean sendFileURL(String message, String imageURL, IChannel channel, boolean loadMessage) {
-        String messageID = null;
+        IMessage toDelete = null;
         if (loadMessage) {
-            messageID = sendMessage("`Loading...`", channel).get();
+            toDelete = sendMessage("`Loading...`", channel).get();
         }
         boolean failed = RequestBuffer.request(() -> {
             try {
@@ -317,8 +318,8 @@ public class Utility {
             }
             return false;
         }).get();
-        if (loadMessage) {
-            deleteMessage(Globals.getClient().getMessageByID(messageID));
+        if (loadMessage && toDelete != null) {
+            deleteMessage(toDelete);
         }
         return failed;
     }
@@ -764,10 +765,10 @@ public class Utility {
     public static String loggingFormatter(String type, String command, String args, CommandObject commandObject) {
         return type + " : \"" + command +
                 "\", ARGS : \"" + args +
-                "\", GUILD : \"" + commandObject.guildID +
-                "\", CHANNEL : \"" + commandObject.channelID +
-                "\", USER : \"" + commandObject.authorID +
-                "\", MESSAGE : \"" + commandObject.messageID +
+                "\", GUILD : \"" + commandObject.guildSID +
+                "\", CHANNEL : \"" + commandObject.channelSID +
+                "\", USER : \"" + commandObject.authorSID +
+                "\", MESSAGE : \"" + commandObject.messageSID +
                 "\".";
     }
 

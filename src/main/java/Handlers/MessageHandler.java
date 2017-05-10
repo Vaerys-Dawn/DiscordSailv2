@@ -10,6 +10,7 @@ import Main.Utility;
 import Objects.BlackListObject;
 import Objects.OffenderObject;
 import POGOs.GuildConfig;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
@@ -78,7 +79,7 @@ public class MessageHandler {
                 if (command.equalsIgnoreCase(guildConfig.getPrefixCommand() + name)) {
                     //command logging
 
-                    if (c.type().equals(Command.TYPE_CREATOR) && !commandObject.authorID.equalsIgnoreCase(Globals.creatorID)) {
+                    if (c.type().equals(Command.TYPE_CREATOR) && !commandObject.authorSID.equalsIgnoreCase(Globals.creatorID)) {
                         return;
                     }
 
@@ -95,7 +96,7 @@ public class MessageHandler {
                             if (s.type().equals(c.channel())){
                                 if (s.getIDs(commandObject.guildConfig) != null){
                                     for (String id : s.getIDs(commandObject.guildConfig)){
-                                        if (id.equals(commandObject.channelID)){
+                                        if (id.equals(commandObject.channelSID)){
                                             channelFound = true;
                                         }
                                         channelMentions.add(commandObject.client.getChannelByID(id).mention());
@@ -181,9 +182,9 @@ public class MessageHandler {
                 } else {
                     response = response.replaceAll("#mentionAdmin#", "Admin");
                 }
-                if (TimedEvents.getDoAdminMention(command.guildID) == 0) {
+                if (TimedEvents.getDoAdminMention(command.guildSID) == 0) {
                     Utility.sendMessage(response, command.channel);
-                    TimedEvents.setDoAdminMention(command.guildID, 60);
+                    TimedEvents.setDoAdminMention(command.guildSID, 60);
                 }
             }
         }
@@ -195,12 +196,12 @@ public class MessageHandler {
             return false;
         }
         if (command.guildConfig.rateLimiting) {
-            if (command.guildContent.rateLimit(command.authorID)) {
+            if (command.guildContent.rateLimit(command.authorSID)) {
                 List<IRole> oldRoles = new ArrayList<>(command.author.getRolesForGuild(command.guild));
                 command.message.delete();
-                Utility.sendDM("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guildConfig.messageLimit, command.authorID);
+                Utility.sendDM("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guildConfig.messageLimit, command.authorSID);
                 if (command.guildConfig.muteRepeatOffenders) {
-                    int rate = command.guildContent.getUserRate(command.authorID);
+                    int rate = command.guildContent.getUserRate(command.authorSID);
                     if (rate - 3 > command.guildConfig.messageLimit) {
                         //mutes users if they abuse it.
                         boolean failed = Utility.roleManagement(command.author, command.guild, command.guildConfig.getMutedRole().getRoleID(), true).get();
@@ -213,7 +214,7 @@ public class MessageHandler {
                             if (adminChannel == null) {
                                 adminChannel = command.channel;
                             }
-                            Utility.sendDM("You have been muted for abusing the Guild rate limit.", command.authorID);
+                            Utility.sendDM("You have been muted for abusing the Guild rate limit.", command.authorSID);
                             Utility.sendMessage("> " + command.author.mention() + " has been muted for repetitively abusing Guild rateLimit.", adminChannel);
                         }
                     }
@@ -258,9 +259,9 @@ public class MessageHandler {
                             response = response.replaceAll("#mentionAdmin#", "");
                         }
                         response = response.replace("#user#", author.mention());
-                        if (TimedEvents.getDoAdminMention(command.guildID) == 0) {
+                        if (TimedEvents.getDoAdminMention(command.guildSID) == 0) {
                             Utility.sendMessage(response, command.channel);
-                            TimedEvents.setDoAdminMention(command.guildID, 60);
+                            TimedEvents.setDoAdminMention(command.guildSID, 60);
                         }
                         Utility.deleteMessage(message);
                     } else {

@@ -33,7 +33,6 @@ import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
 
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -320,7 +319,7 @@ public class AnnotationListener {
         List<String> dontLog = command.guildConfig.getChannelIDsByType(Command.CHANNEL_DONT_LOG);
         if (dontLog != null) {
             for (String id : dontLog) {
-                if (command.channelID.equals(id)) {
+                if (command.channelSID.equals(id)) {
                     return;
                 }
             }
@@ -331,13 +330,13 @@ public class AnnotationListener {
         if (event.getMessage() == null) {
             return;
         }
-        if (serverLogID != null && serverLogID.get(0).equals(command.channelID) && ourUser.getStringID().equals(command.authorID)) {
+        if (serverLogID != null && serverLogID.get(0).equals(command.channelSID) && ourUser.getStringID().equals(command.authorSID)) {
             return;
         }
-        if (infoID != null && infoID.get(0).equals(command.channelID) && ourUser.getStringID().equals(command.authorID)) {
+        if (infoID != null && infoID.get(0).equals(command.channelSID) && ourUser.getStringID().equals(command.authorSID)) {
             return;
         }
-        if (adminLogID != null && adminLogID.get(0).equals(command.channelID) && ourUser.getStringID().equals(command.authorID)) {
+        if (adminLogID != null && adminLogID.get(0).equals(command.channelSID) && ourUser.getStringID().equals(command.authorSID)) {
             return;
         }
         if (command.guildConfig.deleteLogging) {
@@ -353,7 +352,7 @@ public class AnnotationListener {
             } else {
                 content = Utility.unFormatMentions(command.message);
             }
-            if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.authorID.equals(command.client.getOurUser().getStringID())) {
+            if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.authorSID.equals(command.client.getOurUser().getStringID())) {
                 return;
             }
             long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - event.getMessage().getTimestamp().atZone(ZoneOffset.UTC).toEpochSecond();
@@ -410,7 +409,7 @@ public class AnnotationListener {
         List<String> dontLog = command.guildConfig.getChannelIDsByType(Command.CHANNEL_DONT_LOG);
         if (dontLog != null) {
             for (String id : dontLog) {
-                if (command.channelID.equals(id)) {
+                if (command.channelSID.equals(id)) {
                     return;
                 }
             }
@@ -424,7 +423,7 @@ public class AnnotationListener {
             if (event.getMessage() == null) {
                 return;
             }
-            if (serverLogID != null && serverLogID.equals(command.channelID) && ourUser.getStringID().equals(command.authorID)) {
+            if (serverLogID != null && serverLogID.equals(command.channelSID) && ourUser.getStringID().equals(command.authorSID)) {
                 return;
             }
             if (command.guildConfig.editLogging) {

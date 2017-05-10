@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class CharacterObject {
     String name; //Character's Name
-    String userID; //author's authorID
+    String userID; //author's authorSID
     String nickname; //character's name;
     ArrayList<RoleTypeObject> roles = new ArrayList<>(); // these are the cosmetic and modifier roles the author has;
     String gender = "N/a"; //limit = 20 chars.

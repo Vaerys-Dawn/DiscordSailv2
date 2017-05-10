@@ -14,7 +14,7 @@ public class ClearReminder implements Command{
     public String execute(String args, CommandObject command) {
         boolean wasfound = false;
         for (ReminderObject r: Globals.getGlobalData().getReminders()){
-            if (r.getUserID().equals(command.authorID)){
+            if (r.getUserID().equals(command.authorSID)){
                 wasfound = true;
                 if (r.isSent()){
                     return "> I could not clear your reminder as it is about to be sent.";
@@ -22,7 +22,7 @@ public class ClearReminder implements Command{
             }
         }
         if (wasfound) {
-            Globals.getGlobalData().removeReminder(command.authorID);
+            Globals.getGlobalData().removeReminder(command.authorSID);
             return "> Reminder cleared";
         }else {
             return "> You have no reminders set";

@@ -45,9 +45,10 @@ public class GetGuildInfo implements Command{
         boolean manageServer = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getStringID().equals(Globals.creatorID);
         boolean manageChannels = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getStringID().equals(Globals.creatorID);
 
-        Utility.sendFileURL("",guild.getIconURL(),command.client.getOrCreatePMChannel(command.author),true);
+        Utility.sendMessage("> Info will be sent to you via Direct Message.",command.channel);
+        Utility.sendFileURL("",guild.getIconURL(),command.client.getOrCreatePMChannel(command.author),false);
         builder.append("***[" + guildName.toUpperCase() + "]***");
-        builder.append("\n\n> Guild ID : **" + guild.getStringID());
+        builder.append("\n\n> Guild ID : **" + guild.getLongID());
         builder.append("**\n> Creation Date : **" + creationDate.getYear() + " " + creationDate.getMonth() + " " + creationDate.getDayOfMonth() + " - " + creationDate.getHour() + ":" + creationDate.getMinute());
         builder.append("**\n> Guild Owner : **@" + guildOwner.getName() + "#" + guildOwner.getDiscriminator());
         builder.append("**\n> Command Prefix: **"+  config.getPrefixCommand());
@@ -160,7 +161,7 @@ public class GetGuildInfo implements Command{
         builder.append("\n > Total users : \"**" + totalModified + "**\"");
         builder.append("\n\n------{END OF INFO}------");
         Utility.sendDM(builder.toString(), author.getStringID());
-        return "> Info sent to you via Direct Message.";
+        return null;
     }
 
     @Override

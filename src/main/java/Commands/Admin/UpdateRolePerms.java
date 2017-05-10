@@ -4,6 +4,7 @@ import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Utility;
 import Objects.RoleTypeObject;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -21,7 +22,7 @@ public class UpdateRolePerms implements Command
         List<IRole> parentRole = Utility.getRolesByName(command.guild,args);
         EnumSet parentPerms = command.guild.getEveryoneRole().getPermissions();
         ArrayList<String> permList = new ArrayList<>();
-        String workingID = Utility.sendMessage("`Working...`",command.channel).get();
+        IMessage workingMsg = Utility.sendMessage("`Working...`",command.channel).get();
         if (parentRole.size() != 0){
             parentPerms = parentRole.get(0).getPermissions();
         }
@@ -40,7 +41,7 @@ public class UpdateRolePerms implements Command
         for (Object p : parentPerms.toArray()){
             permList.add(p.toString());
         }
-        Utility.deleteMessage(command.client.getMessageByID(workingID));
+        Utility.deleteMessage(workingMsg);
         return "> Cosmetic Roles Perms set to : " + Utility.listFormatter(permList,true);
     }
 

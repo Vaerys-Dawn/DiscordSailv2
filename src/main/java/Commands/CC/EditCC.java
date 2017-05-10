@@ -26,7 +26,7 @@ public class EditCC implements Command {
                 boolean canBypass = false;
                 canBypass = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, command.author, command.guild);
                 if (canBypass ||
-                        command.authorID.equals(c.getUserID()) && !c.isLocked() ||
+                        command.authorSID.equals(c.getUserID()) && !c.isLocked() ||
                         Utility.canBypass(command.author, command.guild)) {
                     if (command.customCommands.checkblackList(args) != null) {
                         return command.customCommands.checkblackList(args);

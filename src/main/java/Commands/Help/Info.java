@@ -25,7 +25,7 @@ public class Info implements Command {
         for (Command c : commands) {
             for (String s : c.names()) {
                 if (args.equalsIgnoreCase(s)) {
-                    if (c.type().equalsIgnoreCase(TYPE_CREATOR) && !command.authorID.equalsIgnoreCase(Globals.creatorID)){
+                    if (c.type().equalsIgnoreCase(TYPE_CREATOR) && !command.authorSID.equalsIgnoreCase(Globals.creatorID)){
                         return error;
                     }
 

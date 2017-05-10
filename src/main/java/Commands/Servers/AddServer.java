@@ -21,7 +21,7 @@ public class AddServer implements Command {
         if (splitArgs.size() < 2) {
             return "> Cannot create server, Missing IP";
         }
-        return command.servers.addServer(command.authorID, splitArgs.get(0), splitArgs.get(1), port);
+        return command.servers.addServer(command.authorSID, splitArgs.get(0), splitArgs.get(1), port);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class NewCC implements Command {
         List<String> shitpostChannels = command.guildConfig.getChannelIDsByType(Command.CHANNEL_SHITPOST);
         if (shitpostChannels != null) {
             for (String id : shitpostChannels) {
-                if (command.channelID.equals(id)) {
+                if (command.channelSID.equals(id)) {
                     isShitpost = true;
                 }
             }

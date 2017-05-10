@@ -18,9 +18,13 @@ public class SetGender implements Command {
         SplitFirstObject userID = new SplitFirstObject(args);
         boolean adminEdit = false;
         if (Utility.testForPerms(dualPerms(), command.author, command.guild) || Utility.canBypass(command.author, command.guild)) {
-            user = command.client.getUserByID(userID.getFirstWord());
-            if (user != null) {
-                adminEdit = true;
+            try {
+                user = command.client.getUserByID(Long.parseLong(userID.getFirstWord()));
+                if (user != null) {
+                    adminEdit = true;
+                }
+            }catch (NumberFormatException e){
+                //do nothing
             }
         }
 
@@ -38,7 +42,7 @@ public class SetGender implements Command {
                 if (args.length() > 20) {
                     return "> Your Gender's Length is too long...\n(Must be under 20 chars)";
                 }
-                if (u.getID().equals(command.authorID)) {
+                if (u.getID().equals(command.authorSID)) {
                     u.setGender(args);
                     return "> Gender Edited";
 

@@ -20,7 +20,7 @@ public class EditChar implements Command {
         SplitFirstObject mode = new SplitFirstObject(charName.getRest());
         for (CharacterObject c: command.characters.getCharacters()){
             if (c.getName().equalsIgnoreCase(charName.getFirstWord())){
-                if (c.getUserID().equals(command.authorID) || Utility.canBypass(command.author,command.guild)){
+                if (c.getUserID().equals(command.authorSID) || Utility.canBypass(command.author,command.guild)){
                     if (mode.getRest() == null || mode.getRest().isEmpty()){
                         return "> Missing Arguments for Editing.";
                     }

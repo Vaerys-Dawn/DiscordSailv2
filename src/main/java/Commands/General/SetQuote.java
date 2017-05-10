@@ -18,10 +18,14 @@ public class SetQuote implements Command {
         IUser user = command.author;
         SplitFirstObject userID = new SplitFirstObject(args);
         boolean adminEdit = false;
-        if (Utility.testForPerms(dualPerms(), command.author, command.guild) || Utility.canBypass(command.author,command.guild)) {
-            user = command.client.getUserByID(userID.getFirstWord());
-            if (user != null) {
-                adminEdit = true;
+        if (Utility.testForPerms(dualPerms(), command.author, command.guild) || Utility.canBypass(command.author, command.guild)) {
+            try {
+                user = command.client.getUserByID(Long.parseLong(userID.getFirstWord()));
+                if (user != null) {
+                    adminEdit = true;
+                }
+            }catch (NumberFormatException e){
+                //do nothing
             }
         }
         for (UserTypeObject u : command.guildUsers.getUsers()) {
@@ -39,7 +43,7 @@ public class SetQuote implements Command {
                 if (args.length() > 140) {
                     return "> Your Quote is too long...\n(must be under 140 chars)";
                 }
-                if (u.getID().equals(command.authorID)) {
+                if (u.getID().equals(command.authorSID)) {
                     u.setQuote(args);
                     return "> Quote Edited.";
                 }

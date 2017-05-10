@@ -24,7 +24,7 @@ public class SelectChar implements Command {
     public String execute(String args, CommandObject command) {
         for (CharacterObject c : command.characters.getCharacters()) {
             if (c.getName().equalsIgnoreCase(args)) {
-                if (c.getUserID().equals(command.authorID)) {
+                if (c.getUserID().equals(command.authorSID)) {
                     List<IRole> userRoles = command.guild.getRolesForUser(command.author);
                     int roleCount = 0;
                     int postRoleCount = 0;

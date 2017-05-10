@@ -17,7 +17,7 @@ public class ListChars implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder();
-        String id = command.authorID;
+        String id = command.authorSID;
         String title = "> Here are all of your characters.";
         if (command.message.getMentions().size() > 0){
             IUser mentioned = command.message.getMentions().get(0);

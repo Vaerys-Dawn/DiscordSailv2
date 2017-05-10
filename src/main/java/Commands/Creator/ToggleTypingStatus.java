@@ -1,52 +1,42 @@
-package Commands.Servers;
+package Commands.Creator;
 
 import Commands.CommandObject;
 import Interfaces.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
- * Created by Vaerys on 31/01/2017.
+ * Created by Vaerys on 10/05/2017.
  */
-public class EditServerIP implements Command {
+public class ToggleTypingStatus implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        ArrayList<String> splitArgs = new ArrayList<>(Arrays.asList(args.split(" ")));
-        String port = "N/a";
-        if (splitArgs.size() > 2) {
-            port = splitArgs.get(2);
-        }
-        if (splitArgs.size() < 2) {
-            return "> Cannot edit server IP, missing arguments.";
-        }
-        return command.servers.editIP(command.authorSID, splitArgs.get(0), splitArgs.get(1), port, command.guild);
+        command.channel.toggleTypingStatus();
+        return null;
     }
 
     @Override
     public String[] names() {
-        return new String[]{"EditServerIP"};
+        return new String[]{"Typing"};
     }
 
     @Override
     public String description() {
-        return "Allows you to edit your server IP and Port.";
+        return "Toggles the typing status on a channel.";
     }
 
     @Override
     public String usage() {
-        return "[Server Name] [IP] (Port)";
+        return null;
     }
 
     @Override
     public String type() {
-        return TYPE_SERVERS;
+        return TYPE_CREATOR;
     }
 
     @Override
     public String channel() {
-        return CHANNEL_SERVERS;
+        return null;
     }
 
     @Override
@@ -56,12 +46,12 @@ public class EditServerIP implements Command {
 
     @Override
     public boolean requiresArgs() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean doAdminLogging() {
-        return false;
+        return true;
     }
 
     @Override

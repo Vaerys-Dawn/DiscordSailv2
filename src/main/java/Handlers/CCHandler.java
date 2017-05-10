@@ -70,7 +70,7 @@ public class CCHandler {
                         for (ChannelSetting c : commandObject.channelSettings) {
                             if (c.type().equals(Command.CHANNEL_SHITPOST)) {
                                 for (String id : c.getIDs(commandObject.guildConfig)) {
-                                    if (commandObject.channelID.equals(id)) {
+                                    if (commandObject.channelSID.equals(id)) {
                                         isShitpost = true;
                                         IChannel channel = commandObject.client.getChannelByID(id);
                                         channelMentions.add(channel.mention());

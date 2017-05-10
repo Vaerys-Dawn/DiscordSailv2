@@ -35,7 +35,7 @@ public class Help implements Command {
 
         //getting Types of commands.
 
-        if (!command.authorID.equalsIgnoreCase(Globals.creatorID)) {
+        if (!command.authorSID.equalsIgnoreCase(Globals.creatorID)) {
             for (int i = 0; i < types.size(); i++) {
                 if (types.get(i).equals(TYPE_CREATOR)) {
                     types.remove(i);
@@ -53,7 +53,7 @@ public class Help implements Command {
             builder.append(codeBlock + "\n");
             String desc = "[Suport Sail on Patreon](https://www.patreon.com/DawnFelstar)\n" +
                     "[Find Sail on GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)";
-            if (!command.guildID.equals("206792432560373761")) {
+            if (!command.guildSID.equals("206792432560373761")) {
                 desc += "\nSupport Discord - https://discord.gg/XSyQQrR";
             }
 

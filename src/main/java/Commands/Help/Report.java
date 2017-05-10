@@ -22,10 +22,14 @@ public class Report implements Command {
         if (command.guildConfig.getChannelIDsByType(CHANNEL_ADMIN) != null) {
             String channelID = command.guildConfig.getChannelIDsByType(CHANNEL_ADMIN).get(0);
             SplitFirstObject user = new SplitFirstObject(args);
-            IUser reportedUser = command.client.getUserByID(user.getFirstWord());
-
-            if (reportedUser != null) {
-                reported = reportedUser.mention();
+            long uID = -1;
+            try {
+                uID = Long.parseLong(user.getFirstWord());
+            }catch (NumberFormatException e){
+                //do nothing
+            }
+            if (uID != -1) {
+                reported = command.client.getUserByID(uID).mention();
             } else if (command.message.getMentions().size() > 0) {
                 reported = command.message.getMentions().get(0).mention();
             } else {
