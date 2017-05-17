@@ -67,7 +67,7 @@ public class Help implements Command {
             String title = "ERROR";
             String suffix = Utility.getCommandInfo(new Info(), command);
             for (String s : types) {
-                if (args.equalsIgnoreCase(s)) {
+                if (args.equalsIgnoreCase(s) || args.equalsIgnoreCase(command.guildConfig.getPrefixCommand() + s)) {
                     title = "> Here are all of the " + s + " Commands I have available.";
                     isFound = true;
                     if (s.equalsIgnoreCase(TYPE_DM)) {

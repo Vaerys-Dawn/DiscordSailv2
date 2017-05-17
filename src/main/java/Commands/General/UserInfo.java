@@ -5,6 +5,7 @@ import Interfaces.Command;
 import Main.Utility;
 import Objects.UserTypeObject;
 import Objects.XEmbedBuilder;
+import POGOs.CustomCommands;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
@@ -22,7 +23,7 @@ public class UserInfo implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         IUser user = command.author;
-        if (command.message.getMentions().size() > 0){
+        if (command.message.getMentions().size() > 0) {
             user = command.message.getMentions().get(0);
         }
         for (UserTypeObject u : command.guildUsers.getUsers()) {
@@ -48,15 +49,16 @@ public class UserInfo implements Command {
 
 
                 //sets sidebar colour
-                builder.withColor(Utility.getUsersColour(user,command.guild));
+                builder.withColor(Utility.getUsersColour(user, command.guild));
 
                 //collect role names;
                 roleNames.addAll(roles.stream().filter(role -> !role.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
 
                 //builds desc
-                builder.withDesc("Account Created: " + Utility.formatTimeDifference(difference) +
-                        "\nGender: " + u.getGender() +
-                        "\nRoles : " + Utility.listFormatter(roleNames, true) +
+                builder.withDesc("**Account Created: **" + Utility.formatTimeDifference(difference) +
+                        "\n**Gender: **" + u.getGender() +
+                        "\n**Custom Commands: **" + command.customCommands.getUserCommandCount(user, command.guild, command.guildConfig) +
+                        "\n**Roles: **" + Utility.listFormatter(roleNames, true) +
                         "\n\n*" + u.getQuote() + "*");
 
                 // TODO: 27/02/2017 when xp system is implemented put xp and rank on the user card.
@@ -69,16 +71,16 @@ public class UserInfo implements Command {
                 return null;
             }
         }
-        if (user.isBot()){
+        if (user.isBot()) {
             command.guildUsers.addUser(user.getStringID());
-            return execute(args,command);
+            return execute(args, command);
         }
         return "> Unfortunately that user doesn't seem to have a user info right now.";
     }
 
     @Override
     public String[] names() {
-        return new String[]{"UserInfo","Me"};
+        return new String[]{"UserInfo", "Me"};
     }
 
     @Override

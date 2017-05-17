@@ -20,6 +20,7 @@ public class InitChannels {
         channelSettings.add(new Admin());
         channelSettings.add(new AdminLog());
         channelSettings.add(new ServerLog());
+        channelSettings.add(new Art());
 
         //Channel Settings
         channelSettings.add(new Shitpost());

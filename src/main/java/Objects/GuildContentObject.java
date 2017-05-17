@@ -17,10 +17,11 @@ public class GuildContentObject {
     private Characters characters;
     private Competition competition;
     private GuildUsers guildUsers;
+    private ChannelData channelData;
     public ArrayList<UserRateObject> ratelimiting = new ArrayList<>();
     private int doAdminMention;
 
-    public GuildContentObject(String guildID, GuildConfig guildConfig, CustomCommands customCommands, Servers servers, Characters characters, Competition competition,GuildUsers guildUsers) {
+    public GuildContentObject(String guildID, GuildConfig guildConfig, CustomCommands customCommands, Servers servers, Characters characters, Competition competition, GuildUsers guildUsers, ChannelData channelData) {
         this.guildID = guildID;
         this.guildConfig = guildConfig;
         this.customCommands = customCommands;
@@ -28,30 +29,35 @@ public class GuildContentObject {
         this.characters = characters;
         this.competition = competition;
         this.guildUsers = guildUsers;
+        this.channelData = channelData;
     }
 
-    public boolean rateLimit(String userID){
+    public ChannelData getChannelData() {
+        return channelData;
+    }
+
+    public boolean rateLimit(String userID) {
         int max = guildConfig.messageLimit;
-        if (max == -1){
+        if (max == -1) {
             return false;
         }
         boolean isfound = false;
-        for (UserRateObject r: ratelimiting){
-            if (r.userID.equals(userID)){
+        for (UserRateObject r : ratelimiting) {
+            if (r.userID.equals(userID)) {
                 r.counterUp();
                 isfound = true;
-                if (r.counter > max){
+                if (r.counter > max) {
                     return true;
                 }
             }
         }
-        if (!isfound){
+        if (!isfound) {
             ratelimiting.add(new UserRateObject(userID));
         }
         return false;
     }
 
-    public void resetRateLimit(){
+    public void resetRateLimit() {
         ratelimiting.clear();
     }
 
@@ -105,12 +111,13 @@ public class GuildContentObject {
         Utility.flushFile(guildID, Constants.FILE_CHARACTERS, characters, characters.isProperlyInit());
         Utility.flushFile(guildID, Constants.FILE_SERVERS, servers, servers.isProperlyInit());
         Utility.flushFile(guildID, Constants.FILE_COMPETITION, competition, competition.isProperlyInit());
-        Utility.flushFile(guildID,Constants.FILE_GUILD_USERS,guildUsers, guildUsers.isProperlyInit());
+        Utility.flushFile(guildID, Constants.FILE_GUILD_USERS, guildUsers, guildUsers.isProperlyInit());
+        Utility.flushFile(guildID, Constants.FILE_CHANNEl_DATA, channelData, true);
     }
 
     public int getUserRate(String userID) {
-        for (UserRateObject u : ratelimiting){
-            if (u.userID.equals(userID)){
+        for (UserRateObject u : ratelimiting) {
+            if (u.userID.equals(userID)) {
                 return u.counter;
             }
         }

@@ -161,4 +161,15 @@ public class CustomCommands {
         }
         return Constants.ERROR_CC_NOT_FOUND;
     }
+
+    public String getUserCommandCount(IUser user, IGuild guild, GuildConfig guildConfig) {
+        int totalCommands = 0;
+        int ccMax = maxCCs(user,guild,guildConfig);
+        for (CCommandObject c: commands){
+            if (c.getUserID().equals(user.getStringID())){
+                totalCommands++;
+            }
+        }
+        return totalCommands + "/" + ccMax;
+    }
 }

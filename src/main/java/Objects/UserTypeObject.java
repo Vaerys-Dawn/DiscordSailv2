@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 public class UserTypeObject {
     String ID;
     long xp = 0;
-    long level = 0;
-    String rewardRoleID = "";
+    long rewardID = -1;
+//    String rewardRoleID = "";
     String gender = "Unknown";
     String quote = "This person doesn't seem to have much to say for themselves.";
 
@@ -41,12 +41,12 @@ public class UserTypeObject {
         this.gender = gender;
     }
 
-    public String getRewardRoleID() {
-        return rewardRoleID;
+    public long getRewardID() {
+        return rewardID;
     }
 
-    public void setRewardRoleID(String rewardRoleID) {
-        this.rewardRoleID = rewardRoleID;
+    public void setRewardID(long rewardID) {
+        this.rewardID = rewardID;
     }
 
     public UserTypeObject(String ID) {
@@ -62,23 +62,8 @@ public class UserTypeObject {
         logger.trace(Globals.getClient().getUserByID(ID)+ " - Xp gained");
     }
 
-    public void addLevel(){
-        level += 1;
-    }
-
     public void setXp(long xp) {
         this.xp = xp;
-        calculateLevel();
-    }
-
-    private void calculateLevel() {
-        int xpForLvlOne = Globals.xpForLevelOne;
-        int baseModifier = Globals.baseXPModifier;
-
-    }
-
-    public long getLevel() {
-        return level;
     }
 
     public int getXP() {

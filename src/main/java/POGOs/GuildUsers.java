@@ -40,12 +40,7 @@ public class GuildUsers {
 //        user.addXP(object.guildConfig);
     }
 
-    public void addLevels() {
-        for (UserTypeObject u : users) {
-            u.addLevel();
-        }
-    }
-
+  
     public boolean muteUser(String userID, long time, String guildID) {
         boolean found = false;
         for (UserCountDown c : mutedUsers) {

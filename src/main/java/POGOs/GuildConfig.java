@@ -20,9 +20,11 @@ public class GuildConfig {
     boolean properlyInit = false;
     String guildName = "";
     //toggles
-    //--AutoMessages
+    //--Auto Tasks
     public boolean loginMessage = true;
     public boolean dailyMessage = true;
+    public boolean artPinning = false;
+    public boolean autoArtPinning = false;
     //--Logging
     public boolean generalLogging = false;
     public boolean adminLogging = false;
@@ -67,10 +69,13 @@ public class GuildConfig {
     ArrayList<RoleTypeObject> trustedRoles = new ArrayList<>();
     ArrayList<BlackListObject> blackList = new ArrayList<>();
     ArrayList<OffenderObject> repeatOffenders = new ArrayList<>();
+    ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", null);
     RoleTypeObject mutedRole = new RoleTypeObject("No Role Set", null);
 
-
+    public ArrayList<RewardRoleObject> getRewardRoles() {
+        return rewardRoles;
+    }
 
     public String getPrefixCommand() {
         return prefixCommand;

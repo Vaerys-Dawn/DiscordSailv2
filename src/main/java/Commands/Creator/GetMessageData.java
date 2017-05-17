@@ -44,8 +44,6 @@ public class GetMessageData implements Command {
                     topUser = user.getID();
                 }
                 totalMessage += user.getXP();
-                totalMessageAvg += user.getXP() / (user.getLevel() + 1);
-                totalAvg += user.getXP() / (user.getLevel() + 1);
                 totalGlobalUsers++;
                 totalUsers++;
             }

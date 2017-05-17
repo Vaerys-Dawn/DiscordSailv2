@@ -49,6 +49,7 @@ public class CommandObject {
     public Servers servers;
     public Competition competition;
     public GuildUsers guildUsers;
+    public ChannelData channelData;
 
     public ArrayList<Command> commands = new ArrayList<>();
     public ArrayList<DMCommand> dmCommands = new ArrayList<>();
@@ -61,7 +62,6 @@ public class CommandObject {
 
 
     final static Logger logger = LoggerFactory.getLogger(CommandObject.class);
-
 
 
     public CommandObject(IMessage message) {
@@ -85,8 +85,8 @@ public class CommandObject {
         this.message = command.message;
         this.channel = command.channel;
         this.author = command.author;
-        for (IGuild g: command.client.getGuilds()){
-            if (g.getUsers().contains(command.author)){
+        for (IGuild g : command.client.getGuilds()) {
+            if (g.getUsers().contains(command.author)) {
                 this.guild = g;
             }
         }
@@ -99,7 +99,7 @@ public class CommandObject {
         guildSID = guild.getStringID();
         channelSID = channel.getStringID();
         authorSID = author.getStringID();
-        messageID = author.getLongID();
+        messageID = message.getLongID();
         guildID = guild.getLongID();
         channelID = channel.getLongID();
         authorID = author.getLongID();
@@ -115,11 +115,11 @@ public class CommandObject {
         servers = guildContent.getServers();
         competition = guildContent.getCompetition();
         guildUsers = guildContent.getGuildUsers();
+        channelData = guildContent.getChannelData();
         client = Globals.getClient();
 
         commands = (ArrayList<Command>) Globals.getCommands().clone();
         commandTypes = (ArrayList<String>) Globals.getCommandTypes().clone();
-//        channelTypes = (ArrayList<String>) Globals.getChannelTypes().clone();
         channelSettings = (ArrayList<ChannelSetting>) Globals.getChannelSettings().clone();
         guildToggles = (ArrayList<GuildToggle>) Globals.getGuildGuildToggles().clone();
 
@@ -134,9 +134,6 @@ public class CommandObject {
         for (GuildToggle g : guildToggles) {
             testToggles += g.name() + ", ";
         }
-        if (testToggles.contains(new ModuleServers().name())) {
-            logger.debug("Module Servers found.");
-        }
         for (int i = 0; i < guildToggles.size(); i++) {
             if (!guildToggles.get(i).get(guildConfig)) {
                 if (guildToggles.get(i).isModule()) {
@@ -148,7 +145,7 @@ public class CommandObject {
         //well this works I guess.
         for (GuildToggle t : toRemove) {
             for (int i = 0; i < guildToggles.size(); i++) {
-                if (t.name().equalsIgnoreCase(guildToggles.get(i).name())){
+                if (t.name().equalsIgnoreCase(guildToggles.get(i).name())) {
                     guildToggles.remove(i);
                 }
             }
@@ -166,7 +163,7 @@ public class CommandObject {
         if (author == null) throw new IllegalStateException("author can't be null");
     }
 
-    public void setAuthor(IUser author) {
+    public CommandObject setAuthor(IUser author) {
         this.author = author;
         authorSID = author.getStringID();
         authorUserName = author.getName() + "#" + author.getDiscriminator();
@@ -174,14 +171,16 @@ public class CommandObject {
         authorColour = Utility.getUsersColour(author, guild);
         authorRoles = author.getRolesForGuild(guild);
         notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't let you do that.";
+        return this;
     }
 
-    public void setChannel(IChannel channel) {
+    public CommandObject setChannel(IChannel channel) {
         this.channel = channel;
         channelSID = channel.getStringID();
+        return this;
     }
 
-    public void setGuild(IGuild guild) {
+    public CommandObject setGuild(IGuild guild) {
         this.guild = guild;
         guildSID = guild.getStringID();
         GuildContentObject contentObject = Globals.getGuildContent(guildSID);
@@ -196,11 +195,13 @@ public class CommandObject {
             authorDisplayName = author.getDisplayName(guild);
             notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't let you do that.";
         }
+        return this;
     }
 
-    public void setMessage(IMessage message) {
+    public CommandObject setMessage(IMessage message) {
         this.message = message;
         messageSID = message.getStringID();
+        return this;
     }
 
     public void removeCommandsByType(String type) {

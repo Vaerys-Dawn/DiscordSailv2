@@ -10,7 +10,6 @@ import Main.Utility;
 import Objects.BlackListObject;
 import Objects.OffenderObject;
 import POGOs.GuildConfig;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
@@ -56,6 +55,11 @@ public class MessageHandler {
                     Utility.sendMessage(s.response(), commandObject.channel);
                     return;
                 }
+            }
+        }
+        if (commandObject.guildConfig.artPinning) {
+            if (commandObject.guildConfig.autoArtPinning) {
+                new ArtHandler(commandObject);
             }
         }
         if (command.toLowerCase().startsWith(commandObject.guildConfig.getPrefixCommand().toLowerCase())) {

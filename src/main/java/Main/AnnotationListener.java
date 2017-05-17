@@ -1,14 +1,14 @@
 package Main;
 
 import Commands.CommandObject;
-import Handlers.DMHandler;
-import Handlers.FileHandler;
-import Handlers.MessageHandler;
-import Handlers.PatchHandler;
+import Handlers.*;
 import Interfaces.Command;
 import Objects.GuildContentObject;
 import Objects.SplitFirstObject;
+import OldCode.*;
 import POGOs.*;
+import POGOs.ChannelData;
+import POGOs.CustomCommands;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import org.slf4j.Logger;
@@ -20,10 +20,7 @@ import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.*;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.impl.events.guild.member.GuildMemberEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
@@ -66,6 +63,7 @@ public class AnnotationListener {
         Characters characters = new Characters();
         Competition competition = new Competition();
         GuildUsers guildUsers = new GuildUsers();
+        ChannelData channelData = new ChannelData();
 
         //Preps Objects for initial load
         guildConfig.initConfig();
@@ -91,6 +89,7 @@ public class AnnotationListener {
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_INFO));
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_COMPETITION), competition);
         FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_GUILD_USERS), guildUsers);
+        FileHandler.initFile(Utility.getFilePath(guildID, Constants.FILE_CHANNEl_DATA), channelData);
 
         //loads all Files for the guild;
         guildConfig = (GuildConfig) Utility.initFile(guildID, Constants.FILE_GUILD_CONFIG, GuildConfig.class);
@@ -99,9 +98,9 @@ public class AnnotationListener {
         characters = (Characters) Utility.initFile(guildID, Constants.FILE_CHARACTERS, Characters.class);
         competition = (Competition) Utility.initFile(guildID, Constants.FILE_COMPETITION, Competition.class);
         guildUsers = (GuildUsers) Utility.initFile(guildID, Constants.FILE_GUILD_USERS, GuildUsers.class);
-
+        channelData = (ChannelData) Utility.initFile(guildID, Constants.FILE_CHANNEl_DATA, ChannelData.class);
         //sends objects to globals
-        Globals.initGuild(guildID, guildConfig, servers, customCommands, characters, competition, guildUsers);
+        Globals.initGuild(guildID, guildConfig, servers, customCommands, characters, competition, guildUsers, channelData);
 
         logger.info("Finished Initialising Guild With ID: " + guildID);
     }
@@ -286,19 +285,40 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onReactionAddEvent(ReactionAddEvent event) {
+        CommandObject object = new CommandObject(event.getMessage());
+        if (object.guildConfig.artPinning) {
+            if (!event.getChannel().isPrivate()) {
+                if (event.getReaction().getUnicodeEmoji().equals(EmojiManager.getForAlias("pushpin"))) {
+                    new ArtHandler(object.setAuthor(event.getUser()));
+                }
+            }
+        }
+
         Emoji x = EmojiManager.getForAlias("x");
         if (event.getChannel().isPrivate()) {
             if (event.getReaction().getUnicodeEmoji().equals(x)) {
                 if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
                     Utility.deleteMessage(event.getMessage());
+                    return;
                 }
             }
-            return;
         }
         if (Utility.canBypass(event.getUser(), event.getGuild())) {
             if (event.getReaction().getUnicodeEmoji().equals(x)) {
                 if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
                     Utility.deleteMessage(event.getMessage());
+                    return;
+                }
+            }
+        }
+        if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
+            if (event.getReaction().getUnicodeEmoji().equals(x)) {
+                if (event.getMessage().getEmbeds().size() == 0) {
+                    if (event.getMessage().getAttachments().size() == 0) {
+                        if (event.getMessage().getContent().length() == 0) {
+                            Utility.deleteMessage(event.getMessage());
+                        }
+                    }
                 }
             }
         }
@@ -403,7 +423,6 @@ public class AnnotationListener {
             return;
         }
         CommandObject command = new CommandObject(event.getMessage());
-
         IUser ourUser = command.client.getOurUser();
         List<String> logID = command.guildConfig.getChannelIDsByType(Command.CHANNEL_SERVER_LOG);
         List<String> dontLog = command.guildConfig.getChannelIDsByType(Command.CHANNEL_DONT_LOG);
@@ -494,5 +513,10 @@ public class AnnotationListener {
             String prefix = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "'s** Role have been Updated.";
             Utility.sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content.getGuildConfig(), false);
         }
+    }
+
+    @EventSubscriber
+    public void onMessagePinEvent(MessagePinEvent event) {
+        // do stuff
     }
 }

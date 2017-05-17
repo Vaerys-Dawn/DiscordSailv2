@@ -117,7 +117,6 @@ public class TimedEvents {
                     Utility.backupFile(task.getGuildID(), Constants.FILE_GUILD_USERS);
                     GuildConfig guildConfig = Globals.getGuildContent(task.getGuildID()).getGuildConfig();
                     GuildContentObject contentObject = Globals.getGuildContent(task.getGuildID());
-                    contentObject.getGuildUsers().addLevels();
 
                     //daily messages
                     if (guildConfig.getChannelIDsByType(Command.CHANNEL_GENERAL) != null) {
@@ -231,7 +230,7 @@ public class TimedEvents {
 
                 //Sending isAlive Check.
                 try {
-                    logger.debug("Backup in 5 seconds do not restart.");
+                    logger.info("Backup in 5 seconds do not restart.");
                     Thread.sleep(5000);
                     Globals.getClient().checkLoggedIn("IsAlive");
                 } catch (DiscordException e) {
@@ -239,9 +238,14 @@ public class TimedEvents {
                     logger.info("Logging back in.");
                     try {
                         Globals.getClient().login();
+                        Globals.getClient().changePlayingText("Recovered From Crash.");
+                        Thread.sleep(30000);
+                        Globals.getClient().changePlayingText(Globals.playing);
                         return;
                     } catch (IllegalStateException ex) {
                         //ignore exception
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();

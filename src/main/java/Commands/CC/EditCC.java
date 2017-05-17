@@ -77,7 +77,7 @@ public class EditCC implements Command {
     @Override
     public String description() {
         return "Allows you to edit a custom command.\n" +
-                "Modes: Replace, Append, toEmbed,DelCall\n" +
+                "  Modes: Replace, Append, toEmbed, DelCall.\n" +
                 "**Admin Modes: **lock, Shitpost\n\n" +
                 "Mode is optional, defaults to replace.\n" +
                 "[Custom Command Guide](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide)";

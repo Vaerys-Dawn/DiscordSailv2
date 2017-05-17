@@ -64,6 +64,7 @@ public class Constants {
     public static final String FILE_SERVERS = "Servers.json";
     public static final String FILE_CHARACTERS = "Characters.json";
     public static final String FILE_GUILD_USERS = "Guild_Users.json";
+    public static final String FILE_CHANNEl_DATA = "Channel_Data.json";
     public static final String FILE_INFO = "Info.txt";
     public static final String FILE_CONFIG = DIRECTORY_STORAGE + "Config.json";
     public static final String FILE_CONFIG_BACKUP = DIRECTORY_BACKUPS + "Config.json";

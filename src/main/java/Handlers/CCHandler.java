@@ -72,19 +72,23 @@ public class CCHandler {
                                 for (String id : c.getIDs(commandObject.guildConfig)) {
                                     if (commandObject.channelSID.equals(id)) {
                                         isShitpost = true;
-                                        IChannel channel = commandObject.client.getChannelByID(id);
-                                        channelMentions.add(channel.mention());
+                                    }
+                                    for (IChannel channel : commandObject.guild.getChannels()) {
+                                        if (id.equals(channel.getStringID())) {
+                                            channelMentions.add(channel.mention());
+                                        }
                                     }
                                 }
                             }
                         }
                         if (!isShitpost) {
-                            if (channelMentions.size() > 1){
+                            if (channelMentions.size() > 1) {
                                 Utility.sendMessage("> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true), channel);
-                            }else {
+                                return;
+                            } else if (channelMentions.size() == 1){
                                 Utility.sendMessage("> Command must be performed in: " + channelMentions.get(0), channel);
+                                return;
                             }
-                            return;
                         }
                     }
 

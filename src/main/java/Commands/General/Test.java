@@ -4,9 +4,7 @@ import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Utility;
 import Objects.ChannelSettingObject;
-import Objects.ChannelTypeObject;
-import sx.blah.discord.api.internal.json.objects.WebhookObject;
-import sx.blah.discord.handle.impl.obj.Webhook;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessagePinEvent;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -17,11 +15,34 @@ public class Test implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        String channels = "Channel Settings: \n";
-        for (ChannelSettingObject c : command.guildConfig.getChannelSettings()) {
-            channels += c.getType() + ": " + Utility.listFormatter(c.mentionChannelIDs(), true) + "\n";
+        try {
+            long msgId = Long.parseUnsignedLong(args);
+            IMessage message = command.client.getMessageByID(msgId);
+            if (message != null) {
+                System.out.println("Embeds: " + message.getEmbeds().size());
+                System.out.println("Attachments: " + message.getAttachments().size());
+                System.out.println("Channels: " + message.getChannelMentions().size());
+                System.out.println("Mentions: " + message.getMentions().size());
+                System.out.println("RoleMentions: " + message.getRoleMentions().size());
+                System.out.println("Reactions: " + message.getReactions().size());
+                System.out.println("Charactes: " + message.getContent().length());
+                System.out.println("Words: " + message.getContent().split(" ").length);
+                System.out.println("Content: " + message.getContent());
+                System.out.println("Formatted Content: " + message.getFormattedContent());
+//            message.getChannel().pin(message);
+//            command.client.getDispatcher().dispatch(new MessagePinEvent(message));
+//            message.delete();
+                return "> you sent Erin some data :P";
+            }else {
+                return "> Nothing interesting happens.";
+            }
+        } catch (NumberFormatException e) {
+            String channels = "Channel Settings: \n";
+            for (ChannelSettingObject c : command.guildConfig.getChannelSettings()) {
+                channels += c.getType() + ": " + Utility.listFormatter(c.mentionChannelIDs(), true) + "\n";
+            }
+            return channels;
         }
-        return channels;
     }
 
     @Override

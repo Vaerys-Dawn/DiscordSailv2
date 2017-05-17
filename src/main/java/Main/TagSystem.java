@@ -36,9 +36,28 @@ public class TagSystem {
         response = tagRegex(response, "<replace>{", "}", ";;");
         response = tagRegex(response, "<replace!>(", ")</r>", "::");
         response = tagRandNum(response);
+        response = replaceError(response);
         response = tagMentionRemover(response);
         response = tagToCaps(response);
         return response;
+    }
+
+    private static String replaceError(String from) {
+        String tag;
+        String prefix = "<repError>{";
+        String suffix = "}";
+        String lastAttempt;
+        if (from.contains(prefix)) {
+            do {
+                lastAttempt = from;
+                tag = StringUtils.substringBetween(from, prefix, suffix);
+                if (tag != null) {
+                    from = from.replace("#ERROR#",tag);
+                    from = from.replace(prefix + tag + suffix, "");
+                }
+            } while (StringUtils.countMatches(from, prefix) > 0 && (!lastAttempt.equals(from)));
+        }
+        return from;
     }
 
     public static String getTagList(String type) {

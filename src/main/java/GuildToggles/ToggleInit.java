@@ -15,6 +15,7 @@ public class ToggleInit {
 
         //toggles
         guildToggles.add(new AdminLogging());
+        guildToggles.add(new AutoArtPinning());
         guildToggles.add(new ChannelLogging());
         guildToggles.add(new CompEntries());
         guildToggles.add(new DailyMessage());
@@ -44,6 +45,7 @@ public class ToggleInit {
         guildToggles.add(new ModuleCC());
         guildToggles.add(new ModuleMe());
         guildToggles.add(new ModuleModMuting());
+        guildToggles.add(new ArtPinning());
 
         return guildToggles;
     }

@@ -228,7 +228,7 @@ public class Globals {
         }
     }
 
-    public static void initGuild(String guildID, GuildConfig guildConfig, Servers servers, CustomCommands customCommands, Characters characters, Competition competition, GuildUsers guildUsers) {
+    public static void initGuild(String guildID, GuildConfig guildConfig, Servers servers, CustomCommands customCommands, Characters characters, Competition competition, GuildUsers guildUsers, ChannelData channelData) {
         for (GuildContentObject contentObject : guildContentObjects) {
             if (guildID.equals(contentObject.getGuildID())) {
                 return;
@@ -238,7 +238,7 @@ public class Globals {
         IGuild guild = client.getGuildByID(guildID);
         guildConfig.updateVariables(guild);
 
-        GuildContentObject guildContentObject = new GuildContentObject(guildID, guildConfig, customCommands, servers, characters, competition, guildUsers);
+        GuildContentObject guildContentObject = new GuildContentObject(guildID, guildConfig, customCommands, servers, characters, competition, guildUsers, channelData);
         guildContentObjects.add(guildContentObject);
     }
 
