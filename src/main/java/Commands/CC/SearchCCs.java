@@ -50,7 +50,7 @@ public class SearchCCs implements Command {
             return null;
         } else {
             String path = Constants.DIRECTORY_TEMP + command.messageSID + ".txt";
-            FileHandler.writeToFile(path, Utility.listFormatter(list,true));
+            FileHandler.writeToFile(path, Utility.listFormatter(list,true),false);
             File file = new File(path);
             Utility.sendFile(title, file, command.channel);
             try {

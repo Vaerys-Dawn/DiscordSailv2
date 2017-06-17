@@ -4,9 +4,13 @@ import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Utility;
 import Objects.ChannelSettingObject;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessagePinEvent;
+import Objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.regex.Matcher;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -15,6 +19,36 @@ public class Test implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        SplitFirstObject obe = new SplitFirstObject(args);
+        if (obe.getFirstWord().equalsIgnoreCase("Mention")) {
+            if (obe.getRest() != null) {
+                IUser user = null;
+                SplitFirstObject mentionee = new SplitFirstObject(obe.getRest());
+                String toTest = Matcher.quoteReplacement(mentionee.getFirstWord()).replace("_", "[_| ]");
+                for (IUser u : command.guild.getUsers()) {
+                    try {
+                        if ((u.getName() + "#" + u.getDiscriminator()).matches(toTest)) {
+                            user = u;
+                        }
+                    }catch (PatternSyntaxException e){
+                        //do nothing.
+                    }
+                }
+                try {
+                    long uID = Long.parseLong(mentionee.getFirstWord());
+                    user = command.client.getUserByID(uID);
+                } catch (NumberFormatException e) {
+                    if (command.message.getMentions().size() > 0) {
+                        user = command.message.getMentions().get(0);
+                    }
+                }
+                if (user != null) {
+                    return "> User was found.";
+                } else {
+                    return "> user could not be found.";
+                }
+            }
+        }
         try {
             long msgId = Long.parseUnsignedLong(args);
             IMessage message = command.client.getMessageByID(msgId);
@@ -33,7 +67,7 @@ public class Test implements Command {
 //            command.client.getDispatcher().dispatch(new MessagePinEvent(message));
 //            message.delete();
                 return "> you sent Erin some data :P";
-            }else {
+            } else {
                 return "> Nothing interesting happens.";
             }
         } catch (NumberFormatException e) {
@@ -72,7 +106,7 @@ public class Test implements Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[0];
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

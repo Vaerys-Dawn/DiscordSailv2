@@ -33,7 +33,7 @@ public class Constants {
     public static final String PATCH_1 = "UPDATE_TAGS_1";
     public static final String PATCH_2 = "UPDATE_CHANNELS";
     public static final String PATCH_3 = "UPDATE_TAGS_2";
-    public static final String PATCH_4 = "INFO_FIX";
+    public static final String PATCH_4 = "RESET_XP";
     public static final String PATCH_GLOBAL_1 = "UPDATE_CONFIG";
 
     //Error Constants
@@ -55,7 +55,8 @@ public class Constants {
     public static final String DIRECTORY_TEMP = DIRECTORY_STORAGE + "Temp/";
     public static final String DIRECTORY_OLD_FILES = DIRECTORY_STORAGE + "Old_Files/";
     public static final String DIRECTORY_ERROR = DIRECTORY_STORAGE + "Error/";
-
+    public static final String DIRECTORY_WIKI = "DiscordSailv2.wiki/";
+    public static final String DIRECTORY_WIKI_COMMANDS = DIRECTORY_WIKI + "Commands/";
 
     //Files
     public static final String FILE_TOKEN = DIRECTORY_STORAGE + "Token.txt";
@@ -103,4 +104,5 @@ public class Constants {
             "Goodness what have you all done to the place since I was last here?;;" +
             "My My My Its a brand new day isn't it? looks like we're all still here.}";
     public static final String DAILY_MESSAGE_7 = "> A new Day arrives, Prepare for fun.";
+
 }

@@ -52,8 +52,12 @@ public class CharEditModes {
     public static String longDesc(String args, CharacterObject character) {
         try {
             new URL(args);
-            character.setLongBioURL(args);
-            return "> Long Desc Link updated.";
+            if (Utility.checkURL(args)) {
+                character.setLongBioURL(args);
+                return "> Long Desc Link updated.";
+            }else {
+                return "> Specified URL is invalid.";
+            }
         } catch (MalformedURLException e) {
             return "> Specified URL is invalid.";
         }

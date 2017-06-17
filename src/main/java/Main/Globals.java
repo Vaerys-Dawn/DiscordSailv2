@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Properties;
 
 /**
@@ -55,6 +56,7 @@ public class Globals {
     private static GlobalData globalData;
     public static int baseXPModifier;
     public static int xpForLevelOne;
+    public static long lastDmUserID = -1;
 
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
         if (newGlobalData != null) {
@@ -117,6 +119,7 @@ public class Globals {
                 commandTypes.add(c.type());
             }
         }
+        Collections.sort(commandTypes);
 
         logger.info(commands.size() + " Commands Loaded.");
         logger.info(commandsDM.size() + " DM Commands Loaded.");

@@ -1,7 +1,5 @@
 package POGOs;
 
-import Interfaces.ChannelSetting;
-import Interfaces.Command;
 import Main.Globals;
 import Objects.*;
 import sx.blah.discord.handle.obj.IChannel;
@@ -48,13 +46,14 @@ public class GuildConfig {
     public boolean compEntries = false;
     public boolean compVoting = false;
     //modules
-    public boolean moduleServers = true;
-    public boolean moduleChars = true;
+    public boolean moduleServers = false;
+    public boolean moduleChars = false;
     public boolean moduleComp = false;
     public boolean moduleRoles = true;
     public boolean moduleCC = true;
     public boolean moduleMe = true;
-    public boolean moduleModMute = true;
+    public boolean moduleModMute = false;
+    public boolean moduleGroups = false;
     public int maxMentionLimit = 8;
     public int messageLimit = 10;
 

@@ -3,14 +3,12 @@ package Handlers;
 import Main.Constants;
 import Main.Globals;
 import Main.Utility;
-import Objects.CCommandObject;
-import Objects.ChannelTypeObject;
-import Objects.DailyMessageObject;
-import Objects.PatchObject;
+import Objects.*;
 import OldCode.ChannelData;
 import POGOs.Config;
 import POGOs.CustomCommands;
 import POGOs.GuildConfig;
+import POGOs.GuildUsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
@@ -35,6 +33,9 @@ public class PatchHandler {
             Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_2));
         if (!patchesFound.contains(Constants.PATCH_3))
             Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_3));
+        if (!patchesFound.contains(Constants.PATCH_4)){
+            Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_4));
+        }
 
         ArrayList<PatchObject> patches = Globals.getGlobalData().getPatches();
 
@@ -102,10 +103,21 @@ public class PatchHandler {
                 }
                 File newFile = new File(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO + "x"));
                 File oldFile = new File(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO));
-                FileHandler.writeToFile(newFile.getPath(), content);
+                FileHandler.writeToFile(newFile.getPath(), content,false);
                 oldFile.delete();
                 newFile.renameTo(oldFile);
 
+                p.getPatchedGuildIDs().add(guild.getStringID());
+            }
+            if (!exit && p.getPatchLevel().equalsIgnoreCase(Constants.PATCH_4)){
+                GuildUsers guildUsers = (GuildUsers) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_USERS, GuildUsers.class);
+
+                for (UserTypeObject u :guildUsers.getUsers()){
+                    u.setXp(0);
+                    u.setRewardID(-1);
+                }
+
+                FileHandler.writeToJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_GUILD_USERS), guildUsers);
                 p.getPatchedGuildIDs().add(guild.getStringID());
             }
         }

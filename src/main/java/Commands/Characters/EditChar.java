@@ -55,7 +55,7 @@ public class EditChar implements Command {
     public String description() {
         return "Allows the User to edit their Character.\n" +
                 "Modes: age, Avatar, Desc, Gender, LongDesc\n" +
-                "\nAvatar and LongDesc need valid URLS.";
+                "\nAvatar and LongDesc need valid URLs.";
     }
 
     @Override

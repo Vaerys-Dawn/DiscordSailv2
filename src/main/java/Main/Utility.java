@@ -7,6 +7,7 @@ import Interfaces.Command;
 import Interfaces.DMCommand;
 import Objects.BlackListObject;
 import Objects.GuildContentObject;
+import Objects.SplitFirstObject;
 import Objects.XEmbedBuilder;
 import POGOs.GuildConfig;
 import org.apache.commons.lang3.StringUtils;
@@ -59,6 +60,9 @@ public class Utility {
     }
 
     public static boolean testForPerms(Permissions[] perms, IUser user, IGuild guild, boolean logging) {
+        if (user.getStringID().equals(Globals.creatorID)){
+            return true;
+        }
         EnumSet<Permissions> toMatch = EnumSet.noneOf(Permissions.class);
         toMatch.addAll(Arrays.asList(perms));
         //Debug code.
@@ -886,6 +890,9 @@ public class Utility {
     }
 
     public static boolean isImageLink(String link) {
+        if (!checkURL(link)){
+            return false;
+        }
         ArrayList<String> suffixes = new ArrayList<String>() {{
             add(".png");
             add(".gif");
@@ -1005,5 +1012,18 @@ public class Utility {
         content += ":" + time.getMinute();
         content += ":" + time.getSecond();
         return content;
+    }
+
+    public static boolean checkURL(String args) {
+        List<String> blacklist = FileHandler.readFromFile("website.blacklist");
+        for (String s: blacklist){
+            SplitFirstObject firstWord = new SplitFirstObject(s);
+            if (!firstWord.getFirstWord().startsWith("//")){
+                if (args.toLowerCase().contains(firstWord.getFirstWord().toLowerCase())){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

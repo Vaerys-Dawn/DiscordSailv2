@@ -1,6 +1,7 @@
 package POGOs;
 
 import Commands.CommandObject;
+import Interfaces.Command;
 import Main.Utility;
 import Objects.UserCountDown;
 import Objects.UserTypeObject;
@@ -13,9 +14,6 @@ import java.util.ArrayList;
 public class GuildUsers {
     private boolean properlyInit;
     public ArrayList<UserTypeObject> users = new ArrayList<>();
-    //    public ArrayList<ReminderObject> reminders = new ArrayList<>();
-//    public ArrayList<ReminderObject> soonToExecute = new ArrayList<>();
-//    public ArrayList<WaiterObject> groupedUp = new ArrayList<>();
     public ArrayList<UserCountDown> mutedUsers = new ArrayList<>();
 
     public ArrayList<UserTypeObject> getUsers() {
@@ -23,9 +21,26 @@ public class GuildUsers {
     }
 
     public void addXP(CommandObject object) {
+        //bots don't get XP
         if (object.author.isBot()) {
             return;
         }
+        //you can only gain xp once per min
+        if(object.guildContent.getSpokenUsers().contains(object.authorID)){
+            return;
+        }
+        //you must have typed at least 10 chars to gain xp
+        if (object.message.getContent().length() < 10){
+            return;
+        }
+        //you cannot gain xp in an xpDenied channel
+        ArrayList<String> xpChannels = object.guildConfig.getChannelIDsByType(Command.Channel_XP_DENIED);
+        if (xpChannels != null && xpChannels.size() > 0){
+            if (xpChannels.contains(object.channelSID)){
+                return;
+            }
+        }
+        object.guildContent.getSpokenUsers().add(object.authorID);
         boolean isFound = false;
         UserTypeObject user = new UserTypeObject(object.authorSID);
         for (UserTypeObject u : users) {
@@ -37,7 +52,7 @@ public class GuildUsers {
         if (!isFound) {
             users.add(user);
         }
-//        user.addXP(object.guildConfig);
+        user.addXP(object.guildConfig);
     }
 
   
@@ -80,29 +95,13 @@ public class GuildUsers {
         UserTypeObject user = new UserTypeObject(id);
         users.add(user);
     }
-//
-//
-//    public ArrayList<ReminderObject> getReminders() {
-//        return reminders;
-//    }
-//
-//    public void setReminders(ArrayList<ReminderObject> reminders) {
-//        this.reminders = reminders;
-//    }
-//
-//    public ArrayList<ReminderObject> getSoonToExecute() {
-//        return soonToExecute;
-//    }
-//
-//    public void setSoonToExecute(ArrayList<ReminderObject> soonToExecute) {
-//        this.soonToExecute = soonToExecute;
-//    }
-//
-//    public ArrayList<WaiterObject> getGroupedUp() {
-//        return groupedUp;
-//    }
-//
-//    public void setGroupedUp(ArrayList<WaiterObject> groupedUp) {
-//        this.groupedUp = groupedUp;
-//    }
+
+    public UserTypeObject getUserByID(String authorSID) {
+        for (UserTypeObject u: users){
+            if (u.getID().equalsIgnoreCase(authorSID)){
+                return u;
+            }
+        }
+        return null;
+    }
 }

@@ -58,6 +58,7 @@ public class DMHandler {
         }else if (!message.getAuthor().getStringID().equals(Globals.creatorID)){
             String logging = "[" + message.getAuthor().getStringID() + "] " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + ": " + message.toString();
             logger.info(logging);
+            Globals.lastDmUserID = message.getAuthor().getLongID();
             if(message.getAttachments().size() > 0){
                 String attachmemts = "";
                 for (IMessage.Attachment a: message.getAttachments()){

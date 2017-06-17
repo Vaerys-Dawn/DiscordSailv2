@@ -2,7 +2,6 @@ package Commands.Characters;
 
 import Commands.CommandObject;
 import Interfaces.Command;
-import Main.Client;
 import Main.Utility;
 import Objects.CharacterObject;
 import Objects.RoleTypeObject;

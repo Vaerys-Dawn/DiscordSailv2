@@ -15,13 +15,18 @@ public class Respond implements DMCommand {
     public String execute(String args, DMCommandObject command) {
         SplitFirstObject response = new SplitFirstObject(args);
         IUser recipient = command.client.getUserByID(response.getFirstWord());
+        return sendDM(response.getRest(),command,recipient);
+    }
+
+    public static String sendDM(String args, DMCommandObject command,IUser recipient){
+
         if (recipient == null) {
             return "> Could Not Send Response, UserID is invalid.";
         }
-        if (response.getRest() == null) {
+        if (args == null) {
             return "> Could Not Send Response, Contents cannot be empty.";
         }
-        if (Utility.sendDM(command.authorUserName + ": " + response.getRest(), recipient.getStringID()).get()) {
+        if (Utility.sendDM(command.authorUserName + ": " + args, recipient.getStringID()).get()) {
             return "> An Error occurred while attempting to run this command.";
         } else {
             return "> Message Sent.";

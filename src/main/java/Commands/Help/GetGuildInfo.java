@@ -5,7 +5,6 @@ import Interfaces.Command;
 import Interfaces.GuildToggle;
 import Main.Globals;
 import Main.Utility;
-import Objects.ChannelTypeObject;
 import Objects.RoleStatsObject;
 import POGOs.GuildConfig;
 import sx.blah.discord.handle.obj.*;

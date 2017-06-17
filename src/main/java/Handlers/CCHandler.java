@@ -12,12 +12,10 @@ import POGOs.GuildConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.*;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.regex.Pattern;
 
 /**
@@ -75,17 +73,30 @@ public class CCHandler {
                                     }
                                     for (IChannel channel : commandObject.guild.getChannels()) {
                                         if (id.equals(channel.getStringID())) {
-                                            channelMentions.add(channel.mention());
+                                            EnumSet<Permissions> userPerms = channel.getModifiedPermissions(commandObject.author);
+//                                            if (channel.getLongID() == 302969098835329024L) {
+//                                                System.out.println("----- [PERMS - " + channel.getName().toUpperCase() + "] -----");
+//                                                for (Permissions p : userPerms) {
+//                                                    System.out.print(p.toString() + ", ");
+//                                                }
+//                                                System.out.print("\n");
+//                                            }
+                                            if (userPerms.contains(Permissions.SEND_MESSAGES) && userPerms.contains(Permissions.READ_MESSAGES)) {
+                                                channelMentions.add(channel.mention());
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                         if (!isShitpost) {
-                            if (channelMentions.size() > 1) {
+                            if (channelMentions.size() == 0) {
+                                Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.", channel);
+                                return;
+                            } else if (channelMentions.size() > 1) {
                                 Utility.sendMessage("> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true), channel);
                                 return;
-                            } else if (channelMentions.size() == 1){
+                            } else if (channelMentions.size() == 1) {
                                 Utility.sendMessage("> Command must be performed in: " + channelMentions.get(0), channel);
                                 return;
                             }

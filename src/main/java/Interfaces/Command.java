@@ -20,6 +20,7 @@ public interface Command {
     String TYPE_DM = "DM";
     String TYPE_CREATOR = "Creator";
     String TYPE_XP = "XP";
+    String TYPE_GROUPS = "Groups";
 
     //Channel Constants
     String CHANNEL_GENERAL = "General";
@@ -32,6 +33,8 @@ public interface Command {
     String CHANNEL_SHITPOST = "ShitPost";
     String CHANNEL_DONT_LOG = "DontLog";
     String CHANNEL_ART = "Art";
+    String CHANNEL_GROUPS = "Groups";
+    String Channel_XP_DENIED = "XpDenied";
 
     String spacer = "\u200B";
     String indent = "    ";

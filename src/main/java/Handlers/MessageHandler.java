@@ -5,7 +5,6 @@ import Interfaces.ChannelSetting;
 import Interfaces.Command;
 import Interfaces.SlashCommand;
 import Main.Globals;
-import Main.TimedEvents;
 import Main.Utility;
 import Objects.BlackListObject;
 import Objects.OffenderObject;
@@ -17,6 +16,7 @@ import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 
@@ -93,32 +93,41 @@ public class MessageHandler {
                         Utility.sendMessage(Utility.getCommandInfo(c, commandObject), channel);
                         return;
                     }
+
+                    //start section
                     if (c.channel() != null && !Utility.canBypass(commandObject.author, commandObject.guild)) {
                         boolean channelFound = false;
                         ArrayList<String> channelMentions = new ArrayList<>();
-                        for (ChannelSetting s: commandObject.channelSettings){
-                            if (s.type().equals(c.channel())){
-                                if (s.getIDs(commandObject.guildConfig) != null){
-                                    for (String id : s.getIDs(commandObject.guildConfig)){
-                                        if (id.equals(commandObject.channelSID)){
+                        for (ChannelSetting s : commandObject.channelSettings) {
+                            if (s.type().equals(c.channel())) {
+                                if (s.getIDs(commandObject.guildConfig) != null) {
+                                    for (String id : s.getIDs(commandObject.guildConfig)) {
+                                        if (id.equals(commandObject.channelSID)) {
                                             channelFound = true;
                                         }
-                                        channelMentions.add(commandObject.client.getChannelByID(id).mention());
+                                        IChannel testPerms = client.getChannelByID(id);
+                                        EnumSet<Permissions> userPerms = testPerms.getModifiedPermissions(commandObject.author);
+                                        if (userPerms.contains(Permissions.SEND_MESSAGES) && userPerms.contains(Permissions.READ_MESSAGES)) {
+                                            channelMentions.add(commandObject.client.getChannelByID(id).mention());
+                                        }
                                     }
-                                }else {
+                                } else {
                                     channelFound = true;
                                 }
                             }
                         }
-                        if (!channelFound){
-                            if (channelMentions.size() > 1){
+                        if (!channelFound) {
+                            if (channelMentions.size() == 0) {
+                                Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.",channel);
+                            } else if (channelMentions.size() > 1) {
                                 Utility.sendMessage("> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true), channel);
-                            }else {
+                            } else {
                                 Utility.sendMessage("> Command must be performed in: " + channelMentions.get(0), channel);
                             }
                             return;
                         }
                     }
+                    //end
                     if (c.perms().length != 0 && !Utility.canBypass(commandObject.author, commandObject.guild)) {
                         if (!Utility.testForPerms(c.perms(), commandObject.author, commandObject.guild)) {
                             Utility.sendMessage(commandObject.notAllowed, channel);
@@ -186,9 +195,9 @@ public class MessageHandler {
                 } else {
                     response = response.replaceAll("#mentionAdmin#", "Admin");
                 }
-                if (TimedEvents.getDoAdminMention(command.guildSID) == 0) {
+                if (EventHandler.getDoAdminMention(command.guildSID) == 0) {
                     Utility.sendMessage(response, command.channel);
-                    TimedEvents.setDoAdminMention(command.guildSID, 60);
+                    EventHandler.setDoAdminMention(command.guildSID, 60);
                 }
             }
         }
@@ -263,9 +272,9 @@ public class MessageHandler {
                             response = response.replaceAll("#mentionAdmin#", "");
                         }
                         response = response.replace("#user#", author.mention());
-                        if (TimedEvents.getDoAdminMention(command.guildSID) == 0) {
+                        if (EventHandler.getDoAdminMention(command.guildSID) == 0) {
                             Utility.sendMessage(response, command.channel);
-                            TimedEvents.setDoAdminMention(command.guildSID, 60);
+                            EventHandler.setDoAdminMention(command.guildSID, 60);
                         }
                         Utility.deleteMessage(message);
                     } else {

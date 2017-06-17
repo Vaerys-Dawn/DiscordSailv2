@@ -20,11 +20,11 @@ public class GetMessageData implements Command {
         int totalAvg = 0;
         for (IGuild guild : command.client.getGuilds()) {
             String builder = "";
-            int totalUsers = 0;
-            int totalMessage = 0;
-            int totalMessageAvg = 0;
-            int topGuild = 0;
-            int bottomGuild = 0;
+            long totalUsers = 0;
+            long totalMessage = 0;
+            long totalMessageAvg = 0;
+            long topGuild = 0;
+            long bottomGuild = 0;
             String topUser = null;
             String bottomUser = null;
             GuildContentObject content = Globals.getGuildContent(guild.getStringID());

@@ -1,7 +1,9 @@
 package Main;
 
+import Handlers.EventHandler;
 import Handlers.FileHandler;
 import Handlers.PatchHandler;
+import Handlers.WikiBuilder;
 import POGOs.Config;
 import POGOs.GlobalData;
 import org.slf4j.Logger;
@@ -87,13 +89,16 @@ public class Main {
 
 
             //timed events getSlashCommands
-            new TimedEvents();
+            new EventHandler();
 
             while (!client.isReady()) ;
 
             //makes sure that nothing in the config file will cause an error
             Globals.validateConfig();
             Globals.setVersion();
+            if (args.length > 0 && args[0].equals("-w")) {
+                WikiBuilder.handleCommandLists();
+            }
             consoleInput();
         } catch (DiscordException ex) {
             logger.error(ex.getErrorMessage());
@@ -114,7 +119,7 @@ public class Main {
             message = message.replace("#Dawn#", Globals.getClient().getUserByID("153159020528533505").getName());
             message = message.replace("teh", "the");
             message = message.replace("Teh", "The");
-            System.out.println(message);
+//            System.out.println(message);
             if (!message.equals("")) {
                 Utility.sendMessage(message, channel);
             }

@@ -64,15 +64,22 @@ public class FileHandler {
     /**
      * Writes to File using "file" as the path.
      */
-    public static void writeToFile(String file, String text) {
+    public static void writeToFile(String file, String text,boolean overwrite) {
         try {
             if (!Files.exists(Paths.get(file))) {
                 Files.createFile(Paths.get(file));
             }
-            FileWriter fileWriter = new FileWriter(file, true);
-            fileWriter.append(text + "\n");
-            fileWriter.flush();
-            fileWriter.close();
+            if (overwrite){
+                FileWriter fileWriter = new FileWriter(file, false);
+                fileWriter.write(text);
+                fileWriter.flush();
+                fileWriter.close();
+            }else {
+                FileWriter fileWriter = new FileWriter(file, true);
+                fileWriter.append(text + "\n");
+                fileWriter.flush();
+                fileWriter.close();
+            }
             logger.trace("Writing to file: " + file);
         } catch (IOException e) {
             logger.error(e.getCause().toString());
@@ -119,6 +126,6 @@ public class FileHandler {
     }
 
     public static void initFile(String path) {
-        if (!exists(path)) writeToFile(path, "");
+        if (!exists(path)) writeToFile(path, "",false);
     }
 }

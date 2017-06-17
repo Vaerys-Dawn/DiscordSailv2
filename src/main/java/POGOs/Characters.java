@@ -2,15 +2,11 @@ package POGOs;
 
 import Main.Constants;
 import Main.Globals;
-import Main.Utility;
 import Objects.CharacterObject;
-import Objects.RoleTypeObject;
 import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Vaerys on 14/08/2016.

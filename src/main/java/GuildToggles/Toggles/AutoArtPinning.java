@@ -1,7 +1,6 @@
 package GuildToggles.Toggles;
 
 import Commands.CommandObject;
-import Interfaces.Command;
 import Interfaces.GuildToggle;
 import POGOs.GuildConfig;
 

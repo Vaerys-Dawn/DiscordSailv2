@@ -26,7 +26,8 @@ public class InitChannels {
         channelSettings.add(new Shitpost());
         channelSettings.add(new Servers());
         channelSettings.add(new BotCommands());
-        channelSettings.add(new DontLog());
+        channelSettings.add(new Groups());
+        channelSettings.add(new XpDenied());
 
         return channelSettings;
     }

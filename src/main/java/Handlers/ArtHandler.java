@@ -4,7 +4,6 @@ import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Utility;
 import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RequestBuffer;
 
@@ -63,7 +62,7 @@ public class ArtHandler {
                 if (pinnedMessages.get(0) == msg.getLongID()) {
                     RequestBuffer.request(() -> {
                         command.channel.unpin(msg);
-                        pinnedMessages.remove(0);
+                        RequestBuffer.request(() -> pinnedMessages.remove(0));
                     });
                 }
             }

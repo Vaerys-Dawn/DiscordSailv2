@@ -56,7 +56,7 @@ public class ListCCs implements Command {
         String title = "> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.";
         ArrayList<String> list = new ArrayList<>();
         for (CCommandObject c : command.customCommands.getCommandList()) {
-            if (c.getUserID().equals(userID)) {
+            if (c.getUserID().equals(userID + "")) {
                 list.add(command.guildConfig.getPrefixCC() + c.getName());
                 total++;
             }

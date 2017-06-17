@@ -5,10 +5,7 @@ import Handlers.*;
 import Interfaces.Command;
 import Objects.GuildContentObject;
 import Objects.SplitFirstObject;
-import OldCode.*;
 import POGOs.*;
-import POGOs.ChannelData;
-import POGOs.CustomCommands;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import org.slf4j.Logger;
@@ -30,6 +27,7 @@ import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
 
+import java.io.File;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -52,9 +50,11 @@ public class AnnotationListener {
     public void onGuildCreateEvent(GuildCreateEvent event) {
         IGuild guild = event.getGuild();
         String guildID = guild.getStringID();
-        logger.info("Starting Guild getSlashCommands process for Guild with ID: " + guildID);
+        logger.info("Starting Initialisation process for Guild with ID: " + guildID);
 
-        PatchHandler.guildPatches(guild);
+        if (new File(Utility.getDirectory(guildID)).exists()) {
+            PatchHandler.guildPatches(guild);
+        }
 
         //Create POGO templates
         GuildConfig guildConfig = new GuildConfig();
@@ -285,38 +285,38 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onReactionAddEvent(ReactionAddEvent event) {
-        CommandObject object = new CommandObject(event.getMessage());
-        if (object.guildConfig.artPinning) {
-            if (!event.getChannel().isPrivate()) {
-                if (event.getReaction().getUnicodeEmoji().equals(EmojiManager.getForAlias("pushpin"))) {
-                    new ArtHandler(object.setAuthor(event.getUser()));
-                }
-            }
-        }
-
         Emoji x = EmojiManager.getForAlias("x");
-        if (event.getChannel().isPrivate()) {
+        if (!event.getChannel().isPrivate()) {
+            CommandObject object = new CommandObject(event.getMessage());
+            if (object.guildConfig.artPinning) {
+                if (!event.getChannel().isPrivate()) {
+                    if (event.getReaction().getUnicodeEmoji().equals(EmojiManager.getForAlias("pushpin"))) {
+                        new ArtHandler(object.setAuthor(event.getUser()));
+                    }
+                }
+            }
             if (event.getReaction().getUnicodeEmoji().equals(x)) {
                 if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
                     Utility.deleteMessage(event.getMessage());
                     return;
                 }
             }
-        }
-        if (Utility.canBypass(event.getUser(), event.getGuild())) {
-            if (event.getReaction().getUnicodeEmoji().equals(x)) {
-                if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
-                    Utility.deleteMessage(event.getMessage());
-                    return;
+        } else {
+            if (Utility.canBypass(event.getUser(), event.getGuild())) {
+                if (event.getReaction().getUnicodeEmoji().equals(x)) {
+                    if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
+                        Utility.deleteMessage(event.getMessage());
+                        return;
+                    }
                 }
             }
-        }
-        if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
-            if (event.getReaction().getUnicodeEmoji().equals(x)) {
-                if (event.getMessage().getEmbeds().size() == 0) {
-                    if (event.getMessage().getAttachments().size() == 0) {
-                        if (event.getMessage().getContent().length() == 0) {
-                            Utility.deleteMessage(event.getMessage());
+            if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
+                if (event.getReaction().getUnicodeEmoji().equals(x)) {
+                    if (event.getMessage().getEmbeds().size() == 0) {
+                        if (event.getMessage().getAttachments().size() == 0) {
+                            if (event.getMessage().getContent().length() == 0) {
+                                Utility.deleteMessage(event.getMessage());
+                            }
                         }
                     }
                 }

@@ -1,5 +1,7 @@
 package POGOs;
 
+import Objects.GroupUpObject;
+
 import java.util.ArrayList;
 
 /**
@@ -7,8 +9,15 @@ import java.util.ArrayList;
  */
 public class ChannelData {
     ArrayList<Long> pinnedMessages = new ArrayList<>();
+    ArrayList<GroupUpObject> groupUpObjects = new ArrayList<>();
+
+    public ArrayList<GroupUpObject> getGroupUpObjects() {
+        return groupUpObjects;
+    }
 
     public ArrayList<Long> getPinnedMessages() {
         return pinnedMessages;
     }
+
+
 }

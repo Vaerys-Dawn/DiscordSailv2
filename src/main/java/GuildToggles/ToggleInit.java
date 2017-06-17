@@ -38,6 +38,7 @@ public class ToggleInit {
         guildToggles.add(new Voting());
 
         //modules
+        guildToggles.add(new ModuleGroups());
         guildToggles.add(new ModuleChars());
         guildToggles.add(new ModuleComp());
         guildToggles.add(new ModuleServers());
@@ -45,7 +46,7 @@ public class ToggleInit {
         guildToggles.add(new ModuleCC());
         guildToggles.add(new ModuleMe());
         guildToggles.add(new ModuleModMuting());
-        guildToggles.add(new ArtPinning());
+        guildToggles.add(new ModuleArtPinning());
 
         return guildToggles;
     }

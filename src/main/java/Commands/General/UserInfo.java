@@ -5,7 +5,6 @@ import Interfaces.Command;
 import Main.Utility;
 import Objects.UserTypeObject;
 import Objects.XEmbedBuilder;
-import POGOs.CustomCommands;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
@@ -20,6 +19,9 @@ import java.util.stream.Collectors;
  * Created by Vaerys on 27/02/2017.
  */
 public class UserInfo implements Command {
+
+    // TODO: 15/06/2017 add user generated links
+    // TODO: 15/06/2017 add blacklist of sites
     @Override
     public String execute(String args, CommandObject command) {
         IUser user = command.author;
@@ -32,6 +34,7 @@ public class UserInfo implements Command {
                 XEmbedBuilder builder = new XEmbedBuilder();
                 List<IRole> roles = user.getRolesForGuild(command.guild);
                 ArrayList<String> roleNames = new ArrayList<>();
+                ArrayList<String> links = new ArrayList<>();
 
                 //If user is a bot it will display the image below as the user avatar icon.
                 if (user.isBot()) {
@@ -54,12 +57,17 @@ public class UserInfo implements Command {
                 //collect role names;
                 roleNames.addAll(roles.stream().filter(role -> !role.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
 
+                if (u.getLinks() != null && u.getLinks().size() > 0) {
+                    links.addAll(u.getLinks().stream().map(link -> "[" + link.getName() + "](" + link.getLink() + ")").collect(Collectors.toList()));
+                }
+
                 //builds desc
                 builder.withDesc("**Account Created: **" + Utility.formatTimeDifference(difference) +
                         "\n**Gender: **" + u.getGender() +
                         "\n**Custom Commands: **" + command.customCommands.getUserCommandCount(user, command.guild, command.guildConfig) +
                         "\n**Roles: **" + Utility.listFormatter(roleNames, true) +
-                        "\n\n*" + u.getQuote() + "*");
+                        "\n\n*" + u.getQuote() + "*" +
+                        "\n" + Utility.listFormatter(links, true));
 
                 // TODO: 27/02/2017 when xp system is implemented put xp and rank on the user card.
 

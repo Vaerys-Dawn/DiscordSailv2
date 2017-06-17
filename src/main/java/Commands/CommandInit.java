@@ -8,6 +8,8 @@ import Commands.Creator.*;
 import Commands.Creator.Shutdown;
 import Commands.DMCommands.*;
 import Commands.General.*;
+import Commands.Groups.ClearGroupUp;
+import Commands.Groups.GroupUp;
 import Commands.Help.GetGuildInfo;
 import Commands.Help.*;
 import Commands.RoleSelect.CosmeticRoles;
@@ -38,6 +40,7 @@ public class CommandInit {
         commands.add(new TempCommand());
         commands.add(new ResetPlayingStatus());
         commands.add(new ToggleTypingStatus());
+        commands.add(new SetPlayingStatus());
         //Admin commands
         commands.add(new ChannelHere());
         commands.add(new MaxMessages());
@@ -60,6 +63,7 @@ public class CommandInit {
         commands.add(new UserInfo());
         commands.add(new SlashList());
         commands.add(new ClearReminder());
+        commands.add(new EditLinks());
         //Help commands
         commands.add(new GetGuildInfo());
         commands.add(new Help());
@@ -103,6 +107,9 @@ public class CommandInit {
         commands.add(new EnterComp());
         commands.add(new EnterVote());
         commands.add(new PurgeComp());
+        //Groups commands
+        commands.add(new GroupUp());
+        commands.add(new ClearGroupUp());
 
         return commands;
     }
@@ -120,6 +127,7 @@ public class CommandInit {
         commands.add(new ReminderDM());
         commands.add(new ClearReminderDM());
         commands.add(new ShutdownDM());
+        commands.add(new QuickRespond());
         return commands;
     }
 

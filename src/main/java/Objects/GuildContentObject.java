@@ -20,6 +20,7 @@ public class GuildContentObject {
     private ChannelData channelData;
     public ArrayList<UserRateObject> ratelimiting = new ArrayList<>();
     private int doAdminMention;
+    private ArrayList<Long> spokenUsers = new ArrayList<>();
 
     public GuildContentObject(String guildID, GuildConfig guildConfig, CustomCommands customCommands, Servers servers, Characters characters, Competition competition, GuildUsers guildUsers, ChannelData channelData) {
         this.guildID = guildID;
@@ -134,5 +135,9 @@ public class GuildContentObject {
 
     public void setDoAdminMention(int doAdminMention) {
         this.doAdminMention = doAdminMention;
+    }
+
+    public ArrayList<Long> getSpokenUsers() {
+        return spokenUsers;
     }
 }

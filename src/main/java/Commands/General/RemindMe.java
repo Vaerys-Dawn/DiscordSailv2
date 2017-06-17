@@ -1,14 +1,13 @@
 package Commands.General;
 
 import Commands.CommandObject;
+import Handlers.EventHandler;
 import Interfaces.Command;
-import Main.TimedEvents;
 import Main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.regex.Pattern;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -32,7 +31,7 @@ public class RemindMe implements Command {
             now = now.plusMinutes(timeMins);
             StringBuilder builder = new StringBuilder(args);
             builder.delete(0,(timeMins + "").length());
-            if (TimedEvents.addReminder(command.author.getStringID(), command.channel.getStringID(), now.toEpochSecond(), builder.toString())) {
+            if (EventHandler.addReminder(command.author.getStringID(), command.channel.getStringID(), now.toEpochSecond(), builder.toString())) {
                 return "> Reminder set for " + timeString + " Minute(s) from now.";
             } else {
                 return "> You already have a reminder set.";

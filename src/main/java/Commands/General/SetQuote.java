@@ -30,7 +30,11 @@ public class SetQuote implements Command {
         }
         for (UserTypeObject u : command.guildUsers.getUsers()) {
             args = Utility.removeFun(args);
-
+            for (String s: args.split(" ")){
+                if (!Utility.checkURL(s)){
+                    return "> Cannot add quote. Malicious link found.";
+                }
+            }
             if (adminEdit) {
                 if (userID.getRest().length() > 140){
                     return "> User Quote is too long...\n(must be under 140 chars)";

@@ -1,10 +1,13 @@
 package Objects;
 
+import Enums.UserSetting;
 import Handlers.MessageHandler;
 import Main.Globals;
 import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 27/08/2016.
@@ -13,14 +16,20 @@ public class UserTypeObject {
     String ID;
     long xp = 0;
     long rewardID = -1;
-//    String rewardRoleID = "";
     String gender = "Unknown";
     String quote = "This person doesn't seem to have much to say for themselves.";
+    ArrayList<UserSetting> settings = new ArrayList<>();
+    ArrayList<UserLinkObject> links = new ArrayList<>();
+
+    public UserTypeObject() {
+        if (links == null) links = new ArrayList<>();
+        if (settings == null) settings = new ArrayList<>();
+    }
 
     private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
     public String getQuote() {
-        if (quote == null){
+        if (quote == null) {
             quote = "This person doesn't seem to have much to say for themselves.";
         }
         return quote;
@@ -31,7 +40,7 @@ public class UserTypeObject {
     }
 
     public String getGender() {
-        if (gender == null){
+        if (gender == null) {
             gender = "Unknown";
         }
         return gender;
@@ -58,15 +67,29 @@ public class UserTypeObject {
     }
 
     public void addXP(GuildConfig config) {
-        xp += 1;
-        logger.trace(Globals.getClient().getUserByID(ID)+ " - Xp gained");
+        xp += 20;
+        logger.trace(Globals.getClient().getUserByID(ID) + " - Xp gained");
     }
 
     public void setXp(long xp) {
         this.xp = xp;
     }
 
-    public int getXP() {
-        return Math.round(xp);
+    public long getXP() {
+        return xp;
+    }
+
+    public ArrayList<UserSetting> getSettings() {
+        return settings;
+    }
+
+    public ArrayList<UserLinkObject> getLinks() {
+        return links;
+    }
+
+    public void setLinks() {
+        if (links == null) {
+            links = new ArrayList<>();
+        }
     }
 }
