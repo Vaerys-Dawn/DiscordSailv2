@@ -14,7 +14,8 @@ public class CCEditModes {
 
     public static String lock(CCommandObject c, CommandObject command, IUser author, IGuild guild) {
         if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild)) {
-            return "> Lock for " + c.getName() + " is now " + c.toggleShitPost() + ".";
+            c.toggleLocked();
+            return "> Lock for " + c.getName() + " is now " + c.isLocked() + ".";
         } else {
             return command.notAllowed;
         }
@@ -22,7 +23,8 @@ public class CCEditModes {
 
     public static String shitPost(CCommandObject c, CommandObject command, IUser author, IGuild guild) {
         if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild)) {
-            return "> Shitpost for " + c.getName() + " is now " + c.toggleShitPost() + ".";
+            c.toggleShitPost();
+            return "> Shitpost for " + c.getName() + " is now " + c.isShitPost() + ".";
         } else {
             return command.notAllowed;
         }

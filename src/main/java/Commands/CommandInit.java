@@ -46,6 +46,7 @@ public class CommandInit {
         commands.add(new MaxMessages());
         commands.add(new Module());
         commands.add(new Mute());
+        commands.add(new EditInfoFiles());
 //        commands.add(new RewardRole());
         commands.add(new SetAdminRole());
         commands.add(new SetMutedRole());

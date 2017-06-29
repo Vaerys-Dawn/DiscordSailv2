@@ -4,10 +4,7 @@ import Interfaces.Command;
 import Main.Constants;
 import Main.Globals;
 import Main.Utility;
-import Objects.DailyMessageObject;
-import Objects.GuildContentObject;
-import Objects.ReminderObject;
-import Objects.UserCountDown;
+import Objects.*;
 import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -52,7 +50,7 @@ public class EventHandler {
                     g.getSpokenUsers().clear();
                 }
             }
-        }, intialdelay, 60* 1000);
+        }, intialdelay, 60 * 1000);
     }
 
     //Reminder new setup.
@@ -139,7 +137,8 @@ public class EventHandler {
                     Utility.backupFile(task.getGuildID(), Constants.FILE_COMPETITION);
                     Utility.backupFile(task.getGuildID(), Constants.FILE_GUILD_USERS);
                     GuildConfig guildConfig = Globals.getGuildContent(task.getGuildID()).getGuildConfig();
-                    GuildContentObject contentObject = Globals.getGuildContent(task.getGuildID());
+
+                    XpHandler.doDecay(task,nowUTC);
 
                     //daily messages
                     if (guildConfig.getChannelIDsByType(Command.CHANNEL_GENERAL) != null) {
@@ -253,7 +252,9 @@ public class EventHandler {
 
                 //Sending isAlive Check.
                 try {
-                    logger.info("Backup in 5 seconds do not restart.");
+                    if (Globals.showSaveWarning) {
+                        logger.info("Backup in 5 seconds do not restart.");
+                    }
                     Thread.sleep(5000);
                     Globals.getClient().checkLoggedIn("IsAlive");
                 } catch (DiscordException e) {
@@ -282,60 +283,18 @@ public class EventHandler {
 
     private static void randomPlayingStatus() {
         Random random = new Random();
-        String status;
-        switch (random.nextInt(26)) {
-            case 1:
-                status = "Stardew Valley";
-                break;
-            case 2:
-                status = "Pocket Rumble";
-                break;
-            case 3:
-                status = "The Siege and the SandFox";
-                break;
-            case 4:
-                status = "Treasure Adventure World";
-                break;
-            case 5:
-                status = "Interstellaria";
-                break;
-            case 6:
-                status = "Halfway";
-                break;
-            case 7:
-                status = "Lenna's Inception";
-                break;
-            case 8:
-                status = "Risk of Rain";
-                break;
-            case 9:
-                status = "Witchmarsh";
-                break;
-            case 10:
-                status = "Wanderlust Adventure";
-                break;
-            case 11:
-                status = "Wanderlust Rebirth";
-                break;
-            case 12:
-                status = "WarGroove";
-                break;
-            case 13:
-                status = "WarGroove";
-                break;
-            case 14:
-                status = "WarGroove";
-                break;
-            case 15:
-                status = "WarGroove";
-                break;
-            case 16:
-                status = "WarGroove";
-                break;
-            default:
-                status = Globals.playing;
-                break;
+        String status = Globals.playing;
+        if (Globals.doRandomGames && Globals.getRandomStatuses().size() != 0) {
+            ArrayList<String> games = new ArrayList<>();
+            for (RandomStatusObject r: Globals.getRandomStatuses()){
+                for (int i = 0; i < r.getWeight();i++){
+                    games.add(r.getStatus());
+                }
+            }
+            int nextRand = random.nextInt(games.size());
+            status = games.get(nextRand);
         }
         Globals.client.changePlayingText(status);
+        return;
     }
 }

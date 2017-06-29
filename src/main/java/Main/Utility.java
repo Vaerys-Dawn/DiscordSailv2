@@ -20,10 +20,7 @@ import sx.blah.discord.util.*;
 import sx.blah.discord.util.Image;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,6 +33,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by Vaerys on 17/08/2016.
@@ -280,8 +278,8 @@ public class Utility {
             try {
                 final HttpURLConnection connection = (HttpURLConnection) new URL(imageURL).openConnection();
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) " + "AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
-                InputStream stream = connection.getInputStream();
 
+                InputStream stream = connection.getInputStream();
                 //tests to see if the URL specified is a valid Image URL
                 String[] urlSplit = imageURL.split(Pattern.quote("."));
                 String suffix = "." + urlSplit[urlSplit.length - 1];
@@ -1019,8 +1017,10 @@ public class Utility {
         for (String s: blacklist){
             SplitFirstObject firstWord = new SplitFirstObject(s);
             if (!firstWord.getFirstWord().startsWith("//")){
-                if (args.toLowerCase().contains(firstWord.getFirstWord().toLowerCase())){
-                    return false;
+                if (firstWord.getFirstWord() != null && firstWord.getFirstWord().length() != 0) {
+                    if (args.toLowerCase().contains(firstWord.getFirstWord().toLowerCase())) {
+                        return false;
+                    }
                 }
             }
         }

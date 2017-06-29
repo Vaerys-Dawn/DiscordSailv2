@@ -33,9 +33,8 @@ public class PatchHandler {
             Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_2));
         if (!patchesFound.contains(Constants.PATCH_3))
             Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_3));
-        if (!patchesFound.contains(Constants.PATCH_4)){
+        if (!patchesFound.contains(Constants.PATCH_4))
             Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_4));
-        }
 
         ArrayList<PatchObject> patches = Globals.getGlobalData().getPatches();
 
@@ -103,16 +102,16 @@ public class PatchHandler {
                 }
                 File newFile = new File(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO + "x"));
                 File oldFile = new File(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO));
-                FileHandler.writeToFile(newFile.getPath(), content,false);
+                FileHandler.writeToFile(newFile.getPath(), content, false);
                 oldFile.delete();
                 newFile.renameTo(oldFile);
 
                 p.getPatchedGuildIDs().add(guild.getStringID());
             }
-            if (!exit && p.getPatchLevel().equalsIgnoreCase(Constants.PATCH_4)){
+            if (!exit && p.getPatchLevel().equalsIgnoreCase(Constants.PATCH_4)) {
                 GuildUsers guildUsers = (GuildUsers) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_USERS, GuildUsers.class);
 
-                for (UserTypeObject u :guildUsers.getUsers()){
+                for (UserTypeObject u : guildUsers.getUsers()) {
                     u.setXp(0);
                     u.setRewardID(-1);
                 }
@@ -139,6 +138,15 @@ public class PatchHandler {
             FileHandler.writeToJson(Constants.FILE_CONFIG, config);
             Globals.getGlobalData().getGlobalPatches().add(Constants.PATCH_GLOBAL_1);
         }
+        if (!Globals.getGlobalData().getGlobalPatches().contains(Constants.PATCH_GLOBAL_2)) {
+            logger.info("Performing patch : " + Constants.PATCH_GLOBAL_2 + ". Please wait...");
+            Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
+            config.randomStatuses = Config.defaultStatuses();
+            FileHandler.writeToJson(Constants.FILE_CONFIG, config);
+            Globals.getGlobalData().getGlobalPatches().add(Constants.PATCH_GLOBAL_2);
+            logger.info("Reloading Globals...");
+            Globals.initConfig(Globals.client,config,Globals.getGlobalData());
+        }
     }
 
     private static String toNewSystem(String from) {
@@ -158,7 +166,7 @@ public class PatchHandler {
         from = from.replace("#!break#", "<!break>");
         from = from.replace("#toCaps#", "<toCaps>");
         from = from.replace("#embedImage#", "<embedImage>");
-        from = from.replace("#randNum#","<randNum>");
+        from = from.replace("#randNum#", "<randNum>");
         from = from.replace("#delCall#", "<delCall>");
         return from;
     }

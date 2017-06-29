@@ -31,7 +31,7 @@ public class SlashList implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"Commands/Slash"};
+        return new String[]{"SlashList","SlashCommands","Slash"};
     }
 
     @Override

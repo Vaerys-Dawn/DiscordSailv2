@@ -17,5 +17,6 @@ public enum UserSetting {
     DENIED_XP, //Admin Settable. Denies all xp gain for the user.
     DONT_SHOW_LEADERBOARD, //Hides user on the server leader-board.
     AUTO_SHITPOST, //Automatically sets all new commands made by this user to be shitpost locked.
-    DENY_CCS //Removes the ability for the user to make custom commands.
+    DENY_MAKE_CC, //Removes the ability for the user to make custom commands.
+    DENY_USE_CCS //Removes the ability for the user to use custom commands.
 }

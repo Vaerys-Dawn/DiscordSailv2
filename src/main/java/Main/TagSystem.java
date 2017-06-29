@@ -31,7 +31,7 @@ public class TagSystem {
         response = tagRandom(response);
         response = tagIfRole(response, message.getAuthor(), message.getGuild());
         response = tagIfName(response, message.getAuthor(), message.getGuild());
-        response = tagEmptyArgs(response,args);
+        response = tagEmptyArgs(response, args);
         response = tagIfArgs(response, args);
         response = tagRegex(response, "<replace>{", "}", ";;");
         response = tagRegex(response, "<replace!>(", ")</r>", "::");
@@ -52,7 +52,7 @@ public class TagSystem {
                 lastAttempt = from;
                 tag = StringUtils.substringBetween(from, prefix, suffix);
                 if (tag != null) {
-                    from = from.replace("#ERROR#",tag);
+                    from = from.replace("#ERROR#", tag);
                     from = from.replace(prefix + tag + suffix, "");
                 }
             } while (StringUtils.countMatches(from, prefix) > 0 && (!lastAttempt.equals(from)));
@@ -276,7 +276,7 @@ public class TagSystem {
         return from;
     }
 
-    public static String tagEmptyArgs(String from, String args){
+    public static String tagEmptyArgs(String from, String args) {
         String prefix = "<ifArgsEmpty>{";
         String suffix = "}";
         String tag;
@@ -363,10 +363,14 @@ public class TagSystem {
                 lastAttempt = from;
                 contents = StringUtils.substringBetween(from, prefix, suffix);
                 if (contents != null) {
-                    IChannel channel = Globals.getClient().getChannelByID(contents);
-                    if (channel != null) {
-                        from = from.replace(prefix + contents + suffix, channel.mention());
-                    } else {
+                    try {
+                        IChannel channel = Globals.getClient().getChannelByID(contents);
+                        if (channel != null) {
+                            from = from.replace(prefix + contents + suffix, channel.mention());
+                        } else {
+                            from = from.replaceFirst(Pattern.quote(contents), "#ERROR#");
+                        }
+                    } catch (NumberFormatException e) {
                         from = from.replaceFirst(Pattern.quote(contents), "#ERROR#");
                     }
                 }
@@ -386,12 +390,17 @@ public class TagSystem {
                 lastAttempt = from;
                 contents = StringUtils.substringBetween(from, prefix, suffix);
                 if (contents != null) {
-                    IUser user = Globals.getClient().getUserByID(contents);
-                    if (user != null) {
-                        from = from.replace(prefix + contents + suffix, user.getDisplayName(guild));
-                    } else {
+                    try {
+                        IUser user = Globals.getClient().getUserByID(contents);
+                        if (user != null) {
+                            from = from.replace(prefix + contents + suffix, user.getDisplayName(guild));
+                        } else {
+                            from = from.replaceFirst(Pattern.quote(contents), "#ERROR#");
+                        }
+                    } catch (NumberFormatException e) {
                         from = from.replaceFirst(Pattern.quote(contents), "#ERROR#");
                     }
+
                 }
             } while (StringUtils.countMatches(from, prefix) > 0 && (!lastAttempt.equals(from)));
         }

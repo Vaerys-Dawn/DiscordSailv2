@@ -43,7 +43,7 @@ public class MessageHandler {
 
         checkBlacklist(commandObject);
         checkMentionCount(commandObject);
-        commandObject.guildUsers.addXP(commandObject);
+        XpHandler.grantXP(commandObject);
         if (rateLimiting(commandObject)) {
             return;
         }

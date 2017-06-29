@@ -6,6 +6,8 @@ import Main.Utility;
 import Objects.UserCountDown;
 import Objects.UserTypeObject;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 /**
@@ -20,42 +22,6 @@ public class GuildUsers {
         return users;
     }
 
-    public void addXP(CommandObject object) {
-        //bots don't get XP
-        if (object.author.isBot()) {
-            return;
-        }
-        //you can only gain xp once per min
-        if(object.guildContent.getSpokenUsers().contains(object.authorID)){
-            return;
-        }
-        //you must have typed at least 10 chars to gain xp
-        if (object.message.getContent().length() < 10){
-            return;
-        }
-        //you cannot gain xp in an xpDenied channel
-        ArrayList<String> xpChannels = object.guildConfig.getChannelIDsByType(Command.Channel_XP_DENIED);
-        if (xpChannels != null && xpChannels.size() > 0){
-            if (xpChannels.contains(object.channelSID)){
-                return;
-            }
-        }
-        object.guildContent.getSpokenUsers().add(object.authorID);
-        boolean isFound = false;
-        UserTypeObject user = new UserTypeObject(object.authorSID);
-        for (UserTypeObject u : users) {
-            if (u.getID().equals(object.authorSID)) {
-                isFound = true;
-                user = u;
-            }
-        }
-        if (!isFound) {
-            users.add(user);
-        }
-        user.addXP(object.guildConfig);
-    }
-
-  
     public boolean muteUser(String userID, long time, String guildID) {
         boolean found = false;
         for (UserCountDown c : mutedUsers) {
@@ -97,8 +63,8 @@ public class GuildUsers {
     }
 
     public UserTypeObject getUserByID(String authorSID) {
-        for (UserTypeObject u: users){
-            if (u.getID().equalsIgnoreCase(authorSID)){
+        for (UserTypeObject u : users) {
+            if (u.getID().equalsIgnoreCase(authorSID)) {
                 return u;
             }
         }

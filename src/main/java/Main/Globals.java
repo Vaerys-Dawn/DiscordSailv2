@@ -8,6 +8,7 @@ import Handlers.FileHandler;
 import Interfaces.*;
 import Objects.DailyMessageObject;
 import Objects.GuildContentObject;
+import Objects.RandomStatusObject;
 import POGOs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ public class Globals {
     public static String defaultPrefixCC = null;
     public static String defaultAvatarFile = null;
     public static boolean doDailyAvatars = false;
+    public static boolean doRandomGames = false;
     public static String dailyAvatarName = null;
     public static String playing = null;
     public static int argsMax = 0;
@@ -44,6 +46,7 @@ public class Globals {
     public static ArrayList<DailyMessageObject> dailyMessages = new ArrayList<>();
     public static IDiscordClient client;
     public static boolean isModifingFiles = false;
+    public static boolean showSaveWarning = false;
     private static ArrayList<GuildContentObject> guildContentObjects = new ArrayList<>();
     private static ArrayList<Command> commands = new ArrayList<>();
     private static ArrayList<DMCommand> commandsDM = new ArrayList<>();
@@ -51,6 +54,7 @@ public class Globals {
     private static ArrayList<ChannelSetting> channelSettings = new ArrayList<>();
     private static ArrayList<GuildToggle> guildGuildToggles = new ArrayList<>();
     private static ArrayList<SlashCommand> slashCommands = new ArrayList<>();
+    private static ArrayList<RandomStatusObject> randomStatuses = new ArrayList<>();
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
     private static GlobalData globalData;
@@ -77,6 +81,9 @@ public class Globals {
         baseXPModifier = config.baseXpModifier;
         xpForLevelOne = config.xpForLevelOne;
         avgMessagesPerDay = config.avgMessagesPerDay;
+        doRandomGames = config.doRandomGames;
+        showSaveWarning = config.showSaveWarning;
+        randomStatuses = config.randomStatuses;
         initCommands();
     }
 
@@ -262,7 +269,7 @@ public class Globals {
 
     public static GuildContentObject getGuildContent(String guildID) {
         for (GuildContentObject storage : guildContentObjects) {
-            if (storage.getGuildID().equals(guildID)) {
+            if (storage.getGuildID() != null && storage.getGuildID().equals(guildID)) {
                 return storage;
             }
         }
@@ -320,5 +327,9 @@ public class Globals {
 
     public static ArrayList<SlashCommand> getSlashCommands() {
         return slashCommands;
+    }
+
+    public static ArrayList<RandomStatusObject> getRandomStatuses() {
+        return randomStatuses;
     }
 }

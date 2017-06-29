@@ -3,6 +3,7 @@ package Commands.RoleSelect;
 import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Constants;
+import Main.Globals;
 import Main.Utility;
 import Objects.RoleTypeObject;
 import Objects.SplitFirstObject;
@@ -46,6 +47,12 @@ public class CosmeticRoles implements Command {
                     }
                 }
             } else {
+                if (args.startsWith("[") && args.endsWith("]")){
+                    return Constants.ERROR_BRACKETS + "\n" + Utility.getCommandInfo(this,command);
+                }
+                if (args.toLowerCase().endsWith("/remove")){
+                    return "> Did you mean `"+ command.guildConfig.getPrefixCommand() + names()[0] +" "+ args.replaceAll("(?i)/remove","") + "`?";
+                }
                 ArrayList<RoleTypeObject> roles = guildConfig.getCosmeticRoles();
                 String newRoleId = null;
                 List<IRole> userRoles = guild.getRolesForUser(author);

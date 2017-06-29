@@ -143,7 +143,7 @@ public class AnnotationListener {
         String messageLC = message.toString().toLowerCase();
         String args = "";
         String command = "";
-        while (!event.getClient().isReady()) ;
+        while (Globals.getGuildContent(guild.getStringID()) == null) ;
         GuildConfig guildConfig = Globals.getGuildContent(guild.getStringID()).getGuildConfig();
 
 
@@ -286,13 +286,15 @@ public class AnnotationListener {
     @EventSubscriber
     public void onReactionAddEvent(ReactionAddEvent event) {
         Emoji x = EmojiManager.getForAlias("x");
+        Emoji pin = EmojiManager.getForAlias("pushpin");
+        if (event.getReaction() == null) {
+            return;
+        }
         if (!event.getChannel().isPrivate()) {
             CommandObject object = new CommandObject(event.getMessage());
             if (object.guildConfig.artPinning) {
-                if (!event.getChannel().isPrivate()) {
-                    if (event.getReaction().getUnicodeEmoji().equals(EmojiManager.getForAlias("pushpin"))) {
-                        new ArtHandler(object.setAuthor(event.getUser()));
-                    }
+                if (event.getReaction().getUnicodeEmoji().equals(pin)) {
+                    new ArtHandler(object.setAuthor(event.getUser()));
                 }
             }
             if (event.getReaction().getUnicodeEmoji().equals(x)) {

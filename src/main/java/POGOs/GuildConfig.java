@@ -19,10 +19,10 @@ public class GuildConfig {
     String guildName = "";
     //toggles
     //--Auto Tasks
-    public boolean loginMessage = true;
     public boolean dailyMessage = true;
     public boolean artPinning = false;
     public boolean autoArtPinning = false;
+    public boolean doXpDecay = false;
     //--Logging
     public boolean generalLogging = false;
     public boolean adminLogging = false;

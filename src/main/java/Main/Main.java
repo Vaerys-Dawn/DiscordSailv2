@@ -80,6 +80,8 @@ public class Main {
 
             PatchHandler.globalPatches();
 
+
+
             //login + register listener.
             EventDispatcher dispatcher = client.getDispatcher();
             dispatcher.registerListener(new AnnotationListener());

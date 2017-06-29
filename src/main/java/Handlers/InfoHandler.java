@@ -46,6 +46,7 @@ public class InfoHandler {
         for (String s: infoContents){
             //this ignores commented out code.
             if (!s.startsWith("//")){
+                //code for image handling
                 if (builder.toString().contains(imagePrefix)){
                     imageTag = imagePrefix + StringUtils.substringBetween(builder.toString(),imagePrefix,imageSuffix) + imageSuffix;
                     splited = builder.toString().split(Pattern.quote(imageTag));
@@ -56,6 +57,7 @@ public class InfoHandler {
                     builder.delete(0,builder.length());
                     builder.append(nextChunk);
                 }
+                // tag tells the system to save chunk and move to the next one
                 if (builder.toString().contains(tagBreak)){
                     splited = builder.toString().split(Pattern.quote(tagBreak));
                     lastChunk = splited[0];
@@ -64,6 +66,7 @@ public class InfoHandler {
                     builder.delete(0,builder.length());
                     builder.append(nextChunk);
                 }
+                //if the char count for the current chunk is too much move to the next one
                 if ((builder + doTextTags(s) + "\n").length() > 2000){
                     stringChunks.add(builder.toString());
                     builder.delete(0, builder.length());
@@ -77,8 +80,8 @@ public class InfoHandler {
 
         //actual code.
         for (String contents : stringChunks){
-            contents = TagSystem.tagNoNL(contents);
-            contents = TagSystem.tagEmoji(contents,guild);
+            contents = TagSystem.tagNoNL(contents); //noNL tag
+            contents = TagSystem.tagEmoji(contents,guild); //Emoji tag
             if (contents.contains(imagePrefix)){
                 image = StringUtils.substringBetween(contents, imagePrefix, imageSuffix);
                 File file = new File(Utility.getGuildImageDir(guild.getStringID()) + image);
@@ -96,9 +99,9 @@ public class InfoHandler {
 
 
     private String doTextTags(String s) {
-        s = TagSystem.tagChannel(s);
-        s = TagSystem.tagDisplayName(s, guild);
-        s = TagSystem.tagSpacer(s);
+        s = TagSystem.tagChannel(s); //links the channel
+        s = TagSystem.tagDisplayName(s, guild); //links a non ping displayname
+        s = TagSystem.tagSpacer(s); //spacer tag
         return s;
     }
 

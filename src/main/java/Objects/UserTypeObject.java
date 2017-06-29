@@ -20,6 +20,8 @@ public class UserTypeObject {
     String quote = "This person doesn't seem to have much to say for themselves.";
     ArrayList<UserSetting> settings = new ArrayList<>();
     ArrayList<UserLinkObject> links = new ArrayList<>();
+    public long lastTalked = -1;
+
 
     public UserTypeObject() {
         if (links == null) links = new ArrayList<>();
@@ -91,5 +93,9 @@ public class UserTypeObject {
         if (links == null) {
             links = new ArrayList<>();
         }
+    }
+
+    public long getLastTalked() {
+        return lastTalked;
     }
 }

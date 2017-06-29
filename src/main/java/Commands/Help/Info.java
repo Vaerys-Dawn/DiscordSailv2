@@ -1,9 +1,11 @@
 package Commands.Help;
 
 import Commands.CommandObject;
+import Interfaces.ChannelSetting;
 import Interfaces.Command;
 import Main.Globals;
 import Main.Utility;
+import Objects.UserLinkObject;
 import Objects.XEmbedBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import sx.blah.discord.handle.obj.IChannel;
@@ -11,6 +13,8 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 29/01/2017.
@@ -21,11 +25,14 @@ public class Info implements Command {
     public String execute(String args, CommandObject command) {
         ArrayList<Command> commands = command.commands;
 
-        String error = "> Command with the name " + args + " not found.";
+        String error = "> Could not find information on any commands named **" + args + "**.";
         for (Command c : commands) {
             for (String s : c.names()) {
                 if (args.equalsIgnoreCase(s)) {
-                    if (c.type().equalsIgnoreCase(TYPE_CREATOR) && !command.authorSID.equalsIgnoreCase(Globals.creatorID)){
+                    if (c.type().equalsIgnoreCase(TYPE_CREATOR) && !command.authorSID.equalsIgnoreCase(Globals.creatorID)) {
+                        return error;
+                    }
+                    if (!Utility.testForPerms(c.perms(),command.author,command.guild)){
                         return error;
                     }
 
@@ -42,48 +49,64 @@ public class Info implements Command {
                         primaryCommand += " " + c.usage();
                     }
                     builder.append("**" + primaryCommand + "**\n");
-                    builder.append("Desc: **" + c.description() + "**\n");
-                    builder.append("Type: **" + c.type() + "**\n");
+                    builder.append("**Desc: **" + c.description() + "\n");
+                    builder.append("**Type: **" + c.type() + "\n");
                     if (c.perms().length != 0) {
-                        builder.append("Perms: **");
+                        builder.append("**Perms: **");
                         ArrayList<String> permList = new ArrayList<>();
                         for (Permissions p : c.perms()) {
                             permList.add(p.toString());
                         }
-                        builder.append("**");
                         builder.append(Utility.listFormatter(permList, true));
                     }
                     //dual command info
-                    if (c.dualType() != null) {
+                    if (c.dualType() != null && Utility.testForPerms(c.dualPerms(), command.author, command.guild)) {
                         String dualCommand = command.guildConfig.getPrefixCommand() + c.names()[0];
                         if (c.dualUsage() != null) {
                             dualCommand += " " + c.dualUsage();
                         }
                         StringBuilder builderDual = new StringBuilder();
                         builder.append("\n**" + dualCommand + "**\n");
-                        builder.append("Desc: **" + c.dualDescription() + "**\n");
-                        builder.append("Type: **" + c.dualType() + "**\n");
+                        builder.append("**Desc: **" + c.dualDescription() + "\n");
+                        builder.append("**Type: **" + c.dualType() + "\n");
                         if (c.perms().length != 0 || c.dualPerms().length != 0) {
                             Permissions[] perms;
                             perms = ArrayUtils.addAll(c.dualPerms(), c.perms());
-                            builder.append("Perms: **");
+                            builder.append("**Perms: **");
                             ArrayList<String> permList = new ArrayList<>();
                             for (Permissions p : perms) {
                                 permList.add(p.toString());
                             }
                             builder.append(Utility.listFormatter(permList, true));
-                            builderDual.append("**");
                         }
                         builder.append(builderDual.toString());
                     }
                     infoEmbed.appendField("> Info - " + c.names()[0], builder.toString(), false);
-                    IChannel commandChannel = null;
-                    if (command.guildConfig.getChannelIDsByType(c.channel()) != null){
-                        command.client.getChannelByID(command.guildConfig.getChannelIDsByType(c.channel()).get(0));
+
+                    //Handle channels
+                    ArrayList<String> channelIDs = command.guildConfig.getChannelIDsByType(c.channel());
+                    ArrayList<String> channelMentions = new ArrayList<>();
+
+                    if (channelIDs != null) {
+                        for (String id: channelIDs){
+                            IChannel temp = command.guild.getChannelByID(id);
+                            if (temp != null){
+                                EnumSet<Permissions> userPerms = temp.getModifiedPermissions(command.author);
+                                if (userPerms.contains(Permissions.SEND_MESSAGES) && userPerms.contains(Permissions.READ_MESSAGES)) {
+                                    channelMentions.add(temp.mention());
+                                }
+                            }
+                        }
+                        builder.append("\n" + Utility.listFormatter(channelMentions, true));
                     }
+
                     //channel
-                    if (commandChannel != null) {
-                        infoEmbed.appendField("Channel: ", commandChannel.mention(), false);
+                    if (channelMentions.size() > 0) {
+                        if (channelMentions.size() == 1) {
+                            infoEmbed.appendField("Channel ", Utility.listFormatter(channelMentions, true), false);
+                        } else {
+                            infoEmbed.appendField("Channels ", Utility.listFormatter(channelMentions, true), false);
+                        }
                     }
 
                     //aliases
@@ -94,7 +117,7 @@ public class Info implements Command {
                         }
                         aliasBuilder.delete(aliasBuilder.length() - 2, aliasBuilder.length());
                         aliasBuilder.append(".\n");
-                        infoEmbed.appendField("Aliases:", aliasBuilder.toString(), false);
+                        infoEmbed.appendField("Aliases", aliasBuilder.toString(), false);
                     }
                     Utility.sendEmbedMessage("", infoEmbed, command.channel);
                     return "";

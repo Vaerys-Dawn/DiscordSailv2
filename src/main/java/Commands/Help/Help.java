@@ -2,6 +2,7 @@ package Commands.Help;
 
 import Commands.CommandObject;
 import Interfaces.Command;
+import Interfaces.DMCommand;
 import Main.Globals;
 import Main.Utility;
 import Objects.XEmbedBuilder;
@@ -21,12 +22,12 @@ public class Help implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        ArrayList<String> types = command.commandTypes;
+        ArrayList<String> types = (ArrayList<String>) command.commandTypes.clone();
         XEmbedBuilder helpEmbed = new XEmbedBuilder();
         StringBuilder builder = new StringBuilder();
         ArrayList<String> commandList = new ArrayList<>();
         ArrayList<Command> commands = command.commands;
-        String error = "> There are no commands with the type: " + args + ".\n" + Utility.getCommandInfo(this, command);
+        String error = "> There are no commands with the type: **" + args + "**.\n" + Utility.getCommandInfo(this, command);
         //setting embed colour to match Bot's Colour
         Color color = Utility.getUsersColour(Globals.getClient().getOurUser(), command.guild);
         if (color != null) {
@@ -45,6 +46,23 @@ public class Help implements Command {
 
         //sort types
         Collections.sort(types);
+
+        boolean showAdmin = false;
+        for (Command c : command.commands) {
+            if (c.type().equals(Command.TYPE_ADMIN)) {
+                if (Utility.testForPerms(c.perms(), command.author, command.guild)) {
+                    showAdmin = true;
+                }
+            }
+        }
+
+        if (!showAdmin) {
+            for (int i = 0; i < types.size(); i++) {
+                if (types.get(i).equalsIgnoreCase(Command.TYPE_ADMIN)) {
+                    types.remove(i);
+                }
+            }
+        }
 
         //building the embed
         if (args.isEmpty()) {
@@ -71,16 +89,22 @@ public class Help implements Command {
                     title = "> Here are all of the " + s + " Commands I have available.";
                     isFound = true;
                     if (s.equalsIgnoreCase(TYPE_DM)) {
-                        commandList.addAll(Globals.getCommandsDM().stream().map(c -> Globals.defaultPrefixCommand + c.names()[0]).collect(Collectors.toList()));
+                        for (DMCommand cDM : Globals.getCommandsDM()){
+                            if (!cDM.type().equalsIgnoreCase(DMCommand.TYPE_CREATOR)){
+                                commandList.add(Globals.defaultPrefixCommand + cDM.names()[0]);
+                            }
+                        }
                         suffix = "**These commands can only be performed in DMs.**\n" +
                                 "> If you send a non command message to my DMs it will send it to my creator.";
                     } else {
                         for (Command c : commands) {
-                            if (c.type().equalsIgnoreCase(s)) {
-                                if (c.dualType() != null) {
-                                    commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0] + indent + "*");
-                                } else {
-                                    commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0]);
+                            if (Utility.testForPerms(c.perms(), command.author, command.guild)) {
+                                if (c.type().equalsIgnoreCase(s)) {
+                                    if (c.dualType() != null) {
+                                        commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0] + indent + "*");
+                                    } else {
+                                        commandList.add(command.guildConfig.getPrefixCommand() + c.names()[0]);
+                                    }
                                 }
                             }
                         }

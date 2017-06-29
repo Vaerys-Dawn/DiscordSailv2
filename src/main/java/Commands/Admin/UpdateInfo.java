@@ -6,6 +6,8 @@ import Interfaces.Command;
 import Main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.ArrayList;
+
 /**
  * Created by Vaerys on 31/01/2017.
  */
@@ -13,10 +15,14 @@ public class UpdateInfo implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guildConfig.getChannelIDsByType(Command.CHANNEL_INFO) == null) {
-            return "> No Info channel set up yet, you need to set one up in order to run this command.\n" + Utility.getCommandInfo(this,command);
+            return "> No Info channel set up yet, you need to set one up in order to run this command.\n" + Utility.getCommandInfo(this, command);
         } else {
-            new InfoHandler(command.channel, command.guild);
-            return null;
+            if (command.guildConfig.getChannelIDsByType(Command.CHANNEL_INFO).contains(command.channelSID)) {
+                new InfoHandler(command.channel, command.guild);
+                return null;
+            } else {
+                return "> Command must be performed in " + command.client.getChannelByID(command.guildConfig.getChannelIDsByType(CHANNEL_INFO).get(0)).mention() + ".";
+            }
         }
     }
 

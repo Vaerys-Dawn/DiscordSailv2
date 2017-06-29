@@ -35,6 +35,7 @@ public class Constants {
     public static final String PATCH_3 = "UPDATE_TAGS_2";
     public static final String PATCH_4 = "RESET_XP";
     public static final String PATCH_GLOBAL_1 = "UPDATE_CONFIG";
+    public static final String PATCH_GLOBAL_2 = "INIT_RANDOM_GAMES";
 
     //Error Constants
     public static final String ERROR = "> An Error Occurred";
@@ -42,7 +43,8 @@ public class Constants {
     public static final String ERROR_UPDATING_ROLE = "> An Error Occurred when trying to Update your roles.";
     public static final String ERROR_CC_NOT_FOUND = "> Command with that name could not be found.";
     public static final String ERROR_CHAR_NOT_FOUND = "> Character with that name could not be found.";
-
+    public static final String ERROR_BRACKETS = "> Brackets `[]` and Parentheses `()` are not required, " +
+            "they mean that a variable is required or optional respectively, so don't use them.";
 
     //-------FilePath Constants--------
 
@@ -79,7 +81,7 @@ public class Constants {
     public static final String DAILY_MESSAGE_1 = "> Load Sail.getBehaviour(\"Cat\");\n" +
             "> <random>{Meow;;Feed MEEEE;;Pet me;;Get away from me}, <random>{*Licks self*;;***HISSSSSS***;;Wait no don't leave me..}.";
     public static final String DAILY_MESSAGE_2 = "> Well hello again, looks like its a brand new day.";
-    public static final String DAILY_MESSAGE_3 = "> <random>{Protocol Avali initiated;;Loading Avali Settings;;OS S.A.V.A.L.I Loaded}." +
+    public static final String DAILY_MESSAGE_3 = "> <random>{Protocol Avali initiated;;Loading Avali Settings;;OS A.V.A.L.A.I Loaded}." +
             " <random>{Greetings;;Hello;;Salutations}, it appears that today is a new day. It looks like a great day for <random>{exploration;;discovery;;some cake;;**CIVILISATION**;;a picnic}.";
     public static final String DAILY_MESSAGE_4 = "LOADING PROTOCOL M.E.T.A" +
             "\n> <random>{" +
@@ -104,5 +106,4 @@ public class Constants {
             "Goodness what have you all done to the place since I was last here?;;" +
             "My My My Its a brand new day isn't it? looks like we're all still here.}";
     public static final String DAILY_MESSAGE_7 = "> A new Day arrives, Prepare for fun.";
-
 }

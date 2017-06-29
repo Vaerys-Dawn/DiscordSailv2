@@ -26,9 +26,18 @@ public class ArtHandler {
         }
         if (command.message.getAttachments().size() != 0) {
             if (Utility.isImageLink(command.message.getAttachments().get(0).getUrl())) {
-                command.message.getChannel().pin(command.message);
-                checkList(command, true);
-                return;
+                try {
+                    command.message.getChannel().pin(command.message);
+                    checkList(command, true);
+                    return;
+                } catch (DiscordException e){
+                    if (e.getErrorMessage().contains("already pinned")){
+                        return;
+                    }else{
+                        e.printStackTrace();
+                    }
+                }
+
             }
         } else {
             for (String nl : command.message.getContent().split("/n")) {

@@ -77,14 +77,16 @@ public class ListCCs implements Command {
         builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
 
         for (CCommandObject c : command.customCommands.getCommandList()) {
-            if (counter > 15) {
-                pages.add("`" + Utility.listFormatter(list, true) + "`");
-                list.clear();
-                counter = 0;
-            }
-            list.add(command.guildConfig.getPrefixCC() + c.getName());
-            totalCCs++;
-            counter++;
+//            if (command.guild.getUserByID(c.getUserID()) != null) {
+                if (counter > 15) {
+                    pages.add("`" + Utility.listFormatter(list, true) + "`");
+                    list.clear();
+                    counter = 0;
+                }
+                list.add(command.guildConfig.getPrefixCC() + c.getName());
+                totalCCs++;
+                counter++;
+//            }
         }
         pages.add("`" + Utility.listFormatter(list, true) + "`");
         try {
