@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class Characters {
 
-    // TODO: 22/09/2016 add more profile options: link roles, display name, gender, age, bio.
     boolean properlyInit = false;
     ArrayList<CharacterObject> characters = new ArrayList<>();
+    private String rolePrefix = "";
 
 
     public boolean isProperlyInit() {
@@ -61,5 +61,13 @@ public class Characters {
             }
         }
         return Constants.ERROR_CHAR_NOT_FOUND;
+    }
+
+    public void setRolePrefix(String rolePrefix) {
+        this.rolePrefix = rolePrefix;
+    }
+
+    public String getRolePrefix() {
+        return rolePrefix;
     }
 }

@@ -117,16 +117,6 @@ public class AnnotationListener {
         Utility.updateUsername(Globals.botName);
     }
 
-    // TODO: 15/02/2017 ---------------PIXEL XP-----------------
-    // TODO: 16/01/2017 add xp system 20 xp per min max, decay of 150 xp per day, level up to be exponential unsure at what rate tho
-    // TODO: 16/01/2017 roles removed when level threshold is no longer high enough, ability to set role to gain on level,
-    // TODO: 16/01/2017 min word limit to gain xp default = 10 words,
-    // TODO: 16/01/2017 create a list of users that have spoken in the current min, clear list at end of min
-    // TODO: 16/01/2017 send all level up and rank messages to DMS
-    // TODO: 16/01/2017 ability to toggle xp per channel
-    // TODO: 16/01/2017 make level decay toggleable
-    // TODO: 16/01/2017 make everything optional/ modifiable
-    // TODO: 18/03/2017 make a toggle that will Hide UserXp on their profile and hide the server rank list.
     @EventSubscriber
     public void onMessageReceivedEvent(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) {
@@ -287,7 +277,7 @@ public class AnnotationListener {
     public void onReactionAddEvent(ReactionAddEvent event) {
         Emoji x = EmojiManager.getForAlias("x");
         Emoji pin = EmojiManager.getForAlias("pushpin");
-        if (event.getReaction() == null) {
+        if (event.getReaction().isCustomEmoji()) {
             return;
         }
         if (!event.getChannel().isPrivate()) {
@@ -297,14 +287,7 @@ public class AnnotationListener {
                     new ArtHandler(object.setAuthor(event.getUser()));
                 }
             }
-            if (event.getReaction().getUnicodeEmoji().equals(x)) {
-                if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
-                    Utility.deleteMessage(event.getMessage());
-                    return;
-                }
-            }
-        } else {
-            if (Utility.canBypass(event.getUser(), event.getGuild())) {
+            if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, event.getUser(), event.getGuild())) {
                 if (event.getReaction().getUnicodeEmoji().equals(x)) {
                     if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
                         Utility.deleteMessage(event.getMessage());
@@ -312,15 +295,11 @@ public class AnnotationListener {
                     }
                 }
             }
-            if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
-                if (event.getReaction().getUnicodeEmoji().equals(x)) {
-                    if (event.getMessage().getEmbeds().size() == 0) {
-                        if (event.getMessage().getAttachments().size() == 0) {
-                            if (event.getMessage().getContent().length() == 0) {
-                                Utility.deleteMessage(event.getMessage());
-                            }
-                        }
-                    }
+        } else {
+            if (event.getReaction().getUnicodeEmoji().equals(x)) {
+                if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
+                    Utility.deleteMessage(event.getMessage());
+                    return;
                 }
             }
         }
@@ -390,6 +369,13 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onUserJoinEvent(UserJoinEvent event) {
+        GuildContentObject content = Globals.getGuildContent(event.getGuild().getStringID());
+        if (content.getGuildConfig().joinsServerMessages) {
+            String message = content.getGuildConfig().getJoinMessage();
+            message = message.replace("<server>", event.getGuild().getName());
+            message = message.replace("<user>", event.getUser().getName());
+            Utility.sendDM(message,event.getUser().getStringID());
+        }
         joinLeaveLogging(event, true);
     }
 
@@ -508,10 +494,10 @@ public class AnnotationListener {
             for (String r : newRoles) {
                 newRoleList += r + ", ";
             }
-            logger.info("Old Roles:");
-            logger.info(oldRoleList);
-            logger.info("New Roles:");
-            logger.info(newRoleList);
+            logger.debug("Old Roles:");
+            logger.debug(oldRoleList);
+            logger.debug("New Roles:");
+            logger.debug(newRoleList);
             String prefix = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "'s** Role have been Updated.";
             Utility.sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content.getGuildConfig(), false);
         }

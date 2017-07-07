@@ -9,7 +9,7 @@ import Interfaces.Command;
 public class XpDenied implements ChannelSetting {
     @Override
     public String type() {
-        return Command.Channel_XP_DENIED;
+        return Command.CHANNEL_XP_DENIED;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package POGOs;
 
+import Commands.CommandObject;
 import Handlers.FileHandler;
+import Handlers.XpHandler;
 import Main.Constants;
 import Main.Globals;
 import Main.Utility;
@@ -16,11 +18,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 // TODO: 31/08/2016 Add the ability to search for a custom command based on name, contents, or ShitPost (use separate commands) -- partially complete.
+// name:[name] shitpost contents:[contents]
 // TODO: 31/08/2016 Add blacklisting of phrases to custom command creation, editing and execution
-// TODO: 07/10/2016 add tag `variant` that allows people to use $addvariant [Commandname] to that (would use 'Random' tag as a base)
-// TODO: 31/08/2016 (Maybe) Add Fweeee to CC.RewardBag (using VoiceBot functionality)
-// TODO: 04/09/2016 (Maybe) a helpful command list that those with manage messages can add to
-// TODO: 06/10/2016 (maybe) Add a way to create a CC variant. using $AddCCVariant jeez this is going to be interesting...
+// TODO: 07/10/2016 add tag `variant` that allows people to use $editcc [command Name] addvariant [Content] to that (would use 'Random' tag as a base)
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -38,27 +38,29 @@ public class CustomCommands {
         this.properlyInit = properlyInit;
     }
 
-    public int maxCCs(IUser author, IGuild guild, GuildConfig guildConfig) {
+    public int maxCCs(CommandObject object) {
+        // TODO: 03/07/2017 move this to grant ccs based on reward roles.
         int total = 10;
-        boolean hasManagePerms = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild);
-        boolean hasAdminPerms = Utility.testForPerms(new Permissions[]{Permissions.ADMINISTRATOR}, author, guild);
-        boolean isTrusted = guildConfig.testIsTrusted(author, guild);
+        boolean hasManagePerms = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, object.author, object.guild);
+        boolean hasAdminPerms = Utility.testForPerms(new Permissions[]{Permissions.ADMINISTRATOR}, object.author, object.guild);
         if (hasManagePerms) {
-            total += 40;
+            total += 50;
         }
         if (hasAdminPerms) {
             total += 100;
         }
-        if (isTrusted) {
-            total += 20;
+        if (object.guildConfig.modulePixels) {
+            total += (XpHandler.getRewardCount(object, object.author) * 10);
+        }else{
+            total += 40;
         }
-        if (guild.getOwner().getStringID().equals(author.getStringID())) {
-            total = 170;
+        if (object.guild.getOwner().getStringID().equals(object.authorSID)) {
+            total = 200;
         }
         return total;
     }
 
-    public String addCommand(boolean isLocked, IUser author, String commandName, String commandContents, boolean isShitPost, IGuild guild, GuildConfig guildConfig) {
+    public String addCommand(boolean isLocked, String commandName, String commandContents, boolean isShitPost, CommandObject object) {
         int counter = 0;
         int limitCCs;
         String toCheck = commandName + commandContents;
@@ -68,27 +70,27 @@ public class CustomCommands {
         if (commandName.length() > 50) {
             return "> Command name too long.";
         }
-        if (commandName.isEmpty()){
+        if (commandName.isEmpty()) {
             return "> Command name cannot be empty.";
         }
         if (StringUtils.countMatches(commandContents, "#embedImage#{") > 1) {
             return "> Custom Commands Cannot have multiple #embedImage# tags";
         }
-        limitCCs = maxCCs(author, guild, guildConfig);
+        limitCCs = maxCCs(object);
 
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(commandName)) {
                 return "> Command name already in use.";
             }
-            if (c.getUserID().equals(author.getStringID())) {
+            if (c.getUserID().equals(object.authorSID)) {
                 counter++;
             }
         }
         if (counter < limitCCs) {
             if (commandContents.length() < 1500) {
-                commands.add(new CCommandObject(isLocked, author.getStringID(), commandName, commandContents, isShitPost));
+                commands.add(new CCommandObject(isLocked, object.authorSID, commandName, commandContents, isShitPost));
                 return "> Command Added you have " + (limitCCs - counter - 1) + " custom command slots left.\n" +
-                        Constants.PREFIX_INDENT + "You can run your new command by performing `" + guildConfig.getPrefixCC() + commandName + "`.";
+                        Constants.PREFIX_INDENT + "You can run your new command by performing `" + object.guildConfig.getPrefixCC() + commandName + "`.";
             } else {
                 return "> Command Contents to long. max length = 1500 chars.";
             }
@@ -162,11 +164,11 @@ public class CustomCommands {
         return Constants.ERROR_CC_NOT_FOUND;
     }
 
-    public String getUserCommandCount(IUser user, IGuild guild, GuildConfig guildConfig) {
+    public String getUserCommandCount(CommandObject object) {
         int totalCommands = 0;
-        int ccMax = maxCCs(user,guild,guildConfig);
-        for (CCommandObject c: commands){
-            if (c.getUserID().equals(user.getStringID())){
+        int ccMax = maxCCs(object);
+        for (CCommandObject c : commands) {
+            if (c.getUserID().equals(object.authorSID)) {
                 totalCommands++;
             }
         }

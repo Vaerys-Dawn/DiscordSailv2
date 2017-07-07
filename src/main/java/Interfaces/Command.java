@@ -19,7 +19,7 @@ public interface Command {
     String TYPE_COMPETITION = "Competition";
     String TYPE_DM = "DM";
     String TYPE_CREATOR = "Creator";
-    String TYPE_XP = "XP";
+    String TYPE_PIXEL = "Pixels";
     String TYPE_GROUPS = "Groups";
 
     //Channel Constants
@@ -34,7 +34,10 @@ public interface Command {
     String CHANNEL_DONT_LOG = "DontLog";
     String CHANNEL_ART = "Art";
     String CHANNEL_GROUPS = "Groups";
-    String Channel_XP_DENIED = "XpDenied";
+    String CHANNEL_XP_DENIED = "XpDenied";
+    String CHANNEL_PIXELS = "Pixels";
+    String CHANNEL_LEVEL_UP = "LevelUp";
+    String CHANNEL_LEVEL_UP_DENIED = "LevelUpDenied";
 
     String spacer = "\u200B";
     String indent = "    ";

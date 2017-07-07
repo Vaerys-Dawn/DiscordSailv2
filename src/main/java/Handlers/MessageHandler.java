@@ -44,6 +44,7 @@ public class MessageHandler {
         checkBlacklist(commandObject);
         checkMentionCount(commandObject);
         XpHandler.grantXP(commandObject);
+
         if (rateLimiting(commandObject)) {
             return;
         }
@@ -81,20 +82,21 @@ public class MessageHandler {
         for (Command c : commands) {
             for (String name : c.names()) {
                 if (command.equalsIgnoreCase(guildConfig.getPrefixCommand() + name)) {
-                    //command logging
-
                     if (c.type().equals(Command.TYPE_CREATOR) && !commandObject.authorSID.equalsIgnoreCase(Globals.creatorID)) {
                         return;
                     }
 
                     logger.debug(Utility.loggingFormatter("COMMAND", command, args, commandObject));
 
-                    if (c.requiresArgs() && args.isEmpty()) {
-                        Utility.sendMessage(Utility.getCommandInfo(c, commandObject), channel);
-                        return;
+                    //permissions checking
+                    if (c.perms().length != 0 && !Utility.canBypass(commandObject.author, commandObject.guild)) {
+                        if (!Utility.testForPerms(c.perms(), commandObject.author, commandObject.guild)) {
+                            Utility.sendMessage(commandObject.notAllowed, channel);
+                            return;
+                        }
                     }
 
-                    //start section
+                    //channel checking
                     if (c.channel() != null && !Utility.canBypass(commandObject.author, commandObject.guild)) {
                         boolean channelFound = false;
                         ArrayList<String> channelMentions = new ArrayList<>();
@@ -116,9 +118,10 @@ public class MessageHandler {
                                 }
                             }
                         }
+                        //correct channel message formatting
                         if (!channelFound) {
                             if (channelMentions.size() == 0) {
-                                Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.",channel);
+                                Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.", channel);
                             } else if (channelMentions.size() > 1) {
                                 Utility.sendMessage("> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true), channel);
                             } else {
@@ -127,13 +130,14 @@ public class MessageHandler {
                             return;
                         }
                     }
-                    //end
-                    if (c.perms().length != 0 && !Utility.canBypass(commandObject.author, commandObject.guild)) {
-                        if (!Utility.testForPerms(c.perms(), commandObject.author, commandObject.guild)) {
-                            Utility.sendMessage(commandObject.notAllowed, channel);
-                            return;
-                        }
+
+                    //arguments checking.
+                    if (c.requiresArgs() && args.isEmpty()) {
+                        Utility.sendMessage(Utility.getCommandInfo(c, commandObject), channel);
+                        return;
                     }
+
+                    //command logging
                     if (c.doAdminLogging()) {
                         if (guildConfig.adminLogging) {
                             handleLogging(commandObject, args, c, true);
@@ -204,7 +208,7 @@ public class MessageHandler {
     }
 
     private boolean rateLimiting(CommandObject command) {
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, command.author, command.guild, false) ||
+        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, command.author, command.guild) ||
                 Utility.canBypass(command.author, command.guild, false)) {
             return false;
         }

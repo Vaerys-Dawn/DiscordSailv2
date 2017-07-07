@@ -12,6 +12,7 @@ import Commands.Groups.ClearGroupUp;
 import Commands.Groups.GroupUp;
 import Commands.Help.GetGuildInfo;
 import Commands.Help.*;
+import Commands.Pixels.*;
 import Commands.RoleSelect.CosmeticRoles;
 import Commands.RoleSelect.ListModifs;
 import Commands.RoleSelect.ListRoles;
@@ -37,23 +38,24 @@ public class CommandInit {
         commands.add(new Sudo());
         commands.add(new UpdateAvatar());
         commands.add(new GetMessageData());
-        commands.add(new TempCommand());
         commands.add(new ResetPlayingStatus());
         commands.add(new ToggleTypingStatus());
         commands.add(new SetPlayingStatus());
         //Admin commands
         commands.add(new ChannelHere());
+        commands.add(new ChannelStats());
         commands.add(new MaxMessages());
         commands.add(new Module());
         commands.add(new Mute());
         commands.add(new EditInfoFiles());
-//        commands.add(new RewardRole());
         commands.add(new SetAdminRole());
         commands.add(new SetMutedRole());
         commands.add(new SetTrustedRoles());
         commands.add(new Toggle());
         commands.add(new UpdateInfo());
         commands.add(new UpdateRolePerms());
+        commands.add(new UserSettings());
+        commands.add(new SetJoinMessage());
         //General commands
         commands.add(new GetAvatar());
         commands.add(new Hello());
@@ -93,6 +95,7 @@ public class CommandInit {
         commands.add(new ListChars());
         commands.add(new SelectChar());
         commands.add(new UpdateChar());
+        commands.add(new SetBioRolePrefix());
         //CC commands
         commands.add(new DelCC());
         commands.add(new EditCC());
@@ -111,6 +114,17 @@ public class CommandInit {
         //Groups commands
         commands.add(new GroupUp());
         commands.add(new ClearGroupUp());
+        //Pixels
+        commands.add(new Pixels());
+        commands.add(new PixelHelp());
+        commands.add(new DefaultLevelMode());
+        commands.add(new PixelSettings());
+        commands.add(new LevelUpMessage());
+        commands.add(new ManagePixelRoles());
+        commands.add(new TransferLevels());
+        commands.add(new SetXp());
+        commands.add(new SetLevel());
+        commands.add(new SetPixelModifier());
 
         return commands;
     }
@@ -132,7 +146,7 @@ public class CommandInit {
         return commands;
     }
 
-    public static ArrayList<SlashCommand> getSlashCommands(){
+    public static ArrayList<SlashCommand> getSlashCommands() {
         ArrayList<SlashCommand> commands = new ArrayList<>();
 
         commands.add(new Disapproval());

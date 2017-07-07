@@ -51,7 +51,8 @@ public class ListCCs implements Command {
     public String getUserCommands(CommandObject command, long userID) {
         IUser user = Globals.getClient().getUserByID(userID);
         int total = 0;
-        int max = command.customCommands.maxCCs(user, command.guild, command.guildConfig);
+        command.setAuthor(user);
+        int max = command.customCommands.maxCCs(command);
         XEmbedBuilder builder = new XEmbedBuilder();
         String title = "> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.";
         ArrayList<String> list = new ArrayList<>();

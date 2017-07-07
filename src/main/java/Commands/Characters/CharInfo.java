@@ -37,18 +37,22 @@ public class CharInfo implements Command {
                 }
 
                 String description = "";
-                description += "age: " + object.getAge();
-                description += "\nGender: " + object.getGender();
+                description += "**Age:** " + object.getAge();
+                description += "\n**Gender:** " + object.getGender();
                 if (roleNames.size() != 0) {
-                    description += "\n" + Utility.listFormatter(roleNames, true);
+                    if (command.characters.getRolePrefix() != null && !command.characters.getRolePrefix().isEmpty()) {
+                        description += "\n" + command.characters.getRolePrefix() + " " + Utility.listFormatter(roleNames, true);
+                    } else {
+                        description += "\n" + Utility.listFormatter(roleNames, true);
+                    }
                 }
-                description += "\nBio: " + object.getShortBio();
+                description += "\n**Bio:** " + object.getShortBio();
                 if (object.getLongBioURL() != null && !object.getLongBioURL().isEmpty()) {
-                    description += "\n\n[Long Description Link...](" + object.getLongBioURL() + ")";
+                    description += "\n\n**[Long Description Link...](" + object.getLongBioURL() + ")**";
                 }
                 builder.withDesc(description);
                 if (object.getAvatarURL() != null && !object.getAvatarURL().isEmpty()) {
-                    if (object.getAvatarURL().contains("\n") || object.getAvatarURL().contains(" ")){
+                    if (object.getAvatarURL().contains("\n") || object.getAvatarURL().contains(" ")) {
                         return "> An Error Occurred. Avatar url needs to be reset.";
                     }
                     builder.withThumbnail(object.getAvatarURL());

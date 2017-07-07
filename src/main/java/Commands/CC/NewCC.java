@@ -44,7 +44,7 @@ public class NewCC implements Command {
             isLocked = true;
         }
         content = newContent;
-        return command.customCommands.addCommand(isLocked, command.author, nameCC, content, isShitpost, command.guild, command.guildConfig);
+        return command.customCommands.addCommand(isLocked, nameCC, content, isShitpost, command);
     }
 
     @Override

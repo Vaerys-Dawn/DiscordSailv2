@@ -1,5 +1,6 @@
 package Commands;
 
+import Enums.UserSetting;
 import Interfaces.ChannelSetting;
 import Interfaces.Command;
 import Interfaces.DMCommand;
@@ -39,6 +40,7 @@ public class CommandObject {
     public String authorUserName;
     public Color authorColour;
     public List<IRole> authorRoles;
+    public IUser botUser;
     public String notAllowed;
 
     public GuildContentObject guildContent;
@@ -61,6 +63,7 @@ public class CommandObject {
 
 
     final static Logger logger = LoggerFactory.getLogger(CommandObject.class);
+
 
 
     public CommandObject(IMessage message) {
@@ -106,7 +109,6 @@ public class CommandObject {
         authorDisplayName = author.getDisplayName(guild);
         authorColour = Utility.getUsersColour(author, guild);
         authorRoles = author.getRolesForGuild(guild);
-
         guildContent = Globals.getGuildContent(guildSID);
         guildConfig = guildContent.getGuildConfig();
         customCommands = guildContent.getCustomCommands();
@@ -116,6 +118,7 @@ public class CommandObject {
         guildUsers = guildContent.getGuildUsers();
         channelData = guildContent.getChannelData();
         client = Globals.getClient();
+        botUser = client.getOurUser();
 
         commands = (ArrayList<Command>) Globals.getCommands().clone();
         commandTypes = (ArrayList<String>) Globals.getCommandTypes().clone();
@@ -242,4 +245,6 @@ public class CommandObject {
             }
         }
     }
+
+
 }

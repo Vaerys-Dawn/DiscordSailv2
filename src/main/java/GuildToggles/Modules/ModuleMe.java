@@ -1,6 +1,7 @@
 package GuildToggles.Modules;
 
 import Commands.CommandObject;
+import Commands.General.EditLinks;
 import Commands.General.SetGender;
 import Commands.General.SetQuote;
 import Commands.General.UserInfo;
@@ -37,6 +38,7 @@ public class ModuleMe implements GuildToggle {
         command.removeCommand(new UserInfo().names());
         command.removeCommand(new SetGender().names());
         command.removeCommand(new SetQuote().names());
+        command.removeCommand(new EditLinks().names());
     }
 
     @Override

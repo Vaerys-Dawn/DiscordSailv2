@@ -138,7 +138,9 @@ public class EventHandler {
                     Utility.backupFile(task.getGuildID(), Constants.FILE_GUILD_USERS);
                     GuildConfig guildConfig = Globals.getGuildContent(task.getGuildID()).getGuildConfig();
 
-                    XpHandler.doDecay(task,nowUTC);
+                    if (guildConfig.modulePixels && guildConfig.xpDecay) {
+                        XpHandler.doDecay(task, nowUTC);
+                    }
 
                     //daily messages
                     if (guildConfig.getChannelIDsByType(Command.CHANNEL_GENERAL) != null) {
@@ -254,6 +256,8 @@ public class EventHandler {
                 try {
                     if (Globals.showSaveWarning) {
                         logger.info("Backup in 5 seconds do not restart.");
+                    }else {
+                        logger.debug("Backup in 5 seconds do not restart.");
                     }
                     Thread.sleep(5000);
                     Globals.getClient().checkLoggedIn("IsAlive");
@@ -276,7 +280,11 @@ public class EventHandler {
                 }
                 randomPlayingStatus();
                 Globals.saveFiles();
-                logger.debug("Files Saved.");
+                if (Globals.showSaveWarning){
+                    logger.info("Files Saved.");
+                }else {
+                    logger.debug("Files Saved.");
+                }
             }
         }, initialDelay * 1000, 5 * 60 * 1000);
     }

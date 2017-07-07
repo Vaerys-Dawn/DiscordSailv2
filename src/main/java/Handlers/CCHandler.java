@@ -74,13 +74,6 @@ public class CCHandler {
                                     for (IChannel channel : commandObject.guild.getChannels()) {
                                         if (id.equals(channel.getStringID())) {
                                             EnumSet<Permissions> userPerms = channel.getModifiedPermissions(commandObject.author);
-//                                            if (channel.getLongID() == 302969098835329024L) {
-//                                                System.out.println("----- [PERMS - " + channel.getName().toUpperCase() + "] -----");
-//                                                for (Permissions p : userPerms) {
-//                                                    System.out.print(p.toString() + ", ");
-//                                                }
-//                                                System.out.print("\n");
-//                                            }
                                             if (userPerms.contains(Permissions.SEND_MESSAGES) && userPerms.contains(Permissions.READ_MESSAGES)) {
                                                 channelMentions.add(channel.mention());
                                             }

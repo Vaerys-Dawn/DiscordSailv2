@@ -1,30 +1,36 @@
 package Objects;
 
+import Handlers.XpHandler;
+
 /**
  * Created by Vaerys on 11/05/2017.
  */
 public class RewardRoleObject {
-    long RoleID;
-    int level;
+    long roleID;
+    long level;
 
-    public RewardRoleObject(long roleID, int level) {
-        RoleID = roleID;
+    public RewardRoleObject(long roleID, long level) {
+        this.roleID = roleID;
         this.level = level;
     }
 
     public long getRoleID() {
-        return RoleID;
+        return roleID;
     }
 
     public void setRoleID(long roleID) {
-        RoleID = roleID;
+        this.roleID = roleID;
     }
 
-    public int getLevel() {
+    public long getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(long level) {
         this.level = level;
+    }
+
+    public long getXp() {
+        return XpHandler.totalXPForLevel(level);
     }
 }

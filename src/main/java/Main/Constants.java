@@ -1,5 +1,9 @@
 package Main;
 
+import Enums.UserSetting;
+
+import java.util.ArrayList;
+
 /**
  * Created by Vaerys on 03/08/2016.
  */
@@ -76,6 +80,31 @@ public class Constants {
 
     public static final String FILE_COMPETITION = "Competition.json";
 
+    public static final String LEVEL_UP_IMAGE_URL = "http://i.imgur.com/Vdt2DkK.gif";
+    public static final String RANK_UP_IMAGE_URL = "http://i.imgur.com/MwsPixA.gif";
+
+
+    //EnumSets
+    public static final ArrayList<UserSetting> levelUpStates = new ArrayList<UserSetting>() {{
+        add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
+        add(UserSetting.SEND_LVLUP_DMS);
+        add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
+        add(UserSetting.DONT_SEND_LVLUP);
+    }};
+    public static final ArrayList<UserSetting> userGainedSettings = new ArrayList<UserSetting>(){{
+        add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
+        add(UserSetting.SEND_LVLUP_DMS);
+        add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
+        add(UserSetting.DONT_SEND_LVLUP);
+        add(UserSetting.HIDE_RANK);
+        add(UserSetting.NO_XP_GAIN);
+    }};
+    public static final ArrayList<UserSetting> dontLogStates = new ArrayList<UserSetting>() {{
+        add(UserSetting.NO_XP_GAIN);
+        add(UserSetting.DENIED_XP);
+        add(UserSetting.DONT_SHOW_LEADERBOARD);
+        add(UserSetting.HIDE_RANK);
+    }};
 
     //Special Messages
     public static final String DAILY_MESSAGE_1 = "> Load Sail.getBehaviour(\"Cat\");\n" +

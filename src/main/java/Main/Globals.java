@@ -3,6 +3,7 @@ package Main;
 import ChannelSettings.InitChannels;
 import Commands.Admin.ChannelHere;
 import Commands.CommandInit;
+import Enums.UserSetting;
 import GuildToggles.ToggleInit;
 import Handlers.FileHandler;
 import Interfaces.*;
@@ -16,6 +17,7 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -39,7 +41,7 @@ public class Globals {
     public static String playing = null;
     public static int argsMax = 0;
     public static int maxWarnings = 0;
-    public static int avgMessagesPerDay = 0;
+    public static int avgMessagesPerDay = 20;
     public static boolean isReady = false;
     public static String version;
     public static String consoleMessageCID = null;
@@ -56,11 +58,14 @@ public class Globals {
     private static ArrayList<SlashCommand> slashCommands = new ArrayList<>();
     private static ArrayList<RandomStatusObject> randomStatuses = new ArrayList<>();
 
+
+
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
     private static GlobalData globalData;
     public static int baseXPModifier;
     public static int xpForLevelOne;
     public static long lastDmUserID = -1;
+    public static Color pixelColour = new Color(226, 218, 117);
 
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
         if (newGlobalData != null) {
@@ -190,8 +195,8 @@ public class Globals {
                 throw new IllegalArgumentException(s.getClass().getName() + " Slash Command call must Start with \"/\"");
         }
 
-        for (ChannelSetting s: channelSettings){
-            if (s.type() == null || s.type().isEmpty()){
+        for (ChannelSetting s : channelSettings) {
+            if (s.type() == null || s.type().isEmpty()) {
                 throw new IllegalArgumentException(s.getClass().getName() + " Channel Type cannot be null.");
             }
         }
@@ -268,6 +273,9 @@ public class Globals {
     }
 
     public static GuildContentObject getGuildContent(String guildID) {
+        if (guildContentObjects == null) {
+            return null;
+        }
         for (GuildContentObject storage : guildContentObjects) {
             if (storage.getGuildID() != null && storage.getGuildID().equals(guildID)) {
                 return storage;

@@ -21,13 +21,16 @@ public class InitChannels {
         channelSettings.add(new AdminLog());
         channelSettings.add(new ServerLog());
         channelSettings.add(new Art());
+        channelSettings.add(new LevelUp());
 
         //Channel Settings
+        channelSettings.add(new Rank());
         channelSettings.add(new Shitpost());
         channelSettings.add(new Servers());
         channelSettings.add(new BotCommands());
         channelSettings.add(new Groups());
         channelSettings.add(new XpDenied());
+        channelSettings.add(new LevelUpDenied());
 
         return channelSettings;
     }

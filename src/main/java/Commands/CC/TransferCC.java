@@ -53,7 +53,8 @@ public class TransferCC implements Command {
             contents = contents.replace("#author!#", "#username#");
             boolean shitpost = transfering.isShitPost();
 
-            return customCommands.addCommand(locked, Globals.getClient().getUserByID(userID), name, contents, shitpost, guild, guildConfig);
+            command.setAuthor(Globals.getClient().getUserByID(userID));
+            return customCommands.addCommand(locked, name, contents, shitpost, command);
         } else {
             return "> Your Server has no Legacy commands to transfer.";
         }

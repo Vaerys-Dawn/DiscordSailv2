@@ -1,6 +1,8 @@
 package POGOs;
 
+import Enums.UserSetting;
 import Main.Globals;
+import Main.Utility;
 import Objects.*;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -22,7 +24,9 @@ public class GuildConfig {
     public boolean dailyMessage = true;
     public boolean artPinning = false;
     public boolean autoArtPinning = false;
-    public boolean doXpDecay = false;
+    public boolean xpDecay = false;
+    public boolean xpGain = false;
+    public boolean joinsServerMessages = false;
     //--Logging
     public boolean generalLogging = false;
     public boolean adminLogging = false;
@@ -54,11 +58,18 @@ public class GuildConfig {
     public boolean moduleMe = true;
     public boolean moduleModMute = false;
     public boolean moduleGroups = false;
+    public boolean modulePixels = false;
     public int maxMentionLimit = 8;
     public int messageLimit = 10;
+    public long xpDeniedRoleID = -1;
+    public long topTenRoleID = -1;
+
+    public UserSetting defaultLevelMode = UserSetting.SEND_LVLUP_RANK_CHANNEL;
 
     public int xpRate = 20;
     public float xpModifier = 1;
+
+    public String levelUpMessage = "Ding. Gratz on level <level> <user>.";
 
     // TODO: 04/10/2016 let the mention limit be customisable.
 //    ArrayList<ChannelTypeObject> channels = new ArrayList<>();
@@ -71,6 +82,7 @@ public class GuildConfig {
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", null);
     RoleTypeObject mutedRole = new RoleTypeObject("No Role Set", null);
+    private String joinMessage = "> Welcome to the <server> server <user>.";
 
     public ArrayList<RewardRoleObject> getRewardRoles() {
         return rewardRoles;
@@ -100,19 +112,19 @@ public class GuildConfig {
         this.properlyInit = properlyInit;
     }
 
-    public void addChannelSetting(String type, String id){
-        channelSettings.add(new ChannelSettingObject(type,id));
+    public void addChannelSetting(String type, String id) {
+        channelSettings.add(new ChannelSettingObject(type, id));
     }
 
     public void initConfig() {
-        for (BlackListObject b: blackList){
-            if (b.getReason().contains("**invites**")){
+        for (BlackListObject b : blackList) {
+            if (b.getReason().contains("**invites**")) {
                 blackList.clear();
                 blackList.add(new BlackListObject("discord.gg", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
                 blackList.add(new BlackListObject("discordapp.com/Invite/", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
             }
         }
-        if (!properlyInit){
+        if (!properlyInit) {
             blackList.add(new BlackListObject("discord.gg", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
             blackList.add(new BlackListObject("discordapp.com/Invite/", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
         }
@@ -122,33 +134,12 @@ public class GuildConfig {
         this.guildName = guildName;
     }
 
-//    public ArrayList<ChannelTypeObject> getChannels() {
-//        return channels;
-//    }
-
-//    public void setUpChannel(String channelType, String channelSID) {
-//        if (channelType.equals(Command.CHANNEL_SERVERS) && !moduleServers) {
-//            return;
-//        }
-//        if (channels.size() == 0) {
-//            channels.add(new ChannelTypeObject(channelType, channelSID));
-//            return;
-//        }
-//        for (int i = 0; i < channels.size(); i++) {
-//            if (channels.getSlashCommands(i).getType().equals(channelType)) {
-//                channels.set(i, new ChannelTypeObject(channelType, channelSID));
-//                return;
-//            }
-//        }
-//        channels.add(new ChannelTypeObject(channelType, channelSID));
-//    }
-
     public ArrayList<String> getChannelIDsByType(String channelType) {
         for (ChannelSettingObject c : channelSettings) {
             if (c.getType().equals(channelType)) {
                 if (c.getChannelIDs().size() >= 1) {
                     return c.getChannelIDs();
-                }else {
+                } else {
                     return null;
                 }
             }
@@ -214,15 +205,15 @@ public class GuildConfig {
         //update channels
         for (ChannelSettingObject c : channelSettings) {
             ArrayList<String> toRemove = new ArrayList<>();
-            for (String id: c.getChannelIDs()){
+            for (String id : c.getChannelIDs()) {
                 IChannel channel = Globals.getClient().getChannelByID(id);
-                if (channel == null){
+                if (channel == null) {
                     toRemove.add(id);
                 }
             }
-            for (String removing : toRemove){
-                for (int i = 0;i <  c.getChannelIDs().size();i++){
-                    if (removing.equals(c.getChannelIDs().get(i))){
+            for (String removing : toRemove) {
+                for (int i = 0; i < c.getChannelIDs().size(); i++) {
+                    if (removing.equals(c.getChannelIDs().get(i))) {
                         c.getChannelIDs().remove(i);
                     }
                 }
@@ -400,5 +391,115 @@ public class GuildConfig {
 
     public void setRateLimit(int rateLimit) {
         messageLimit = rateLimit;
+    }
+
+    public RewardRoleObject getRewardRole(long rewardID) {
+        for (RewardRoleObject r : rewardRoles) {
+            if (r.getRoleID() == rewardID) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    public RewardRoleObject getLowerReward(RewardRoleObject rewardRole) {
+        Utility.sortRewards(rewardRoles);
+        ArrayList<RewardRoleObject> compareRewards = new ArrayList<>();
+        RewardRoleObject lowerReward = null;
+        //remove reward roles that are above it or are it.
+        for (int i = 0; i < rewardRoles.size(); i++) {
+            if (rewardRoles.get(i).getLevel() < rewardRole.getLevel()) {
+                compareRewards.add(rewardRoles.get(i));
+            }
+        }
+        if (compareRewards.size() == 0) {
+            return null;
+        }
+        for (RewardRoleObject r : compareRewards) {
+            if (lowerReward == null) {
+                lowerReward = r;
+            } else {
+                if (r.getLevel() < lowerReward.getLevel()) {
+                    lowerReward = r;
+                }
+            }
+        }
+        return lowerReward;
+    }
+
+    public ArrayList<RewardRoleObject> getAllRewards(long rewardID) {
+        if (rewardID == -1) {
+            return null;
+        }
+        ArrayList<RewardRoleObject> allRewards = new ArrayList<>();
+        RewardRoleObject topReward = getRewardRole(rewardID);
+        for (RewardRoleObject r : rewardRoles) {
+            if (r.getLevel() <= topReward.getLevel()) {
+                allRewards.add(r);
+            }
+        }
+        if (allRewards.size() == 0) {
+            return null;
+        } else {
+            return allRewards;
+        }
+    }
+
+    public RewardRoleObject lowestReward() {
+        RewardRoleObject lowest = null;
+        for (RewardRoleObject r : rewardRoles) {
+            if (lowest == null) {
+                lowest = r;
+            } else {
+                if (lowest.getLevel() > r.getLevel()) {
+                    lowest = r;
+                }
+            }
+        }
+        return lowest;
+    }
+
+    public RewardRoleObject getNextReward(RewardRoleObject rewardRole) {
+        ArrayList<RewardRoleObject> compareRewards = (ArrayList<RewardRoleObject>) rewardRoles.clone();
+        RewardRoleObject lowestRole = null;
+        //remove reward roles that are above it or are it.
+        for (int i = 0; i < compareRewards.size(); i++) {
+            if (compareRewards.get(i).getLevel() <= rewardRole.getLevel()) {
+                compareRewards.remove(i);
+            }
+        }
+        if (compareRewards == null || compareRewards.size() == 0) {
+            return null;
+        }
+        for (RewardRoleObject r : compareRewards) {
+            if (lowestRole == null) {
+                lowestRole = r;
+            } else {
+                if (r.getLevel() < lowestRole.getLevel()) {
+                    lowestRole = r;
+                }
+            }
+        }
+        return lowestRole;
+    }
+
+    public UserSetting getDefaultLevelMode() {
+        return defaultLevelMode;
+    }
+
+    public void setDefaultLevelMode(UserSetting defaultLevelMode) {
+        this.defaultLevelMode = defaultLevelMode;
+    }
+
+    public void setLevelUpMessage(String levelUpMessage) {
+        this.levelUpMessage = levelUpMessage;
+    }
+
+    public String getJoinMessage() {
+        return joinMessage;
+    }
+
+    public void setJoinMessage(String args) {
+        joinMessage = args;
     }
 }

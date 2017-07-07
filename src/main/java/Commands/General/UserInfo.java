@@ -1,6 +1,7 @@
 package Commands.General;
 
 import Commands.CommandObject;
+import Handlers.XpHandler;
 import Interfaces.Command;
 import Main.Utility;
 import Objects.UserTypeObject;
@@ -20,8 +21,6 @@ import java.util.stream.Collectors;
  */
 public class UserInfo implements Command {
 
-    // TODO: 15/06/2017 add user generated links
-    // TODO: 15/06/2017 add blacklist of sites
     @Override
     public String execute(String args, CommandObject command) {
         IUser user = command.author;
@@ -50,7 +49,6 @@ public class UserInfo implements Command {
                 //gets the age of the account.
                 long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - user.getCreationDate().atZone(ZoneOffset.UTC).toEpochSecond();
 
-
                 //sets sidebar colour
                 builder.withColor(Utility.getUsersColour(user, command.guild));
 
@@ -62,16 +60,25 @@ public class UserInfo implements Command {
                 }
 
                 //builds desc
-                builder.withDesc("**Account Created: **" + Utility.formatTimeDifference(difference) +
-                        "\n**Gender: **" + u.getGender() +
-                        "\n**Custom Commands: **" + command.customCommands.getUserCommandCount(user, command.guild, command.guildConfig) +
-                        "\n**Roles: **" + Utility.listFormatter(roleNames, true) +
-                        "\n\n*" + u.getQuote() + "*" +
-                        "\n" + Utility.listFormatter(links, true));
 
-                // TODO: 27/02/2017 when xp system is implemented put xp and rank on the user card.
+                command.setAuthor(user);
 
-                //adds ID
+                String desc = "";
+                desc += "**Account Created: **" + Utility.formatTimeDifference(difference);
+                desc += "\n**Gender: **" + u.getGender();
+                if (command.guildConfig.moduleCC && !command.guildConfig.modulePixels) {
+                    desc += "\n**Custom Commands: **" + command.customCommands.getUserCommandCount(command);
+                } else if (!command.guildConfig.moduleCC && command.guildConfig.modulePixels) {
+                    desc += "**Level: **" + XpHandler.xpToLevel(u.getXP());
+                } else {
+                    desc += "\n**Custom Commands: **" + command.customCommands.getUserCommandCount(command) +
+                            indent + indent + indent + "**Level: **" + XpHandler.xpToLevel(u.getXP());
+                }
+                desc += "\n**Roles: **" + Utility.listFormatter(roleNames, true);
+                desc += "\n\n*" + u.getQuote() + "*";
+                desc += "\n" + Utility.listFormatter(links, true);
+
+                builder.withDesc(desc);
                 builder.withFooterText("User ID: " + u.getID());
 
                 //sends Message

@@ -35,6 +35,9 @@ public class ToggleInit {
         guildToggles.add(new UserRoleLogging());
         guildToggles.add(new UseTimeStamps());
         guildToggles.add(new Voting());
+        guildToggles.add(new XpDecay());
+        guildToggles.add(new XpGain());
+        guildToggles.add(new JoinServerMessages());
 
         //modules
         guildToggles.add(new ModuleGroups());
@@ -46,6 +49,7 @@ public class ToggleInit {
         guildToggles.add(new ModuleMe());
         guildToggles.add(new ModuleModMuting());
         guildToggles.add(new ModuleArtPinning());
+        guildToggles.add(new ModulePixels());
 
         return guildToggles;
     }
