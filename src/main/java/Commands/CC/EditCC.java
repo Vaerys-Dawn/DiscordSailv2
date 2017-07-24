@@ -12,6 +12,15 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 01/02/2017.
  */
 public class EditCC implements Command {
+
+    String modes = "**Modes: **\n" +
+            "> Replace\n" +
+            "> ToEmbed\n" +
+            "> DelCall\n";
+    String adminModes = "**Admin Modes:**\n" +
+            "> Shitpost\n" +
+            "> Lock\n";
+
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject getName = new SplitFirstObject(args);
@@ -34,7 +43,7 @@ public class EditCC implements Command {
                     if (StringUtils.countMatches(mode + " " + content, "#embedImage#{") > 1) {
                         return "> Custom Commands Cannot have multiple #embedImage# tags";
                     }
-                    if(c.isLocked() && !canBypass){
+                    if (c.isLocked() && !canBypass) {
                         return "> This command is locked and cannot be edited.";
                     }
                     switch (mode.toLowerCase()) {
@@ -51,7 +60,7 @@ public class EditCC implements Command {
                         case "shitpost":
                             return CCEditModes.shitPost(c, command, command.author, command.guild);
                         case "lock":
-                            return CCEditModes.lock(c,command,command.author,command.guild);
+                            return CCEditModes.lock(c, command, command.author, command.guild);
                         default:
                             if (content == null || content.isEmpty()) {
                                 return CCEditModes.replace(c, mode);
@@ -68,7 +77,6 @@ public class EditCC implements Command {
     }
 
 
-
     @Override
     public String[] names() {
         return new String[]{"EditCC"};
@@ -76,11 +84,8 @@ public class EditCC implements Command {
 
     @Override
     public String description() {
-        return "Allows you to edit a custom command.\n" +
-                "  Modes: Replace, Append, toEmbed, DelCall.\n" +
-                "**Admin Modes: **lock, Shitpost\n\n" +
-                "Mode is optional, defaults to replace.\n" +
-                "[Custom Command Guide](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide)";
+        return "Allows you to edit a custom command.\n" + modes + adminModes +
+                "**[Custom Command Guide](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide)**";
     }
 
     @Override

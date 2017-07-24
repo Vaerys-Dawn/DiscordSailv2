@@ -30,10 +30,10 @@ public class ArtHandler {
                     command.message.getChannel().pin(command.message);
                     checkList(command, true);
                     return;
-                } catch (DiscordException e){
-                    if (e.getErrorMessage().contains("already pinned")){
+                } catch (DiscordException e) {
+                    if (e.getErrorMessage().contains("already pinned")) {
                         return;
-                    }else{
+                    } else {
                         e.printStackTrace();
                     }
                 }
@@ -59,6 +59,8 @@ public class ArtHandler {
 
     private void checkList(CommandObject command, boolean adding) {
         ArrayList<Long> pinnedMessages = command.channelData.getPinnedMessages();
+
+        //check for null'd pins
         for (int i = 0; i < pinnedMessages.size(); i++) {
             if (command.channel.getMessageByID(pinnedMessages.get(i)) == null) {
                 pinnedMessages.remove(i);
@@ -66,18 +68,27 @@ public class ArtHandler {
                 pinnedMessages.remove(i);
             }
         }
-        while (pinnedMessages.size() >= 26) {
+
+        //remove unwanted pins
+        while (pinnedMessages.size() > 25) {
             for (IMessage msg : command.channel.getPinnedMessages()) {
                 if (pinnedMessages.get(0) == msg.getLongID()) {
-                    RequestBuffer.request(() -> {
-                        command.channel.unpin(msg);
-                        RequestBuffer.request(() -> pinnedMessages.remove(0));
-                    });
+                    unPin(msg, command);
+                    pinnedMessages.remove(0);
                 }
             }
         }
+
+        //add new pin
         if (adding) {
             pinnedMessages.add(command.messageID);
+        }
+    }
+
+    private void unPin(IMessage message, CommandObject command) {
+        RequestBuffer.request(() -> command.channel.unpin(message));
+        if (message.isPinned()) {
+            unPin(message, command);
         }
     }
 

@@ -87,7 +87,7 @@ public class SearchCCs implements Command {
 
     @Override
     public String channel() {
-        return null;
+        return CHANNEL_BOT_COMMANDS;
     }
 
     @Override

@@ -12,6 +12,14 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 26/06/2017.
  */
 public class EditInfoFiles implements Command {
+
+    String modes = "**Modes:**\n" +
+            "> uploadImage - `Requires image file.`\n" +
+            "> removeImage - `Requires file name.`\n" +
+            "> listFiles/listImages - `Lists the server's image files.`\n" +
+            "> uploadInfo - `Requires \"" + Constants.FILE_INFO + "\" file.`\n" +
+            "> getInfoFile - `Post the server's Info.txt.`";
+
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject object = new SplitFirstObject(args);
@@ -41,18 +49,12 @@ public class EditInfoFiles implements Command {
 
     @Override
     public String description() {
-        return "Allows for editing of the updateInfo command.\n" +
-                "**Modes:**\n" +
-                "- uploadImage: **Requires image file.**\n" +
-                "- removeImage: **Requires file name.**\n" +
-                "- listFiles/listImages\n" +
-                "- uploadInfo: **Requires \"" + Constants.FILE_INFO + "\" file.**\n" +
-                "- getInfoFile";
+        return "Allows for editing of the updateInfo command.\n" + modes;
     }
 
     @Override
     public String usage() {
-        return "[EditMode] (ImageFile/ImageName/Info.txt)";
+        return "[Mode] (args)";
     }
 
     @Override

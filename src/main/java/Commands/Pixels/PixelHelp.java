@@ -7,6 +7,8 @@ import Main.Utility;
 import Objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.text.NumberFormat;
+
 /**
  * Created by Vaerys on 01/07/2017.
  */
@@ -17,12 +19,12 @@ public class PixelHelp implements Command {
         try {
             if (obe.getFirstWord().equalsIgnoreCase("levelToXP")) {
                 long level = Long.parseLong(obe.getRest());
-                return "> Level: " + level + " = " + XpHandler.totalXPForLevel(level) + "XP";
+                return "> Level: " + level + " = " + NumberFormat.getInstance().format(XpHandler.totalXPForLevel(level)) + " pixels.";
             } else if (obe.getFirstWord().equalsIgnoreCase("xpToLevel")) {
                 long xp = Long.parseLong(obe.getRest());
                 return "> " + xp + "XP = Level: " + XpHandler.xpToLevel(xp);
             } else {
-                return "> Pixels are S.A.I.L's Form of Xp. you can gain 20 pixels once ever minute in channels that allow for pixel gain.\n\n" +
+                return "> Pixels are S.A.I.L's Form of Xp. you can gain 20 pixels once every minute in channels that allow for pixel gain.\n\n" +
                         Utility.getCommandInfo(this, command);
             }
         } catch (NumberFormatException e) {

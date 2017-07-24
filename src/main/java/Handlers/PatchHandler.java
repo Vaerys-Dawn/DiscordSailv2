@@ -141,7 +141,7 @@ public class PatchHandler {
         if (!Globals.getGlobalData().getGlobalPatches().contains(Constants.PATCH_GLOBAL_2)) {
             logger.info("Performing patch : " + Constants.PATCH_GLOBAL_2 + ". Please wait...");
             Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
-            config.randomStatuses = Config.defaultStatuses();
+            config.randomStatuses = new Config().randomStatuses;
             FileHandler.writeToJson(Constants.FILE_CONFIG, config);
             Globals.getGlobalData().getGlobalPatches().add(Constants.PATCH_GLOBAL_2);
             logger.info("Reloading Globals...");

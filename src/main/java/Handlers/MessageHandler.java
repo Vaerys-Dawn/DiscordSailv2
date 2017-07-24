@@ -41,13 +41,10 @@ public class MessageHandler {
             }
         }
 
-        checkBlacklist(commandObject);
-        checkMentionCount(commandObject);
+        if (checkForInvites(commandObject)) return;
+        if (checkMentionCount(commandObject)) return;
+        if (rateLimiting(commandObject)) return;
         XpHandler.grantXP(commandObject);
-
-        if (rateLimiting(commandObject)) {
-            return;
-        }
 
 
         if (commandObject.guildConfig.slashCommands) {
@@ -147,6 +144,9 @@ public class MessageHandler {
                             handleLogging(commandObject, args, c, false);
                         }
                     }
+                    if (!commandObject.channel.getTypingStatus()) {
+                        commandObject.channel.toggleTypingStatus();
+                    }
                     Utility.sendMessage(c.execute(args, commandObject), channel);
                 }
             }
@@ -163,7 +163,7 @@ public class MessageHandler {
         Utility.sendLog(builder.toString(), commandObject.guildConfig, isAdmin);
     }
 
-    private void checkMentionCount(CommandObject command) {
+    private boolean checkMentionCount(CommandObject command) {
         IMessage message = command.message;
         GuildConfig guildConfig = command.guildConfig;
         IUser author = command.author;
@@ -171,7 +171,7 @@ public class MessageHandler {
         IGuild guild = command.guild;
 
         if (message.toString().contains("@everyone") || message.toString().contains("@here")) {
-            return;
+            return false;
         }
         if (guildConfig.maxMentions) {
             if (message.getMentions().size() > 8) {
@@ -203,8 +203,10 @@ public class MessageHandler {
                     Utility.sendMessage(response, command.channel);
                     EventHandler.setDoAdminMention(command.guildSID, 60);
                 }
+                return true;
             }
         }
+        return false;
     }
 
     private boolean rateLimiting(CommandObject command) {
@@ -250,43 +252,25 @@ public class MessageHandler {
     //File handlers
 
     //BlackListed Phrase Remover
-    private void checkBlacklist(CommandObject command) {
+    private boolean checkForInvites(CommandObject command) {
         GuildConfig guildConfig = command.guildConfig;
         IMessage message = command.message;
         IGuild guild = command.guild;
         IUser author = command.author;
 
-        if (guildConfig == null) {
-            return;
-        }
-        if (guildConfig.getBlackList() == null) {
-            return;
-        }
         if (guildConfig.denyInvites) {
             for (BlackListObject bLP : guildConfig.getBlackList()) {
                 if (message.toString().toLowerCase().contains(bLP.getPhrase().toLowerCase())) {
                     if (guildConfig.testIsTrusted(author, guild)) {
-                        return;
+                        return false;
                     }
-                    String response = bLP.getReason();
-                    if (response.contains("#mentionAdmin#")) {
-                        if (guildConfig.getRoleToMention().getRoleID() != null) {
-                            response = response.replaceAll("#mentionAdmin#", guild.getRoleByID(guildConfig.getRoleToMention().getRoleID()).mention());
-                        } else {
-                            response = response.replaceAll("#mentionAdmin#", "");
-                        }
-                        response = response.replace("#user#", author.mention());
-                        if (EventHandler.getDoAdminMention(command.guildSID) == 0) {
-                            Utility.sendMessage(response, command.channel);
-                            EventHandler.setDoAdminMention(command.guildSID, 60);
-                        }
-                        Utility.deleteMessage(message);
-                    } else {
-                        Utility.deleteMessage(message);
-                        Utility.sendMessage(response, command.channel);
-                    }
+                    String response = "> Please do not post Instant Invites.";
+                    Utility.deleteMessage(message);
+                    Utility.sendMessage(response, command.channel);
+                    return true;
                 }
             }
         }
+        return false;
     }
 }

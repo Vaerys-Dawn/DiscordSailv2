@@ -64,7 +64,7 @@ public class Main {
             GlobalData globalData = (GlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, GlobalData.class);
 
 
-            config.initObject();
+            config.initObject(config);
             FileHandler.writeToJson(Constants.FILE_CONFIG, config);
 
             //getting bot token

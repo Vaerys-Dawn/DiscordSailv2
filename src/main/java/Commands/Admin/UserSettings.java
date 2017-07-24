@@ -16,6 +16,7 @@ public class UserSettings implements Command {
     private String settings = "**Settings**\n" +
             "- DeniedXp\n" +
             "- DontShowRank\n";
+
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject split = new SplitFirstObject(args);
@@ -36,24 +37,24 @@ public class UserSettings implements Command {
                         for (UserSetting s : userObject.getSettings()) {
                             if (s == UserSetting.DENIED_XP) {
                                 userObject.getSettings().remove(s);
-                                return "> User will no longer gain XP.";
+                                return "> User will now gain xp again.";
                             }
                         }
                     } else {
                         userObject.getSettings().add(UserSetting.DENIED_XP);
-                        return "> User will now gain xp again.";
+                        return "> User will no longer gain XP.";
                     }
                 case "dontshowrank":
                     if (userObject.getSettings().contains(UserSetting.DONT_SHOW_LEADERBOARD)) {
                         for (UserSetting s : userObject.getSettings()) {
                             if (s == UserSetting.DONT_SHOW_LEADERBOARD) {
                                 userObject.getSettings().remove(s);
-                                return "> User will no longer display their rank.";
+                                return "> User's rank is now visible.";
                             }
                         }
                     } else {
                         userObject.getSettings().add(UserSetting.DONT_SHOW_LEADERBOARD);
-                        return "> User's rank is now visible.";
+                        return "> User will no longer display their rank.";
                     }
                 default:
                     return "> Invalid setting.\n" + settings + "\n\n" + Utility.getCommandInfo(this, command);

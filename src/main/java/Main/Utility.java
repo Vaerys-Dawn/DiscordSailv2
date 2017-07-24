@@ -330,17 +330,16 @@ public class Utility {
         return failed;
     }
 
-    public static boolean sendDMEmbed(String message, XEmbedBuilder embed, String userID) {
+    public static IMessage sendDMEmbed(String message, XEmbedBuilder embed, String userID) {
         IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
         if (channel != null) {
             return sendEmbedMessage(message, embed, channel).get();
         } else {
-            return true;
+            return null;
         }
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> sendEmbedMessage(String message, XEmbedBuilder
-            builder, IChannel channel) {
+    public static RequestBuffer.RequestFuture<IMessage> sendEmbedMessage(String message, XEmbedBuilder builder, IChannel channel) {
 
         //removal of @everyone and @here Mentions.
         EmbedObject embed = builder.build();
@@ -350,13 +349,13 @@ public class Utility {
                 if (iMessage == null) {
                     iMessage = "";
                 }
-                channel.sendMessage(iMessage, builder.build(), false);
+                return channel.sendMessage(iMessage, builder.build(), false);
             } catch (DiscordException e) {
                 if (e.getMessage().contains("CloudFlare")) {
-                    sendMessage(message, channel);
+                    sendEmbedMessage(message, builder, channel);
                 } else {
                     e.printStackTrace();
-                    return true;
+                    return null;
                 }
             } catch (MissingPermissionsException e) {
                 logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
@@ -372,10 +371,9 @@ public class Utility {
                 }
                 if (embed.footer != null) embedToString.append("*" + embed.footer.text + "*");
                 if (embed.image != null) embedToString.append(embed.image.url);
-                sendMessage(embedToString.toString(), channel);
-                return true;
+                return sendMessage(embedToString.toString(), channel).get();
             }
-            return false;
+            return null;
         });
     }
 
@@ -573,8 +571,7 @@ public class Utility {
         });
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> updateUserNickName(IUser author, IGuild guild, String
-            nickname) {
+    public static RequestBuffer.RequestFuture<Boolean> updateUserNickName(IUser author, IGuild guild, String nickname) {
         return RequestBuffer.request(() -> {
             try {
                 guild.setUserNickname(author, nickname);
@@ -938,7 +935,7 @@ public class Utility {
 
     public static boolean testUserHierarchy(IUser author, IUser toTest, IGuild guild) {
         List<IRole> userRoles = author.getRolesForGuild(guild);
-        List<IRole> testRoles = author.getRolesForGuild(guild);
+        List<IRole> testRoles = toTest.getRolesForGuild(guild);
         IRole topRole = null;
         int topRolePos = 0;
         for (IRole role : userRoles) {
@@ -1050,5 +1047,29 @@ public class Utility {
                 return 0;
             }
         });
+    }
+
+    public static void sortUserObjects(ArrayList<UserTypeObject> users, boolean sortAsc) {
+        if (sortAsc) {
+            Collections.sort(users, (o1, o2) -> {
+                if (o1.getXP() < o2.getXP()) {
+                    return -1;
+                } else if (o1.getXP() > o2.getXP()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+        }else {
+            Collections.sort(users, (o1, o2) -> {
+                if (o1.getXP() > o2.getXP()) {
+                    return -1;
+                } else if (o1.getXP() < o2.getXP()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+        }
     }
 }

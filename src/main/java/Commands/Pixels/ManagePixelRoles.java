@@ -18,7 +18,7 @@ public class ManagePixelRoles implements Command {
         String roleID = Utility.getRoleIDFromName(mode.getRest(), command.guild);
         IRole role = command.guild.getRoleByID(roleID);
         if (role == null) {
-            return "> **" + mode.getRest() + "** is not a validrRole name.";
+            return "> **" + mode.getRest() + "** is not a valid Role name.";
         }
         try {
             long level = Long.parseLong(mode.getFirstWord());
@@ -66,7 +66,7 @@ public class ManagePixelRoles implements Command {
                         return "> **" + role.getName() + "** is no longer the server's xpDenied role.";
                     } else if (role.getLongID() == command.guildConfig.topTenRoleID) {
                         command.guildConfig.topTenRoleID = -1;
-                        return "> **" + role.getName() + "** is no longer the server's xpDenied role.";
+                        return "> **" + role.getName() + "** is no longer the server's Top Ten role.";
                     }
                     for (RewardRoleObject r : command.guildConfig.getRewardRoles()) {
                         if (r.getRoleID() == role.getLongID()) {

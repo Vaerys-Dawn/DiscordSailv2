@@ -160,7 +160,7 @@ public class Info implements Command {
 
     @Override
     public boolean requiresArgs() {
-        return false;
+        return true;
     }
 
     @Override

@@ -22,14 +22,12 @@ public class DefaultLevelMode implements Command {
             case "levelchannel":
                 command.guildConfig.setDefaultLevelMode(UserSetting.SEND_LVLUP_RANK_CHANNEL);
                 return message + "the server's level up channel.";
-
             case "currentchannel":
                 command.guildConfig.setDefaultLevelMode(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
                 return message + "the current channel.";
             case "dms":
                 command.guildConfig.setDefaultLevelMode(UserSetting.SEND_LVLUP_DMS);
                 return message + "the user's Direct messages.";
-
             case "nomessage":
                 command.guildConfig.setDefaultLevelMode(UserSetting.DONT_SEND_LVLUP);
                 return "> Now set to now send level up messages";

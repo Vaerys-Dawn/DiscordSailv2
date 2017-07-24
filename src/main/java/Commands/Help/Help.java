@@ -69,17 +69,17 @@ public class Help implements Command {
             builder.append(codeBlock + "\n");
             builder.append(Utility.listFormatter(types, false));
             builder.append(codeBlock + "\n");
-            String desc = "[Suport Sail on Patreon](https://www.patreon.com/DawnFelstar)\n" +
-                    "[Find Sail on GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)";
-            if (!command.guildSID.equals("206792432560373761")) {
-                desc += "\nSupport Discord - https://discord.gg/XSyQQrR";
-            }
+//            String desc = "[Suport Sail on Patreon](https://www.patreon.com/DawnFelstar)\n" +
+//                    "[Find Sail on GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)";
+//            if (!command.guildSID.equals("206792432560373761")) {
+//                desc += "\nSupport Discord - https://discord.gg/XSyQQrR";
+//            }
 
             helpEmbed.withTitle("Here are the Command Types I have available for use:");
             builder.append(Utility.getCommandInfo(this, command) + "\n");
             helpEmbed.withDescription(builder.toString());
-            helpEmbed.appendField("Helpful Links", desc, true);
-            helpEmbed.withFooterText("Bot Version: " + Globals.version);
+//            helpEmbed.appendField("Helpful Links", desc, true);
+
         } else {
             boolean isFound = false;
             String title = "ERROR";
@@ -128,7 +128,7 @@ public class Help implements Command {
 
     @Override
     public String description() {
-        return "Gives information about Sail, including the commands it can run.";
+        return "Lists the commands that users can run.";
     }
 
     @Override

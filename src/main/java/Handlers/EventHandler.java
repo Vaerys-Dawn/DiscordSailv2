@@ -152,8 +152,22 @@ public class EventHandler {
                                         Utility.sendMessage("> ***MERRY CHRISTMAS***", channel);
                                     } else if (timeNow.getDayOfMonth() == 1 && timeNow.getMonth().equals(Month.JANUARY)) {
                                         Utility.sendMessage("> ***HAPPY NEW YEAR***", channel);
+                                    } else if (timeNow.getDayOfMonth() == 13 && timeNow.getMonth().equals(Month.JULY)) {
+                                        int age = nowUTC.getYear() - 1996;
+                                        String modifier = "th";
+                                        if ((age + "").endsWith("1")) {
+                                            modifier = "st";
+                                        } else if ((age + "").endsWith("2")) {
+                                            modifier = "nd";
+                                        } else if ((age + "").endsWith("3")) {
+                                            modifier = "rd";
+                                        }
+                                        Utility.sendMessage("> Happy " + age + modifier + " Birthday Mum.", channel);
                                     } else {
-                                        Utility.sendMessage(d.getContents(), channel);
+                                        ArrayList<DailyUserMessageObject> dailyMessages = Globals.getGlobalData().getDailyMessages(day);
+                                        dailyMessages.add(new DailyUserMessageObject(d.getContents(), d.getDayOfWeek(), Globals.botName));
+                                        Random random = new Random();
+                                        Utility.sendMessage(dailyMessages.get(random.nextInt(dailyMessages.size())).getContents(), channel);
                                     }
                                 }
                             }
@@ -256,7 +270,7 @@ public class EventHandler {
                 try {
                     if (Globals.showSaveWarning) {
                         logger.info("Backup in 5 seconds do not restart.");
-                    }else {
+                    } else {
                         logger.debug("Backup in 5 seconds do not restart.");
                     }
                     Thread.sleep(5000);
@@ -280,9 +294,9 @@ public class EventHandler {
                 }
                 randomPlayingStatus();
                 Globals.saveFiles();
-                if (Globals.showSaveWarning){
+                if (Globals.showSaveWarning) {
                     logger.info("Files Saved.");
-                }else {
+                } else {
                     logger.debug("Files Saved.");
                 }
             }
@@ -294,8 +308,8 @@ public class EventHandler {
         String status = Globals.playing;
         if (Globals.doRandomGames && Globals.getRandomStatuses().size() != 0) {
             ArrayList<String> games = new ArrayList<>();
-            for (RandomStatusObject r: Globals.getRandomStatuses()){
-                for (int i = 0; i < r.getWeight();i++){
+            for (RandomStatusObject r : Globals.getRandomStatuses()) {
+                for (int i = 0; i < r.getWeight(); i++) {
                     games.add(r.getStatus());
                 }
             }

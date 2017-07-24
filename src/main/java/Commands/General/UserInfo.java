@@ -66,14 +66,23 @@ public class UserInfo implements Command {
                 String desc = "";
                 desc += "**Account Created: **" + Utility.formatTimeDifference(difference);
                 desc += "\n**Gender: **" + u.getGender();
-                if (command.guildConfig.moduleCC && !command.guildConfig.modulePixels) {
+
+                boolean showLevel = true;
+                boolean showCC = command.guildConfig.moduleCC;
+
+                if (!command.guildConfig.modulePixels || u.getXP() == 0) {
+                    showLevel = false;
+                }
+
+                if (showCC && !showLevel) {
                     desc += "\n**Custom Commands: **" + command.customCommands.getUserCommandCount(command);
-                } else if (!command.guildConfig.moduleCC && command.guildConfig.modulePixels) {
-                    desc += "**Level: **" + XpHandler.xpToLevel(u.getXP());
-                } else {
+                } else if (showLevel && !showCC) {
+                    desc += "\n**Level: **" + XpHandler.xpToLevel(u.getXP());
+                } else if (showLevel && showCC){
                     desc += "\n**Custom Commands: **" + command.customCommands.getUserCommandCount(command) +
                             indent + indent + indent + "**Level: **" + XpHandler.xpToLevel(u.getXP());
                 }
+                
                 desc += "\n**Roles: **" + Utility.listFormatter(roleNames, true);
                 desc += "\n\n*" + u.getQuote() + "*";
                 desc += "\n" + Utility.listFormatter(links, true);

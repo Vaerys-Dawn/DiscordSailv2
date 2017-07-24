@@ -104,6 +104,7 @@ public class Constants {
         add(UserSetting.DENIED_XP);
         add(UserSetting.DONT_SHOW_LEADERBOARD);
         add(UserSetting.HIDE_RANK);
+        add(UserSetting.HIT_LEVEL_FLOOR);
     }};
 
     //Special Messages

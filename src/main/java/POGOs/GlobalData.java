@@ -1,9 +1,13 @@
 package POGOs;
 
 
+import GuildToggles.Toggles.DailyMessage;
+import Objects.DailyMessageObject;
+import Objects.DailyUserMessageObject;
 import Objects.PatchObject;
 import Objects.ReminderObject;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 
 /**
@@ -14,6 +18,8 @@ public class GlobalData {
     ArrayList<ReminderObject> reminders = new ArrayList<>();
     private ArrayList<PatchObject> patches = new ArrayList<>();
     private ArrayList<String> globalPatches = new ArrayList<>();
+    private ArrayList<Long> queuedRequests = new ArrayList<>();
+    private ArrayList<DailyUserMessageObject> dailyUserMessages = new ArrayList<>();
 
     public ArrayList<PatchObject> getPatches() {
         return patches;
@@ -21,6 +27,10 @@ public class GlobalData {
 
     public ArrayList<String> getBlockedFromDMS() {
         return blockedFromDMS;
+    }
+
+    public ArrayList<Long> getQueuedRequests() {
+        return queuedRequests;
     }
 
     public boolean blockUserFromDMS(String userID) {
@@ -55,5 +65,19 @@ public class GlobalData {
 
     public ArrayList<String> getGlobalPatches() {
         return globalPatches;
+    }
+
+    public ArrayList<DailyUserMessageObject> getDailyUserMessages() {
+        return dailyUserMessages;
+    }
+
+    public ArrayList<DailyUserMessageObject> getDailyMessages(DayOfWeek day) {
+        ArrayList dailyMessages = new ArrayList();
+        for (DailyUserMessageObject d: dailyUserMessages){
+            if (d.getDay() == day){
+                dailyMessages.add(d);
+            }
+        }
+        return dailyMessages;
     }
 }

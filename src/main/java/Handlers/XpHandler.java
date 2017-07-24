@@ -134,8 +134,7 @@ public class XpHandler {
     public static void checkUsersRoles(String id, GuildContentObject content) {
         //do code.
         UserTypeObject userObject = content.getGuildUsers().getUserByID(id);
-        ArrayList<RewardRoleObject> allRewards = content.getGuildConfig().getAllRewards(userObject.getRewardID());
-        if (allRewards == null) {
+        if (userObject == null) {
             return;
         }
         IUser user = Globals.getClient().getUserByID(userObject.getID());
@@ -154,15 +153,22 @@ public class XpHandler {
             }
 
         }
-        for (RewardRoleObject r : allRewards) {
-            IRole role = Globals.getClient().getRoleByID(r.getRoleID());
-            if (role != null) {
-                userRoles.add(role);
+        if (userObject.getRewardID() != -1) {
+            ArrayList<RewardRoleObject> allRewards = content.getGuildConfig().getAllRewards(userObject.getRewardID());
+            if (allRewards == null) {
+                return;
+            }
+            for (RewardRoleObject r : allRewards) {
+                IRole role = Globals.getClient().getRoleByID(r.getRoleID());
+                if (role != null) {
+                    userRoles.add(role);
+                }
             }
         }
         IRole topTenRole = Globals.client.getGuildByID(content.getGuildID()).getRoleByID(content.getGuildConfig().topTenRoleID);
         if (topTenRole != null) {
-            if (XpHandler.rank(content.getGuildUsers(), Globals.client.getGuildByID(content.getGuildID()), user.getStringID()) >= 10) {
+            long rank = XpHandler.rank(content.getGuildUsers(), Globals.client.getGuildByID(content.getGuildID()), user.getStringID());
+            if (rank <= 10 && rank > 0) {
                 userRoles.add(topTenRole);
             }
         }
@@ -186,6 +192,7 @@ public class XpHandler {
 
         //ony do xp checks if module is true
         if (!object.guildConfig.modulePixels) return;
+        if (!object.guildConfig.xpGain) return;
 
         user.lastTalked = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
 
@@ -376,24 +383,26 @@ public class XpHandler {
         if (guild.getUserByID(userID) == null) {
             return -1;
         }
-        long rank = 1;
-
-
-        for (UserTypeObject u : guildUsers.getUsers()) {
-            boolean hiderank = false;
-            for (UserSetting s : u.getSettings()) {
-                for (UserSetting test : Constants.dontLogStates) {
-                    if (s == test) {
-                        hiderank = true;
+        if (user.getXP() == 0) {
+            return -1;
+        }
+        long rank = 0;
+        ArrayList<UserTypeObject> users = (ArrayList<UserTypeObject>) guildUsers.getUsers().clone();
+        Utility.sortUserObjects(users, false);
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getID().equals(userID)) {
+                return rank + 1;
+            } else {
+                boolean hiderank = false;
+                for (UserSetting s : users.get(i).getSettings()) {
+                    for (UserSetting test : Constants.dontLogStates) {
+                        if (s == test) {
+                            hiderank = true;
+                        }
                     }
                 }
-            }
-
-            if (guild.getUserByID(userID) != null) {
-                if (!hiderank) {
-                    if (u.getXP() > user.getXP()) {
-                        rank++;
-                    }
+                if (guild.getUserByID(users.get(i).getID()) != null && !hiderank && user.getXP() != users.get(i).getXP()) {
+                    rank++;
                 }
             }
         }

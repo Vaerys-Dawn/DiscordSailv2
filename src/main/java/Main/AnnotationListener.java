@@ -1,6 +1,7 @@
 package Main;
 
 import Commands.CommandObject;
+import Commands.General.NewDailyMessage;
 import Handlers.*;
 import Interfaces.Command;
 import Objects.GuildContentObject;
@@ -103,6 +104,8 @@ public class AnnotationListener {
         Globals.initGuild(guildID, guildConfig, servers, customCommands, characters, competition, guildUsers, channelData);
 
         logger.info("Finished Initialising Guild With ID: " + guildID);
+
+        NewDailyMessage.checkIsEnabled(Globals.client.getChannelByID(Globals.queueChannelID) != null);
     }
 
     @EventSubscriber
@@ -277,6 +280,8 @@ public class AnnotationListener {
     public void onReactionAddEvent(ReactionAddEvent event) {
         Emoji x = EmojiManager.getForAlias("x");
         Emoji pin = EmojiManager.getForAlias("pushpin");
+        Emoji thumbsUp = EmojiManager.getForAlias("thumbsup");
+        Emoji thumbsDown = EmojiManager.getForAlias("thumbsdown");
         if (event.getReaction().isCustomEmoji()) {
             return;
         }
@@ -292,6 +297,16 @@ public class AnnotationListener {
                     if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
                         Utility.deleteMessage(event.getMessage());
                         return;
+                    }
+                }
+            }
+            if (event.getChannel().getLongID() == Globals.queueChannelID) {
+                if (!event.getReaction().isCustomEmoji()) {
+                    if (event.getReaction().getUnicodeEmoji().equals(thumbsUp) || event.getReaction().getUnicodeEmoji().equals(thumbsDown)) {
+                        IUser owner = Globals.getClient().getUserByID(Globals.creatorID);
+                        if (event.getReaction().getUserReacted(owner)) {
+                            DailyHandler.addedReaction(event.getMessage(), event.getReaction());
+                        }
                     }
                 }
             }
@@ -374,7 +389,7 @@ public class AnnotationListener {
             String message = content.getGuildConfig().getJoinMessage();
             message = message.replace("<server>", event.getGuild().getName());
             message = message.replace("<user>", event.getUser().getName());
-            Utility.sendDM(message,event.getUser().getStringID());
+            Utility.sendDM(message, event.getUser().getStringID());
         }
         joinLeaveLogging(event, true);
     }

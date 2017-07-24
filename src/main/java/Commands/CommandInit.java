@@ -7,6 +7,7 @@ import Commands.Competition.*;
 import Commands.Creator.*;
 import Commands.Creator.Shutdown;
 import Commands.DMCommands.*;
+import Commands.DMCommands.TestDM;
 import Commands.General.*;
 import Commands.Groups.ClearGroupUp;
 import Commands.Groups.GroupUp;
@@ -67,6 +68,7 @@ public class CommandInit {
         commands.add(new SlashList());
         commands.add(new ClearReminder());
         commands.add(new EditLinks());
+        commands.add(new Ping());
         //Help commands
         commands.add(new GetGuildInfo());
         commands.add(new Help());
@@ -75,6 +77,7 @@ public class CommandInit {
         commands.add(new Report());
         commands.add(new SilentReport());
         commands.add(new StartUpGuide());
+        commands.add(new BotInfo());
         //RoleSelect commands
         commands.add(new CosmeticRoles());
         commands.add(new ModifierRoles());
@@ -125,6 +128,10 @@ public class CommandInit {
         commands.add(new SetXp());
         commands.add(new SetLevel());
         commands.add(new SetPixelModifier());
+        commands.add(new CheckPixelRoles());
+        commands.add(new TopUserForRole());
+        commands.add(new Rank());
+        commands.add(new TopTen());
 
         return commands;
     }
@@ -143,6 +150,7 @@ public class CommandInit {
         commands.add(new ClearReminderDM());
         commands.add(new ShutdownDM());
         commands.add(new QuickRespond());
+        commands.add(new TestDM());
         return commands;
     }
 

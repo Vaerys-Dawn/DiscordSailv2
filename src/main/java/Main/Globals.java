@@ -3,6 +3,7 @@ package Main;
 import ChannelSettings.InitChannels;
 import Commands.Admin.ChannelHere;
 import Commands.CommandInit;
+import Commands.General.NewDailyMessage;
 import Enums.UserSetting;
 import GuildToggles.ToggleInit;
 import Handlers.FileHandler;
@@ -14,6 +15,7 @@ import POGOs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -39,6 +41,7 @@ public class Globals {
     public static boolean doRandomGames = false;
     public static String dailyAvatarName = null;
     public static String playing = null;
+    public static long queueChannelID = -1;
     public static int argsMax = 0;
     public static int maxWarnings = 0;
     public static int avgMessagesPerDay = 20;
@@ -57,7 +60,6 @@ public class Globals {
     private static ArrayList<GuildToggle> guildGuildToggles = new ArrayList<>();
     private static ArrayList<SlashCommand> slashCommands = new ArrayList<>();
     private static ArrayList<RandomStatusObject> randomStatuses = new ArrayList<>();
-
 
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
@@ -89,6 +91,7 @@ public class Globals {
         doRandomGames = config.doRandomGames;
         showSaveWarning = config.showSaveWarning;
         randomStatuses = config.randomStatuses;
+        queueChannelID = config.queueChannelID;
         initCommands();
     }
 

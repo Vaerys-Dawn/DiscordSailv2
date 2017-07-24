@@ -1,129 +1,61 @@
 package Commands.General;
 
 import Commands.CommandObject;
-import Commands.Pixels.SetXp;
+import Enums.EnumString;
 import Handlers.XpHandler;
 import Interfaces.Command;
-import Main.Constants;
-import Main.Globals;
 import Main.Utility;
-import Objects.*;
-import POGOs.GuildUsers;
-import sx.blah.discord.handle.obj.IMessage;
+import Objects.UserTypeObject;
+import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.awt.*;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.regex.Matcher;
-import java.util.regex.PatternSyntaxException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 30/01/2017.
  */
 public class Test implements Command {
 
+    /**
+     * Important ass code do not delete plserino
+     * //        if (obe.getFirstWord().equalsIgnoreCase("Mention")) {
+     * //            if (obe.getRest() != null) {
+     * //                IUser user = null;
+     * //                SplitFirstObject mentionee = new SplitFirstObject(obe.getRest());
+     * //                String toTest = Matcher.quoteReplacement(mentionee.getFirstWord()).replace("_", "[_| ]");
+     * //                for (IUser u : command.guild.getUsers()) {
+     * //                    try {
+     * //                        if ((u.getName() + "#" + u.getDiscriminator()).matches(toTest)) {
+     * //                            user = u;
+     * //                        }
+     * //                    } catch (PatternSyntaxException e) {
+     * //                        //do nothing.
+     * //                    }
+     * //                }
+     * //                try {
+     * //                    long uID = Long.parseLong(mentionee.getFirstWord());
+     * //                    user = command.client.getUserByID(uID);
+     * //                } catch (NumberFormatException e) {
+     * //                    if (command.message.getMentions().size() > 0) {
+     * //                        user = command.message.getMentions().get(0);
+     * //                    }
+     * //                }
+     * //                if (user != null) {
+     * //                    return "> User was found.";
+     * //                } else {
+     * //                    return "> user could not be found.";
+     * //                }
+     * //            }
+     * //        }
+     */
+
+    String nothing = "> Nothing to see here move along.";
+
     @Override
     public String execute(String args, CommandObject command) {
-//        SplitFirstObject obe = new SplitFirstObject(args);
-//        try {
-//            if (obe.getFirstWord().equalsIgnoreCase("decay")) {
-//                if (command.message.getMentions().size() > 0) {
-//                    IUser user = command.message.getMentions().get(0);
-//                    UserTypeObject userObject = command.guildUsers.getUserByID(user.getStringID());
-//                    String stats = "";
-//                    long xp = userObject.getXP();
-//                    long level = userObject.getCurrentLevel();
-//                    long rewardID = userObject.getRewardID();
-//                    userObject.setXp(XpHandler.totalXPForLevel(29));
-//                    userObject.setCurrentLevel(29);
-//                    for (RewardRoleObject r : command.guildConfig.getRewardRoles()) {
-//                        if (r.getLevel() == 20) {
-//                            userObject.setRewardID(r.getRoleID());
-//                        }
-//                    }
-//                    stats += "**START TEST**\n";
-//                    stats += "Level: " + userObject.getCurrentLevel() + ", Xp: " + userObject.getXP() + ", Reward: " + command.guild.getRoleByID(userObject.getRewardID()) + ".\n";
-//
-//                    for (int i = 8; i < 32; i++) {
-//                        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC).plusDays(i);
-//                        XpHandler.doDeacyUser(userObject, command, now);
-//                        if (stats.length() > 1800) {
-//                            Utility.sendMessage(stats, command.channel);
-//                            stats = "";
-//                        }
-//                        stats += "Level: " + userObject.getCurrentLevel() + ", Xp: " + userObject.getXP() + ", Reward: " + command.guild.getRoleByID(userObject.getRewardID()) + ", Days: " + i + ".\n";
-//                    }
-//                    userObject.setXp(xp);
-//                    userObject.setCurrentLevel(level);
-//                    userObject.setRewardID(rewardID);
-//                    XpHandler.checkUsersRoles(user.getStringID(),command.guildContent);
-//                    stats += "**TEST ENDED**";
-//                    return stats;
-//                }
-//            }
-//        } catch (NumberFormatException e) {
-//            return "> You must supply a valid number.";
-//        }
-//        if (obe.getFirstWord().equalsIgnoreCase("Mention")) {
-//            if (obe.getRest() != null) {
-//                IUser user = null;
-//                SplitFirstObject mentionee = new SplitFirstObject(obe.getRest());
-//                String toTest = Matcher.quoteReplacement(mentionee.getFirstWord()).replace("_", "[_| ]");
-//                for (IUser u : command.guild.getUsers()) {
-//                    try {
-//                        if ((u.getName() + "#" + u.getDiscriminator()).matches(toTest)) {
-//                            user = u;
-//                        }
-//                    } catch (PatternSyntaxException e) {
-//                        //do nothing.
-//                    }
-//                }
-//                try {
-//                    long uID = Long.parseLong(mentionee.getFirstWord());
-//                    user = command.client.getUserByID(uID);
-//                } catch (NumberFormatException e) {
-//                    if (command.message.getMentions().size() > 0) {
-//                        user = command.message.getMentions().get(0);
-//                    }
-//                }
-//                if (user != null) {
-//                    return "> User was found.";
-//                } else {
-//                    return "> user could not be found.";
-//                }
-//            }
-//        }
-//        try {
-//            long msgId = Long.parseUnsignedLong(args);
-//            IMessage message = command.client.getMessageByID(msgId);
-//            if (message != null) {
-//                System.out.println("Embeds: " + message.getEmbeds().size());
-//                System.out.println("Attachments: " + message.getAttachments().size());
-//                System.out.println("Channels: " + message.getChannelMentions().size());
-//                System.out.println("Mentions: " + message.getMentions().size());
-//                System.out.println("RoleMentions: " + message.getRoleMentions().size());
-//                System.out.println("Reactions: " + message.getReactions().size());
-//                System.out.println("Charactes: " + message.getContent().length());
-//                System.out.println("Words: " + message.getContent().split(" ").length);
-//                System.out.println("Content: " + message.getContent());
-//                System.out.println("Formatted Content: " + message.getFormattedContent());
-////            message.getChannel().pin(message);
-////            command.client.getDispatcher().dispatch(new MessagePinEvent(message));
-////            message.delete();
-//                return "> you sent Erin some data :P";
-//            } else {
-//                return "> Nothing interesting happens.";
-//            }
-//        } catch (NumberFormatException e) {
-//            String channels = "Channel Settings: \n";
-//            for (ChannelSettingObject c : command.guildConfig.getChannelSettings()) {
-//                channels += c.getType() + ": " + Utility.listFormatter(c.mentionChannelIDs(), true) + "\n";
-//            }
-//            return channels;
-//        }
-        return "> Nothing to test right now.";
+        return nothing;
     }
 
     @Override
@@ -153,7 +85,7 @@ public class Test implements Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+        return new Permissions[0];
     }
 
     @Override
@@ -163,7 +95,7 @@ public class Test implements Command {
 
     @Override
     public boolean doAdminLogging() {
-        return true;
+        return false;
     }
 
     @Override

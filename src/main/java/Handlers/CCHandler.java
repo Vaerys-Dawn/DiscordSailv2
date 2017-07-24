@@ -29,7 +29,6 @@ public class CCHandler {
     private IGuild guild;
     private IUser author;
     private IChannel channel;
-    private String guildID;
     private CommandObject commandObject;
     CustomCommands customCommands;
     GuildConfig guildConfig;
@@ -41,12 +40,11 @@ public class CCHandler {
         this.command = command;
         this.args = args;
         this.commandObject = commandObject;
-        guild = message.getGuild();
-        channel = message.getChannel();
-        author = message.getAuthor();
-        guildID = guild.getStringID();
-        customCommands = Globals.getGuildContent(guildID).getCustomCommands();
-        guildConfig = Globals.getGuildContent(guildID).getGuildConfig();
+        this.guild = commandObject.guild;
+        this.author = commandObject.author;
+        this.channel = commandObject.channel;
+        guildConfig = commandObject.guildConfig;
+        customCommands = commandObject.customCommands;
         handleCommand();
     }
 
@@ -97,6 +95,9 @@ public class CCHandler {
                     }
 
                 }
+//                if (!channel.getTypingStatus()) {
+//                    channel.toggleTypingStatus();
+//                }
                 response = cc.getContents(true);
                 int argsCount = StringUtils.countMatches(response, "<args>");
                 if (argsCount != 0) {
@@ -119,9 +120,14 @@ public class CCHandler {
                 if (response.contains("<embedImage>{")) {
                     String imageURL = TagSystem.tagEmbedImage(response, prefixEmbedImage);
                     if (imageURL != null || !imageURL.isEmpty()) {
-                        response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "");
-                        response = TagSystem.tagToCaps(response);
-                        Utility.sendFileURL(response, imageURL, channel, true);
+                        if (commandObject.channel.getModifiedPermissions(author).contains(Permissions.EMBED_LINKS)) {
+                            response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "");
+                            response = TagSystem.tagToCaps(response);
+                            Utility.sendFileURL(response, imageURL, channel, true);
+                        } else {
+                            response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "<" + imageURL + ">");
+                            Utility.sendMessage(response, channel);
+                        }
                         return;
                     }
                 }

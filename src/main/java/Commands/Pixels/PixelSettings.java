@@ -14,11 +14,11 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 public class PixelSettings implements Command {
     String settings = "**Settings:**\n" +
-            "- LevelChannel\n" +
-            "- CurrentChannel\n" +
-            "- DMs\n" +
-            "- NoLvLMessages\n" +
-            "- NoXP";
+            "> LevelChannel\n" +
+            "> CurrentChannel\n" +
+            "> DMs\n" +
+            "> NoLvLMessages - `Hides your rank on the server`\n" +
+            "> NoXP - `Stops you from gaining pixels`";
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -41,7 +41,7 @@ public class PixelSettings implements Command {
                 removeLevelSettings(userObject);
                 userObject.getSettings().add(UserSetting.DONT_SEND_LVLUP);
                 return "> You will no longer see any level up messages.";
-            case "noXP":
+            case "noxp":
                 if (userObject.getSettings().contains(UserSetting.NO_XP_GAIN)) {
                     for (UserSetting s : userObject.getSettings()) {
                         if (s == UserSetting.NO_XP_GAIN) {

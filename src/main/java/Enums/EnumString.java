@@ -8,7 +8,7 @@ public class EnumString {
     public static String get(UserSetting setting) {
         switch (setting) {
             case SEND_LVLUP_RANK_CHANNEL:
-                return "RankChannel";
+                return "LevelChannel";
             case SEND_LVLUP_CURRENT_CHANNEL:
                 return "CurrentChannel";
             case SEND_LVLUP_DMS:
