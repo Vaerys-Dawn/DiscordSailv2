@@ -4,9 +4,11 @@ import Main.Constants;
 import Main.Globals;
 import Objects.CharacterObject;
 import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -27,7 +29,8 @@ public class Characters {
         this.properlyInit = properlyInit;
     }
 
-    public String updateChar(CharacterObject newCharacter) {
+    public String updateChar(CharacterObject newCharacter, IGuild guild) {
+        validateRoles(guild);
         int position = 0;
         for (CharacterObject c : characters) {
             if (c.getName().equalsIgnoreCase(newCharacter.getName())) {
@@ -45,7 +48,8 @@ public class Characters {
         return "> Character: \"" + newCharacter.getName() + "\" Added";
     }
 
-    public ArrayList<CharacterObject> getCharacters() {
+    public ArrayList<CharacterObject> getCharacters(IGuild guild) {
+        validateRoles(guild);
         return characters;
     }
 
@@ -69,5 +73,20 @@ public class Characters {
 
     public String getRolePrefix() {
         return rolePrefix;
+    }
+
+    private void validateRoles(IGuild guild) {
+        if (guild == null){
+            return;
+        }
+        for (CharacterObject c : characters) {
+            ListIterator iterator = c.getRoleIDs().listIterator();
+            while (iterator.hasNext()) {
+                IRole role = guild.getRoleByID((long) iterator.next());
+                if (role == null) {
+                    iterator.remove();
+                }
+            }
+        }
     }
 }

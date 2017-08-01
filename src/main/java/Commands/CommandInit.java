@@ -7,12 +7,11 @@ import Commands.Competition.*;
 import Commands.Creator.*;
 import Commands.Creator.Shutdown;
 import Commands.DMCommands.*;
-import Commands.DMCommands.TestDM;
 import Commands.General.*;
 import Commands.Groups.ClearGroupUp;
 import Commands.Groups.GroupUp;
-import Commands.Help.GetGuildInfo;
 import Commands.Help.*;
+import Commands.Help.GetGuildInfo;
 import Commands.Pixels.*;
 import Commands.RoleSelect.CosmeticRoles;
 import Commands.RoleSelect.ListModifs;
@@ -38,10 +37,11 @@ public class CommandInit {
         commands.add(new Shutdown());
         commands.add(new Sudo());
         commands.add(new UpdateAvatar());
-        commands.add(new GetMessageData());
+        commands.add(new GetGlobalStats());
         commands.add(new ResetPlayingStatus());
         commands.add(new ToggleTypingStatus());
         commands.add(new SetPlayingStatus());
+        commands.add(new DailyMsg());
         //Admin commands
         commands.add(new ChannelHere());
         commands.add(new ChannelStats());
@@ -57,6 +57,8 @@ public class CommandInit {
         commands.add(new UpdateRolePerms());
         commands.add(new UserSettings());
         commands.add(new SetJoinMessage());
+        commands.add(new PruneEmptyProfiles());
+        commands.add(new DenyXpPrefix());
         //General commands
         commands.add(new GetAvatar());
         commands.add(new Hello());
@@ -132,6 +134,8 @@ public class CommandInit {
         commands.add(new TopUserForRole());
         commands.add(new Rank());
         commands.add(new TopTen());
+        commands.add(new FixLevelErrors());
+        commands.add(new SetLevelUpReaction());
 
         return commands;
     }

@@ -184,7 +184,7 @@ public class MessageHandler {
                         offenderFound = true;
                         i++;
                         if (o.getCount() > Globals.maxWarnings) {
-                            Utility.roleManagement(author, guild, guildConfig.getMutedRole().getRoleID(), true);
+                            Utility.roleManagement(author, guild, guildConfig.getMutedRoleID(), true);
                             command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(guild, author, oldRoles, command.author.getRolesForGuild(guild)));
                             Utility.sendMessage("> " + author.mention() + " Has been Muted for repeat offences of spamming Mentions.", command.channel);
                         }
@@ -194,15 +194,13 @@ public class MessageHandler {
                     guildConfig.addOffender(new OffenderObject(author.getStringID()));
                 }
                 String response = "> #mentionAdmin# " + author.mention() + "  has attempted to post more than " + guildConfig.getMaxMentionLimit() + " Mentions in a single message.";
-                if (guildConfig.getRoleToMention().getRoleID() != null) {
-                    response = response.replaceAll("#mentionAdmin#", guild.getRoleByID(guildConfig.getRoleToMention().getRoleID()).mention());
+                IRole roleToMention = command.guild.getRoleByID(guildConfig.getRoleToMentionID());
+                if (roleToMention != null) {
+                    response = response.replaceAll("#mentionAdmin#", roleToMention.mention());
                 } else {
                     response = response.replaceAll("#mentionAdmin#", "Admin");
                 }
-                if (EventHandler.getDoAdminMention(command.guildSID) == 0) {
-                    Utility.sendMessage(response, command.channel);
-                    EventHandler.setDoAdminMention(command.guildSID, 60);
-                }
+                Utility.sendMessage(response, command.channel);
                 return true;
             }
         }
@@ -223,7 +221,7 @@ public class MessageHandler {
                     int rate = command.guildContent.getUserRate(command.authorSID);
                     if (rate - 3 > command.guildConfig.messageLimit) {
                         //mutes users if they abuse it.
-                        boolean failed = Utility.roleManagement(command.author, command.guild, command.guildConfig.getMutedRole().getRoleID(), true).get();
+                        boolean failed = Utility.roleManagement(command.author, command.guild, command.guildConfig.getMutedRoleID(), true).get();
                         command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(command.guild, command.author, oldRoles, command.author.getRolesForGuild(command.guild)));
                         if (!failed) {
                             IChannel adminChannel = null;
@@ -257,10 +255,15 @@ public class MessageHandler {
         IMessage message = command.message;
         IGuild guild = command.guild;
         IUser author = command.author;
+        ArrayList<String> inviteformats = new ArrayList<String>() {{
+            add("discord.gg");
+            add("discordapp.com/Invite/");
+        }};
+
 
         if (guildConfig.denyInvites) {
-            for (BlackListObject bLP : guildConfig.getBlackList()) {
-                if (message.toString().toLowerCase().contains(bLP.getPhrase().toLowerCase())) {
+            for (String s : inviteformats) {
+                if (message.toString().toLowerCase().contains(s.toLowerCase())) {
                     if (guildConfig.testIsTrusted(author, guild)) {
                         return false;
                     }

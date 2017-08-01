@@ -2,7 +2,6 @@ package Commands.DMCommands;
 
 import Commands.DMCommandObject;
 import Interfaces.DMCommand;
-import sx.blah.discord.handle.obj.IChannel;
 
 /**
  * Created by Vaerys on 15/07/2017.

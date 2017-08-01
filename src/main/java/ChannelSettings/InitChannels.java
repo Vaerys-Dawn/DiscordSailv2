@@ -31,6 +31,7 @@ public class InitChannels {
         channelSettings.add(new Groups());
         channelSettings.add(new XpDenied());
         channelSettings.add(new LevelUpDenied());
+        channelSettings.add(new DontLog());
 
         return channelSettings;
     }

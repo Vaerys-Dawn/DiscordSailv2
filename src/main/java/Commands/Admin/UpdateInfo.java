@@ -6,8 +6,6 @@ import Interfaces.Command;
 import Main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
-
 /**
  * Created by Vaerys on 31/01/2017.
  */

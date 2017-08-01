@@ -6,11 +6,11 @@ import Main.Utility;
 import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IMessage;
 
-import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;

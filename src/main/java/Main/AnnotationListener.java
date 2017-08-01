@@ -51,7 +51,7 @@ public class AnnotationListener {
     public void onGuildCreateEvent(GuildCreateEvent event) {
         IGuild guild = event.getGuild();
         String guildID = guild.getStringID();
-        logger.info("Starting Initialisation process for Guild with ID: " + guildID);
+        logger.debug("Starting Initialisation process for Guild with ID: " + guildID);
 
         if (new File(Utility.getDirectory(guildID)).exists()) {
             PatchHandler.guildPatches(guild);
@@ -102,7 +102,7 @@ public class AnnotationListener {
         channelData = (ChannelData) Utility.initFile(guildID, Constants.FILE_CHANNEl_DATA, ChannelData.class);
         //sends objects to globals
         Globals.initGuild(guildID, guildConfig, servers, customCommands, characters, competition, guildUsers, channelData);
-
+        updateVariables(guild);
         logger.info("Finished Initialising Guild With ID: " + guildID);
 
         NewDailyMessage.checkIsEnabled(Globals.client.getChannelByID(Globals.queueChannelID) != null);
@@ -136,7 +136,7 @@ public class AnnotationListener {
         String messageLC = message.toString().toLowerCase();
         String args = "";
         String command = "";
-        while (Globals.getGuildContent(guild.getStringID()) == null) ;
+        if (Globals.getGuildContent(guild.getStringID()) == null) return;
         GuildConfig guildConfig = Globals.getGuildContent(guild.getStringID()).getGuildConfig();
 
 
@@ -232,18 +232,18 @@ public class AnnotationListener {
             } else if ((event.getOldChannel().getTopic() == null || event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() == null || event.getNewChannel().getTopic().isEmpty())) {
                 //do nothing
             } else if ((event.getOldChannel().getTopic() == null || event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() != null || !event.getNewChannel().getTopic().isEmpty())) {
-                String log = "> Channel " + event.getNewChannel().mention() + "'s Channel topic was added.\n";
-                log += "**New Topic**: " + event.getNewChannel().getTopic();
-                Utility.sendLog(log, content.getGuildConfig(), false);
+                StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was added.\n");
+                log.append("**New Topic**: " + event.getNewChannel().getTopic());
+                Utility.sendLog(log.toString(), content.getGuildConfig(), false);
             } else if ((event.getOldChannel().getTopic() != null || !event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() == null || event.getNewChannel().getTopic().isEmpty())) {
-                String log = "> Channel " + event.getNewChannel().mention() + "'s Channel topic was removed.\n";
-                log += "**Old Topic**: " + event.getOldChannel().getTopic();
-                Utility.sendLog(log, content.getGuildConfig(), false);
+                StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was removed.\n");
+                log.append("**Old Topic**: " + event.getOldChannel().getTopic());
+                Utility.sendLog(log.toString(), content.getGuildConfig(), false);
             } else if (!event.getOldChannel().getTopic().equalsIgnoreCase(event.getNewChannel().getTopic())) {
-                String log = "> Channel " + event.getNewChannel().mention() + "'s Channel topic was changed.";
-                log += "\n**Old Topic**: " + event.getOldChannel().getTopic();
-                log += "\n**New Topic**: " + event.getNewChannel().getTopic();
-                Utility.sendLog(log, content.getGuildConfig(), false);
+                StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was changed.");
+                log.append("\n**Old Topic**: " + event.getOldChannel().getTopic());
+                log.append("\n**New Topic**: " + event.getNewChannel().getTopic());
+                Utility.sendLog(log.toString(), content.getGuildConfig(), false);
             }
         }
     }
@@ -305,7 +305,7 @@ public class AnnotationListener {
                     if (event.getReaction().getUnicodeEmoji().equals(thumbsUp) || event.getReaction().getUnicodeEmoji().equals(thumbsDown)) {
                         IUser owner = Globals.getClient().getUserByID(Globals.creatorID);
                         if (event.getReaction().getUserReacted(owner)) {
-                            DailyHandler.addedReaction(event.getMessage(), event.getReaction());
+                            QueueHandler.addedReaction(event.getMessage(), event.getReaction());
                         }
                     }
                 }
@@ -453,7 +453,7 @@ public class AnnotationListener {
                 String formatted;
                 String oldContent;
                 String newContent;
-                String response = "";
+                StringBuilder response = new StringBuilder();
                 ZonedDateTime oldMessageTime = event.getOldMessage().getTimestamp().atZone(ZoneOffset.UTC);
                 ZonedDateTime newMessageTime = event.getNewMessage().getEditedTimestamp().get().atZone(ZoneOffset.UTC);
                 int charLimit;
@@ -463,7 +463,7 @@ public class AnnotationListener {
                 } else {
                     formatted = "from " + Utility.formatTimeDifference(difference);
                 }
-                response += "> **@" + command.authorUserName + "'s** Message " + formatted + " was **Edited** in channel: " + command.channel.mention() + ". ";
+                response.append("> **@" + command.authorUserName + "'s** Message " + formatted + " was **Edited** in channel: " + command.channel.mention() + ". ");
                 //remove excess text that would cause a max char limit error.
                 if (command.message.getContent().isEmpty()) {
                     return;
@@ -483,11 +483,11 @@ public class AnnotationListener {
                 } else {
                     newContent = Utility.unFormatMentions(event.getNewMessage());
                 }
-                response += "**\nMessage's Old Contents:**\n" + oldContent;
+                response.append("**\nMessage's Old Contents:**\n" + oldContent);
                 if (command.guildConfig.extendEditLog) {
-                    response += "\n**Message's New Contents:**\n" + newContent;
+                    response.append("\n**Message's New Contents:**\n" + newContent);
                 }
-                Utility.sendLog(response, command.guildConfig, false);
+                Utility.sendLog(response.toString(), command.guildConfig, false);
             }
         }
     }
@@ -501,18 +501,18 @@ public class AnnotationListener {
             ArrayList<String> newRoles = new ArrayList<>();
             oldRoles.addAll(event.getOldRoles().stream().filter(r -> !r.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
             newRoles.addAll(event.getNewRoles().stream().filter(r -> !r.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
-            String oldRoleList = "";
-            String newRoleList = "";
+            StringBuilder oldRoleList = new StringBuilder();
+            StringBuilder newRoleList = new StringBuilder();
             for (String r : oldRoles) {
-                oldRoleList += r + ", ";
+                oldRoleList.append(r + ", ");
             }
             for (String r : newRoles) {
-                newRoleList += r + ", ";
+                newRoleList.append(r + ", ");
             }
             logger.debug("Old Roles:");
-            logger.debug(oldRoleList);
+            logger.debug(oldRoleList.toString());
             logger.debug("New Roles:");
-            logger.debug(newRoleList);
+            logger.debug(newRoleList.toString());
             String prefix = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "'s** Role have been Updated.";
             Utility.sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content.getGuildConfig(), false);
         }

@@ -1,6 +1,7 @@
 package Main;
 
 import Enums.UserSetting;
+import Objects.QueueObject;
 
 import java.util.ArrayList;
 
@@ -38,12 +39,14 @@ public class Constants {
     public static final String PATCH_2 = "UPDATE_CHANNELS";
     public static final String PATCH_3 = "UPDATE_TAGS_2";
     public static final String PATCH_4 = "RESET_XP";
+    public static final String PATCH_5 = "UPDATE_ROLES_1";
+    public static final String PATCH_6 = "UPDATE_GLOBAL_DATA_1";
     public static final String PATCH_GLOBAL_1 = "UPDATE_CONFIG";
     public static final String PATCH_GLOBAL_2 = "INIT_RANDOM_GAMES";
 
     //Error Constants
     public static final String ERROR = "> An Error Occurred";
-    public static final String ERROR_ROLE_NOT_FOUND = "> Role with that name not found.";
+    public static final String ERROR_ROLE_NOT_FOUND = "> I found no roles with that name.";
     public static final String ERROR_UPDATING_ROLE = "> An Error Occurred when trying to Update your roles.";
     public static final String ERROR_CC_NOT_FOUND = "> Command with that name could not be found.";
     public static final String ERROR_CHAR_NOT_FOUND = "> Character with that name could not be found.";
@@ -91,7 +94,7 @@ public class Constants {
         add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
         add(UserSetting.DONT_SEND_LVLUP);
     }};
-    public static final ArrayList<UserSetting> userGainedSettings = new ArrayList<UserSetting>(){{
+    public static final ArrayList<UserSetting> userGainedSettings = new ArrayList<UserSetting>() {{
         add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
         add(UserSetting.SEND_LVLUP_DMS);
         add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
@@ -136,4 +139,7 @@ public class Constants {
             "Goodness what have you all done to the place since I was last here?;;" +
             "My My My Its a brand new day isn't it? looks like we're all still here.}";
     public static final String DAILY_MESSAGE_7 = "> A new Day arrives, Prepare for fun.";
+
+    //queue types
+    public static final String QUEUE_DAILY = "DAILY_MESSAGE";
 }

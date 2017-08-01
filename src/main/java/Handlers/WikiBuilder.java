@@ -27,27 +27,27 @@ public class WikiBuilder {
         String pagePath = "https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/";
         FileHandler.createDirectory(Constants.DIRECTORY_WIKI_COMMANDS);
 
-        String menuContents = "";
-        menuContents += "### Command Types:   \n  \n";
+        StringBuilder menuContents = new StringBuilder();
+        menuContents.append("### Command Types:   \n  \n");
         for (String s : types) {
             File temp = new File(Constants.DIRECTORY_WIKI_COMMANDS + s + ".md");
-            String contents = "";
-            menuContents += "[" + s + "](" + pagePath + s + ")  \n";
-            if (!temp.exists()){
+            StringBuilder contents = new StringBuilder();
+            menuContents.append("[" + s + "](" + pagePath + s + ")  \n");
+            if (!temp.exists()) {
                 try {
                     temp.createNewFile();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            contents += "### " + s + "\n  \n  ";
+            contents.append("### " + s + "\n  \n  ");
             for (Command c : commands) {
                 if (c.type().equalsIgnoreCase(s)) {
-                    contents += "##" +c.names()[0] +"\n";
+                    contents.append("##" + c.names()[0] + "\n");
                 }
             }
         }
         System.out.println("Creating Wiki Menu");
-        FileHandler.writeToFile(commandMenu.getPath(), menuContents, true);
+        FileHandler.writeToFile(commandMenu.getPath(), menuContents.toString(), true);
     }
 }

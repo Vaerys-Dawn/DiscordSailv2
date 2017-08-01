@@ -1,11 +1,9 @@
 package Commands.Help;
 
 import Commands.CommandObject;
-import Interfaces.ChannelSetting;
 import Interfaces.Command;
 import Main.Globals;
 import Main.Utility;
-import Objects.UserLinkObject;
 import Objects.XEmbedBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import sx.blah.discord.handle.obj.IChannel;
@@ -14,7 +12,6 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 29/01/2017.
@@ -32,7 +29,7 @@ public class Info implements Command {
                     if (c.type().equalsIgnoreCase(TYPE_CREATOR) && !command.authorSID.equalsIgnoreCase(Globals.creatorID)) {
                         return error;
                     }
-                    if (!Utility.testForPerms(c.perms(),command.author,command.guild)){
+                    if (!Utility.testForPerms(c.perms(), command.author, command.guild)) {
                         return error;
                     }
 
@@ -44,9 +41,9 @@ public class Info implements Command {
 
                     //command info
                     StringBuilder builder = new StringBuilder();
-                    String primaryCommand = command.guildConfig.getPrefixCommand() + c.names()[0];
+                    StringBuilder primaryCommand = new StringBuilder(command.guildConfig.getPrefixCommand() + c.names()[0]);
                     if (c.usage() != null) {
-                        primaryCommand += " " + c.usage();
+                        primaryCommand.append(" " + c.usage());
                     }
                     builder.append("**" + primaryCommand + "**\n");
                     builder.append("**Desc: **" + c.description() + "\n");
@@ -61,9 +58,9 @@ public class Info implements Command {
                     }
                     //dual command info
                     if (c.dualType() != null && Utility.testForPerms(c.dualPerms(), command.author, command.guild)) {
-                        String dualCommand = command.guildConfig.getPrefixCommand() + c.names()[0];
+                        StringBuilder dualCommand = new StringBuilder(command.guildConfig.getPrefixCommand() + c.names()[0]);
                         if (c.dualUsage() != null) {
-                            dualCommand += " " + c.dualUsage();
+                            dualCommand.append(" " + c.dualUsage());
                         }
                         StringBuilder builderDual = new StringBuilder();
                         builder.append("\n**" + dualCommand + "**\n");
@@ -88,9 +85,9 @@ public class Info implements Command {
                     ArrayList<String> channelMentions = new ArrayList<>();
 
                     if (channelIDs != null) {
-                        for (String id: channelIDs){
+                        for (String id : channelIDs) {
                             IChannel temp = command.guild.getChannelByID(id);
-                            if (temp != null){
+                            if (temp != null) {
                                 EnumSet<Permissions> userPerms = temp.getModifiedPermissions(command.author);
                                 if (userPerms.contains(Permissions.SEND_MESSAGES) && userPerms.contains(Permissions.READ_MESSAGES)) {
                                     channelMentions.add(temp.mention());

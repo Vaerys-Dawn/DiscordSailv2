@@ -4,6 +4,7 @@ import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Utility;
 import Objects.SplitFirstObject;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -24,7 +25,7 @@ public class Report implements Command {
             long uID = -1;
             try {
                 uID = Long.parseLong(user.getFirstWord());
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 //do nothing
             }
             if (uID != -1) {
@@ -37,8 +38,9 @@ public class Report implements Command {
 
             if (channelID != null) {
                 StringBuilder builder = new StringBuilder();
-                if (command.guildConfig.getRoleToMention().getRoleID() != null) {
-                    builder.append(command.guild.getRoleByID(command.guildConfig.getRoleToMention().getRoleID()).mention() + "\n");
+                IRole roleToMention = command.guild.getRoleByID(command.guildConfig.getRoleToMentionID());
+                if (roleToMention != null) {
+                    builder.append(roleToMention.mention() + "\n");
                 }
                 if (isSilent) {
                     builder.append("**User Report - Silent**\n");
@@ -52,7 +54,7 @@ public class Report implements Command {
                 return "> User Report sent.";
             }
             return "> Your report could not be sent as the server does not have an admin channel set up at this time.";
-        }else {
+        } else {
             return "> Your report could not be sent as the server does not have an admin channel set up at this time.";
         }
     }

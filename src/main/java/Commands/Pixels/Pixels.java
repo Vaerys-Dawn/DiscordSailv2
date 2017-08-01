@@ -42,8 +42,14 @@ public class Pixels implements Command {
         long xpTillNext = XpHandler.totalXPForLevel(user.getCurrentLevel() + 1) - user.getXP();
         long xpProgress = xpForNext - xpTillNext;
         long percentToLvl = (xpProgress * 100) / xpForNext;
-        StringBuilder xpBar = new StringBuilder("--------------------");
+        StringBuilder xpBar = new StringBuilder("-------------------");
         int pos = (int) (percentToLvl / 5);
+        if (pos < 0) {
+            pos = 0;
+        }
+        if (pos > xpBar.length()) {
+            pos = xpBar.length();
+        }
         xpBar.replace(pos, pos, "**>**");
         String levelTotal = "**" + user.getCurrentLevel() + "** [" + xpBar.toString() + "] **" + (user.getCurrentLevel() + 1) + "**";
 

@@ -2,6 +2,7 @@ package Commands.Servers;
 
 import Commands.CommandObject;
 import Interfaces.Command;
+import Main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -10,7 +11,8 @@ import sx.blah.discord.handle.obj.Permissions;
 public class Server implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        return command.servers.getServer(args, command.guild);
+        Utility.sendDM(command.servers.getServer(args, command.guild),command.authorSID);
+        return "> Server info has been sent to your DMs";
     }
 
     @Override

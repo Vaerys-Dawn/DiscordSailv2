@@ -85,9 +85,9 @@ public class InfoHandler {
             if (contents.contains(imagePrefix)){
                 image = StringUtils.substringBetween(contents, imagePrefix, imageSuffix);
                 File file = new File(Utility.getGuildImageDir(guild.getStringID()) + image);
-                Utility.sendFile("",file,channel);
+                Utility.sendFile("",file,channel).get();
             }else {
-                Utility.sendMessage(contents,channel);
+                Utility.sendMessage(contents,channel).get();
             }
             try {
                 Thread.sleep(1000);

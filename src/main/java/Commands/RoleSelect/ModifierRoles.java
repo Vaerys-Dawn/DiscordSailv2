@@ -4,17 +4,13 @@ import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Constants;
 import Main.Utility;
-import Objects.RoleTypeObject;
 import Objects.SplitFirstObject;
-import POGOs.GuildConfig;
-import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
-import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -22,92 +18,89 @@ import java.util.List;
 public class ModifierRoles implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        IGuild guild = command.guild;
-        IUser author = command.author;
-        List<IRole> oldRoles = new ArrayList<>(command.author.getRolesForGuild(guild));
-        GuildConfig guildConfig = command.guildConfig;
-        String response;
-        SplitFirstObject splitFirst = new SplitFirstObject(args);
-        boolean rolefound = false;
-        if (splitFirst.getFirstWord() != null) {
-            if (Utility.testModifier(splitFirst.getFirstWord()) != null && Utility.testForPerms(dualPerms(), author, guild)) {
-                if (Utility.testModifier(splitFirst.getFirstWord())) {
-                    String roleID = Utility.getRoleIDFromName(splitFirst.getRest(), guild);
-                    if (roleID == null) {
-                        return Constants.ERROR_ROLE_NOT_FOUND;
-                    } else {
-                        return guildConfig.addRole(roleID, guild.getRoleByID(roleID).getName(), false);
-                    }
+        SplitFirstObject modif = new SplitFirstObject(args);
+
+        //test to see if the first word is a modifier
+        Boolean isAdding = Utility.testModifier(modif.getFirstWord());
+        if (isAdding != null) {
+            //test the permissions of the user to make sure they can modify the role list.
+            if (Utility.testForPerms(dualPerms(), command.author, command.guild)) {
+                IRole role = Utility.getRoleFromName(modif.getRest(), command.guild);
+                if (role == null) {
+                    return "> **" + args + "** is not a valid Role Name.";
                 } else {
-                    String roleID = Utility.getRoleIDFromName(splitFirst.getRest(), guild);
-                    if (roleID == null) {
-                        return Constants.ERROR_ROLE_NOT_FOUND;
+                    //tests to see if the bot is allowed to mess with a role.
+                    if (!Utility.testUserHierarchy(command.botUser,role,command.guild)){
+                        return "> I do not have permission to modify the **" + role.getName() + "** role.";
+                    }
+                    //test the user's hierarchy to make sure that the are allowed to mess with that role.
+                    if (Utility.testUserHierarchy(command.author, role, command.guild)) {
+                        // do if modifier is true
+                        if (isAdding) {
+                            //check for the role and add if its not a Modifier role.
+                            if (command.guildConfig.isRoleModifier(role.getLongID())) {
+                                return "> The **" + role.getName() + "** role is already listed as a modifier role.";
+                            } else {
+                                command.guildConfig.getModifierRoleIDs().add(role.getLongID());
+                                return "> The **" + role.getName() + "** role was added to the modifier role list.";
+                            }
+                            //do if modifier is false
+                        } else {
+                            //check for the role and remove if it is a Modifier role.
+                            if (command.guildConfig.isRoleModifier(role.getLongID())) {
+                                Iterator iterator = command.guildConfig.getModifierRoleIDs().listIterator();
+                                while (iterator.hasNext()) {
+                                    long id = (long) iterator.next();
+                                    if (role.getLongID() == id) {
+                                        iterator.remove();
+                                    }
+                                }
+                                return "> The **" + role.getName() + "** role was removed from the modifier role list.";
+                            } else {
+                                return "> The **" + role.getName() + "** role is not listed as a modifier role.";
+                            }
+                        }
                     } else {
-                        return guildConfig.removeRole(roleID, guild.getRoleByID(roleID).getName(), false);
+                        return "> You do not have permission to modify the **" + role.getName() + "**role.";
                     }
                 }
             } else {
-                ArrayList<RoleTypeObject> roles = guildConfig.getModifierRoles();
-                String newRoleId = null;
-                List<IRole> userRoles = guild.getRolesForUser(author);
-                ArrayList<String> roleNames1 = new ArrayList<>();
-                for (IRole r : userRoles) {
-                    roleNames1.add(r.getName());
-                }
-                int userRoleCount = userRoles.size();
-                for (RoleTypeObject role : roles) {
-                    if (args.equalsIgnoreCase(guild.getRoleByID(role.getRoleID()).getName())) {
-                        newRoleId = role.getRoleID();
-                    }
-                }
-                for (int i = 0; userRoles.size() > i; i++) {
-                    if (userRoles.get(i).getStringID().equals(newRoleId)) {
-                        userRoles.remove(i);
-                        rolefound = true;
-                    }
-                }
-                if (newRoleId == null) {
-                    if (Utility.testModifier(splitFirst.getFirstWord()) != null) {
-                        return command.notAllowed;
-                    }
-                    return "> Role with name: **" + args + "** not found in **Modifier Role** list.";
-                } else {
-                    //adding
-                    if (!rolefound) {
-                        userRoles.add(guild.getRoleByID(newRoleId));
-                        if (userRoleCount >= userRoles.size()) {
-                            ArrayList<String> roleNames2 = new ArrayList<>();
-                            for (IRole r : userRoles) {
-                                roleNames2.add(r.getName());
+                return command.notAllowed;
+            }
+        } else {
+            IRole role = Utility.getRoleFromName(args, command.guild);
+            List<IRole> userRoles = command.authorRoles;
+            String response = Constants.ERROR_UPDATING_ROLE;
+            if (role == null) {
+                return "> **" + args + "** is not a valid Role Name.";
+            } else {
+                if (command.guildConfig.isRoleModifier(role.getLongID())) {
+                    //if user has role remove it
+                    if (userRoles.contains(role)) {
+                        ListIterator iterator = userRoles.listIterator();
+                        while (iterator.hasNext()) {
+                            IRole userRole = (IRole) iterator.next();
+                            if (userRole.getLongID() == role.getLongID()) {
+                                iterator.remove();
+                                response = "> You have had the **" + role.getName() + "** role removed.";
                             }
-                            return "> An Error Occurred while attempting to update your roles.\n" +
-                                    "please send this to the Bot Developer.\n" +
-                                    "```Old Roles: " + Utility.listFormatter(roleNames1, true).replace("@everyone","#everyone") + "\n" +
-                                    "New Roles: " + Utility.listFormatter(roleNames2, true).replace("@everyone","#everyone") + "```";
                         }
+                        //else add it
                     } else {
-                        //removing
-                        if (userRoleCount - 2 >= userRoles.size()) {
-                            ArrayList<String> roleNames2 = new ArrayList<>();
-                            for (IRole r : userRoles) {
-                                roleNames2.add(r.getName());
-                            }
-                            return "> An Error Occurred while attempting to update your roles.\n" +
-                                    "please send this to the Bot Developer.\n" +
-                                    "```Old Roles." + Utility.listFormatter(roleNames1, true) + "\n" +
-                                    "New Roles." + Utility.listFormatter(roleNames2, true) + "```";
-                        }
-                    }command.client.getDispatcher().dispatch(new UserRoleUpdateEvent(guild,author,oldRoles,userRoles));
-                    response = "> You have toggled the Modifier role: **" + guild.getRoleByID(newRoleId).getName() + "**.";
-                }
-                if (Utility.roleManagement(author, guild, userRoles).get()) {
-                    return Constants.ERROR_UPDATING_ROLE;
+                        userRoles.add(role);
+                        response = "> You have been granted the **" + role.getName() + "** role.";
+                    }
+                    //push changes
+                    if (Utility.roleManagement(command.author, command.guild, userRoles).get()) {
+                        return response;
+                    } else {
+                        return Constants.ERROR_UPDATING_ROLE;
+                    }
                 } else {
-                    return response;
+                    return "> The **" + role.getName() + "** role is not listed as a modifier role.";
                 }
             }
         }
-        return Constants.ERROR;
     }
 
     @Override

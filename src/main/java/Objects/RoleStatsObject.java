@@ -1,5 +1,6 @@
 package Objects;
 
+import OldCode.RoleTypeObject;
 import POGOs.GuildConfig;
 import sx.blah.discord.handle.obj.IRole;
 
@@ -18,9 +19,9 @@ public class RoleStatsObject extends RoleTypeObject {
         super(role.getName(), role.getStringID());
         this.colour = "#" + Integer.toHexString(role.getColor().getRGB()).substring(2).toUpperCase();
         this.totalUsers = totalUsers;
-        isCosmetic = guildConfig.isRoleCosmetic(role.getStringID());
-        isModifier = guildConfig.isRoleModifier(role.getStringID());
-        isTrusted = guildConfig.isRoleTrusted(role.getStringID());
+        isCosmetic = guildConfig.isRoleCosmetic(role.getLongID());
+        isModifier = guildConfig.isRoleModifier(role.getLongID());
+        isTrusted = guildConfig.isRoleTrusted(role.getLongID());
     }
 
 

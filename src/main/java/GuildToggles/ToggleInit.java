@@ -38,6 +38,9 @@ public class ToggleInit {
         guildToggles.add(new XpDecay());
         guildToggles.add(new XpGain());
         guildToggles.add(new JoinServerMessages());
+        guildToggles.add(new UserInfoShowsDate());
+        guildToggles.add(new SelfDestructLevelUps());
+        guildToggles.add(new ReactToLevelUp());
 
         //modules
         guildToggles.add(new ModuleGroups());

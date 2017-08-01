@@ -6,6 +6,7 @@ import Handlers.FileHandler;
 import Interfaces.Command;
 import Interfaces.DMCommand;
 import Objects.*;
+import POGOs.GlobalData;
 import POGOs.GuildConfig;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +19,10 @@ import sx.blah.discord.util.*;
 import sx.blah.discord.util.Image;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,9 +33,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by Vaerys on 17/08/2016.
@@ -44,16 +46,14 @@ public class Utility {
     final static Logger logger = LoggerFactory.getLogger(Utility.class);
 
     //Discord Utils
-    public static String getRoleIDFromName(String roleName, IGuild guild) {
-
-        String roleID = null;
-        List<IRole> guildRoles = guild.getRoles();
-        for (IRole r : guildRoles) {
+    public static IRole getRoleFromName(String roleName, IGuild guild) {
+        IRole role = null;
+        for (IRole r : guild.getRoles()) {
             if (r.getName().equalsIgnoreCase(roleName)) {
-                roleID = r.getStringID();
+                role = r;
             }
         }
-        return roleID;
+        return role;
     }
 
     public static boolean testForPerms(Permissions[] perms, IUser user, IGuild guild) {
@@ -61,7 +61,7 @@ public class Utility {
             logger.trace("User is Creator, BYPASSING.");
             return true;
         }
-        if (user.getStringID().equals(guild.getOwnerID())) {
+        if (user.getLongID() == guild.getOwnerLongID()) {
             logger.trace("User is Guild Owner, GUILD : \"" + guild.getStringID() + "\", BYPASSING.");
             return true;
         }
@@ -88,21 +88,21 @@ public class Utility {
 
     //Command Utils
     public static String getCommandInfo(Command command, CommandObject commandObject) {
-        String response = ">> **" + commandObject.guildConfig.getPrefixCommand() + command.names()[0];
+        StringBuilder response = new StringBuilder(">> **" + commandObject.guildConfig.getPrefixCommand() + command.names()[0]);
         if (command.usage() != null) {
-            response += " " + command.usage();
+            response.append(" " + command.usage());
         }
-        response += "** <<";
-        return response;
+        response.append("** <<");
+        return response.toString();
     }
 
     public static String getCommandInfo(DMCommand command) {
-        String response = ">> **" + Globals.defaultPrefixCommand + command.names()[0];
+        StringBuilder response = new StringBuilder(">> **" + Globals.defaultPrefixCommand + command.names()[0]);
         if (command.usage() != null) {
-            response += " " + command.usage();
+            response.append(" " + command.usage());
         }
-        response += "** <<";
-        return response;
+        response.append("** <<");
+        return response.toString();
     }
 
     public static String checkBlacklist(String message, ArrayList<BlackListObject> blacklist) {
@@ -428,7 +428,7 @@ public class Utility {
         });
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, String newRoleID,
+    public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, long newRoleID,
                                                                       boolean isAdding) {
         return RequestBuffer.request(() -> {
             try {
@@ -480,24 +480,24 @@ public class Utility {
                     i++;
                 }
                 guild.editUserRoles(author, roles);
+                return true;
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("hierarchy")) {
                     logger.debug("Error Editing roles of user with id: " + author.getStringID() + " on guild with id: " + guild.getStringID() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
-                    return true;
+                    return false;
                 } else {
                     e.printStackTrace();
-                    return true;
+                    return false;
                 }
             } catch (DiscordException e) {
                 if (e.getMessage().contains("CloudFlare")) {
-                    roleManagement(author, guild, userRoles);
+                    return roleManagement(author, guild, userRoles).get();
                 } else {
                     e.printStackTrace();
-                    return true;
+                    return false;
                 }
             }
-            return false;
         });
     }
 
@@ -795,10 +795,10 @@ public class Utility {
 
     public static void sendGlobalAdminLogging(Command command, String args, CommandObject commandObject) {
         for (GuildContentObject c : Globals.getGuildContentObjects()) {
-            String message = "***GLOBAL LOGGING***\n> **@" + commandObject.authorUserName + "** Has Used Command `" + command.names()[0] + "`";
+            StringBuilder message = new StringBuilder("***GLOBAL LOGGING***\n> **@" + commandObject.authorUserName + "** Has Used Command `" + command.names()[0] + "`");
             IChannel channel = null;
             if (!(args == null || args.isEmpty())) {
-                message += " with args: `" + args + "`";
+                message.append(" with args: `" + args + "`");
             }
             if (c.getGuildConfig().getChannelIDsByType(Command.CHANNEL_SERVER_LOG) != null) {
                 channel = commandObject.client.getChannelByID(c.getGuildConfig().getChannelIDsByType(Command.CHANNEL_SERVER_LOG).get(0));
@@ -807,7 +807,7 @@ public class Utility {
                 channel = commandObject.client.getChannelByID(c.getGuildConfig().getChannelIDsByType(Command.CHANNEL_ADMIN_LOG).get(0));
             }
             if (channel != null) {
-                sendMessage(message, channel);
+                sendMessage(message.toString(), channel);
             }
         }
     }
@@ -922,10 +922,10 @@ public class Utility {
         GuildContentObject content = Globals.getGuildContent(guildID);
         IUser user = Globals.getClient().getUserByID(userID);
         IGuild guild = Globals.getClient().getGuildByID(guildID);
-        IRole mutedRole = Globals.client.getRoleByID(content.getGuildConfig().getMutedRole().getRoleID());
+        IRole mutedRole = Globals.client.getRoleByID(content.getGuildConfig().getMutedRoleID());
         List<IRole> oldRoles = user.getRolesForGuild(guild);
         if (mutedRole != null) {
-            roleManagement(Globals.getClient().getUserByID(userID), Globals.client.getGuildByID(guildID), mutedRole.getStringID(), isMuting);
+            roleManagement(Globals.getClient().getUserByID(userID), Globals.client.getGuildByID(guildID), mutedRole.getLongID(), isMuting);
             List<IRole> newRoles = user.getRolesForGuild(guild);
             Globals.getClient().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, user, oldRoles, newRoles));
             return true;
@@ -955,6 +955,16 @@ public class Utility {
             }
         }
         return true;
+    }
+
+    public static boolean testUserHierarchy(IUser author, IRole toTest, IGuild guild) {
+        boolean roleIsLower = false;
+        for (IRole r : author.getRolesForGuild(guild)) {
+            if (toTest.getPosition() < r.getPosition()) {
+                roleIsLower = true;
+            }
+        }
+        return roleIsLower;
     }
 
     public static long textToSeconds(String time) {
@@ -1012,18 +1022,18 @@ public class Utility {
     }
 
     public static String formatTimestamp(ZonedDateTime time) {
-        String content = "";
-        content += time.getYear();
-        content += "/" + time.getMonthValue();
-        content += "/" + time.getDayOfMonth();
-        content += " - " + time.getHour();
-        content += ":" + time.getMinute();
-        content += ":" + time.getSecond();
-        return content;
+        StringBuilder content = new StringBuilder();
+        content.append(time.getYear());
+        content.append("/" + time.getMonthValue());
+        content.append("/" + time.getDayOfMonth());
+        content.append(" - " + time.getHour());
+        content.append(":" + time.getMinute());
+        content.append(":" + time.getSecond());
+        return content.toString();
     }
 
     public static boolean checkURL(String args) {
-        List<String> blacklist = FileHandler.readFromFile("website.blacklist");
+        List<String> blacklist = Globals.getBlacklistedURls();
         for (String s : blacklist) {
             SplitFirstObject firstWord = new SplitFirstObject(s);
             if (!firstWord.getFirstWord().startsWith("//")) {
@@ -1060,7 +1070,7 @@ public class Utility {
                     return 0;
                 }
             });
-        }else {
+        } else {
             Collections.sort(users, (o1, o2) -> {
                 if (o1.getXP() > o2.getXP()) {
                     return -1;
@@ -1071,5 +1081,24 @@ public class Utility {
                 }
             });
         }
+    }
+
+    public static long newDailyMsgUID(GlobalData data) {
+        long result;
+        Random random = new Random();
+        ArrayList<Long> uIDs = new ArrayList<>();
+        for (DailyUserMessageObject d : data.getDailyMessages()) {
+            if (d.getUID() != -1) {
+                uIDs.add(d.getUID());
+            }
+        }
+        for (QueueObject o : data.getQueuedRequests()) {
+            uIDs.add(o.getuID());
+        }
+        result = random.nextInt(9000) + 1000;
+        while (uIDs.contains(result)) {
+            result = random.nextInt(9000) + 1000;
+        }
+        return result;
     }
 }

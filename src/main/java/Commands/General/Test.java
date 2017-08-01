@@ -1,17 +1,8 @@
 package Commands.General;
 
 import Commands.CommandObject;
-import Enums.EnumString;
-import Handlers.XpHandler;
 import Interfaces.Command;
-import Main.Utility;
-import Objects.UserTypeObject;
-import Objects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.text.NumberFormat;
-import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -55,7 +46,30 @@ public class Test implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return nothing;
+        try {
+            int test = Integer.parseInt(args);
+            if (test < 0) {
+                return "> Positive number pls";
+            } else if (test > 100) {
+                return "> number lower than 100 Please";
+            }
+            StringBuilder xpBar = new StringBuilder("-------------------");
+            int pos = (int) (test / 5);
+            if (pos < 0) {
+                pos = 0;
+            }
+            if (pos > xpBar.length()) {
+                pos = xpBar.length();
+            }
+            xpBar.replace(pos, pos, "**>**");
+            return "[" + xpBar.toString() + "]";
+
+        } catch (NumberFormatException e) {
+            return "> Invalid input";
+        }
+
+
+//        return nothing;
     }
 
     @Override

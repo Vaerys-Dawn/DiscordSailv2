@@ -31,7 +31,7 @@ public class TransferCC implements Command {
 
         if (Paths.get(filePath).toFile().exists()) {
             OldCode.CustomCommands oldCommands = null;
-            while (oldCommands == null) {
+            if (oldCommands == null) {
                 oldCommands = (OldCode.CustomCommands) FileHandler.readFromJson(filePath, OldCode.CustomCommands.class);
             }
             CCommandObject transfering = oldCommands.convertCommand(args);

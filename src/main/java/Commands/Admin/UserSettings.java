@@ -9,18 +9,23 @@ import Objects.UserTypeObject;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.ListIterator;
+
 /**
  * Created by Vaerys on 06/07/2017.
  */
 public class UserSettings implements Command {
     private String settings = "**Settings**\n" +
-            "- DeniedXp\n" +
-            "- DontShowRank\n";
+            "> DeniedXp\n" +
+            "> DontShowRank\n" +
+            "> DenyMakeCC\n" +
+            "> DenyUseCCs\n" +
+            "> AutoShitpost";
 
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject split = new SplitFirstObject(args);
-        IUser user = null;
+        IUser user;
         if (command.message.getMentions().size() > 0) {
             user = command.message.getMentions().get(0);
         } else {
@@ -33,34 +38,46 @@ public class UserSettings implements Command {
         if (userObject != null) {
             switch (split.getRest().toLowerCase()) {
                 case "deniedxp":
-                    if (userObject.getSettings().contains(UserSetting.DENIED_XP)) {
-                        for (UserSetting s : userObject.getSettings()) {
-                            if (s == UserSetting.DENIED_XP) {
-                                userObject.getSettings().remove(s);
-                                return "> User will now gain xp again.";
-                            }
-                        }
-                    } else {
-                        userObject.getSettings().add(UserSetting.DENIED_XP);
-                        return "> User will no longer gain XP.";
-                    }
+                    return toggleSetting(userObject, UserSetting.DENY_MAKE_CC,
+                            "> User will now gain xp again.",
+                            "> User will no longer gain XP.");
                 case "dontshowrank":
-                    if (userObject.getSettings().contains(UserSetting.DONT_SHOW_LEADERBOARD)) {
-                        for (UserSetting s : userObject.getSettings()) {
-                            if (s == UserSetting.DONT_SHOW_LEADERBOARD) {
-                                userObject.getSettings().remove(s);
-                                return "> User's rank is now visible.";
-                            }
-                        }
-                    } else {
-                        userObject.getSettings().add(UserSetting.DONT_SHOW_LEADERBOARD);
-                        return "> User will no longer display their rank.";
-                    }
+                    return toggleSetting(userObject, UserSetting.DENY_MAKE_CC,
+                            "> User's rank is now visible.",
+                            "> User will no longer display their rank.");
+                case "denymakecc":
+                    return toggleSetting(userObject, UserSetting.DENY_MAKE_CC,
+                            "> User can now make custom commands.",
+                            "> User can no longer make custom commands.");
+                case "denyuseccs":
+                    return toggleSetting(userObject, UserSetting.DENY_MAKE_CC,
+                            "> User can now use custom commands.",
+                            "> User can no longer use custom commands.");
+                case "autoshitpost":
+                    return toggleSetting(userObject, UserSetting.AUTO_SHITPOST,
+                            "> User no longer has the shitpost tag automatically added to all of their new Custom Commands.",
+                            "> User now has the shitpost tag automatically added to all of their new Custom Commands.");
                 default:
                     return "> Invalid setting.\n" + settings + "\n\n" + Utility.getCommandInfo(this, command);
             }
         } else {
             return "> Invalid user.";
+        }
+    }
+
+    private String toggleSetting(UserTypeObject user, UserSetting setting, String remove, String add) {
+        if (user.getSettings().contains(setting)) {
+            ListIterator iterator = user.getSettings().listIterator();
+            while (iterator.hasNext()) {
+                UserSetting s = (UserSetting) iterator.next();
+                if (s == setting) {
+                    iterator.remove();
+                }
+            }
+            return remove;
+        } else {
+            user.getSettings().add(setting);
+            return add;
         }
     }
 

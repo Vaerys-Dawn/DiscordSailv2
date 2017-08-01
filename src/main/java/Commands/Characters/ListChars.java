@@ -25,7 +25,7 @@ public class ListChars implements Command {
             title = "> Here are all of **@" + mentioned.getName() + "#" + mentioned.getDiscriminator() + "'s** Characters.";
         }
         ArrayList<String> list = new ArrayList<>();
-        for (CharacterObject c: command.characters.getCharacters()){
+        for (CharacterObject c: command.characters.getCharacters(command.guild)){
             if (c.getUserID().equals(id)){
                 list.add(c.getName());
             }

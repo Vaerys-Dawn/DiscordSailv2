@@ -19,9 +19,21 @@ public class PixelHelp implements Command {
         try {
             if (obe.getFirstWord().equalsIgnoreCase("levelToXP")) {
                 long level = Long.parseLong(obe.getRest());
+                if (level < 0) {
+                    return "> Please use a positive number.";
+                }
+                if (level > 1000) {
+                    return "> No, I don't want to calculate the total xp for level " + level + "!";
+                }
                 return "> Level: " + level + " = " + NumberFormat.getInstance().format(XpHandler.totalXPForLevel(level)) + " pixels.";
             } else if (obe.getFirstWord().equalsIgnoreCase("xpToLevel")) {
                 long xp = Long.parseLong(obe.getRest());
+                if (xp < 0) {
+                    return "> Please use a positive number.";
+                }
+                if (xp > 1345412000) {
+                    return "> Its something over level 1000, could you leave me alone.";
+                }
                 return "> " + xp + "XP = Level: " + XpHandler.xpToLevel(xp);
             } else {
                 return "> Pixels are S.A.I.L's Form of Xp. you can gain 20 pixels once every minute in channels that allow for pixel gain.\n\n" +

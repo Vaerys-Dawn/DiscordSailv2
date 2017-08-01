@@ -1,6 +1,7 @@
 package Main;
 
 import Annotations.TagAnnotation;
+import Commands.CommandObject;
 import Objects.ReplaceObject;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.*;
@@ -20,17 +21,17 @@ public class TagSystem {
     // TODO: 12/11/2016 replace repetitive code for the IfTags
     // TODO: 15/01/2017 actually use the annotations
 
-    public static String tagSystem(String contents, IMessage message, String args) {
+    public static String tagSystem(String contents, CommandObject object, String args) {
         String response = contents;
         response = tagArgs(response, args);
         response = tagNoNL(response);
-        response = tagGetAuthor(response, message.getAuthor(), message.getGuild());
-        response = tagGetUsername(response, message.getAuthor());
+        response = tagGetAuthor(response, object.author, object.guild);
+        response = tagGetUsername(response, object.author);
         response = tagSpacer(response);
         response = tagSpecialArgs(response, args);
         response = tagRandom(response);
-        response = tagIfRole(response, message.getAuthor(), message.getGuild());
-        response = tagIfName(response, message.getAuthor(), message.getGuild());
+        response = tagIfRole(response, object.author,object.guild);
+        response = tagIfName(response, object.author,object.guild);
         response = tagEmptyArgs(response, args);
         response = tagIfArgs(response, args);
         response = tagRegex(response, "<replace>{", "}", ";;");

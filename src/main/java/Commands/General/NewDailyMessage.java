@@ -1,8 +1,9 @@
 package Commands.General;
 
 import Commands.CommandObject;
-import Handlers.DailyHandler;
+import Handlers.QueueHandler;
 import Interfaces.Command;
+import Main.Constants;
 import Main.Globals;
 import Main.Utility;
 import Objects.SplitFirstObject;
@@ -19,12 +20,12 @@ public class NewDailyMessage implements Command {
             SplitFirstObject day = new SplitFirstObject(args);
             DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.getFirstWord().toUpperCase());
             if (day.getRest() != null) {
-                DailyHandler.addToQueue(command, day.getRest(), dayOfWeek);
+                QueueHandler.addToQueue(command, day.getRest(), dayOfWeek, Constants.QUEUE_DAILY);
                 return "> Request Sent.";
             } else {
                 return Utility.getCommandInfo(this, command);
             }
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return "> Not a valid Day of the week.";
         }
     }
@@ -52,7 +53,7 @@ public class NewDailyMessage implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"RequestDailyMessage","RequestDailyMsg","ReqDailyMsg"};
+        return new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg"};
     }
 
     @Override

@@ -3,13 +3,11 @@ package Commands.RoleSelect;
 import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Utility;
-import Objects.RoleTypeObject;
 import Objects.XEmbedBuilder;
-import POGOs.GuildConfig;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -18,13 +16,15 @@ public class ListRoles implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        GuildConfig guildConfig = command.guildConfig;
         String title = "> Here are the **Cosmetic** roles you can choose from:\n";
         ArrayList<String> list = new ArrayList<>();
         XEmbedBuilder builder = new XEmbedBuilder();
-        list.addAll(guildConfig.getCosmeticRoles().stream().map(RoleTypeObject::getRoleName).collect(Collectors.toList()));
-        Utility.listFormatterEmbed(title,builder,list,true);
-        builder.appendField(spacer, Utility.getCommandInfo(new CosmeticRoles(), command),false);
+        for (long l : command.guildConfig.getCosmeticRoleIDs()) {
+            IRole role = command.guild.getRoleByID(l);
+            list.add(role.getName());
+        }
+        Utility.listFormatterEmbed(title, builder, list, true);
+        builder.appendField(spacer, Utility.getCommandInfo(new CosmeticRoles(), command), false);
         builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
         Utility.sendEmbedMessage("", builder, command.channel);
         return null;

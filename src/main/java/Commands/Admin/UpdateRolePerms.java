@@ -3,7 +3,6 @@ package Commands.Admin;
 import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Utility;
-import Objects.RoleTypeObject;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
@@ -15,20 +14,19 @@ import java.util.List;
 /**
  * Created by Vaerys on 06/02/2017.
  */
-public class UpdateRolePerms implements Command
-{
+public class UpdateRolePerms implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        List<IRole> parentRole = Utility.getRolesByName(command.guild,args);
+        List<IRole> parentRole = Utility.getRolesByName(command.guild, args);
         EnumSet parentPerms = command.guild.getEveryoneRole().getPermissions();
         ArrayList<String> permList = new ArrayList<>();
-        IMessage workingMsg = Utility.sendMessage("`Working...`",command.channel).get();
-        if (parentRole.size() != 0){
+        IMessage workingMsg = Utility.sendMessage("`Working...`", command.channel).get();
+        if (parentRole.size() != 0) {
             parentPerms = parentRole.get(0).getPermissions();
         }
-        for (IRole r: command.guild.getRoles()){
-            for (RoleTypeObject to: command.guildConfig.getCosmeticRoles()){
-                if (r.getStringID().equals(to.getRoleID())){
+        for (IRole r : command.guild.getRoles()) {
+            for (long to : command.guildConfig.getCosmeticRoleIDs()) {
+                if (r.getLongID() == to) {
                     r.changePermissions(parentPerms);
                     try {
                         Thread.sleep(1000);
@@ -38,11 +36,11 @@ public class UpdateRolePerms implements Command
                 }
             }
         }
-        for (Object p : parentPerms.toArray()){
+        for (Object p : parentPerms.toArray()) {
             permList.add(p.toString());
         }
         Utility.deleteMessage(workingMsg);
-        return "> Cosmetic Roles Perms set to : " + Utility.listFormatter(permList,true);
+        return "> Cosmetic Roles Perms set to : " + Utility.listFormatter(permList, true);
     }
 
     @Override

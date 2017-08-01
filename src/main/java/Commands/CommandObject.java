@@ -1,6 +1,5 @@
 package Commands;
 
-import Enums.UserSetting;
 import Interfaces.ChannelSetting;
 import Interfaces.Command;
 import Interfaces.DMCommand;
@@ -17,6 +16,7 @@ import sx.blah.discord.handle.obj.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 
 /**
@@ -63,7 +63,6 @@ public class CommandObject {
 
 
     final static Logger logger = LoggerFactory.getLogger(CommandObject.class);
-
 
 
     public CommandObject(IMessage message) {
@@ -125,33 +124,7 @@ public class CommandObject {
         channelSettings = (ArrayList<ChannelSetting>) Globals.getChannelSettings().clone();
         guildToggles = (ArrayList<GuildToggle>) Globals.getGuildGuildToggles().clone();
 
-        logger.trace("Nodules:" + (" CC = " + guildConfig.moduleCC +
-                ", ROLES = " + guildConfig.moduleRoles +
-                ", COMP = " + guildConfig.moduleComp +
-                ", SERVERS = " + guildConfig.moduleServers +
-                ", CHARS = " + guildConfig.moduleChars +
-                ", ME = " + guildConfig.moduleMe +
-                ", MODMUTE = " + guildConfig.moduleModMute + ".").toUpperCase());
-        String testToggles = "";
-        for (GuildToggle g : guildToggles) {
-            testToggles += g.name() + ", ";
-        }
-        for (int i = 0; i < guildToggles.size(); i++) {
-            if (!guildToggles.get(i).get(guildConfig)) {
-                if (guildToggles.get(i).isModule()) {
-                    logger.trace(guildToggles.get(i).name() + " - " + guildToggles.get(i).get(guildConfig));
-                }
-                guildToggles.get(i).execute(this);
-            }
-        }
-        //well this works I guess.
-        for (GuildToggle t : toRemove) {
-            for (int i = 0; i < guildToggles.size(); i++) {
-                if (t.name().equalsIgnoreCase(guildToggles.get(i).name())) {
-                    guildToggles.remove(i);
-                }
-            }
-        }
+        checkToggles();
 
         dmCommands = Globals.getCommandsDM();
 
@@ -167,84 +140,100 @@ public class CommandObject {
 
     public CommandObject setAuthor(IUser author) {
         this.author = author;
-        authorSID = author.getStringID();
-        authorUserName = author.getName() + "#" + author.getDiscriminator();
-        authorDisplayName = author.getDisplayName(guild);
-        authorColour = Utility.getUsersColour(author, guild);
-        authorRoles = author.getRolesForGuild(guild);
-        notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't let you do that.";
+        validate();
+        init();
         return this;
     }
 
     public CommandObject setChannel(IChannel channel) {
         this.channel = channel;
-        channelSID = channel.getStringID();
+        validate();
+        init();
         return this;
     }
 
     public CommandObject setGuild(IGuild guild) {
         this.guild = guild;
-        guildSID = guild.getStringID();
-        GuildContentObject contentObject = Globals.getGuildContent(guildSID);
-        guildConfig = contentObject.getGuildConfig();
-        customCommands = contentObject.getCustomCommands();
-        servers = contentObject.getServers();
-        characters = contentObject.getCharacters();
-        competition = contentObject.getCompetition();
-        if (guild.getUserByID(authorSID) != null) {
-            authorColour = Utility.getUsersColour(author, guild);
-            authorRoles = author.getRolesForGuild(guild);
-            authorDisplayName = author.getDisplayName(guild);
-            notAllowed = "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't let you do that.";
-        }
+        validate();
+        init();
         return this;
     }
 
     public CommandObject setMessage(IMessage message) {
         this.message = message;
-        messageSID = message.getStringID();
+        validate();
+        init();
         return this;
     }
 
-    public void removeCommandsByType(String type) {
-        for (int i = 0; i < commands.size(); i++) {
-            if (commands.get(i).type().equalsIgnoreCase(type)) {
-                logger.trace(type + " - " + commands.get(i).names()[0] + " - removed");
-                commands.remove(i);
-                i--;
+    private void checkToggles() {
+        for (GuildToggle g : guildToggles) {
+            if (!g.get(guildConfig)) {
+                g.execute(this);
             }
         }
-        for (int i = 0; i < commandTypes.size(); i++) {
-            if (commandTypes.get(i).equalsIgnoreCase(type)) {
-                logger.trace("Type - " + commandTypes.get(i) + " - removed");
-                commandTypes.remove(i);
+
+        for (GuildToggle g : toRemove) {
+            ListIterator iterator = guildToggles.listIterator();
+            while (iterator.hasNext()) {
+                GuildToggle toggle = (GuildToggle) iterator.next();
+                if (toggle.name().equalsIgnoreCase(g.name())) {
+                    if (g.isModule()) {
+                        logger.trace("Module: " + g.name() + " removed.");
+                    } else {
+                        logger.trace("Toggle: " + g.name() + " removed.");
+                    }
+                    iterator.remove();
+                }
+            }
+        }
+    }
+
+    public void removeCommandsByType(String type) {
+        ListIterator iterator = commands.listIterator();
+        while (iterator.hasNext()) {
+            Command c = (Command) iterator.next();
+            if (c.type().equals(type)) {
+                logger.trace("Command: " + c.names()[0] + " removed.");
+                iterator.remove();
+            }
+        }
+        for (String s : commandTypes) {
+            if (s.equals(type)) {
+                logger.trace("Type: " + s + " removed.");
+                commandTypes.remove(s);
+                return;
             }
         }
     }
 
     public void removeChannel(String channel) {
-        for (int i = 0; i < channelSettings.size(); i++) {
-            if (channelSettings.get(i).type().equalsIgnoreCase(channel)) {
-                channelSettings.remove(i);
+        ListIterator iterator = channelSettings.listIterator();
+        while (iterator.hasNext()) {
+            ChannelSetting c = (ChannelSetting) iterator.next();
+            if (c.type().equals(channel)) {
+                iterator.remove();
+                logger.trace("Channel Setting: " + c.type() + " removed.");
             }
         }
     }
 
     public void removeCommand(String[] names) {
-        for (int i = 0; i < commands.size(); i++) {
-            if (commands.get(i).names()[0].equals(names[0])) {
-                commands.remove(i);
+        ListIterator iterator = commands.listIterator();
+        while (iterator.hasNext()) {
+            Command c = (Command) iterator.next();
+            if (c.names()[0].equals(names[0])) {
+                iterator.remove();
+                logger.trace("Command: " + c.names()[0] + " removed.");
             }
         }
     }
 
     public void removeToggle(String name) {
-        for (int i = 0; i < guildToggles.size(); i++) {
-            if (guildToggles.get(i).name().equals(name)) {
-                toRemove.add(guildToggles.get(i));
+        for (GuildToggle g : guildToggles) {
+            if (g.name().equalsIgnoreCase(name)) {
+                toRemove.add(g);
             }
         }
     }
-
-
 }

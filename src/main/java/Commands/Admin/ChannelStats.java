@@ -6,9 +6,7 @@ import Interfaces.Command;
 import Main.Globals;
 import Main.Utility;
 import Objects.ChannelSettingObject;
-import Objects.UserTypeObject;
 import Objects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;

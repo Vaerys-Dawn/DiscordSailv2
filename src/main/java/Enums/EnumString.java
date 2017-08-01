@@ -26,9 +26,9 @@ public class EnumString {
             case AUTO_SHITPOST:
                 return "AutoShitpost";
             case DENY_MAKE_CC:
-                return "DeniedCreateCC";
+                return "DenyMakeCC";
             case DENY_USE_CCS:
-                return "DeniedUseCCs";
+                return "DenyUseCCs";
             case HIT_LEVEL_FLOOR:
                 return "HitLevelFloor";
             default:

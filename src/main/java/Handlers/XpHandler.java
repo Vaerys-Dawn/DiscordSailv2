@@ -10,7 +10,12 @@ import Objects.GuildContentObject;
 import Objects.RewardRoleObject;
 import Objects.UserTypeObject;
 import POGOs.GuildUsers;
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiManager;
 import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -210,8 +215,14 @@ public class XpHandler {
         if (object.guildContent.getSpokenUsers().contains(object.authorID)) return;
 
         //messages that might be considered commands should be ignored.
-        if (object.message.getContent().startsWith(object.guildConfig.getPrefixCommand())) return;
-        if (object.message.getContent().startsWith(object.guildConfig.getPrefixCC())) return;
+        ArrayList<String> deniedPrefixes = (ArrayList<String>) object.guildConfig.getXPDeniedPrefixes().clone();
+        deniedPrefixes.add(object.guildConfig.getPrefixCommand());
+        deniedPrefixes.add(object.guildConfig.getPrefixCC());
+        for (String s: deniedPrefixes){
+            if (object.message.getContent().startsWith(s)){
+                return;
+            }
+        }
 
         //you must have typed at least 10 chars to gain xp
         if (object.message.getContent().length() < 10) return;
@@ -229,6 +240,7 @@ public class XpHandler {
     }
 
     private static void checkIfLevelUp(UserTypeObject user, CommandObject object) {
+        // TODO: 29/07/2017 comment the steps for this code
         boolean leveledUp;
         boolean rankedup = false;
         IMessage selfDestruct = null;
@@ -237,12 +249,41 @@ public class XpHandler {
             return;
         }
         if (xpToLevel(user.getXP()) >= user.getCurrentLevel() + 1) {
+            //react to message that leveled them up
+            if (object.guildConfig.reactToLevelUp) {
+                if (!object.guildConfig.getChannelIDsByType(Command.CHANNEL_LEVEL_UP_DENIED).contains(object.channelSID)) {
+                    IEmoji customEmoji = null;
+                    Emoji emoji = EmojiManager.getByUnicode(object.guildConfig.levelUpReaction);
+                    boolean foundEmoji = false;
+                    for (IGuild g : object.client.getGuilds()) {
+                        IEmoji test = g.getEmojiByName(object.guildConfig.levelUpReaction);
+                        if (!foundEmoji && test != null) {
+                            customEmoji = test;
+                            foundEmoji = true;
+                        }
+                    }
+                    try {
+                        if (emoji != null) {
+                            RequestBuffer.request(() -> object.message.addReaction(emoji));
+                        } else if (customEmoji != null) {
+                            IEmoji finalCustomEmoji = customEmoji;
+                            RequestBuffer.request(() -> object.message.addReaction(finalCustomEmoji));
+                        }
+                    } catch (DiscordException e) {
+                        //do nothing
+                    } catch (MissingPermissionsException e) {
+                        //also do nothing
+                    }
+                }
+            }
+
+            // level the user up
             user.setCurrentLevel(user.getCurrentLevel() + 1);
             UserSetting userOverride = user.getLevelState();
-            String levelUpMessage = object.guildConfig.levelUpMessage;
+            StringBuilder levelUpMessage = new StringBuilder(object.guildConfig.levelUpMessage);
 
-            levelUpMessage = levelUpMessage.replace("<level>", user.getCurrentLevel() + "");
-            levelUpMessage = levelUpMessage.replace("<user>", object.author.mention());
+            levelUpMessage = new StringBuilder(levelUpMessage.toString().replace("<level>", user.getCurrentLevel() + ""));
+            levelUpMessage = new StringBuilder(levelUpMessage.toString().replace("<user>", object.author.mention()));
             //adds a special message if a reward is added.
             for (RewardRoleObject r : object.guildConfig.getRewardRoles()) {
                 if (r.getLevel() == user.getCurrentLevel()) {
@@ -252,9 +293,9 @@ public class XpHandler {
                                 user.getSettings().remove(i);
                             }
                         }
-                        levelUpMessage = "Welcome Back.\n" + levelUpMessage + "\nYour **" + object.guild.getRoleByID(r.getRoleID()) + "** role has been returned to you.";
+                        levelUpMessage = new StringBuilder("Welcome Back.\n" + levelUpMessage + "\nYour **" + object.guild.getRoleByID(r.getRoleID()) + "** role has been returned to you.");
                     } else {
-                        levelUpMessage += "\nYou have been granted the **" + object.guild.getRoleByID(r.getRoleID()) + "** role for reaching this level.";
+                        levelUpMessage.append("\nYou have been granted the **" + object.guild.getRoleByID(r.getRoleID()) + "** role for reaching this level.");
                     }
                     rankedup = true;
                 }
@@ -274,7 +315,7 @@ public class XpHandler {
             }
             switch (userOverride) {
                 case SEND_LVLUP_CURRENT_CHANNEL:
-                    selfDestruct = Utility.sendMessage(levelUpMessage, object.channel).get();
+                    selfDestruct = Utility.sendMessage(levelUpMessage.toString(), object.channel).get();
                     break;
                 case SEND_LVLUP_RANK_CHANNEL:
                     IChannel channel = null;
@@ -284,22 +325,22 @@ public class XpHandler {
                     if (channel != null) {
                         if (channel.getModifiedPermissions(object.botUser).contains(Permissions.ATTACH_FILES)) {
                             if (rankedup) {
-                                Utility.sendFileURL(levelUpMessage, Constants.RANK_UP_IMAGE_URL, channel, false);
+                                Utility.sendFileURL(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, channel, false);
                             } else {
-                                Utility.sendFileURL(levelUpMessage, Constants.LEVEL_UP_IMAGE_URL, channel, false);
+                                Utility.sendFileURL(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, channel, false);
                             }
                         } else {
-                            Utility.sendMessage(levelUpMessage, channel).get();
+                            Utility.sendMessage(levelUpMessage.toString(), channel).get();
                         }
                     } else {
-                        selfDestruct = Utility.sendMessage(levelUpMessage, object.channel).get();
+                        selfDestruct = Utility.sendMessage(levelUpMessage.toString(), object.channel).get();
                     }
                     break;
                 case SEND_LVLUP_DMS:
                     if (rankedup) {
-                        Utility.sendFileURL(levelUpMessage, Constants.RANK_UP_IMAGE_URL, object.author.getOrCreatePMChannel(), false);
+                        Utility.sendFileURL(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.author.getOrCreatePMChannel(), false);
                     } else {
-                        Utility.sendFileURL(levelUpMessage, Constants.LEVEL_UP_IMAGE_URL, object.author.getOrCreatePMChannel(), false);
+                        Utility.sendFileURL(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.author.getOrCreatePMChannel(), false);
                     }
                     break;
                 case DONT_SEND_LVLUP:
@@ -315,7 +356,7 @@ public class XpHandler {
         if (leveledUp) {
             checkUsersRoles(user.getID(), object.guildContent);
         }
-        if (selfDestruct != null && !rankedup) {
+        if (object.guildConfig.selfDestructLevelUps && selfDestruct != null && !rankedup) {
             try {
                 //sef destruct messages after 1 min.
                 Thread.sleep(60 * 1000);
@@ -338,6 +379,7 @@ public class XpHandler {
         }
         if (user.getCurrentLevel() == nextReward.getLevel()) {
             user.setRewardID(nextReward.getRoleID());
+            Utility.roleManagement(object.author, object.guild, nextReward.getRoleID(), true);
         }
         return;
     }

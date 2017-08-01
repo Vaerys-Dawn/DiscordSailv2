@@ -1,13 +1,11 @@
 package POGOs;
 
 import Main.Constants;
-import Main.Globals;
 import Objects.DailyMessageObject;
 import Objects.RandomStatusObject;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by Vaerys on 14/01/2017.

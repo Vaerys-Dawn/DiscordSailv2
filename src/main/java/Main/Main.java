@@ -3,7 +3,6 @@ package Main;
 import Handlers.EventHandler;
 import Handlers.FileHandler;
 import Handlers.PatchHandler;
-import Handlers.WikiBuilder;
 import POGOs.Config;
 import POGOs.GlobalData;
 import org.slf4j.Logger;
@@ -31,6 +30,9 @@ public class Main {
     public static void main(String[] args) throws UnknownHostException {
         System.out.println("Starting Program...");
 
+        //important, do not move
+        PatchHandler.globalDataPatch();
+
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
@@ -38,8 +40,6 @@ public class Main {
                 Globals.saveFiles();
             }
         });
-
-
 
         String token;
         // you need to set a token in Token/Token.txt for the bot to run
@@ -81,10 +81,10 @@ public class Main {
             PatchHandler.globalPatches();
 
 
-
             //login + register listener.
             EventDispatcher dispatcher = client.getDispatcher();
             dispatcher.registerListener(new AnnotationListener());
+            dispatcher.registerTemporaryListener(new InitEvent());
             client.login();
 
             //Init Patch system.
@@ -93,15 +93,7 @@ public class Main {
             //timed events getSlashCommands
             new EventHandler();
 
-            while (!client.isReady()) ;
 
-            //makes sure that nothing in the config file will cause an error
-            Globals.validateConfig();
-            Globals.setVersion();
-            if (args.length > 0 && args[0].equals("-w")) {
-                WikiBuilder.handleCommandLists();
-            }
-            consoleInput();
         } catch (DiscordException ex) {
             logger.error(ex.getErrorMessage());
         } catch (RateLimitException e) {
@@ -109,21 +101,21 @@ public class Main {
         }
     }
 
-    private static void consoleInput() {
+    public static void consoleInput() {
         Scanner scanner = new Scanner(System.in);
-        while (!Globals.isReady) ;
         logger.info("Console input initiated.");
 
         while (scanner.hasNextLine()) {
-            while (Globals.consoleMessageCID == null) ;
-            IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
-            String message = scanner.nextLine();
-            message = message.replace("#Dawn#", Globals.getClient().getUserByID("153159020528533505").getName());
-            message = message.replace("teh", "the");
-            message = message.replace("Teh", "The");
+            if (Globals.consoleMessageCID != null) {
+                IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
+                String message = scanner.nextLine();
+                message = message.replace("#Dawn#", Globals.getClient().getUserByID(153159020528533505L).getName());
+                message = message.replace("teh", "the");
+                message = message.replace("Teh", "The");
 //            System.out.println(message);
-            if (!message.equals("")) {
-                Utility.sendMessage(message, channel);
+                if (!message.equals("")) {
+                    Utility.sendMessage(message, channel);
+                }
             }
         }
     }

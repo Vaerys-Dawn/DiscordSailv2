@@ -5,7 +5,6 @@ import Interfaces.Command;
 import Main.Constants;
 import Main.Utility;
 import Objects.CharacterObject;
-import Objects.RoleTypeObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IRole;
@@ -22,21 +21,19 @@ public class SelectChar implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        for (CharacterObject c : command.characters.getCharacters()) {
+        for (CharacterObject c : command.characters.getCharacters(command.guild)) {
             if (c.getName().equalsIgnoreCase(args)) {
                 if (c.getUserID().equals(command.authorSID)) {
                     List<IRole> userRoles = command.guild.getRolesForUser(command.author);
-                    int roleCount = 0;
-                    int postRoleCount = 0;
                     //resets User roles back to scratch.
                     for (int i = 0; i < userRoles.size(); i++) {
-                        if (command.guildConfig.isRoleCosmetic(userRoles.get(i).getStringID())) {
+                        if (command.guildConfig.isRoleCosmetic(userRoles.get(i).getLongID())) {
                             userRoles.remove(i);
                         }
                     }
                     //loads new roles.
-                    for (RoleTypeObject r : c.getRoles()) {
-                        userRoles.add(command.guild.getRoleByID(r.getRoleID()));
+                    for (long r : c.getRoleIDs()) {
+                        userRoles.add(command.guild.getRoleByID(r));
                     }
                     Utility.roleManagement(command.author, command.guild, userRoles);
                     Utility.updateUserNickName(command.author, command.guild, c.getNickname());

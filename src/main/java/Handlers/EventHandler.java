@@ -8,6 +8,7 @@ import Objects.*;
 import POGOs.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
@@ -21,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -32,7 +32,7 @@ public class EventHandler {
 
     public EventHandler() {
         ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
-        doEventSec();
+//        doEventSec();
         doEventTenSec();
         doEventMin();
         doEventFiveMin(nowUTC);
@@ -57,7 +57,7 @@ public class EventHandler {
     public static void sendReminder(ReminderObject object) {
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         long initialDelay = object.getExecuteTime() - now.toEpochSecond();
-        System.out.println(initialDelay + "");
+//        System.out.println(initialDelay + "");
         if (initialDelay < 0) {
             initialDelay = 5;
         }
@@ -107,6 +107,7 @@ public class EventHandler {
                 String dailyFileName = Globals.dailyAvatarName.replace("#day#", timeNow.getDayOfWeek().toString());
                 DayOfWeek day = timeNow.getDayOfWeek();
                 File avatarFile;
+                Random random = new Random();
 
                 logger.info("Running Daily tasks for " + day);
 
@@ -165,8 +166,7 @@ public class EventHandler {
                                         Utility.sendMessage("> Happy " + age + modifier + " Birthday Mum.", channel);
                                     } else {
                                         ArrayList<DailyUserMessageObject> dailyMessages = Globals.getGlobalData().getDailyMessages(day);
-                                        dailyMessages.add(new DailyUserMessageObject(d.getContents(), d.getDayOfWeek(), Globals.botName));
-                                        Random random = new Random();
+//                                        dailyMessages.add(new DailyUserMessageObject(d.getContents(), d.getDayOfWeek(), Globals.botName));
                                         Utility.sendMessage(dailyMessages.get(random.nextInt(dailyMessages.size())).getContents(), channel);
                                     }
                                 }
@@ -235,7 +235,11 @@ public class EventHandler {
     }
 
     private static void doEventFiveMin(ZonedDateTime nowUTC) {
-        while (!Globals.getClient().isReady()) ;
+        try {
+            Globals.client.getDispatcher().waitFor(ReadyEvent.class);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ZonedDateTime nextTimeUTC;
         long initialDelay;
         if (nowUTC.getMinute() != 59) {

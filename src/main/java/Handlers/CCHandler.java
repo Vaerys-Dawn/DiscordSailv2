@@ -1,12 +1,14 @@
 package Handlers;
 
 import Commands.CommandObject;
+import Enums.UserSetting;
 import Interfaces.ChannelSetting;
 import Interfaces.Command;
 import Main.Globals;
 import Main.TagSystem;
 import Main.Utility;
 import Objects.CCommandObject;
+import Objects.UserTypeObject;
 import POGOs.CustomCommands;
 import POGOs.GuildConfig;
 import org.apache.commons.lang3.StringUtils;
@@ -49,6 +51,11 @@ public class CCHandler {
     }
 
     private void handleCommand() {
+        UserTypeObject object = commandObject.guildUsers.getUserByID(author.getStringID());
+        if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
+            Utility.sendMessage("> Nothing interesting happens. `(ERROR: 401)`", channel);
+            return;
+        }
         String response;
         String prefixEmbedImage = "<embedImage>{";
         String tagDeleteMessage = "<delCall>";
@@ -106,7 +113,7 @@ public class CCHandler {
                         return;
                     }
                 }
-                response = TagSystem.tagSystem(response, message, args);
+                response = TagSystem.tagSystem(response, commandObject, args);
                 response = response.replace("<DELCALL>", "<delCall>");
                 response = response.replace("<EMBEDIMAGE>", "<embedImage>");
                 if (customCommands.checkblackList(response) != null) {

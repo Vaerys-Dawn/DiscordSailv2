@@ -17,18 +17,18 @@ public class CharacterObject {
     String name; //Character's Name
     String userID; //author's authorSID
     String nickname; //character's name;
-    ArrayList<RoleTypeObject> roles = new ArrayList<>(); // these are the cosmetic and modifier roles the author has;
+    ArrayList<Long> roleIDs = new ArrayList<>(); // these are the cosmetic and modifier roleIDs the author has;
     String gender = "N/a"; //limit = 20 chars.
     String age = "Unknown"; // limit = 20 chars.
     String shortBio = ""; //limit to 140 chars.
     String avatarURL = "";
     String longBioURL = ""; //URL link linking to Character Bios
 
-    public CharacterObject(String name, String userID, String nickname, ArrayList<RoleTypeObject> roles) {
+    public CharacterObject(String name, String userID, String nickname, ArrayList<Long> roleIDs) {
         this.name = name;
         this.userID = userID;
         this.nickname = nickname;
-        this.roles = roles;
+        this.roleIDs = roleIDs;
     }
 
     public void setLongBioURL(String longBioURL) {
@@ -63,8 +63,8 @@ public class CharacterObject {
         this.gender = gender;
     }
 
-    public void setRoles(ArrayList<RoleTypeObject> roles) {
-        this.roles = roles;
+    public void setRoleIDs(ArrayList<Long> roleIDs) {
+        this.roleIDs = roleIDs;
     }
 
     public void setAge(String age) {
@@ -79,8 +79,8 @@ public class CharacterObject {
         return name;
     }
 
-    public ArrayList<RoleTypeObject> getRoles() {
-        return roles;
+    public ArrayList<Long> getRoleIDs() {
+        return roleIDs;
     }
 
     public String getGender() {
@@ -97,6 +97,6 @@ public class CharacterObject {
 
     public void update(CharacterObject newCharacter) {
         this.nickname = newCharacter.getNickname();
-        this.roles = newCharacter.getRoles();
+        this.roleIDs = newCharacter.getRoleIDs();
     }
 }

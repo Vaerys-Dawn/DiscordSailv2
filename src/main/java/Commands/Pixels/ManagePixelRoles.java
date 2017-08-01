@@ -15,8 +15,7 @@ public class ManagePixelRoles implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject mode = new SplitFirstObject(args);
-        String roleID = Utility.getRoleIDFromName(mode.getRest(), command.guild);
-        IRole role = command.guild.getRoleByID(roleID);
+        IRole role = Utility.getRoleFromName(mode.getRest(), command.guild);
         if (role == null) {
             return "> **" + mode.getRest() + "** is not a valid Role name.";
         }

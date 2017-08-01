@@ -57,7 +57,7 @@ public class InfoCC implements Command {
 
     @Override
     public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+        return null;
     }
 
     @Override

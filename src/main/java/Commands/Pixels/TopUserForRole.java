@@ -1,7 +1,7 @@
 package Commands.Pixels;
 
 import Commands.CommandObject;
-import Enums.UserSetting;
+import Handlers.XpHandler;
 import Interfaces.Command;
 import Main.Utility;
 import Objects.UserTypeObject;
@@ -16,7 +16,7 @@ public class TopUserForRole implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        IRole role = command.guild.getRoleByID(Utility.getRoleIDFromName(args, command.guild));
+        IRole role = Utility.getRoleFromName(args, command.guild);
         if (role == null) {
             return "> Invalid Role.";
         }
@@ -31,14 +31,14 @@ public class TopUserForRole implements Command {
                     topUserObject = command.guildUsers.getUserByID(topUser.getStringID());
                     if (topUserObject == null) {
                         topUser = null;
-                    } else if (topUserObject.getSettings().contains(UserSetting.HIDE_RANK) || topUserObject.getSettings().contains(UserSetting.DONT_SHOW_LEADERBOARD)) {
+                    } else if (XpHandler.rank(command.guildUsers, command.guild, topUserObject.getID()) == -1) {
                         topUser = null;
                     }
                 } else {
                     userTypeObject = command.guildUsers.getUserByID(user.getStringID());
                     topUserObject = command.guildUsers.getUserByID(topUser.getStringID());
                     if (topUserObject != null && userTypeObject != null) {
-                        if (!userTypeObject.getSettings().contains(UserSetting.HIDE_RANK) || !userTypeObject.getSettings().contains(UserSetting.DONT_SHOW_LEADERBOARD)) {
+                        if (XpHandler.rank(command.guildUsers, command.guild, userTypeObject.getID()) != -1) {
                             if (topUserObject.getXP() < userTypeObject.getXP()) {
                                 topUser = user;
                             }

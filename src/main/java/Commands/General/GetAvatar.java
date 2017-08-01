@@ -2,6 +2,7 @@ package Commands.General;
 
 import Commands.CommandObject;
 import Interfaces.Command;
+import Main.Utility;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -10,13 +11,16 @@ import java.util.List;
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class GetAvatar implements Command{
+public class GetAvatar implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         List<IUser> mentions = command.message.getMentions();
         StringBuilder builder = new StringBuilder();
         for (IUser u : mentions) {
             builder.append(u.getDisplayName(command.guild) + ": " + u.getAvatarURL() + "\n");
+        }
+        if (builder.length() == 0 || builder.toString().isEmpty()) {
+            return Utility.getCommandInfo(this, command);
         }
         return builder.toString();
     }

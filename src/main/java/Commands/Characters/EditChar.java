@@ -26,7 +26,7 @@ public class EditChar implements Command {
             return "> Mode Not Specified";
         }
         SplitFirstObject mode = new SplitFirstObject(charName.getRest());
-        for (CharacterObject c : command.characters.getCharacters()) {
+        for (CharacterObject c : command.characters.getCharacters(command.guild)) {
             if (c.getName().equalsIgnoreCase(charName.getFirstWord())) {
                 if (c.getUserID().equals(command.authorSID) || Utility.canBypass(command.author, command.guild)) {
                     if (mode.getRest() == null || mode.getRest().isEmpty()) {

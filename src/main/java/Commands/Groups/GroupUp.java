@@ -33,23 +33,25 @@ public class GroupUp implements Command {
         ArrayList<String> completeList = new ArrayList<>();
         for (GroupUpObject g : list) {
             IUser user = command.client.getUserByID(g.getUserID());
-            IPresence userPres = user.getPresence();
-            if (!userPres.getStatus().equals(StatusType.DND) || !userPres.getStatus().equals(StatusType.OFFLINE) || !userPres.getStatus().equals(StatusType.UNKNOWN)) {
-                if (g.getPresence() != null || userPres.getPlayingText().isPresent()) {
-                    String newPres;
-                    if (g.getPresence() == null) {
-                        newPres = userPres.getPlayingText().get();
-                    }else {
-                        newPres = g.getPresence();
+            if (user != null) {
+                IPresence userPres = user.getPresence();
+                if (!userPres.getStatus().equals(StatusType.DND) && !userPres.getStatus().equals(StatusType.OFFLINE) && !userPres.getStatus().equals(StatusType.UNKNOWN)) {
+                    if (g.getPresence() != null || userPres.getPlayingText().isPresent()) {
+                        String newPres;
+                        if (g.getPresence() == null) {
+                            newPres = userPres.getPlayingText().get();
+                        } else {
+                            newPres = g.getPresence();
+                        }
+                        StringBuilder builder = new StringBuilder(newPres);
+                        if (builder.length() > 40) {
+                            builder.delete(0, 40);
+                            builder.append("...");
+                        }
+                        completeList.add(indent + user.mention() + " Playing: " + builder.toString());
+                    } else {
+                        completeList.add(indent + user.mention());
                     }
-                    StringBuilder builder = new StringBuilder(newPres);
-                    if (builder.length() > 40){
-                        builder.delete(0,40);
-                        builder.append("...");
-                    }
-                    completeList.add(indent + user.mention() + " Playing: " + builder.toString());
-                } else {
-                    completeList.add(indent + user.mention());
                 }
             }
         }

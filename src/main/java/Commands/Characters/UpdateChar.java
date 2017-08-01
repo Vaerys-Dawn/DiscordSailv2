@@ -3,7 +3,6 @@ package Commands.Characters;
 import Commands.CommandObject;
 import Interfaces.Command;
 import Objects.CharacterObject;
-import Objects.RoleTypeObject;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -15,20 +14,20 @@ import java.util.ArrayList;
 public class UpdateChar implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        ArrayList<RoleTypeObject> charRoles = new ArrayList<>();
+        ArrayList<Long> charRoles = new ArrayList<>();
         for (IRole r : command.authorRoles) {
-            for (RoleTypeObject ro : command.guildConfig.getCosmeticRoles()) {
-                if (r.getStringID().equals(ro.getRoleID())) {
+            for (long ro : command.guildConfig.getCosmeticRoleIDs()) {
+                if (r.getLongID() == ro) {
                     charRoles.add(ro);
                 }
             }
         }
-        return command.characters.updateChar(new CharacterObject(args.split(" ")[0], command.authorSID, command.authorDisplayName, charRoles));
+        return command.characters.updateChar(new CharacterObject(args.split(" ")[0], command.authorSID, command.authorDisplayName, charRoles),command.guild);
     }
 
     @Override
     public String[] names() {
-        return new String[]{"UpdateChar","NewChar"};
+        return new String[]{"UpdateChar", "NewChar"};
     }
 
     @Override

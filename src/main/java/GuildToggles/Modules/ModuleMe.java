@@ -5,6 +5,7 @@ import Commands.General.EditLinks;
 import Commands.General.SetGender;
 import Commands.General.SetQuote;
 import Commands.General.UserInfo;
+import GuildToggles.Toggles.UserInfoShowsDate;
 import Interfaces.GuildToggle;
 import POGOs.GuildConfig;
 
@@ -39,6 +40,7 @@ public class ModuleMe implements GuildToggle {
         command.removeCommand(new SetGender().names());
         command.removeCommand(new SetQuote().names());
         command.removeCommand(new EditLinks().names());
+        command.removeToggle(new UserInfoShowsDate().name());
     }
 
     @Override

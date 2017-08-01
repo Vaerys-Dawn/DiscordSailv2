@@ -13,7 +13,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Collections;
 
 /**
  * Created by Vaerys on 06/07/2017.

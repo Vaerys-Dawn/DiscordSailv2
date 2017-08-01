@@ -18,54 +18,54 @@ public class DMHandler {
 
     public DMHandler(IMessage message) {
         message.getTimestamp();
-        if (message.getAuthor().isBot()){
+        if (message.getAuthor().isBot()) {
             return;
         }
-        for (String blocked: Globals.getGlobalData().getBlockedFromDMS()){
-            if (message.getAuthor().getStringID().equals(blocked)){
-                Utility.sendDM("> You have been blocked from sending DMs to S.A.I.L by the Bot Creator.",blocked);
+        for (String blocked : Globals.getGlobalData().getBlockedFromDMS()) {
+            if (message.getAuthor().getStringID().equals(blocked)) {
+                Utility.sendDM("> You have been blocked from sending DMs to S.A.I.L by the Bot Creator.", blocked);
                 return;
             }
         }
         if (message.toString().startsWith(Globals.defaultPrefixCommand)) {
             DMCommandObject commandObject = new DMCommandObject(message);
             SplitFirstObject args = new SplitFirstObject(message.toString());
-            for (DMCommand command : Globals.getCommandsDM()){
-                for (String name : command.names()){
-                    if (args.getFirstWord().equalsIgnoreCase(Globals.defaultPrefixCommand + name)){
+            for (DMCommand command : Globals.getCommandsDM()) {
+                for (String name : command.names()) {
+                    if (args.getFirstWord().equalsIgnoreCase(Globals.defaultPrefixCommand + name)) {
                         //logging
-                        logger.debug(Utility.loggingFormatter(args.getFirstWord(),args.getRest(),commandObject));
+                        logger.debug(Utility.loggingFormatter(args.getFirstWord(), args.getRest(), commandObject));
 
-                        if (command.requiresArgs() && (args.getRest() == null || args.getRest().isEmpty())){
-                            Utility.sendDM("> Command Missing arguments.\n" + Utility.getCommandInfo(command),commandObject.authorID);
+                        if (command.requiresArgs() && (args.getRest() == null || args.getRest().isEmpty())) {
+                            Utility.sendDM("> Command Missing arguments.\n" + Utility.getCommandInfo(command), commandObject.authorID);
                             return;
                         }
-                        if (command.type().equals(DMCommand.TYPE_CREATOR)){
-                            if (commandObject.authorID.equals(Globals.creatorID)){
-                                Utility.sendDM(command.execute(args.getRest(),commandObject),commandObject.authorID);
+                        if (command.type().equals(DMCommand.TYPE_CREATOR)) {
+                            if (commandObject.authorID.equals(Globals.creatorID)) {
+                                Utility.sendDM(command.execute(args.getRest(), commandObject), commandObject.authorID);
                                 return;
-                            }else {
-                                Utility.sendDM(commandObject.notAllowed,commandObject.authorID);
+                            } else {
+                                Utility.sendDM(commandObject.notAllowed, commandObject.authorID);
                                 return;
                             }
-                        }else {
-                            Utility.sendDM(command.execute(args.getRest(),commandObject),commandObject.authorID);
+                        } else {
+                            Utility.sendDM(command.execute(args.getRest(), commandObject), commandObject.authorID);
                             return;
                         }
                     }
                 }
             }
-        }else if (!message.getAuthor().getStringID().equals(Globals.creatorID)){
+        } else if (!message.getAuthor().getStringID().equals(Globals.creatorID)) {
             String logging = "[" + message.getAuthor().getStringID() + "] " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + ": " + message.toString();
             logger.info(logging);
             Globals.lastDmUserID = message.getAuthor().getLongID();
-            if(message.getAttachments().size() > 0){
+            if (message.getAttachments().size() > 0) {
                 String attachmemts = "";
-                for (IMessage.Attachment a: message.getAttachments()){
-                    attachmemts += "\n" + a.getUrl();
+                for (IMessage.Attachment a : message.getAttachments()) {
+                    attachmemts = "\n" + a.getUrl();
                 }
                 Utility.sendDM(logging + attachmemts, Globals.creatorID);
-            }else {
+            } else {
                 Utility.sendDM(logging, Globals.creatorID);
             }
         }

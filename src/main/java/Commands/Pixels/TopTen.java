@@ -31,8 +31,8 @@ public class TopTen implements Command {
         for (UserTypeObject r : ranks) {
             IUser ranked = command.guild.getUserByID(r.getID());
             String rankPos = "**" + XpHandler.rank(command.guildUsers, command.guild, r.getID()) + "** - ";
-            String toFormat = ranked.getDisplayName(command.guild);
-            toFormat += "\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`";
+            StringBuilder toFormat = new StringBuilder(ranked.getDisplayName(command.guild));
+            toFormat.append("\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`");
             if (r.getID().equals(command.author.getStringID())) {
                 response.add(rankPos + spacer + "**" + toFormat + "**");
             } else {

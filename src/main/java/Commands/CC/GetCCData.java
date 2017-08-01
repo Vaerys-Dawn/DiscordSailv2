@@ -18,12 +18,12 @@ public class GetCCData implements Command {
     public String execute(String args, CommandObject command) {
         for (CCommandObject c : command.customCommands.getCommandList()) {
             if (c.getName().equalsIgnoreCase(args)) {
-                String content = "Command Name: \"" + c.getName() + "\"";
-                content += "\nCreated by: \"" + command.client.getUserByID(c.getUserID()).getDisplayName(command.guild) + "\"";
-                content += "\nTimes run: \"" + c.getTimesRun() + "\"";
-                content += "\nContents: \"" + c.getContents(false) + "\"";
+                StringBuilder content = new StringBuilder("Command Name: \"" + c.getName() + "\"");
+                content.append("\nCreated by: \"" + command.client.getUserByID(c.getUserID()).getDisplayName(command.guild) + "\"");
+                content.append("\nTimes run: \"" + c.getTimesRun() + "\"");
+                content.append("\nContents: \"" + c.getContents(false) + "\"");
                 String filePath = Constants.DIRECTORY_TEMP + command.messageSID + ".txt";
-                FileHandler.writeToFile(filePath, content,false);
+                FileHandler.writeToFile(filePath, content.toString(), false);
                 Utility.sendFile("> Here is the raw data for Custom Command: **" + c.getName() + "**", new File(filePath), command.channel);
                 try {
                     Thread.sleep(4000);

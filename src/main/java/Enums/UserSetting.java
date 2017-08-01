@@ -1,7 +1,5 @@
 package Enums;
 
-import java.util.ArrayList;
-
 /**
  * Created by Vaerys on 14/06/2017.
  */

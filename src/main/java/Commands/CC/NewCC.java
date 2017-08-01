@@ -1,9 +1,11 @@
 package Commands.CC;
 
 import Commands.CommandObject;
+import Enums.UserSetting;
 import Interfaces.Command;
 import Main.TagSystem;
 import Objects.SplitFirstObject;
+import Objects.UserTypeObject;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -14,6 +16,10 @@ import java.util.List;
 public class NewCC implements Command {
     @Override
     public String execute(String args, CommandObject command) {
+        UserTypeObject object = command.guildUsers.getUserByID(command.authorSID);
+        if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
+            return "> You have been denied the creation of custom commands.";
+        }
         boolean isShitpost = false;
         boolean isLocked = false;
         SplitFirstObject splitfirst = new SplitFirstObject(args);
@@ -26,12 +32,15 @@ public class NewCC implements Command {
                 }
             }
         }
+        if (object.getSettings().contains(UserSetting.AUTO_SHITPOST)) {
+            isShitpost = true;
+        }
         String nameCC = splitfirst.getFirstWord();
         if (splitfirst.getRest() == null || splitfirst.getRest().isEmpty()) {
-            return "> Custom command contents cannot be blank";
+            return "> Custom command contents cannot be blank.";
         }
         if (nameCC.contains("\n")) {
-            return "> Command name cannot contain Newlines";
+            return "> Command name cannot contain Newlines.";
         }
         String content = splitfirst.getRest();
         newContent = TagSystem.testForShit(content);

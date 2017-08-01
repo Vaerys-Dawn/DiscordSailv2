@@ -19,9 +19,9 @@ public class HelpDM implements DMCommand {
         XEmbedBuilder builder = new XEmbedBuilder();
         ArrayList<String> list = (ArrayList) Globals.getCommandsDM().stream().map(c -> Globals.defaultPrefixCommand + c.names()[0]).collect(Collectors.toList());
         Collections.sort(list);
-        String desc = "**> Direct Message Commands.**```"  + Utility.listFormatter(list,false) + "```\n";
-        desc += Utility.getCommandInfo(new InfoDM());
-        builder.withDescription(desc);
+        StringBuilder desc = new StringBuilder("**> Direct Message Commands.**```"  + Utility.listFormatter(list,false) + "```\n");
+        desc.append(Utility.getCommandInfo(new InfoDM()));
+        builder.withDescription(desc.toString());
         Utility.sendEmbedMessage("",builder,command.channel);
         return null;
     }

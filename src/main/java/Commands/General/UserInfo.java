@@ -10,8 +10,10 @@ import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +49,11 @@ public class UserInfo implements Command {
                 builder.withThumbnail(user.getAvatarURL());
 
                 //gets the age of the account.
-                long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - user.getCreationDate().atZone(ZoneOffset.UTC).toEpochSecond();
+                long nowUTC = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
+                ZonedDateTime creationDate = user.getCreationDate().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC);
+                long creationUTC = creationDate.toEpochSecond();
+
+                long difference = nowUTC - creationUTC;
 
                 //sets sidebar colour
                 builder.withColor(Utility.getUsersColour(user, command.guild));
@@ -63,9 +69,14 @@ public class UserInfo implements Command {
 
                 command.setAuthor(user);
 
-                String desc = "";
-                desc += "**Account Created: **" + Utility.formatTimeDifference(difference);
-                desc += "\n**Gender: **" + u.getGender();
+                DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+                StringBuilder desc = new StringBuilder();
+                if (command.guildConfig.userInfoShowsDate) {
+                    desc.append("**Account Created: **" + creationDate.format(formatter));
+                } else {
+                    desc.append("**Account Created: **" + Utility.formatTimeDifference(difference));
+                }
+                desc.append("\n**Gender: **" + u.getGender());
 
                 boolean showLevel = true;
                 boolean showCC = command.guildConfig.moduleCC;
@@ -75,19 +86,19 @@ public class UserInfo implements Command {
                 }
 
                 if (showCC && !showLevel) {
-                    desc += "\n**Custom Commands: **" + command.customCommands.getUserCommandCount(command);
+                    desc.append("\n**Custom Commands: **" + command.customCommands.getUserCommandCount(command));
                 } else if (showLevel && !showCC) {
-                    desc += "\n**Level: **" + XpHandler.xpToLevel(u.getXP());
-                } else if (showLevel && showCC){
-                    desc += "\n**Custom Commands: **" + command.customCommands.getUserCommandCount(command) +
-                            indent + indent + indent + "**Level: **" + XpHandler.xpToLevel(u.getXP());
+                    desc.append("\n**Level: **" + XpHandler.xpToLevel(u.getXP()));
+                } else if (showLevel && showCC) {
+                    desc.append("\n**Custom Commands: **" + command.customCommands.getUserCommandCount(command) +
+                            indent + indent + indent + "**Level: **" + XpHandler.xpToLevel(u.getXP()));
                 }
-                
-                desc += "\n**Roles: **" + Utility.listFormatter(roleNames, true);
-                desc += "\n\n*" + u.getQuote() + "*";
-                desc += "\n" + Utility.listFormatter(links, true);
 
-                builder.withDesc(desc);
+                desc.append("\n**Roles: **" + Utility.listFormatter(roleNames, true));
+                desc.append("\n\n*" + u.getQuote() + "*");
+                desc.append("\n" + Utility.listFormatter(links, true));
+
+                builder.withDesc(desc.toString());
                 builder.withFooterText("User ID: " + u.getID());
 
                 //sends Message
@@ -104,7 +115,7 @@ public class UserInfo implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"UserInfo", "Me"};
+        return new String[]{"Profile", "UserInfo", "Me"};
     }
 
     @Override

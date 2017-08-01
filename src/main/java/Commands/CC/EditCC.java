@@ -1,10 +1,12 @@
 package Commands.CC;
 
 import Commands.CommandObject;
+import Enums.UserSetting;
 import Interfaces.Command;
 import Main.Utility;
 import Objects.CCommandObject;
 import Objects.SplitFirstObject;
+import Objects.UserTypeObject;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -23,6 +25,10 @@ public class EditCC implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        UserTypeObject object = command.guildUsers.getUserByID(command.authorSID);
+        if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)){
+            return "> You have been denied the modification of custom commands.";
+        }
         SplitFirstObject getName = new SplitFirstObject(args);
         if (getName.getRest() == null) {
             return Utility.getCommandInfo(this, command);

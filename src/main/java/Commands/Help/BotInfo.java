@@ -14,16 +14,16 @@ public class BotInfo implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder();
-        String response = "";
+        StringBuilder response = new StringBuilder();
         IUser creator = command.client.getUserByID(Globals.creatorID);
         builder.withTitle("Information about " + Globals.botName);
-        response += "Created by: **@" + creator.getName() + "#" + creator.getDiscriminator() + "**.";
-        response += "\nCreated entirely using Java 8 and the **[Discord4J Libraries](https://discord4j.com/)**.";
-        response += "\nSupport Sail on **[Patreon](https://www.patreon.com/DawnFelstar)**.";
-        response += "\nFind Sail on **[GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)**.";
-        response += "\nBot's Support Discord: **https://discord.gg/XSyQQrR**.";
+        response.append("Created by: **@" + creator.getName() + "#" + creator.getDiscriminator() + "**.");
+        response.append("\nCreated entirely using Java 8 and the **[Discord4J Libraries](https://discord4j.com/)**.");
+        response.append("\nSupport Sail on **[Patreon](https://www.patreon.com/DawnFelstar)**.");
+        response.append("\nFind Sail on **[GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)**.");
+        response.append("\nBot's Support Discord: **https://discord.gg/XSyQQrR**.");
         builder.withColor(Utility.getUsersColour(command.botUser, command.guild));
-        builder.withDesc(response);
+        builder.withDesc(response.toString());
         builder.withThumbnail(command.botUser.getAvatarURL());
         builder.withFooterText("Bot Version: " + Globals.version);
         Utility.sendEmbedMessage("", builder, command.channel);

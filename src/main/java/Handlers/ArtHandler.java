@@ -74,7 +74,9 @@ public class ArtHandler {
             for (IMessage msg : command.channel.getPinnedMessages()) {
                 if (pinnedMessages.get(0) == msg.getLongID()) {
                     unPin(msg, command);
-                    pinnedMessages.remove(0);
+                    if (!msg.isPinned()) {
+                        pinnedMessages.remove(0);
+                    }
                 }
             }
         }
@@ -86,9 +88,8 @@ public class ArtHandler {
     }
 
     private void unPin(IMessage message, CommandObject command) {
-        RequestBuffer.request(() -> command.channel.unpin(message));
         if (message.isPinned()) {
-            unPin(message, command);
+            RequestBuffer.request(() -> command.channel.unpin(message));
         }
     }
 

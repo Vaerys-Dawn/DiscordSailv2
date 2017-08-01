@@ -5,10 +5,10 @@ import Main.Globals;
 import Main.Utility;
 import Objects.*;
 import OldCode.ChannelData;
-import POGOs.Config;
+import OldCode.*;
+import POGOs.*;
 import POGOs.CustomCommands;
-import POGOs.GuildConfig;
-import POGOs.GuildUsers;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
@@ -16,6 +16,7 @@ import sx.blah.discord.handle.obj.IGuild;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +36,10 @@ public class PatchHandler {
             Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_3));
         if (!patchesFound.contains(Constants.PATCH_4))
             Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_4));
+        if (!patchesFound.contains(Constants.PATCH_5))
+            Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_5));
+//        if (!patchesFound.contains(Constants.PATCH_6))
+//            Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_6));
 
         ArrayList<PatchObject> patches = Globals.getGlobalData().getPatches();
 
@@ -90,7 +95,7 @@ public class PatchHandler {
 
 
                 List<String> contents = FileHandler.readFromFile(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO));
-                String content = "";
+                StringBuilder content = new StringBuilder();
                 for (String c : contents) {
                     c = c.replace("#displayName#", "<displayName>");
                     c = c.replace("#channel#", "<channel>");
@@ -98,11 +103,11 @@ public class PatchHandler {
                     c = c.replace("#!break#", "<!break>");
                     c = c.replace("#image#", "<image>");
                     c = c.replace("#split#", "<split>");
-                    content += c + "\n";
+                    content.append(c + "\n");
                 }
                 File newFile = new File(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO + "x"));
                 File oldFile = new File(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO));
-                FileHandler.writeToFile(newFile.getPath(), content, false);
+                FileHandler.writeToFile(newFile.getPath(), content.toString(), false);
                 oldFile.delete();
                 newFile.renameTo(oldFile);
 
@@ -119,6 +124,56 @@ public class PatchHandler {
                 FileHandler.writeToJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_GUILD_USERS), guildUsers);
                 p.getPatchedGuildIDs().add(guild.getStringID());
             }
+            if (!exit && p.getPatchLevel().equalsIgnoreCase(Constants.PATCH_5)) {
+                OldGuildConfig oldGuildConfig = (OldGuildConfig) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, OldGuildConfig.class);
+                GuildConfig guildConfig = (GuildConfig) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, GuildConfig.class);
+                OldCharacters oldCharacters = (OldCharacters) Utility.initFile(guild.getStringID(), Constants.FILE_CHARACTERS, OldCharacters.class);
+                Characters characters = (Characters) Utility.initFile(guild.getStringID(), Constants.FILE_CHARACTERS, Characters.class);
+                for (RoleTypeObject r : oldGuildConfig.getCosmeticRoles()) {
+                    guildConfig.getCosmeticRoleIDs().add(Long.parseLong(r.getRoleID()));
+                }
+                for (RoleTypeObject r : oldGuildConfig.getModifierRoles()) {
+                    guildConfig.getModifierRoleIDs().add(Long.parseLong(r.getRoleID()));
+                }
+                for (RoleTypeObject r : oldGuildConfig.getTrustedRoles()) {
+                    guildConfig.getTrustedRoleIDs().add(Long.parseLong(r.getRoleID()));
+                }
+                try {
+
+                    long newRoleToMention = Long.parseLong(oldGuildConfig.getRoleToMention().getRoleID());
+
+                    guildConfig.setRoleToMentionID(newRoleToMention);
+                } catch (NumberFormatException e) {
+                    logger.info("Could not find valid role to mention role");
+                }
+                try {
+                    long newMutedRole = Long.parseLong(oldGuildConfig.getMutedRole().getRoleID());
+                    guildConfig.setMutedRoleID(newMutedRole);
+                } catch (NumberFormatException e) {
+                    logger.info("Could not find valid mute role");
+                }
+                for (OldCharacterObject oldChar : oldCharacters.getCharacters()) {
+                    for (CharacterObject newChar : characters.getCharacters(null)) {
+                        if (oldChar.getName().equalsIgnoreCase(newChar.getName())) {
+                            ArrayList<Long> roleIDs = new ArrayList<>();
+                            for (RoleTypeObject r : oldChar.getRoles()) {
+                                roleIDs.add(Long.parseLong(r.getRoleID()));
+                            }
+                            newChar.setRoleIDs(roleIDs);
+                        }
+                    }
+                }
+                Utility.flushFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, guildConfig, true);
+                Utility.flushFile(guild.getStringID(), Constants.FILE_CHARACTERS, characters, true);
+                p.getPatchedGuildIDs().add(guild.getStringID());
+            }
+//            if (!exit && p.getPatchLevel().equalsIgnoreCase(Constants.PATCH_6)) {
+//                GuildConfig guildConfig = (GuildConfig) FileHandler.readFromJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_GUILD_CONFIG, true) + "1", GuildConfig.class);
+//                Utility.flushFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, guildConfig, true);
+//                Characters characters = (Characters) FileHandler.readFromJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_CHARACTERS, true) + "1", Characters.class);
+//                Utility.flushFile(guild.getStringID(), Constants.FILE_CHARACTERS, characters, true);
+//                p.getPatchedGuildIDs().add(guild.getStringID());
+//            }
         }
     }
 
@@ -128,11 +183,11 @@ public class PatchHandler {
             //fix daily messages
             Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
             for (DailyMessageObject d : Globals.dailyMessages) {
-                String content = "";
+                StringBuilder content = new StringBuilder();
                 for (String s : d.getData()) {
-                    content += s.replace("#random#", "<random>") + "\n";
+                    content.append(s.replace("#random#", "<random>") + "\n");
                 }
-                d.setContents(content);
+                d.setContents(content.toString());
             }
             config.setDailyMessages(Globals.dailyMessages);
             FileHandler.writeToJson(Constants.FILE_CONFIG, config);
@@ -145,8 +200,34 @@ public class PatchHandler {
             FileHandler.writeToJson(Constants.FILE_CONFIG, config);
             Globals.getGlobalData().getGlobalPatches().add(Constants.PATCH_GLOBAL_2);
             logger.info("Reloading Globals...");
-            Globals.initConfig(Globals.client,config,Globals.getGlobalData());
+            Globals.initConfig(Globals.client, config, Globals.getGlobalData());
         }
+    }
+
+    public static void globalDataPatch() {
+        OldGlobalData oldData = (OldGlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, OldGlobalData.class);
+        GlobalData globalData = (GlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, GlobalData.class);
+        for (OldUserDailyMessageObject o : oldData.getObjects()) {
+            try {
+                String substring = StringUtils.substringBetween(o.getAuthor().split(" ")[0], "[", "]");
+                long userID = Long.parseLong(substring);
+                long uID = Utility.newDailyMsgUID(globalData);
+                globalData.getDailyMessages().add(new DailyUserMessageObject(o.getContent(), o.getDay(), userID, uID));
+            } catch (NumberFormatException e) {
+                //Skip this one.
+            }
+        }
+        globalData.getQueuedRequests().clear();
+        ListIterator iterator = globalData.getPatches().listIterator();
+        while (iterator.hasNext()) {
+            PatchObject object = (PatchObject) iterator.next();
+            if (object.getPatchLevel() != null) {
+                if (object.getPatchLevel().equalsIgnoreCase("SAVE_MY_BABY")) {
+                    iterator.remove();
+                }
+            }
+        }
+        FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, globalData);
     }
 
     private static String toNewSystem(String from) {

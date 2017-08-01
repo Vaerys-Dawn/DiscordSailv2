@@ -9,13 +9,16 @@ import java.time.DayOfWeek;
  */
 public class DailyUserMessageObject {
     String author;
+    long userID = -1;
     String content;
     DayOfWeek day;
+    long uID = -1;
 
-    public DailyUserMessageObject(String description, DayOfWeek day, String name) {
+    public DailyUserMessageObject(String description, DayOfWeek day, long userID, long uID) {
         this.content = description;
         this.day = day;
-        this.author = name;
+        this.userID = userID;
+        this.uID = uID;
     }
 
     public DayOfWeek getDay() {
@@ -24,5 +27,17 @@ public class DailyUserMessageObject {
 
     public String getContents() {
         return TagSystem.tagRandom(TagSystem.tagSpacer(TagSystem.tagNoNL(TagSystem.tagMentionRemover(content))));
+    }
+
+    public long getUID() {
+        return uID;
+    }
+
+    public void setContents(String contents) {
+        this.content = contents;
+    }
+
+    public long getUserID() {
+        return userID;
     }
 }

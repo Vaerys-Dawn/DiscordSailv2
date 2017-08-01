@@ -16,7 +16,7 @@ public class Mute implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject userCall = new SplitFirstObject(args);
-        IRole mutedRole = command.client.getRoleByID(command.guildConfig.getMutedRole().getRoleID());
+        IRole mutedRole = command.client.getRoleByID(command.guildConfig.getMutedRoleID());
         if (mutedRole == null) {
             return "> Cannot Mute/UnMute user. No mute role exists.";
         }

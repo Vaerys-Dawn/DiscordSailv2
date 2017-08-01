@@ -3,8 +3,6 @@ package Main;
 import ChannelSettings.InitChannels;
 import Commands.Admin.ChannelHere;
 import Commands.CommandInit;
-import Commands.General.NewDailyMessage;
-import Enums.UserSetting;
 import GuildToggles.ToggleInit;
 import Handlers.FileHandler;
 import Interfaces.*;
@@ -15,7 +13,6 @@ import POGOs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -24,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
 import java.util.Properties;
 
@@ -60,6 +58,7 @@ public class Globals {
     private static ArrayList<GuildToggle> guildGuildToggles = new ArrayList<>();
     private static ArrayList<SlashCommand> slashCommands = new ArrayList<>();
     private static ArrayList<RandomStatusObject> randomStatuses = new ArrayList<>();
+    private static List<String> blacklistedURls;
 
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
@@ -92,6 +91,7 @@ public class Globals {
         showSaveWarning = config.showSaveWarning;
         randomStatuses = config.randomStatuses;
         queueChannelID = config.queueChannelID;
+        blacklistedURls = FileHandler.readFromFile("website.blacklist");
         initCommands();
     }
 
@@ -342,5 +342,9 @@ public class Globals {
 
     public static ArrayList<RandomStatusObject> getRandomStatuses() {
         return randomStatuses;
+    }
+
+    public static List<String> getBlacklistedURls() {
+        return blacklistedURls;
     }
 }

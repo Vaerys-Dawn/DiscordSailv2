@@ -1,6 +1,5 @@
 package POGOs;
 
-import Main.Constants;
 import Main.Globals;
 import Main.Utility;
 import Objects.BlackListObject;
@@ -153,12 +152,12 @@ public class Servers {
     public String getServer(String serverName, IGuild guild) {
         for (ServerObject s : servers) {
             if (s.getName().equalsIgnoreCase(serverName)) {
-                String builder = "";
-                builder += "> **" + s.getName() + "**\n";
-                builder += Constants.PREFIX_INDENT + "IP: **" + s.getServerIP() + "** Port: **" + s.getServerPort() + "**\n";
-                builder += Constants.PREFIX_INDENT + "Listing Creator: " + guild.getUserByID(s.getCreatorID()).getDisplayName(guild) + "\n";
-                builder += s.getServerDesc();
-                return builder;
+                StringBuilder builder = new StringBuilder();
+                builder.append("**" + s.getName() + "**\n");
+                builder.append("**IP:** " + s.getServerIP() + " **Port:** " + s.getServerPort() + "\n");
+                builder.append("**Listing Creator:** " + guild.getUserByID(s.getCreatorID()).getDisplayName(guild) + "\n");
+                builder.append(s.getServerDesc());
+                return builder.toString();
             }
         }
         return "> Server with that name not found.";

@@ -11,7 +11,6 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 29/01/2017.
@@ -69,12 +68,6 @@ public class Help implements Command {
             builder.append(codeBlock + "\n");
             builder.append(Utility.listFormatter(types, false));
             builder.append(codeBlock + "\n");
-//            String desc = "[Suport Sail on Patreon](https://www.patreon.com/DawnFelstar)\n" +
-//                    "[Find Sail on GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)";
-//            if (!command.guildSID.equals("206792432560373761")) {
-//                desc += "\nSupport Discord - https://discord.gg/XSyQQrR";
-//            }
-
             helpEmbed.withTitle("Here are the Command Types I have available for use:");
             builder.append(Utility.getCommandInfo(this, command) + "\n");
             helpEmbed.withDescription(builder.toString());

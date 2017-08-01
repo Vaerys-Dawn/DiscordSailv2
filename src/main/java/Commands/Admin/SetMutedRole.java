@@ -4,7 +4,7 @@ import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Constants;
 import Main.Utility;
-import Objects.RoleTypeObject;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -13,16 +13,16 @@ import sx.blah.discord.handle.obj.Permissions;
 public class SetMutedRole implements Command{
     @Override
     public String execute(String args, CommandObject command) {
-        if (args.equalsIgnoreCase("Remove")){
-            command.guildConfig.setMutedRole(new RoleTypeObject("NoRoleSetUp","null"));
+        if (args.equalsIgnoreCase("Remove")) {
+            command.guildConfig.setRoleToMentionID(-1);
             return "> Muted Role Removed.";
         }
-        String roleID = Utility.getRoleIDFromName(args, command.guild);
-        if (roleID == null) {
+        IRole role = Utility.getRoleFromName(args, command.guild);
+        if (role == null) {
             return Constants.ERROR_ROLE_NOT_FOUND;
         } else {
-            command.guildConfig.setMutedRole(new RoleTypeObject(command.guild.getRoleByID(roleID).getName(), roleID));
-            return "> Role: " + command.guild.getRoleByID(roleID).getName() + " Has been set as the Muted Role.";
+            command.guildConfig.setMutedRoleID(role.getLongID());
+            return "> The role **" + role.getName() + "** Is now set as the mute role.";
         }
     }
 

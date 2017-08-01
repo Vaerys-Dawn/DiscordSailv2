@@ -4,7 +4,6 @@ import Commands.CommandObject;
 import Interfaces.Command;
 import Main.Utility;
 import Objects.CharacterObject;
-import Objects.RoleTypeObject;
 import Objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
@@ -17,17 +16,17 @@ import java.util.ArrayList;
 public class CharInfo implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        for (CharacterObject object : command.characters.getCharacters()) {
+        for (CharacterObject object : command.characters.getCharacters(command.guild)) {
             if (object.getName().equalsIgnoreCase(args)) {
                 XEmbedBuilder builder = new XEmbedBuilder();
                 builder.withTitle(object.getNickname());
 
                 ArrayList<IRole> roles = new ArrayList<>();
                 ArrayList<String> roleNames = new ArrayList<>();
-                for (RoleTypeObject role : object.getRoles()) {
-                    if (command.client.getRoleByID(role.getRoleID()) != null) {
-                        roles.add(command.client.getRoleByID(role.getRoleID()));
-                        roleNames.add(command.client.getRoleByID(role.getRoleID()).getName());
+                for (Long roleId : object.getRoleIDs()) {
+                    if (command.client.getRoleByID(roleId) != null) {
+                        roles.add(command.client.getRoleByID(roleId));
+                        roleNames.add(command.client.getRoleByID(roleId).getName());
                     }
                 }
                 if (roles.size() != 0) {
@@ -36,21 +35,21 @@ public class CharInfo implements Command {
                     builder.withColor(Utility.getUsersColour(command.client.getOurUser(), command.guild));
                 }
 
-                String description = "";
-                description += "**Age:** " + object.getAge();
-                description += "\n**Gender:** " + object.getGender();
+                StringBuilder description = new StringBuilder();
+                description.append("**Age:** " + object.getAge());
+                description.append("\n**Gender:** " + object.getGender());
                 if (roleNames.size() != 0) {
                     if (command.characters.getRolePrefix() != null && !command.characters.getRolePrefix().isEmpty()) {
-                        description += "\n" + command.characters.getRolePrefix() + " " + Utility.listFormatter(roleNames, true);
+                        description.append("\n" + command.characters.getRolePrefix() + " " + Utility.listFormatter(roleNames, true));
                     } else {
-                        description += "\n" + Utility.listFormatter(roleNames, true);
+                        description.append("\n" + Utility.listFormatter(roleNames, true));
                     }
                 }
-                description += "\n**Bio:** " + object.getShortBio();
+                description.append("\n**Bio:** " + object.getShortBio());
                 if (object.getLongBioURL() != null && !object.getLongBioURL().isEmpty()) {
-                    description += "\n\n**[Long Description Link...](" + object.getLongBioURL() + ")**";
+                    description.append("\n\n**[Long Description Link...](" + object.getLongBioURL() + ")**");
                 }
-                builder.withDesc(description);
+                builder.withDesc(description.toString());
                 if (object.getAvatarURL() != null && !object.getAvatarURL().isEmpty()) {
                     if (object.getAvatarURL().contains("\n") || object.getAvatarURL().contains(" ")) {
                         return "> An Error Occurred. Avatar url needs to be reset.";

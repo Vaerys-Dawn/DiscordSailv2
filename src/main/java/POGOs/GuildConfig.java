@@ -3,13 +3,17 @@ package POGOs;
 import Enums.UserSetting;
 import Main.Globals;
 import Main.Utility;
-import Objects.*;
+import Objects.BlackListObject;
+import Objects.ChannelSettingObject;
+import Objects.OffenderObject;
+import Objects.RewardRoleObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 03/08/2016.
@@ -19,6 +23,7 @@ public class GuildConfig {
     String prefixCC = Globals.defaultPrefixCC;
     boolean properlyInit = false;
     String guildName = "";
+    long guildID = -1;
     //toggles
     //--Auto Tasks
     public boolean dailyMessage = true;
@@ -27,6 +32,8 @@ public class GuildConfig {
     public boolean xpDecay = false;
     public boolean xpGain = false;
     public boolean joinsServerMessages = false;
+    public boolean selfDestructLevelUps = true;
+    public boolean reactToLevelUp = false;
     //--Logging
     public boolean generalLogging = false;
     public boolean adminLogging = false;
@@ -46,6 +53,7 @@ public class GuildConfig {
     public boolean rateLimiting = false;
     public boolean slashCommands = false;
     public boolean roleIsToggle = false;
+    public boolean userInfoShowsDate = false;
     //--Competition
     public boolean compEntries = false;
     public boolean compVoting = false;
@@ -59,30 +67,33 @@ public class GuildConfig {
     public boolean moduleModMute = false;
     public boolean moduleGroups = false;
     public boolean modulePixels = false;
+
     public int maxMentionLimit = 8;
     public int messageLimit = 10;
-    public long xpDeniedRoleID = -1;
-    public long topTenRoleID = -1;
-
-    public UserSetting defaultLevelMode = UserSetting.SEND_LVLUP_RANK_CHANNEL;
-
     public int xpRate = 20;
     public float xpModifier = 1;
 
+    public long xpDeniedRoleID = -1;
+    public long topTenRoleID = -1;
+    long roleToMentionID = -1;
+    long mutedRoleID = -1;
+
+    public UserSetting defaultLevelMode = UserSetting.SEND_LVLUP_RANK_CHANNEL;
+
+
+    public String levelUpReaction = "null";
     public String levelUpMessage = "Ding. Gratz on level <level> <user>.";
+    private String joinMessage = "> Welcome to the <server> server <user>.";
+    private ArrayList<String> XPDeniedPrefixes = new ArrayList<>();
 
     // TODO: 04/10/2016 let the mention limit be customisable.
-//    ArrayList<ChannelTypeObject> channels = new ArrayList<>();
     ArrayList<ChannelSettingObject> channelSettings = new ArrayList<>();
-    ArrayList<RoleTypeObject> cosmeticRoles = new ArrayList<>();
-    ArrayList<RoleTypeObject> modifierRoles = new ArrayList<>();
-    ArrayList<RoleTypeObject> trustedRoles = new ArrayList<>();
-    ArrayList<BlackListObject> blackList = new ArrayList<>();
-    ArrayList<OffenderObject> repeatOffenders = new ArrayList<>();
+    ArrayList<Long> cosmeticRoleIDs = new ArrayList<>();
+    ArrayList<Long> modifierRoleIDs = new ArrayList<>();
+    ArrayList<Long> trustedRoleIDs = new ArrayList<>();
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
-    RoleTypeObject roleToMention = new RoleTypeObject("No Role Set", null);
-    RoleTypeObject mutedRole = new RoleTypeObject("No Role Set", null);
-    private String joinMessage = "> Welcome to the <server> server <user>.";
+    ArrayList<OffenderObject> repeatOffenders = new ArrayList<>();
+
 
     public ArrayList<RewardRoleObject> getRewardRoles() {
         return rewardRoles;
@@ -117,17 +128,7 @@ public class GuildConfig {
     }
 
     public void initConfig() {
-        for (BlackListObject b : blackList) {
-            if (b.getReason().contains("**invites**")) {
-                blackList.clear();
-                blackList.add(new BlackListObject("discord.gg", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
-                blackList.add(new BlackListObject("discordapp.com/Invite/", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
-            }
-        }
-        if (!properlyInit) {
-            blackList.add(new BlackListObject("discord.gg", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
-            blackList.add(new BlackListObject("discordapp.com/Invite/", "#user# Please do not post Instant Invites To this Server.\n#mentionaAdmin#"));
-        }
+        //lol why is this here again??
     }
 
     public void setGuildName(String guildName) {
@@ -154,47 +155,11 @@ public class GuildConfig {
     public void updateVariables(IGuild guild) {
         //update Guild Name
         setGuildName(guild.getName());
+        guildID = guild.getLongID();
 
-        //Update Races
-        ArrayList<RoleTypeObject> newRaces = new ArrayList<>();
-        for (RoleTypeObject r : cosmeticRoles) {
-            if (guild.getRoleByID(r.getRoleID()) != null) {
-                r.updateRoleName(guild.getRoleByID(r.getRoleID()).getName());
-                newRaces.add(r);
-            }
-        }
-        cosmeticRoles = newRaces;
-
-        //Update Trusted Roles
-        ArrayList<RoleTypeObject> newTrustedRoles = new ArrayList<>();
-        for (RoleTypeObject r : trustedRoles) {
-            if (guild.getRoleByID(r.getRoleID()) != null) {
-                r.updateRoleName(guild.getRoleByID(r.getRoleID()).getName());
-                newTrustedRoles.add(r);
-            }
-        }
-        trustedRoles = newTrustedRoles;
-
-        //Update Role to Mention
-        if (roleToMention.getRoleID() != null) {
-            if (guild.getRoleByID(roleToMention.getRoleID()) == null) {
-                roleToMention = new RoleTypeObject("Role Missing", null);
-            } else {
-                roleToMention.updateRoleName(guild.getRoleByID(roleToMention.getRoleID()).getName());
-            }
-        }
-
-        //update Muted Role
-        if (mutedRole.getRoleID() != null) {
-            if (guild.getRoleByID(mutedRole.getRoleID()) == null) {
-                mutedRole = new RoleTypeObject("Role Missing", null);
-            } else {
-                mutedRole.updateRoleName(guild.getRoleByID(mutedRole.getRoleID()).getName());
-            }
-        }
+        validateRoles();
 
         //update repeat offenders.
-        ArrayList<OffenderObject> newMentionSpammers = new ArrayList<>();
         for (int i = 0; i < repeatOffenders.size(); i++) {
             IUser offender = Globals.getClient().getUserByID(repeatOffenders.get(i).getID());
             if (offender != null) {
@@ -204,125 +169,94 @@ public class GuildConfig {
 
         //update channels
         for (ChannelSettingObject c : channelSettings) {
-            ArrayList<String> toRemove = new ArrayList<>();
-            for (String id : c.getChannelIDs()) {
-                IChannel channel = Globals.getClient().getChannelByID(id);
+            ListIterator iterator = c.getChannelIDs().listIterator();
+            while (iterator.hasNext()) {
+                IChannel channel = guild.getChannelByID((String) iterator.next());
                 if (channel == null) {
-                    toRemove.add(id);
-                }
-            }
-            for (String removing : toRemove) {
-                for (int i = 0; i < c.getChannelIDs().size(); i++) {
-                    if (removing.equals(c.getChannelIDs().get(i))) {
-                        c.getChannelIDs().remove(i);
-                    }
+                    iterator.remove();
                 }
             }
         }
-        repeatOffenders = newMentionSpammers;
+
     }
 
-    public ArrayList<BlackListObject> getBlackList() {
-        return blackList;
+    public void setRoleToMentionID(long roleID) {
+        validateRoles();
+        roleToMentionID = roleID;
     }
 
-    public String setRoleToMention(String roleName, String roleID) {
-        roleToMention = new RoleTypeObject(roleName, roleID);
-        return "> the Role `" + roleName + "` will now be mentioned when the tag #admin# is called within the blacklisting process.";
+    public long getRoleToMentionID() {
+        validateRoles();
+        return roleToMentionID;
     }
 
-    public RoleTypeObject getRoleToMention() {
-        return roleToMention;
-    }
-
-    public String addRole(String roleID, String roleName, boolean isCosmetic) {
-        ArrayList<RoleTypeObject> roleList;
-        boolean isfound = false;
-        int i = 0;
-        if (isCosmetic) {
-            roleList = cosmeticRoles;
-        } else {
-            roleList = modifierRoles;
+    private void validateRoles() {
+        IGuild guild = Globals.client.getGuildByID(guildID);
+        if (guild == null) {
+            return;
         }
-        while (i < roleList.size()) {
-            if (roleList.get(i).getRoleID().equals(roleID)) {
-                isfound = true;
-            }
-            i++;
-        }
-        if (!isfound) {
-            roleList.add(new RoleTypeObject(roleName, roleID));
-            if (isCosmetic) {
-                cosmeticRoles = roleList;
-            } else {
-                modifierRoles = roleList;
-            }
-            return "> Role `" + roleName + "` Added to Role List.";
-        }
-        return "> Role already added to list.";
-    }
-
-    public String removeRole(String roleID, String roleName, boolean isCosmetic) {
-        ArrayList<RoleTypeObject> roleList;
-        if (isCosmetic) {
-            roleList = cosmeticRoles;
-        } else {
-            roleList = modifierRoles;
-        }
-        for (int i = 0; i < roleList.size(); i++) {
-            if (roleList.get(i).getRoleID().equals(roleID)) {
-                roleList.remove(i);
-                if (isCosmetic) {
-                    cosmeticRoles = roleList;
-                } else {
-                    modifierRoles = roleList;
-                }
-                return "> Role `" + roleName + "` Removed from Role List.";
+        ListIterator iterator = cosmeticRoleIDs.listIterator();
+        while (iterator.hasNext()) {
+            IRole role = guild.getRoleByID((Long) iterator.next());
+            if (role == null) {
+                iterator.remove();
             }
         }
-        return "> Role not in list of roles.";
+        iterator = modifierRoleIDs.listIterator();
+        while (iterator.hasNext()) {
+            IRole role = guild.getRoleByID((Long) iterator.next());
+            if (role == null) {
+                iterator.remove();
+            }
+        }
+        iterator = trustedRoleIDs.listIterator();
+        while (iterator.hasNext()) {
+            IRole role = guild.getRoleByID((Long) iterator.next());
+            if (role == null) {
+                iterator.remove();
+            }
+        }
+        IRole mutedRole = guild.getRoleByID(mutedRoleID);
+        if (mutedRole == null) {
+            mutedRoleID = -1;
+        }
+        IRole roleToMention = guild.getRoleByID(roleToMentionID);
+        if (roleToMention == null) {
+            roleToMentionID = -1;
+        }
+        iterator = rewardRoles.listIterator();
+        while (iterator.hasNext()) {
+            RewardRoleObject reward = (RewardRoleObject) iterator.next();
+            IRole role = guild.getRoleByID(reward.getRoleID());
+            if (role == null) {
+                iterator.remove();
+            }
+        }
     }
 
-    public ArrayList<RoleTypeObject> getModifierRoles() {
-        return modifierRoles;
+    public ArrayList<Long> getModifierRoleIDs() {
+        validateRoles();
+        return modifierRoleIDs;
     }
 
-    public ArrayList<RoleTypeObject> getCosmeticRoles() {
-        return cosmeticRoles;
+    public ArrayList<Long> getCosmeticRoleIDs() {
+        validateRoles();
+        return cosmeticRoleIDs;
     }
 
     public boolean testIsTrusted(IUser author, IGuild guild) {
-        if (trustedRoles.size() == 0) {
+        validateRoles();
+        if (trustedRoleIDs.size() == 0) {
             return true;
         } else {
-            for (RoleTypeObject task : trustedRoles) {
+            for (Long task : trustedRoleIDs) {
                 for (IRole role : author.getRolesForGuild(guild)) {
-                    if (role.getStringID().equals(task.getRoleID())) {
+                    if (role.getStringID().equals(task)) {
                         return true;
                     }
                 }
             }
             return false;
-        }
-    }
-
-    public void addTrusted(String roleID) {
-        for (RoleTypeObject r : trustedRoles) {
-            if (r.getRoleID().equals(roleID)) {
-                return;
-            }
-        }
-        trustedRoles.add(new RoleTypeObject(Globals.getClient().getRoleByID(roleID).getName(), roleID));
-    }
-
-    public void delTrusted(String roleID) {
-        int i = 0;
-        for (RoleTypeObject r : trustedRoles) {
-            if (r.getRoleID().equals(roleID)) {
-                trustedRoles.remove(i);
-                return;
-            }
-            i++;
         }
     }
 
@@ -346,43 +280,34 @@ public class GuildConfig {
         }
     }
 
-    public void setMutedRole(RoleTypeObject mutedRole) {
-        this.mutedRole = mutedRole;
+    public void setMutedRoleID(long mutedRole) {
+        validateRoles();
+        this.mutedRoleID = mutedRole;
     }
 
-    public RoleTypeObject getMutedRole() {
-        return mutedRole;
+    public long getMutedRoleID() {
+        validateRoles();
+        return mutedRoleID;
     }
 
-    public ArrayList<RoleTypeObject> getTrustedRoles() {
-        return trustedRoles;
+    public ArrayList<Long> getTrustedRoleIDs() {
+        validateRoles();
+        return trustedRoleIDs;
     }
 
-    public boolean isRoleCosmetic(String id) {
-        for (RoleTypeObject r : cosmeticRoles) {
-            if (r.getRoleID().equals(id)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isRoleCosmetic(long id) {
+        validateRoles();
+        return cosmeticRoleIDs.contains(id);
     }
 
-    public boolean isRoleModifier(String id) {
-        for (RoleTypeObject r : modifierRoles) {
-            if (r.getRoleID().equals(id)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isRoleModifier(long id) {
+        validateRoles();
+        return modifierRoleIDs.contains(id);
     }
 
-    public boolean isRoleTrusted(String id) {
-        for (RoleTypeObject r : trustedRoles) {
-            if (r.getRoleID().equals(id)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isRoleTrusted(long id) {
+        validateRoles();
+        return trustedRoleIDs.contains(id);
     }
 
     public int getMaxMentionLimit() {
@@ -394,6 +319,7 @@ public class GuildConfig {
     }
 
     public RewardRoleObject getRewardRole(long rewardID) {
+        validateRoles();
         for (RewardRoleObject r : rewardRoles) {
             if (r.getRoleID() == rewardID) {
                 return r;
@@ -403,6 +329,7 @@ public class GuildConfig {
     }
 
     public RewardRoleObject getLowerReward(RewardRoleObject rewardRole) {
+        validateRoles();
         Utility.sortRewards(rewardRoles);
         ArrayList<RewardRoleObject> compareRewards = new ArrayList<>();
         RewardRoleObject lowerReward = null;
@@ -428,6 +355,7 @@ public class GuildConfig {
     }
 
     public ArrayList<RewardRoleObject> getAllRewards(long rewardID) {
+        validateRoles();
         if (rewardID == -1) {
             return null;
         }
@@ -446,6 +374,7 @@ public class GuildConfig {
     }
 
     public RewardRoleObject lowestReward() {
+        validateRoles();
         RewardRoleObject lowest = null;
         for (RewardRoleObject r : rewardRoles) {
             if (lowest == null) {
@@ -460,6 +389,7 @@ public class GuildConfig {
     }
 
     public RewardRoleObject getNextReward(RewardRoleObject rewardRole) {
+        validateRoles();
         ArrayList<RewardRoleObject> compareRewards = (ArrayList<RewardRoleObject>) rewardRoles.clone();
         RewardRoleObject lowestRole = null;
         //remove reward roles that are above it or are it.
@@ -501,5 +431,9 @@ public class GuildConfig {
 
     public void setJoinMessage(String args) {
         joinMessage = args;
+    }
+
+    public ArrayList<String> getXPDeniedPrefixes() {
+        return XPDeniedPrefixes;
     }
 }
