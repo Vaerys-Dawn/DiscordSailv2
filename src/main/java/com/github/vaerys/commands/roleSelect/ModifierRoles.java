@@ -1,0 +1,165 @@
+package com.github.vaerys.commands.roleSelect;
+
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.objects.SplitFirstObject;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+/**
+ * Created by Vaerys on 31/01/2017.
+ */
+public class ModifierRoles implements Command {
+    @Override
+    public String execute(String args, CommandObject command) {
+        SplitFirstObject modif = new SplitFirstObject(args);
+
+        //test to see if the first word is a modifier
+        Boolean isAdding = Utility.testModifier(modif.getFirstWord());
+        if (isAdding != null) {
+            //test the permissions of the user to make sure they can modify the role list.
+            if (Utility.testForPerms(dualPerms(), command.user.get(), command.guild.get())) {
+                IRole role = Utility.getRoleFromName(modif.getRest(), command.guild.get());
+                if (role == null) {
+                    return "> **" + args + "** is not a valid Role Name.";
+                } else {
+                    //tests to see if the bot is allowed to mess with a role.
+                    if (!Utility.testUserHierarchy(command.client.bot,role,command.guild.get())){
+                        return "> I do not have permission to modify the **" + role.getName() + "** role.";
+                    }
+                    //test the user's hierarchy to make sure that the are allowed to mess with that role.
+                    if (Utility.testUserHierarchy(command.user.get(), role, command.guild.get())) {
+                        // do if modifier is true
+                        if (isAdding) {
+                            //check for the role and add if its not a Modifier role.
+                            if (command.guild.config.isRoleModifier(role.getLongID())) {
+                                return "> The **" + role.getName() + "** role is already listed as a modifier role.";
+                            } else {
+                                command.guild.config.getModifierRoleIDs().add(role.getLongID());
+                                return "> The **" + role.getName() + "** role was added to the modifier role list.";
+                            }
+                            //do if modifier is false
+                        } else {
+                            //check for the role and remove if it is a Modifier role.
+                            if (command.guild.config.isRoleModifier(role.getLongID())) {
+                                Iterator iterator = command.guild.config.getModifierRoleIDs().listIterator();
+                                while (iterator.hasNext()) {
+                                    long id = (long) iterator.next();
+                                    if (role.getLongID() == id) {
+                                        iterator.remove();
+                                    }
+                                }
+                                return "> The **" + role.getName() + "** role was removed from the modifier role list.";
+                            } else {
+                                return "> The **" + role.getName() + "** role is not listed as a modifier role.";
+                            }
+                        }
+                    } else {
+                        return "> You do not have permission to modify the **" + role.getName() + "**role.";
+                    }
+                }
+            } else {
+                return command.user.notAllowed;
+            }
+        } else {
+            IRole role = Utility.getRoleFromName(args, command.guild.get());
+            List<IRole> userRoles = command.user.roles;
+            String response = Constants.ERROR_UPDATING_ROLE;
+            if (role == null) {
+                return "> **" + args + "** is not a valid Role Name.";
+            } else {
+                if (command.guild.config.isRoleModifier(role.getLongID())) {
+                    //if user has role remove it
+                    if (userRoles.contains(role)) {
+                        ListIterator iterator = userRoles.listIterator();
+                        while (iterator.hasNext()) {
+                            IRole userRole = (IRole) iterator.next();
+                            if (userRole.getLongID() == role.getLongID()) {
+                                iterator.remove();
+                                response = "> You have had the **" + role.getName() + "** role removed.";
+                            }
+                        }
+                        //else add it
+                    } else {
+                        userRoles.add(role);
+                        response = "> You have been granted the **" + role.getName() + "** role.";
+                    }
+                    //push changes
+                    if (Utility.roleManagement(command.user.get(), command.guild.get(), userRoles).get()) {
+                        return response;
+                    } else {
+                        return Constants.ERROR_UPDATING_ROLE;
+                    }
+                } else {
+                    return "> The **" + role.getName() + "** role is not listed as a modifier role.";
+                }
+            }
+        }
+    }
+
+    @Override
+    public String[] names() {
+        return new String[]{"Modifier", "Modif"};
+    }
+
+    @Override
+    public String description() {
+        return "Allows you to toggle a modifier role.";
+    }
+
+    @Override
+    public String usage() {
+        return "[Role Name]";
+    }
+
+    @Override
+    public String type() {
+        return TYPE_ROLE_SELECT;
+    }
+
+    @Override
+    public String channel() {
+        return CHANNEL_BOT_COMMANDS;
+    }
+
+    @Override
+    public Permissions[] perms() {
+        return new Permissions[0];
+    }
+
+    @Override
+    public boolean requiresArgs() {
+        return true;
+    }
+
+    @Override
+    public boolean doAdminLogging() {
+        return false;
+    }
+
+    @Override
+    public String dualDescription() {
+        return "Used to manage the selectable modifier roles.";
+    }
+
+    @Override
+    public String dualUsage() {
+        return "+/-/add/del [Role Name]";
+    }
+
+    @Override
+    public String dualType() {
+        return TYPE_ADMIN;
+    }
+
+    @Override
+    public Permissions[] dualPerms() {
+        return new Permissions[]{Permissions.MANAGE_ROLES};
+    }
+}
