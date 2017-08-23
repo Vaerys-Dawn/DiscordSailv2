@@ -57,7 +57,7 @@ public class Toggle implements Command {
         embedBuilder.appendField(spacer, Utility.getCommandInfo(classObject, command), false);
         embedBuilder.withColor(command.client.color);
         Utility.sendEmbedMessage("", embedBuilder, command.channel.get());
-        command.guild.loadCommandData();
+//        command.guild.loadCommandData();
         return null;
     }
 

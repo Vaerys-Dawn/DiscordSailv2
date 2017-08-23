@@ -166,7 +166,7 @@ public class MessageHandler {
         if (command.guild.config.rateLimiting) {
             if (command.guild.rateLimit(command.user.stringID)) {
                 List<IRole> oldRoles = command.user.roles;
-                command.message.get().delete();
+                Utility.deleteMessage(command.message.get());
                 Utility.sendDM("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guild.config.messageLimit, command.user.longID);
                 if (command.guild.config.muteRepeatOffenders) {
                     int rate = command.guild.getUserRate(command.user.stringID);
