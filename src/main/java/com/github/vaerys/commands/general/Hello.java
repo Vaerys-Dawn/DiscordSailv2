@@ -10,7 +10,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class Hello implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        if (command.user.get().equals(command.client.creator)) {
+        if (command.user.longID == 153159020528533505L) {
             return "> Hello Mum.";
         }
         return "> Hello " + command.user.displayName + ".";
