@@ -48,6 +48,8 @@ public class Globals {
     public static ArrayList<DailyMessageObject> configDailyMessages = new ArrayList<>();
     public static IDiscordClient client;
     public static boolean showSaveWarning = false;
+    public static boolean shuttingDown = false;
+    public static boolean savingFiles = false;
     //    private static ArrayList<GuildContentObject> guildContentObjects = new ArrayList<>();
     private static List<GuildObject> guilds = new ArrayList<>();
     public static List<Command> commands = new ArrayList<>();
@@ -265,6 +267,10 @@ public class Globals {
     }
 
     public static void saveFiles() {
+        if (shuttingDown) {
+            return;
+        }
+        savingFiles = true;
         logger.debug("Saving Files.");
         dailyMessages.flushFile();
         for (GuildObject g : guilds) {
@@ -273,6 +279,7 @@ public class Globals {
             }
         }
         FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, getGlobalData());
+        savingFiles = false;
     }
 
     public static void unloadGuild(long id) {

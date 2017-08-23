@@ -39,7 +39,6 @@ public class GuildObject {
 
 
     private final static Logger logger = LoggerFactory.getLogger(GuildObject.class);
-    private ArrayList<Command> commandsByType;
 
     public GuildObject(IGuild object) {
         this.object = object;
@@ -68,9 +67,9 @@ public class GuildObject {
 
     public void loadCommandData() {
         this.commands = new ArrayList<>(Globals.getCommands(false));
-        this.toggles = (List<GuildToggle>) Globals.getGuildGuildToggles().clone();
-        this.channelSettings = (List<ChannelSetting>) Globals.getChannelSettings().clone();
-        this.commandTypes = (List<String>) Globals.getCommandTypes().clone();
+        this.toggles = new ArrayList<>(Globals.getGuildGuildToggles());
+        this.channelSettings = new ArrayList<>(Globals.getChannelSettings());
+        this.commandTypes = new ArrayList<>(Globals.getCommandTypes());
         checkToggles();
     }
 
@@ -96,6 +95,7 @@ public class GuildObject {
     }
 
     private void checkToggles() {
+        toRemove = new ArrayList<>();
         for (GuildToggle g : toggles) {
             if (!g.get(config)) {
                 g.execute(this);
