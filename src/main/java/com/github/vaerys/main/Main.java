@@ -39,7 +39,15 @@ public class Main {
             @Override
             public void run() {
                 logger.info(">>> Running Shutdown Process <<<");
+                if (Globals.savingFiles) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 Globals.saveFiles();
+                Globals.shuttingDown = true;
             }
         });
 

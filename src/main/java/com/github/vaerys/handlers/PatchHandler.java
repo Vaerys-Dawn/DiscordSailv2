@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -203,6 +205,7 @@ public class PatchHandler {
     }
 
     public static void globalDataPatch() {
+        if (!Files.exists(Paths.get(Constants.FILE_GLOBAL_DATA))) return;
         OldGlobalData oldData = (OldGlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, OldGlobalData.class);
         DailyMessages dailyMessages = (DailyMessages) DailyMessages.create(DailyMessages.FILE_PATH, new DailyMessages());
         dailyMessages.getMessages().addAll(oldData.getDailyMessages());
