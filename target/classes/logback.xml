@@ -34,7 +34,7 @@
         </triggeringPolicy>
     </appender>
 
-    <root level="INFO">
+    <root level="TRACE">
         <appender-ref ref="CONSOLE"/>
         <!-- Uncomment the next line to also log to a file -->
         <appender-ref ref="FILE"/>

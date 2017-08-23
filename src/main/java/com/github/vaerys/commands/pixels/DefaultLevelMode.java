@@ -13,7 +13,7 @@ public class DefaultLevelMode implements Command {
             "- LevelChannel\n" +
             "- CurrentChannel\n" +
             "- DMs\n" +
-            "- NoMessage";;
+            "- NoMessage";
 
     @Override
     public String execute(String args, CommandObject command) {
