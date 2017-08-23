@@ -123,7 +123,6 @@ public class CommandInit {
         commands.add(new LevelUpMessage());
         commands.add(new ManagePixelRoles());
         commands.add(new TransferLevels());
-        commands.add(new SetXp());
         commands.add(new EditXp());
         commands.add(new SetLevel());
         commands.add(new SetPixelModifier());
