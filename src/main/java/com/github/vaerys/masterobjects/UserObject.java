@@ -67,7 +67,7 @@ public class UserObject {
 
     public boolean isPrivateProfile(GuildObject guild) {
         ProfileObject profile = getProfile(guild);
-        if (profile.getSettings().size() == 0) {
+        if (profile.getSettings() == null || profile.getSettings().size() == 0) {
             return false;
         } else {
             return getProfile(guild).getSettings().contains(UserSetting.PRIVATE_PROFILE);
