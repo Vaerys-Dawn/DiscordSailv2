@@ -15,74 +15,83 @@ import sx.blah.discord.handle.obj.Permissions;
 public class EditXp implements Command {
 
     @Override
-    public String execute(String args, CommandObject command){
+    public String execute(String args, CommandObject command) {
         // Split args into String[]
         String[] splitArgs = args.split(" ");
 
-        if (splitArgs.length != 3) {
-            return missingArgs(command);
-        } else {
-            UserObject user = Utility.getUser(command, splitArgs[0], false);
-            // Check for a valid user
-            if (user != null) {
-                try {
-                    long xp = Long.parseLong(splitArgs[2]);
+        // Check if user passed enough args
+        if (splitArgs.length != 3) return missingArgs(command);
 
-                    if (xp < 0) return "> I don't know what negative Pixels are. What are you trying to do?";
+        // Get user specified in command
+        UserObject user = Utility.getUser(command, splitArgs[0], false);
+        if (user == null) return "> Could not find user.";
 
-                    ProfileObject userObject = user.getProfile(command.guild);
+        // Parse passed XP into a number
+        long xp;
+        try {
+            xp = Long.parseLong(splitArgs[2]);
 
-                    // check if the user's profile exists.
-                    if (userObject != null) {
+            if (xp < 0) return "> I don't know what negative pixels are. What are you trying to do?";
 
-                        //handle xp changes
-                        String out;
-                        Boolean xpChanged = false;
-
-                        switch (splitArgs[1]) {
-                            case "+":
-                            case "add":
-                                // Add Pixels
-                                userObject.setXp(userObject.getXP() + xp);
-                                out = "> Added **" + xp + "** pixels to **" + user.displayName + "**.";
-                                xpChanged = true;
-                                break;
-                            case "-":
-                            case "rem":
-                            case "sub":
-                                // Subtract Pixels
-                                userObject.setXp(userObject.getXP() - xp);
-                                // check for 0 underflow...
-                                if (userObject.getXP() < 0){
-                                    userObject.setXp(0);
-                                    out = "> **"+ user.displayName + "** didn't have enough pixels, so I set them to **0**.";
-                                } else {
-                                    out = "> Subtracted **" + xp + "** pixels from **" + user.displayName + "**.";
-                                }
-                                xpChanged = true;
-                                break;
-                            case "=":
-                            case "set":
-                                // Set Pixels
-                                userObject.setXp(xp);
-                                xpChanged = true;
-                                out = "> Set Pixels to **" + xp + "** for user **" + user.displayName + "**.";
-                                break;
-                            default:
-                                out = "> Invalid modifier. Valid modifiers are **[+/-/=]** or **add/sub/set**";
-                                break;
-                        }
-                        if (xpChanged) {
-                            userObject.removeLevelFloor();
-                            XpHandler.checkUsersRoles(user.stringID, command.guild);
-                        }
-                        return out;
-                    } else return "> User does not have a profile";
-                } catch (NumberFormatException e) {
-                    return "> Invalid number";
-                }
-            } else return "> Could not find user";
+        } catch (NumberFormatException e) {
+            return "> **" + splitArgs[2] + "** is not a number.";
         }
+
+        // Get userObject from passed user.
+        ProfileObject userObject = user.getProfile(command.guild);
+        if (userObject == null) return "> " + user.displayName + " does not have a profile.";
+
+        // Parse and execute modifiers
+        String out;
+        boolean xpChanged = false;
+
+        switch (splitArgs[1]) {
+            // Add Pixels:
+            case "+":
+            case "add":
+                userObject.setXp(userObject.getXP() + xp);
+                xpChanged = true;
+
+                out = "> Added **" + xp + "** pixels to **" + user.displayName + "**.";
+                break;
+
+            // Remove Pixels
+            case "-":
+            case "rem":
+            case "sub":
+                userObject.setXp(userObject.getXP() - xp);
+                xpChanged = true;
+
+                out = "> Removed **" + xp + "** pixels from **" + user.displayName + "**.";
+
+                // Special handling if XP is set below 0
+                if (userObject.getXP() < 0) {
+                    userObject.setXp(0);
+                    out = "> **" + user.displayName + "** did not have enough pixels. I just set them to **0**";
+                }
+
+                break;
+
+            // Set Pixels
+            case "=":
+            case "set":
+                userObject.setXp(xp);
+                xpChanged = true;
+
+                out = "> Set Pixels to **" + xp + "** for user **" + user.displayName + "**.";
+                break;
+
+            // Failure case
+            default:
+                out = "> Invalid modifier. Valid modifiers are **[+/-/=]** or **add/sub/set**";
+                break;
+        }
+
+        if (xpChanged) {
+            userObject.removeLevelFloor();
+            XpHandler.checkUsersRoles(user.stringID, command.guild);
+        }
+        return out;
     }
 
     // Define Command parameters.
