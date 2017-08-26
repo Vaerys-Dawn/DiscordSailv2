@@ -8,6 +8,7 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 30/01/2017.
  */
 public class Hello implements Command {
+    
     @Override
     public String execute(String args, CommandObject command) {
         if (command.user.longID == 153159020528533505L) {
