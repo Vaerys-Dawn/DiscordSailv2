@@ -65,5 +65,6 @@ Storage
 *.json3
 bot.log
 *.class
-.idea/workspace.xml
+<<<<<<< HEAD
+=======
 .idea/workspace.xml
