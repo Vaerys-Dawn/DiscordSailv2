@@ -170,7 +170,7 @@ public class CommandInit {
         //DM Creator Commands
         commands.add(new BlockUser());
         commands.add(new GetGuildList());
-        commands.add(new GetGuildInfo());
+        commands.add(new GetGuildInfoDm());
         commands.add(new Respond());
         commands.add(new ShutdownDM());
         commands.add(new QuickRespond());

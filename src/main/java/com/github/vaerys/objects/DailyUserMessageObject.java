@@ -40,4 +40,8 @@ public class DailyUserMessageObject {
     public long getUserID() {
         return userID;
     }
+
+    public void setDay(DayOfWeek newDay) {
+        day = newDay;
+    }
 }
