@@ -13,13 +13,6 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 06/07/2017.
  */
-
-/**
- * @deprecated
- * Implementation of EditXP makes this redunant.
- * Please use EditXP [user] "=" [amount] instead.
- */
-@Deprecated
 public class SetXp implements Command {
     @Override
     public String execute(String args, CommandObject command) {
