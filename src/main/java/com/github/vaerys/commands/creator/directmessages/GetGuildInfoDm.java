@@ -7,12 +7,12 @@ import sx.blah.discord.handle.obj.IGuild;
 /**
  * Created by Vaerys on 17/02/2017.
  */
-public class GetGuildInfo implements DMCommand {
+public class GetGuildInfoDm implements DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         IGuild guild = command.client.get().getGuildByID(args);
         if (guild != null) {
-            new GetGuildInfo().execute(args, command);
+            new GetGuildInfoDm().execute(args, command);
             return null;
         } else {
             return "> Guild ID Invalid";
