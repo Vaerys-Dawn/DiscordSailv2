@@ -7,6 +7,7 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.time.DayOfWeek;
@@ -20,7 +21,9 @@ public class NewDailyMessage implements Command {
             SplitFirstObject day = new SplitFirstObject(args);
             DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.getFirstWord().toUpperCase());
             if (day.getRest() != null) {
+                IMessage working = Utility.sendMessage("`Working...`", command.channel.get()).get();
                 QueueHandler.addToQueue(command, day.getRest(), dayOfWeek, Constants.QUEUE_DAILY);
+                Utility.deleteMessage(working);
                 return "> Request Sent.";
             } else {
                 return Utility.getCommandInfo(this, command);

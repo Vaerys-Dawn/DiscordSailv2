@@ -155,7 +155,7 @@ public class EventHandler {
                                             task.config.lastDailyMessageID = toSend.getUID();
                                         }
                                         String message = toSend.getContents(task);
-                                        if (message.matches("^(> |\\*> |\\*\\*> |\\*\\*\\*> |_> |__> |`> |```> ).*$")) {
+                                        if (message.matches("^(> |\\*> |\\*\\*> |\\*\\*\\*> |_> |__> |`> |```> ).*$") || message.startsWith("> ")) {
                                             Utility.sendMessage(message, channel);
                                         } else {
                                             Utility.sendMessage("> " + message, channel);
