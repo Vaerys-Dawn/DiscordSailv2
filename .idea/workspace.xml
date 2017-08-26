@@ -8,9 +8,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/main/AnnotationListener.java" description="if (command.message.getContent().length() &gt; charLi..." line="330" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="1119069f-7e16-4993-aa39-0cdad260914a" name="Default" comment="" />
     <ignored path="DiscordSailv2.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -55,47 +53,32 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-721">
+            <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NewDailyMessage.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/commands/general/NewDailyMessage.java">
+      <file leaf-file-name="ChannelSetting.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/interfaces/ChannelSetting.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="26" column="31" lean-forward="false" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
-              <folding>
-                <marker date="1503744420662" expanded="true" signature="1082:1339" ph="{...}" />
-                <marker date="1503744420662" expanded="true" signature="1396:2049" ph="{...}" />
-                <marker date="1503744420662" expanded="false" signature="2092:2103" ph=" { " />
-                <marker date="1503744420662" expanded="false" signature="2180:2186" ph=" }" />
-                <marker date="1503744420662" expanded="true" signature="2234:2412" ph="{...}" />
-                <marker date="1503744420662" expanded="false" signature="2453:2464" ph=" { " />
-                <marker date="1503744420662" expanded="false" signature="2495:2501" ph=" }" />
-                <marker date="1503744420662" expanded="false" signature="2541:2552" ph=" { " />
-                <marker date="1503744420662" expanded="false" signature="2572:2578" ph=" }" />
-                <marker date="1503744420662" expanded="false" signature="2621:2632" ph=" { " />
-                <marker date="1503744420662" expanded="false" signature="2660:2666" ph=" }" />
-                <marker date="1503744420662" expanded="false" signature="2714:2725" ph=" { " />
-                <marker date="1503744420662" expanded="false" signature="2751:2757" ph=" }" />
-                <marker date="1503744420662" expanded="false" signature="2806:2817" ph=" { " />
-                <marker date="1503744420662" expanded="false" signature="2829:2835" ph=" }" />
-                <marker date="1503744420662" expanded="false" signature="2886:2897" ph=" { " />
-                <marker date="1503744420662" expanded="false" signature="2910:2916" ph=" }" />
-                <marker date="1503744420662" expanded="false" signature="2990:2996" ph=" }" />
-                <marker date="1503744420662" expanded="false" signature="3041:3052" ph=" { " />
-                <marker date="1503744420662" expanded="false" signature="3064:3070" ph=" }" />
-                <marker date="1503744420662" expanded="false" signature="3114:3125" ph=" { " />
-                <marker date="1503744420662" expanded="false" signature="3137:3143" ph=" }" />
-                <marker date="1503744420662" expanded="false" signature="3195:3206" ph=" { " />
-                <marker date="1503744420662" expanded="false" signature="3232:3238" ph=" }" />
-              </folding>
+            <state relative-caret-position="289">
+              <caret line="21" column="28" lean-forward="false" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SlashCommand.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/interfaces/SlashCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="10" column="17" lean-forward="false" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -103,7 +86,7 @@
       <file leaf-file-name="QueueHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/handlers/QueueHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
+            <state relative-caret-position="1734">
               <caret line="119" column="37" lean-forward="false" selection-start-line="119" selection-start-column="37" selection-end-line="119" selection-end-column="37" />
               <folding />
             </state>
@@ -113,20 +96,9 @@
       <file leaf-file-name="EventHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/handlers/EventHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
+            <state relative-caret-position="2278">
               <caret line="157" column="148" lean-forward="false" selection-start-line="157" selection-start-column="148" selection-end-line="157" selection-end-column="148" />
-              <folding>
-                <marker date="1503744420678" expanded="false" signature="3147:3218" ph="() → {" />
-                <marker date="1503744420678" expanded="false" signature="8182:8197" ph="}" />
-                <marker date="1503744420678" expanded="true" signature="8351:8916" ph="{...}" />
-                <marker date="1503744420678" expanded="true" signature="8951:9826" ph="{...}" />
-                <marker date="1503744420678" expanded="false" signature="9011:9082" ph="() → {" />
-                <marker date="1503744420678" expanded="false" signature="9781:9796" ph="}" />
-                <marker date="1503744420678" expanded="true" signature="9889:13048" ph="{...}" />
-                <marker date="1503744420678" expanded="false" signature="10579:10650" ph="() → {" />
-                <marker date="1503744420678" expanded="false" signature="12989:13004" ph="}" />
-                <marker date="1503744420678" expanded="true" signature="13096:13701" ph="{...}" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -134,7 +106,7 @@
       <file leaf-file-name="TagHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/handlers/TagHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
+            <state relative-caret-position="799">
               <caret line="64" column="45" lean-forward="false" selection-start-line="64" selection-start-column="45" selection-end-line="64" selection-end-column="45" />
               <folding />
             </state>
@@ -144,7 +116,7 @@
       <file leaf-file-name="CommandInit.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/commands/CommandInit.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="835">
+            <state relative-caret-position="2618">
               <caret line="180" column="0" lean-forward="false" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
               <folding />
             </state>
@@ -154,48 +126,11 @@
       <file leaf-file-name="UserObject.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/masterobjects/UserObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-219">
+            <state relative-caret-position="408">
               <caret line="35" column="41" lean-forward="false" selection-start-line="35" selection-start-column="41" selection-end-line="35" selection-end-column="41" />
               <folding>
                 <element signature="e#2548#2549#0" expanded="true" />
                 <element signature="e#2577#2578#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DailyMsg.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/commands/creator/DailyMsg.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="23" column="13" lean-forward="false" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-              <folding>
-                <marker date="1503744420651" expanded="true" signature="3082:3525" ph="{...}" />
-                <marker date="1503744420651" expanded="true" signature="3621:4552" ph="{...}" />
-                <marker date="1503744420651" expanded="false" signature="4595:4606" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="4638:4644" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="4691:4702" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="4767:4773" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="4814:4825" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="4853:4859" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="4899:4910" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="4930:4936" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="4979:4990" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="5002:5008" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="5056:5067" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="5093:5099" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="5148:5159" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="5171:5177" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="5228:5239" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="5252:5258" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="5309:5320" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="5332:5338" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="5383:5394" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="5406:5412" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="5456:5467" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="5479:5485" ph=" }" />
-                <marker date="1503744420651" expanded="false" signature="5537:5548" ph=" { " />
-                <marker date="1503744420651" expanded="false" signature="5574:5580" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -435,6 +370,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -475,16 +411,15 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="vaerys" type="462c0819:PsiDirectoryNode" />
-              <item name="masterobjects" type="462c0819:PsiDirectoryNode" />
+              <item name="interfaces" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="AndroidView" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -517,13 +452,6 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit3" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="Objects" />
-      <recent name="Handlers" />
-      <recent name="Interfaces" />
-      <recent name="OldCode" />
-      <recent name="Commands.DMCommands" />
-    </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="GuildToggles.Toggles" />
     </key>
@@ -536,6 +464,12 @@
       <recent name="Commands.Competition" />
       <recent name="Commands" />
       <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Repositories\DiscordSailv2\Storage\176434793674833920" />
+      <recent name="E:\Repositories\DiscordSailv2\Storage\254790152851816458" />
+      <recent name="E:\Repositories\DiscordSailv2\Storage" />
+      <recent name="E:\Repositories\DiscordSailv2\Storage\Images" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Repositories\DiscordSailv2\Storage" />
@@ -557,11 +491,12 @@
       <recent name="Commands.Characters.CharEditModes" />
       <recent name="Commands.Characters.CharEditModes.gender" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\Repositories\DiscordSailv2\Storage\176434793674833920" />
-      <recent name="E:\Repositories\DiscordSailv2\Storage\254790152851816458" />
-      <recent name="E:\Repositories\DiscordSailv2\Storage" />
-      <recent name="E:\Repositories\DiscordSailv2\Storage\Images" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="Objects" />
+      <recent name="Handlers" />
+      <recent name="Interfaces" />
+      <recent name="OldCode" />
+      <recent name="Commands.DMCommands" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -896,22 +831,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1296" height="1000" extended-state="7" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4312026" sideWeight="0.49676377" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29456523" sideWeight="0.4935275" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41630435" sideWeight="0.5165245" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3304904" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33796296" sideWeight="0.48347548" order="1" side_tool="false" content_ui="tabs" x="14" y="443" width="1892" height="389" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33796296" sideWeight="0.48347548" order="1" side_tool="false" content_ui="tabs" x="14" y="443" width="1892" height="389" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33912036" sideWeight="0.4911003" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27302274" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3001618" sideWeight="0.746114" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3050162" sideWeight="0.746114" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32291666" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -920,36 +853,16 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41956523" sideWeight="0.49200428" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26066098" sideWeight="0.253886" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41630435" sideWeight="0.5165245" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3304904" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32291666" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41956523" sideWeight="0.49200428" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4312026" sideWeight="0.49676377" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29456523" sideWeight="0.4935275" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3997833" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33796296" sideWeight="0.48347548" order="1" side_tool="false" content_ui="tabs" x="14" y="443" width="1892" height="389" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33912036" sideWeight="0.4911003" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27302274" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3001618" sideWeight="0.746114" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="true" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.3021739" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" x="2281" y="612" width="241" height="457" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26066098" sideWeight="0.253886" order="5" side_tool="true" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1021,20 +934,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/commands/cc/EditCC.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/commands/characters/ListChars.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="30" column="13" lean-forward="false" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/commands/admin/UserSettings.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -1273,9 +1172,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="309">
           <caret line="48" column="13" lean-forward="false" selection-start-line="48" selection-start-column="13" selection-end-line="48" selection-end-column="13" />
-          <folding>
-            <marker date="1503744420644" expanded="false" signature="1966:1972" ph=" }" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1283,7 +1179,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1291,81 +1186,32 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
           <caret line="46" column="1" lean-forward="false" selection-start-line="46" selection-start-column="1" selection-end-line="46" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/commands/creator/DailyMsg.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
+        <state relative-caret-position="187">
           <caret line="23" column="13" lean-forward="false" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
           <folding>
             <marker date="1503744420651" expanded="true" signature="3082:3525" ph="{...}" />
-            <marker date="1503744420651" expanded="true" signature="3621:4552" ph="{...}" />
-            <marker date="1503744420651" expanded="false" signature="4595:4606" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="4638:4644" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="4691:4702" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="4767:4773" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="4814:4825" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="4853:4859" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="4899:4910" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="4930:4936" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="4979:4990" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="5002:5008" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="5056:5067" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="5093:5099" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="5148:5159" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="5171:5177" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="5228:5239" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="5252:5258" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="5309:5320" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="5332:5338" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="5383:5394" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="5406:5412" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="5456:5467" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="5479:5485" ph=" }" />
-            <marker date="1503744420651" expanded="false" signature="5537:5548" ph=" { " />
-            <marker date="1503744420651" expanded="false" signature="5574:5580" ph=" }" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/commands/general/NewDailyMessage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
+        <state relative-caret-position="255">
           <caret line="26" column="31" lean-forward="false" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
           <folding>
             <marker date="1503744420662" expanded="true" signature="1082:1339" ph="{...}" />
-            <marker date="1503744420662" expanded="true" signature="1396:2049" ph="{...}" />
-            <marker date="1503744420662" expanded="false" signature="2092:2103" ph=" { " />
-            <marker date="1503744420662" expanded="false" signature="2180:2186" ph=" }" />
-            <marker date="1503744420662" expanded="true" signature="2234:2412" ph="{...}" />
-            <marker date="1503744420662" expanded="false" signature="2453:2464" ph=" { " />
-            <marker date="1503744420662" expanded="false" signature="2495:2501" ph=" }" />
-            <marker date="1503744420662" expanded="false" signature="2541:2552" ph=" { " />
-            <marker date="1503744420662" expanded="false" signature="2572:2578" ph=" }" />
-            <marker date="1503744420662" expanded="false" signature="2621:2632" ph=" { " />
-            <marker date="1503744420662" expanded="false" signature="2660:2666" ph=" }" />
-            <marker date="1503744420662" expanded="false" signature="2714:2725" ph=" { " />
-            <marker date="1503744420662" expanded="false" signature="2751:2757" ph=" }" />
-            <marker date="1503744420662" expanded="false" signature="2806:2817" ph=" { " />
-            <marker date="1503744420662" expanded="false" signature="2829:2835" ph=" }" />
-            <marker date="1503744420662" expanded="false" signature="2886:2897" ph=" { " />
-            <marker date="1503744420662" expanded="false" signature="2910:2916" ph=" }" />
-            <marker date="1503744420662" expanded="false" signature="2990:2996" ph=" }" />
-            <marker date="1503744420662" expanded="false" signature="3041:3052" ph=" { " />
-            <marker date="1503744420662" expanded="false" signature="3064:3070" ph=" }" />
-            <marker date="1503744420662" expanded="false" signature="3114:3125" ph=" { " />
-            <marker date="1503744420662" expanded="false" signature="3137:3143" ph=" }" />
-            <marker date="1503744420662" expanded="false" signature="3195:3206" ph=" { " />
-            <marker date="1503744420662" expanded="false" signature="3232:3238" ph=" }" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/handlers/QueueHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
+        <state relative-caret-position="1734">
           <caret line="119" column="37" lean-forward="false" selection-start-line="119" selection-start-column="37" selection-end-line="119" selection-end-column="37" />
           <folding />
         </state>
@@ -1373,20 +1219,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/handlers/EventHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
+        <state relative-caret-position="2278">
           <caret line="157" column="148" lean-forward="false" selection-start-line="157" selection-start-column="148" selection-end-line="157" selection-end-column="148" />
-          <folding>
-            <marker date="1503744420678" expanded="false" signature="3147:3218" ph="() → {" />
-            <marker date="1503744420678" expanded="false" signature="8182:8197" ph="}" />
-            <marker date="1503744420678" expanded="true" signature="8351:8916" ph="{...}" />
-            <marker date="1503744420678" expanded="true" signature="8951:9826" ph="{...}" />
-            <marker date="1503744420678" expanded="false" signature="9011:9082" ph="() → {" />
-            <marker date="1503744420678" expanded="false" signature="9781:9796" ph="}" />
-            <marker date="1503744420678" expanded="true" signature="9889:13048" ph="{...}" />
-            <marker date="1503744420678" expanded="false" signature="10579:10650" ph="() → {" />
-            <marker date="1503744420678" expanded="false" signature="12989:13004" ph="}" />
-            <marker date="1503744420678" expanded="true" signature="13096:13701" ph="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1399,7 +1234,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/handlers/TagHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
+        <state relative-caret-position="799">
           <caret line="64" column="45" lean-forward="false" selection-start-line="64" selection-start-column="45" selection-end-line="64" selection-end-column="45" />
           <folding />
         </state>
@@ -1414,7 +1249,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/commands/CommandInit.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="835">
+        <state relative-caret-position="2618">
           <caret line="180" column="0" lean-forward="false" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
           <folding />
         </state>
@@ -1422,7 +1257,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/masterobjects/UserObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-219">
+        <state relative-caret-position="408">
           <caret line="35" column="41" lean-forward="false" selection-start-line="35" selection-start-column="41" selection-end-line="35" selection-end-column="41" />
           <folding>
             <element signature="e#2548#2549#0" expanded="true" />
@@ -1449,8 +1284,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-721">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/interfaces/ChannelSetting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="21" column="28" lean-forward="false" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/github/vaerys/interfaces/SlashCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="10" column="17" lean-forward="false" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
           <folding />
         </state>
       </provider>
