@@ -13,12 +13,14 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.security.validator.ValidatorException;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.*;
 import sx.blah.discord.util.Image;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -295,7 +297,7 @@ public class Utility {
             final HttpURLConnection connection = (HttpURLConnection) new URL(imageURL).openConnection();
             connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) " + "AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
             InputStream stream = connection.getInputStream();
-            sentMessage = (IMessage) XRequestBuffer.request(() -> {
+            sentMessage = XRequestBuffer.request(() -> {
                 try {
                     //set up the file name
                     URL url = new URL(imageURL);
@@ -338,6 +340,8 @@ public class Utility {
             stream.close();
         } catch (MalformedURLException e) {
             sendStack(e);
+        } catch (SSLHandshakeException e) {
+            sendMessage("> Could not get image from website, invalid SSL certificate.", channel);
         } catch (IOException e) {
             sendStack(e);
         }
