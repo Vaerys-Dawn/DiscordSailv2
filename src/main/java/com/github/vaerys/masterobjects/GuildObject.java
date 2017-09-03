@@ -37,6 +37,7 @@ public class GuildObject {
     private List<Long> spokenUsers = new ArrayList<>();
     private List<GuildToggle> toRemove = new ArrayList<>();
 
+
     private final static Logger logger = LoggerFactory.getLogger(GuildObject.class);
 
     public GuildObject(IGuild object) {
@@ -171,10 +172,6 @@ public class GuildObject {
 
     public List<Long> getSpokenUsers() {
         return spokenUsers;
-    }
-
-    public void forceClearRate() {
-        ratelimiting = new ArrayList<>();
     }
 
     public boolean rateLimit(String userID) {
