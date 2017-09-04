@@ -18,6 +18,10 @@ import java.util.ListIterator;
 public class ModifierRoles implements Command {
     @Override
     public String execute(String args, CommandObject command) {
+        if (args == null || args.isEmpty()) {
+            return new ListModifs().execute(args, command);
+        }
+
         SplitFirstObject modif = new SplitFirstObject(args);
 
         //test to see if the first word is a modifier
@@ -30,7 +34,7 @@ public class ModifierRoles implements Command {
                     return "> **" + args + "** is not a valid Role Name.";
                 } else {
                     //tests to see if the bot is allowed to mess with a role.
-                    if (!Utility.testUserHierarchy(command.client.bot,role,command.guild.get())){
+                    if (!Utility.testUserHierarchy(command.client.bot, role, command.guild.get())) {
                         return "> I do not have permission to modify the **" + role.getName() + "** role.";
                     }
                     //test the user's hierarchy to make sure that the are allowed to mess with that role.
@@ -115,7 +119,7 @@ public class ModifierRoles implements Command {
 
     @Override
     public String usage() {
-        return "[Role Name]";
+        return "(Role Name)";
     }
 
     @Override
@@ -135,7 +139,7 @@ public class ModifierRoles implements Command {
 
     @Override
     public boolean requiresArgs() {
-        return true;
+        return false;
     }
 
     @Override

@@ -18,6 +18,10 @@ import java.util.ListIterator;
 public class CosmeticRoles implements Command {
     @Override
     public String execute(String args, CommandObject command) {
+        if (args == null || args.isEmpty()) {
+            return new ListRoles().execute(args, command);
+        }
+
         SplitFirstObject modif = new SplitFirstObject(args);
 
         //test to see if the first word is a modifier
@@ -162,7 +166,7 @@ public class CosmeticRoles implements Command {
 
     @Override
     public String usage() {
-        return "[Role Name]/Remove";
+        return "(Role Name)/Remove";
     }
 
     @Override
@@ -182,7 +186,7 @@ public class CosmeticRoles implements Command {
 
     @Override
     public boolean requiresArgs() {
-        return true;
+        return false;
     }
 
     @Override
