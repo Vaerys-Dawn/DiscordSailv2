@@ -36,20 +36,20 @@ public class UserInfo implements Command {
             user = Utility.getUser(command, args, true);
         }
         if (user == null) {
-            return "> Could not find that user.";
+            return "> Could not find user.";
         }
         ProfileObject profile = user.getProfile(command.guild);
         if (profile == null && user.get().isBot()) {
             if (user.get().getPresence().getStatus().equals(StatusType.OFFLINE) || user.get().getPresence().getStatus().equals(StatusType.UNKNOWN)) {
-                return "> Could not get a profile for this user.";
+                return "> Could not get a profile for " + user.displayName + ".";
             }
             profile = new ProfileObject(user.stringID);
             command.guild.users.addUser(profile);
         } else if (profile == null) {
-            return "> Could not get a profile for this user.";
+            return "> Could not get a profile for " + user.displayName + ".";
         }
         if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
-            return "> User has set their profile to private.";
+            return "> " + user.displayName + " has set their profile to private.";
         }
 
         //start of the profile builder.

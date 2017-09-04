@@ -70,7 +70,7 @@ public class MessageHandler {
                 if (!currentChannel.isPrivate()) {
                     if (c.channel() != null && !Utility.canBypass(command.user.get(), command.guild.get())) {
                         List<IChannel> channels = command.guild.config.getChannelsByType(c.channel(), command.guild);
-                        if (!channels.contains(command.channel.get())) {
+                        if (!channels.contains(command.channel.get()) && channels.size() != 0) {
                             List<String> list = Utility.getChannelMentions(Utility.getVisibleChannels(channels, command.user));
                             if (list.size() == 0) {
                                 Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.", currentChannel);

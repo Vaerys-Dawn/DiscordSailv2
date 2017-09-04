@@ -496,6 +496,9 @@ public class XpHandler {
 
     public static int getRewardCount(GuildObject object, String userID) {
         ProfileObject userObject = object.users.getUserByID(userID);
+        if (userObject == null) {
+            return 0;
+        }
         ArrayList<RewardRoleObject> allRewards = object.config.getAllRewards(userObject.getCurrentLevel());
         if (allRewards.size() == 0) {
             return 0;

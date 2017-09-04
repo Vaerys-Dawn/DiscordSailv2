@@ -23,31 +23,31 @@ public class Mute implements Command {
     public String execute(String args, CommandObject command) {
         SplitFirstObject userCall = new SplitFirstObject(args);
         IRole mutedRole = command.client.get().getRoleByID(command.guild.config.getMutedRoleID());
-        if (mutedRole == null) {
-            return "> Cannot Mute/UnMute user. No mute role exists.";
-        }
-        if (userCall.getRest() == null) {
-            return "> Cannot Mute/UnMute user. No modifier specified.";
-        }
         SplitFirstObject modifier = new SplitFirstObject(userCall.getRest());
         UserObject muted = Utility.getUser(command, userCall.getFirstWord(), false);
         if (muted == null) {
             return "> Could not find user.";
         }
+        if (mutedRole == null) {
+            return "> Cannot Mute/UnMute " + muted.displayName + ". No mute role exists.";
+        }
+        if (userCall.getRest() == null) {
+            return "> Cannot Mute/UnMute " + muted.displayName + ". No modifier specified.";
+        }
         if (!Utility.testUserHierarchy(command.client.bot, mutedRole, command.guild.get())) {
-            return "> Cannot Mute/UnMute user. **" + mutedRole.getName() + "** role has a higher hierarchy than me.";
+            return "> Cannot Mute/UnMute " + muted.displayName + ". **" + mutedRole.getName() + "** role has a higher hierarchy than me.";
         }
         if (muted.stringID.equals(command.user.stringID)) {
             return "> Don't try to mute yourself you numpty.";
         }
         if (Utility.testModifier(modifier.getFirstWord()) == null) {
-            return "> Cannot Mute/UnMute user. Modifier Invalid. Must be either +/-/add/del";
+            return "> Cannot Mute/UnMute " + muted.displayName + ". Modifier Invalid. Must be either +/-/add/del";
         }
         if (!Utility.testUserHierarchy(command.user.get(), muted.get(), command.guild.get())) {
-            return "> Cannot Mute/UnMute user. User hierarchy higher than yours.";
+            return "> Cannot Mute/UnMute " + muted.displayName + ". User hierarchy higher than yours.";
         }
         if (!Utility.testUserHierarchy(command.client.bot, muted.get(), command.guild.get())) {
-            return "> Cannot Mute/UnMute user. My hierarchy level is too low.";
+            return "> Cannot Mute/UnMute " + muted.displayName + ". My hierarchy level is too low.";
         }
         if (Utility.testModifier(modifier.getFirstWord())) {
             SplitFirstObject time = new SplitFirstObject("");

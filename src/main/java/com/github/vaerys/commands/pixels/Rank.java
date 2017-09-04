@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
@@ -18,7 +19,6 @@ public class Rank implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         UserObject user = command.user;
-        String error = "> Cannot get rank stats for this user.";
         if (args != null && !args.isEmpty()) {
             UserObject userObject = Utility.getUser(command, args, true);
             if (userObject != null) {
@@ -27,10 +27,17 @@ public class Rank implements Command {
                 return "> Could not find user.";
             }
         }
+        String error = "> Cannot get rank stats for " + user.displayName + ".";
         if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
-            return "> User has set their profile to private.";
+            return "> " + user.displayName + " has set their profile to private.";
         } else if (user.isPrivateProfile(command.guild) && user.longID == command.user.longID) {
             return "> You cannot see your ranking as you have set your profile to private.";
+        }
+        if (user.getProfile(command.guild) == null) {
+            return error;
+        }
+        if (user.getProfile(command.guild).getSettings().contains(UserSetting.HIT_LEVEL_FLOOR)) {
+            return "> " + user.displayName + " has decayed to the level floor, they will need to level up again to see your rank.";
         }
         //grab a copy of the list
         ArrayList<ProfileObject> users = (ArrayList<ProfileObject>) command.guild.users.getProfiles().clone();

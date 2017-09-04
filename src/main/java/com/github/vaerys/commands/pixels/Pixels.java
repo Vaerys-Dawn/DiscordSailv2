@@ -28,12 +28,12 @@ public class Pixels implements Command {
                 return "> Could not find user.";
             }
         }
-        if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
-            return "> User has set their profile to private.";
-        }
         ProfileObject profile = command.guild.users.getUserByID(user.stringID);
-        if (user == null) {
-            return "> That user currently does not have a profile.";
+        if (profile == null) {
+            return "> " + user.displayName + " currently does not have a profile.";
+        }
+        if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
+            return "> " + user.displayName + " has set their profile to private.";
         }
         String xpTitle = "Total Pixels: ";
         String xpTotal = NumberFormat.getInstance().format(profile.getXP());
