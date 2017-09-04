@@ -32,27 +32,52 @@ public class EventHandler {
 
     final static Logger logger = LoggerFactory.getLogger(EventHandler.class);
 
+    private static long keepAliveTenSec;
+    private static long keepAliveMin;
+    private static long keepAliveFiveMin;
+
+    public static void checkKeepAlive() {
+        if (keepAliveTenSec - System.currentTimeMillis() > 10 * 4 * 1000) {
+            logger.error("Ten Second Timer Failed to respond to keep alive. resetting.");
+            doEventTenSec();
+        }
+        if (keepAliveMin - System.currentTimeMillis() > 60 * 4 * 1000) {
+            logger.error("One Min Timer Failed to respond to keep alive. resetting.");
+            doEventMin();
+        }
+        if (keepAliveFiveMin - System.currentTimeMillis() > 60 * 5 * 4 * 1000) {
+            logger.error("Five Min Timer Failed to respond to keep alive. resetting.");
+            doEventFiveMin(ZonedDateTime.now(ZoneOffset.UTC));
+        }
+    }
+
+
     public EventHandler() {
         ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
 //        doEventSec();
+        keepAliveFiveMin = System.currentTimeMillis();
+        keepAliveMin = System.currentTimeMillis();
+        keepAliveTenSec = System.currentTimeMillis();
         doEventTenSec();
         doEventMin();
         doEventFiveMin(nowUTC);
         doEventDaily(nowUTC);
     }
 
-    private void doEventMin() {
-        int intialdelay = 4000;
+    private static void doEventMin() {
+        int initialDelay = 4000;
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                keepAliveMin = System.currentTimeMillis();
+                checkKeepAlive();
                 logger.trace("Reset speakers.");
                 for (GuildObject g : Globals.getGuilds()) {
                     g.getSpokenUsers().clear();
                 }
             }
-        }, intialdelay, 60 * 1000);
+        }, initialDelay, 60 * 1000);
     }
 
     //Reminder new setup.
@@ -87,6 +112,7 @@ public class EventHandler {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                checkKeepAlive();
                 ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
                 String dailyFileName = Globals.dailyAvatarName.replace("#day#", timeNow.getDayOfWeek().toString());
                 DayOfWeek day = timeNow.getDayOfWeek();
@@ -186,14 +212,18 @@ public class EventHandler {
         return true;
     }
 
-    private void doEventTenSec() {
+    private static void doEventTenSec() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                keepAliveTenSec = System.currentTimeMillis();
                 for (GuildObject task : Globals.getGuilds()) {
                     task.resetRateLimit();
-
+                    if (task.getRatelimiting().size() != 0) {
+                        logger.error("Failed to clear list, forcing it to clear.");
+                        task.forceClearRate();
+                    }
                     //Mutes.
                     ArrayList<UserCountDown> mutedUsers = task.users.getMutedUsers();
                     for (int i = 0; i < mutedUsers.size(); i++) {
@@ -231,6 +261,8 @@ public class EventHandler {
             @Override
             public void run() {
                 ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+                keepAliveFiveMin = System.currentTimeMillis();
+                checkKeepAlive();
                 for (ReminderObject object : Globals.getGlobalData().getReminders()) {
                     if (object.getExecuteTime() - now.toEpochSecond() < 350) {
                         if (!object.isSent()) {
