@@ -71,6 +71,10 @@ public class Pixels implements Command {
         } else {
             builder.appendField(levelTitle, "N/a", false);
         }
+
+        if (profile.getSettings().contains(UserSetting.HIT_LEVEL_FLOOR)) {
+            builder.withDescription("**You have decayed to the level floor,\nYou will need to level up again to see your rank.**");
+        }
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             Utility.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
             return "> Pixels sent to your Direct messages.";
