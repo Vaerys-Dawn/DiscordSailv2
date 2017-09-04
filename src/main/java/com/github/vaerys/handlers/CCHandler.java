@@ -126,7 +126,7 @@ public class CCHandler {
                 }
                 if (response.contains("<embedImage>{")) {
                     String imageURL = TagHandler.tagEmbedImage(response, prefixEmbedImage);
-                    if (imageURL != null || !imageURL.isEmpty()) {
+                    if (imageURL != null && !imageURL.isEmpty()) {
                         if (commandObject.channel.get().getModifiedPermissions(author).contains(Permissions.EMBED_LINKS)) {
                             response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "");
                             response = TagHandler.tagToCaps(response);
