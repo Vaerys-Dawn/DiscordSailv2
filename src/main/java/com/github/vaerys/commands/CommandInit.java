@@ -112,6 +112,7 @@ public class CommandInit {
         commands.add(new EnterComp());
         commands.add(new EnterVote());
         commands.add(new PurgeComp());
+        commands.add(new WeightedFinalTally());
         //Groups commands
         commands.add(new GroupUp());
         commands.add(new ClearGroupUp());

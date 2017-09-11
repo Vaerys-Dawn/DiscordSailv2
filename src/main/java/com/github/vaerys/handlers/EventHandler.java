@@ -250,7 +250,11 @@ public class EventHandler {
         if (nowUTC.getMinute() != 59) {
             nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
         } else {
-            nextTimeUTC = nowUTC.withSecond(0).withHour(nowUTC.getHour() + 1).withMinute(0);
+            if (nowUTC.getHour() == 23 && nowUTC.getMinute() > 54) {
+                nextTimeUTC = nowUTC.withDayOfYear(nowUTC.getDayOfYear() + 1).withMinute(0).withHour(0).withSecond(0);
+            } else {
+                nextTimeUTC = nowUTC.withSecond(0).withHour(nowUTC.getHour() + 1).withMinute(0);
+            }
         }
         initialDelay = (nextTimeUTC.toEpochSecond() - nowUTC.toEpochSecond());
         if (initialDelay < 30) {

@@ -76,7 +76,8 @@ public class ModifierRoles implements Command {
             List<IRole> userRoles = command.user.roles;
             String response = Constants.ERROR_UPDATING_ROLE;
             if (role == null) {
-                return "> **" + args + "** is not a valid Role Name.";
+                Utility.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListModifs.getList(command), command.channel.get());
+                return null;
             } else {
                 if (command.guild.config.isRoleModifier(role.getLongID())) {
                     //if user has role remove it
@@ -101,7 +102,8 @@ public class ModifierRoles implements Command {
                         return Constants.ERROR_UPDATING_ROLE;
                     }
                 } else {
-                    return "> The **" + role.getName() + "** role is not listed as a modifier role.";
+                    Utility.sendEmbedMessage("> The **" + role.getName() + "** role is not listed as a modifier role.",ListModifs.getList(command),command.channel.get());
+                    return null;
                 }
             }
         }

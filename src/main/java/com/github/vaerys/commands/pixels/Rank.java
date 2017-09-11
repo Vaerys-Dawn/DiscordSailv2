@@ -37,7 +37,11 @@ public class Rank implements Command {
             return error;
         }
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.HIT_LEVEL_FLOOR)) {
-            return "> " + user.displayName + " has decayed to the level floor, they will need to level up again to see your rank.";
+            if (user.get() != command.user.get()) {
+                return "> " + user.displayName + " has decayed to the level floor, they will need to level up again to see your rank.";
+            }else {
+                return "> You have decayed to the level floor, you will need to level up again to see your rank.";
+            }
         }
         //grab a copy of the list
         ArrayList<ProfileObject> users = (ArrayList<ProfileObject>) command.guild.users.getProfiles().clone();

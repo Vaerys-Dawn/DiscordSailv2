@@ -83,6 +83,9 @@ public class ProfileObject {
     }
 
     public ArrayList<UserSetting> getSettings() {
+        if (settings == null) {
+            return new ArrayList<>();
+        }
         return settings;
     }
 

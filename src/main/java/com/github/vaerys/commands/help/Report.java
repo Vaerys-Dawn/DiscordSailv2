@@ -43,7 +43,11 @@ public class Report implements Command {
                     builder.append("**User Report**\n");
                 }
                 split.editRestReplace(split.getRest(), Utility.convertMentionToText(split.getRest()));
-                builder.append("Reporter: " + command.user.get().mention() + "\nReported: " + reported.get().mention() + "\nReason: `" + split.getRest() + "`");
+                String reason = split.getRest();
+                if (split.getRest() == null) {
+                    reason = "No reason given.";
+                }
+                builder.append("Reporter: " + command.user.get().mention() + "\nReported: " + reported.get().mention() + "\nReason: `" + reason + "`");
                 builder.append("\n" + command.channel.get().mention());
                 IMessage message = Utility.sendMessage(builder.toString(), channel).get();
                 if (message == null) {

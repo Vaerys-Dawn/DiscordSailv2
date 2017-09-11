@@ -14,8 +14,7 @@ import java.util.ArrayList;
  */
 public class ListRoles implements Command {
 
-    @Override
-    public String execute(String args, CommandObject command) {
+    public static XEmbedBuilder getList(CommandObject command) {
         String title = "> Here are the **Cosmetic** roles you can choose from:\n";
         ArrayList<String> list = new ArrayList<>();
         XEmbedBuilder builder = new XEmbedBuilder();
@@ -26,7 +25,12 @@ public class ListRoles implements Command {
         Utility.listFormatterEmbed(title, builder, list, true);
         builder.appendField(spacer, Utility.getCommandInfo(new CosmeticRoles(), command), false);
         builder.withColor(Utility.getUsersColour(command.client.bot, command.guild.get()));
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        return builder;
+    }
+
+    @Override
+    public String execute(String args, CommandObject command) {
+        Utility.sendEmbedMessage("", getList(command), command.channel.get());
         return null;
     }
 

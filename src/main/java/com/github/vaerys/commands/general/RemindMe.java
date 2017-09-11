@@ -41,7 +41,7 @@ public class RemindMe implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"RemindMe"};
+        return new String[]{"RemindMe","Reminder"};
     }
 
     @Override

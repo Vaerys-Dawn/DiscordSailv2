@@ -67,6 +67,10 @@ public class UserSettings implements Command {
                     return toggleSetting(profile, UserSetting.DENY_AUTO_ROLE,
                             "> **" + user.displayName + "** will no longer automatically be granted roles.",
                             "> **" + user.displayName + "** will now automatically be granted roles.");
+                case "dontdecay":
+                    return toggleSetting(profile, UserSetting.DONT_DECAY,
+                            "> **" + user.displayName + "** will now have pixel decay.",
+                            "> **" + user.displayName + "** will no longer have pixel decay.");
                 case "list":
                     List<String> userSettings = new ArrayList<>();
                     for (UserSetting s : profile.getSettings()) {

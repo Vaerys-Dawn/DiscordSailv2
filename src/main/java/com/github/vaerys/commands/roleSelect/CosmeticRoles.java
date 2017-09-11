@@ -85,7 +85,8 @@ public class CosmeticRoles implements Command {
             //check if role is valid
             IRole role = Utility.getRoleFromName(args, command.guild.get());
             if (role == null && !args.equalsIgnoreCase("remove")) {
-                return "> **" + args + "** is not a valid Role Name.";
+                Utility.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListRoles.getList(command), command.channel.get());
+                return null;
                 //if args = remove. remove the user's cosmetic role
             } else if (args.equalsIgnoreCase("remove")) {
                 ListIterator iterator = userRoles.listIterator();
@@ -142,7 +143,8 @@ public class CosmeticRoles implements Command {
                         }
                     }
                 } else {
-                    return "> **" + args + "** is not a valid cosmetic role.";
+                    Utility.sendEmbedMessage("> **" + args + "** is not a valid cosmetic role.", ListRoles.getList(command), command.channel.get());
+                    return null;
                 }
             }
             // push the changes to the user's roles.

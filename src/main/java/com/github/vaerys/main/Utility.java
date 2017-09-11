@@ -732,6 +732,9 @@ public class Utility {
 
     public static String convertMentionToText(String from) {
         String last;
+        if (from == null || from.isEmpty()) {
+            return from;
+        }
         do {
             last = from;
             if (from.contains("<@") || from.contains("<!@")) {
@@ -1213,18 +1216,18 @@ public class Utility {
                     if ((u.getName() + "#" + u.getDiscriminator()).matches("(?i)" + toTest)) {
                         user = u;
                     }
-                    if (u.getName().matches("(?i)" + toTest)) {
+                    if (u.getName().matches("(?i)" + toTest) && user == null) {
                         user = u;
                     }
                     String displayName = u.getDisplayName(command.guild.get());
-                    if (displayName.matches("(?i)" + toTest)) {
+                    if (displayName.matches("(?i)" + toTest) && user == null) {
                         user = u;
                     }
                     if (doContains && conUser == null) {
                         if (u.getName().matches("(?i).*" + toTest + ".*")) {
                             conUser = u;
                         }
-                        if (displayName.matches("(?i).*" + toTest + ".*")) {
+                        if (displayName.matches("(?i).*" + toTest + ".*") && conUser == null) {
                             conUser = u;
                         }
                     }

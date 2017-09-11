@@ -39,7 +39,7 @@ public class XpHandler {
 
     public static void doDecay(GuildObject content, ZonedDateTime nowUTC) {
         for (ProfileObject u : content.users.getProfiles()) {
-            if (u.getLastTalked() != -1) {
+            if (u.getLastTalked() != -1 && !u.getSettings().contains(DONT_DECAY)) {
                 long diff = nowUTC.toEpochSecond() - u.getLastTalked();
                 long days = TimeUnit.DAYS.convert(diff, TimeUnit.SECONDS);
                 float temp = 0;
