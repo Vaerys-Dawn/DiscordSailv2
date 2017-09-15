@@ -206,6 +206,9 @@ public class Utility {
 
     //Discord Request Processors
     public static XRequestBuffer.RequestFuture<IMessage> sendMessage(String message, IChannel channel) {
+        if (!Globals.client.isReady()) {
+            return null;
+        }
         return XRequestBuffer.request(() -> {
             IMessage error = null;
             if (message == null) {

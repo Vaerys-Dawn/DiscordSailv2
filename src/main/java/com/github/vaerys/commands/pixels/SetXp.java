@@ -15,7 +15,7 @@ import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * @deprecated
- * Implementation of EditXP makes this redunant.
+ * Implementation of EditXP makes this redundant.
  * Please use EditXP [user] "=" [amount] instead.
  */
 @Deprecated

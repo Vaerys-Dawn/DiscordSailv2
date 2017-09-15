@@ -10,7 +10,7 @@ import sx.blah.discord.handle.obj.Permissions;
 
 
 /**
- *  Created by AndrielChaoti 22-Aug-17
+ * Created by AndrielChaoti 22-Aug-17
  */
 public class EditXp implements Command {
 
@@ -25,21 +25,18 @@ public class EditXp implements Command {
         // Get user specified in command
         UserObject user = Utility.getUser(command, splitArgs[0], false);
         if (user == null) return "> Could not find user.";
-
         // Parse passed XP into a number
         long xp;
         try {
             xp = Long.parseLong(splitArgs[2]);
-
             if (xp < 0) return "> I don't know what negative pixels are. What are you trying to do?";
-
         } catch (NumberFormatException e) {
             return "> **" + splitArgs[2] + "** is not a number.";
         }
 
         // Get userObject from passed user.
-        ProfileObject userObject = user.getProfile(command.guild);
-        if (userObject == null) return "> " + user.displayName + " does not have a profile.";
+        ProfileObject profile = user.getProfile(command.guild);
+        if (profile == null) return "> " + user.displayName + " doesn't have a profile yet.";
 
         // Parse and execute modifiers
         String out;
@@ -49,38 +46,30 @@ public class EditXp implements Command {
             // Add Pixels:
             case "+":
             case "add":
-                userObject.setXp(userObject.getXP() + xp);
+                profile.setXp(profile.getXP() + xp);
                 xpChanged = true;
-
                 out = "> Added **" + xp + "** pixels to **" + user.displayName + "**.";
                 break;
-
             // Remove Pixels
             case "-":
             case "rem":
             case "sub":
-                userObject.setXp(userObject.getXP() - xp);
+                profile.setXp(profile.getXP() - xp);
                 xpChanged = true;
-
                 out = "> Removed **" + xp + "** pixels from **" + user.displayName + "**.";
-
                 // Special handling if XP is set below 0
-                if (userObject.getXP() < 0) {
-                    userObject.setXp(0);
+                if (profile.getXP() < 0) {
+                    profile.setXp(0);
                     out = "> **" + user.displayName + "** did not have enough pixels. I just set them to **0**";
                 }
-
                 break;
-
             // Set Pixels
             case "=":
             case "set":
-                userObject.setXp(xp);
+                profile.setXp(xp);
                 xpChanged = true;
-
                 out = "> Set Pixels to **" + xp + "** for user **" + user.displayName + "**.";
                 break;
-
             // Failure case
             default:
                 out = "> Invalid modifier. Valid modifiers are **[+/-/=]** or **add/sub/set**";
@@ -88,32 +77,41 @@ public class EditXp implements Command {
         }
 
         if (xpChanged) {
-            userObject.removeLevelFloor();
-            XpHandler.checkUsersRoles(user.stringID, command.guild);
+            profile.removeLevelFloor();
+            XpHandler.checkUsersRoles(user.longID, command.guild);
         }
         return out;
     }
 
     // Define Command parameters.
     @Override
-    public String[] names(){return new String[]{"EditXp", "EditPixels"};}
+    public String[] names() {
+        return new String[]{"EditXp", "EditPixels"};
+    }
 
     @Override
-    public String description(){
+    public String description() {
         String modifiers = "\n**Modifiers**:\n" +
                 "> +/add - `Add [Pixels] pixels.`\n" +
                 "> -/sub - `Remove [Pixels] pixels.`\n" +
                 "> =/set - `Set pixels to [Pixels].`\n";
-        return "Allows you to add or remove pixels from a user." + modifiers;}
+        return "Allows you to add or remove pixels from a user." + modifiers;
+    }
 
     @Override
-    public String type(){return TYPE_PIXEL;}
+    public String type() {
+        return TYPE_PIXEL;
+    }
 
     @Override
-    public Permissions[] perms(){return new Permissions[]{Permissions.MANAGE_SERVER};}
+    public Permissions[] perms() {
+        return new Permissions[]{Permissions.MANAGE_SERVER};
+    }
 
     @Override
-    public String usage() {return "[@User] [modifier] [Pixels]";}
+    public String usage() {
+        return "[@User] [modifier] [Pixels]";
+    }
 
     @Override
     public boolean doAdminLogging() {
