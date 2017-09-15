@@ -15,7 +15,6 @@ import com.github.vaerys.commands.general.*;
 import com.github.vaerys.commands.groups.ClearGroupUp;
 import com.github.vaerys.commands.groups.GroupUp;
 import com.github.vaerys.commands.help.*;
-import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.commands.pixels.*;
 import com.github.vaerys.commands.roleSelect.CosmeticRoles;
 import com.github.vaerys.commands.roleSelect.ListModifs;

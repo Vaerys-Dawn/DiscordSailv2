@@ -28,7 +28,7 @@ public class ProfileSettings implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         String message = "> Your Level messages will now be sent to ";
-        ProfileObject userObject = command.guild.users.getUserByID(command.user.stringID);
+        ProfileObject userObject = command.guild.users.getUserByID(command.user.longID);
         StringBuilder builder = new StringBuilder();
         for (String s : args.split(" ")) {
             switch (s.toLowerCase()) {

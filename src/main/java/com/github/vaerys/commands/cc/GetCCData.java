@@ -24,7 +24,7 @@ public class GetCCData implements Command {
                 content.append("\nCreated by: \"" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "\"");
                 content.append("\nTimes run: \"" + c.getTimesRun() + "\"");
                 content.append("\nContents: \"" + c.getContents(false) + "\"");
-                String filePath = Constants.DIRECTORY_TEMP + command.message.stringID + ".txt";
+                String filePath = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
                 FileHandler.writeToFile(filePath, content.toString(), false);
                 Utility.sendFile("> Here is the raw data for Custom Command: **" + c.getName() + "**", new File(filePath), command.channel.get());
                 try {

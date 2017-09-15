@@ -71,7 +71,7 @@ public class AnnotationListener {
             CommandObject command = new CommandObject(event.getMessage());
             //Set Console Response Channel.
             if (command.user.get().equals(command.client.creator)) {
-                Globals.consoleMessageCID = command.channel.stringID;
+                Globals.consoleMessageCID = command.channel.longID;
             }
             //message and command handling
             new MessageHandler(command.message.get().getContent(), command, event.getChannel().isPrivate());
@@ -106,7 +106,7 @@ public class AnnotationListener {
         }
         IGuild guild = event.getMessage().getGuild();
         IUser author = event.getMessage().getAuthor();
-        String guildOwnerID = guild.getOwner().getStringID();
+        long guildOwnerID = guild.getOwner().getLongID();
         String sailMention = event.getClient().getOurUser().mention(false);
         String sailMentionNick = event.getClient().getOurUser().mention(true);
         String prefix;
@@ -116,12 +116,12 @@ public class AnnotationListener {
         if (event.getMessage().mentionsEveryone() || event.getMessage().mentionsHere()) {
             return;
         }
-        if (author.getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
+        if (author.getLongID() == Globals.getClient().getOurUser().getLongID()) {
             return;
         }
 
         /**This lets you set the guild's Prefix if you run "@Bot SetCommandPrefix [New Prefix]"*/
-        if (author.getStringID().equals(guildOwnerID) || author.getStringID().equals(Globals.creatorID)) {
+        if (author.getLongID() == guildOwnerID || author.getLongID() == Globals.creatorID) {
             SplitFirstObject mentionSplit = new SplitFirstObject(message);
             SplitFirstObject getArgs = new SplitFirstObject(mentionSplit.getRest());
             if (mentionSplit.getFirstWord() != null) {
@@ -166,22 +166,22 @@ public class AnnotationListener {
         if (content.config.channelLogging) {
             if (!event.getOldChannel().getName().equalsIgnoreCase(event.getNewChannel().getName())) {
                 String log = "> Channel " + event.getNewChannel().mention() + "'s name was changed.\nOld name : #" + event.getOldChannel().getName() + ".";
-                Utility.sendLog(log, content.config, false);
+                Utility.sendLog(log, content, false);
             } else if ((event.getOldChannel().getTopic() == null || event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() == null || event.getNewChannel().getTopic().isEmpty())) {
                 //do nothing
             } else if ((event.getOldChannel().getTopic() == null || event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() != null || !event.getNewChannel().getTopic().isEmpty())) {
                 StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was added.\n");
                 log.append("**New Topic**: " + event.getNewChannel().getTopic());
-                Utility.sendLog(log.toString(), content.config, false);
+                Utility.sendLog(log.toString(), content, false);
             } else if ((event.getOldChannel().getTopic() != null || !event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() == null || event.getNewChannel().getTopic().isEmpty())) {
                 StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was removed.\n");
                 log.append("**Old Topic**: " + event.getOldChannel().getTopic());
-                Utility.sendLog(log.toString(), content.config, false);
+                Utility.sendLog(log.toString(), content, false);
             } else if (!event.getOldChannel().getTopic().equalsIgnoreCase(event.getNewChannel().getTopic())) {
                 StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was changed.");
                 log.append("\n**Old Topic**: " + event.getOldChannel().getTopic());
                 log.append("\n**New Topic**: " + event.getNewChannel().getTopic());
-                Utility.sendLog(log.toString(), content.config, false);
+                Utility.sendLog(log.toString(), content, false);
             }
         }
     }
@@ -194,7 +194,7 @@ public class AnnotationListener {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
         if (content.config.channelLogging) {
             String log = "> Channel #" + event.getChannel().getName() + " was deleted.";
-            Utility.sendLog(log, content.config, false);
+            Utility.sendLog(log, content, false);
         }
         updateVariables(event.getChannel().getGuild());
     }
@@ -204,7 +204,7 @@ public class AnnotationListener {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
         if (content.config.channelLogging) {
             String log = "> Channel " + event.getChannel().mention() + " was created.";
-            Utility.sendLog(log, content.config, false);
+            Utility.sendLog(log, content, false);
         }
     }
 
@@ -251,7 +251,7 @@ public class AnnotationListener {
                 //if is x and can bypass
                 if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, event.getUser(), event.getGuild())) {
                     if (event.getReaction().getUnicodeEmoji().equals(x)) {
-                        if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
+                        if (event.getMessage().getAuthor().getLongID() == Globals.getClient().getOurUser().getLongID()) {
                             Utility.deleteMessage(event.getMessage());
                             return;
                         }
@@ -276,7 +276,7 @@ public class AnnotationListener {
             } else {
                 //if anyone uses x
                 if (event.getReaction().getUnicodeEmoji().equals(x)) {
-                    if (event.getMessage().getAuthor().getStringID().equals(Globals.getClient().getOurUser().getStringID())) {
+                    if (event.getMessage().getAuthor().getLongID() == Globals.getClient().getOurUser().getLongID()) {
                         Utility.deleteMessage(event.getMessage());
                         return;
                     }
@@ -294,32 +294,10 @@ public class AnnotationListener {
         String content;
         IUser ourUser = command.client.bot;
 
-        List<String> infoID = command.guild.config.getChannelIDsByType(Command.CHANNEL_INFO);
-        List<String> serverLogID = command.guild.config.getChannelIDsByType(Command.CHANNEL_SERVER_LOG);
-        List<String> adminLogID = command.guild.config.getChannelIDsByType(Command.CHANNEL_ADMIN_LOG);
-        List<String> dontLog = command.guild.config.getChannelIDsByType(Command.CHANNEL_DONT_LOG);
-        if (dontLog != null) {
-            for (String id : dontLog) {
-                if (command.channel.stringID.equals(id)) {
-                    return;
-                }
-            }
-        }
-        if (command.guild.config.dontLogBot && command.user.get().isBot()) {
+        if (!shouldLog(command)) {
             return;
         }
-        if (event.getMessage() == null) {
-            return;
-        }
-        if (serverLogID != null && serverLogID.get(0).equals(command.channel.stringID) && ourUser.getStringID().equals(command.user.stringID)) {
-            return;
-        }
-        if (infoID != null && infoID.get(0).equals(command.channel.stringID) && ourUser.getStringID().equals(command.user.stringID)) {
-            return;
-        }
-        if (adminLogID != null && adminLogID.get(0).equals(command.channel.stringID) && ourUser.getStringID().equals(command.user.stringID)) {
-            return;
-        }
+
         if (command.guild.config.deleteLogging) {
             if (command.message.get().getContent() == null) {
                 return;
@@ -333,7 +311,7 @@ public class AnnotationListener {
             } else {
                 content = Utility.unFormatMentions(command.message.get());
             }
-            if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.user.stringID.equals(command.client.stringID)) {
+            if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.user.longID == command.client.longID) {
                 return;
             }
             long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - event.getMessage().getTimestamp().atZone(ZoneOffset.UTC).toEpochSecond();
@@ -343,8 +321,36 @@ public class AnnotationListener {
             } else {
                 formatted = "from " + Utility.formatTimeDifference(difference);
             }
-            Utility.sendLog("> **@" + command.user.username + "'s** Message " + formatted + " was **Deleted** in channel: " + command.channel.get().mention() + " with contents:\n" + content, command.guild.config, false);
+            Utility.sendLog("> **@" + command.user.username + "'s** Message " + formatted + " was **Deleted** in channel: " + command.channel.get().mention() + " with contents:\n" + content, command.guild, false);
         }
+    }
+
+    private boolean shouldLog(CommandObject command) {
+        List<IChannel> infoID = command.guild.config.getChannelsByType(Command.CHANNEL_INFO, command.guild);
+        List<IChannel> serverLogID = command.guild.config.getChannelsByType(Command.CHANNEL_SERVER_LOG, command.guild);
+        List<IChannel> adminLogID = command.guild.config.getChannelsByType(Command.CHANNEL_ADMIN_LOG, command.guild);
+        List<IChannel> dontLog = command.guild.config.getChannelsByType(Command.CHANNEL_DONT_LOG, command.guild);
+        if (dontLog.size() != 0) {
+            if (dontLog.contains(command.channel.get())) {
+                return false;
+            }
+        }
+        if (command.guild.config.dontLogBot && command.user.get().isBot()) {
+            return false;
+        }
+        if (command.message.get() == null) {
+            return false;
+        }
+        if (serverLogID.size() != 0 && serverLogID.get(0).equals(command.channel.get()) && command.client.longID == command.user.longID) {
+            return false;
+        }
+        if (infoID.size() != 0 && infoID.get(0).equals(command.channel.get()) && command.client.longID == command.user.longID) {
+            return false;
+        }
+        if (adminLogID.size() != 0 && adminLogID.get(0).equals(command.channel.get()) && command.client.longID == command.user.longID) {
+            return false;
+        }
+        return true;
     }
 
     @EventSubscriber
@@ -369,9 +375,9 @@ public class AnnotationListener {
         GuildObject content = Globals.getGuildContent(guild.getLongID());
         if (content.config.joinLeaveLogging) {
             if (joining) {
-                Utility.sendLog("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **Joined** the server.", content.config, false);
+                Utility.sendLog("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **Joined** the server.", content, false);
             } else {
-                Utility.sendLog("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **Left** the server.", content.config, false);
+                Utility.sendLog("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **Left** the server.", content, false);
             }
         }
     }
@@ -392,68 +398,50 @@ public class AnnotationListener {
         }
         CommandObject command = new CommandObject(event.getMessage());
         IUser ourUser = command.client.bot;
-        List<String> logID = command.guild.config.getChannelIDsByType(Command.CHANNEL_SERVER_LOG);
-        List<String> dontLog = command.guild.config.getChannelIDsByType(Command.CHANNEL_DONT_LOG);
-        if (dontLog != null) {
-            for (String id : dontLog) {
-                if (command.channel.stringID.equals(id)) {
-                    return;
-                }
-            }
+        if (!shouldLog(command)) {
+            return;
         }
-        if (logID != null) {
-            String serverLogID = logID.get(0);
 
-            if (command.guild.config.dontLogBot && command.user.get().isBot()) {
+        if (command.guild.config.editLogging) {
+            //formats how long ago this was.
+            String formatted;
+            String oldContent;
+            String newContent;
+            StringBuilder response = new StringBuilder();
+            ZonedDateTime oldMessageTime = event.getOldMessage().getTimestamp().atZone(ZoneOffset.UTC);
+            ZonedDateTime newMessageTime = event.getNewMessage().getEditedTimestamp().get().atZone(ZoneOffset.UTC);
+            int charLimit;
+            long difference = newMessageTime.toEpochSecond() - oldMessageTime.toEpochSecond();
+            if (command.guild.config.useTimeStamps) {
+                formatted = "at `" + Utility.formatTimestamp(oldMessageTime) + " - UTC`";
+            } else {
+                formatted = "from " + Utility.formatTimeDifference(difference);
+            }
+            response.append("> **@" + command.user.username + "'s** Message " + formatted + " was **Edited** in channel: " + command.channel.get().mention() + ". ");
+            //remove excess text that would cause a max char limit error.
+            if (command.message.get().getContent().isEmpty()) {
                 return;
             }
-            if (event.getMessage() == null) {
-                return;
+            if (command.guild.config.extendEditLog) {
+                charLimit = 900;
+            } else {
+                charLimit = 1800;
             }
-            if (serverLogID != null && serverLogID.equals(command.channel.stringID) && ourUser.getStringID().equals(command.user.stringID)) {
-                return;
+            if (event.getOldMessage().getContent().length() > charLimit) {
+                oldContent = Utility.unFormatMentions(event.getOldMessage()).substring(0, charLimit) + "...";
+            } else {
+                oldContent = Utility.unFormatMentions(event.getOldMessage());
             }
-            if (command.guild.config.editLogging) {
-                //formats how long ago this was.
-                String formatted;
-                String oldContent;
-                String newContent;
-                StringBuilder response = new StringBuilder();
-                ZonedDateTime oldMessageTime = event.getOldMessage().getTimestamp().atZone(ZoneOffset.UTC);
-                ZonedDateTime newMessageTime = event.getNewMessage().getEditedTimestamp().get().atZone(ZoneOffset.UTC);
-                int charLimit;
-                long difference = newMessageTime.toEpochSecond() - oldMessageTime.toEpochSecond();
-                if (command.guild.config.useTimeStamps) {
-                    formatted = "at `" + Utility.formatTimestamp(oldMessageTime) + " - UTC`";
-                } else {
-                    formatted = "from " + Utility.formatTimeDifference(difference);
-                }
-                response.append("> **@" + command.user.username + "'s** Message " + formatted + " was **Edited** in channel: " + command.channel.get().mention() + ". ");
-                //remove excess text that would cause a max char limit error.
-                if (command.message.get().getContent().isEmpty()) {
-                    return;
-                }
-                if (command.guild.config.extendEditLog) {
-                    charLimit = 900;
-                } else {
-                    charLimit = 1800;
-                }
-                if (event.getOldMessage().getContent().length() > charLimit) {
-                    oldContent = Utility.unFormatMentions(event.getOldMessage()).substring(0, charLimit) + "...";
-                } else {
-                    oldContent = Utility.unFormatMentions(event.getOldMessage());
-                }
-                if (event.getNewMessage().getContent().length() > charLimit) {
-                    newContent = Utility.unFormatMentions(event.getNewMessage()).substring(0, charLimit) + "...";
-                } else {
-                    newContent = Utility.unFormatMentions(event.getNewMessage());
-                }
-                response.append("**\nMessage's Old Contents:**\n" + oldContent);
-                if (command.guild.config.extendEditLog) {
-                    response.append("\n**Message's New Contents:**\n" + newContent);
-                }
-                Utility.sendLog(response.toString(), command.guild.config, false);
+            if (event.getNewMessage().getContent().length() > charLimit) {
+                newContent = Utility.unFormatMentions(event.getNewMessage()).substring(0, charLimit) + "...";
+            } else {
+                newContent = Utility.unFormatMentions(event.getNewMessage());
             }
+            response.append("**\nMessage's Old Contents:**\n" + oldContent);
+            if (command.guild.config.extendEditLog) {
+                response.append("\n**Message's New Contents:**\n" + newContent);
+            }
+            Utility.sendLog(response.toString(), command.guild, false);
         }
     }
 
@@ -479,7 +467,7 @@ public class AnnotationListener {
             logger.debug("New Roles:");
             logger.debug(newRoleList.toString());
             String prefix = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "'s** Role have been Updated.";
-            Utility.sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content.config, false);
+            Utility.sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content, false);
         }
     }
 }

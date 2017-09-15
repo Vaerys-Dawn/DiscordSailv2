@@ -30,7 +30,7 @@ import java.util.List;
 public class Globals {
 
     public static String botName = null;
-    public static String creatorID = null;
+    public static long creatorID = -1;
     public static String defaultPrefixCommand = null;
     public static String defaultPrefixCC = null;
     public static String defaultAvatarFile = null;
@@ -44,7 +44,7 @@ public class Globals {
     public static int avgMessagesPerDay = 20;
     public static boolean isReady = false;
     public static String version;
-    public static String consoleMessageCID = null;
+    public static long consoleMessageCID = -1;
     public static ArrayList<DailyMessageObject> configDailyMessages = new ArrayList<>();
     public static IDiscordClient client;
     public static boolean showSaveWarning = false;

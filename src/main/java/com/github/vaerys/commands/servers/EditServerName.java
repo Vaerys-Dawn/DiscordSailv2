@@ -17,7 +17,7 @@ public class EditServerName implements Command{
         if (splitArgs.size() < 2) {
             return "> Cannot Edit Server Name as no new name was specified.";
         }
-        return command.guild.servers.editServerName(command.user.stringID, splitArgs.get(0), splitArgs.get(1), command.guild.get());
+        return command.guild.servers.editServerName(command.user.longID, splitArgs.get(0), splitArgs.get(1), command.guild.get());
     }
 
     @Override

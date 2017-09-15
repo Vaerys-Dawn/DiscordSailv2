@@ -38,7 +38,7 @@ public class QueueHandler {
                     long uID = Utility.newDailyMsgUID(Globals.getDailyMessages());
                     XEmbedBuilder embedBuilder = new XEmbedBuilder();
                     embedBuilder.withAuthorName("New Daily Message - " + object.guild.get().getName());
-                    embedBuilder.withFooterText(object.user.stringID);
+                    embedBuilder.withFooterText(object.user.longID + "");
                     embedBuilder.withTitle(object.user.username);
                     embedBuilder.withDesc(content);
                     embedBuilder.appendField(dowString, dayOfWeek + "", true);

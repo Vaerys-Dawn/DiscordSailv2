@@ -9,7 +9,6 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.text.NumberFormat;
@@ -28,7 +27,7 @@ public class Pixels implements Command {
                 return "> Could not find user.";
             }
         }
-        ProfileObject profile = command.guild.users.getUserByID(user.stringID);
+        ProfileObject profile = command.guild.users.getUserByID(user.longID);
         if (profile == null) {
             return "> " + user.displayName + " currently does not have a profile.";
         }
@@ -41,8 +40,8 @@ public class Pixels implements Command {
 
         String rankTitle = "Rank: ";
         String rankTotal;
-        if (XpHandler.rank(command.guild.users, command.guild.get(), profile.getID()) != -1 && profile.getXP() != 0) {
-            rankTotal = XpHandler.rank(command.guild.users, command.guild.get(), profile.getID()) + "/" + XpHandler.totalRanked(command);
+        if (XpHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) != -1 && profile.getXP() != 0) {
+            rankTotal = XpHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) + "/" + XpHandler.totalRanked(command);
         } else {
             rankTotal = "N/a";
         }

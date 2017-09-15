@@ -7,10 +7,8 @@ import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.handle.obj.StatusType;
 
@@ -43,7 +41,7 @@ public class UserInfo implements Command {
             if (user.get().getPresence().getStatus().equals(StatusType.OFFLINE) || user.get().getPresence().getStatus().equals(StatusType.UNKNOWN)) {
                 return "> Could not get a profile for " + user.displayName + ".";
             }
-            profile = new ProfileObject(user.stringID);
+            profile = new ProfileObject(user.longID);
             command.guild.users.addUser(profile);
         } else if (profile == null) {
             return "> Could not get a profile for " + user.displayName + ".";
@@ -116,7 +114,7 @@ public class UserInfo implements Command {
         desc.append("\n" + Utility.listFormatter(links, true));
 
         builder.withDesc(desc.toString());
-        builder.withFooterText("User ID: " + profile.getID());
+        builder.withFooterText("User ID: " + profile.getUserID());
 
         //sends Message
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {

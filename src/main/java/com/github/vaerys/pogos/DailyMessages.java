@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 public class DailyMessages extends GlobalFile {
+    private double fileVersion = 1.0;
     ArrayList<DailyUserMessageObject> dailyMessages = new ArrayList<>();
     ArrayList<QueueObject> queuedRequests = new ArrayList<>();
     public static final String FILE_PATH = "DailyMessages.json";

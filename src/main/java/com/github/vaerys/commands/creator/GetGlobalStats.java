@@ -91,7 +91,7 @@ public class GetGlobalStats implements Command {
 //            long bottomGuild = 0;
 //            String topUser = null;
 //            String bottomUser = null;
-//            GuildContentObject content = Globals.getGuildContent(guild.getStringID());
+//            GuildContentObject content = Globals.getGuildContent(guild.getLongID());
 //            for (UserTypeObject user : content.getGuildUsers().getProfiles()) {
 //                if (bottomGuild == 0) {
 //                    bottomGuild = user.getXP();

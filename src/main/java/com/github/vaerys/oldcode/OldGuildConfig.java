@@ -6,8 +6,8 @@ public class OldGuildConfig {
     ArrayList<RoleTypeObject> cosmeticRoles = new ArrayList<>();
     ArrayList<RoleTypeObject> modifierRoles = new ArrayList<>();
     ArrayList<RoleTypeObject> trustedRoles = new ArrayList<>();
-    RoleTypeObject roleToMention = new RoleTypeObject("null", "null");
-    RoleTypeObject mutedRole = new RoleTypeObject("null", "null");
+    RoleTypeObject roleToMention = new RoleTypeObject("null", -1);
+    RoleTypeObject mutedRole = new RoleTypeObject("null", -1);
 
     public ArrayList<RoleTypeObject> getCosmeticRoles() {
         return cosmeticRoles;

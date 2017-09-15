@@ -7,7 +7,6 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -28,7 +27,7 @@ public class SetLevel implements Command {
             if (userObject != null) {
                 userObject.setXp(xp);
                 userObject.removeLevelFloor();
-                XpHandler.checkUsersRoles(user.stringID, command.guild);
+                XpHandler.checkUsersRoles(user.longID, command.guild);
                 return "> " + user.displayName + "'s Level is now set to: **" + level + "**";
             } else {
                 return "> User does not have a profile.";

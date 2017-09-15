@@ -26,8 +26,8 @@ public class InfoEditModes {
         } else {
             try {
                 IMessage.Attachment attachment = message.getAttachments().get(0);
-                File file = new File(Utility.getGuildImageDir(message.getGuild().getStringID()) + attachment.getFilename());
-                File imagDir = new File(Utility.getGuildImageDir(message.getGuild().getStringID()));
+                File file = new File(Utility.getGuildImageDir(message.getGuild().getLongID()) + attachment.getFilename());
+                File imagDir = new File(Utility.getGuildImageDir(message.getGuild().getLongID()));
                 File[] imageList = imagDir.listFiles();
 
                 if (!Utility.isImageLink(attachment.getFilename())) {
@@ -63,7 +63,7 @@ public class InfoEditModes {
     }
 
     public static String removeFile(String rest, IMessage message) {
-        File imagDir = new File(Utility.getGuildImageDir(message.getGuild().getStringID()));
+        File imagDir = new File(Utility.getGuildImageDir(message.getGuild().getLongID()));
         File[] imageList = imagDir.listFiles();
         for (File f : imageList) {
             if (f.getName().equalsIgnoreCase(rest)) {
@@ -78,7 +78,7 @@ public class InfoEditModes {
         //send Embed
         XEmbedBuilder builder = new XEmbedBuilder();
         builder.withTitle("> Here are the files available to you:");
-        File imagDir = new File(Utility.getGuildImageDir(message.getGuild().getStringID()));
+        File imagDir = new File(Utility.getGuildImageDir(message.getGuild().getLongID()));
         File[] imageList = imagDir.listFiles();
         ArrayList<String> fileNames = new ArrayList<>();
         for (File f : imageList) {
@@ -96,7 +96,7 @@ public class InfoEditModes {
         } else {
             try {
                 IMessage.Attachment attachment = message.getAttachments().get(0);
-                File file = new File(Utility.getFilePath(message.getGuild().getStringID(), Constants.FILE_INFO));
+                File file = new File(Utility.getFilePath(message.getGuild().getLongID(), Constants.FILE_INFO));
 
                 if (!attachment.getFilename().equals(Constants.FILE_INFO)) {
                     return "> Cannot upload file, File name must be \"" + Constants.FILE_INFO + "\"";
@@ -126,7 +126,7 @@ public class InfoEditModes {
     }
 
     public static String getInfoFile(IMessage message) {
-        String filePath = Utility.getFilePath(message.getGuild().getStringID(), Constants.FILE_INFO);
+        String filePath = Utility.getFilePath(message.getGuild().getLongID(), Constants.FILE_INFO);
         File file = new File(filePath);
         if (file.exists()) {
             Utility.sendFile("> Here is your **" + Constants.FILE_INFO + "** file.", file, message.getChannel());

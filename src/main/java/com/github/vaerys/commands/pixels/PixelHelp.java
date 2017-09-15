@@ -6,6 +6,7 @@ import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -40,7 +41,8 @@ public class PixelHelp implements Command {
             case "xp->level":
                 return xptolevel(obe.getRest());
             default:
-                List<String> channelMentions = Utility.getChannelMentions(command.guild.config.getChannelIDsByType(CHANNEL_XP_DENIED), command);
+                List<IChannel> channels = command.guild.config.getChannelsByType(CHANNEL_XP_DENIED, command.guild);
+                List<String> channelMentions = Utility.getChannelMentions(channels);
                 StringBuilder builder = new StringBuilder();
                 builder.append("**The rules for gaining xp are:**\n");
                 if (channelMentions.size() != 0) {

@@ -10,6 +10,8 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.List;
+
 /**
  * Created by Vaerys on 30/01/2017.
  */
@@ -21,8 +23,9 @@ public class Report implements Command {
     }
 
     public static String report(String args, CommandObject command, boolean isSilent) {
-        if (command.guild.config.getChannelIDsByType(CHANNEL_ADMIN) != null) {
-            IChannel channel = command.guild.get().getChannelByID(command.guild.config.getChannelIDsByType(CHANNEL_ADMIN).get(0));
+        List<IChannel> channels = command.guild.config.getChannelsByType(CHANNEL_ADMIN, command.guild);
+        if (channels.size() != 0) {
+            IChannel channel = channels.get(0);
             SplitFirstObject split = new SplitFirstObject(args);
             UserObject reported = Utility.getUser(command, split.getFirstWord(), false);
             if (reported == null) {

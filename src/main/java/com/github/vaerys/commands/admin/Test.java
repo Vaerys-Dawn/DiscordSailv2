@@ -2,8 +2,6 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
 

@@ -7,9 +7,9 @@ public class RoleTypeObject {
     String RoleName;
     String RoleID;
 
-    public RoleTypeObject(String roleName, String roleID) {
+    public RoleTypeObject(String roleName, long roleID) {
         RoleName = roleName;
-        RoleID = roleID;
+        RoleID = Long.toUnsignedString(roleID);
     }
 
     public String getRoleID() {

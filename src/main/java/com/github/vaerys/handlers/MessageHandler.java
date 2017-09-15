@@ -111,7 +111,7 @@ public class MessageHandler {
             builder.append(" with args: `" + args + "`");
         }
         builder.append(" in channel " + commandObject.channel.get().mention() + ".");
-        Utility.sendLog(builder.toString(), commandObject.guild.config, command.doAdminLogging());
+        Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging());
     }
 
     private boolean checkMentionCount(CommandObject command) {
@@ -130,7 +130,7 @@ public class MessageHandler {
                 int i = 0;
                 boolean offenderFound = false;
                 for (OffenderObject o : guildconfig.getRepeatOffenders()) {
-                    if (author.getStringID().equals(o.getID())) {
+                    if (author.getLongID() == o.getID()) {
                         guildconfig.addOffence(o.getID());
                         offenderFound = true;
                         i++;
@@ -142,7 +142,7 @@ public class MessageHandler {
                     }
                 }
                 if (!offenderFound) {
-                    guildconfig.addOffender(new OffenderObject(author.getStringID()));
+                    guildconfig.addOffender(new OffenderObject(author.getLongID()));
                 }
                 String response = "> #mentionAdmin# " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message.";
                 IRole roleToMention = command.guild.get().getRoleByID(guildconfig.getRoleToMentionID());
@@ -164,31 +164,32 @@ public class MessageHandler {
             return false;
         }
         if (command.guild.config.rateLimiting) {
-            if (command.guild.rateLimit(command.user.stringID)) {
+            if (command.guild.rateLimit(command.user.longID)) {
                 List<IRole> oldRoles = command.user.roles;
                 Utility.deleteMessage(command.message.get());
                 Utility.sendDM("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guild.config.messageLimit, command.user.longID);
                 if (command.guild.config.muteRepeatOffenders) {
-                    int rate = command.guild.getUserRate(command.user.stringID);
+                    int rate = command.guild.getUserRate(command.user.longID);
                     if (rate - 3 > command.guild.config.messageLimit) {
                         //mutes profiles if they abuse it.
                         boolean failed = Utility.roleManagement(command.user.get(), command.guild.get(), command.guild.config.getMutedRoleID(), true).get();
                         command.client.get().getDispatcher().dispatch(new UserRoleUpdateEvent(command.guild.get(), command.user.get(), oldRoles, command.user.roles));
                         if (!failed) {
+                            List<IChannel> adminChannels = command.guild.config.getChannelsByType(Command.CHANNEL_ADMIN, command.guild);
                             IChannel adminChannel = null;
-                            if (command.guild.config.getChannelIDsByType(Command.CHANNEL_ADMIN) != null) {
-                                adminChannel = command.client.get().getChannelByID(command.guild.config.getChannelIDsByType(Command.CHANNEL_ADMIN).get(0));
+                            if (adminChannels.size() != 0) {
+                                adminChannel = adminChannels.get(0);
                             }
                             if (adminChannel == null) {
                                 adminChannel = command.channel.get();
                             }
-                            Utility.sendDM("You have been muted for abusing the Guild rate limit.", command.user.stringID);
+                            Utility.sendDM("You have been muted for abusing the Guild rate limit.", command.user.longID);
                             Utility.sendMessage("> " + command.user.get().mention() + " has been muted for repetitively abusing Guild rateLimit.", adminChannel);
                         }
                     }
                 }
                 if (command.guild.config.deleteLogging) {
-                    Utility.sendLog("> **@" + command.user.username + "** is being rate limited", command.guild.config, false);
+                    Utility.sendLog("> **@" + command.user.username + "** is being rate limited", command.guild, false);
                 }
                 return true;
             }

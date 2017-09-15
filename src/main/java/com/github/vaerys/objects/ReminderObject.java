@@ -6,24 +6,24 @@ import com.github.vaerys.main.Globals;
  * Created by Vaerys on 05/04/2017.
  */
 public class ReminderObject {
-    String userID;
-    String channelID;
+    long userID;
+    long channelID;
     String message;
     boolean sent = false;
     long executeTime;
 
-    public ReminderObject(String userID, String channelID, String message, long reminderTime) {
+    public ReminderObject(long userID, long channelID, String message, long reminderTime) {
         this.userID = userID;
         this.channelID = channelID;
         this.message = Globals.getClient().getUserByID(userID).mention() + message;
         this.executeTime = reminderTime;
     }
 
-    public String getUserID() {
+    public long getUserID() {
         return userID;
     }
 
-    public String getChannelID() {
+    public long getChannelID() {
         return channelID;
     }
 

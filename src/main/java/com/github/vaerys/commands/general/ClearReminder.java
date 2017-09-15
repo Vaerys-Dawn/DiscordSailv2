@@ -9,22 +9,22 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 05/04/2017.
  */
-public class ClearReminder implements Command{
+public class ClearReminder implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         boolean wasfound = false;
-        for (ReminderObject r: Globals.getGlobalData().getReminders()){
-            if (r.getUserID().equals(command.user.stringID)){
+        for (ReminderObject r : Globals.getGlobalData().getReminders()) {
+            if (r.getUserID() == command.user.longID) {
                 wasfound = true;
-                if (r.isSent()){
+                if (r.isSent()) {
                     return "> I could not clear your reminder as it is about to be sent.";
                 }
             }
         }
         if (wasfound) {
-            Globals.getGlobalData().removeReminder(command.user.stringID);
+            Globals.getGlobalData().removeReminder(command.user.longID);
             return "> Reminder cleared";
-        }else {
+        } else {
             return "> You have no reminders set";
         }
     }

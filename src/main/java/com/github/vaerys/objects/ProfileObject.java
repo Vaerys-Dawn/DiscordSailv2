@@ -16,10 +16,9 @@ import java.util.ListIterator;
  * Created by Vaerys on 27/08/2016.
  */
 public class ProfileObject {
-    String ID;
+    long userID;
     long xp = 0;
     long currentLevel = -1;
-    //    long rewardID = -1;
     String gender = "Unknown";
     String quote = "This person doesn't seem to have much to say for themselves.";
     ArrayList<UserSetting> settings = new ArrayList<>();
@@ -58,19 +57,19 @@ public class ProfileObject {
 //        this.rewardID = rewardID;
 //    }
 
-    public ProfileObject(String ID) {
-        this.ID = ID;
+    public ProfileObject(long userID) {
+        this.userID = userID;
         if (links == null) links = new ArrayList<>();
         if (settings == null) settings = new ArrayList<>();
     }
 
-    public String getID() {
-        return ID;
+    public long getUserID() {
+        return userID;
     }
 
     public void addXP(GuildConfig config) {
         xp += config.xpRate * config.xpModifier;
-        logger.trace(Globals.getClient().getUserByID(ID) + " - Xp gained");
+        logger.trace(Globals.getClient().getUserByID(userID) + " - Xp gained");
     }
 
     public void setXp(long xp) {

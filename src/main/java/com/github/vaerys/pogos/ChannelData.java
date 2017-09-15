@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 public class ChannelData extends GuildFile {
     public static final String FILE_PATH = "Channel_Data.json";
+    private double fileVersion = 1.0;
     ArrayList<Long> pinnedMessages = new ArrayList<>();
     ArrayList<GroupUpObject> groupUpObjects = new ArrayList<>();
 

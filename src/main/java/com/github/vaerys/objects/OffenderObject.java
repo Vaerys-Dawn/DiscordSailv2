@@ -1,6 +1,7 @@
 package com.github.vaerys.objects;
 
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Utility;
 
 /**
  * Created by Vaerys on 04/11/2016.
@@ -10,17 +11,17 @@ public class OffenderObject {
     String displayName;
     String ID;
 
-    public String getID() {
-        return ID;
+    public long getID() {
+        return Utility.stringLong(ID);
     }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
-    public OffenderObject(String ID) {
+    public OffenderObject(long ID) {
         this.displayName = Globals.getClient().getUserByID(ID).getName() + "#" + Globals.getClient().getUserByID(ID).getDiscriminator();
-        this.ID = ID;
+        this.ID = ID + "";
         count = 1;
     }
 

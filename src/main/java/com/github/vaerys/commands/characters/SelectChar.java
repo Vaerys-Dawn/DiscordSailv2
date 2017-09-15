@@ -23,7 +23,7 @@ public class SelectChar implements Command {
     public String execute(String args, CommandObject command) {
         for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
             if (c.getName().equalsIgnoreCase(args)) {
-                if (c.getUserID().equals(command.user.stringID)) {
+                if (c.getUserID() == command.user.longID) {
                     List<IRole> userRoles = command.guild.get().getRolesForUser(command.user.get());
                     //resets User roles back to scratch.
                     for (int i = 0; i < userRoles.size(); i++) {

@@ -11,7 +11,7 @@ public class EnterVote implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.config.compVoting) {
-            return command.guild.competition.addVote(command.user.stringID, args);
+            return command.guild.competition.addVote(command.user.longID, args);
         } else {
             return "> Competition Voting is closed.";
         }

@@ -2,6 +2,7 @@ package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.DMCommand;
+import com.github.vaerys.main.Utility;
 import sx.blah.discord.handle.obj.IGuild;
 
 /**
@@ -10,7 +11,7 @@ import sx.blah.discord.handle.obj.IGuild;
 public class GetGuildInfoDm implements DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
-        IGuild guild = command.client.get().getGuildByID(args);
+        IGuild guild = command.client.get().getGuildByID(Utility.stringLong(args));
         if (guild != null) {
             new GetGuildInfoDm().execute(args, command);
             return null;

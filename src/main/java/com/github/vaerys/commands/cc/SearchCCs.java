@@ -49,7 +49,7 @@ public class SearchCCs implements Command {
             Utility.sendEmbedMessage("",embedBuilder,command.channel.get());
             return null;
         } else {
-            String path = Constants.DIRECTORY_TEMP + command.message.stringID + ".txt";
+            String path = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
             FileHandler.writeToFile(path, Utility.listFormatter(list,true),false);
             File file = new File(path);
             Utility.sendFile(title, file, command.channel.get());

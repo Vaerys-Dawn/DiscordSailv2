@@ -1,23 +1,17 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.*;
-import com.github.vaerys.oldcode.ChannelData;
-import com.github.vaerys.oldcode.*;
 import com.github.vaerys.pogos.*;
-import com.github.vaerys.pogos.CustomCommands;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 05/04/2017.
@@ -27,190 +21,246 @@ public class PatchHandler {
     final static Logger logger = LoggerFactory.getLogger(PatchHandler.class);
 
     public static void guildPatches(IGuild guild) {
-        List<String> patchesFound = Globals.getGlobalData().getPatches().stream().map(PatchObject::getPatchLevel).collect(Collectors.toList());
-        if (!patchesFound.contains(Constants.PATCH_1))
-            Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_1));
-        if (!patchesFound.contains(Constants.PATCH_2))
-            Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_2));
-        if (!patchesFound.contains(Constants.PATCH_3))
-            Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_3));
-        if (!patchesFound.contains(Constants.PATCH_4))
-            Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_4));
-        if (!patchesFound.contains(Constants.PATCH_5))
-            Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_5));
-//        if (!patchesFound.contains(Constants.PATCH_6))
-//            Globals.getGlobalData().getPatches().add(new PatchObject(Constants.PATCH_6));
 
-        ArrayList<PatchObject> patches = Globals.getGlobalData().getPatches();
-
-        for (PatchObject p : patches) {
-            boolean exit = false;
-            for (String guildID : p.getPatchedGuildIDs()) {
-                if (guild.getStringID().equals(guildID)) {
-                    exit = true;
-                }
-            }
-            if (!exit) {
-                logger.info("Performing Patch " + p.getPatchLevel() + " For guild with ID: " + guild.getStringID() + ". This may take a while.");
-            }
-            //patch 1
-            if (!exit && p.getPatchLevel().equals(Constants.PATCH_1)) {
-                CustomCommands customCommands = (CustomCommands) Utility.initFile(guild.getStringID(), Constants.FILE_CUSTOM, CustomCommands.class);
-                if (customCommands != null) {
-                    if (customCommands != null) {
-                        for (CCommandObject c : customCommands.getCommandList()) {
-                            if (c.getContents(false).contains("#ifArgs#{;;")) {
-                                logger.info("converting code in $$" + c.getName() + " to new system");
-                                c.setContents(c.getContents(false).replace("#ifArgs#{;;", "#ifArgsEmpty#{"));
-                            }
-                        }
-                    }
-                }
-                FileHandler.writeToJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_CUSTOM), customCommands);
-                p.getPatchedGuildIDs().add(guild.getStringID());
-            }
-            //patch 2
-            if (!exit && p.getPatchLevel().equals(Constants.PATCH_2)) {
-                ChannelData channelData = (ChannelData) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, ChannelData.class);
-                GuildConfig guildconfig = (GuildConfig) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, GuildConfig.class);
-                if (channelData != null) {
-                    for (ChannelTypeObject c : channelData.getChannels()) {
-                        guildconfig.addChannelSetting(c.getType(), c.getID());
-                    }
-                }
-                FileHandler.writeToJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_GUILD_CONFIG), guildconfig);
-                p.getPatchedGuildIDs().add(guild.getStringID());
-            }
-            //patch 3 - rename all of the toggles to used <tag> instead of #tag# (lots of code that cant be simplified ;_;)
-            if (!exit && p.getPatchLevel().equals(Constants.PATCH_3)) {
-                CustomCommands customCommands = (CustomCommands) Utility.initFile(guild.getStringID(), Constants.FILE_CUSTOM, CustomCommands.class);
-                if (customCommands != null) {
-                    if (customCommands != null) {
-                        for (CCommandObject c : customCommands.getCommandList()) {
-                            c.setContents(toNewSystem(c.getContents(false)));
-                        }
-                    }
-                }
-                FileHandler.writeToJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_CUSTOM), customCommands);
-
-
-                List<String> contents = FileHandler.readFromFile(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO));
-                StringBuilder content = new StringBuilder();
-                for (String c : contents) {
-                    c = c.replace("#displayName#", "<displayName>");
-                    c = c.replace("#channel#", "<channel>");
-                    c = c.replace("#spacer#", "<spacer>");
-                    c = c.replace("#!break#", "<!break>");
-                    c = c.replace("#image#", "<image>");
-                    c = c.replace("#split#", "<split>");
-                    content.append(c + "\n");
-                }
-                File newFile = new File(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO + "x"));
-                File oldFile = new File(Utility.getFilePath(guild.getStringID(), Constants.FILE_INFO));
-                FileHandler.writeToFile(newFile.getPath(), content.toString(), false);
-                oldFile.delete();
-                newFile.renameTo(oldFile);
-
-                p.getPatchedGuildIDs().add(guild.getStringID());
-            }
-            if (!exit && p.getPatchLevel().equalsIgnoreCase(Constants.PATCH_4)) {
-                GuildUsers guildUsers = (GuildUsers) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_USERS, GuildUsers.class);
-
-                for (ProfileObject u : guildUsers.getProfiles()) {
-                    u.setXp(0);
-//                    u.setRewardID(-1);
-                }
-
-                FileHandler.writeToJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_GUILD_USERS), guildUsers);
-                p.getPatchedGuildIDs().add(guild.getStringID());
-            }
-            if (!exit && p.getPatchLevel().equalsIgnoreCase(Constants.PATCH_5)) {
-                OldGuildConfig oldGuildConfig = (OldGuildConfig) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, OldGuildConfig.class);
-                GuildConfig guildconfig = (GuildConfig) Utility.initFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, GuildConfig.class);
-                OldCharacters oldCharacters = (OldCharacters) Utility.initFile(guild.getStringID(), Constants.FILE_CHARACTERS, OldCharacters.class);
-                Characters characters = (Characters) Utility.initFile(guild.getStringID(), Constants.FILE_CHARACTERS, Characters.class);
-                for (RoleTypeObject r : oldGuildConfig.getCosmeticRoles()) {
-                    guildconfig.getCosmeticRoleIDs().add(Long.parseLong(r.getRoleID()));
-                }
-                for (RoleTypeObject r : oldGuildConfig.getModifierRoles()) {
-                    guildconfig.getModifierRoleIDs().add(Long.parseLong(r.getRoleID()));
-                }
-                for (RoleTypeObject r : oldGuildConfig.getTrustedRoles()) {
-                    guildconfig.getTrustedRoleIDs().add(Long.parseLong(r.getRoleID()));
-                }
-                try {
-
-                    long newRoleToMention = Long.parseLong(oldGuildConfig.getRoleToMention().getRoleID());
-
-                    guildconfig.setRoleToMentionID(newRoleToMention);
-                } catch (NumberFormatException e) {
-                    logger.info("Could not find valid role to mention role");
-                }
-                try {
-                    long newMutedRole = Long.parseLong(oldGuildConfig.getMutedRole().getRoleID());
-                    guildconfig.setMutedRoleID(newMutedRole);
-                } catch (NumberFormatException e) {
-                    logger.info("Could not find valid mute role");
-                }
-                for (OldCharacterObject oldChar : oldCharacters.getCharacters()) {
-                    for (CharacterObject newChar : characters.getCharacters(null)) {
-                        if (oldChar.getName().equalsIgnoreCase(newChar.getName())) {
-                            ArrayList<Long> roleIDs = new ArrayList<>();
-                            for (RoleTypeObject r : oldChar.getRoles()) {
-                                roleIDs.add(Long.parseLong(r.getRoleID()));
-                            }
-                            newChar.setRoleIDs(roleIDs);
-                        }
-                    }
-                }
-                Utility.flushFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, guildconfig, true);
-                Utility.flushFile(guild.getStringID(), Constants.FILE_CHARACTERS, characters, true);
-                p.getPatchedGuildIDs().add(guild.getStringID());
-            }
-//            if (!exit && p.getPatchLevel().equalsIgnoreCase(Constants.PATCH_6)) {
-//                GuildConfig guildConfig = (GuildConfig) FileHandler.readFromJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_GUILD_CONFIG, true) + "1", GuildConfig.class);
-//                Utility.flushFile(guild.getStringID(), Constants.FILE_GUILD_CONFIG, guildConfig, true);
-//                Characters characters = (Characters) FileHandler.readFromJson(Utility.getFilePath(guild.getStringID(), Constants.FILE_CHARACTERS, true) + "1", Characters.class);
-//                Utility.flushFile(guild.getStringID(), Constants.FILE_CHARACTERS, characters, true);
-//                p.getPatchedGuildIDs().add(guild.getStringID());
-//            }
-        }
+        // overhauling strings to longs and fixing spelling/name issues.
+        overhaulCharacters(guild);
+        overhaulGuildConfig(guild);
+        overhaulGuildUsers(guild);
+        overhaulCustomCommands(guild);
+        overhaulServers(guild);
+        overhaulComp(guild);
     }
 
-    public static void globalPatches() {
-        if (!Globals.getGlobalData().getGlobalPatches().contains(Constants.PATCH_GLOBAL_1)) {
-            logger.info("Performing patch : " + Constants.PATCH_GLOBAL_1 + ". Please wait...");
-            //fix daily messages
-            Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
-            for (DailyMessageObject d : Globals.configDailyMessages) {
-                StringBuilder content = new StringBuilder();
-                for (String s : d.getData()) {
-                    content.append(s.replace("#random#", "<random>") + "\n");
+
+    private static boolean checkPatch(double version, IGuild guild, String patch, JsonObject json) {
+        if (json.get("fileVersion") != null) {
+            if (json.get("fileVersion").getAsDouble() >= version) {
+                if (guild != null) {
+                    logger.trace(guild.getLongID() + ": Skipping Patch - " + patch + ".");
+                } else {
+                    logger.trace("Skipping Patch - " + patch + ".");
                 }
-                d.setContents(content.toString());
+                return true;
             }
-            config.setDailyMessages(Globals.configDailyMessages);
-            FileHandler.writeToJson(Constants.FILE_CONFIG, config);
-            Globals.getGlobalData().getGlobalPatches().add(Constants.PATCH_GLOBAL_1);
         }
-        if (!Globals.getGlobalData().getGlobalPatches().contains(Constants.PATCH_GLOBAL_2)) {
-            logger.info("Performing patch : " + Constants.PATCH_GLOBAL_2 + ". Please wait...");
-            Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
-            config.randomStatuses = new Config().randomStatuses;
-            FileHandler.writeToJson(Constants.FILE_CONFIG, config);
-            Globals.getGlobalData().getGlobalPatches().add(Constants.PATCH_GLOBAL_2);
-            logger.info("Reloading Globals...");
-            Globals.initConfig(Globals.client, config, Globals.getGlobalData());
+        if (guild != null) {
+            logger.info(guild.getLongID() + ": Performing Patch " + patch + ".");
+        } else {
+            logger.info("Performing Patch " + patch + ".");
         }
+        return false;
     }
 
-    public static void globalDataPatch() {
-        if (!Files.exists(Paths.get(Constants.FILE_GLOBAL_DATA))) return;
-        OldGlobalData oldData = (OldGlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, OldGlobalData.class);
-        DailyMessages dailyMessages = (DailyMessages) DailyMessages.create(DailyMessages.FILE_PATH, new DailyMessages());
-        dailyMessages.getMessages().addAll(oldData.getDailyMessages());
-        dailyMessages.getQueue().addAll(oldData.getQueuedRequests());
-        dailyMessages.flushFile();
+    private static void overhaulComp(IGuild guild) {
+        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), Competition.FILE_PATH));
+        if (checkPatch(1.0, guild, "Overhaul_Comp", json)) return;
+        JsonArray array = json.getAsJsonArray("entries");
+        array.forEach(entry -> {
+            try {
+                String oldItem = entry.getAsJsonObject().get("userID").getAsString();
+                long newItem = Long.parseUnsignedLong(oldItem);
+                entry.getAsJsonObject().remove("userID");
+                entry.getAsJsonObject().addProperty("userID", newItem);
+            } catch (NumberFormatException e) {
+                entry.getAsJsonObject().remove("userID");
+                entry.getAsJsonObject().addProperty("userID", -1);
+            } catch (ClassCastException e) {
+                // do nothing
+            }
+        });
+        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), Competition.FILE_PATH), json);
+    }
+
+    private static void overhaulServers(IGuild guild) {
+        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), Servers.FILE_PATH));
+        if (checkPatch(1.0, guild, "Overhaul_Servers", json)) return;
+        JsonArray array = json.getAsJsonArray("servers");
+        array.forEach(server -> {
+            try {
+                String oldItem = server.getAsJsonObject().get("creatorID").getAsString();
+                long newItem = Long.parseUnsignedLong(oldItem);
+                server.getAsJsonObject().remove("creatorID");
+                server.getAsJsonObject().addProperty("creatorID", newItem);
+            } catch (NumberFormatException e) {
+                server.getAsJsonObject().remove("creatorID");
+                server.getAsJsonObject().addProperty("creatorID", -1);
+            } catch (ClassCastException e) {
+                // do nothing
+            }
+        });
+        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), Servers.FILE_PATH), json);
+    }
+
+    private static void overhaulCustomCommands(IGuild guild) {
+        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH));
+        if (checkPatch(1.0, guild, "Overhaul_CustomCommands", json)) return;
+        JsonArray array = json.getAsJsonArray("commands");
+        array.forEach(command -> {
+            try {
+                String oldItem = command.getAsJsonObject().get("userID").getAsString();
+                long newItem = Long.parseUnsignedLong(oldItem);
+                command.getAsJsonObject().remove("userID");
+                command.getAsJsonObject().addProperty("userID", newItem);
+            } catch (NumberFormatException e) {
+                command.getAsJsonObject().remove("userID");
+                command.getAsJsonObject().addProperty("userID", -1);
+            } catch (ClassCastException e) {
+                // do nothing
+            }
+        });
+        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH), json);
+    }
+
+    private static void overhaulGuildUsers(IGuild guild) {
+        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH));
+        if (checkPatch(1.0, guild, "Overhaul_GuildUsers", json)) return;
+        JsonArray users = json.getAsJsonArray("users");
+        if (users == null) return;
+        users.forEach(profile -> {
+            try {
+                String oldItem = profile.getAsJsonObject().get("ID").getAsString();
+                long newItem = Long.parseUnsignedLong(oldItem);
+                profile.getAsJsonObject().remove("ID");
+                profile.getAsJsonObject().addProperty("userID", newItem);
+            } catch (NumberFormatException e) {
+                profile.getAsJsonObject().remove("ID");
+                profile.getAsJsonObject().addProperty("userID", -1);
+            } catch (ClassCastException e) {
+                // do nothing
+            }
+        });
+        json.remove("users");
+        json.add("profiles", users);
+        JsonArray muted = json.getAsJsonArray("mutedUsers");
+        muted.forEach(user -> {
+            String oldItem = user.getAsJsonObject().get("userID").getAsString();
+            long newItem = Long.parseUnsignedLong(oldItem);
+            user.getAsJsonObject().remove("userID");
+            user.getAsJsonObject().addProperty("userID", newItem);
+        });
+        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH), json);
+    }
+
+    private static void overhaulCharacters(IGuild guild) {
+        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), Characters.FILE_PATH));
+        if (checkPatch(1.0, guild, "Overhaul_Characters", json)) return;
+        JsonElement e = json.get("characters");
+        JsonArray array = e.getAsJsonArray();
+        array.forEach(jsonElement -> {
+            try {
+                String oldType = jsonElement.getAsJsonObject().get("userID").getAsString();
+                long newType = Long.parseUnsignedLong(oldType);
+                jsonElement.getAsJsonObject().remove("userID");
+                jsonElement.getAsJsonObject().addProperty("userID", newType);
+            } catch (ClassCastException ex) {
+                //Do nothing
+            } catch (NumberFormatException e1) {
+                logger.error("NumberFormatException - This shouldn't happen.");
+                jsonElement.getAsJsonObject().remove("userID");
+                jsonElement.getAsJsonObject().addProperty("userID", -1);
+            }
+        });
+        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), Characters.FILE_PATH), json);
+    }
+
+    private static void overhaulGuildConfig(IGuild guild) {
+        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), GuildConfig.FILE_PATH));
+        if (checkPatch(1.0, guild, "Overhaul_GuildConfig", json)) return;
+        JsonArray array = json.getAsJsonArray("channelSettings");
+        array.forEach(jsonElement -> {
+            JsonElement channelIDs = jsonElement.getAsJsonObject().get("channelIDs");
+            JsonArray newIDs = new JsonArray();
+            channelIDs.getAsJsonArray().forEach(id -> {
+                try {
+                    String oldType = id.getAsString();
+                    long newType = Long.parseUnsignedLong(oldType);
+                    newIDs.add(newType);
+                } catch (NumberFormatException e) {
+                    //do nothing
+                } catch (ClassCastException e) {
+                    // do nothing
+                }
+            });
+            jsonElement.getAsJsonObject().remove("channelIDs");
+            jsonElement.getAsJsonObject().add("channelIDs", newIDs);
+        });
+        JsonArray array1 = json.getAsJsonArray("XPDeniedPrefixes");
+        json.remove("XPDeniedPrefixes");
+        json.add("xpDeniedPrefixes", array1);
+        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), GuildConfig.FILE_PATH), json);
+    }
+
+    public static void preInitPatches() {
+        if (Files.exists(Paths.get(Constants.FILE_GLOBAL_DATA))) {
+            JsonObject json = FileHandler.fileToJsonObject(Constants.FILE_GLOBAL_DATA);
+            if (checkPatch(1.0, null, "Overhaul_GlobalData", json)) return;
+            //blocked from Dms
+            JsonArray blockedUsers = json.getAsJsonArray("blockedFromDMS");
+            JsonArray newUsers = new JsonArray();
+            blockedUsers.forEach(user -> {
+                try {
+                    String oldItem = user.getAsString();
+                    long newItem = Long.parseUnsignedLong(oldItem);
+                    newUsers.add(newItem);
+                } catch (NumberFormatException e) {
+                    //do nothing
+                } catch (ClassCastException ex) {
+                    //do nothing
+                }
+            });
+            json.remove("blockedFromDMS");
+            json.add("blockedFromDMS", newUsers);
+            //Reminders
+            JsonArray reminders = json.getAsJsonArray("reminders");
+            reminders.forEach(reminder -> {
+                try {
+                    try {
+                        String oldUserID = reminder.getAsJsonObject().get("userID").getAsString();
+                        long newUserID = Long.parseUnsignedLong(oldUserID);
+                        reminder.getAsJsonObject().remove("userID");
+                        reminder.getAsJsonObject().addProperty("userID", newUserID);
+                    } catch (NumberFormatException e) {
+                        reminder.getAsJsonObject().remove("userID");
+                        reminder.getAsJsonObject().addProperty("userID", -1);
+                    }
+                    try {
+                        String oldChannelID = reminder.getAsJsonObject().get("channelID").getAsString();
+                        long newChannelID = Long.parseUnsignedLong(oldChannelID);
+                        reminder.getAsJsonObject().remove("channelID");
+                        reminder.getAsJsonObject().addProperty("channelID", newChannelID);
+                    }catch (NumberFormatException e){
+                        reminder.getAsJsonObject().remove("channelID");
+                        reminder.getAsJsonObject().addProperty("channelID", -1);
+                    }
+                } catch (ClassCastException ex) {
+                    // also do nothin
+                }
+            });
+            FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, json);
+        }
+        if (Files.exists(Paths.get(Constants.FILE_CONFIG))) {
+            JsonObject json = FileHandler.fileToJsonObject(Constants.FILE_CONFIG);
+            if (checkPatch(1.0, null, "Overhaul_Config", json)) return;
+            try {
+                String oldItem = json.get("creatorID").getAsString();
+                long newItem = Long.parseUnsignedLong(oldItem);
+                json.remove("creatorID");
+                json.addProperty("creatorID", newItem);
+            } catch (ClassCastException e) {
+                // do nothing
+            } catch (NumberFormatException e) {
+                json.remove("creatorID");
+                json.addProperty("creatorID", -1);
+            }
+            FileHandler.writeToJson(Constants.FILE_CONFIG, json);
+        }
+
+
+//        OldGlobalData oldData = (OldGlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, OldGlobalData.class);
+//        DailyMessages dailyMessages = (DailyMessages) DailyMessages.create(DailyMessages.FILE_PATH, new DailyMessages());
+//        dailyMessages.getMessages().addAll(oldData.getDailyMessages());
+//        dailyMessages.getQueue().addAll(oldData.getQueuedRequests());
+//        dailyMessages.flushFile();
     }
 
     private static String toNewSystem(String from) {

@@ -20,10 +20,7 @@ import java.time.DayOfWeek;
 import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -151,15 +148,16 @@ public class EventHandler {
                     }
 
                     //daily messages
-                    if (guildconfig.getChannelIDsByType(Command.CHANNEL_GENERAL) != null) {
+                    List<IChannel> channels = guildconfig.getChannelsByType(Command.CHANNEL_GENERAL, task);
+                    IChannel generalChannel = channels.get(0);
+                    if (generalChannel != null) {
                         if (guildconfig.dailyMessage) {
-                            IChannel channel = Globals.getClient().getChannelByID(guildconfig.getChannelIDsByType(Command.CHANNEL_GENERAL).get(0));
                             for (DailyMessageObject d : Globals.configDailyMessages) {
                                 if (day.equals(d.getDayOfWeek())) {
                                     if (timeNow.getDayOfMonth() == 25 && timeNow.getMonth().equals(Month.DECEMBER)) {
-                                        Utility.sendMessage("> ***MERRY CHRISTMAS***", channel);
+                                        Utility.sendMessage("> ***MERRY CHRISTMAS***", generalChannel);
                                     } else if (timeNow.getDayOfMonth() == 1 && timeNow.getMonth().equals(Month.JANUARY)) {
-                                        Utility.sendMessage("> ***HAPPY NEW YEAR***", channel);
+                                        Utility.sendMessage("> ***HAPPY NEW YEAR***", generalChannel);
                                     } else if (timeNow.getDayOfMonth() == 13 && timeNow.getMonth().equals(Month.JULY)) {
                                         int age = nowUTC.getYear() - 1996;
                                         String modifier = "th";
@@ -170,7 +168,7 @@ public class EventHandler {
                                         } else if ((age + "").endsWith("3")) {
                                             modifier = "rd";
                                         }
-                                        Utility.sendMessage("> Happy " + age + modifier + " Birthday Mum.", channel);
+                                        Utility.sendMessage("> Happy " + age + modifier + " Birthday Mum.", generalChannel);
                                     } else {
                                         ArrayList<DailyUserMessageObject> dailyMessages = Globals.getDailyMessages().getDailyMessages(day);
                                         dailyMessages.add(new DailyUserMessageObject(d.getContents(), d.getDayOfWeek(), task.client.longID, 10000));
@@ -182,9 +180,9 @@ public class EventHandler {
                                         }
                                         String message = toSend.getContents(task);
                                         if (message.matches("^(> |\\*> |\\*\\*> |\\*\\*\\*> |_> |__> |`> |```> ).*$") || message.startsWith("> ")) {
-                                            Utility.sendMessage(message, channel);
+                                            Utility.sendMessage(message, generalChannel);
                                         } else {
-                                            Utility.sendMessage("> " + message, channel);
+                                            Utility.sendMessage("> " + message, generalChannel);
                                         }
                                     }
                                 }
@@ -196,9 +194,9 @@ public class EventHandler {
         }, initialDelay * 1000, 24 * 60 * 60 * 1000);
     }
 
-    public static boolean addReminder(String userID, String channelID, long timeSecs, String message) {
+    public static boolean addReminder(long userID, long channelID, long timeSecs, String message) {
         for (ReminderObject object : Globals.getGlobalData().getReminders()) {
-            if (object.getUserID().equals(userID)) {
+            if (object.getUserID() == userID) {
                 return false;
             }
         }

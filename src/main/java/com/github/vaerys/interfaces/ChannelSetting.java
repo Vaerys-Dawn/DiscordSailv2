@@ -15,7 +15,7 @@ public interface ChannelSetting {
 
     boolean isSetting();
 
-    default ArrayList<String> getIDs(GuildConfig config) {
+    default ArrayList<Long> getIDs(GuildConfig config) {
         for (ChannelSettingObject o : config.getChannelSettings()) {
             if (o.getType().equals(type())) {
                 if (o.getChannelIDs().size() != 0) {
@@ -28,7 +28,7 @@ public interface ChannelSetting {
         return null;
     }
 
-    default String toggleSetting(GuildConfig config, String channelID) {
+    default String toggleSetting(GuildConfig config, long channelID) {
         ArrayList<ChannelSettingObject> objects = config.getChannelSettings();
         boolean isFound = false;
         for (ChannelSettingObject s : objects) {
@@ -43,9 +43,9 @@ public interface ChannelSetting {
             if (object.getType().equals(type())) {
                 if (!isSetting()) {
                     if (object.getChannelIDs().size() == 0 || !object.getChannelIDs().get(0).equals(channelID)) {
-                        if (object.getChannelIDs().size() == 0){
+                        if (object.getChannelIDs().size() == 0) {
                             object.getChannelIDs().add(channelID);
-                        }else {
+                        } else {
                             object.getChannelIDs().set(0, channelID);
                         }
                         return "> " + Globals.client.getChannelByID(channelID).mention() + " is now the Server's **" + type() + "** channel.";
@@ -59,7 +59,7 @@ public interface ChannelSetting {
                         return "> " + Globals.client.getChannelByID(channelID).mention() + ". Channel setting: **" + type() + "** added.";
                     } else {
                         for (int i = 0; i < object.getChannelIDs().size(); i++) {
-                            if (channelID.equals(object.getChannelIDs().get(i))) {
+                            if (channelID == object.getChannelIDs().get(i)) {
                                 object.getChannelIDs().remove(i);
                                 return "> " + Globals.client.getChannelByID(channelID).mention() + ". Channel setting: **" + type() + "** removed.";
                             }

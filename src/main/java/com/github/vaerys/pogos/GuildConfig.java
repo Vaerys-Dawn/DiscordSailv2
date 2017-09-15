@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
  */
 public class GuildConfig extends GuildFile {
     public static final String FILE_PATH = "Guild_Config.json";
+    private double fileVersion = 1.0;
     String prefixCommand = Globals.defaultPrefixCommand;
     String prefixCC = Globals.defaultPrefixCC;
-    boolean properlyInit = false;
     String guildName = "";
     long guildID = -1;
     //toggles
@@ -89,7 +89,7 @@ public class GuildConfig extends GuildFile {
     public String levelUpReaction = "null";
     public String levelUpMessage = "Ding. Gratz on level <level> <user>.";
     private String joinMessage = "> Welcome to the <server> server <user>.";
-    private ArrayList<String> XPDeniedPrefixes = new ArrayList<>();
+    private ArrayList<String> xpDeniedPrefixes = new ArrayList<>();
 
     // TODO: 04/10/2016 let the mention limit be customisable.
     ArrayList<ChannelSettingObject> channelSettings = new ArrayList<>();
@@ -119,33 +119,12 @@ public class GuildConfig extends GuildFile {
         this.prefixCC = prefixCC;
     }
 
-    public boolean isProperlyInit() {
-        return properlyInit;
-    }
-
-    public void setProperlyInit(boolean properlyInit) {
-        this.properlyInit = properlyInit;
-    }
-
-    public void addChannelSetting(String type, String id) {
+    public void addChannelSetting(String type, long id) {
         channelSettings.add(new ChannelSettingObject(type, id));
     }
 
     public void setGuildName(String guildName) {
         this.guildName = guildName;
-    }
-
-    public ArrayList<String> getChannelIDsByType(String channelType) {
-        for (ChannelSettingObject c : channelSettings) {
-            if (c.getType().equals(channelType)) {
-                if (c.getChannelIDs().size() >= 1) {
-                    return c.getChannelIDs();
-                } else {
-                    return null;
-                }
-            }
-        }
-        return null;
     }
 
     public ArrayList<ChannelSettingObject> getChannelSettings() {
@@ -171,7 +150,7 @@ public class GuildConfig extends GuildFile {
         for (ChannelSettingObject c : channelSettings) {
             ListIterator iterator = c.getChannelIDs().listIterator();
             while (iterator.hasNext()) {
-                IChannel channel = guild.getChannelByID((String) iterator.next());
+                IChannel channel = guild.getChannelByID((Long) iterator.next());
                 if (channel == null) {
                     iterator.remove();
                 }
@@ -270,9 +249,9 @@ public class GuildConfig extends GuildFile {
         return repeatOffenders;
     }
 
-    public void addOffence(String userID) {
+    public void addOffence(long userID) {
         for (int i = 0; i < repeatOffenders.size(); i++) {
-            if (repeatOffenders.get(i).getID().equals(userID)) {
+            if (repeatOffenders.get(i).getID() == userID) {
                 repeatOffenders.get(i).addOffence();
             }
         }
@@ -432,8 +411,8 @@ public class GuildConfig extends GuildFile {
         joinMessage = args;
     }
 
-    public ArrayList<String> getXPDeniedPrefixes() {
-        return XPDeniedPrefixes;
+    public ArrayList<String> getXpDeniedPrefixes() {
+        return xpDeniedPrefixes;
     }
 
     public RewardRoleObject getCurrentReward(long currentLevel) {
@@ -456,7 +435,7 @@ public class GuildConfig extends GuildFile {
         List<IChannel> channels = new ArrayList<>();
         for (ChannelSettingObject c : channelSettings) {
             if (c.getType().equalsIgnoreCase(type)) {
-                for (String s : c.getChannelIDs()) {
+                for (long s : c.getChannelIDs()) {
                     IChannel channel = guild.get().getChannelByID(s);
                     if (channel != null) {
                         channels.add(channel);

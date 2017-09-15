@@ -39,7 +39,7 @@ public class Rank implements Command {
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.HIT_LEVEL_FLOOR)) {
             if (user.get() != command.user.get()) {
                 return "> " + user.displayName + " has decayed to the level floor, they will need to level up again to see your rank.";
-            }else {
+            } else {
                 return "> You have decayed to the level floor, you will need to level up again to see your rank.";
             }
         }
@@ -48,12 +48,12 @@ public class Rank implements Command {
         //sort profiles by Xp in ascending order (lowest Xp to highest XP).
         Utility.sortUserObjects(users, true);
         //test to see if said user actually has rank stats.
-        if (XpHandler.rank(command.guild.users, command.guild.get(), user.stringID) == -1) {
+        if (XpHandler.rank(command.guild.users, command.guild.get(), user.longID) == -1) {
             return error;
         }
         //build the Array of stats
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getID().equals(user.stringID)) {
+            if (users.get(i).getUserID() == user.longID) {
                 ArrayList<ProfileObject> ranks = new ArrayList();
                 ArrayList<String> response = new ArrayList();
 
@@ -63,7 +63,7 @@ public class Rank implements Command {
                 int posBottom = 0;
                 //add profiles above
                 while (addedTop < 3 && i + posTop < users.size()) {
-                    if (!user.stringID.equals(users.get(i + posTop).getID()) && XpHandler.rank(command.guild.users, command.guild.get(), users.get(i + posTop).getID()) != -1) {
+                    if (user.longID != users.get(i + posTop).getUserID() && XpHandler.rank(command.guild.users, command.guild.get(), users.get(i + posTop).getUserID()) != -1) {
                         addedTop++;
                         ranks.add(users.get(i + posTop));
                     }
@@ -73,7 +73,7 @@ public class Rank implements Command {
                 ranks.add(users.get(i));
                 //add user below
                 while (addedBottom < 3 && i + posBottom > 0) {
-                    if (!user.stringID.equals(users.get(i + posBottom).getID()) && XpHandler.rank(command.guild.users, command.guild.get(), users.get(i + posBottom).getID()) != -1) {
+                    if (user.longID != users.get(i + posBottom).getUserID() && XpHandler.rank(command.guild.users, command.guild.get(), users.get(i + posBottom).getUserID()) != -1) {
                         addedBottom++;
                         ranks.add(users.get(i + posBottom));
                     }
@@ -83,11 +83,11 @@ public class Rank implements Command {
                 Utility.sortUserObjects(ranks, false);
                 //format rank stats
                 for (ProfileObject r : ranks) {
-                    IUser ranked = command.guild.get().getUserByID(r.getID());
-                    String rankPos = "**" + XpHandler.rank(command.guild.users, command.guild.get(), r.getID()) + "** - ";
+                    IUser ranked = command.guild.get().getUserByID(r.getUserID());
+                    String rankPos = "**" + XpHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
                     String toFormat = ranked.getDisplayName(command.guild.get())
                             + "\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`";
-                    if (r.getID().equals(user.stringID)) {
+                    if (r.getUserID() == user.longID) {
                         response.add(rankPos + spacer + "**" + toFormat + "**");
                     } else {
                         response.add(rankPos + toFormat);

@@ -4,10 +4,12 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XRequestBuffer;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 12/05/2017.
@@ -18,10 +20,11 @@ public class ArtHandler {
         if (command.user.get().isBot()) {
             return;
         }
-        if (command.guild.config.getChannelIDsByType(Command.CHANNEL_ART) == null) {
+        List<IChannel> channelIDS = command.guild.config.getChannelsByType(Command.CHANNEL_ART, command.guild);
+        if (channelIDS.size() == 0) {
             return;
         }
-        if (!command.guild.config.getChannelIDsByType(Command.CHANNEL_ART).get(0).equals(command.channel.stringID)) {
+        if (channelIDS.get(0).getLongID() != command.channel.longID) {
             return;
         }
         if (command.message.get().getAttachments().size() != 0) {

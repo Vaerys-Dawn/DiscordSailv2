@@ -3,14 +3,11 @@ package com.github.vaerys.commands.competition;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.CompObject;
+import com.github.vaerys.main.Utility;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class WeightedFinalTally implements Command {
@@ -31,9 +28,9 @@ public class WeightedFinalTally implements Command {
                     try {
                         long vote = Long.parseLong(splitVotes[(int) i]);
                         if (entryVotes.containsKey(vote)) {
-                            IUser user = command.guild.get().getUserByID(splitVotes[0]);
+                            IUser user = command.guild.get().getUserByID(Utility.stringLong(splitVotes[0]));
                             if (user != null) {
-                                int weight = XpHandler.getRewardCount(command.guild, user.getStringID());
+                                int weight = XpHandler.getRewardCount(command.guild, user.getLongID());
                                 entryVotes.put(vote, entryVotes.get(vote).longValue() + weight + 1);
                                 totalVotes += weight + 1;
                             }

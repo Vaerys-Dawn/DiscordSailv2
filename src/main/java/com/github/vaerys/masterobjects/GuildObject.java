@@ -20,7 +20,6 @@ public class GuildObject {
     public ClientObject client;
     private IGuild object;
     public long longID;
-    public String stringID;
     public GuildConfig config;
     public CustomCommands customCommands;
     public Servers servers;
@@ -42,7 +41,6 @@ public class GuildObject {
     public GuildObject(IGuild object) {
         this.object = object;
         this.longID = object.getLongID();
-        this.stringID = object.getStringID();
         this.config = (GuildConfig) GuildConfig.create(GuildConfig.FILE_PATH, longID, new GuildConfig());
         this.customCommands = (CustomCommands) CustomCommands.create(CustomCommands.FILE_PATH, longID, new CustomCommands());
         this.servers = (Servers) Servers.create(Servers.FILE_PATH, longID, new Servers());
@@ -76,7 +74,6 @@ public class GuildObject {
         this.client = new ClientObject(Globals.getClient(), this);
         this.object = null;
         this.longID = -1;
-        this.stringID = null;
         this.config = new GuildConfig();
         this.customCommands = new CustomCommands();
         this.servers = new Servers();
@@ -177,14 +174,14 @@ public class GuildObject {
         ratelimiting = new ArrayList<>();
     }
 
-    public boolean rateLimit(String userID) {
+    public boolean rateLimit(long userID) {
         int max = config.messageLimit;
         if (max == -1) {
             return false;
         }
         boolean isfound = false;
         for (UserRateObject r : ratelimiting) {
-            if (r.userID.equals(userID)) {
+            if (r.getID() == userID) {
                 r.counterUp();
                 isfound = true;
                 if (r.counter > max) {
@@ -198,9 +195,9 @@ public class GuildObject {
         return false;
     }
 
-    public int getUserRate(String userID) {
+    public int getUserRate(long userID) {
         for (UserRateObject u : ratelimiting) {
-            if (u.userID.equals(userID)) {
+            if (u.getID() == userID) {
                 return u.counter;
             }
         }

@@ -28,7 +28,7 @@ public class RemindMe implements Command {
             now = now.plusMinutes(timeMins);
             StringBuilder builder = new StringBuilder(args);
             builder.delete(0, (timeMins + "").length());
-            if (EventHandler.addReminder(command.user.stringID, command.channel.stringID, now.toEpochSecond(), builder.toString())) {
+            if (EventHandler.addReminder(command.user.longID, command.channel.longID, now.toEpochSecond(), builder.toString())) {
                 return "> Reminder set for " + timeString + " Minute(s) from now.";
             } else {
                 return "> You already have a reminder set.";

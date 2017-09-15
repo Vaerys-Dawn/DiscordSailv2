@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class CharacterObject {
     String name; //Character's Name
-    String userID; //author's authorSID
+    long userID; //author's authorSID
     String nickname; //character's name;
     ArrayList<Long> roleIDs = new ArrayList<>(); // these are the cosmetic and modifier roleIDs the author has;
     String gender = "N/a"; //limit = 20 chars.
@@ -24,7 +24,7 @@ public class CharacterObject {
     String avatarURL = "";
     String longBioURL = ""; //URL link linking to Character Bios
 
-    public CharacterObject(String name, String userID, String nickname, ArrayList<Long> roleIDs) {
+    public CharacterObject(String name, long userID, String nickname, ArrayList<Long> roleIDs) {
         this.name = name;
         this.userID = userID;
         this.nickname = nickname;
@@ -71,7 +71,7 @@ public class CharacterObject {
         this.age = age;
     }
 
-    public String getUserID() {
+    public long getUserID() {
         return userID;
     }
 

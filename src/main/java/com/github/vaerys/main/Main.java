@@ -27,13 +27,15 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
 
-    final static Logger logger = LoggerFactory.getLogger(Main.class);
+    static Logger logger;
 
     public static void main(String[] args) throws UnknownHostException {
-        System.out.println("Starting Program...");
 
         //important, do not move
-        PatchHandler.globalDataPatch();
+        PatchHandler.preInitPatches();
+        logger = LoggerFactory.getLogger(Main.class);
+
+        logger.info("Starting bot...");
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -89,8 +91,6 @@ public class Main {
             //load config phase 2
             Globals.initConfig(client, config, globalData);
 
-            PatchHandler.globalPatches();
-
 
             ThreadGroup group = new ThreadGroup("GuildCreateGroup");
             final int[] count = new int[]{0};
@@ -133,7 +133,7 @@ public class Main {
         logger.info("Console input initiated.");
 
         while (scanner.hasNextLine()) {
-            if (Globals.consoleMessageCID != null) {
+            if (Globals.consoleMessageCID != -1) {
                 IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
                 String message = scanner.nextLine();
                 message = message.replace("#Dawn#", Globals.getClient().getUserByID(153159020528533505L).getName());

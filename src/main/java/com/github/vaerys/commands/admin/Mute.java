@@ -6,13 +6,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
 
 /**
  * Created by Vaerys on 02/03/2017.
@@ -37,7 +31,7 @@ public class Mute implements Command {
         if (!Utility.testUserHierarchy(command.client.bot, mutedRole, command.guild.get())) {
             return "> Cannot Mute/UnMute " + muted.displayName + ". **" + mutedRole.getName() + "** role has a higher hierarchy than me.";
         }
-        if (muted.stringID.equals(command.user.stringID)) {
+        if (muted.longID == command.user.longID) {
             return "> Don't try to mute yourself you numpty.";
         }
         if (Utility.testModifier(modifier.getFirstWord()) == null) {
@@ -56,14 +50,14 @@ public class Mute implements Command {
                 time = new SplitFirstObject(modifier.getRest());
                 timeSecs = Utility.textToSeconds(time.getFirstWord());
             }
-            command.guild.users.muteUser(muted.stringID, timeSecs, command.guild.longID);
+            command.guild.users.muteUser(muted.longID, timeSecs, command.guild.longID);
             if (time.getFirstWord() == null || timeSecs == -1) {
                 return "> " + muted.displayName + " was Muted.";
             } else {
                 return "> " + muted.displayName + " was Muted for " + time.getFirstWord() + ".";
             }
         } else {
-            command.guild.users.unMuteUser(muted.stringID, command.guild.longID);
+            command.guild.users.unMuteUser(muted.longID, command.guild.longID);
             return "> " + muted.displayName + " was UnMuted.";
         }
     }

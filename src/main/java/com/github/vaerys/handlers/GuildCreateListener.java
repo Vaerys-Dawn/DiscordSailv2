@@ -21,7 +21,7 @@ public class GuildCreateListener {
     @EventSubscriber
     public void onGuildCreateEvent(GuildCreateEvent event) {
         IGuild guild = event.getGuild();
-        String guildID = guild.getStringID();
+        long guildID = guild.getLongID();
         logger.debug("Starting Initialisation process for Guild with ID: " + guildID);
 
         if (new File(Utility.getDirectory(guildID)).exists()) {

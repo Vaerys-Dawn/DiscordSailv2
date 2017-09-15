@@ -17,7 +17,6 @@ public class UserObject {
     public ClientObject client;
     private IUser object;
     public long longID;
-    public String stringID;
     public String name;
     public String displayName;
     public String username;
@@ -34,16 +33,15 @@ public class UserObject {
         this.client = new ClientObject(object.getClient(), guild);
         this.object = object;
         this.longID = object.getLongID();
-        this.stringID = object.getStringID();
         this.name = object.getName();
         this.username = object.getName() + "#" + object.getDiscriminator();
         if (guild.get() != null) {
             this.displayName = object.getDisplayName(guild.get());
             this.roles = object.getRolesForGuild(guild.get());
             this.color = Utility.getUsersColour(get(), guild.get());
-            customCommands = guild.customCommands.getCommandList().stream().filter(c -> c.getUserID().equals(stringID)).collect(Collectors.toList());
-            characters = guild.characters.getCharacters(guild.get()).stream().filter(c -> c.getUserID().equals(stringID)).collect(Collectors.toList());
-            servers = guild.servers.getServers().stream().filter(s -> s.getCreatorID().equals(stringID)).collect(Collectors.toList());
+            customCommands = guild.customCommands.getCommandList().stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
+            characters = guild.characters.getCharacters(guild.get()).stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
+            servers = guild.servers.getServers().stream().filter(s -> s.getCreatorID() == longID).collect(Collectors.toList());
             dailyMessages = Globals.getDailyMessages().getMessages().stream().filter(d -> d.getUserID() == longID).collect(Collectors.toList());
         } else {
             this.displayName = name;
@@ -62,7 +60,7 @@ public class UserObject {
     }
 
     public ProfileObject getProfile(GuildObject guild) {
-        return guild.users.getUserByID(stringID);
+        return guild.users.getUserByID(longID);
     }
 
     public boolean isPrivateProfile(GuildObject guild) {
@@ -78,6 +76,6 @@ public class UserObject {
     }
 
     public boolean showRank(GuildObject guild) {
-        return XpHandler.rank(guild.users, guild.get(), stringID) != -1;
+        return XpHandler.rank(guild.users, guild.get(), longID) != -1;
     }
 }
