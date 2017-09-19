@@ -7,12 +7,16 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.*;
 import com.github.vaerys.pogos.DailyMessages;
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiManager;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
+import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.*;
 import sx.blah.discord.util.Image;
@@ -28,7 +32,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.List;
@@ -560,7 +563,9 @@ public class Utility {
     public static XRequestBuffer.RequestFuture<Boolean> deleteMessage(IMessage message) {
         return XRequestBuffer.request(() -> {
             try {
-                message.delete();
+                if (Globals.isReady) {
+                    message.delete();
+                } else return false;
             } catch (MissingPermissionsException e) {
                 sendStack(e);
                 return true;
@@ -619,6 +624,7 @@ public class Utility {
     }
 
     public static Color getUsersColour(IUser user, IGuild guild) {
+        //before
         List<IRole> userRoles = guild.getRolesForUser(user);
         IRole topColour = null;
         String defaultColour = "0,0,0";
@@ -656,7 +662,7 @@ public class Utility {
         if (topColour != null) {
             return topColour.getColor();
         }
-        return null;
+        return Color.black;
     }
 
     //Time Utils
@@ -1143,10 +1149,18 @@ public class Utility {
     }
 
     public static void sendStack(Exception e) {
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        System.err.printf("%02d:%02d:%02d.%03d ", now.getHour(), now.getMinute(), now.getSecond(), now.getNano() / 1000000);
-        System.err.print("[" + Thread.currentThread().getName() + "] ERROR ");
-        e.printStackTrace();
+        String s = ExceptionUtils.getStackTrace(e);
+        s = s.substring(0, s.length() - 2);
+        if (!s.endsWith(")")) {
+            s = s + ")";
+        }
+
+        logger.error(s);
+
+//        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+//        System.err.printf("%02d:%02d:%02d.%03d ", now.getHour(), now.getMinute(), now.getSecond(), now.getNano() / 1000000);
+//        System.err.print("[" + Thread.currentThread().getName() + "] ERROR ");
+//        e.printStackTrace();
     }
 
     public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, String type, boolean testPerms) {
@@ -1280,4 +1294,11 @@ public class Utility {
     }
 
 
+    public static ReactionEmoji getReaction(String emojiName) {
+        Emoji emoji = EmojiManager.getForAlias(emojiName);
+        if (emoji == null) {
+            throw new IllegalStateException("Invalid unicode call: " + emojiName);
+        }
+        return ReactionEmoji.of(emoji.getUnicode());
+    }
 }

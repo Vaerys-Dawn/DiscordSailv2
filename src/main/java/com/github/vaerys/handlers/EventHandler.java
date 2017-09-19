@@ -149,7 +149,10 @@ public class EventHandler {
 
                     //daily messages
                     List<IChannel> channels = guildconfig.getChannelsByType(Command.CHANNEL_GENERAL, task);
-                    IChannel generalChannel = channels.get(0);
+                    IChannel generalChannel = null;
+                    if (channels.size() != 0) {
+                        generalChannel = channels.get(0);
+                    }
                     if (generalChannel != null) {
                         if (guildconfig.dailyMessage) {
                             for (DailyMessageObject d : Globals.configDailyMessages) {

@@ -125,6 +125,7 @@ public class Globals {
             }
         }
 
+
         //Init Command Types.
         for (Command c : commands) {
             boolean typeFound = false;

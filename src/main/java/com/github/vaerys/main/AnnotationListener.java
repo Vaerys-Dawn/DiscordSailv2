@@ -8,8 +8,6 @@ import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.pogos.GuildConfig;
-import com.vdurmont.emoji.Emoji;
-import com.vdurmont.emoji.EmojiManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -18,10 +16,7 @@ import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.*;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.impl.events.guild.member.GuildMemberEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
@@ -29,6 +24,7 @@ import sx.blah.discord.handle.impl.events.guild.member.UserLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
+import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
 
 import java.time.ZoneOffset;
@@ -61,6 +57,35 @@ public class AnnotationListener {
         event.getClient().changePlayingText(Globals.playing);
         Utility.updateUsername(Globals.botName);
     }
+
+    @EventSubscriber
+    public void onSystemMessageReceivedEvent(MessageSendEvent event) {
+        // TODO: 19/09/2017 make a better deletion system, don't use a sleep on its own.
+        if (!event.getMessage().getContent().isEmpty()) {
+            return;
+        }
+        if (event.getMessage().getAttachments().size() != 0) {
+            return;
+        }
+        if (event.getMessage().getEmbeds().size() != 0) {
+            return;
+        }
+        Thread thread = new Thread(() -> {
+            try {
+                logger.trace("Found my pin message, Deleting in 2 minutes.");
+                Thread.sleep(2 * 60 * 1000);
+                Utility.deleteMessage(event.getMessage());
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+        });
+        thread.start();
+    }
+//
+//    @EventSubscriber
+//    public void onCategoryCreateEvent(CategoryCreateEvent event){
+//
+//    }
 
     @EventSubscriber
     public void onMessageReceivedEvent(MessageReceivedEvent event) {
@@ -219,64 +244,52 @@ public class AnnotationListener {
         if (event.getUser().isBot()) {
             return;
         }
-        Emoji x = EmojiManager.getForAlias("x");
-        Emoji pin = EmojiManager.getForAlias("pushpin");
-        Emoji thumbsUp = EmojiManager.getForAlias("thumbsup");
-        Emoji thumbsDown = EmojiManager.getForAlias("thumbsdown");
-        IEmoji customEmoji = null;
-        Emoji emoji = null;
+        ReactionEmoji x = Utility.getReaction("x");
+        ReactionEmoji pin = Utility.getReaction("pushpin");
+        ReactionEmoji thumbsUp = Utility.getReaction("thumbsup");
+        ReactionEmoji thumbsDown = Utility.getReaction("thumbsdown");
+        ReactionEmoji heart = Utility.getReaction("heart");
+        ReactionEmoji emoji = event.getReaction().getEmoji();
 
-        if (event.getReaction().isCustomEmoji()) {
-            customEmoji = event.getReaction().getCustomEmoji();
-        } else {
-            emoji = event.getReaction().getUnicodeEmoji();
-        }
+        if (emoji == null) return;
 
-        if (customEmoji == null && emoji == null) {
-            return;
-        }
+        CommandObject object = new CommandObject(event.getMessage());
 
         //do only on server channels
         if (!event.getChannel().isPrivate()) {
-            CommandObject object = new CommandObject(event.getMessage());
-            if (customEmoji != null) {
+            if (!emoji.isUnicode()) {
                 return;
             } else {
                 //if is pushpin
-                if (object.guild.config.artPinning) {
-                    if (event.getReaction().getUnicodeEmoji().equals(pin)) {
-                        new ArtHandler(object.setAuthor(event.getUser()));
-                    }
-                }
-                //if is x and can bypass
-                if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, event.getUser(), event.getGuild())) {
-                    if (event.getReaction().getUnicodeEmoji().equals(x)) {
-                        if (event.getMessage().getAuthor().getLongID() == Globals.getClient().getOurUser().getLongID()) {
-                            Utility.deleteMessage(event.getMessage());
-                            return;
-                        }
-                    }
+                if (emoji.equals(pin)) {
+                    ArtHandler.pinMessage(object.setAuthor(event.getUser()));
                 }
                 //if is thumbsup or thumbs down and is creator.
-                if (event.getChannel().getLongID() == Globals.queueChannelID) {
-                    if (!event.getReaction().isCustomEmoji()) {
-                        if (event.getReaction().getUnicodeEmoji().equals(thumbsUp) || event.getReaction().getUnicodeEmoji().equals(thumbsDown)) {
-                            IUser owner = Globals.getClient().getUserByID(Globals.creatorID);
-                            if (event.getReaction().getUserReacted(owner)) {
-                                QueueHandler.addedReaction(event.getMessage(), event.getReaction());
-                            }
+                if (emoji.equals(thumbsUp) || emoji.equals(thumbsDown)) {
+                    QueueHandler.reactionAdded(object, event.getReaction());
+                }
+                //if is hear and is pinned then give xp
+                if (emoji.equals(heart)) {
+                    ArtHandler.pinLiked(object.setAuthor(event.getUser()));
+                }
+                //if is x and can bypass
+                if (emoji.equals(x)) {
+                    if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, event.getUser(), event.getGuild())) {
+                        if (object.client.longID == object.user.longID) {
+                            Utility.deleteMessage(event.getMessage());
+                            return;
                         }
                     }
                 }
             }
             //do only within Direct messages
         } else {
-            if (customEmoji != null) {
+            if (!emoji.isUnicode()) {
                 return;
             } else {
                 //if anyone uses x
-                if (event.getReaction().getUnicodeEmoji().equals(x)) {
-                    if (event.getMessage().getAuthor().getLongID() == Globals.getClient().getOurUser().getLongID()) {
+                if (emoji.equals(x)) {
+                    if (object.client.longID == object.user.longID) {
                         Utility.deleteMessage(event.getMessage());
                         return;
                     }
@@ -290,9 +303,12 @@ public class AnnotationListener {
         if (event.getChannel().isPrivate()) {
             return;
         }
+        if (!Globals.isReady) {
+            return;
+        }
         CommandObject command = new CommandObject(event.getMessage());
         String content;
-        IUser ourUser = command.client.bot;
+        IUser ourUser = Globals.client.getOurUser();
 
         if (!shouldLog(command)) {
             return;
@@ -326,6 +342,9 @@ public class AnnotationListener {
     }
 
     private boolean shouldLog(CommandObject command) {
+        if (command.guild == null) {
+            return false;
+        }
         List<IChannel> infoID = command.guild.config.getChannelsByType(Command.CHANNEL_INFO, command.guild);
         List<IChannel> serverLogID = command.guild.config.getChannelsByType(Command.CHANNEL_SERVER_LOG, command.guild);
         List<IChannel> adminLogID = command.guild.config.getChannelsByType(Command.CHANNEL_ADMIN_LOG, command.guild);

@@ -1,6 +1,7 @@
 package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.general.NewDailyMessage;
 import com.github.vaerys.interfaces.ChannelSetting;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.interfaces.GuildFile;
@@ -10,6 +11,7 @@ import com.github.vaerys.objects.UserRateObject;
 import com.github.vaerys.pogos.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
@@ -108,6 +110,17 @@ public class GuildObject {
                     } else {
                         logger.trace("Toggle: " + g.name() + " removed.");
                     }
+                    iterator.remove();
+                }
+            }
+        }
+        IChannel channel = client.get().getChannelByID(Globals.queueChannelID);
+        if (channel == null) {
+            ListIterator iterator = commands.listIterator();
+            while (iterator.hasNext()) {
+                Command command = (Command) iterator.next();
+                if (command.names()[0] == new NewDailyMessage().names()[0]) {
+                    logger.trace(longID + ": Removed newDailyMsg command.");
                     iterator.remove();
                 }
             }

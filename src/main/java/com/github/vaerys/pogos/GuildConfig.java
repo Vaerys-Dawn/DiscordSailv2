@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 public class GuildConfig extends GuildFile {
     public static final String FILE_PATH = "Guild_Config.json";
-    private double fileVersion = 1.0;
+    private double fileVersion = 1.1;
     String prefixCommand = Globals.defaultPrefixCommand;
     String prefixCC = Globals.defaultPrefixCC;
     String guildName = "";
@@ -38,6 +38,7 @@ public class GuildConfig extends GuildFile {
     public boolean joinsServerMessages = false;
     public boolean selfDestructLevelUps = true;
     public boolean reactToLevelUp = false;
+    public boolean likeArt = false;
     //--Logging
     public boolean generalLogging = false;
     public boolean adminLogging = false;

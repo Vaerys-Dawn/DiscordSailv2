@@ -64,8 +64,8 @@ public class UserSettings implements Command {
                             "> **" + user.displayName + "** now has the shitpost tag automatically added to all of their new Custom Commands.");
                 case "denyautorole":
                     return toggleSetting(profile, UserSetting.DENY_AUTO_ROLE,
-                            "> **" + user.displayName + "** will no longer automatically be granted roles.",
-                            "> **" + user.displayName + "** will now automatically be granted roles.");
+                            "> **" + user.displayName + "** will now automatically be granted roles.",
+                            "> **" + user.displayName + "** will no longer automatically be granted roles.");
                 case "dontdecay":
                     return toggleSetting(profile, UserSetting.DONT_DECAY,
                             "> **" + user.displayName + "** will now have pixel decay.",

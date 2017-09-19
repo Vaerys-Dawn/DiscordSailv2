@@ -65,6 +65,7 @@ public class CommandInit {
         commands.add(new EditLinks());
         commands.add(new Ping());
         commands.add(new LastDailyMessage());
+        commands.add(new NewDailyMessage());
         //Help commands
         commands.add(new GetGuildInfo());
         commands.add(new Help());

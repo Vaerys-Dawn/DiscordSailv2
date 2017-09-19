@@ -49,14 +49,6 @@ public class ProfileObject {
         this.gender = gender;
     }
 
-//    public long getRewardID() {
-//        return rewardID;
-//    }
-
-//    public void setRewardID(long rewardID) {
-//        this.rewardID = rewardID;
-//    }
-
     public ProfileObject(long userID) {
         this.userID = userID;
         if (links == null) links = new ArrayList<>();
@@ -69,12 +61,21 @@ public class ProfileObject {
 
     public void addXP(GuildConfig config) {
         xp += config.xpRate * config.xpModifier;
-        logger.trace(Globals.getClient().getUserByID(userID) + " - Xp gained");
+    }
+
+    public void addXP(long xp, GuildConfig config) {
+        this.xp += config.xpModifier * xp;
+    }
+
+    public void setXp(long xp, boolean levelUp) {
+        this.xp = xp;
+        if (levelUp) {
+            this.currentLevel = XpHandler.xpToLevel(xp);
+        }
     }
 
     public void setXp(long xp) {
-        this.xp = xp;
-        this.currentLevel = XpHandler.xpToLevel(xp);
+        setXp(xp, true);
     }
 
     public long getXP() {

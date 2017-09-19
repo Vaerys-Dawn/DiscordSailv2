@@ -1,6 +1,5 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.general.NewDailyMessage;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -36,7 +35,6 @@ public class GuildCreateListener {
         GuildObject guildObject = new GuildObject(guild);
         Globals.initGuild(guildObject);
         logger.info("Finished Initialising Guild With ID: " + guildID);
-        NewDailyMessage.checkIsEnabled(Globals.client.getChannelByID(Globals.queueChannelID) != null);
     }
 }
 

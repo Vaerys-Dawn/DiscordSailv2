@@ -35,7 +35,7 @@ public class MessageHandler {
             XpHandler.grantXP(command);
             if (command.guild.config.artPinning) {
                 if (command.guild.config.autoArtPinning) {
-                    new ArtHandler(command);
+                    ArtHandler.pinMessage(command);
                 }
             }
             if (command.guild.config.moduleCC) {

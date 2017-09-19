@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class GuildUsers extends GuildFile {
     public static final String FILE_PATH = "Guild_Users.json";
-    private double fileVersion = 1.0;
+    private double fileVersion = 1.1;
     // TODO: 12/08/2017 make this just a liiitle bit less of a hack.)
     public ArrayList<ProfileObject> profiles = new ArrayList<>();
     public ArrayList<UserCountDown> mutedUsers = new ArrayList<>();

@@ -27,6 +27,9 @@ public class CommandObject {
 
 
     public CommandObject(IMessage message) {
+        if (message == null) {
+            throw new IllegalStateException("Message should never be null.");
+        }
         if (message.getGuild() == null) {
             this.guild = new GuildObject();
         } else {
