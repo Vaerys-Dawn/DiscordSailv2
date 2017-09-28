@@ -4,14 +4,12 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.QueueHandler;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.time.DayOfWeek;
-import java.util.Arrays;
 
 public class NewDailyMessage implements Command {
 
@@ -33,26 +31,26 @@ public class NewDailyMessage implements Command {
         }
     }
 
-    public static void checkIsEnabled(boolean enabled) {
-        boolean commandFound = false;
-        for (Command c : Globals.commands) {
-            if (Arrays.equals(c.names(), new NewDailyMessage().names())) {
-                commandFound = true;
-            }
-        }
-        if (!commandFound && enabled) {
-            Globals.commands.add(new NewDailyMessage());
-        } else if (commandFound && !enabled) {
-            for (Command c : Globals.commands) {
-                if (Arrays.equals(c.names(), new NewDailyMessage().names())) {
-                    Globals.commands.remove(c);
-                    return;
-                }
-            }
-        } else {
-            return;
-        }
-    }
+//    public static void checkIsEnabled(boolean enabled) {
+//        boolean commandFound = false;
+//        for (Command c : Globals.commands) {
+//            if (Arrays.equals(c.names(), new NewDailyMessage().names())) {
+//                commandFound = true;
+//            }
+//        }
+//        if (!commandFound && enabled) {
+//            Globals.commands.add(new NewDailyMessage());
+//        } else if (commandFound && !enabled) {
+//            for (Command c : Globals.commands) {
+//                if (Arrays.equals(c.names(), new NewDailyMessage().names())) {
+//                    Globals.commands.remove(c);
+//                    return;
+//                }
+//            }
+//        } else {
+//            return;
+//        }
+//    }
 
     @Override
     public String[] names() {

@@ -2,8 +2,6 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
 
@@ -49,27 +47,7 @@ public class Test implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-//        ProfileObject profile = command.guildUsers.getUserByID(command.authorSID);
-//        long userXp = profile.getXP();
-//        profile.setXp(20000);
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("> Start test.");
-//        for (int i = 1; i < 41; i++) {
-//            XpHandler.doDeacyUser(profile, command.guildObject, i);
-//            String stats = "\nXp: **" + profile.getXP() + "**, Level: **" + profile.getCurrentLevel() + "**, Day: **" + i + "**, Role Count: **" + command.author.getRolesForGuild(command.guild).size() + "**.";
-//            if (builder.length() + stats.length() > 1800) {
-//                Utility.sendMessage(builder.toString(), command.channel);
-//                builder.delete(0, builder.length());
-//            }
-//            builder.append(stats);
-//        }
-//        builder.append("\n> Test Complete.");
-//        profile.setXp(userXp);
-//        profile.removeLevelFloor();
-//        XpHandler.checkUsersRoles(profile.getID(), command.guildObject);
-//        return builder.toString();
-//        return Utility.getCommandsByType(Globals.getAllCommands(), command, TYPE_DM, true).size() + "";
-        throw new DiscordException("Test Exception");
+        throw new DiscordException("TestException");
 //        return nothing;
     }
 

@@ -9,9 +9,9 @@ import java.util.ArrayList;
  */
 public class ChannelSettingObject {
     String type;
-    ArrayList<String> channelIDs = new ArrayList<>();
+    ArrayList<Long> channelIDs = new ArrayList<>();
 
-    public ChannelSettingObject(String type, String id) {
+    public ChannelSettingObject(String type, long id) {
         this.type = type;
         channelIDs.add(id);
     }
@@ -24,13 +24,13 @@ public class ChannelSettingObject {
         return type;
     }
 
-    public ArrayList<String> getChannelIDs() {
+    public ArrayList<Long> getChannelIDs() {
         return channelIDs;
     }
 
-    public ArrayList<String> mentionChannelIDs(){
+    public ArrayList<String> mentionChannelIDs() {
         ArrayList<String> mentioned = new ArrayList<>();
-        for (String s: channelIDs){
+        for (long s : channelIDs) {
             mentioned.add(Globals.client.getChannelByID(s).mention());
         }
         return mentioned;

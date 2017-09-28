@@ -7,10 +7,8 @@ import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.handle.obj.StatusType;
 
@@ -36,20 +34,20 @@ public class UserInfo implements Command {
             user = Utility.getUser(command, args, true);
         }
         if (user == null) {
-            return "> Could not find that user.";
+            return "> Could not find user.";
         }
         ProfileObject profile = user.getProfile(command.guild);
         if (profile == null && user.get().isBot()) {
             if (user.get().getPresence().getStatus().equals(StatusType.OFFLINE) || user.get().getPresence().getStatus().equals(StatusType.UNKNOWN)) {
-                return "> Could not get a profile for this user.";
+                return "> Could not get a profile for " + user.displayName + ".";
             }
-            profile = new ProfileObject(user.stringID);
+            profile = new ProfileObject(user.longID);
             command.guild.users.addUser(profile);
         } else if (profile == null) {
-            return "> Could not get a profile for this user.";
+            return "> Could not get a profile for " + user.displayName + ".";
         }
         if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
-            return "> User has set their profile to private.";
+            return "> " + user.displayName + " has set their profile to private.";
         }
 
         //start of the profile builder.
@@ -116,7 +114,7 @@ public class UserInfo implements Command {
         desc.append("\n" + Utility.listFormatter(links, true));
 
         builder.withDesc(desc.toString());
-        builder.withFooterText("User ID: " + profile.getID());
+        builder.withFooterText("User ID: " + profile.getUserID());
 
         //sends Message
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {

@@ -25,7 +25,7 @@ public class EditCC implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        ProfileObject object = command.guild.users.getUserByID(command.user.stringID);
+        ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
             return "> You have been denied the modification of custom commands.";
         }
@@ -41,7 +41,7 @@ public class EditCC implements Command {
                 boolean canBypass = false;
                 canBypass = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, command.user.get(), command.guild.get());
                 if (canBypass ||
-                        command.user.stringID.equals(c.getUserID()) && !c.isLocked() ||
+                        command.user.longID == c.getUserID() && !c.isLocked() ||
                         Utility.canBypass(command.user.get(), command.guild.get())) {
                     if (command.guild.customCommands.checkblackList(args) != null) {
                         return command.guild.customCommands.checkblackList(args);

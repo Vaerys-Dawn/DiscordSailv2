@@ -2,10 +2,11 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.handlers.TagHandler;
+import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public class NewCC implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        ProfileObject object = command.guild.users.getUserByID(command.user.stringID);
+        ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
             return "> You have been denied the creation of custom commands.";
         }
@@ -24,10 +25,10 @@ public class NewCC implements Command {
         boolean isLocked = false;
         SplitFirstObject splitfirst = new SplitFirstObject(args);
         String newContent;
-        List<String> shitpostChannels = command.guild.config.getChannelIDsByType(Command.CHANNEL_SHITPOST);
+        List<IChannel> shitpostChannels = command.guild.config.getChannelsByType(Command.CHANNEL_SHITPOST, command.guild);
         if (shitpostChannels != null) {
-            for (String id : shitpostChannels) {
-                if (command.channel.stringID.equals(id)) {
+            for (IChannel channel : shitpostChannels) {
+                if (command.channel.longID == channel.getLongID()) {
                     isShitpost = true;
                 }
             }

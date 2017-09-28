@@ -39,7 +39,7 @@ public class XpHandler {
 
     public static void doDecay(GuildObject content, ZonedDateTime nowUTC) {
         for (ProfileObject u : content.users.getProfiles()) {
-            if (u.getLastTalked() != -1) {
+            if (u.getLastTalked() != -1 && !u.getSettings().contains(DONT_DECAY)) {
                 long diff = nowUTC.toEpochSecond() - u.getLastTalked();
                 long days = TimeUnit.DAYS.convert(diff, TimeUnit.SECONDS);
                 float temp = 0;
@@ -58,7 +58,7 @@ public class XpHandler {
                 if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) {
                     decay = decay / 2;
                 }
-                if (XpHandler.getRewardCount(content, u.getID()) != 0) {
+                if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
                     long pseudoLevel = xpToLevel(u.getXP() + 120);
                     RewardRoleObject rewardRole = content.config.getCurrentReward(pseudoLevel);
                     if (rewardRole != null) {
@@ -87,7 +87,7 @@ public class XpHandler {
                     }
                 }
                 //check user's roles and make sure that they have the right roles.
-                checkUsersRoles(u.getID(), content);
+                checkUsersRoles(u.getUserID(), content);
             }
         }
     }
@@ -111,7 +111,7 @@ public class XpHandler {
             if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) {
                 decay = decay / 2;
             }
-            if (XpHandler.getRewardCount(content, u.getID()) != 0) {
+            if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
                 long pseudoLevel = xpToLevel(u.getXP() + 120);
                 RewardRoleObject rewardRole = content.config.getCurrentReward(pseudoLevel);
                 if (rewardRole != null) {
@@ -140,10 +140,10 @@ public class XpHandler {
             }
             //check user's roles and make sure that they have the right roles.
         }
-        checkUsersRoles(u.getID(), content);
+        checkUsersRoles(u.getUserID(), content);
     }
 
-    public static void checkUsersRoles(String id, GuildObject content) {
+    public static void checkUsersRoles(long id, GuildObject content) {
         //do code.
         ProfileObject userObject = content.users.getUserByID(id);
         if (userObject == null) {
@@ -151,7 +151,7 @@ public class XpHandler {
         }
         if (userObject.getSettings().contains(DENY_AUTO_ROLE)) return;
 
-        IUser user = Globals.getClient().getUserByID(userObject.getID());
+        IUser user = Globals.getClient().getUserByID(userObject.getUserID());
         if (user == null) {
             return;
         }
@@ -172,7 +172,7 @@ public class XpHandler {
         //add the top ten role if they should have it.
         IRole topTenRole = content.get().getRoleByID(content.config.topTenRoleID);
         if (topTenRole != null) {
-            long rank = XpHandler.rank(content.users, content.get(), user.getStringID());
+            long rank = XpHandler.rank(content.users, content.get(), user.getLongID());
             if (rank <= 10 && rank > 0) {
                 userRoles.add(topTenRole);
             }
@@ -189,11 +189,11 @@ public class XpHandler {
         if (object.user.get().isBot()) return;
 
         //creates a profile for the user if they don't already have one.
-        ProfileObject user = new ProfileObject(object.user.stringID);
-        if (object.guild.users.getUserByID(object.user.stringID) == null) {
+        ProfileObject user = new ProfileObject(object.user.longID);
+        if (object.guild.users.getUserByID(object.user.longID) == null) {
             object.guild.users.getProfiles().add(user);
         } else {
-            user = object.guild.users.getUserByID(object.user.stringID);
+            user = object.guild.users.getUserByID(object.user.longID);
         }
 
         //ony do xp checks if module is true
@@ -216,7 +216,7 @@ public class XpHandler {
         if (object.guild.getSpokenUsers().contains(object.user.longID)) return;
 
         //messages that might be considered commands should be ignored.
-        ArrayList<String> deniedPrefixes = (ArrayList<String>) object.guild.config.getXPDeniedPrefixes().clone();
+        ArrayList<String> deniedPrefixes = (ArrayList<String>) object.guild.config.getXpDeniedPrefixes().clone();
         deniedPrefixes.add(object.guild.config.getPrefixCommand());
         deniedPrefixes.add(object.guild.config.getPrefixCC());
         for (String s : deniedPrefixes) {
@@ -229,9 +229,11 @@ public class XpHandler {
         if (object.message.get().getContent().length() < 10) return;
 
         //you cannot gain xp in an xpDenied channel
-        ArrayList<String> xpChannels = object.guild.config.getChannelIDsByType(Command.CHANNEL_XP_DENIED);
-        if (xpChannels != null && xpChannels.size() > 0) {
-            if (xpChannels.contains(object.channel.stringID)) return;
+        List<IChannel> xpChannels = object.guild.config.getChannelsByType(Command.CHANNEL_XP_DENIED, object.guild);
+        if (xpChannels.size() > 0) {
+            if (xpChannels.contains(object.channel.get())) {
+                return;
+            }
         }
 
         //gives them their xp.
@@ -293,9 +295,10 @@ public class XpHandler {
             } else {
                 userOverride = object.guild.config.defaultLevelMode;
             }
-            List<String> levelDenied = object.guild.config.getChannelIDsByType(Command.CHANNEL_LEVEL_UP_DENIED);
-            if (levelDenied != null && levelDenied.contains(object.channel.stringID)) {
-                if (userOverride != SEND_LVLUP_DMS || (userOverride != SEND_LVLUP_RANK_CHANNEL && object.guild.config.getChannelIDsByType(Command.CHANNEL_PIXELS).get(0) != null)) {
+            List<IChannel> levelDenied = object.guild.config.getChannelsByType(Command.CHANNEL_LEVEL_UP_DENIED, object.guild);
+            List<IChannel> levelUpChannel = object.guild.config.getChannelsByType(Command.CHANNEL_LEVEL_UP, object.guild);
+            if (levelDenied.size() != 0 && levelDenied.contains(object.channel.get())) {
+                if (userOverride != SEND_LVLUP_DMS || userOverride != SEND_LVLUP_RANK_CHANNEL && levelUpChannel.size() == 0) {
                     userOverride = DONT_SEND_LVLUP;
                 }
             }
@@ -305,8 +308,8 @@ public class XpHandler {
                     break;
                 case SEND_LVLUP_RANK_CHANNEL:
                     IChannel channel = null;
-                    if (object.guild.config.getChannelIDsByType(Command.CHANNEL_LEVEL_UP) != null) {
-                        channel = object.guild.get().getChannelByID(object.guild.config.getChannelIDsByType(Command.CHANNEL_LEVEL_UP).get(0));
+                    if (levelUpChannel.size() != 0) {
+                        channel = levelUpChannel.get(0);
                     }
                     if (channel != null) {
                         if (channel.getModifiedPermissions(object.client.bot).contains(Permissions.ATTACH_FILES)) {
@@ -339,7 +342,7 @@ public class XpHandler {
             leveledUp = false;
         }
         if (leveledUp) {
-            checkUsersRoles(user.getID(), object.guild);
+            checkUsersRoles(user.getUserID(), object.guild);
         }
         if (object.guild.config.selfDestructLevelUps && selfDestruct != null && !rankedup) {
             try {
@@ -359,7 +362,7 @@ public class XpHandler {
 
     private static void reactTolevelUp(CommandObject object) {
         if (object.guild.config.reactToLevelUp) {
-            ProfileObject user = object.guild.users.getUserByID(object.user.stringID);
+            ProfileObject user = object.guild.users.getUserByID(object.user.longID);
             if (user != null && user.getSettings().contains(UserSetting.NO_LEVEL_UP_REACTIONS)) {
                 return;
             }
@@ -391,7 +394,7 @@ public class XpHandler {
                         object.message.get().addReaction(finalCustomEmoji);
                     }
                 } catch (DiscordException e) {
-                    logger.error("Discord didn't like the custom emoji that guild with id: " + object.guild.stringID + " chose for a levelUp react.");
+                    logger.error("Discord didn't like the custom emoji that guild with id: " + object.guild.longID + " chose for a levelUp react.");
                     if (emoji != null) {
                         logger.error(emoji.getUnicode());
                     } else if (finalCustomEmoji != null) {
@@ -434,7 +437,7 @@ public class XpHandler {
         return levelxp;
     }
 
-    public static long rank(GuildUsers guildUsers, IGuild guild, String userID) {
+    public static long rank(GuildUsers guildUsers, IGuild guild, long userID) {
         ProfileObject user = guildUsers.getUserByID(userID);
         for (UserSetting s : user.getSettings()) {
             for (UserSetting test : Constants.dontLogStates) {
@@ -453,7 +456,7 @@ public class XpHandler {
         ArrayList<ProfileObject> users = (ArrayList<ProfileObject>) guildUsers.getProfiles().clone();
         Utility.sortUserObjects(users, false);
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getID().equals(userID)) {
+            if (users.get(i).getUserID() == userID) {
                 return rank + 1;
             } else {
                 boolean hiderank = false;
@@ -464,7 +467,7 @@ public class XpHandler {
                         }
                     }
                 }
-                if (guild.getUserByID(users.get(i).getID()) != null && !hiderank && user.getXP() != users.get(i).getXP()) {
+                if (guild.getUserByID(users.get(i).getUserID()) != null && !hiderank && user.getXP() != users.get(i).getXP()) {
                     rank++;
                 }
             }
@@ -483,7 +486,7 @@ public class XpHandler {
                     }
                 }
             }
-            if (command.guild.get().getUserByID(u.getID()) != null) {
+            if (command.guild.get().getUserByID(u.getUserID()) != null) {
                 if (u.getXP() != 0) {
                     if (!hiderank) {
                         totalRanked++;
@@ -494,8 +497,11 @@ public class XpHandler {
         return totalRanked;
     }
 
-    public static int getRewardCount(GuildObject object, String userID) {
+    public static int getRewardCount(GuildObject object, long userID) {
         ProfileObject userObject = object.users.getUserByID(userID);
+        if (userObject == null) {
+            return 0;
+        }
         ArrayList<RewardRoleObject> allRewards = object.config.getAllRewards(userObject.getCurrentLevel());
         if (allRewards.size() == 0) {
             return 0;

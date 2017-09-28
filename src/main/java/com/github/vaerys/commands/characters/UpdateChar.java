@@ -22,7 +22,7 @@ public class UpdateChar implements Command {
                 }
             }
         }
-        return command.guild.characters.updateChar(new CharacterObject(args.split(" ")[0], command.user.stringID, command.user.displayName, charRoles), command.guild.get());
+        return command.guild.characters.updateChar(new CharacterObject(args.split(" ")[0], command.user.longID, command.user.displayName, charRoles), command.guild.get());
     }
 
     @Override

@@ -13,8 +13,7 @@ import java.util.ArrayList;
  * Created by Vaerys on 31/01/2017.
  */
 public class ListModifs implements Command {
-    @Override
-    public String execute(String args, CommandObject command) {
+    public static XEmbedBuilder getList(CommandObject command) {
         String title = "> Here are the **Modifier** roles you can choose from:\n";
         ArrayList<String> list = new ArrayList<>();
         XEmbedBuilder builder = new XEmbedBuilder();
@@ -25,7 +24,12 @@ public class ListModifs implements Command {
         Utility.listFormatterEmbed(title, builder, list, true);
         builder.appendField(spacer, Utility.getCommandInfo(new ModifierRoles(), command), false);
         builder.withColor(command.client.color);
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        return builder;
+    }
+
+    @Override
+    public String execute(String args, CommandObject command) {
+        Utility.sendEmbedMessage("",getList(command),command.channel.get());
         return null;
     }
 

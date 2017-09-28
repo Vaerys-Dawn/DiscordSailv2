@@ -15,7 +15,7 @@ public class Respond implements DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject response = new SplitFirstObject(args);
-        IUser recipient = command.client.get().getUserByID(response.getFirstWord());
+        IUser recipient = command.client.get().getUserByID(Utility.stringLong(response.getFirstWord()));
         return sendDM(response.getRest(), command, recipient);
     }
 

@@ -1,6 +1,7 @@
 package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.general.NewDailyMessage;
 import com.github.vaerys.interfaces.ChannelSetting;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.interfaces.GuildFile;
@@ -10,6 +11,7 @@ import com.github.vaerys.objects.UserRateObject;
 import com.github.vaerys.pogos.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
@@ -20,7 +22,6 @@ public class GuildObject {
     public ClientObject client;
     private IGuild object;
     public long longID;
-    public String stringID;
     public GuildConfig config;
     public CustomCommands customCommands;
     public Servers servers;
@@ -42,7 +43,6 @@ public class GuildObject {
     public GuildObject(IGuild object) {
         this.object = object;
         this.longID = object.getLongID();
-        this.stringID = object.getStringID();
         this.config = (GuildConfig) GuildConfig.create(GuildConfig.FILE_PATH, longID, new GuildConfig());
         this.customCommands = (CustomCommands) CustomCommands.create(CustomCommands.FILE_PATH, longID, new CustomCommands());
         this.servers = (Servers) Servers.create(Servers.FILE_PATH, longID, new Servers());
@@ -76,7 +76,6 @@ public class GuildObject {
         this.client = new ClientObject(Globals.getClient(), this);
         this.object = null;
         this.longID = -1;
-        this.stringID = null;
         this.config = new GuildConfig();
         this.customCommands = new CustomCommands();
         this.servers = new Servers();
@@ -111,6 +110,17 @@ public class GuildObject {
                     } else {
                         logger.trace("Toggle: " + g.name() + " removed.");
                     }
+                    iterator.remove();
+                }
+            }
+        }
+        IChannel channel = client.get().getChannelByID(Globals.queueChannelID);
+        if (channel == null) {
+            ListIterator iterator = commands.listIterator();
+            while (iterator.hasNext()) {
+                Command command = (Command) iterator.next();
+                if (command.names()[0] == new NewDailyMessage().names()[0]) {
+                    logger.trace(longID + ": Removed newDailyMsg command.");
                     iterator.remove();
                 }
             }
@@ -177,14 +187,14 @@ public class GuildObject {
         ratelimiting = new ArrayList<>();
     }
 
-    public boolean rateLimit(String userID) {
+    public boolean rateLimit(long userID) {
         int max = config.messageLimit;
         if (max == -1) {
             return false;
         }
         boolean isfound = false;
         for (UserRateObject r : ratelimiting) {
-            if (r.userID.equals(userID)) {
+            if (r.getID() == userID) {
                 r.counterUp();
                 isfound = true;
                 if (r.counter > max) {
@@ -198,9 +208,9 @@ public class GuildObject {
         return false;
     }
 
-    public int getUserRate(String userID) {
+    public int getUserRate(long userID) {
         for (UserRateObject u : ratelimiting) {
-            if (u.userID.equals(userID)) {
+            if (u.getID() == userID) {
                 return u.counter;
             }
         }

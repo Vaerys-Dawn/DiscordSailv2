@@ -7,7 +7,6 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class ListChars implements Command {
         }
         ArrayList<String> list = new ArrayList<>();
         for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
-            if (c.getUserID().equals(user.stringID)) {
+            if (c.getUserID() == user.longID) {
                 list.add(c.getName());
             }
         }

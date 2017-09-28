@@ -1,7 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,5 +126,21 @@ public class FileHandler {
 
     public static void initFile(String path) {
         if (!exists(path)) writeToFile(path, "", false);
+    }
+
+    public static JsonObject fileToJsonObject(String filePath) {
+        JsonObject jsonObject = new JsonObject();
+        try {
+            Reader reader = new InputStreamReader(new FileInputStream(new File(filePath)), StandardCharsets.UTF_8);
+            JsonParser parser = new JsonParser();
+            JsonElement jsonElement = parser.parse(reader);
+            reader.close();
+            jsonObject = jsonElement.getAsJsonObject();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 }

@@ -14,7 +14,7 @@ public class PruneEmptyProfiles implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<ProfileObject> profiles = command.guild.users.getProfiles();
-        ProfileObject defaultProfile = new ProfileObject(null);
+        ProfileObject defaultProfile = new ProfileObject(-1);
         long profileCount = 0;
         ListIterator listIterator = profiles.listIterator();
         while (listIterator.hasNext()) {

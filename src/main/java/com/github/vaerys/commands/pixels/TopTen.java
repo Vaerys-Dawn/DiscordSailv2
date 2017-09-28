@@ -20,7 +20,7 @@ public class TopTen implements Command {
         ArrayList<String> response = new ArrayList<>();
 
         for (ProfileObject u : command.guild.users.getProfiles()) {
-            long rank = XpHandler.rank(command.guild.users, command.guild.get(), u.getID());
+            long rank = XpHandler.rank(command.guild.users, command.guild.get(), u.getUserID());
             if (rank <= 10 && rank != -1) {
                 ranks.add(u);
             }
@@ -29,11 +29,11 @@ public class TopTen implements Command {
         Utility.sortUserObjects(ranks, false);
         //format rank stats
         for (ProfileObject r : ranks) {
-            IUser ranked = command.guild.get().getUserByID(r.getID());
-            String rankPos = "**" + XpHandler.rank(command.guild.users, command.guild.get(), r.getID()) + "** - ";
+            IUser ranked = command.guild.get().getUserByID(r.getUserID());
+            String rankPos = "**" + XpHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
             StringBuilder toFormat = new StringBuilder(ranked.getDisplayName(command.guild.get()));
             toFormat.append("\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`");
-            if (r.getID().equals(command.user.get().getStringID())) {
+            if (r.getUserID() == command.user.get().getLongID()) {
                 response.add(rankPos + spacer + "**" + toFormat + "**");
             } else {
                 response.add(rankPos + toFormat);
@@ -49,7 +49,7 @@ public class TopTen implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"TopTen","Top10"};
+        return new String[]{"TopTen", "Top10"};
     }
 
     @Override

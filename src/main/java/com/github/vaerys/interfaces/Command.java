@@ -10,7 +10,7 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.List;
 
 
 /**
@@ -31,6 +31,7 @@ public interface Command {
     String TYPE_PIXEL = "Pixels";
     String TYPE_GROUPS = "Groups";
     String TYPE_SLASH = "Slash";
+    String TYPE_MENTION = "Mention";
 
     //Channel Constants
     String CHANNEL_GENERAL = "General";
@@ -89,9 +90,9 @@ public interface Command {
 
     default String getUsage(CommandObject command) {
         if (usage() == null || usage().isEmpty()) {
-            return command.guild.config.getPrefixCommand() + names()[0];
+            return getCommand(command);
         } else {
-            return command.guild.config.getPrefixCommand() + names()[0] + " " + usage();
+            return getCommand(command) + " " + usage();
         }
     }
 
@@ -99,7 +100,7 @@ public interface Command {
         if (dualUsage() == null || dualUsage().isEmpty()) {
             return getUsage(command);
         } else {
-            return command.guild.config.getPrefixCommand() + names()[0] + " " + dualUsage();
+            return getCommand(command) + " " + dualUsage();
         }
     }
 
@@ -164,21 +165,8 @@ public interface Command {
         infoEmbed.appendField("> Info - " + names()[0], builder.toString(), false);
 
         //Handle channels
-        ArrayList<String> channelIDs = command.guild.config.getChannelIDsByType(channel());
-        ArrayList<String> channelMentions = new ArrayList<>();
-
-        if (channelIDs != null) {
-            for (String id : channelIDs) {
-                IChannel temp = command.guild.get().getChannelByID(id);
-                if (temp != null) {
-                    EnumSet<Permissions> userPerms = temp.getModifiedPermissions(command.user.get());
-                    if (userPerms.contains(Permissions.SEND_MESSAGES) && userPerms.contains(Permissions.READ_MESSAGES)) {
-                        channelMentions.add(temp.mention());
-                    }
-                }
-            }
-            builder.append("\n" + Utility.listFormatter(channelMentions, true));
-        }
+        List<IChannel> channels = command.guild.config.getChannelsByType(channel(), command.guild);
+        List<String> channelMentions = Utility.getChannelMentions(channels);
 
         //channel
         if (channelMentions.size() > 0) {

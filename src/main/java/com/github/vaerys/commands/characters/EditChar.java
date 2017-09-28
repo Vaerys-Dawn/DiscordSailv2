@@ -28,7 +28,7 @@ public class EditChar implements Command {
         SplitFirstObject mode = new SplitFirstObject(charName.getRest());
         for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
             if (c.getName().equalsIgnoreCase(charName.getFirstWord())) {
-                if (c.getUserID().equals(command.user.stringID) || Utility.canBypass(command.user.get(), command.guild.get())) {
+                if (c.getUserID() == command.user.longID || Utility.canBypass(command.user.get(), command.guild.get())) {
                     if (mode.getRest() == null || mode.getRest().isEmpty()) {
                         return "> Missing Arguments for Editing.";
                     }

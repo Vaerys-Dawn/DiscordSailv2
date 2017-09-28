@@ -4,10 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.List;
 
 /**
  * Created by Vaerys on 30/01/2017.

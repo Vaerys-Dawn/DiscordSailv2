@@ -10,7 +10,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class DelServer implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        return command.guild.servers.deleteServer(command.user.get().getStringID(), args, command.guild.get());
+        return command.guild.servers.deleteServer(command.user.get().getLongID(), args, command.guild.get());
     }
 
     @Override

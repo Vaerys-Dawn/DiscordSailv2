@@ -5,12 +5,12 @@ package com.github.vaerys.objects;
  */
 public class CompObject {
     String userName;
-    String userID;
+    long userID;
     String fileName;
     String fileUrl;
     String timeSubmitted;
 
-    public CompObject(String userName, String userID, String fileName, String fileUrl, String timeSubmitted) {
+    public CompObject(String userName, long userID, String fileName, String fileUrl, String timeSubmitted) {
         this.userName = userName;
         this.userID = userID;
         this.fileName = fileName;
@@ -26,7 +26,7 @@ public class CompObject {
         return fileName;
     }
 
-    public String getUserID() {
+    public long getUserID() {
         return userID;
     }
 }

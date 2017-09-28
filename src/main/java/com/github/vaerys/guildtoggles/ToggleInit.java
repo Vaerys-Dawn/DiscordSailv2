@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by Vaerys on 20/02/2017.
  */
 public class ToggleInit {
-    public static ArrayList<GuildToggle> get(){
+    public static ArrayList<GuildToggle> get() {
         ArrayList<GuildToggle> guildToggles = new ArrayList<>();
 
         //toggles
@@ -41,6 +41,7 @@ public class ToggleInit {
         guildToggles.add(new UserInfoShowsDate());
         guildToggles.add(new SelfDestructLevelUps());
         guildToggles.add(new ReactToLevelUp());
+        guildToggles.add(new LikeArt());
 
         //modules
         guildToggles.add(new ModuleGroups());
@@ -58,7 +59,7 @@ public class ToggleInit {
     }
 
     // TODO: 23/04/2017 add global toggles i.e. allow multiple reminders.
-    public static ArrayList<GuildToggle> globalToggles(){
+    public static ArrayList<GuildToggle> globalToggles() {
         return null;
     }
 }

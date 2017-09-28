@@ -29,7 +29,7 @@ public class PurgeBannedData implements Command {
         try {
             userId = Long.parseLong(args);
             userStringID = args;
-            if (userStringID.equalsIgnoreCase(Globals.creatorID)) {
+            if (userStringID.equalsIgnoreCase(Globals.creatorID + "")) {
                 return "> You cannot purge the bot owner's data, if you have found an error in their data please DM me with the details.";
             }
             if (userId == command.guild.get().getOwnerLongID()) {
@@ -49,10 +49,10 @@ public class PurgeBannedData implements Command {
                     "Feel free to remove the permission after you purge the data as I don't need it.";
         }
         if (userId != -1 && userStringID != null) {
-            purgeData(userId, userStringID, command);
+            purgeData(userId, command);
         } else {
             for (IUser user : command.guild.get().getBannedUsers()) {
-                purgeData(user.getLongID(), user.getStringID(), command);
+                purgeData(user.getLongID(), command);
             }
         }
         return "> Purged Profiles: **" + purgedProfiles + "**." +
@@ -62,11 +62,11 @@ public class PurgeBannedData implements Command {
                 "\n> Purged Daily Messages: **" + purgedDailyMessages + "**.";
     }
 
-    public void purgeData(long userID, String userStringID, CommandObject command) {
+    public void purgeData(long userID, CommandObject command) {
         ListIterator iterator = command.guild.users.profiles.listIterator();
         while (iterator.hasNext()) {
             ProfileObject object = (ProfileObject) iterator.next();
-            if (userStringID.equalsIgnoreCase(object.getID())) {
+            if (userID == object.getUserID()){
                 iterator.remove();
                 purgedProfiles++;
             }
@@ -74,7 +74,7 @@ public class PurgeBannedData implements Command {
         iterator = command.guild.customCommands.getCommandList().listIterator();
         while (iterator.hasNext()) {
             CCommandObject ccObject = (CCommandObject) iterator.next();
-            if (userStringID.equalsIgnoreCase(ccObject.getUserID())) {
+            if (userID == ccObject.getUserID()) {
                 iterator.remove();
                 purgedCCs++;
             }
@@ -82,7 +82,7 @@ public class PurgeBannedData implements Command {
         iterator = command.guild.characters.getCharacters(command.guild.get()).listIterator();
         while (iterator.hasNext()) {
             CharacterObject charObject = (CharacterObject) iterator.next();
-            if (charObject.getUserID().equalsIgnoreCase(userStringID)) {
+            if (charObject.getUserID() == userID) {
                 iterator.remove();
                 purgedCharacters++;
             }
@@ -90,7 +90,7 @@ public class PurgeBannedData implements Command {
         iterator = command.guild.servers.getServers().listIterator();
         while (iterator.hasNext()) {
             ServerObject serverObject = (ServerObject) iterator.next();
-            if (serverObject.getCreatorID().equalsIgnoreCase(userStringID)) {
+            if (serverObject.getCreatorID() == userID) {
                 iterator.remove();
                 purgedServers++;
             }

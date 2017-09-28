@@ -37,6 +37,8 @@ public class EnumString {
                 return "PrivateProfile";
             case DENY_AUTO_ROLE:
                 return "DenyAutoRole";
+            case DONT_DECAY:
+                return "DontDecay";
             default:
                 return null;
         }

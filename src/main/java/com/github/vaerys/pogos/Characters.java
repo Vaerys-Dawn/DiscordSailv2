@@ -17,17 +17,9 @@ import java.util.ListIterator;
 
 public class Characters extends GuildFile {
     public static final String FILE_PATH = "Characters.json";
-    boolean properlyInit = false;
+    private double fileVersion = 1.0;
     ArrayList<CharacterObject> characters = new ArrayList<>();
     private String rolePrefix = "";
-
-    public boolean isProperlyInit() {
-        return properlyInit;
-    }
-
-    public void setProperlyInit(boolean properlyInit) {
-        this.properlyInit = properlyInit;
-    }
 
     public String updateChar(CharacterObject newCharacter, IGuild guild) {
         validateRoles(guild);
@@ -35,7 +27,7 @@ public class Characters extends GuildFile {
         for (CharacterObject c : characters) {
             if (c.getName().equalsIgnoreCase(newCharacter.getName())) {
                 IUser author = Globals.getClient().getUserByID(newCharacter.getUserID());
-                if (c.getUserID().equals(author.getStringID())) {
+                if (c.getUserID() == author.getLongID()) {
                     characters.get(position).update(newCharacter);
                     return "> Character Updated.";
                 } else {
@@ -56,7 +48,7 @@ public class Characters extends GuildFile {
     public String delChar(String character, IUser author, IGuild guild, boolean bypass) {
         for (CharacterObject c : characters) {
             if (c.getName().equalsIgnoreCase(character)) {
-                if (author.getStringID().equals(c.getUserID()) || bypass) {
+                if (author.getLongID() == c.getUserID() || bypass) {
                     characters.remove(c);
                     return "> Character Deleted.";
                 } else {
@@ -76,7 +68,7 @@ public class Characters extends GuildFile {
     }
 
     private void validateRoles(IGuild guild) {
-        if (guild == null){
+        if (guild == null) {
             return;
         }
         for (CharacterObject c : characters) {

@@ -2,7 +2,6 @@
   <library name="Maven: ch.qos.logback:logback-classic:1.1.7">
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/ch/qos/logback/logback-classic/1.1.7/logback-classic-1.1.7.jar!/" />
-      <root url="jar://E:/Vaerys/Downloads/Cooldown.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/ch/qos/logback/logback-classic/1.1.7/logback-classic-1.1.7-javadoc.jar!/" />

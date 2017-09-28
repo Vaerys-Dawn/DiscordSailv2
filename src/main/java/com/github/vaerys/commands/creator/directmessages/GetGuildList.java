@@ -16,11 +16,11 @@ public class GetGuildList implements DMCommand {
     public String execute(String args, CommandObject command) {
         ArrayList<String> guilds = new ArrayList<>();
         for (IGuild g: command.client.get().getGuilds()){
-            guilds.add(g.getName() +": " + g.getStringID());
+            guilds.add(g.getName() +": " + g.getLongID());
         }
         XEmbedBuilder builder = new XEmbedBuilder();
         Utility.listFormatterEmbed("List Of Guilds", builder, guilds, false);
-        Utility.sendDMEmbed("",builder,command.user.stringID);
+        Utility.sendDMEmbed("",builder,command.user.longID);
         return null;
     }
 

@@ -14,7 +14,7 @@ public class DenyXpPrefix implements Command {
     public String execute(String args, CommandObject command) {
         if (args.equalsIgnoreCase("list")) {
             return "> Here are all of the prefixes that are registered.\n```" +
-                    Utility.listFormatter(command.guild.config.getXPDeniedPrefixes(), true) + "```";
+                    Utility.listFormatter(command.guild.config.getXpDeniedPrefixes(), true) + "```";
         }
         boolean isAlphanumeric = args.matches("[A-Za-z0-9]+");
         if (args.length() > 5) {
@@ -35,7 +35,7 @@ public class DenyXpPrefix implements Command {
         if (args.startsWith("@")) {
             return "> Prefix cannot start with a `@`.";
         }
-        ArrayList<String> prefixes = command.guild.config.getXPDeniedPrefixes();
+        ArrayList<String> prefixes = command.guild.config.getXpDeniedPrefixes();
         ListIterator iterator = prefixes.listIterator();
         while (iterator.hasNext()) {
             String prefix = (String) iterator.next();
