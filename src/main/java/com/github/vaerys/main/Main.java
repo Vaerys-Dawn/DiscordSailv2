@@ -54,7 +54,7 @@ public class Main {
         });
 
 
-        String token;
+        String token = null;
         // you need to set a token in Token/Token.txt for the bot to run
         try {
             Discord4J.disableAudio();
@@ -81,9 +81,11 @@ public class Main {
             FileHandler.writeToJson(Constants.FILE_CONFIG, config);
 
             //getting bot token
-            token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
-            if (token == null) {
+            try {
+                token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
+            } catch (IndexOutOfBoundsException e) {
                 logger.error("!!!BOT TOKEN NOT VALID PLEASE CHECK \"Storage/Token.txt\" AND UPDATE THE TOKEN!!!");
+                System.exit(-1);
             }
 
             IDiscordClient client = Client.getClient(token, false);

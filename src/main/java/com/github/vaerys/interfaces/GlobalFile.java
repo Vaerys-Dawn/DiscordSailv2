@@ -27,6 +27,13 @@ public class GlobalFile {
         } else {
             object = (GlobalFile) FileHandler.readFromJson(path, object.getClass());
         }
+        if (object == null) {
+            try {
+                throw new IOException("File is corrupt: " + path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         object.setPath(newPath);
         return object;
     }

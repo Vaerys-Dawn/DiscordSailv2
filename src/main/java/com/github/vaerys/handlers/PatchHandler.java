@@ -6,10 +6,12 @@ import com.github.vaerys.pogos.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import jdk.nashorn.internal.ir.IfNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -22,42 +24,52 @@ public class PatchHandler {
 
     public static void guildPatches(IGuild guild) {
 
-        // overhauling strings to longs and fixing spelling/name issues.
+        // 1.0 overhauling strings to longs and fixing spelling/name issues.
         overhaulCharacters(guild);
         overhaulGuildConfig(guild);
         overhaulGuildUsers(guild);
         overhaulCustomCommands(guild);
         overhaulServers(guild);
         overhaulComp(guild);
-        //unicode fixes
+        // 1.1 unicode fixes
         fixUnicode(guild);
         fixUnicodeGuildUsers(guild);
         guildConfigRemoveUnicodeEmoji(guild);
     }
 
     private static void guildConfigRemoveUnicodeEmoji(IGuild guild) {
-        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), GuildConfig.FILE_PATH));
+        String path = Utility.getFilePath(guild.getLongID(), GuildConfig.FILE_PATH);
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.1, guild, "FixUnicode_Guild_Config", json)) return;
-        String s = json.get("levelUpReaction").getAsString();
+        JsonElement object = json.get("levelUpReaction");
+        if (object == null) return;
+        String s = object.getAsString();
+        if (s == null) return;
         try {
             Long l = Long.parseUnsignedLong(s);
         } catch (NumberFormatException e) {
             json.remove("levelUpReaction");
             json.addProperty("levelUpReaction", "null");
+        } catch (ClassCastException e) {
+            // do nothing
         }
         newPatchID(1.1, json);
-        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), GuildConfig.FILE_PATH), json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void fixUnicodeGuildUsers(IGuild guild) {
-        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH));
-        JsonObject backupjson = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH + "1", true));
+        String path = Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH);
+        String backupPath = Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH + "1", true);
+        //check files
+        if (!FileHandler.exists(path) || !FileHandler.exists(backupPath)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
+        JsonObject backupjson = FileHandler.fileToJsonObject(backupPath);
         if (checkPatch(1.1, guild, "FixUnicode_Profiles", json)) return;
         JsonArray profiles = json.getAsJsonArray("profiles");
         JsonArray oldprofiles = backupjson.getAsJsonArray("profiles");
-        if (profiles == null || oldprofiles == null) {
-            return;
-        }
+        if (profiles == null || oldprofiles == null) return;
         profiles.forEach(profile -> {
             oldprofiles.forEach(oldprofile -> {
                 if (Utility.stringLong(oldprofile.getAsJsonObject().get("userID").getAsString()) == profile.getAsJsonObject().get("userID").getAsLong()) {
@@ -69,15 +81,20 @@ public class PatchHandler {
             });
         });
         newPatchID(1.1, json);
-        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH), json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void fixUnicodeDaily() {
-        JsonObject json = FileHandler.fileToJsonObject(Constants.DIRECTORY_STORAGE + DailyMessages.FILE_PATH);
-        JsonObject backupjson = FileHandler.fileToJsonObject(Constants.DIRECTORY_BACKUPS + DailyMessages.FILE_PATH + 1);
+        String path = Constants.DIRECTORY_STORAGE + DailyMessages.FILE_PATH;
+        String backupPath = Constants.DIRECTORY_BACKUPS + DailyMessages.FILE_PATH + 1;
+        //check files
+        if (!FileHandler.exists(path) || !FileHandler.exists(backupPath)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
+        JsonObject backupjson = FileHandler.fileToJsonObject(backupPath);
         if (checkPatch(1.1, null, "FixUnicode_dailyMessages", json)) return;
         JsonArray commands = json.getAsJsonArray("dailyMessages");
         JsonArray oldCommands = backupjson.getAsJsonArray("dailyMessages");
+        if (commands == null || oldCommands == null) return;
         commands.forEach(command -> {
             oldCommands.forEach(oldCommand -> {
                 if (oldCommand.getAsJsonObject().get("uID").getAsString().equalsIgnoreCase(command.getAsJsonObject().get("uID").getAsString())) {
@@ -87,7 +104,7 @@ public class PatchHandler {
             });
         });
         newPatchID(1.1, json);
-        FileHandler.writeToJson(Constants.DIRECTORY_STORAGE + DailyMessages.FILE_PATH, json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void newPatchID(double s, JsonObject json) {
@@ -96,11 +113,16 @@ public class PatchHandler {
     }
 
     private static void fixUnicode(IGuild guild) {
-        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH));
-        JsonObject backupjson = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH + "1", true));
+        String path = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH);
+        String backupPath = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH + "1", true);
+        //check files
+        if (!FileHandler.exists(path) || !FileHandler.exists(backupPath)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
+        JsonObject backupjson = FileHandler.fileToJsonObject(backupPath);
         if (checkPatch(1.1, guild, "FixUnicode", json)) return;
         JsonArray commands = json.getAsJsonArray("commands");
         JsonArray oldCommands = backupjson.getAsJsonArray("commands");
+        if (commands == null || oldCommands == null) return;
         commands.forEach(command -> {
             oldCommands.forEach(oldCommand -> {
                 if (oldCommand.getAsJsonObject().get("name").getAsString().equalsIgnoreCase(command.getAsJsonObject().get("name").getAsString())) {
@@ -110,7 +132,7 @@ public class PatchHandler {
             });
         });
         newPatchID(1.1, json);
-        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH), json);
+        FileHandler.writeToJson(path, json);
     }
 
 
@@ -134,9 +156,13 @@ public class PatchHandler {
     }
 
     private static void overhaulComp(IGuild guild) {
-        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), Competition.FILE_PATH));
+        String path = Utility.getFilePath(guild.getLongID(), Competition.FILE_PATH);
+        //check file
+        if (!FileHandler.exists(path)) ;
+        JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.0, guild, "Overhaul_Comp", json)) return;
         JsonArray array = json.getAsJsonArray("entries");
+        if (array == null) return;
         array.forEach(entry -> {
             try {
                 String oldItem = entry.getAsJsonObject().get("userID").getAsString();
@@ -150,13 +176,17 @@ public class PatchHandler {
                 // do nothing
             }
         });
-        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), Competition.FILE_PATH), json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void overhaulServers(IGuild guild) {
-        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), Servers.FILE_PATH));
+        String path = Utility.getFilePath(guild.getLongID(), Servers.FILE_PATH);
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.0, guild, "Overhaul_Servers", json)) return;
         JsonArray array = json.getAsJsonArray("servers");
+        if (array == null) return;
         array.forEach(server -> {
             try {
                 String oldItem = server.getAsJsonObject().get("creatorID").getAsString();
@@ -170,13 +200,17 @@ public class PatchHandler {
                 // do nothing
             }
         });
-        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), Servers.FILE_PATH), json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void overhaulCustomCommands(IGuild guild) {
-        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH));
+        String path = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH);
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.0, guild, "Overhaul_CustomCommands", json)) return;
         JsonArray array = json.getAsJsonArray("commands");
+        if (array == null) return;
         array.forEach(command -> {
             try {
                 String oldItem = command.getAsJsonObject().get("userID").getAsString();
@@ -190,11 +224,14 @@ public class PatchHandler {
                 // do nothing
             }
         });
-        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH), json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void overhaulGuildUsers(IGuild guild) {
-        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH));
+        String path = Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH);
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.0, guild, "Overhaul_GuildUsers", json)) return;
         JsonArray users = json.getAsJsonArray("users");
         if (users == null) return;
@@ -214,20 +251,25 @@ public class PatchHandler {
         json.remove("users");
         json.add("profiles", users);
         JsonArray muted = json.getAsJsonArray("mutedUsers");
+        if (muted == null) return;
         muted.forEach(user -> {
             String oldItem = user.getAsJsonObject().get("userID").getAsString();
             long newItem = Long.parseUnsignedLong(oldItem);
             user.getAsJsonObject().remove("userID");
             user.getAsJsonObject().addProperty("userID", newItem);
         });
-        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH), json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void overhaulCharacters(IGuild guild) {
-        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), Characters.FILE_PATH));
+        String path = Utility.getFilePath(guild.getLongID(), Characters.FILE_PATH);
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.0, guild, "Overhaul_Characters", json)) return;
         JsonElement e = json.get("characters");
         JsonArray array = e.getAsJsonArray();
+        if (array == null) return;
         array.forEach(jsonElement -> {
             try {
                 String oldType = jsonElement.getAsJsonObject().get("userID").getAsString();
@@ -242,16 +284,21 @@ public class PatchHandler {
                 jsonElement.getAsJsonObject().addProperty("userID", -1);
             }
         });
-        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), Characters.FILE_PATH), json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void overhaulGuildConfig(IGuild guild) {
-        JsonObject json = FileHandler.fileToJsonObject(Utility.getFilePath(guild.getLongID(), GuildConfig.FILE_PATH));
+        String path = Utility.getFilePath(guild.getLongID(), GuildConfig.FILE_PATH);
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.0, guild, "Overhaul_GuildConfig", json)) return;
         JsonArray array = json.getAsJsonArray("channelSettings");
+        if (array == null) return;
         array.forEach(jsonElement -> {
             JsonElement channelIDs = jsonElement.getAsJsonObject().get("channelIDs");
             JsonArray newIDs = new JsonArray();
+            if (array == null) return;
             channelIDs.getAsJsonArray().forEach(id -> {
                 try {
                     String oldType = id.getAsString();
@@ -269,81 +316,87 @@ public class PatchHandler {
         JsonArray array1 = json.getAsJsonArray("XPDeniedPrefixes");
         json.remove("XPDeniedPrefixes");
         json.add("xpDeniedPrefixes", array1);
-        FileHandler.writeToJson(Utility.getFilePath(guild.getLongID(), GuildConfig.FILE_PATH), json);
+        FileHandler.writeToJson(path, json);
     }
 
     public static void preInitPatches() {
+        // 1.0 patches
+        overhaulGlobalData();
+        overhaulConfig();
         fixUnicodeDaily();
-        if (Files.exists(Paths.get(Constants.FILE_GLOBAL_DATA))) {
-            JsonObject json = FileHandler.fileToJsonObject(Constants.FILE_GLOBAL_DATA);
-            if (checkPatch(1.0, null, "Overhaul_GlobalData", json)) return;
-            //blocked from Dms
-            JsonArray blockedUsers = json.getAsJsonArray("blockedFromDMS");
-            JsonArray newUsers = new JsonArray();
-            blockedUsers.forEach(user -> {
-                try {
-                    String oldItem = user.getAsString();
-                    long newItem = Long.parseUnsignedLong(oldItem);
-                    newUsers.add(newItem);
-                } catch (NumberFormatException e) {
-                    //do nothing
-                } catch (ClassCastException ex) {
-                    //do nothing
-                }
-            });
-            json.remove("blockedFromDMS");
-            json.add("blockedFromDMS", newUsers);
-            //Reminders
-            JsonArray reminders = json.getAsJsonArray("reminders");
-            reminders.forEach(reminder -> {
-                try {
-                    try {
-                        String oldUserID = reminder.getAsJsonObject().get("userID").getAsString();
-                        long newUserID = Long.parseUnsignedLong(oldUserID);
-                        reminder.getAsJsonObject().remove("userID");
-                        reminder.getAsJsonObject().addProperty("userID", newUserID);
-                    } catch (NumberFormatException e) {
-                        reminder.getAsJsonObject().remove("userID");
-                        reminder.getAsJsonObject().addProperty("userID", -1);
-                    }
-                    try {
-                        String oldChannelID = reminder.getAsJsonObject().get("channelID").getAsString();
-                        long newChannelID = Long.parseUnsignedLong(oldChannelID);
-                        reminder.getAsJsonObject().remove("channelID");
-                        reminder.getAsJsonObject().addProperty("channelID", newChannelID);
-                    } catch (NumberFormatException e) {
-                        reminder.getAsJsonObject().remove("channelID");
-                        reminder.getAsJsonObject().addProperty("channelID", -1);
-                    }
-                } catch (ClassCastException ex) {
-                    // also do nothin
-                }
-            });
-            FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, json);
+    }
+
+    private static void overhaulConfig() {
+        String path = Constants.FILE_CONFIG;
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(Constants.FILE_CONFIG);
+        if (checkPatch(1.0, null, "Overhaul_Config", json)) return;
+        try {
+            String oldItem = json.get("creatorID").getAsString();
+            long newItem = Long.parseUnsignedLong(oldItem);
+            json.remove("creatorID");
+            json.addProperty("creatorID", newItem);
+        } catch (ClassCastException e) {
+            // do nothing
+        } catch (NumberFormatException e) {
+            json.remove("creatorID");
+            json.addProperty("creatorID", -1);
         }
-        if (Files.exists(Paths.get(Constants.FILE_CONFIG))) {
-            JsonObject json = FileHandler.fileToJsonObject(Constants.FILE_CONFIG);
-            if (checkPatch(1.0, null, "Overhaul_Config", json)) return;
+        FileHandler.writeToJson(Constants.FILE_CONFIG, json);
+
+    }
+
+    private static void overhaulGlobalData() {
+        String path = Constants.FILE_GLOBAL_DATA;
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(Constants.FILE_GLOBAL_DATA);
+        if (checkPatch(1.0, null, "Overhaul_GlobalData", json)) return;
+        //blocked from Dms
+        JsonArray blockedUsers = json.getAsJsonArray("blockedFromDMS");
+        JsonArray newUsers = new JsonArray();
+        blockedUsers.forEach(user -> {
             try {
-                String oldItem = json.get("creatorID").getAsString();
+                String oldItem = user.getAsString();
                 long newItem = Long.parseUnsignedLong(oldItem);
-                json.remove("creatorID");
-                json.addProperty("creatorID", newItem);
-            } catch (ClassCastException e) {
-                // do nothing
+                newUsers.add(newItem);
             } catch (NumberFormatException e) {
-                json.remove("creatorID");
-                json.addProperty("creatorID", -1);
+                //do nothing
+            } catch (ClassCastException ex) {
+                //do nothing
             }
-            FileHandler.writeToJson(Constants.FILE_CONFIG, json);
-        }
-
-
-//        OldGlobalData oldData = (OldGlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, OldGlobalData.class);
-//        DailyMessages dailyMessages = (DailyMessages) DailyMessages.create(DailyMessages.FILE_PATH, new DailyMessages());
-//        dailyMessages.getMessages().addAll(oldData.getDailyMessages());
-//        dailyMessages.getQueue().addAll(oldData.getQueuedRequests());
-//        dailyMessages.flushFile();
+        });
+        json.remove("blockedFromDMS");
+        json.add("blockedFromDMS", newUsers);
+        //Reminders
+        JsonArray reminders = json.getAsJsonArray("reminders");
+        if (reminders == null) return;
+        reminders.forEach(reminder -> {
+            try {
+                try {
+                    String oldUserID = reminder.getAsJsonObject().get("userID").getAsString();
+                    long newUserID = Long.parseUnsignedLong(oldUserID);
+                    reminder.getAsJsonObject().remove("userID");
+                    reminder.getAsJsonObject().addProperty("userID", newUserID);
+                } catch (NumberFormatException e) {
+                    reminder.getAsJsonObject().remove("userID");
+                    reminder.getAsJsonObject().addProperty("userID", -1);
+                }
+                try {
+                    String oldChannelID = reminder.getAsJsonObject().get("channelID").getAsString();
+                    long newChannelID = Long.parseUnsignedLong(oldChannelID);
+                    reminder.getAsJsonObject().remove("channelID");
+                    reminder.getAsJsonObject().addProperty("channelID", newChannelID);
+                } catch (NumberFormatException e) {
+                    reminder.getAsJsonObject().remove("channelID");
+                    reminder.getAsJsonObject().addProperty("channelID", -1);
+                }
+            } catch (ClassCastException ex) {
+                // also do nothin
+            }
+        });
+        FileHandler.writeToJson(path, json);
     }
 
     private static String toNewSystem(String from) {

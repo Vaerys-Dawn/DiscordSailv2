@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.austinv11:Discord4j:shaded:d12a9ac">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/d12a9ac/Discord4j-d12a9ac-shaded.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/d12a9ac/Discord4j-d12a9ac-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/austinv11/Discord4j/d12a9ac/Discord4j-d12a9ac-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

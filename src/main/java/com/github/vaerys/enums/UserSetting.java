@@ -22,11 +22,12 @@ public enum UserSetting {
     AUTO_SHITPOST, //Automatically sets all new custom commands made by this user to be shitpost locked.
     DENY_MAKE_CC, //Removes the ability for the user to make custom commands.
     DENY_USE_CCS, //Removes the ability for the user to use custom commands.
-    DENY_AUTO_ROLE,
+    DENY_AUTO_ROLE, //stops the auto role system for sail
     DONT_DECAY, //stops the automatic role allocation
+    DENY_ART_PINNING, //stop users from pinning art.
 
     //bot assigned
-    HIT_LEVEL_FLOOR, //added when the user reaches the xp floor of a reward, used to welcome
+    HIT_LEVEL_FLOOR,//added when the user reaches the xp floor of a reward, used to welcome
     // profiles back when the level up again
 }
 

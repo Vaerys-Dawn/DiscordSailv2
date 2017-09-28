@@ -273,6 +273,7 @@ public class Globals {
         }
         savingFiles = true;
         logger.debug("Saving Files.");
+        if (dailyMessages == null) return;
         dailyMessages.flushFile();
         for (GuildObject g : guilds) {
             for (GuildFile file : g.guildFiles) {

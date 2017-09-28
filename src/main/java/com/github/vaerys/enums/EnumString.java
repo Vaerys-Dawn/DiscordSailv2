@@ -39,6 +39,8 @@ public class EnumString {
                 return "DenyAutoRole";
             case DONT_DECAY:
                 return "DontDecay";
+            case DENY_ART_PINNING:
+                return "DenyArtPinning";
             default:
                 return null;
         }

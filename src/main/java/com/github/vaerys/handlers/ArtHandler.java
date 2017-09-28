@@ -1,10 +1,8 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.channelsettings.settings.XpDenied;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.main.AnnotationListener;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
@@ -37,14 +35,13 @@ public class ArtHandler {
         if (!command.guild.config.artPinning) return;
         //exit if message owner is a bot
         if (command.message.get().getAuthor().isBot()) return;
-        //you cnat pin your own art
-        if (command.message.get().getAuthor().getLongID() == command.user.longID) return;
+        //exit if user has art pinning denied.
+        ProfileObject profile = command.user.getProfile(command.guild);
+        if (profile != null && profile.getSettings().contains(UserSetting.DENY_ART_PINNING)) return;
         //exit if there is no art channel
         if (channelIDS.size() == 0) return;
         //exit if this is not the art channel
         if (channelIDS.get(0).getLongID() != command.channel.longID) return;
-
-        checkList(command);
 
         if (command.message.get().getAttachments().size() != 0) {
             if (Utility.isImageLink(command.message.get().getAttachments().get(0).getUrl())) {
@@ -62,6 +59,7 @@ public class ArtHandler {
                         //add to list
                         likes.add(new TrackLikes(command.message.longID));
                     }
+                    checkList(command);
                     return;
                 } catch (DiscordException e) {
                     if (e.getErrorMessage().contains("already pinned")) {
@@ -90,6 +88,7 @@ public class ArtHandler {
                                 //add to list
                                 likes.add(new TrackLikes(command.message.longID));
                             }
+                            checkList(command);
                             return;
                         } catch (DiscordException e) {
                             //do nothing

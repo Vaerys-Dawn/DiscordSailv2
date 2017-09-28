@@ -84,15 +84,17 @@ public class MessageHandler {
                     }
                 }
                 if (c.requiresArgs() && (commandArgs == null || commandArgs.isEmpty())) {
+
                     Utility.sendMessage(Utility.getCommandInfo(c, command), currentChannel);
                     return true;
                 }
                 //command logging
                 handleLogging(command, c, commandArgs);
-                if (!command.channel.get().getTypingStatus()) {
-                    command.channel.get().toggleTypingStatus();
-                }
-                Utility.sendMessage(c.execute(commandArgs, command), currentChannel);
+//                if (!command.channel.get().getTypingStatus()) {
+//                    command.channel.get().toggleTypingStatus();
+//                }
+                String response = c.execute(commandArgs, command);
+                Utility.sendMessage(response, currentChannel);
                 return true;
             }
         }

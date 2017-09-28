@@ -306,6 +306,9 @@ public class AnnotationListener {
         if (!Globals.isReady) {
             return;
         }
+        if(event.getMessage() == null){
+            return;
+        }
         CommandObject command = new CommandObject(event.getMessage());
         String content;
         IUser ourUser = Globals.client.getOurUser();

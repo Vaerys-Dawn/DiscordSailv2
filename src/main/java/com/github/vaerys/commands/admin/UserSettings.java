@@ -26,6 +26,7 @@ public class UserSettings implements Command {
             "> DenyUseCCs\n" +
             "> AutoShitpost\n" +
             "> DenyAutoRole\n" +
+            "> DenyArtPinning\n" +
             "> List - `Shows the user's settings.`";
 
     @Override
@@ -70,6 +71,10 @@ public class UserSettings implements Command {
                     return toggleSetting(profile, UserSetting.DONT_DECAY,
                             "> **" + user.displayName + "** will now have pixel decay.",
                             "> **" + user.displayName + "** will no longer have pixel decay.");
+                case "denyartpinning":
+                    return toggleSetting(profile, UserSetting.DENY_ART_PINNING,
+                            "> **" + user.displayName + "** can now pin art again.",
+                            "> **" + user.displayName + "** can no longer pin art.");
                 case "list":
                     List<String> userSettings = new ArrayList<>();
                     for (UserSetting s : profile.getSettings()) {

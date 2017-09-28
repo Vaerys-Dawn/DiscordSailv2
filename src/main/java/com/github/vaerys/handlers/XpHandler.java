@@ -225,8 +225,9 @@ public class XpHandler {
             }
         }
 
-        //you must have typed at least 10 chars to gain xp
-        if (object.message.get().getContent().length() < 10) return;
+        //you must have typed at least 10 chars to gain xp and doesn't contain an image.
+        if (object.message.get().getContent().length() < 10 &&
+                object.message.get().getAttachments().isEmpty()) return;
 
         //you cannot gain xp in an xpDenied channel
         List<IChannel> xpChannels = object.guild.config.getChannelsByType(Command.CHANNEL_XP_DENIED, object.guild);
