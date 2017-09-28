@@ -15,7 +15,6 @@ import com.github.vaerys.commands.general.*;
 import com.github.vaerys.commands.groups.ClearGroupUp;
 import com.github.vaerys.commands.groups.GroupUp;
 import com.github.vaerys.commands.help.*;
-import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.commands.pixels.*;
 import com.github.vaerys.commands.roleSelect.CosmeticRoles;
 import com.github.vaerys.commands.roleSelect.ListModifs;
@@ -66,6 +65,7 @@ public class CommandInit {
         commands.add(new EditLinks());
         commands.add(new Ping());
         commands.add(new LastDailyMessage());
+        commands.add(new NewDailyMessage());
         //Help commands
         commands.add(new GetGuildInfo());
         commands.add(new Help());
@@ -112,6 +112,7 @@ public class CommandInit {
         commands.add(new EnterComp());
         commands.add(new EnterVote());
         commands.add(new PurgeComp());
+        commands.add(new WeightedFinalTally());
         //Groups commands
         commands.add(new GroupUp());
         commands.add(new ClearGroupUp());

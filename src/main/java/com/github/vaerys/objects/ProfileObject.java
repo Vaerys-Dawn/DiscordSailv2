@@ -16,10 +16,9 @@ import java.util.ListIterator;
  * Created by Vaerys on 27/08/2016.
  */
 public class ProfileObject {
-    String ID;
+    long userID;
     long xp = 0;
     long currentLevel = -1;
-    //    long rewardID = -1;
     String gender = "Unknown";
     String quote = "This person doesn't seem to have much to say for themselves.";
     ArrayList<UserSetting> settings = new ArrayList<>();
@@ -50,32 +49,33 @@ public class ProfileObject {
         this.gender = gender;
     }
 
-//    public long getRewardID() {
-//        return rewardID;
-//    }
-
-//    public void setRewardID(long rewardID) {
-//        this.rewardID = rewardID;
-//    }
-
-    public ProfileObject(String ID) {
-        this.ID = ID;
+    public ProfileObject(long userID) {
+        this.userID = userID;
         if (links == null) links = new ArrayList<>();
         if (settings == null) settings = new ArrayList<>();
     }
 
-    public String getID() {
-        return ID;
+    public long getUserID() {
+        return userID;
     }
 
     public void addXP(GuildConfig config) {
         xp += config.xpRate * config.xpModifier;
-        logger.trace(Globals.getClient().getUserByID(ID) + " - Xp gained");
+    }
+
+    public void addXP(long xp, GuildConfig config) {
+        this.xp += config.xpModifier * xp;
+    }
+
+    public void setXp(long xp, boolean levelUp) {
+        this.xp = xp;
+        if (levelUp) {
+            this.currentLevel = XpHandler.xpToLevel(xp);
+        }
     }
 
     public void setXp(long xp) {
-        this.xp = xp;
-        this.currentLevel = XpHandler.xpToLevel(xp);
+        setXp(xp, true);
     }
 
     public long getXP() {
@@ -83,6 +83,9 @@ public class ProfileObject {
     }
 
     public ArrayList<UserSetting> getSettings() {
+        if (settings == null) {
+            return new ArrayList<>();
+        }
         return settings;
     }
 

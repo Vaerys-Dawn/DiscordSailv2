@@ -28,17 +28,17 @@ public class TopUserForRole implements Command {
             if (user.getRolesForGuild(command.guild.get()).contains(role)) {
                 if (topUser == null) {
                     topUser = user;
-                    topUserObject = command.guild.users.getUserByID(topUser.getStringID());
+                    topUserObject = command.guild.users.getUserByID(topUser.getLongID());
                     if (topUserObject == null) {
                         topUser = null;
-                    } else if (XpHandler.rank(command.guild.users, command.guild.get(), topUserObject.getID()) == -1) {
+                    } else if (XpHandler.rank(command.guild.users, command.guild.get(), topUserObject.getUserID()) == -1) {
                         topUser = null;
                     }
                 } else {
-                    userTypeObject = command.guild.users.getUserByID(user.getStringID());
-                    topUserObject = command.guild.users.getUserByID(topUser.getStringID());
+                    userTypeObject = command.guild.users.getUserByID(user.getLongID());
+                    topUserObject = command.guild.users.getUserByID(topUser.getLongID());
                     if (topUserObject != null && userTypeObject != null) {
-                        if (XpHandler.rank(command.guild.users, command.guild.get(), userTypeObject.getID()) != -1) {
+                        if (XpHandler.rank(command.guild.users, command.guild.get(), userTypeObject.getUserID()) != -1) {
                             if (topUserObject.getXP() < userTypeObject.getXP()) {
                                 topUser = user;
                             }
@@ -48,10 +48,10 @@ public class TopUserForRole implements Command {
             }
         }
         try {
-            topUserObject = command.guild.users.getUserByID(topUser.getStringID());
+            topUserObject = command.guild.users.getUserByID(topUser.getLongID());
             Utility.deleteMessage(working);
             if (topUserObject != null) {
-                return "> @" + topUser.getName() + "#" + topUser.getDiscriminator() + ", Pixels: " + NumberFormat.getInstance().format(topUserObject.getXP()) + ", Level: " + topUserObject.getCurrentLevel() + ", UserID: " + topUserObject.getID();
+                return "> @" + topUser.getName() + "#" + topUser.getDiscriminator() + ", Pixels: " + NumberFormat.getInstance().format(topUserObject.getXP()) + ", Level: " + topUserObject.getCurrentLevel() + ", UserID: " + topUserObject.getUserID();
             } else {
                 return "> User could not be found.";
             }

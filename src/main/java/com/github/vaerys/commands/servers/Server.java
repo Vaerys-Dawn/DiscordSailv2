@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ServerObject;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -14,10 +15,21 @@ public class Server implements Command {
     public String execute(String args, CommandObject command) {
         for (ServerObject s : command.guild.servers.getServers()) {
             if (s.getName().equalsIgnoreCase(args)) {
+                IUser user = command.guild.get().getUserByID(s.getCreatorID());
+                boolean isGuildUser = true;
+                if (user == null) {
+                    user = command.client.get().fetchUser(s.getCreatorID());
+                    isGuildUser = false;
+                }
+
                 StringBuilder builder = new StringBuilder();
                 builder.append("**" + s.getName() + "**\n");
                 builder.append("**IP:** " + s.getServerIP() + " **Port:** " + s.getServerPort() + "\n");
-                builder.append("**Listing Creator:** " + command.guild.get().getUserByID(s.getCreatorID()).getDisplayName(command.guild.get()) + "\n");
+                if (isGuildUser) {
+                    builder.append("**Listing Creator:** " + user.getDisplayName(command.guild.get()) + "\n");
+                } else {
+                    builder.append("**Listing Creator:** " + user.getName() + "#" + user.getDiscriminator() + "\n");
+                }
                 builder.append(s.getServerDesc());
                 Utility.sendDM(builder.toString(), command.user.longID);
                 return "> Server info has been sent to your DMs";

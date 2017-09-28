@@ -9,13 +9,13 @@ import java.util.List;
 public class CCommandObject {
 
     String name;
-    String userID;
+    long userID;
     boolean isLocked;
     boolean shitPost;
     long timesRun;
     List<String> contents;
 
-    public CCommandObject(boolean isLocked, String userID, String name, String contents,boolean shitPost) {
+    public CCommandObject(boolean isLocked, long userID, String name, String contents, boolean shitPost) {
         this.isLocked = isLocked;
         this.userID = userID;
         this.name = name;
@@ -32,7 +32,7 @@ public class CCommandObject {
         return name;
     }
 
-    public String getUserID() {
+    public long getUserID() {
         return userID;
     }
 
@@ -41,14 +41,14 @@ public class CCommandObject {
     }
 
     public String getContents(boolean addCounter) {
-        if(addCounter) {
+        if (addCounter) {
             timesRun++;
         }
         StringBuilder builder = new StringBuilder();
-        for (String s: contents){
+        for (String s : contents) {
             builder.append(s + "\n");
         }
-        builder.delete(builder.length() -1, builder.length());
+        builder.delete(builder.length() - 1, builder.length());
         return builder.toString();
     }
 
@@ -56,7 +56,7 @@ public class CCommandObject {
         return timesRun;
     }
 
-    public boolean toggleShitPost(){
+    public boolean toggleShitPost() {
         return shitPost = !shitPost;
     }
 

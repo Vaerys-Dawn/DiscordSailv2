@@ -30,7 +30,7 @@ import java.util.List;
 public class Globals {
 
     public static String botName = null;
-    public static String creatorID = null;
+    public static long creatorID = -1;
     public static String defaultPrefixCommand = null;
     public static String defaultPrefixCC = null;
     public static String defaultAvatarFile = null;
@@ -44,7 +44,7 @@ public class Globals {
     public static int avgMessagesPerDay = 20;
     public static boolean isReady = false;
     public static String version;
-    public static String consoleMessageCID = null;
+    public static long consoleMessageCID = -1;
     public static ArrayList<DailyMessageObject> configDailyMessages = new ArrayList<>();
     public static IDiscordClient client;
     public static boolean showSaveWarning = false;
@@ -124,6 +124,7 @@ public class Globals {
                 }
             }
         }
+
 
         //Init Command Types.
         for (Command c : commands) {
@@ -272,13 +273,17 @@ public class Globals {
         }
         savingFiles = true;
         logger.debug("Saving Files.");
-        dailyMessages.flushFile();
+        if (dailyMessages != null) { // don't save null data
+            dailyMessages.flushFile();
+        }
         for (GuildObject g : guilds) {
             for (GuildFile file : g.guildFiles) {
                 file.flushFile();
             }
         }
-        FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, getGlobalData());
+        if (getGlobalData() != null) { // don't save null data
+            FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, getGlobalData());
+        }
         savingFiles = false;
     }
 

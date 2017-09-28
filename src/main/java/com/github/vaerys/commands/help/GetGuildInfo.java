@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class GetGuildInfo implements Command{
+public class GetGuildInfo implements Command {
 
     IGuild guild;
     IUser author;
@@ -40,17 +40,17 @@ public class GetGuildInfo implements Command{
         int totalCosmetic = 0;
         int totalModified = 0;
         int totalTrusted = 0;
-        boolean manageRoles = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getStringID().equals(Globals.creatorID);
-        boolean manageServer = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getStringID().equals(Globals.creatorID);
-        boolean manageChannels = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getStringID().equals(Globals.creatorID);
+        boolean manageRoles = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getLongID() == Globals.creatorID;
+        boolean manageServer = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getLongID() == Globals.creatorID;
+        boolean manageChannels = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getLongID() == Globals.creatorID;
 
-        Utility.sendMessage("> Info will be sent to you via Direct Message.",command.channel.get());
-        Utility.sendFileURL("",guild.getIconURL(),command.client.get().getOrCreatePMChannel(command.user.get()),false);
+        Utility.sendMessage("> Info will be sent to you via Direct Message.", command.channel.get());
+        Utility.sendFileURL("", guild.getIconURL(), command.client.get().getOrCreatePMChannel(command.user.get()), false);
         builder.append("***[" + guildName.toUpperCase() + "]***");
         builder.append("\n\n> Guild ID : **" + guild.getLongID());
         builder.append("**\n> Creation Date : **" + creationDate.getYear() + " " + creationDate.getMonth() + " " + creationDate.getDayOfMonth() + " - " + creationDate.getHour() + ":" + creationDate.getMinute());
         builder.append("**\n> Guild Owner : **@" + guildOwner.getName() + "#" + guildOwner.getDiscriminator());
-        builder.append("**\n> Command Prefix: **"+  config.getPrefixCommand());
+        builder.append("**\n> Command Prefix: **" + config.getPrefixCommand());
         builder.append("**\n> Custom Command Prefix: **" + config.getPrefixCC() + "**");
         if (region != null) {
             builder.append("\n> Region : **" + region.getName() + "**");
@@ -59,11 +59,11 @@ public class GetGuildInfo implements Command{
         if (manageServer) {
             ArrayList<String> toggles = new ArrayList<>();
             ArrayList<String> modules = new ArrayList<>();
-            for (GuildToggle t : command.guild.toggles){
+            for (GuildToggle t : command.guild.toggles) {
                 String formatted = "\n> " + t.name() + " = **" + t.get(command.guild.config) + "**";
-                if (t.isModule()){
+                if (t.isModule()) {
                     modules.add(formatted);
-                }else {
+                } else {
                     toggles.add(formatted);
                 }
             }
@@ -82,7 +82,7 @@ public class GetGuildInfo implements Command{
 //        if (manageChannels) {
 //            builder.append("\n\n***[CHANNELS]***");
 //            for (ChannelTypeObject c : config.getChannels()) {
-//                builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getStringID()).getName() + "**");
+//                builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getLongID()).getName() + "**");
 //            }
 //        }
 
@@ -108,7 +108,7 @@ public class GetGuildInfo implements Command{
                 modifierRoleStats.add(formatted.toString());
                 totalModified += rso.getTotalUsers();
             }
-            if (rso.isTrusted()){
+            if (rso.isTrusted()) {
                 trustedRoleStats.add(formatted.toString());
                 totalTrusted += rso.getTotalUsers();
             }
@@ -118,7 +118,7 @@ public class GetGuildInfo implements Command{
         builder.append("\n\n**TRUSTED ROLES**");
         for (String s : trustedRoleStats) {
             if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getStringID());
+                Utility.sendDM(builder.toString(), author.getLongID());
                 builder.delete(0, builder.length());
                 try {
                     Thread.sleep(1000);
@@ -132,7 +132,7 @@ public class GetGuildInfo implements Command{
         builder.append("\n\n**COSMETIC ROLES**");
         for (String s : cosmeticRoleStats) {
             if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getStringID());
+                Utility.sendDM(builder.toString(), author.getLongID());
                 builder.delete(0, builder.length());
                 try {
                     Thread.sleep(1000);
@@ -146,7 +146,7 @@ public class GetGuildInfo implements Command{
         builder.append("\n\n**MODIFIER ROLES**");
         for (String s : modifierRoleStats) {
             if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getStringID());
+                Utility.sendDM(builder.toString(), author.getLongID());
                 builder.delete(0, builder.length());
                 try {
                     Thread.sleep(1000);
@@ -159,7 +159,7 @@ public class GetGuildInfo implements Command{
         }
         builder.append("\n > Total profiles : \"**" + totalModified + "**\"");
         builder.append("\n\n------{END OF INFO}------");
-        Utility.sendDM(builder.toString(), author.getStringID());
+        Utility.sendDM(builder.toString(), author.getLongID());
         return null;
     }
 

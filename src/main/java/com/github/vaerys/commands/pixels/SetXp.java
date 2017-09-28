@@ -7,7 +7,6 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -16,7 +15,7 @@ import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * @deprecated
- * Implementation of EditXP makes this redunant.
+ * Implementation of EditXP makes this redundant.
  * Please use EditXP [user] "=" [amount] instead.
  */
 @Deprecated
@@ -34,7 +33,7 @@ public class SetXp implements Command {
             if (userObject != null) {
                 userObject.setXp(xp);
                 userObject.removeLevelFloor();
-                XpHandler.checkUsersRoles(user.stringID, command.guild);
+                XpHandler.checkUsersRoles(user.longID, command.guild);
                 return "> " + user.displayName + "'s Pixels is now set to: **" + xp + "**";
             } else {
                 return "> User does not have a profile.";

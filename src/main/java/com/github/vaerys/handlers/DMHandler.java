@@ -5,6 +5,7 @@ import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 
 /**
@@ -15,30 +16,32 @@ public class DMHandler {
     final static Logger logger = LoggerFactory.getLogger(DMHandler.class);
 
     public DMHandler(CommandObject command) {
+        IChannel channel = command.user.get().getOrCreatePMChannel();
+        IChannel ownerDm = command.client.creator.getOrCreatePMChannel();
         command.message.get().getTimestamp();
         if (command.message.get().getAuthor().isBot()) {
             return;
         }
-        for (String blocked : Globals.getGlobalData().getBlockedFromDMS()) {
-            if (command.user.stringID.equals(blocked)) {
+        for (long blocked : Globals.getGlobalData().getBlockedFromDMS()) {
+            if (command.user.longID == blocked) {
                 Utility.sendDM("> You have been blocked from sending DMs to S.A.I.L by the Bot Creator.", blocked);
                 return;
             }
         }
-        if (!command.user.stringID.equals(Globals.creatorID)) {
-            String logging = "[" + command.message.get().getAuthor().getStringID() + "] " + command.message.get().getAuthor().getName() + "#" + command.message.get().getAuthor().getDiscriminator() + ": " + command.message.get().toString();
+        if (command.user.longID != Globals.creatorID) {
+            String logging = "[" + command.message.get().getAuthor().getLongID() + "] " + command.message.get().getAuthor().getName() + "#" + command.message.get().getAuthor().getDiscriminator() + ": " + command.message.get().toString();
             logger.info(logging);
-            Globals.lastDmUserID = command.message.get().getAuthor().getLongID();
+            Globals.lastDmUserID = command.user.longID;
             if (command.message.get().getAttachments().size() > 0) {
                 String attachmemts = "";
                 for (IMessage.Attachment a : command.message.get().getAttachments()) {
                     attachmemts = "\n" + a.getUrl();
                 }
-                Utility.sendDM(logging + attachmemts, Globals.creatorID);
+                Utility.sendMessage(logging + attachmemts, ownerDm);
             } else {
-                Utility.sendDM(logging, Globals.creatorID);
+                Utility.sendMessage(logging, ownerDm);
             }
-            Utility.sendDM("> Thank you for your message.", command.user.longID);
+            Utility.sendMessage("> Thank you for your message.", channel);
         }
     }
 }

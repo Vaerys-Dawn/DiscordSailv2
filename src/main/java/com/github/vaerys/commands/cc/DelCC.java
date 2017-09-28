@@ -11,7 +11,6 @@ public class DelCC implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         return command.guild.customCommands.delCommand(args, command.user.get(), command.guild.get());
-
     }
 
     @Override

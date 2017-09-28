@@ -2,7 +2,6 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.ChannelSetting;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -16,8 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -53,7 +51,7 @@ public class CCHandler {
     }
 
     private void handleCommand() {
-        ProfileObject object = commandObject.guild.users.getUserByID(author.getStringID());
+        ProfileObject object = commandObject.guild.users.getUserByID(author.getLongID());
         if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
             Utility.sendMessage("> Nothing interesting happens. `(ERROR: 401)`", channel);
             return;
@@ -69,40 +67,21 @@ public class CCHandler {
 
                 if (Utility.canBypass(author, guild)) ;
                 else if (cc.isShitPost() && guildconfig.shitPostFiltering) {
-                    ArrayList<String> channelMentions = new ArrayList<>();
-                    boolean isShitpost = false;
-                    if (guildconfig.getChannelIDsByType(Command.CHANNEL_SHITPOST) != null) {
-                        for (ChannelSetting c : commandObject.guild.channelSettings) {
-                            if (c.type().equals(Command.CHANNEL_SHITPOST)) {
-                                for (String id : c.getIDs(commandObject.guild.config)) {
-                                    if (commandObject.channel.stringID.equals(id)) {
-                                        isShitpost = true;
-                                    }
-                                    for (IChannel channel : commandObject.guild.get().getChannels()) {
-                                        if (id.equals(channel.getStringID())) {
-                                            EnumSet<Permissions> userPerms = channel.getModifiedPermissions(commandObject.user.get());
-                                            if (userPerms.contains(Permissions.SEND_MESSAGES) && userPerms.contains(Permissions.READ_MESSAGES)) {
-                                                channelMentions.add(channel.mention());
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (!isShitpost) {
-                            if (channelMentions.size() == 0) {
-                                Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.", channel);
-                                return;
-                            } else if (channelMentions.size() > 1) {
-                                Utility.sendMessage("> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true), channel);
-                                return;
-                            } else if (channelMentions.size() == 1) {
-                                Utility.sendMessage("> Command must be performed in: " + channelMentions.get(0), channel);
-                                return;
-                            }
+                    List<IChannel> channels = guildconfig.getChannelsByType(Command.CHANNEL_SHITPOST, commandObject.guild);
+                    channels = Utility.getVisibleChannels(channels, commandObject.user);
+                    List<String> channelMentions = Utility.getChannelMentions(channels);
+                    if (!channels.contains(commandObject.channel.get())) {
+                        if (channelMentions.size() == 0) {
+                            Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.", channel);
+                            return;
+                        } else if (channelMentions.size() > 1) {
+                            Utility.sendMessage("> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true), channel);
+                            return;
+                        } else if (channelMentions.size() == 1) {
+                            Utility.sendMessage("> Command must be performed in: " + channelMentions.get(0), channel);
+                            return;
                         }
                     }
-
                 }
                 response = cc.getContents(true);
                 int argsCount = StringUtils.countMatches(response, "<args>");
@@ -126,7 +105,7 @@ public class CCHandler {
                 }
                 if (response.contains("<embedImage>{")) {
                     String imageURL = TagHandler.tagEmbedImage(response, prefixEmbedImage);
-                    if (imageURL != null || !imageURL.isEmpty()) {
+                    if (imageURL != null && !imageURL.isEmpty()) {
                         if (commandObject.channel.get().getModifiedPermissions(author).contains(Permissions.EMBED_LINKS)) {
                             response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "");
                             response = TagHandler.tagToCaps(response);

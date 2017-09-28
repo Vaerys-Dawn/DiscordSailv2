@@ -31,9 +31,9 @@ public class TransferLevels implements Command {
         Utility.sortRewards(command.guild.config.getRewardRoles());
         for (IUser user : command.guild.get().getUsers()) {
             if (!user.isBot()) {
-                ProfileObject uObject = command.guild.users.getUserByID(user.getStringID());
+                ProfileObject uObject = command.guild.users.getUserByID(user.getLongID());
                 if (uObject == null) {
-                    uObject = new ProfileObject(user.getStringID());
+                    uObject = new ProfileObject(user.getLongID());
                 }
                 uObject.lastTalked = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
 //                uObject.setRewardID(-1);
@@ -49,7 +49,7 @@ public class TransferLevels implements Command {
                         }
                     }
                 }
-                XpHandler.checkUsersRoles(uObject.getID(), command.guild);
+                XpHandler.checkUsersRoles(uObject.getUserID(), command.guild);
             }
         }
         Utility.deleteMessage(message);

@@ -34,7 +34,7 @@ import java.util.concurrent.locks.StampedLock;
 // */
 public class XRequestBuffer {
 
-    private static final ExecutorService initialExecutor = Executors.newFixedThreadPool(2, DiscordUtils.createDaemonThreadFactory("RequestBuffer Initial Executor"));
+    private static final ExecutorService initialExecutor = Executors.newFixedThreadPool(2, DiscordUtils.createDaemonThreadFactory("XRequestBuffer Initial Executor"));
     private static final Map<String, ScheduledExecutorService> requestServices = new ConcurrentHashMap<>();
     private static final Map<String, List<RequestFuture>> requests = new ConcurrentHashMap<>();
 
@@ -59,7 +59,7 @@ public class XRequestBuffer {
                             if (future.getBucket() != null) {
                                 if (!requests.containsKey(future.getBucket())) {
                                     requests.put(future.getBucket(), new CopyOnWriteArrayList<>());
-                                    requestServices.put(future.getBucket(), Executors.newSingleThreadScheduledExecutor(DiscordUtils.createDaemonThreadFactory("RequestBuffer Retry Handler")));
+                                    requestServices.put(future.getBucket(), Executors.newSingleThreadScheduledExecutor(DiscordUtils.createDaemonThreadFactory("XRequestBuffer Retry Handler")));
                                     requestServices.get(future.getBucket()).schedule(new RequestRunnable(future.getBucket()), future.getDelay(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
                                 }
 
@@ -308,7 +308,7 @@ public class XRequestBuffer {
                     bucket = e.getMethod();
                     rateLimited = true;
                 } catch (Exception e) {
-                    Discord4J.LOGGER.warn(LogMarkers.UTIL, "RequestBuffer handled an uncaught exception!", e);
+                    Discord4J.LOGGER.warn(LogMarkers.UTIL, "XRequestBuffer handled an uncaught exception!", e);
                 }
 
                 if (!rateLimited && future.lock.validate(stamp)) {

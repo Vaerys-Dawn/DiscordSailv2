@@ -6,13 +6,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
 
 /**
  * Created by Vaerys on 02/03/2017.
@@ -23,31 +17,31 @@ public class Mute implements Command {
     public String execute(String args, CommandObject command) {
         SplitFirstObject userCall = new SplitFirstObject(args);
         IRole mutedRole = command.client.get().getRoleByID(command.guild.config.getMutedRoleID());
-        if (mutedRole == null) {
-            return "> Cannot Mute/UnMute user. No mute role exists.";
-        }
-        if (userCall.getRest() == null) {
-            return "> Cannot Mute/UnMute user. No modifier specified.";
-        }
         SplitFirstObject modifier = new SplitFirstObject(userCall.getRest());
         UserObject muted = Utility.getUser(command, userCall.getFirstWord(), false);
         if (muted == null) {
             return "> Could not find user.";
         }
-        if (!Utility.testUserHierarchy(command.client.bot, mutedRole, command.guild.get())) {
-            return "> Cannot Mute/UnMute user. **" + mutedRole.getName() + "** role has a higher hierarchy than me.";
+        if (mutedRole == null) {
+            return "> Cannot Mute/UnMute " + muted.displayName + ". No mute role exists.";
         }
-        if (muted.stringID.equals(command.user.stringID)) {
+        if (userCall.getRest() == null) {
+            return "> Cannot Mute/UnMute " + muted.displayName + ". No modifier specified.";
+        }
+        if (!Utility.testUserHierarchy(command.client.bot, mutedRole, command.guild.get())) {
+            return "> Cannot Mute/UnMute " + muted.displayName + ". **" + mutedRole.getName() + "** role has a higher hierarchy than me.";
+        }
+        if (muted.longID == command.user.longID) {
             return "> Don't try to mute yourself you numpty.";
         }
         if (Utility.testModifier(modifier.getFirstWord()) == null) {
-            return "> Cannot Mute/UnMute user. Modifier Invalid. Must be either +/-/add/del";
+            return "> Cannot Mute/UnMute " + muted.displayName + ". Modifier Invalid. Must be either +/-/add/del";
         }
         if (!Utility.testUserHierarchy(command.user.get(), muted.get(), command.guild.get())) {
-            return "> Cannot Mute/UnMute user. User hierarchy higher than yours.";
+            return "> Cannot Mute/UnMute " + muted.displayName + ". User hierarchy higher than yours.";
         }
         if (!Utility.testUserHierarchy(command.client.bot, muted.get(), command.guild.get())) {
-            return "> Cannot Mute/UnMute user. My hierarchy level is too low.";
+            return "> Cannot Mute/UnMute " + muted.displayName + ". My hierarchy level is too low.";
         }
         if (Utility.testModifier(modifier.getFirstWord())) {
             SplitFirstObject time = new SplitFirstObject("");
@@ -56,14 +50,14 @@ public class Mute implements Command {
                 time = new SplitFirstObject(modifier.getRest());
                 timeSecs = Utility.textToSeconds(time.getFirstWord());
             }
-            command.guild.users.muteUser(muted.stringID, timeSecs, command.guild.longID);
+            command.guild.users.muteUser(muted.longID, timeSecs, command.guild.longID);
             if (time.getFirstWord() == null || timeSecs == -1) {
                 return "> " + muted.displayName + " was Muted.";
             } else {
                 return "> " + muted.displayName + " was Muted for " + time.getFirstWord() + ".";
             }
         } else {
-            command.guild.users.unMuteUser(muted.stringID, command.guild.longID);
+            command.guild.users.unMuteUser(muted.longID, command.guild.longID);
             return "> " + muted.displayName + " was UnMuted.";
         }
     }

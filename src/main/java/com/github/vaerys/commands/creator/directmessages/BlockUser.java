@@ -3,30 +3,40 @@ package com.github.vaerys.commands.creator.directmessages;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.DMCommand;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.pogos.GlobalData;
+import sx.blah.discord.handle.obj.IUser;
 
 /**
  * Created by Vaerys on 10/02/2017.
  */
-public class BlockUser implements DMCommand{
+public class BlockUser implements DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
-        if (command.user.stringID.equals(Globals.creatorID)){
+        if (command.user.longID == Globals.creatorID) {
             GlobalData globalData = Globals.getGlobalData();
             boolean worked = false;
-            String userID = args.split(" ")[0];
-            if (userID.equals(Globals.creatorID)){
-                return "> What are you doing. Don't try to block yourself.";
-            }
-            if (globalData != null){
-                worked = globalData.blockUserFromDMS(userID);
+            SplitFirstObject object = new SplitFirstObject(args);
+            if (globalData != null) {
+                long id = Utility.stringLong(object.getFirstWord());
+                IUser user = command.client.get().fetchUser(id);
+                if (id == Globals.creatorID) {
+                    return "> What are you doing. Don't try to block yourself.";
+                }
+                if (user != null) {
+                    globalData.blockUserFromDMS(id);
+                    worked = true;
+                } else {
+                    worked = false;
+                }
             }
             if (worked) {
                 return "> User was Blocked.";
-            }else {
+            } else {
                 return "> An Error Occurred.";
             }
-        }else {
+        } else {
             return command.user.notAllowed;
         }
     }

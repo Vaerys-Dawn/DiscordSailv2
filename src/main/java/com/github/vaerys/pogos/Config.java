@@ -13,9 +13,10 @@ import java.util.ArrayList;
  */
 public class Config extends GlobalFile {
     public static final String FILE_PATH = "Config.json";
+    private double fileVersion = 1.0;
     public boolean resetToDefault = false;
     public String botName = "S.A.I.L";
-    public String creatorID = "153159020528533505";
+    public long creatorID = 153159020528533505L;
     public String defaultPrefixCommand = "$";
     public String defaultPrefixCC = "$$";
     public String defaultAvatarFile = "Avatar.png";

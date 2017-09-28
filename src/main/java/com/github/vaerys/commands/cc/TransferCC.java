@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 public class TransferCC implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        String filePath = Constants.DIRECTORY_OLD_FILES + command.guild.stringID + "_CustomCommands.json";
+        String filePath = Constants.DIRECTORY_OLD_FILES + command.guild.longID + "_CustomCommands.json";
         IGuild guild = command.guild.get();
         IUser author = command.user.get();
         IChannel channel = command.channel.get();
@@ -37,12 +37,12 @@ public class TransferCC implements Command {
                 return Constants.ERROR_CC_NOT_FOUND;
             }
             boolean locked = transfering.isLocked();
-            String userID = transfering.getUserID();
+            long userID = transfering.getUserID();
             if (guild.getUserByID(userID) == null) {
                 Utility.sendMessage("> This command's old owner no longer is part of this server.\n" + Constants.PREFIX_INDENT +
                         author.getDisplayName(guild) + " will become the new owner of this command.\n" +
                         "> I am now attempting to transfer the command over.", channel);
-                userID = author.getStringID();
+                userID = author.getLongID();
             } else {
                 Utility.sendMessage("> I am now attempting to transfer " + guild.getUserByID(userID).getDisplayName(guild) + "'s command.", channel);
             }

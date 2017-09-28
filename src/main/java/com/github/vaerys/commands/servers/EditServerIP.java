@@ -21,7 +21,7 @@ public class EditServerIP implements Command {
         if (splitArgs.size() < 2) {
             return "> Cannot edit server IP, missing arguments.";
         }
-        return command.guild.servers.editIP(command.user.stringID, splitArgs.get(0), splitArgs.get(1), port, command.guild.get());
+        return command.guild.servers.editIP(command.user.longID, splitArgs.get(0), splitArgs.get(1), port, command.guild.get());
     }
 
     @Override

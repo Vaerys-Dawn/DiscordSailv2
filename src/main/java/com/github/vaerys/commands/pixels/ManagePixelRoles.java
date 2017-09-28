@@ -12,6 +12,13 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 04/07/2017.
  */
 public class ManagePixelRoles implements Command {
+
+    private static String modes = "**Modes**\n" +
+            "> Any positive number up to 256\n" +
+            "> xpDenied\n" +
+            "> topTen\n" +
+            "> Remove\n";
+
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject mode = new SplitFirstObject(args);
@@ -75,13 +82,8 @@ public class ManagePixelRoles implements Command {
                     }
                     return "> **" + role.getName() + "** is not a valid Pixel role.";
                 default:
-                    return "> Invalid Mode.\n" +
-                            "**Modes**\n" +
-                            "- Any positive number up to 256\n" +
-                            "- xpDenied\n" +
-                            "- topTen\n" +
-                            "- Remove\n" +
-                            Utility.getCommandInfo(this, command);
+                    return "> Invalid Mode.\n" + modes +
+                Utility.getCommandInfo(this, command);
             }
         }
     }
@@ -93,12 +95,7 @@ public class ManagePixelRoles implements Command {
 
     @Override
     public String description() {
-        return "Allows for the editing of pixel roles such as reward roles, the xp denied role and the top ten role.\n" +
-                "**Modes**\n" +
-                "- Any positive number up to 256\n" +
-                "- xpDenied\n" +
-                "- topTen\n" +
-                "- remove";
+        return "Allows for the editing of pixel roles such as reward roles, the xp denied role and the top ten role.\n" + modes;
     }
 
     @Override

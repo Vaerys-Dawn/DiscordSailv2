@@ -9,7 +9,6 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -65,8 +64,12 @@ public class UserSettings implements Command {
                             "> **" + user.displayName + "** now has the shitpost tag automatically added to all of their new Custom Commands.");
                 case "denyautorole":
                     return toggleSetting(profile, UserSetting.DENY_AUTO_ROLE,
-                            "> **" + user.displayName + "** will no longer automatically be granted roles.",
-                            "> **" + user.displayName + "** will now automatically be granted roles.");
+                            "> **" + user.displayName + "** will now automatically be granted roles.",
+                            "> **" + user.displayName + "** will no longer automatically be granted roles.");
+                case "dontdecay":
+                    return toggleSetting(profile, UserSetting.DONT_DECAY,
+                            "> **" + user.displayName + "** will now have pixel decay.",
+                            "> **" + user.displayName + "** will no longer have pixel decay.");
                 case "list":
                     List<String> userSettings = new ArrayList<>();
                     for (UserSetting s : profile.getSettings()) {

@@ -8,7 +8,6 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -49,7 +48,7 @@ public class ListCCs implements Command {
         String title = "> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.";
         ArrayList<String> list = new ArrayList<>();
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
-            if (c.getUserID().equals(userID + "")) {
+            if (c.getUserID() == userID) {
                 list.add(command.guild.config.getPrefixCC() + c.getName());
                 total++;
             }

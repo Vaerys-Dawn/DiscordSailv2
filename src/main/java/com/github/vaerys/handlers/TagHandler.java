@@ -383,22 +383,22 @@ public class TagHandler {
     public static String tagChannel(String from) {
         String prefix = "<channel>{";
         String suffix = "}";
-        String contents;
+        long contents;
         String lastAttempt;
         if (from.contains(prefix)) {
             do {
                 lastAttempt = from;
-                contents = StringUtils.substringBetween(from, prefix, suffix);
-                if (contents != null) {
+                contents = Utility.stringLong(StringUtils.substringBetween(from, prefix, suffix));
+                if (contents != -1) {
                     try {
                         IChannel channel = Globals.getClient().getChannelByID(contents);
                         if (channel != null) {
                             from = from.replace(prefix + contents + suffix, channel.mention());
                         } else {
-                            from = from.replaceFirst(Pattern.quote(contents), "#ERROR#");
+                            from = from.replaceFirst(Pattern.quote(contents + ""), "#ERROR#");
                         }
                     } catch (NumberFormatException e) {
-                        from = from.replaceFirst(Pattern.quote(contents), "#ERROR#");
+                        from = from.replaceFirst(Pattern.quote(contents + ""), "#ERROR#");
                     }
                 }
             } while (StringUtils.countMatches(from, prefix) > 0 && (!lastAttempt.equals(from)));
@@ -410,22 +410,22 @@ public class TagHandler {
     public static String tagDisplayName(String from, IGuild guild) {
         String prefix = "<displayName>{";
         String suffix = "}";
-        String contents;
+        long contents;
         String lastAttempt;
         if (from.contains(prefix)) {
             do {
                 lastAttempt = from;
-                contents = StringUtils.substringBetween(from, prefix, suffix);
-                if (contents != null) {
+                contents = Utility.stringLong(StringUtils.substringBetween(from, prefix, suffix));
+                if (contents != -1) {
                     try {
                         IUser user = Globals.getClient().getUserByID(contents);
                         if (user != null) {
                             from = from.replace(prefix + contents + suffix, user.getDisplayName(guild));
                         } else {
-                            from = from.replaceFirst(Pattern.quote(contents), "#ERROR#");
+                            from = from.replaceFirst(Pattern.quote(contents + ""), "#ERROR#");
                         }
                     } catch (NumberFormatException e) {
-                        from = from.replaceFirst(Pattern.quote(contents), "#ERROR#");
+                        from = from.replaceFirst(Pattern.quote(contents + ""), "#ERROR#");
                     }
 
                 }
@@ -471,10 +471,10 @@ public class TagHandler {
     public static IUser tagUser(String args) {
         String prefix = "<user>{";
         String suffix = "}";
-        String contents;
+        long contents;
         if (args.contains(prefix)) {
-            contents = StringUtils.substringBetween(args, prefix, suffix);
-            if (contents != null) {
+            contents = Utility.stringLong(StringUtils.substringBetween(args, prefix, suffix));
+            if (contents != -1) {
                 IUser user = Globals.getClient().getUserByID(contents);
                 if (user != null) {
                     return user;

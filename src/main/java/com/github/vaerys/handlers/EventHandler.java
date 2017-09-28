@@ -20,10 +20,7 @@ import java.time.DayOfWeek;
 import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -32,27 +29,52 @@ public class EventHandler {
 
     final static Logger logger = LoggerFactory.getLogger(EventHandler.class);
 
+    private static long keepAliveTenSec;
+    private static long keepAliveMin;
+    private static long keepAliveFiveMin;
+
+    public static void checkKeepAlive() {
+        if (keepAliveTenSec - System.currentTimeMillis() > 10 * 4 * 1000) {
+            logger.error("Ten Second Timer Failed to respond to keep alive. resetting.");
+            doEventTenSec();
+        }
+        if (keepAliveMin - System.currentTimeMillis() > 60 * 4 * 1000) {
+            logger.error("One Min Timer Failed to respond to keep alive. resetting.");
+            doEventMin();
+        }
+        if (keepAliveFiveMin - System.currentTimeMillis() > 60 * 5 * 4 * 1000) {
+            logger.error("Five Min Timer Failed to respond to keep alive. resetting.");
+            doEventFiveMin(ZonedDateTime.now(ZoneOffset.UTC));
+        }
+    }
+
+
     public EventHandler() {
         ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
 //        doEventSec();
+        keepAliveFiveMin = System.currentTimeMillis();
+        keepAliveMin = System.currentTimeMillis();
+        keepAliveTenSec = System.currentTimeMillis();
         doEventTenSec();
         doEventMin();
         doEventFiveMin(nowUTC);
         doEventDaily(nowUTC);
     }
 
-    private void doEventMin() {
-        int intialdelay = 4000;
+    private static void doEventMin() {
+        int initialDelay = 4000;
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                keepAliveMin = System.currentTimeMillis();
+                checkKeepAlive();
                 logger.trace("Reset speakers.");
                 for (GuildObject g : Globals.getGuilds()) {
                     g.getSpokenUsers().clear();
                 }
             }
-        }, intialdelay, 60 * 1000);
+        }, initialDelay, 60 * 1000);
     }
 
     //Reminder new setup.
@@ -87,6 +109,7 @@ public class EventHandler {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                checkKeepAlive();
                 ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
                 String dailyFileName = Globals.dailyAvatarName.replace("#day#", timeNow.getDayOfWeek().toString());
                 DayOfWeek day = timeNow.getDayOfWeek();
@@ -125,15 +148,19 @@ public class EventHandler {
                     }
 
                     //daily messages
-                    if (guildconfig.getChannelIDsByType(Command.CHANNEL_GENERAL) != null) {
+                    List<IChannel> channels = guildconfig.getChannelsByType(Command.CHANNEL_GENERAL, task);
+                    IChannel generalChannel = null;
+                    if (channels.size() != 0) {
+                        generalChannel = channels.get(0);
+                    }
+                    if (generalChannel != null) {
                         if (guildconfig.dailyMessage) {
-                            IChannel channel = Globals.getClient().getChannelByID(guildconfig.getChannelIDsByType(Command.CHANNEL_GENERAL).get(0));
                             for (DailyMessageObject d : Globals.configDailyMessages) {
                                 if (day.equals(d.getDayOfWeek())) {
                                     if (timeNow.getDayOfMonth() == 25 && timeNow.getMonth().equals(Month.DECEMBER)) {
-                                        Utility.sendMessage("> ***MERRY CHRISTMAS***", channel);
+                                        Utility.sendMessage("> ***MERRY CHRISTMAS***", generalChannel);
                                     } else if (timeNow.getDayOfMonth() == 1 && timeNow.getMonth().equals(Month.JANUARY)) {
-                                        Utility.sendMessage("> ***HAPPY NEW YEAR***", channel);
+                                        Utility.sendMessage("> ***HAPPY NEW YEAR***", generalChannel);
                                     } else if (timeNow.getDayOfMonth() == 13 && timeNow.getMonth().equals(Month.JULY)) {
                                         int age = nowUTC.getYear() - 1996;
                                         String modifier = "th";
@@ -144,7 +171,7 @@ public class EventHandler {
                                         } else if ((age + "").endsWith("3")) {
                                             modifier = "rd";
                                         }
-                                        Utility.sendMessage("> Happy " + age + modifier + " Birthday Mum.", channel);
+                                        Utility.sendMessage("> Happy " + age + modifier + " Birthday Mum.", generalChannel);
                                     } else {
                                         ArrayList<DailyUserMessageObject> dailyMessages = Globals.getDailyMessages().getDailyMessages(day);
                                         dailyMessages.add(new DailyUserMessageObject(d.getContents(), d.getDayOfWeek(), task.client.longID, 10000));
@@ -156,9 +183,9 @@ public class EventHandler {
                                         }
                                         String message = toSend.getContents(task);
                                         if (message.matches("^(> |\\*> |\\*\\*> |\\*\\*\\*> |_> |__> |`> |```> ).*$") || message.startsWith("> ")) {
-                                            Utility.sendMessage(message, channel);
+                                            Utility.sendMessage(message, generalChannel);
                                         } else {
-                                            Utility.sendMessage("> " + message, channel);
+                                            Utility.sendMessage("> " + message, generalChannel);
                                         }
                                     }
                                 }
@@ -170,9 +197,9 @@ public class EventHandler {
         }, initialDelay * 1000, 24 * 60 * 60 * 1000);
     }
 
-    public static boolean addReminder(String userID, String channelID, long timeSecs, String message) {
+    public static boolean addReminder(long userID, long channelID, long timeSecs, String message) {
         for (ReminderObject object : Globals.getGlobalData().getReminders()) {
-            if (object.getUserID().equals(userID)) {
+            if (object.getUserID() == userID) {
                 return false;
             }
         }
@@ -186,14 +213,18 @@ public class EventHandler {
         return true;
     }
 
-    private void doEventTenSec() {
+    private static void doEventTenSec() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                keepAliveTenSec = System.currentTimeMillis();
                 for (GuildObject task : Globals.getGuilds()) {
                     task.resetRateLimit();
-
+                    if (task.getRatelimiting().size() != 0) {
+                        logger.error("Failed to clear list, forcing it to clear.");
+                        task.forceClearRate();
+                    }
                     //Mutes.
                     ArrayList<UserCountDown> mutedUsers = task.users.getMutedUsers();
                     for (int i = 0; i < mutedUsers.size(); i++) {
@@ -220,7 +251,11 @@ public class EventHandler {
         if (nowUTC.getMinute() != 59) {
             nextTimeUTC = nowUTC.withSecond(0).withMinute(nowUTC.getMinute() + 1);
         } else {
-            nextTimeUTC = nowUTC.withSecond(0).withHour(nowUTC.getHour() + 1).withMinute(0);
+            if (nowUTC.getHour() == 23 && nowUTC.getMinute() > 54) {
+                nextTimeUTC = nowUTC.withDayOfYear(nowUTC.getDayOfYear() + 1).withMinute(0).withHour(0).withSecond(0);
+            } else {
+                nextTimeUTC = nowUTC.withSecond(0).withHour(nowUTC.getHour() + 1).withMinute(0);
+            }
         }
         initialDelay = (nextTimeUTC.toEpochSecond() - nowUTC.toEpochSecond());
         if (initialDelay < 30) {
@@ -231,6 +266,8 @@ public class EventHandler {
             @Override
             public void run() {
                 ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+                keepAliveFiveMin = System.currentTimeMillis();
+                checkKeepAlive();
                 for (ReminderObject object : Globals.getGlobalData().getReminders()) {
                     if (object.getExecuteTime() - now.toEpochSecond() < 350) {
                         if (!object.isSent()) {

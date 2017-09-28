@@ -9,7 +9,6 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.text.NumberFormat;
@@ -28,12 +27,12 @@ public class Pixels implements Command {
                 return "> Could not find user.";
             }
         }
-        if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
-            return "> User has set their profile to private.";
+        ProfileObject profile = command.guild.users.getUserByID(user.longID);
+        if (profile == null) {
+            return "> " + user.displayName + " currently does not have a profile.";
         }
-        ProfileObject profile = command.guild.users.getUserByID(user.stringID);
-        if (user == null) {
-            return "> That user currently does not have a profile.";
+        if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
+            return "> " + user.displayName + " has set their profile to private.";
         }
         String xpTitle = "Total Pixels: ";
         String xpTotal = NumberFormat.getInstance().format(profile.getXP());
@@ -41,8 +40,8 @@ public class Pixels implements Command {
 
         String rankTitle = "Rank: ";
         String rankTotal;
-        if (XpHandler.rank(command.guild.users, command.guild.get(), profile.getID()) != -1 && profile.getXP() != 0) {
-            rankTotal = XpHandler.rank(command.guild.users, command.guild.get(), profile.getID()) + "/" + XpHandler.totalRanked(command);
+        if (XpHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) != -1 && profile.getXP() != 0) {
+            rankTotal = XpHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) + "/" + XpHandler.totalRanked(command);
         } else {
             rankTotal = "N/a";
         }
@@ -70,6 +69,10 @@ public class Pixels implements Command {
             builder.appendField(levelTitle, levelTotal, false);
         } else {
             builder.appendField(levelTitle, "N/a", false);
+        }
+
+        if (profile.getSettings().contains(UserSetting.HIT_LEVEL_FLOOR)) {
+            builder.withDescription("**You have decayed to the level floor,\nYou will need to level up again to see your rank.**");
         }
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             Utility.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());

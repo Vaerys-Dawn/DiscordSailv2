@@ -1,22 +1,24 @@
 package com.github.vaerys.objects;
 
+import com.github.vaerys.main.Utility;
+
 /**
  * Created by Vaerys on 21/02/2017.
  */
 public class UserRateObject {
-    public String userID;
+    private String userID;
     public int counter;
 
-    public UserRateObject(String userID) {
-        this.userID = userID;
+    public UserRateObject(long userID) {
+        this.userID = Long.toUnsignedString(userID);
         counter = 1;
     }
 
-    public void counterUp(){
+    public void counterUp() {
         counter++;
     }
 
-    public String getID() {
-        return userID;
+    public long getID() {
+        return Utility.stringLong(userID);
     }
 }

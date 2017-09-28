@@ -3,6 +3,7 @@ package com.github.vaerys.main;
 import com.github.vaerys.handlers.*;
 import com.github.vaerys.pogos.Config;
 import com.github.vaerys.pogos.GlobalData;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.Discord4J;
@@ -27,13 +28,15 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
 
-    final static Logger logger = LoggerFactory.getLogger(Main.class);
+    static Logger logger;
 
     public static void main(String[] args) throws UnknownHostException {
-        System.out.println("Starting Program...");
 
         //important, do not move
-        PatchHandler.globalDataPatch();
+        PatchHandler.preInitPatches();
+        logger = LoggerFactory.getLogger(Main.class);
+
+        logger.info("Starting bot...");
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -79,17 +82,15 @@ public class Main {
             FileHandler.writeToJson(Constants.FILE_CONFIG, config);
 
             //getting bot token
-            token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
-            if (token == null) {
+            if (FileHandler.readFromFile(Constants.FILE_TOKEN).isEmpty()) {
                 logger.error("!!!BOT TOKEN NOT VALID PLEASE CHECK \"Storage/Token.txt\" AND UPDATE THE TOKEN!!!");
+                throw new IllegalStateException();
             }
-
+            token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
             IDiscordClient client = Client.getClient(token, false);
 
             //load config phase 2
             Globals.initConfig(client, config, globalData);
-
-            PatchHandler.globalPatches();
 
 
             ThreadGroup group = new ThreadGroup("GuildCreateGroup");
@@ -133,7 +134,7 @@ public class Main {
         logger.info("Console input initiated.");
 
         while (scanner.hasNextLine()) {
-            if (Globals.consoleMessageCID != null) {
+            if (Globals.consoleMessageCID != -1) {
                 IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
                 String message = scanner.nextLine();
                 message = message.replace("#Dawn#", Globals.getClient().getUserByID(153159020528533505L).getName());

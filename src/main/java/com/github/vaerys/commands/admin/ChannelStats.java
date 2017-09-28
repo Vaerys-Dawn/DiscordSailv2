@@ -11,6 +11,7 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 01/07/2017.
@@ -28,15 +29,10 @@ public class ChannelStats implements Command {
         if (args != null && !args.isEmpty()) {
             for (ChannelSetting s : command.guild.channelSettings) {
                 if (s.type().equalsIgnoreCase(args)) {
-                    ArrayList<String> channelIDs = command.guild.config.getChannelIDsByType(s.type());
-                    if (channelIDs != null) {
-                        for (String cID : channelIDs) {
-                            IChannel channel = command.guild.get().getChannelByID(cID);
-                            if (channel != null) {
-                                channelNames.add(channel.mention());
-                            }
-                        }
-                        builder.appendField(s.type(), Utility.listFormatter(channelNames, true), false);
+                    List<IChannel> channels = command.guild.config.getChannelsByType(s.type(), command.guild);
+                    List<String> channelMentions = Utility.getChannelMentions(channels);
+                    if (channels.size() != 0) {
+                        builder.appendField(s.type(), Utility.listFormatter(channelMentions, true), false);
                         Utility.sendEmbedMessage("", builder, command.channel.get());
                         return null;
                     } else {
@@ -52,7 +48,7 @@ public class ChannelStats implements Command {
         }
 
         for (ChannelSettingObject c : command.guild.config.getChannelSettings()) {
-            if (c.getChannelIDs().contains(command.channel.stringID)) {
+            if (c.getChannelIDs().contains(command.channel.longID)) {
                 for (ChannelSetting setting : Globals.getChannelSettings()) {
                     if (c.getType().equalsIgnoreCase(setting.type())) {
                         if (setting.isSetting()) {

@@ -16,9 +16,9 @@ import java.util.ListIterator;
  */
 public class ProfileSettings implements Command {
     String settings = "**Settings:**\n" +
-            "> LevelChannel\n" +
-            "> CurrentChannel\n" +
-            "> DMs\n" +
+            "> LevelChannel - `Level up messages will be sent to the levelup channel.`\n" +
+            "> CurrentChannel - `Level up messages will be sent to the current channel.`\n" +
+            "> DMs - `Level up messages will be sent to your DMs.`\n" +
             "> NoLvLMessages - `Hides your Level up messages.`\n" +
             "> NoXP - `Stops you from gaining pixels.`\n" +
             "> HideRank - `Hides your rank on the server.`\n" +
@@ -28,7 +28,7 @@ public class ProfileSettings implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         String message = "> Your Level messages will now be sent to ";
-        ProfileObject userObject = command.guild.users.getUserByID(command.user.stringID);
+        ProfileObject userObject = command.guild.users.getUserByID(command.user.longID);
         StringBuilder builder = new StringBuilder();
         for (String s : args.split(" ")) {
             switch (s.toLowerCase()) {
