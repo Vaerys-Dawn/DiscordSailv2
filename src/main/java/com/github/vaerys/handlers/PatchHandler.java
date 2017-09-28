@@ -78,14 +78,16 @@ public class PatchHandler {
         if (checkPatch(1.1, null, "FixUnicode_dailyMessages", json)) return;
         JsonArray commands = json.getAsJsonArray("dailyMessages");
         JsonArray oldCommands = backupjson.getAsJsonArray("dailyMessages");
-        commands.forEach(command -> {
-            oldCommands.forEach(oldCommand -> {
-                if (oldCommand.getAsJsonObject().get("uID").getAsString().equalsIgnoreCase(command.getAsJsonObject().get("uID").getAsString())) {
-                    command.getAsJsonObject().remove("content");
-                    command.getAsJsonObject().add("content", oldCommand.getAsJsonObject().get("content"));
-                }
+        if (commands != null) {
+            commands.forEach(command -> {
+                oldCommands.forEach(oldCommand -> {
+                    if (oldCommand.getAsJsonObject().get("uID").getAsString().equalsIgnoreCase(command.getAsJsonObject().get("uID").getAsString())) {
+                        command.getAsJsonObject().remove("content");
+                        command.getAsJsonObject().add("content", oldCommand.getAsJsonObject().get("content"));
+                    }
+                });
             });
-        });
+        }
         newPatchID(1.1, json);
         FileHandler.writeToJson(Constants.DIRECTORY_STORAGE + DailyMessages.FILE_PATH, json);
     }

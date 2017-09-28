@@ -273,13 +273,17 @@ public class Globals {
         }
         savingFiles = true;
         logger.debug("Saving Files.");
-        dailyMessages.flushFile();
+        if (dailyMessages != null) { // don't save null data
+            dailyMessages.flushFile();
+        }
         for (GuildObject g : guilds) {
             for (GuildFile file : g.guildFiles) {
                 file.flushFile();
             }
         }
-        FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, getGlobalData());
+        if (getGlobalData() != null) { // don't save null data
+            FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, getGlobalData());
+        }
         savingFiles = false;
     }
 

@@ -3,6 +3,7 @@ package com.github.vaerys.main;
 import com.github.vaerys.handlers.*;
 import com.github.vaerys.pogos.Config;
 import com.github.vaerys.pogos.GlobalData;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.Discord4J;
@@ -81,11 +82,11 @@ public class Main {
             FileHandler.writeToJson(Constants.FILE_CONFIG, config);
 
             //getting bot token
-            token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
-            if (token == null) {
+            if (FileHandler.readFromFile(Constants.FILE_TOKEN).isEmpty()) {
                 logger.error("!!!BOT TOKEN NOT VALID PLEASE CHECK \"Storage/Token.txt\" AND UPDATE THE TOKEN!!!");
+                throw new IllegalStateException();
             }
-
+            token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
             IDiscordClient client = Client.getClient(token, false);
 
             //load config phase 2
