@@ -90,7 +90,7 @@ public class EditXp implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         String modifiers = "\n**Modifiers**:\n" +
                 "> +/add - `Add [Pixels] pixels.`\n" +
                 "> -/sub - `Remove [Pixels] pixels.`\n" +

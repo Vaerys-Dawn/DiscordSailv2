@@ -41,6 +41,14 @@ public class CommandObject {
         this.client = new ClientObject(message.getClient(), guild);
     }
 
+    public CommandObject() {
+        guild = new GuildObject();
+        user = new UserObject(null, null);
+        message = new MessageObject(null, null);
+        channel = new ChannelObject(null, null);
+        client = new ClientObject(Globals.getClient(), null);
+    }
+
     public CommandObject(IMessage message, IGuild guild, IChannel channel, IUser author) {
         if (guild == null) {
             this.guild = new GuildObject();

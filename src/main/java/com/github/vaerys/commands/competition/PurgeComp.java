@@ -22,7 +22,7 @@ public class PurgeComp implements Command{
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Purges the Current Comp to make way for a new one.";
     }
 

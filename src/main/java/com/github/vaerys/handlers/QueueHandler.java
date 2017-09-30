@@ -118,14 +118,14 @@ public class QueueHandler {
                                 }
                             }
                             //do if accepted
-                            if (reaction.equals(thumbsUp)) {
+                            if (reaction.getEmoji().equals(thumbsUp)) {
                                 Utility.sendDM("> A daily message you sent was approved. **[" + uID + "]**", userID);
                                 Globals.getDailyMessages().getMessages().add(new DailyUserMessageObject(embed.getDescription(), day, userID, uID));
                                 RequestBuffer.request(() -> message.addReaction(ok)).get();
                                 q.toggleMarkedForRemoval();
                                 return;
                                 //do if denied
-                            } else if (reaction.equals(thumbsDown)) {
+                            } else if (reaction.getEmoji().equals(thumbsDown)) {
                                 Utility.sendDM("> A daily message you sent was denied. **[" + uID + "]**", userID);
                                 q.toggleMarkedForRemoval();
                                 RequestBuffer.request(() -> message.addReaction(no)).get();

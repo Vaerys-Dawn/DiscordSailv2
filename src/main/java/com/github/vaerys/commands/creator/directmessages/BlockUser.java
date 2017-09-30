@@ -47,7 +47,7 @@ public class BlockUser implements DMCommand {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows the author to block a user from sending them DMs.";
     }
 

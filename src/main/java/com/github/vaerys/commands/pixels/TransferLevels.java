@@ -63,7 +63,7 @@ public class TransferLevels implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows for the transfer of levels.";
     }
 

@@ -44,7 +44,7 @@ public class Server implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Lists the information about a specific server.";
     }
 

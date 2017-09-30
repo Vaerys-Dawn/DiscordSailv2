@@ -40,7 +40,7 @@ public class SetLevelUpReaction implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sets the Reaction that the bot will post to the message a user sent to level up.";
     }
 

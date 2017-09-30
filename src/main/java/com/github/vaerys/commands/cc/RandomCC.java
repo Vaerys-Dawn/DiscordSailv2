@@ -77,7 +77,7 @@ public class RandomCC implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives you a random cc";
     }
 

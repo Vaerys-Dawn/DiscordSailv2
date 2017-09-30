@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -47,7 +48,7 @@ public class EditInfoFiles implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows for editing of the updateInfo command.\n" + modes;
     }
 

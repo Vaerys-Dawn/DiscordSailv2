@@ -32,7 +32,7 @@ public class SetMutedRole implements Command{
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sets the Muted role.";
     }
 

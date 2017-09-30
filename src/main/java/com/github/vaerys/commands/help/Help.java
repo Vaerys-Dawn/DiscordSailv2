@@ -82,7 +82,7 @@ public class Help implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Lists the commands that profiles can run.";
     }
 

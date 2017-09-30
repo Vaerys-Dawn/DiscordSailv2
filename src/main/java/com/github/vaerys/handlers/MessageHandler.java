@@ -62,7 +62,7 @@ public class MessageHandler {
                 //log command
                 logger.debug(Utility.loggingFormatter(command, "COMMAND"));
                 //test if user has permissions
-                if (!Utility.testForPerms(c.perms(), command.user.get(), command.guild.get())) {
+                if (!Utility.testForPerms(command, c.perms())) {
                     Utility.sendMessage(command.user.notAllowed, currentChannel);
                     return true;
                 }
@@ -161,7 +161,7 @@ public class MessageHandler {
     }
 
     private boolean rateLimiting(CommandObject command) {
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, command.user.get(), command.guild.get()) ||
+        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES) ||
                 Utility.canBypass(command.user.get(), command.guild.get(), false)) {
             return false;
         }

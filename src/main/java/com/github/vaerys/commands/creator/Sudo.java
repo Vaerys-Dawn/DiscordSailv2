@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.MessageHandler;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.Permissions;
@@ -33,7 +34,7 @@ public class Sudo implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Runs a command as though you were someone else.\n" + ownerOnly;
     }
 

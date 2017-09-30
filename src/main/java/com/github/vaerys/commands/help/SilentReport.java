@@ -25,7 +25,7 @@ public class SilentReport extends Report implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Can be used to send a user report to the server staff.\n" +
                 indent + " It will also remove the message used to call the command.";
     }

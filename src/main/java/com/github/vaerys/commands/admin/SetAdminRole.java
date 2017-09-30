@@ -32,7 +32,7 @@ public class SetAdminRole implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sets the admin role that will be mentioned when the tag #admin# is used in the blacklisting process.";
     }
 

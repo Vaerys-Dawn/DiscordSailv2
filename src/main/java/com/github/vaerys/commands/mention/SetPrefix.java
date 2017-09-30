@@ -17,7 +17,7 @@ public class SetPrefix implements MentionCommand {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return null;
     }
 

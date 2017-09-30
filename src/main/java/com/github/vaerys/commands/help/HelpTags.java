@@ -19,7 +19,7 @@ public class HelpTags implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives you information about tags that you can use with S.A.I.L.";
     }
 

@@ -111,7 +111,7 @@ public class PurgeBannedData implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Removes all data related to banned profiles from the server's data. or just the data from one user.\n\n" +
                 "***!!! WARNING: IF YOU USE A USER_ID YOU WILL PURGE ALL DATA FOR THAT USER REGARDLESS OF STATUS SO BE CAREFUL !!!***\n";
     }

@@ -23,7 +23,7 @@ public class Hello implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Says Hello.";
     }
 

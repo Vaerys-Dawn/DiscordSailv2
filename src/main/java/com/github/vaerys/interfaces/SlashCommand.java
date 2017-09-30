@@ -11,7 +11,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public interface SlashCommand extends Command {
 
     @Override
-    default String description() {
+    default String description(CommandObject command) {
         return "Returns with " + execute(null, null) + ".";
     }
 
@@ -101,7 +101,7 @@ public interface SlashCommand extends Command {
         XEmbedBuilder builder = new XEmbedBuilder();
         builder.withColor(command.client.color);
         builder.withTitle(getCommand(command));
-        builder.withDescription(description());
+        builder.withDescription(description(command));
         return builder;
     }
 

@@ -38,7 +38,7 @@ public class HelpDM implements DMCommand {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Lists DM Commands.";
     }
 

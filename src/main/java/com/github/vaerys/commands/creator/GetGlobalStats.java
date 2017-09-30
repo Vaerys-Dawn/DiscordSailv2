@@ -143,7 +143,7 @@ public class GetGlobalStats implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sends the owner captured message counters.";
     }
 

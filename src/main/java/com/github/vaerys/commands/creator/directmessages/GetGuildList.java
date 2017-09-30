@@ -30,7 +30,7 @@ public class GetGuildList implements DMCommand {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives a list of all the Guilds the bot is connected to.";
     }
 

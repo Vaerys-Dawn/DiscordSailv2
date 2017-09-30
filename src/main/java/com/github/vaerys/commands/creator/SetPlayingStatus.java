@@ -20,7 +20,7 @@ public class SetPlayingStatus implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sets the playing status";
     }
 

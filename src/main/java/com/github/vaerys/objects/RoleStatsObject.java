@@ -17,7 +17,7 @@ public class RoleStatsObject extends RoleTypeObject {
 
     public RoleStatsObject(IRole role, GuildConfig guildConfig, int totalUsers) {
         super(role.getName(), role.getLongID());
-        this.colour = "#" + Integer.toHexString(role.getColor().getRGB()).substring(2).toUpperCase();
+        this.colour = "#" + Integer.toHexString(role.getColor().getRGB()).toUpperCase();
         this.totalUsers = totalUsers;
         isCosmetic = guildConfig.isRoleCosmetic(role.getLongID());
         isModifier = guildConfig.isRoleModifier(role.getLongID());

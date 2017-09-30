@@ -2,6 +2,7 @@ package com.github.vaerys.commands.servers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.masterobjects.GuildObject;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class EditServerIP implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to edit your server IP and Port.";
     }
 

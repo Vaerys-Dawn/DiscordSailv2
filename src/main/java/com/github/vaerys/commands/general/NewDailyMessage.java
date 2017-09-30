@@ -58,7 +58,7 @@ public class NewDailyMessage implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to request a new Daily message to be added.\n" +
                 "**Available Tags:**\n" +
                 "<random>, <randEmote>, <randNum>.";

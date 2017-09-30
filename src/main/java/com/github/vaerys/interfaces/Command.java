@@ -2,6 +2,7 @@ package com.github.vaerys.interfaces;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import org.apache.commons.lang3.ArrayUtils;
@@ -62,7 +63,7 @@ public interface Command {
     //descriptors
     String[] names();
 
-    String description();
+    String description(CommandObject command);
 
     String usage();
 
@@ -136,7 +137,7 @@ public interface Command {
         //command info
         StringBuilder builder = new StringBuilder();
         builder.append("**" + getUsage(command) + "**\n");
-        builder.append("**Desc: **" + description() + "\n");
+        builder.append("**Desc: **" + description(command) + "\n");
         builder.append("**Type: **" + type() + "\n");
         if (perms().length != 0) {
             builder.append("**Perms: **");
@@ -147,7 +148,7 @@ public interface Command {
             builder.append(Utility.listFormatter(permList, true));
         }
         //dual command info
-        if (dualType() != null && Utility.testForPerms(dualPerms(), command.user.get(), command.guild.get())) {
+        if (dualType() != null && Utility.testForPerms(command, dualPerms())) {
             builder.append("\n**" + getDualUsage(command) + "**\n");
             builder.append("**Desc: **" + dualDescription() + "\n");
             builder.append("**Type: **" + dualType() + "\n");
@@ -198,7 +199,7 @@ public interface Command {
             response.append("> NAME IS EMPTY.\n");
             isErrored = true;
         }
-        if (description() == null || description().isEmpty()) {
+        if (description(new CommandObject()) == null || description(new CommandObject()).isEmpty()) {
             response.append("> DESCRIPTION IS EMPTY.\n");
             isErrored = true;
         }
@@ -223,7 +224,7 @@ public interface Command {
                 response.append("> DUAL DESCRIPTION IS EMPTY.\n");
                 isErrored = true;
             }
-            if (dualDescription().equalsIgnoreCase(description())) {
+            if (dualDescription().equalsIgnoreCase(description(new CommandObject()))) {
                 response.append("> DUAL DESCRIPTION IS EQUAL TO DESCRIPTION.\n");
                 isErrored = true;
             }
@@ -242,5 +243,9 @@ public interface Command {
         } else {
             return null;
         }
+    }
+
+    default boolean isSubtype(CommandObject command, String subType) {
+        return command.message.get().getContent().toLowerCase().startsWith(command.guild.config.getPrefixCommand() + subType.toLowerCase());
     }
 }

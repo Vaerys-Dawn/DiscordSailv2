@@ -19,7 +19,7 @@ public class StartUpGuide implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Posts a link to the Bot's Startup Guide on its wiki.";
     }
 

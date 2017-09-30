@@ -274,7 +274,7 @@ public class AnnotationListener {
                 }
                 //if is x and can bypass
                 if (emoji.equals(x)) {
-                    if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, event.getUser(), event.getGuild())) {
+                    if (Utility.testForPerms(event.getUser(), event.getGuild(), Permissions.MANAGE_MESSAGES)) {
                         if (object.client.longID == object.user.longID) {
                             Utility.deleteMessage(event.getMessage());
                             return;
@@ -306,7 +306,7 @@ public class AnnotationListener {
         if (!Globals.isReady) {
             return;
         }
-        if(event.getMessage() == null){
+        if (event.getMessage() == null) {
             return;
         }
         CommandObject command = new CommandObject(event.getMessage());

@@ -46,7 +46,7 @@ public class FinalTally implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Posts the final scores.";
     }
 

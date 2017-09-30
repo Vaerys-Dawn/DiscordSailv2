@@ -21,7 +21,7 @@ public class RewardRole implements Command{
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Adds or removes a reward role.";
     }
 

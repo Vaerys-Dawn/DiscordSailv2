@@ -21,11 +21,11 @@ public interface ChannelSetting {
                 if (o.getChannelIDs().size() != 0) {
                     return o.getChannelIDs();
                 } else {
-                    return null;
+                    return new ArrayList<>();
                 }
             }
         }
-        return null;
+        return new ArrayList<>();
     }
 
     default String toggleSetting(GuildConfig config, long channelID) {

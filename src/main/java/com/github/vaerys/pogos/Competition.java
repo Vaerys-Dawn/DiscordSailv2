@@ -6,8 +6,10 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CompObject;
 import com.github.vaerys.objects.PollObject;
 
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Vaerys on 29/08/2016.
@@ -98,5 +100,9 @@ public class Competition extends GuildFile {
 
     public void purgeEntries() {
         entries = new ArrayList<>();
+    }
+
+    public List<String> getVoters() {
+        return voting;
     }
 }

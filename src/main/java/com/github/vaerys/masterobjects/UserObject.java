@@ -30,6 +30,7 @@ public class UserObject {
 
 
     public UserObject(IUser object, GuildObject guild) {
+        if (object == null) return;
         this.client = new ClientObject(object.getClient(), guild);
         this.object = object;
         this.longID = object.getLongID();

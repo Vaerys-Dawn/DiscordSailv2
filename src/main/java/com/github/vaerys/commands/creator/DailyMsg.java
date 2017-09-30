@@ -109,7 +109,7 @@ public class DailyMsg implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "allows for editing of the daily message list.\n" + modes;
     }
 

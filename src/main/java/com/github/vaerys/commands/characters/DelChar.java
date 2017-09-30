@@ -12,7 +12,7 @@ public class DelChar implements Command{
     @Override
     public String execute(String args, CommandObject command) {
         boolean bypass = false;
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, command.user.get(), command.guild.get())) {
+        if (Utility.testForPerms(command,Permissions.MANAGE_MESSAGES)) {
             bypass = true;
         }
         return command.guild.characters.delChar(args.split(" ")[0], command.user.get(), command.guild.get(), bypass);
@@ -24,7 +24,7 @@ public class DelChar implements Command{
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Deletes a Character.";
     }
 

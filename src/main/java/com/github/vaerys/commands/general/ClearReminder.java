@@ -35,7 +35,7 @@ public class ClearReminder implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Removes your global reminder";
     }
 

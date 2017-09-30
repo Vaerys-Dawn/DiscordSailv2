@@ -3,6 +3,7 @@ package com.github.vaerys.commands.admin;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class DenyXpPrefix implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "prefixes added to this list will stop commands starting with the prefix granting xp.";
     }
 

@@ -43,8 +43,8 @@ public class CustomCommands extends GuildFile {
     public int maxCCs(UserObject user, GuildObject guild) {
         // TODO: 03/07/2017 move this to grant ccs based on reward roles.
         int total = 10;
-        boolean hasManagePerms = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, user.get(), guild.get());
-        boolean hasAdminPerms = Utility.testForPerms(new Permissions[]{Permissions.ADMINISTRATOR}, user.get(), guild.get());
+        boolean hasManagePerms = Utility.testForPerms(user, guild, Permissions.MANAGE_MESSAGES);
+        boolean hasAdminPerms = Utility.testForPerms(user, guild, Permissions.ADMINISTRATOR);
         if (hasManagePerms) {
             total += 50;
         }
@@ -150,7 +150,7 @@ public class CustomCommands extends GuildFile {
         int i = 0;
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(args)) {
-                boolean canBypass = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild);
+                boolean canBypass = Utility.testForPerms(author, guild, Permissions.MANAGE_MESSAGES);
                 if (author.getLongID() == guild.getOwnerLongID() || author.getLongID() == Globals.creatorID) {
                     canBypass = true;
                 }

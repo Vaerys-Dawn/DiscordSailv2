@@ -28,7 +28,7 @@ public class SetBioRolePrefix implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to set what shows before the roles of a character.";
     }
 

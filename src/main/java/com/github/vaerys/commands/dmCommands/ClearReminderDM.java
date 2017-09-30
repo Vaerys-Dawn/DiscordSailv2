@@ -19,8 +19,8 @@ public class ClearReminderDM implements DMCommand{
     }
 
     @Override
-    public String description() {
-        return new ClearReminder().description();
+    public String description(CommandObject command) {
+        return new ClearReminder().description(command);
     }
 
     @Override

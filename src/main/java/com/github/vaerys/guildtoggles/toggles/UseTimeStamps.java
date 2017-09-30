@@ -1,13 +1,13 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
+import com.github.vaerys.interfaces.GuildSetting;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
 
 /**
  * Created by Vaerys on 12/03/2017.
  */
-public class UseTimeStamps implements GuildToggle {
+public class UseTimeStamps implements GuildSetting {
 
     @Override
     public String name() {
@@ -32,10 +32,5 @@ public class UseTimeStamps implements GuildToggle {
     @Override
     public void execute(GuildObject guild) {
 
-    }
-
-    @Override
-    public boolean isModule() {
-        return false;
     }
 }

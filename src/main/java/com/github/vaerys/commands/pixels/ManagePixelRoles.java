@@ -94,7 +94,7 @@ public class ManagePixelRoles implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows for the editing of pixel roles such as reward roles, the xp denied role and the top ten role.\n" + modes;
     }
 

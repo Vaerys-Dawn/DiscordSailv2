@@ -32,7 +32,7 @@ public class GetCompEntries implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Posts all of the Competition Entries in the current channel.";
     }
 

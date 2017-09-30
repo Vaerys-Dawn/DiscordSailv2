@@ -1,10 +1,12 @@
 package com.github.vaerys.guildtoggles.modules;
 
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.EditLinks;
 import com.github.vaerys.commands.general.SetGender;
 import com.github.vaerys.commands.general.SetQuote;
 import com.github.vaerys.commands.general.UserInfo;
 import com.github.vaerys.guildtoggles.toggles.UserInfoShowsDate;
+import com.github.vaerys.interfaces.GuildModule;
 import com.github.vaerys.interfaces.GuildToggle;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
@@ -12,11 +14,11 @@ import com.github.vaerys.pogos.GuildConfig;
 /**
  * Created by Vaerys on 02/03/2017.
  */
-public class ModuleMe implements GuildToggle {
+public class ModuleMe implements GuildModule {
 
     @Override
     public String name() {
-        return "UserInfo";
+        return "Profiles";
     }
 
     @Override
@@ -44,7 +46,7 @@ public class ModuleMe implements GuildToggle {
     }
 
     @Override
-    public boolean isModule() {
-        return true;
+    public String stats(CommandObject object) {
+        return "**Total Profiles:** " + object.guild.users.getProfiles().size();
     }
 }

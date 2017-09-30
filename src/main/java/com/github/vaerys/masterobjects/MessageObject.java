@@ -9,6 +9,7 @@ public class MessageObject {
     public long longID;
 
     public MessageObject(IMessage message, GuildObject guild) {
+        if (message == null) return;
         client = new ClientObject(message.getClient(), guild);
         this.object = message;
         this.longID = message.getLongID();

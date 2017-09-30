@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.interfaces.DMCommand;
 import com.github.vaerys.main.Utility;
 import sx.blah.discord.handle.obj.IGuild;
@@ -13,7 +14,7 @@ public class GetGuildInfoDm implements DMCommand {
     public String execute(String args, CommandObject command) {
         IGuild guild = command.client.get().getGuildByID(Utility.stringLong(args));
         if (guild != null) {
-            new GetGuildInfoDm().execute(args, command);
+            new GetGuildInfo().execute(args, command.setGuild(guild));
             return null;
         } else {
             return "> Guild ID Invalid";
@@ -26,7 +27,7 @@ public class GetGuildInfoDm implements DMCommand {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Returns with all of the information about a specific Guild.";
     }
 

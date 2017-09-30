@@ -60,7 +60,7 @@ public class Utility {
         return role;
     }
 
-    public static boolean testForPerms(Permissions[] perms, IUser user, IGuild guild) {
+    public static boolean testForPerms(IUser user, IGuild guild, Permissions... perms) {
         if (perms.length == 0) {
             return true;
         }
@@ -94,6 +94,14 @@ public class Utility {
 //        }
         //end Debug
         return user.getPermissionsForGuild(guild).containsAll(toMatch);
+    }
+
+    public static boolean testForPerms(CommandObject object, Permissions... perms) {
+        return testForPerms(object.user.get(), object.guild.get(), perms);
+    }
+
+    public static boolean testForPerms(UserObject user, GuildObject guild, Permissions... perms) {
+        return testForPerms(user.get(), guild.get(), perms);
     }
 
     //Command Utils
@@ -225,7 +233,7 @@ public class Utility {
                     if (StringUtils.containsOnly(message, "\n")) {
                         return error;
                     }
-                    if (message != null || !message.equals("")) {
+                    if (message != null && !message.isEmpty()) {
                         return channel.sendMessage(removeMentions(message));
                     }
                 } catch (MissingPermissionsException e) {
@@ -398,6 +406,9 @@ public class Utility {
     }
 
     public static String removeMentions(String from) {
+        if (from == null) {
+            return from;
+        }
         return from.replaceAll("(?i)@everyone", "").replaceAll("(?i)@here", "");
     }
 
@@ -1178,9 +1189,9 @@ public class Utility {
                 if (testPerms) {
                     if (c.type().equalsIgnoreCase(Command.TYPE_CREATOR) && !commandObject.user.get().equals(commandObject.client.creator)) {
                         //do nothing
-                    } else if (isDualType && testForPerms(c.dualPerms(), commandObject.user.get(), commandObject.guild.get())) {
+                    } else if (isDualType && testForPerms(commandObject, c.dualPerms())) {
                         toReturn.add(c);
-                    } else if (testForPerms(c.perms(), commandObject.user.get(), commandObject.guild.get())) {
+                    } else if (testForPerms(commandObject, c.perms())) {
                         toReturn.add(c);
                     }
                 } else {

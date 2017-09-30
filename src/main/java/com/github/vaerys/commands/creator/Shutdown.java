@@ -33,7 +33,7 @@ public class Shutdown implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Shuts the bot down safely.\n" + ownerOnly;
     }
 

@@ -16,6 +16,7 @@ import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -107,11 +108,15 @@ public class ArtHandler {
         ListIterator iterator = pinnedMessages.listIterator();
 
         //remove null or non pinned items
-        while (iterator.hasNext()) {
-            Long id = (Long) iterator.next();
-            IMessage pinned = command.channel.get().getMessageByID(id);
-            if (pinned == null) iterator.remove();
-            else if (!pinned.isPinned()) iterator.remove();
+        try {
+            while (iterator.hasNext()) {
+                Long id = (Long) iterator.next();
+                IMessage pinned = command.channel.get().getMessageByID(id);
+                if (pinned == null) iterator.remove();
+                else if (!pinned.isPinned()) iterator.remove();
+            }
+        }catch (ConcurrentModificationException e){
+            //skip, this happens if hearts are added too quickly
         }
 
 

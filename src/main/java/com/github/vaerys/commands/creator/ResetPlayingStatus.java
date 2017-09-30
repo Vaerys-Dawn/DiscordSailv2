@@ -21,7 +21,7 @@ public class ResetPlayingStatus implements Command{
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Resets the playing status.";
     }
 

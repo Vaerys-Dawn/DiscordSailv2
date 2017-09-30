@@ -39,7 +39,7 @@ public class EditCC implements Command {
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
             if (c.getName().equalsIgnoreCase(getName.getFirstWord())) {
                 boolean canBypass = false;
-                canBypass = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, command.user.get(), command.guild.get());
+                canBypass = Utility.testForPerms(command,Permissions.MANAGE_MESSAGES);
                 if (canBypass ||
                         command.user.longID == c.getUserID() && !c.isLocked() ||
                         Utility.canBypass(command.user.get(), command.guild.get())) {
@@ -89,7 +89,7 @@ public class EditCC implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to edit a custom command.\n" + modes + adminModes +
                 "**[Custom Command Guide](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide)**";
     }

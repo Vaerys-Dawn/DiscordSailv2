@@ -43,7 +43,7 @@ public class SetLevel implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to set the level of a user.";
     }
 

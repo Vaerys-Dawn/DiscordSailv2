@@ -1,14 +1,14 @@
 package com.github.vaerys.guildtoggles.toggles;
 
 import com.github.vaerys.commands.admin.SetJoinMessage;
-import com.github.vaerys.interfaces.GuildToggle;
+import com.github.vaerys.interfaces.GuildSetting;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
 
 /**
  * Created by Vaerys on 07/07/2017.
  */
-public class JoinServerMessages implements GuildToggle {
+public class JoinServerMessages implements GuildSetting {
     @Override
     public String name() {
         return "JoinServerMessages";
@@ -32,10 +32,5 @@ public class JoinServerMessages implements GuildToggle {
     @Override
     public void execute(GuildObject guild) {
         guild.removeCommand(new SetJoinMessage().names());
-    }
-
-    @Override
-    public boolean isModule() {
-        return false;
     }
 }

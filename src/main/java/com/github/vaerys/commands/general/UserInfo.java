@@ -131,7 +131,7 @@ public class UserInfo implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Lets you see some information about yourself or another user.";
     }
 

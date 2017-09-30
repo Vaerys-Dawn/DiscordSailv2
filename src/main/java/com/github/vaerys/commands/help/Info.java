@@ -3,6 +3,7 @@ package com.github.vaerys.commands.help;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class Info implements Command {
         for (Command c : commands) {
             for (String s : c.names()) {
                 if (args.equalsIgnoreCase(s)) {
-                    if (!Utility.testForPerms(c.perms(), command.user.get(), command.guild.get())) {
+                    if (!Utility.testForPerms(command,c.perms())) {
                         return error;
                     }
                     Utility.sendEmbedMessage("", c.getCommandInfo(command), command.channel.get());
@@ -38,7 +39,7 @@ public class Info implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives information about a command.";
     }
 

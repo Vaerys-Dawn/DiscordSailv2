@@ -66,7 +66,7 @@ public class GroupUp implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Adds you to a list of people that will be mentioned when this command is run.\nRun this command again to leave the list.";
     }
 

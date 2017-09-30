@@ -31,7 +31,7 @@ public class SetPixelModifier implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to set the modifier that pixels are calculated with.";
     }
 

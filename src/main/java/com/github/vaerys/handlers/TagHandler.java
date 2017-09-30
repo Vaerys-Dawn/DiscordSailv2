@@ -46,6 +46,17 @@ public class TagHandler {
         response = tagRandEmote(response, object.guild);
         response = replaceError(response);
         response = tagToCaps(response);
+        response = tagMentionToString(response, object);
+        return response;
+    }
+
+    private static String tagMentionToString(String response, CommandObject object) {
+        if (object.message.get().getMentions().size() != 0) {
+            for (IUser user : object.message.get().getMentions()) {
+                response = response.replace(user.mention(false), user.getDisplayName(object.guild.get()));
+                response = response.replace(user.mention(true), user.getDisplayName(object.guild.get()));
+            }
+        }
         return response;
     }
 
@@ -222,7 +233,13 @@ public class TagHandler {
                     ArrayList<String> splitString = new ArrayList<>(Arrays.asList(tag.split(";;")));
                     String toRegex = prefix + tag + suffix;
                     if (splitString.size() == 3) {
-                        if (author.getRolesForGuild(guild).toString().toLowerCase().contains(splitString.get(0).toLowerCase())) {
+                        boolean hasRole = false;
+                        for (IRole r : author.getRolesForGuild(guild)) {
+                            if (r.getName().toLowerCase().contains(splitString.get(0).toLowerCase())) {
+                                hasRole = true;
+                            }
+                        }
+                        if (hasRole) {
                             from = from.replace(toRegex, splitString.get(1));
                         } else {
                             from = from.replace(toRegex, splitString.get(2));
@@ -373,7 +390,7 @@ public class TagHandler {
     }
 
     public static String testForLock(String from, IUser author, IGuild guild) {
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild)) {
+        if (Utility.testForPerms(author, guild, Permissions.MANAGE_MESSAGES)) {
             return from.replace("<lock>", "");
         }
         return from;

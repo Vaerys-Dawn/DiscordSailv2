@@ -20,6 +20,7 @@ public class ClientObject {
 
     public ClientObject(IDiscordClient client, GuildObject guild) {
         this.object = client;
+        if (!client.isReady()) return;
         this.bot = object.getOurUser();
         this.longID = bot.getLongID();
         if (guild.get() != null) {

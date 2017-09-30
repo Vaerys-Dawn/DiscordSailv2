@@ -6,6 +6,7 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.ProfileObject;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -113,7 +114,7 @@ public class ProfileSettings implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to set where your level up messages will be sent.\n" + settings;
     }
 

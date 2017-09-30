@@ -24,7 +24,7 @@ public class LastDailyMessage implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives the information of the last Daily message that was sent to this server.";
     }
 

@@ -46,7 +46,7 @@ public class GetCCData implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sends a Json File with all of the Custom command's data.";
     }
 

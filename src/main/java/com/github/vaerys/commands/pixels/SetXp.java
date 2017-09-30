@@ -49,7 +49,7 @@ public class SetXp implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to set the xp of a user.";
     }
 

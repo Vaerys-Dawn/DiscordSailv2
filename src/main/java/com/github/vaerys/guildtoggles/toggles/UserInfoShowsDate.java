@@ -1,10 +1,10 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
+import com.github.vaerys.interfaces.GuildSetting;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
 
-public class UserInfoShowsDate implements GuildToggle {
+public class UserInfoShowsDate implements GuildSetting {
     @Override
     public String name() {
         return "UserInfoShowsDate";
@@ -28,10 +28,5 @@ public class UserInfoShowsDate implements GuildToggle {
     @Override
     public void execute(GuildObject guild) {
 
-    }
-
-    @Override
-    public boolean isModule() {
-        return false;
     }
 }

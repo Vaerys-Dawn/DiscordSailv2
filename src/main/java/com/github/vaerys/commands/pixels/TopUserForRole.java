@@ -66,7 +66,7 @@ public class TopUserForRole implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gets the top user (Pixel wise) for a specific role.";
     }
 

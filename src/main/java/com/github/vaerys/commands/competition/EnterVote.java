@@ -23,7 +23,7 @@ public class EnterVote implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Saves your vote.";
     }
 

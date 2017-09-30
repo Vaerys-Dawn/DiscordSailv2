@@ -110,7 +110,7 @@ public class Rank implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives you some information about your rank";
     }
 

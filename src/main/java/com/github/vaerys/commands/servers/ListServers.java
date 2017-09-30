@@ -35,7 +35,7 @@ public class ListServers implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Shows a listing of this guild's user registered servers.";
     }
 

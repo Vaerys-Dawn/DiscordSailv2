@@ -5,6 +5,7 @@ import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
@@ -71,7 +72,7 @@ public class SearchCCs implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to search the custom command list.";
     }
 

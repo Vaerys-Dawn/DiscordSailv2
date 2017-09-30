@@ -55,7 +55,7 @@ public class WeightedFinalTally implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Returns a tally based on the reward roles of the users.";
     }
 

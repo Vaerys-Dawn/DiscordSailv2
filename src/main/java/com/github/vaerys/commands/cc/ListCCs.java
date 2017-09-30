@@ -96,7 +96,7 @@ public class ListCCs implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Generates a list of custom commands based on parameters.";
     }
 

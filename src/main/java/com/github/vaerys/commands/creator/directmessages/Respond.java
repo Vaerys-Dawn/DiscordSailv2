@@ -40,7 +40,7 @@ public class Respond implements DMCommand {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sends a response to a user.";
     }
 

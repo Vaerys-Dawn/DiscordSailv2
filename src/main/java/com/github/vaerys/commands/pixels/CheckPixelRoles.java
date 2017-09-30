@@ -28,7 +28,7 @@ public class CheckPixelRoles implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "checks all user's Roles and allocates the correct roles based on their Pixel stats.";
     }
 

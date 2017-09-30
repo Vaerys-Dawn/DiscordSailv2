@@ -2,6 +2,7 @@ package com.github.vaerys.commands.competition;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.CompObject;
 import com.github.vaerys.pogos.GuildConfig;
 import sx.blah.discord.handle.obj.IMessage;
@@ -52,7 +53,7 @@ public class EnterComp implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Enters your image into the Sail Competition.";
     }
 

@@ -5,6 +5,7 @@ import com.github.vaerys.interfaces.ChannelSetting;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IChannel;
@@ -80,7 +81,7 @@ public class ChannelStats implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives information about the current channel";
     }
 

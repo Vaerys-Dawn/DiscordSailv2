@@ -24,7 +24,7 @@ public class TestDM implements DMCommand {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Is a test";
     }
 

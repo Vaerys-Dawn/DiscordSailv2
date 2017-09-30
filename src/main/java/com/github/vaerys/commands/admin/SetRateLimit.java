@@ -2,6 +2,7 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.masterobjects.GuildObject;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -32,7 +33,7 @@ public class SetRateLimit implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sets the rate limit for your Guild. (Maximum Messages per 10 seconds per person.)";
     }
 

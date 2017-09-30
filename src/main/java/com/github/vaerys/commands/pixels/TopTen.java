@@ -53,7 +53,7 @@ public class TopTen implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives a list of the top ten profiles on the server.";
     }
 

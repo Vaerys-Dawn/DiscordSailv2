@@ -39,7 +39,7 @@ public class BotInfo implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives Information about the bot.";
     }
 

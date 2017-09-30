@@ -48,7 +48,7 @@ public class UpdateRolePerms implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sets permissions of all Cosmetic roles to mach those of a specific role.\nDefaults to Everyone Role.";
     }
 

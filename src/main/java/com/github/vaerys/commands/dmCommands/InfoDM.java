@@ -73,7 +73,7 @@ public class InfoDM implements DMCommand {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Tells you information about DM commands.";
     }
 

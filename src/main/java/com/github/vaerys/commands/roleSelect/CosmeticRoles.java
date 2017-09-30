@@ -28,7 +28,7 @@ public class CosmeticRoles implements Command {
         Boolean isAdding = Utility.testModifier(modif.getFirstWord());
         if (isAdding != null) {
             //test the permissions of the user to make sure they can modify the role list.
-            if (Utility.testForPerms(dualPerms(), command.user.get(), command.guild.get())) {
+            if (Utility.testForPerms(command, dualPerms())) {
                 IRole role = null;
                 try {
                     role = command.guild.get().getRoleByID(Utility.stringLong(modif.getRest()));
@@ -169,7 +169,7 @@ public class CosmeticRoles implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Modifies your cosmetic role from the list of cosmetic roles.";
     }
 

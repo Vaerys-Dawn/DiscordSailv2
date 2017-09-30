@@ -19,7 +19,7 @@ public class DelServer implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Removes a server from the guild's server list.";
     }
 

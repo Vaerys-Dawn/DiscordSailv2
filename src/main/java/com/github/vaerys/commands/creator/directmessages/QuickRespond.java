@@ -3,6 +3,7 @@ package com.github.vaerys.commands.creator.directmessages;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.DMCommand;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.masterobjects.GuildObject;
 import sx.blah.discord.handle.obj.IUser;
 
 /**
@@ -26,7 +27,7 @@ public class QuickRespond implements DMCommand {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Responds to the last person to message the bot.";
     }
 

@@ -55,7 +55,7 @@ public class ListChars implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Shows you all of your characters.";
     }
 

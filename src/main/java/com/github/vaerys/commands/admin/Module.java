@@ -2,6 +2,7 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.masterobjects.GuildObject;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -19,7 +20,7 @@ public class Module implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows for the toggle of certain commands.";
     }
 

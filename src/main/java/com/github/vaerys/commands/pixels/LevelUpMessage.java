@@ -27,7 +27,7 @@ public class LevelUpMessage implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to set the level up message for the server.\n" +
                 "**Available Tags:**" +
                 "<level>, <user>, <randEmote>.";

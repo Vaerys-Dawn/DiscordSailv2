@@ -69,7 +69,7 @@ public class CharInfo implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives Information about a certain character.";
     }
 

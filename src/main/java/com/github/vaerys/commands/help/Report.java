@@ -71,7 +71,7 @@ public class Report implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Can be used to send a user report to the server staff.";
     }
 

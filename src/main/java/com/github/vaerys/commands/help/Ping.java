@@ -22,7 +22,7 @@ public class Ping implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sends a ping.";
     }
 

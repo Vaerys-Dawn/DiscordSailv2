@@ -13,7 +13,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class CCEditModes {
 
     public static String lock(CCommandObject c, CommandObject command, IUser author, IGuild guild) {
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild)) {
+        if (Utility.testForPerms(author, guild,Permissions.MANAGE_MESSAGES)) {
             c.toggleLocked();
             return "> Lock for **" + c.getName() + "** is now " + c.isLocked() + ".";
         } else {
@@ -22,7 +22,7 @@ public class CCEditModes {
     }
 
     public static String shitPost(CCommandObject c, CommandObject command, IUser author, IGuild guild) {
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, author, guild)) {
+        if (Utility.testForPerms(author, guild,Permissions.MANAGE_MESSAGES)) {
             c.toggleShitPost();
             return "> Shitpost for **" + c.getName() + "** is now " + c.isShitPost() + ".";
         } else {

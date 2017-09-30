@@ -20,7 +20,7 @@ public class ShutdownDM implements DMCommand {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Shuts the bot down.";
     }
 

@@ -30,7 +30,7 @@ public class AddServer implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Adds a server to the guild's server list.";
     }
 

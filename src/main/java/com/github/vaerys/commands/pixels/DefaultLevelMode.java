@@ -42,7 +42,7 @@ public class DefaultLevelMode implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to set the default place that level up messages will be sent.\n" + settings;
     }
 

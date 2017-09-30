@@ -19,7 +19,7 @@ public class DelCC implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Deletes The custom command.";
     }
 

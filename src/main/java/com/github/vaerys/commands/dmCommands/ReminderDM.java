@@ -19,8 +19,8 @@ public class ReminderDM implements DMCommand{
     }
 
     @Override
-    public String description() {
-        return new RemindMe().description();
+    public String description(CommandObject command) {
+        return new RemindMe().description(command);
     }
 
     @Override

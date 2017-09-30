@@ -1,6 +1,8 @@
 package com.github.vaerys.guildtoggles.modules;
 
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.interfaces.GuildModule;
 import com.github.vaerys.interfaces.GuildToggle;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
@@ -8,7 +10,7 @@ import com.github.vaerys.pogos.GuildConfig;
 /**
  * Created by Vaerys on 13/03/2017.
  */
-public class ModuleSlash implements GuildToggle {
+public class ModuleSlash implements GuildModule {
     @Override
     public String name() {
         return "SlashCommands";
@@ -35,7 +37,7 @@ public class ModuleSlash implements GuildToggle {
     }
 
     @Override
-    public boolean isModule() {
-        return true;
+    public String stats(CommandObject object) {
+        return null;
     }
 }

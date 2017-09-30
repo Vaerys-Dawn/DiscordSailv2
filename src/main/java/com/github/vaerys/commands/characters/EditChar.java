@@ -60,7 +60,7 @@ public class EditChar implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows the User to edit their Character.\n" + modes;
     }
 

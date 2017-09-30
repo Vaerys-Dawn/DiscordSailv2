@@ -33,7 +33,7 @@ public class GetAvatar implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gets the Mentionee's Profile Image.";
     }
 

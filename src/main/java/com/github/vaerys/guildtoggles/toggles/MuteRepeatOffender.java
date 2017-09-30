@@ -1,13 +1,13 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
+import com.github.vaerys.interfaces.GuildSetting;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class MuteRepeatOffender implements GuildToggle {
+public class MuteRepeatOffender implements GuildSetting {
 
     @Override
     public String name() {
@@ -32,10 +32,5 @@ public class MuteRepeatOffender implements GuildToggle {
     @Override
     public void execute(GuildObject guild) {
 
-    }
-
-    @Override
-    public boolean isModule() {
-        return false;
     }
 }

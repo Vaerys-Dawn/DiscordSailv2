@@ -20,7 +20,7 @@ public class SetJoinMessage implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows for the setting of the message that shows when a user joins the server.\n" +
                 "**Available tags**\n" +
                 "<server> = Server Name\n" +

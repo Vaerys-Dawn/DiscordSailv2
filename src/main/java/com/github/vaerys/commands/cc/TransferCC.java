@@ -64,7 +64,7 @@ public class TransferCC implements Command {
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Transfers a legacy command to the new system.";
     }
 
