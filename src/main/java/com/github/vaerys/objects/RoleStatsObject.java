@@ -7,6 +7,7 @@ import sx.blah.discord.handle.obj.IRole;
 /**
  * Created by Vaerys on 28/11/2016.
  */
+@Deprecated
 public class RoleStatsObject extends RoleTypeObject {
 
     String colour;
@@ -14,6 +15,7 @@ public class RoleStatsObject extends RoleTypeObject {
     boolean isCosmetic;
     boolean isModifier;
     boolean isTrusted;
+
 
     public RoleStatsObject(IRole role, GuildConfig guildConfig, int totalUsers) {
         super(role.getName(), role.getLongID());

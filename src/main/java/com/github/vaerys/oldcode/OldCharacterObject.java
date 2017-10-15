@@ -2,6 +2,7 @@ package com.github.vaerys.oldcode;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class OldCharacterObject {
     String name = "null"; //Character's Name
     ArrayList<RoleTypeObject> roles = new ArrayList<>();

@@ -29,7 +29,7 @@ public class TopTen implements Command {
         Utility.sortUserObjects(ranks, false);
         //format rank stats
         for (ProfileObject r : ranks) {
-            IUser ranked = command.guild.get().getUserByID(r.getUserID());
+            IUser ranked = command.guild.getUserByID(r.getUserID());
             String rankPos = "**" + XpHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
             StringBuilder toFormat = new StringBuilder(ranked.getDisplayName(command.guild.get()));
             toFormat.append("\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`");
@@ -54,7 +54,7 @@ public class TopTen implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Gives a list of the top ten profiles on the server.";
+        return "Gives a list of the top ten users on the server.";
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.github.vaerys.oldcode;
 /**
  * Created by Vaerys on 17/08/2016.
  */
+@Deprecated
 public class ChannelTypeObject {
     String Type;
     String ID;

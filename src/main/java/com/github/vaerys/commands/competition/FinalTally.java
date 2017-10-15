@@ -30,7 +30,7 @@ public class FinalTally implements Command {
                 totalVotes++;
             }
         }
-        builder.append("total of profiles that voted: " + userVoteClusters + "\n");
+        builder.append("total of users that voted: " + userVoteClusters + "\n");
         builder.append("total number of votes: " + totalVotes + "\n");
         int entry = 0;
         for (int i : tally) {

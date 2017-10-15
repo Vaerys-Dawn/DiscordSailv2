@@ -146,6 +146,7 @@ public class CommandInit {
         commands.add(new Gib());
         commands.add(new Fite());
         commands.add(new DealWithIt());
+        commands.add(new PaintMe());
 
         return commands;
     }

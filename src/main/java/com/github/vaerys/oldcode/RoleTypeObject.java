@@ -3,6 +3,8 @@ package com.github.vaerys.oldcode;
 /**
  * Created by Vaerys on 27/08/2016.
  */
+
+@Deprecated
 public class RoleTypeObject {
     String RoleName;
     String RoleID;

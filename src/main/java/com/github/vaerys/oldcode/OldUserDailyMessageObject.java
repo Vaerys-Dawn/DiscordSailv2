@@ -2,6 +2,7 @@ package com.github.vaerys.oldcode;
 
 import java.time.DayOfWeek;
 
+@Deprecated
 public class OldUserDailyMessageObject {
     String author;
     String content;

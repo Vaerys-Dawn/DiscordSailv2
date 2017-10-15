@@ -56,7 +56,7 @@ public class PixelHelp implements Command {
                 if (command.guild.config.getRewardRoles().size() != 0) {
                     builder.append("**Reward Roles:**");
                     for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
-                        IRole reward = command.guild.get().getRoleByID(r.getRoleID());
+                        IRole reward = command.guild.getRoleByID(r.getRoleID());
                         if (reward == null) {
                             break;
                         }

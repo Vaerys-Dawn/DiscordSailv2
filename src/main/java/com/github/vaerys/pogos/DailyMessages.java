@@ -10,12 +10,33 @@ import java.time.DayOfWeek;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class DailyMessages extends GlobalFile {
     private double fileVersion = 1.1;
     ArrayList<DailyUserMessageObject> dailyMessages = new ArrayList<>();
     ArrayList<QueueObject> queuedRequests = new ArrayList<>();
     public static final String FILE_PATH = "DailyMessages.json";
+
+    public long newDailyMsgUID() {
+        long result;
+        Random random = new Random();
+        List<Long> uIDs = new ArrayList<>();
+        for (DailyUserMessageObject d : dailyMessages) {
+            if (d.getUID() != -1) {
+                uIDs.add(d.getUID());
+            }
+        }
+        for (QueueObject o : queuedRequests) {
+            uIDs.add(o.getuID());
+        }
+        result = random.nextInt(9000) + 1000;
+        while (uIDs.contains(result)) {
+            result = random.nextInt(9000) + 1000;
+        }
+        return result;
+    }
 
     public ArrayList<DailyUserMessageObject> getMessages() {
         return dailyMessages;

@@ -4,12 +4,14 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.OffenderObject;
 import com.github.vaerys.pogos.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +73,7 @@ public class MessageHandler {
                     if (c.channel() != null && !Utility.canBypass(command.user.get(), command.guild.get())) {
                         List<IChannel> channels = command.guild.config.getChannelsByType(c.channel(), command.guild);
                         if (!channels.contains(command.channel.get()) && channels.size() != 0) {
-                            List<String> list = Utility.getChannelMentions(Utility.getVisibleChannels(channels, command.user));
+                            List<String> list = Utility.getChannelMentions(command.user.getVisibleChannels(channels));
                             if (list.size() == 0) {
                                 Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.", currentChannel);
                             } else if (list.size() > 1) {
@@ -147,7 +149,7 @@ public class MessageHandler {
                     guildconfig.addOffender(new OffenderObject(author.getLongID()));
                 }
                 String response = "> #mentionAdmin# " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message.";
-                IRole roleToMention = command.guild.get().getRoleByID(guildconfig.getRoleToMentionID());
+                IRole roleToMention = command.guild.getRoleByID(guildconfig.getRoleToMentionID());
                 if (roleToMention != null) {
                     response = response.replaceAll("#mentionAdmin#", roleToMention.mention());
                 } else {
@@ -161,44 +163,45 @@ public class MessageHandler {
     }
 
     private boolean rateLimiting(CommandObject command) {
-        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES) ||
-                Utility.canBypass(command.user.get(), command.guild.get(), false)) {
-            return false;
+        //make sure that the rate limiting should actually happen
+        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
+        if (!command.guild.config.rateLimiting) return false;
+        if (!command.guild.rateLimit(command.user.longID)) return false;
+
+        //send a dm to let the user know that they are being rate limited
+        IChannel userDMs = command.user.get().getOrCreatePMChannel();
+        if (userDMs != null) {
+            Utility.sendMessage("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guild.config.messageLimit, userDMs);
         }
-        if (command.guild.config.rateLimiting) {
-            if (command.guild.rateLimit(command.user.longID)) {
-                List<IRole> oldRoles = command.user.roles;
-                Utility.deleteMessage(command.message.get());
-                Utility.sendDM("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guild.config.messageLimit, command.user.longID);
-                if (command.guild.config.muteRepeatOffenders) {
-                    int rate = command.guild.getUserRate(command.user.longID);
-                    if (rate - 3 > command.guild.config.messageLimit) {
-                        //mutes profiles if they abuse it.
-                        boolean failed = Utility.roleManagement(command.user.get(), command.guild.get(), command.guild.config.getMutedRoleID(), true).get();
-                        command.client.get().getDispatcher().dispatch(new UserRoleUpdateEvent(command.guild.get(), command.user.get(), oldRoles, command.user.roles));
-                        if (!failed) {
-                            List<IChannel> adminChannels = command.guild.config.getChannelsByType(Command.CHANNEL_ADMIN, command.guild);
-                            IChannel adminChannel = null;
-                            if (adminChannels.size() != 0) {
-                                adminChannel = adminChannels.get(0);
-                            }
-                            if (adminChannel == null) {
-                                adminChannel = command.channel.get();
-                            }
-                            Utility.sendDM("You have been muted for abusing the Guild rate limit.", command.user.longID);
-                            Utility.sendMessage("> " + command.user.get().mention() + " has been muted for repetitively abusing Guild rateLimit.", adminChannel);
-                        }
-                    }
-                }
-                if (command.guild.config.deleteLogging) {
-                    Utility.sendLog("> **@" + command.user.username + "** is being rate limited", command.guild, false);
-                }
-                return true;
-            }
-            return false;
-        } else {
-            return false;
+
+        //user is now being rate limited
+        Utility.deleteMessage(command.message.get());
+        if (command.guild.config.deleteLogging) {
+            Utility.sendLog("> **@" + command.user.username + "** is being rate limited", command.guild, false);
         }
+
+        //if mute continue
+        if (!command.guild.config.muteRepeatOffenders) return true;
+        IRole muteRole = command.guild.getRoleByID(command.guild.config.getMutedRoleID());
+        if (muteRole == null) return true;
+
+        //if they are over the rate limit start muting
+        int rate = command.guild.getUserRate(command.user.longID);
+        if (rate - 3 < command.guild.config.messageLimit) return true;
+
+        //this mutes them
+        RequestBuffer.request(() -> command.user.get().addRole(muteRole));
+
+        //setup of the admin channel
+        IChannel adminChannel = null;
+        List<IChannel> adminChannels = command.guild.config.getChannelsByType(Command.CHANNEL_ADMIN, command.guild);
+        if (adminChannels.size() != 0) adminChannel = adminChannels.get(0);
+        if (adminChannel == null) adminChannel = command.channel.get();
+
+        //sends the response if they got muted
+        Utility.sendDM("You have been muted for abusing the Guild rate limit.", command.user.longID);
+        Utility.sendMessage("> " + command.user.get().mention() + " has been muted for repetitively abusing Guild rateLimit.", adminChannel);
+        return true;
     }
 
     //File com.github.vaerys.handlers

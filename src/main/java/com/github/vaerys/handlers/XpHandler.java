@@ -8,6 +8,7 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.XRequestBuffer;
@@ -277,9 +278,9 @@ public class XpHandler {
                                 user.getSettings().remove(i);
                             }
                         }
-                        levelUpMessage = new StringBuilder("Welcome Back.\n" + levelUpMessage + "\nYour **" + object.guild.get().getRoleByID(r.getRoleID()) + "** role has been returned to you.");
+                        levelUpMessage = new StringBuilder("Welcome Back.\n" + levelUpMessage + "\nYour **" + object.guild.getRoleByID(r.getRoleID()) + "** role has been returned to you.");
                     } else {
-                        levelUpMessage.append("\nYou have been granted the **" + object.guild.get().getRoleByID(r.getRoleID()) + "** role for reaching this level.");
+                        levelUpMessage.append("\nYou have been granted the **" + object.guild.getRoleByID(r.getRoleID()) + "** role for reaching this level.");
                     }
                     rankedup = true;
                 }
@@ -438,60 +439,72 @@ public class XpHandler {
         return levelxp;
     }
 
-    public static long rank(GuildUsers guildUsers, IGuild guild, long userID) {
-        ProfileObject user = guildUsers.getUserByID(userID);
+    public static boolean isUnRanked(long userID, GuildUsers users, IGuild guild) {
+        ProfileObject user = users.getUserByID(userID);
+        GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
+        if (user == null) {
+            return true;
+        }
+        if (guild.getUserByID(userID) == null) {
+            return true;
+        }
+        if (user.getXP() == 0) {
+            return true;
+        }
         for (UserSetting s : user.getSettings()) {
             for (UserSetting test : Constants.dontLogStates) {
                 if (s == test) {
-                    return -1;
+                    return true;
                 }
             }
         }
-        if (guild.getUserByID(userID) == null) {
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        long diff = now.toEpochSecond() - user.getLastTalked();
+        long days = TimeUnit.DAYS.convert(diff, TimeUnit.SECONDS);
+        if (days > 14 && guildObject.config.xpDecay && !user.getSettings().contains(UserSetting.DONT_DECAY)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public static long rank(GuildUsers guildUsers, IGuild guild, long userID) {
+        if (isUnRanked(userID, guildUsers, guild)) {
             return -1;
         }
-        if (user.getXP() == 0) {
-            return -1;
-        }
+
+        ProfileObject user = guildUsers.getUserByID(userID);
+
+        //rank calc
         long rank = 0;
         ArrayList<ProfileObject> users = (ArrayList<ProfileObject>) guildUsers.getProfiles().clone();
+        //sort so that can accurately check rank
         Utility.sortUserObjects(users, false);
+
+        //for all the users
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getUserID() == userID) {
                 return rank + 1;
             } else {
-                boolean hiderank = false;
-                for (UserSetting s : users.get(i).getSettings()) {
-                    for (UserSetting test : Constants.dontLogStates) {
-                        if (s == test) {
-                            hiderank = true;
-                        }
-                    }
-                }
-                if (guild.getUserByID(users.get(i).getUserID()) != null && !hiderank && user.getXP() != users.get(i).getXP()) {
+                boolean hideRank = isUnRanked(users.get(i).getUserID(),guildUsers,guild);
+                if (!hideRank && user.getXP() != users.get(i).getXP()) {
                     rank++;
                 }
             }
         }
+        // this should never occur
         return rank;
     }
 
     public static long totalRanked(CommandObject command) {
         long totalRanked = 0;
         for (ProfileObject u : command.guild.users.getProfiles()) {
-            boolean hiderank = false;
-            for (UserSetting s : u.getSettings()) {
-                for (UserSetting test : Constants.dontLogStates) {
-                    if (s == test) {
-                        hiderank = true;
-                    }
-                }
-            }
-            if (command.guild.get().getUserByID(u.getUserID()) != null) {
-                if (u.getXP() != 0) {
-                    if (!hiderank) {
-                        totalRanked++;
-                    }
+            boolean hideRank;
+            UserObject object = new UserObject(command.guild.getUserByID(u.getUserID()), command.guild);
+            hideRank = !object.showRank(command.guild);
+            if (command.guild.getUserByID(u.getUserID()) != null) {
+                if (u.getXP() != 0 && !hideRank) {
+                    totalRanked++;
                 }
             }
         }

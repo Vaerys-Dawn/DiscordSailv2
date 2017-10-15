@@ -30,7 +30,7 @@ public class ModifierRoles implements Command {
             if (Utility.testForPerms(command, dualPerms())) {
                 IRole role = null;
                 try {
-                    role = command.guild.get().getRoleByID(Utility.stringLong(modif.getRest()));
+                    role = command.guild.getRoleByID(Utility.stringLong(modif.getRest()));
                 } catch (NumberFormatException e) {
                     // move on.
                 }

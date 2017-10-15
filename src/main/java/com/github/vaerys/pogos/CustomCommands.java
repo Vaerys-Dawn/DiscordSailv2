@@ -56,7 +56,7 @@ public class CustomCommands extends GuildFile {
         } else {
             total += 40;
         }
-        if (guild.get().getOwner().getLongID() == user.longID) {
+        if (guild.getOwnerID() == user.longID) {
             total = 200;
         }
         return total;

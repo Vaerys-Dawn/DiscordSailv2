@@ -57,8 +57,8 @@ public class ModulePixels implements GuildModule {
         builder.append("**Pixels Per Message: ** " + object.guild.config.xpRate);
         builder.append("\n**Pixel Modifier:** " + object.guild.config.xpModifier);
         if (hasManageServer) {
-            IRole topTen = object.guild.get().getRoleByID(object.guild.config.topTenRoleID);
-            IRole xpDenied = object.guild.get().getRoleByID(object.guild.config.xpDeniedRoleID);
+            IRole topTen = object.guild.getRoleByID(object.guild.config.topTenRoleID);
+            IRole xpDenied = object.guild.getRoleByID(object.guild.config.xpDeniedRoleID);
             if (topTen != null)
                 builder.append("\n**Top Ten Role:** " + topTen.getName());
             if (xpDenied != null)
@@ -67,7 +67,7 @@ public class ModulePixels implements GuildModule {
         if (object.guild.config.getRewardRoles().size() != 0) {
             builder.append("\n\n**[REWARD ROLES]**");
             for (RewardRoleObject r : object.guild.config.getRewardRoles()) {
-                IRole role = object.guild.get().getRoleByID(r.getRoleID());
+                IRole role = object.guild.getRoleByID(r.getRoleID());
                 if (role != null) {
                     builder.append("\n**" + role.getName() + "** - Lvl " + r.getLevel());
                 }

@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 /**
  * Created by Vaerys on 01/02/2017.
  */
+@Deprecated
 public class TransferCC implements Command {
     @Override
     public String execute(String args, CommandObject command) {

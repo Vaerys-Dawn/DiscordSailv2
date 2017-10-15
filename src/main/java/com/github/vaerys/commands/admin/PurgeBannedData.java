@@ -32,10 +32,10 @@ public class PurgeBannedData implements Command {
             if (userStringID.equalsIgnoreCase(Globals.creatorID + "")) {
                 return "> You cannot purge the bot owner's data, if you have found an error in their data please DM me with the details.";
             }
-            if (userId == command.guild.get().getOwnerLongID()) {
+            if (userId == command.guild.getOwnerID()) {
                 return "> You cannot purge the servers owner's data, if you have found an error in their data please DM me with the details.";
             }
-            IUser toTest = command.guild.get().getUserByID(userId);
+            IUser toTest = command.guild.getUserByID(userId);
             if (toTest != null) {
                 if (toTest.getPermissionsForGuild(command.guild.get()).contains(Permissions.ADMINISTRATOR)) {
                     return "> You cannot purge a user with the administrator permission, if you have found an error in their data please DM me with the details.";
@@ -45,7 +45,7 @@ public class PurgeBannedData implements Command {
             //do nothing
         }
         if (!command.client.bot.getPermissionsForGuild(command.guild.get()).contains(Permissions.BAN)) {
-            return "> I cant purge the data of banned profiles unless I get the ban permission.\n" +
+            return "> I cant purge the data of banned user unless I get the ban permission.\n" +
                     "Feel free to remove the permission after you purge the data as I don't need it.";
         }
         if (userId != -1 && userStringID != null) {
@@ -112,7 +112,7 @@ public class PurgeBannedData implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Removes all data related to banned profiles from the server's data. or just the data from one user.\n\n" +
+        return "Removes all data related to banned users from the server's data. or just the data from one user.\n\n" +
                 "***!!! WARNING: IF YOU USE A USER_ID YOU WILL PURGE ALL DATA FOR THAT USER REGARDLESS OF STATUS SO BE CAREFUL !!!***\n";
     }
 

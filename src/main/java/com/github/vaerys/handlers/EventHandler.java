@@ -199,6 +199,9 @@ public class EventHandler {
 
     public static boolean addReminder(long userID, long channelID, long timeSecs, String message) {
         for (ReminderObject object : Globals.getGlobalData().getReminders()) {
+            if (userID == Globals.creatorID) {
+                break;
+            }
             if (object.getUserID() == userID) {
                 return false;
             }
@@ -296,10 +299,10 @@ public class EventHandler {
                     logger.error(e.getErrorMessage());
                     logger.info("Logging back in.");
                     try {
+                        Globals.client.logout();
+                        Thread.sleep(4000);
                         Globals.getClient().login();
                         Globals.getClient().changePlayingText("Recovered From Crash.");
-                        Thread.sleep(30000);
-                        Globals.getClient().changePlayingText(Globals.playing);
                         return;
                     } catch (IllegalStateException ex) {
                         //ignore exception

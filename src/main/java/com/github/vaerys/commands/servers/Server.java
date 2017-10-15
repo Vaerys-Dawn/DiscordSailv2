@@ -15,7 +15,7 @@ public class Server implements Command {
     public String execute(String args, CommandObject command) {
         for (ServerObject s : command.guild.servers.getServers()) {
             if (s.getName().equalsIgnoreCase(args)) {
-                IUser user = command.guild.get().getUserByID(s.getCreatorID());
+                IUser user = command.guild.getUserByID(s.getCreatorID());
                 boolean isGuildUser = true;
                 if (user == null) {
                     user = command.client.get().fetchUser(s.getCreatorID());

@@ -5,11 +5,12 @@ import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.*;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.cache.LongMap;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,6 +55,35 @@ public class UserObject {
             dailyMessages = new ArrayList<>();
         }
         notAllowed = "> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
+    }
+
+    public List<IChannel> getVisibleChannels(List<IChannel> channels) {
+        List<IChannel> newSet = new ArrayList<>();
+        for (IChannel c : channels) {
+            boolean hasSend = false;
+            boolean hasRead = false;
+            boolean everOverride = false;
+            c.getModifiedPermissions(object);
+            LongMap<PermissionOverride> overrides = c.getRoleOverrides();
+            EnumSet<Permissions> everyoneOverride = c.getModifiedPermissions(c.getGuild().getEveryoneRole());
+
+            for (IRole r : roles) {
+                PermissionOverride override = overrides.get(r.getLongID());
+                if (override != null && !r.isEveryoneRole()) {
+                    if (override.allow().contains(Permissions.READ_MESSAGES)) hasRead = true;
+                    if (override.allow().contains(Permissions.SEND_MESSAGES)) hasSend = true;
+                }
+            }
+            if (everyoneOverride.contains(Permissions.READ_MESSAGES)) {
+                if (everyoneOverride.contains(Permissions.SEND_MESSAGES) || hasSend) {
+                    everOverride = true;
+                }
+            }
+            if ((hasRead && hasSend) || everOverride) {
+                newSet.add(c);
+            }
+        }
+        return newSet;
     }
 
     public IUser get() {

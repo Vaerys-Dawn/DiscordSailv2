@@ -1,5 +1,6 @@
 package com.github.vaerys.objects;
 
+@Deprecated
 public class ChannelStatsObject {
     String name;
     long count = 0;

@@ -20,11 +20,13 @@ public class InfoCC implements Command {
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
             if (c.getName().equalsIgnoreCase(args)) {
                 StringBuilder builder = new StringBuilder();
-                IUser author = Globals.getClient().getUserByID(c.getUserID());
                 XEmbedBuilder embedBuilder = new XEmbedBuilder();
                 embedBuilder.withColor(command.client.color);
                 String title = "> Here is the information for command: **" + c.getName() + "**\n";
-                builder.append("Creator: **@" + author.getName() + "#" + author.getDiscriminator() + "**\n");
+                IUser createdBy = command.guild.getUserByID(c.getUserID());
+                if (createdBy == null) createdBy = command.client.get().fetchUser(c.getUserID());
+                if (createdBy == null) builder.append("Creator: **Null**\n");
+                else builder.append("Creator: **@" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "**\n");
                 builder.append("Time Run: **" + c.getTimesRun() + "**\n");
                 builder.append("Is Locked: **" + c.isLocked() + "**\n");
                 builder.append("Is ShitPost: **" + c.isShitPost() + "**");

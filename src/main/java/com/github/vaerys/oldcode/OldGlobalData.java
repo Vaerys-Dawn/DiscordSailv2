@@ -5,6 +5,7 @@ import com.github.vaerys.objects.QueueObject;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class OldGlobalData {
     ArrayList<QueueObject> queuedRequests = new ArrayList<>();
     ArrayList<DailyUserMessageObject> dailyMessages = new ArrayList<>();

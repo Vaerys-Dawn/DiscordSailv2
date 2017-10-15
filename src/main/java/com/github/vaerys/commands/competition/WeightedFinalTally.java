@@ -28,7 +28,7 @@ public class WeightedFinalTally implements Command {
                     try {
                         long vote = Long.parseLong(splitVotes[(int) i]);
                         if (entryVotes.containsKey(vote)) {
-                            IUser user = command.guild.get().getUserByID(Utility.stringLong(splitVotes[0]));
+                            IUser user = command.guild.getUserByID(Utility.stringLong(splitVotes[0]));
                             if (user != null) {
                                 int weight = XpHandler.getRewardCount(command.guild, user.getLongID());
                                 entryVotes.put(vote, entryVotes.get(vote).longValue() + weight + 1);

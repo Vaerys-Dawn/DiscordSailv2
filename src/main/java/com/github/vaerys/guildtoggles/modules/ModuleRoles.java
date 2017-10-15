@@ -50,18 +50,18 @@ public class ModuleRoles implements GuildModule {
         for (long id : object.guild.config.getCosmeticRoleIDs()) {
             totalUsers += appendRole(builder, id, object);
         }
-        builder.append("**\nTotal Users:** " + totalUsers);
+        builder.append("**\nTotal:** " + totalUsers);
         totalUsers = 0;
         builder.append("\n<split>**[MODIFIER ROLES]**" + Command.spacer);
         for (long id : object.guild.config.getModifierRoleIDs()) {
             totalUsers += appendRole(builder, id, object);
         }
-        builder.append("**\nTotal Users:** " + totalUsers);
+        builder.append("**\nTotal:** " + totalUsers);
         return builder.toString();
     }
 
     private long appendRole(StringBuilder builder, long id, CommandObject object) {
-        IRole role = object.guild.get().getRoleByID(id);
+        IRole role = object.guild.getRoleByID(id);
         if (role != null) {
             String roleName = role.getName();
             if (role.isEveryoneRole()) roleName = "everyone";

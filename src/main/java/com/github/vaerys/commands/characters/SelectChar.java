@@ -33,7 +33,7 @@ public class SelectChar implements Command {
                     }
                     //loads new roles.
                     for (long r : c.getRoleIDs()) {
-                        userRoles.add(command.guild.get().getRoleByID(r));
+                        userRoles.add(command.guild.getRoleByID(r));
                     }
                     Utility.roleManagement(command.user.get(), command.guild.get(), userRoles);
                     Utility.updateUserNickName(command.user.get(), command.guild.get(), c.getNickname());

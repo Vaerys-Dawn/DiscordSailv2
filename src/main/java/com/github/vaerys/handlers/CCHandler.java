@@ -5,6 +5,7 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -68,9 +69,9 @@ public class CCHandler {
                 if (Utility.canBypass(author, guild)) ;
                 else if (cc.isShitPost() && guildconfig.shitPostFiltering) {
                     List<IChannel> channels = guildconfig.getChannelsByType(Command.CHANNEL_SHITPOST, commandObject.guild);
-                    channels = Utility.getVisibleChannels(channels, commandObject.user);
-                    List<String> channelMentions = Utility.getChannelMentions(channels);
                     if (!channels.contains(commandObject.channel.get())) {
+                        channels = commandObject.user.getVisibleChannels(channels);
+                        List<String> channelMentions = Utility.getChannelMentions(channels);
                         if (channelMentions.size() == 0) {
                             Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.", channel);
                             return;

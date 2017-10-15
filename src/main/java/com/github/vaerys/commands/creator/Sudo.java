@@ -3,6 +3,7 @@ package com.github.vaerys.commands.creator;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.MessageHandler;
 import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
@@ -24,7 +25,28 @@ public class Sudo implements Command {
         if (sudo.getRest() == null) {
             return "> You need to specify some arguments.";
         }
-        new MessageHandler(sudo.getRest(), command, false);
+        try {
+            new MessageHandler(sudo.getRest(), command, false);
+        } catch (Exception e) {
+            String errorPos = "";
+            for (StackTraceElement s : e.getStackTrace()) {
+                if (s.toString().contains("com.github.vaerys")) {
+                    errorPos = s.toString();
+                    break;
+                }
+            }
+            StringBuilder builder = new StringBuilder();
+            builder.append("> I caught an Error, Please send this Error message and the message that caused this error " +
+                    "to my **Direct Messages** so my developer can look at it and try to solve the issue.\n```\n");
+            builder.append(e.getClass().getName());
+            builder.append(": " + e.getMessage());
+            if (!errorPos.isEmpty()) {
+                builder.append("\n" + Constants.PREFIX_INDENT + "at " + errorPos);
+            }
+            builder.append("```");
+            Utility.sendMessage(builder.toString(), command.channel.get());
+            Utility.sendStack(e);
+        }
         return null;
     }
 

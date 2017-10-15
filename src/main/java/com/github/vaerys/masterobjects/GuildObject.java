@@ -11,8 +11,7 @@ import com.github.vaerys.objects.UserRateObject;
 import com.github.vaerys.pogos.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -236,5 +235,37 @@ public class GuildObject {
             allCommands.addAll(Globals.getALLCreatorCommands());
         }
         return allCommands;
+    }
+
+    public IChannel getChannelByID(long id) {
+        return object.getChannelByID(id);
+    }
+
+    public IUser getUserByID(long id) {
+        return object.getUserByID(id);
+    }
+
+    public IRole getRoleByID(long id) {
+        return object.getRoleByID(id);
+    }
+
+    public IVoiceChannel getVoiceChannelByID(long id) {
+        return object.getVoiceChannelByID(id);
+    }
+
+    public IEmoji getEmojiById(long id) {
+        return object.getEmojiByID(id);
+    }
+
+    public long getOwnerID() {
+        return object.getOwnerLongID();
+    }
+
+    public IUser getOwner() {
+        return object.getOwner();
+    }
+
+    public List<IUser> getUsers() {
+        return object.getUsers();
     }
 }

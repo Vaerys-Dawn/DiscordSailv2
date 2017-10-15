@@ -2,6 +2,8 @@ package com.github.vaerys.oldcode;
 
 import java.util.ArrayList;
 
+
+@Deprecated
 public class OldGuildConfig {
     ArrayList<RoleTypeObject> cosmeticRoles = new ArrayList<>();
     ArrayList<RoleTypeObject> modifierRoles = new ArrayList<>();

@@ -437,7 +437,7 @@ public class GuildConfig extends GuildFile {
         for (ChannelSettingObject c : channelSettings) {
             if (c.getType().equalsIgnoreCase(type)) {
                 for (long s : c.getChannelIDs()) {
-                    IChannel channel = guild.get().getChannelByID(s);
+                    IChannel channel = guild.getChannelByID(s);
                     if (channel != null) {
                         channels.add(channel);
                     }

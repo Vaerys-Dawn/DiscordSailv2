@@ -19,7 +19,7 @@ public class ListRoles implements Command {
         ArrayList<String> list = new ArrayList<>();
         XEmbedBuilder builder = new XEmbedBuilder();
         for (long l : command.guild.config.getCosmeticRoleIDs()) {
-            IRole role = command.guild.get().getRoleByID(l);
+            IRole role = command.guild.getRoleByID(l);
             list.add(role.getName());
         }
         Utility.listFormatterEmbed(title, builder, list, true);

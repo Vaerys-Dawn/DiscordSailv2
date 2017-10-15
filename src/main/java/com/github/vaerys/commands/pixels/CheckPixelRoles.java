@@ -15,7 +15,7 @@ public class CheckPixelRoles implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         IMessage working = Utility.sendMessage("`Working...`", command.channel.get()).get();
-        for (IUser user : command.guild.get().getUsers()) {
+        for (IUser user : command.guild.getUsers()) {
             XpHandler.checkUsersRoles(user.getLongID(), command.guild);
         }
         Utility.deleteMessage(working);

@@ -29,7 +29,7 @@ public class TransferLevels implements Command {
         IMessage message = Utility.sendMessage("`Working...`", command.channel.get()).get();
 
         Utility.sortRewards(command.guild.config.getRewardRoles());
-        for (IUser user : command.guild.get().getUsers()) {
+        for (IUser user : command.guild.getUsers()) {
             if (!user.isBot()) {
                 ProfileObject uObject = command.guild.users.getUserByID(user.getLongID());
                 if (uObject == null) {

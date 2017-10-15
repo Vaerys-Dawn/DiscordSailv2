@@ -9,6 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 25/06/2016.
  */
+@Deprecated
 public class CustomCommands {
 
 

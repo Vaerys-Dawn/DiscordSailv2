@@ -14,7 +14,7 @@ public class GetCompEntries implements Command {
     public String execute(String args, CommandObject command) {
         int i = 1;
         for (CompObject p : command.guild.competition.getEntries()) {
-            Utility.sendMessage("Entry " + i + " : " + command.guild.get().getUserByID(p.getUserID()).mention() + "\n" +
+            Utility.sendMessage("Entry " + i + " : " + command.guild.getUserByID(p.getUserID()).mention() + "\n" +
                     p.getFileUrl(), command.channel.get());
             try {
                 Thread.sleep(500);

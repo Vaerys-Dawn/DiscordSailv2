@@ -24,7 +24,7 @@ public class TopUserForRole implements Command {
         IUser topUser = null;
         ProfileObject topUserObject;
         ProfileObject userTypeObject;
-        for (IUser user : command.guild.get().getUsers()) {
+        for (IUser user : command.guild.getUsers()) {
             if (user.getRolesForGuild(command.guild.get()).contains(role)) {
                 if (topUser == null) {
                     topUser = user;

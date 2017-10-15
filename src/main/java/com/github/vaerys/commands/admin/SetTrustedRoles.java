@@ -26,7 +26,7 @@ public class SetTrustedRoles implements Command {
             if (command.guild.config.isRoleTrusted(role.getLongID())) {
                 ListIterator iterator = command.guild.config.getTrustedRoleIDs().listIterator();
                 while (iterator.hasNext()) {
-                    IRole trustedRole = command.guild.get().getRoleByID((long) iterator.next());
+                    IRole trustedRole = command.guild.getRoleByID((long) iterator.next());
                     if (role.getLongID() == trustedRole.getLongID()) {
                         iterator.remove();
                     }

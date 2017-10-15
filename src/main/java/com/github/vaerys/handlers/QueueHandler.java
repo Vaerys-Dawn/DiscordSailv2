@@ -7,6 +7,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.DailyUserMessageObject;
 import com.github.vaerys.objects.QueueObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.pogos.DailyMessages;
 import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;
@@ -31,7 +32,7 @@ public class QueueHandler {
         if (channel != null) {
             switch (type) {
                 case Constants.QUEUE_DAILY:
-                    long uID = Utility.newDailyMsgUID(Globals.getDailyMessages());
+                    long uID = Globals.getDailyMessages().newDailyMsgUID();
                     XEmbedBuilder embedBuilder = new XEmbedBuilder();
                     embedBuilder.withAuthorName("New Daily Message - " + object.guild.get().getName());
                     embedBuilder.withFooterText(object.user.longID + "");
@@ -53,20 +54,17 @@ public class QueueHandler {
     }
 
     public static void checkQueue() {
+        IChannel queueChannel = Globals.client.getChannelByID(Globals.queueChannelID);
+        if (queueChannel == null) return;
         ArrayList<QueueObject> queuedMessages = Globals.getDailyMessages().getQueue();
         ListIterator iterator = queuedMessages.listIterator();
         while (iterator.hasNext()) {
             QueueObject object = (QueueObject) iterator.next();
-            if (Globals.client.getMessageByID(object.getMessageId()) == null) {
+            if (queueChannel.getMessageByID(object.getMessageId()) == null) {
                 iterator.remove();
             } else if (object.isMarkedForRemoval()) {
                 iterator.remove();
             }
-//            try {
-//                Thread.sleep(200);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
         }
     }
 
@@ -84,6 +82,9 @@ public class QueueHandler {
             return;
         }
         //exit if not the owner.
+        if (reaction.getCount() == 0){
+            return;
+        }
         if (!reaction.getUserReacted(owner)) {
             return;
         }
@@ -95,6 +96,7 @@ public class QueueHandler {
         if (message.getReactions().size() <= 1) {
             return;
         }
+
         checkQueue();
 
         for (QueueObject q : queuedMessages) {

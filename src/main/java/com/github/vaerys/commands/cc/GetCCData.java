@@ -20,8 +20,10 @@ public class GetCCData implements Command {
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
             if (c.getName().equalsIgnoreCase(args)) {
                 StringBuilder content = new StringBuilder("Command Name: \"" + c.getName() + "\"");
-                IUser createdBy = command.client.get().getUserByID(c.getUserID());
-                content.append("\nCreated by: \"" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "\"");
+                IUser createdBy = command.guild.getUserByID(c.getUserID());
+                if (createdBy == null) createdBy = command.client.get().fetchUser(c.getUserID());
+                if (createdBy == null) content.append("\nCreated by: \"null\"");
+                else content.append("\nCreated by: \"" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "\"");
                 content.append("\nTimes run: \"" + c.getTimesRun() + "\"");
                 content.append("\nContents: \"" + c.getContents(false) + "\"");
                 String filePath = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";

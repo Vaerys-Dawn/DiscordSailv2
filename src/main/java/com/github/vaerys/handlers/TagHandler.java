@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Created by Vaerys on 22/10/2016.
@@ -36,18 +37,84 @@ public class TagHandler {
         response = tagGetUsername(response, object.user.get());
         response = tagSpecialArgs(response, args);
         response = tagRandom(response);
+        response = tagReplaceRandom(response);
         response = tagIfRole(response, object.user.get(), object.guild.get());
         response = tagIfName(response, object.user.get(), object.guild.get());
         response = tagEmptyArgs(response, args);
         response = tagIfArgs(response, args);
-        response = tagRegex(response, "<replace>{", "}", ";;");
-        response = tagRegex(response, "<replace!>(", ")</r>", "::");
+        response = tagReplace(response, "<replace>{", "}", ";;");
+        response = tagReplace(response, "<replace!>(", ")</r>", "::");
+        response = tagRegex(response);
         response = tagRandNum(response);
         response = tagRandEmote(response, object.guild);
         response = replaceError(response);
         response = tagToCaps(response);
         response = tagMentionToString(response, object);
         return response;
+    }
+
+    private static String tagReplaceRandom(String from) {
+        String prefix = "<replaceRandom>{";
+        String suffix = "}";
+        String splitter = ";;";
+        String tagRegex;
+        String lastAttempt;
+        ArrayList<ReplaceObject> toReplace = new ArrayList<>();
+        if (from.contains(prefix)) {
+            do {
+                lastAttempt = from;
+                tagRegex = StringUtils.substringBetween(from, prefix, suffix);
+                if (tagRegex != null) {
+                    ArrayList<String> splitRegex = new ArrayList<>(Arrays.asList(tagRegex.split(splitter)));
+                    String toRegex = prefix + tagRegex + suffix;
+                    if (splitRegex.size() >= 2) {
+                        from = from.replace(toRegex, "");
+                        Random random = new Random();
+                        int randomNum = random.nextInt(splitRegex.size() - 1);
+                        toReplace.add(new ReplaceObject(splitRegex.get(0), splitRegex.get(randomNum + 1)));
+                    } else {
+                        from = from.replace(tagRegex, "#ERROR#");
+                    }
+                }
+            } while (StringUtils.countMatches(from, prefix) > 0 && (!lastAttempt.equals(from)));
+            for (ReplaceObject r : toReplace) {
+                from = from.replace(r.getFrom(), r.getTo());
+            }
+        }
+        return from;
+    }
+
+    private static String tagRegex(String from) {
+        String prefix = "<regex>{";
+        String suffix = "}</r>";
+        String splitter = ";;";
+        String tagRegex;
+        String lastAttempt;
+        ArrayList<ReplaceObject> toReplace = new ArrayList<>();
+        if (from.contains(prefix)) {
+            do {
+                lastAttempt = from;
+                tagRegex = StringUtils.substringBetween(from, prefix, suffix);
+                if (tagRegex != null) {
+                    ArrayList<String> splitRegex = new ArrayList<>(Arrays.asList(tagRegex.split(splitter)));
+                    String toRegex = prefix + tagRegex + suffix;
+                    if (splitRegex.size() == 2) {
+                        from = from.replace(toRegex, "");
+                        toReplace.add(new ReplaceObject(splitRegex.get(0), splitRegex.get(1)));
+                    } else {
+                        from = from.replace(tagRegex, "#ERROR#");
+                    }
+                }
+            } while (StringUtils.countMatches(from, prefix) > 0 && (!lastAttempt.equals(from)));
+            for (ReplaceObject r : toReplace) {
+                try {
+                    from = from.replaceAll(r.getFrom(), r.getTo());
+                } catch (PatternSyntaxException e) {
+                    from = from.replace(r.getFrom(), "#ERROR#");
+                }
+            }
+        }
+        return from;
     }
 
     private static String tagMentionToString(String response, CommandObject object) {
@@ -192,7 +259,7 @@ public class TagHandler {
 
     @TagAnnotation(name = "Replace", description = "This tag replaces all of the first with the second.", usage = "#replace#{from;;to} or #!replace#(from::to)#!r#", priority = 4,
             type = Constants.TAG_TYPE_CC)
-    public static String tagRegex(String from, String prefix, String suffix, String splitter) {
+    public static String tagReplace(String from, String prefix, String suffix, String splitter) {
         String tagRegex;
         String lastAttempt;
         ArrayList<ReplaceObject> toReplace = new ArrayList<>();

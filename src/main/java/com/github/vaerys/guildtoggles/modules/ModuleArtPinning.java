@@ -44,7 +44,7 @@ public class ModuleArtPinning implements GuildModule {
 
     @Override
     public String stats(CommandObject object) {
-        if (Utility.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
+        if (!Utility.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
         return "**Total Pins:** " + object.guild.channelData.getPinnedMessages().size();
     }
 }

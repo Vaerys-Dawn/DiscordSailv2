@@ -83,7 +83,7 @@ public class Rank implements Command {
                 Utility.sortUserObjects(ranks, false);
                 //format rank stats
                 for (ProfileObject r : ranks) {
-                    IUser ranked = command.guild.get().getUserByID(r.getUserID());
+                    IUser ranked = command.guild.getUserByID(r.getUserID());
                     String rankPos = "**" + XpHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
                     String toFormat = ranked.getDisplayName(command.guild.get())
                             + "\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`";

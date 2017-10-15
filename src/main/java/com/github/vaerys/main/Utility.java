@@ -20,6 +20,7 @@ import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.*;
 import sx.blah.discord.util.Image;
+import sx.blah.discord.util.cache.LongMap;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.awt.*;
@@ -216,11 +217,11 @@ public class Utility {
     }
 
     //Discord Request Processors
-    public static XRequestBuffer.RequestFuture<IMessage> sendMessage(String message, IChannel channel) {
+    public static RequestBuffer.RequestFuture<IMessage> sendMessage(String message, IChannel channel) {
         if (!Globals.client.isReady()) {
             return null;
         }
-        return XRequestBuffer.request(() -> {
+        return RequestBuffer.request(() -> {
             IMessage error = null;
             if (message == null) {
                 return error;
@@ -466,8 +467,7 @@ public class Utility {
         });
     }
 
-    public static XRequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, long newRoleID,
-                                                                       boolean isAdding) {
+    public static XRequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, long newRoleID, boolean isAdding) {
         return XRequestBuffer.request(() -> {
             try {
                 if (isAdding) {
@@ -504,8 +504,7 @@ public class Utility {
         });
     }
 
-    public static XRequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild
-            guild, List<IRole> userRoles) {
+    public static XRequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, List<IRole> userRoles) {
         return XRequestBuffer.request(() -> {
             try {
                 IRole[] roles = new IRole[userRoles.size()];
@@ -832,8 +831,8 @@ public class Utility {
     public static void sendGlobalAdminLogging(Command command, String args, CommandObject commandObject) {
         for (GuildObject c : Globals.getGuilds()) {
             StringBuilder message = new StringBuilder("***GLOBAL LOGGING***\n> **@" + commandObject.user.username + "** Has Used Command `" + command.names()[0] + "`");
-            List<IChannel> adminlog = commandObject.guild.config.getChannelsByType(Command.CHANNEL_ADMIN_LOG, commandObject.guild);
-            List<IChannel> serverLog = commandObject.guild.config.getChannelsByType(Command.CHANNEL_SERVER_LOG, commandObject.guild);
+            List<IChannel> adminlog = commandObject.guild.config.getChannelsByType(Command.CHANNEL_ADMIN_LOG, c);
+            List<IChannel> serverLog = commandObject.guild.config.getChannelsByType(Command.CHANNEL_SERVER_LOG, c);
             IChannel channel = null;
 
             if (!(args == null || args.isEmpty())) {
@@ -1030,7 +1029,7 @@ public class Utility {
     public static void sendLog(String content, GuildObject guild, boolean isAdmin) {
         IChannel logChannel = null;
         List<IChannel> serverLog = guild.config.getChannelsByType(Command.CHANNEL_SERVER_LOG, guild);
-        List<IChannel> adminLog = guild.config.getChannelsByType(Command.CHANNEL_SERVER_LOG, guild);
+        List<IChannel> adminLog = guild.config.getChannelsByType(Command.CHANNEL_ADMIN_LOG, guild);
         if (isAdmin) {
             if (adminLog.size() != 0) {
                 logChannel = adminLog.get(0);
@@ -1127,30 +1126,11 @@ public class Utility {
         }
     }
 
-    public static long newDailyMsgUID(DailyMessages data) {
-        long result;
-        Random random = new Random();
-        List<Long> uIDs = new ArrayList<>();
-        for (DailyUserMessageObject d : data.getMessages()) {
-            if (d.getUID() != -1) {
-                uIDs.add(d.getUID());
-            }
-        }
-        for (QueueObject o : data.getQueue()) {
-            uIDs.add(o.getuID());
-        }
-        result = random.nextInt(9000) + 1000;
-        while (uIDs.contains(result)) {
-            result = random.nextInt(9000) + 1000;
-        }
-        return result;
-    }
-
     public static List<String> getChannelMentions(ArrayList<Long> channelIDs, CommandObject command) {
         List<String> channelNames = new ArrayList<>();
         if (channelIDs != null) {
             for (long s : channelIDs) {
-                IChannel channel = command.guild.get().getChannelByID(s);
+                IChannel channel = command.guild.getChannelByID(s);
                 if (channel != null) {
                     channelNames.add(channel.mention());
                 }
@@ -1189,9 +1169,9 @@ public class Utility {
                 if (testPerms) {
                     if (c.type().equalsIgnoreCase(Command.TYPE_CREATOR) && !commandObject.user.get().equals(commandObject.client.creator)) {
                         //do nothing
-                    } else if (isDualType && testForPerms(commandObject, c.dualPerms())) {
+                    }else if (isDualType && testForPerms(commandObject, c.dualPerms())) {
                         toReturn.add(c);
-                    } else if (testForPerms(commandObject, c.perms())) {
+                    } else if (!isDualType && testForPerms(commandObject, c.perms())) {
                         toReturn.add(c);
                     }
                 } else {
@@ -1201,17 +1181,6 @@ public class Utility {
         }
         toReturn.sort(Comparator.comparing(o -> o.names()[0]));
         return toReturn;
-    }
-
-    public static List<IChannel> getVisibleChannels(List<IChannel> channels, UserObject user) {
-        List<IChannel> newSet = new ArrayList<>();
-        for (IChannel c : channels) {
-            if (c.getModifiedPermissions(user.get()).contains(Permissions.READ_MESSAGES)
-                    && c.getModifiedPermissions(user.get()).contains(Permissions.SEND_MESSAGES)) {
-                newSet.add(c);
-            }
-        }
-        return newSet;
     }
 
     public static List<String> getChannelMentions(List<IChannel> channels) {
@@ -1232,7 +1201,7 @@ public class Utility {
             } else {
                 toTest = escapeRegex(args).replace("_", "[_| ]");
             }
-            for (IUser u : command.guild.get().getUsers()) {
+            for (IUser u : command.guild.getUsers()) {
                 if (user != null) {
                     break;
                 }

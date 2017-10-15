@@ -318,10 +318,9 @@ public class AnnotationListener {
         }
 
         if (command.guild.config.deleteLogging) {
-            if (command.message.get().getContent() == null) {
-                return;
-            }
-            if (command.message.get().getContent().isEmpty()) {
+            if ((command.message.get().getContent() == null ||
+                    command.message.get().getContent().isEmpty()) &&
+                    command.message.get().getAttachments().size() == 0) {
                 return;
             }
             int charLimit = 1800;
@@ -329,6 +328,15 @@ public class AnnotationListener {
                 content = Utility.unFormatMentions(command.message.get()).substring(0, 1800) + "...";
             } else {
                 content = Utility.unFormatMentions(command.message.get());
+            }
+            if (event.getMessage().getAttachments().size() != 0) {
+                for (IMessage.Attachment atc : event.getMessage().getAttachments()) {
+                    if (content.length() != 0) {
+                        content += "\n<" + atc.getUrl() + ">";
+                    } else {
+                        content = "<" + atc.getUrl() + ">";
+                    }
+                }
             }
             if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.user.longID == command.client.longID) {
                 return;

@@ -1,9 +1,13 @@
 package com.github.vaerys.interfaces;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Vaerys on 13/03/2017.
@@ -102,6 +106,9 @@ public interface SlashCommand extends Command {
         builder.withColor(command.client.color);
         builder.withTitle(getCommand(command));
         builder.withDescription(description(command));
+        if (names().length != 1) {
+            builder.appendField("Aliases:", Utility.listFormatter(Arrays.asList(names()),true),true);
+        }
         return builder;
     }
 

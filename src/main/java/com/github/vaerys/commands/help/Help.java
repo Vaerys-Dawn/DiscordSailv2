@@ -59,7 +59,7 @@ public class Help implements Command {
                     List<String> commandNames = new ArrayList<>();
                     for (Command c : Utility.getCommandsByType(commands, command, s, true)) {
                         StringBuilder commandCall = new StringBuilder(c.getCommand(command));
-                        if (c.dualType() != null) {
+                        if (c.dualType() != null && Utility.testForPerms(command,c.dualPerms())) {
                             commandCall.append(indent + "*");
                         }
                         commandNames.add(commandCall.toString());
@@ -83,7 +83,7 @@ public class Help implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Lists the commands that profiles can run.";
+        return "Lists the commands that users can run.";
     }
 
     @Override

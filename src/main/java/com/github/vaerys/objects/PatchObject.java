@@ -5,6 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 07/04/2017.
  */
+@Deprecated
 public class PatchObject {
     String patchLevel = "";
     ArrayList<String> patchedGuildIDs = new ArrayList<>();

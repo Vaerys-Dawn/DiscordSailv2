@@ -36,7 +36,7 @@ public class Report implements Command {
             }
             if (channel != null) {
                 StringBuilder builder = new StringBuilder();
-                IRole roleToMention = command.guild.get().getRoleByID(command.guild.config.getRoleToMentionID());
+                IRole roleToMention = command.guild.getRoleByID(command.guild.config.getRoleToMentionID());
                 if (roleToMention != null) {
                     builder.append(roleToMention.mention() + "\n");
                 }
