@@ -118,12 +118,28 @@ public class TagHandler {
     }
 
     private static String tagMentionToString(String response, CommandObject object) {
-        if (object.message.get().getMentions().size() != 0) {
-            for (IUser user : object.message.get().getMentions()) {
-                response = response.replace(user.mention(false), user.getDisplayName(object.guild.get()));
-                response = response.replace(user.mention(true), user.getDisplayName(object.guild.get()));
+
+        while (response.matches(".*<@!?[0-9]*>.*")){
+            String id = StringUtils.substringBetween(response,"<@!",">");
+            if (id == null){
+                id = StringUtils.substringBetween(response,"<@",">");
+            }
+            try {
+                long userID = Long.parseUnsignedLong(id);
+                IUser user = object.guild.getUserByID(userID);
+                if (user != null){
+                    response = response.replace(user.mention(true), user.getDisplayName(object.guild.get()));
+                    response = response.replace(user.mention(false), user.getDisplayName(object.guild.get()));
+                }else {
+                    throw new NumberFormatException("You shouldn't see this.");
+                }
+            }catch (NumberFormatException e){
+                response = response.replace("<@!" + id + ">", "null");
+                response = response.replace("<@" + id + ">", "null");
             }
         }
+
+
         return response;
     }
 

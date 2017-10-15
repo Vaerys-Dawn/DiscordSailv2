@@ -30,9 +30,8 @@ import java.util.ArrayList;
  */
 public class CustomCommands extends GuildFile {
     public static final String FILE_PATH = "Custom_Commands.json";
-    private double fileVersion = 1.1;
+    private double fileVersion = 1.2;
     ArrayList<BlackListObject> blackList = new ArrayList<BlackListObject>() {{
-        add(new BlackListObject("<@", "Please do not put **mentions** in Custom Commands."));
         add(new BlackListObject("discord.gg", "Please do not put **invites** in Custom Commands."));
         add(new BlackListObject("discordapp.com/Invite/", "Please do not put **invites** in Custom Commands."));
         add(new BlackListObject("@everyone", "Please go not put **mentions** in Custom Commands."));

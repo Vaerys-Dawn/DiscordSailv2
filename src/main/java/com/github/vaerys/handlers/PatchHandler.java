@@ -35,6 +35,26 @@ public class PatchHandler {
         fixUnicode(guild);
         fixUnicodeGuildUsers(guild);
         guildConfigRemoveUnicodeEmoji(guild);
+        //1.2 fixes
+        removeMentionRestriction(guild);
+    }
+
+    private static void removeMentionRestriction(IGuild guild) {
+        String path = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH);
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
+        if (checkPatch(1.2, guild, "Remove_Mention_Restrictions_CustomCommands", json)) return;
+        JsonArray object = json.getAsJsonArray("blackList");
+        for (int i = 0; i < object.size(); i++) {
+            JsonObject blacklisted = object.get(i).getAsJsonObject();
+            String phrase = blacklisted.get("phrase").getAsString();
+            if (phrase.equalsIgnoreCase("<@")) {
+                object.remove(i);
+            }
+        }
+        newPatchID(1.2, json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void guildConfigRemoveUnicodeEmoji(IGuild guild) {
@@ -48,7 +68,7 @@ public class PatchHandler {
         String s = object.getAsString();
         if (s == null) return;
         try {
-            Long l = Long.parseUnsignedLong(s);
+            Long.parseUnsignedLong(s);
         } catch (NumberFormatException e) {
             json.remove("levelUpReaction");
             json.addProperty("levelUpReaction", "null");
