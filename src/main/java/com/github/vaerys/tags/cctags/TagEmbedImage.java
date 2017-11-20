@@ -5,6 +5,9 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.TagObject;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class TagEmbedImage extends TagObject {
 
     public TagEmbedImage(int priority, String... types) {
@@ -14,12 +17,17 @@ public class TagEmbedImage extends TagObject {
     @Override
     public String execute(String from, CommandObject command, String args) {
         String imageURL = contents(from);
-        if (Utility.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS)) {
-            from = removeAllTag(from);
-            Utility.sendFileURL(from, imageURL, command.channel.get(), true);
-        } else {
-            from = replaceAllTag(from, "<" + imageURL + ">");
-            Utility.sendMessage(from, command.channel.get());
+        try {
+            URL url = new URL(imageURL);
+            if (Utility.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS)) {
+                from = removeAllTag(from);
+                Utility.sendFileURL(from, imageURL, command.channel.get(), true);
+            } else {
+                from = replaceAllTag(from, "<" + imageURL + ">");
+                Utility.sendMessage(from, command.channel.get());
+            }
+        } catch (MalformedURLException e) {
+            return replaceFirstTag(from, imageURL);
         }
         return "";
     }

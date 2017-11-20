@@ -56,15 +56,23 @@ public class PatchHandler {
         JsonArray array = new JsonArray();
         long creatorID = json.get("creatorID").getAsLong();
         oldMessages.forEach(jsonElement -> {
-            String contents = jsonElement.getAsJsonObject().get("content").getAsString();
-            String dayOfWeek = jsonElement.getAsJsonObject().get("dayOfWeek").getAsString();
-            JsonObject newObject = new JsonObject();
-            newObject.addProperty("content", contents);
-            newObject.addProperty("day", dayOfWeek);
-            newObject.addProperty("userID", creatorID);
-            newObject.addProperty("specialID", Constants.DAILY_SPECIALID);
-            newObject.addProperty("uID", -1);
-            array.add(newObject);
+            if (jsonElement != null) {
+                JsonArray contents = jsonElement.getAsJsonObject().get("contents").getAsJsonArray();
+                String dayOfWeek = jsonElement.getAsJsonObject().get("dayOfWeek").getAsString();
+                StringBuilder newContent = new StringBuilder();
+                for (JsonElement j : contents) {
+                    newContent.append(j.getAsString() + "\n");
+                }
+                if (newContent.toString().endsWith("\n")) ;
+                newContent.replace(newContent.length() - 1, newContent.length(), "");
+                JsonObject newObject = new JsonObject();
+                newObject.addProperty("content", newContent.toString());
+                newObject.addProperty("day", dayOfWeek);
+                newObject.addProperty("userID", creatorID);
+                newObject.addProperty("specialID", Constants.DAILY_SPECIALID);
+                newObject.addProperty("uID", -1);
+                array.add(newObject);
+            }
         });
         json.remove("dailyMessages");
         json.add("dailyMessages", array);
@@ -398,7 +406,7 @@ public class PatchHandler {
         String path = Constants.DIRECTORY_STORAGE + Constants.FILE_CONFIG;
         //check file
         if (!FileHandler.exists(path)) return;
-        JsonObject json = FileHandler.fileToJsonObject(Constants.FILE_CONFIG);
+        JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.0, null, "Overhaul_Config", json)) return;
         try {
             String oldItem = json.get("creatorID").getAsString();
@@ -419,7 +427,7 @@ public class PatchHandler {
         String path = Constants.DIRECTORY_STORAGE + Constants.FILE_GLOBAL_DATA;
         //check file
         if (!FileHandler.exists(path)) return;
-        JsonObject json = FileHandler.fileToJsonObject(Constants.FILE_GLOBAL_DATA);
+        JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.0, null, "Overhaul_GlobalData", json)) return;
         //blocked from Dms
         JsonArray blockedUsers = json.getAsJsonArray("blockedFromDMS");

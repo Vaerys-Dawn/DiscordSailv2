@@ -54,7 +54,7 @@ public abstract class TagObject {
 
     public boolean cont(String from) {
         if (requiredArgs != 0) {
-            String toRegex = Utility.escapeRegex(prefix) + ".*?" + Utility.escapeRegex(suffix);
+            String toRegex = Utility.escapeRegex(prefix) + "(.|\n)*?" + Utility.escapeRegex(suffix);
             return Pattern.compile(toRegex).matcher(from).find();
         } else {
             return Pattern.compile(Utility.escapeRegex(prefix)).matcher(from).find();
