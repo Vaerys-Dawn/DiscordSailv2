@@ -2,17 +2,18 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.ProfileSettings;
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.RewardRoleObject;
-import com.github.vaerys.objects.XRequestBuffer;
 import com.github.vaerys.pogos.GuildUsers;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.TagObject;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -29,7 +31,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.vaerys.enums.UserSetting.*;
+import static com.github.vaerys.main.UserSetting.*;
 
 /**
  * Created by Vaerys on 29/06/2017.
@@ -39,6 +41,7 @@ public class XpHandler {
     final static Logger logger = LoggerFactory.getLogger(XpHandler.class);
 
     public static void doDecay(GuildObject content, ZonedDateTime nowUTC) {
+        if (!content.config.modulePixels || !content.config.xpDecay) return;
         for (ProfileObject u : content.users.getProfiles()) {
             if (u.getLastTalked() != -1 && !u.getSettings().contains(DONT_DECAY)) {
                 long diff = nowUTC.toEpochSecond() - u.getLastTalked();
@@ -57,6 +60,9 @@ public class XpHandler {
                 decay = (long) temp;
                 //half decay if you turn you xp gain off but only if it is voluntary
                 if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) {
+                    decay = decay / 2;
+                }
+                if (u.getUser(content).isPatron) {
                     decay = decay / 2;
                 }
                 if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
@@ -262,9 +268,12 @@ public class XpHandler {
             // level the user up
             user.setCurrentLevel(xpToLevel(user.getXP()));
             UserSetting userOverride = user.getLevelState();
-            StringBuilder levelUpMessage = new StringBuilder(object.guild.config.levelUpMessage);
+            String levelUpMessage = object.guild.config.levelUpMessage;
 
-            levelUpMessage = TagHandler.prepLevelUpMessage(levelUpMessage, object.guild, object.user);
+            //run tags
+            for (TagObject t : TagList.getType(TagList.LEVEL)) {
+                levelUpMessage = t.handleTag(levelUpMessage, object, "");
+            }
 
             //adds a special message if a reward is added.
             for (RewardRoleObject r : object.guild.config.getRewardRoles()) {
@@ -278,16 +287,16 @@ public class XpHandler {
                                 user.getSettings().remove(i);
                             }
                         }
-                        levelUpMessage = new StringBuilder("Welcome Back.\n" + levelUpMessage + "\nYour **" + object.guild.getRoleByID(r.getRoleID()) + "** role has been returned to you.");
+                        levelUpMessage = "Welcome Back.\n" + levelUpMessage + "\nYour **@" + object.guild.getRoleByID(r.getRoleID()).getName() + "** role has been returned to you.";
                     } else {
-                        levelUpMessage.append("\nYou have been granted the **" + object.guild.getRoleByID(r.getRoleID()) + "** role for reaching this level.");
+                        levelUpMessage += "\nYou have been granted the **@" + object.guild.getRoleByID(r.getRoleID()).getName() + "** role for reaching this level.";
                     }
                     rankedup = true;
                 }
             }
             //if the user only just reached level 1 send them a message telling them about the pixelSettings command.
             if (user.getCurrentLevel() == 1) {
-                levelUpMessage.append("\n\n> If you want to change where these messages are sent or want to remove them completely you can change that with `" + new ProfileSettings().getUsage(object) + "`.");
+                levelUpMessage += "\n\n> If you want to change where these messages are sent or want to remove them completely you can change that with `" + new ProfileSettings().getUsage(object) + "`.";
             }
 
             if (userOverride != null) {
@@ -388,7 +397,7 @@ public class XpHandler {
                 }
             }
             IEmoji finalCustomEmoji = customEmoji;
-            XRequestBuffer.request(() -> {
+            RequestBuffer.request(() -> {
                 try {
                     if (emoji != null) {
                         object.message.get().addReaction(emoji);
@@ -486,7 +495,7 @@ public class XpHandler {
             if (users.get(i).getUserID() == userID) {
                 return rank + 1;
             } else {
-                boolean hideRank = isUnRanked(users.get(i).getUserID(),guildUsers,guild);
+                boolean hideRank = isUnRanked(users.get(i).getUserID(), guildUsers, guild);
                 if (!hideRank && user.getXP() != users.get(i).getXP()) {
                     rank++;
                 }

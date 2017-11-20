@@ -2,10 +2,10 @@ package com.github.vaerys.commands.help;
 
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -35,7 +35,7 @@ public class BotInfo implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"BotInfo"};
+        return new String[]{"Info"};
     }
 
     @Override

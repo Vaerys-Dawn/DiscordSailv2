@@ -2,11 +2,11 @@ package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**

@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.TagHandler;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.UserSetting;
+import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -23,8 +23,7 @@ public class NewCC implements Command {
         }
         boolean isShitpost = false;
         boolean isLocked = false;
-        SplitFirstObject splitfirst = new SplitFirstObject(args);
-        String newContent;
+        SplitFirstObject splitFirst = new SplitFirstObject(args);
         List<IChannel> shitpostChannels = command.guild.config.getChannelsByType(Command.CHANNEL_SHITPOST, command.guild);
         if (shitpostChannels != null) {
             for (IChannel channel : shitpostChannels) {
@@ -36,25 +35,35 @@ public class NewCC implements Command {
         if (object.getSettings().contains(UserSetting.AUTO_SHITPOST)) {
             isShitpost = true;
         }
-        String nameCC = splitfirst.getFirstWord();
-        if (splitfirst.getRest() == null || splitfirst.getRest().isEmpty()) {
+        String nameCC = splitFirst.getFirstWord();
+        String argsCC = splitFirst.getRest();
+        if ((argsCC == null || argsCC.isEmpty()) && command.message.get().getAttachments().size() == 0) {
             return "> Custom command contents cannot be blank.";
+        }
+        if (command.message.get().getAttachments().size() != 0) {
+            String testLink = command.message.get().getAttachments().get(0).getUrl();
+            if (Utility.isImageLink(testLink)) {
+                if (argsCC == null || argsCC.isEmpty()) {
+                    argsCC = "<embedImage>{" + testLink + "}";
+                } else {
+                    argsCC += "<embedImage>{" + testLink + "}";
+                }
+            } else {
+                return "> Custom command attachment must be a valid Image.";
+            }
         }
         if (nameCC.contains("\n")) {
             return "> Command name cannot contain Newlines.";
         }
-        String content = splitfirst.getRest();
-        newContent = TagHandler.testForShit(content);
-        if (!newContent.equals(content)) {
+        if (argsCC.contains("<shitpost>")) {
+            argsCC.replace("<shitpost>", "");
             isShitpost = true;
         }
-        content = newContent;
-        newContent = TagHandler.testForLock(content, command.user.get(), command.guild.get());
-        if (!newContent.equals(content)) {
+        if (argsCC.contains("<lock>") && Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+            argsCC.replace("<lock>", "");
             isLocked = true;
         }
-        content = newContent;
-        return command.guild.customCommands.addCommand(isLocked, nameCC, content, isShitpost, command);
+        return command.guild.customCommands.addCommand(isLocked, nameCC, argsCC, isShitpost, command);
     }
 
     @Override
@@ -69,7 +78,7 @@ public class NewCC implements Command {
 
     @Override
     public String usage() {
-        return "[Command Name] [Contents]";
+        return "[Command Name] [Contents/Image]";
     }
 
     @Override

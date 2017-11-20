@@ -1,14 +1,13 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.EnumString;
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ public class UserSettings implements Command {
             "> AutoShitpost\n" +
             "> DenyAutoRole\n" +
             "> DenyArtPinning\n" +
+            "> DontDecay\n" +
             "> List - `Shows the user's settings.`";
 
     @Override
@@ -73,12 +73,12 @@ public class UserSettings implements Command {
                             "> **" + user.displayName + "** will no longer have pixel decay.");
                 case "denyartpinning":
                     return toggleSetting(profile, UserSetting.DENY_ART_PINNING,
-                            "> **" + user.displayName + "** can now pin art again.",
+                            "> **" + user.displayName + "** can now pin art.",
                             "> **" + user.displayName + "** can no longer pin art.");
                 case "list":
                     List<String> userSettings = new ArrayList<>();
                     for (UserSetting s : profile.getSettings()) {
-                        userSettings.add(EnumString.get(s));
+                        userSettings.add(UserSetting.get(s));
                     }
                     XEmbedBuilder builder = new XEmbedBuilder();
                     builder.withTitle(user.displayName + "'s User settings:");

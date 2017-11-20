@@ -1,11 +1,10 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.interfaces.GlobalFile;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.objects.DailyMessageObject;
+import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.RandomStatusObject;
+import com.github.vaerys.templates.GlobalFile;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Config extends GlobalFile {
     public static final String FILE_PATH = "Config.json";
-    private double fileVersion = 1.0;
+    private double fileVersion = 1.1;
     public boolean resetToDefault = false;
     public String botName = "S.A.I.L";
     public long creatorID = 153159020528533505L;
@@ -31,15 +30,7 @@ public class Config extends GlobalFile {
     public int baseXpModifier = 20;
     public int xpForLevelOne = 100;
     public int avgMessagesPerDay = 20;
-    public ArrayList<DailyMessageObject> dailyMessages = new ArrayList<DailyMessageObject>() {{
-        add(new DailyMessageObject(DayOfWeek.MONDAY, Constants.DAILY_MESSAGE_1, dailyAvatarName));
-        add(new DailyMessageObject(DayOfWeek.TUESDAY, Constants.DAILY_MESSAGE_2, dailyAvatarName));
-        add(new DailyMessageObject(DayOfWeek.WEDNESDAY, Constants.DAILY_MESSAGE_3, dailyAvatarName));
-        add(new DailyMessageObject(DayOfWeek.THURSDAY, Constants.DAILY_MESSAGE_4, dailyAvatarName));
-        add(new DailyMessageObject(DayOfWeek.FRIDAY, Constants.DAILY_MESSAGE_5, dailyAvatarName));
-        add(new DailyMessageObject(DayOfWeek.SATURDAY, Constants.DAILY_MESSAGE_6, dailyAvatarName));
-        add(new DailyMessageObject(DayOfWeek.SUNDAY, Constants.DAILY_MESSAGE_7, dailyAvatarName));
-    }};
+    public ArrayList<DailyMessage> dailyMessages = new ArrayList<>();
     public ArrayList<RandomStatusObject> randomStatuses = new ArrayList<RandomStatusObject>() {{
         add(new RandomStatusObject("Starbound", 10));
         add(new RandomStatusObject("WarGroove", 5));
@@ -56,17 +47,18 @@ public class Config extends GlobalFile {
         add(new RandomStatusObject("Wanderlust Rebirth", 1));
     }};
 
-    public boolean initObject(Config config) {
-        if (resetToDefault) {
+    public static Config check(Config config) {
+        if (config.resetToDefault) {
             config = new Config();
         }
-        for (DailyMessageObject d : dailyMessages) {
-            d.updateFilePath(dailyAvatarName);
+        if (config.dailyMessages.size() != 7) {
+            config.dailyMessages = Constants.defaultDailyMessages(config.creatorID);
         }
-        return false;
+        config.flushFile();
+        return config;
     }
 
-    public void setDailyMessages(ArrayList<DailyMessageObject> dailyMessages) {
+    public void setDailyMessages(ArrayList<DailyMessage> dailyMessages) {
         this.dailyMessages = dailyMessages;
     }
 }

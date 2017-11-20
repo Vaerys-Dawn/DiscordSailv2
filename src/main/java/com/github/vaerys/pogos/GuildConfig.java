@@ -1,13 +1,14 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.GuildFile;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.ChannelSettingObject;
+import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.OffenderObject;
 import com.github.vaerys.objects.RewardRoleObject;
+import com.github.vaerys.templates.GuildFile;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
@@ -39,6 +40,7 @@ public class GuildConfig extends GuildFile {
     public boolean selfDestructLevelUps = true;
     public boolean reactToLevelUp = false;
     public boolean likeArt = false;
+    public boolean welcomeMessage = false;
     //--Logging
     public boolean generalLogging = false;
     public boolean adminLogging = false;
@@ -59,6 +61,7 @@ public class GuildConfig extends GuildFile {
     public boolean slashCommands = false;
     public boolean roleIsToggle = false;
     public boolean userInfoShowsDate = false;
+    public boolean debugMode = true;
     //--Competition
     public boolean compEntries = false;
     public boolean compVoting = false;
@@ -77,12 +80,12 @@ public class GuildConfig extends GuildFile {
     public int messageLimit = 10;
     public int xpRate = 20;
     public float xpModifier = 1;
-    public long lastDailyMessageID = -1;
 
     public long xpDeniedRoleID = -1;
     public long topTenRoleID = -1;
     long roleToMentionID = -1;
     long mutedRoleID = -1;
+    public int pinLimit = 25;
 
     public UserSetting defaultLevelMode = UserSetting.SEND_LVLUP_RANK_CHANNEL;
 
@@ -90,6 +93,7 @@ public class GuildConfig extends GuildFile {
     public String levelUpReaction = "null";
     public String levelUpMessage = "Ding. Gratz on level <level> <user>.";
     private String joinMessage = "> Welcome to the <server> server <user>.";
+    private DailyMessage lastDailyMessage = null;
     private ArrayList<String> xpDeniedPrefixes = new ArrayList<>();
 
     // TODO: 04/10/2016 let the mention limit be customisable.
@@ -99,6 +103,14 @@ public class GuildConfig extends GuildFile {
     ArrayList<Long> trustedRoleIDs = new ArrayList<>();
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     ArrayList<OffenderObject> repeatOffenders = new ArrayList<>();
+
+    public void setLastDailyMessage(DailyMessage lastDailyMessage) {
+        this.lastDailyMessage = lastDailyMessage;
+    }
+
+    public DailyMessage getLastDailyMessage() {
+        return lastDailyMessage;
+    }
 
     public ArrayList<RewardRoleObject> getRewardRoles() {
         return rewardRoles;
@@ -445,5 +457,9 @@ public class GuildConfig extends GuildFile {
             }
         }
         return channels;
+    }
+
+    public void setPinLimit(int pinLimit) {
+        this.pinLimit = pinLimit;
     }
 }

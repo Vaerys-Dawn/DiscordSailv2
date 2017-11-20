@@ -1,13 +1,11 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -17,25 +15,25 @@ import sx.blah.discord.handle.obj.Permissions;
 public class InfoCC implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        for (CCommandObject c : command.guild.customCommands.getCommandList()) {
-            if (c.getName().equalsIgnoreCase(args)) {
-                StringBuilder builder = new StringBuilder();
-                XEmbedBuilder embedBuilder = new XEmbedBuilder();
-                embedBuilder.withColor(command.client.color);
-                String title = "> Here is the information for command: **" + c.getName() + "**\n";
-                IUser createdBy = command.guild.getUserByID(c.getUserID());
-                if (createdBy == null) createdBy = command.client.get().fetchUser(c.getUserID());
-                if (createdBy == null) builder.append("Creator: **Null**\n");
-                else builder.append("Creator: **@" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "**\n");
-                builder.append("Time Run: **" + c.getTimesRun() + "**\n");
-                builder.append("Is Locked: **" + c.isLocked() + "**\n");
-                builder.append("Is ShitPost: **" + c.isShitPost() + "**");
-                embedBuilder.appendField(title,builder.toString(),false);
-                Utility.sendEmbedMessage("",embedBuilder,command.channel.get());
-                return null;
-            }
+        CCommandObject customCommand = command.guild.customCommands.getCommand(args);
+        if (customCommand == null) {
+            return Constants.ERROR_CC_NOT_FOUND;
         }
-        return Constants.ERROR_CC_NOT_FOUND;
+        StringBuilder builder = new StringBuilder();
+        XEmbedBuilder embedBuilder = new XEmbedBuilder();
+        embedBuilder.withColor(command.client.color);
+        String title = "> Here is the information for command: **" + customCommand.getName() + "**\n";
+        IUser createdBy = command.guild.getUserByID(customCommand.getUserID());
+        if (createdBy == null) createdBy = command.client.get().fetchUser(customCommand.getUserID());
+        if (createdBy == null) builder.append("Creator: **Null**\n");
+        else builder.append("Creator: **@" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "**\n");
+        builder.append("Time Run: **" + customCommand.getTimesRun() + "**\n");
+        builder.append("Is Locked: **" + customCommand.isLocked() + "**\n");
+        builder.append("Is ShitPost: **" + customCommand.isShitPost() + "**");
+        embedBuilder.appendField(title, builder.toString(), false);
+        Utility.sendEmbedMessage("", embedBuilder, command.channel.get());
+        return null;
+
     }
 
     @Override

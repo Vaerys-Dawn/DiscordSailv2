@@ -2,12 +2,11 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.io.File;
@@ -15,6 +14,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -22,8 +23,7 @@ import java.util.ArrayList;
 public class SearchCCs implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        ArrayList<CCommandObject> searched = new ArrayList<>();
-        StringBuilder builder = new StringBuilder();
+        List<CCommandObject> searched = new ArrayList<>();
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
             StringBuilder toSearch = new StringBuilder();
             toSearch.append(c.getName().toLowerCase());
@@ -38,20 +38,33 @@ public class SearchCCs implements Command {
                 searched.add(c);
             }
         }
-        String title = "> Here is your search:";
-        ArrayList<String> list = new ArrayList<>();
-        for (CCommandObject c : searched) {
-            list.add(command.guild.config.getPrefixCC() + c.getName());
+        if (searched.size() == 0) {
+            return "> Could not find any custom commands that contains **" + args + "**.";
         }
-        XEmbedBuilder embedBuilder = new XEmbedBuilder();
-        Utility.listFormatterEmbed(title,embedBuilder,list,true);
-        embedBuilder.withColor(command.client.color);
-        if (searched.size() < 40) {
-            Utility.sendEmbedMessage("",embedBuilder,command.channel.get());
-            return null;
-        } else {
+
+        String title = "> Here is your search:";
+        XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
+        String contents = Utility.listFormatter(searched.stream().map(cCommandObject -> cCommandObject.getName(command)).collect(Collectors.toList()), true);
+        if (contents.length() > 2040) {
+            List<String> blah = new ArrayList<>();
+            StringBuilder complete = new StringBuilder();
+            for (CCommandObject c : searched) {
+                if (blah.size() == 8) {
+                    complete.append(Utility.listFormatter(blah, true));
+                    blah = new ArrayList<>();
+                    complete.replace(complete.length()-1, complete.length(), ",");
+                    complete.append("\n");
+                }
+                blah.add(c.getName(command));
+            }
+            if (blah.size() != 0) {
+                complete.append(Utility.listFormatter(blah, true));
+            }
+            if (complete.toString().endsWith(",\n")) {
+                complete.replace(complete.length() - 2, complete.length() - 1, ".");
+            }
             String path = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
-            FileHandler.writeToFile(path, Utility.listFormatter(list,true),false);
+            FileHandler.writeToFile(path, complete.toString(), false);
             File file = new File(path);
             Utility.sendFile(title, file, command.channel.get());
             try {
@@ -62,6 +75,11 @@ public class SearchCCs implements Command {
             } catch (InterruptedException e) {
                 Utility.sendStack(e);
             }
+            return null;
+        } else {
+            embedBuilder.withTitle(title);
+            embedBuilder.withDesc("```\n" + contents + spacer + "```");
+            Utility.sendEmbedMessage("", embedBuilder, command.channel.get());
             return null;
         }
     }

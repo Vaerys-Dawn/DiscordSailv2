@@ -1,7 +1,10 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.TagObject;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -10,22 +13,28 @@ import sx.blah.discord.handle.obj.Permissions;
 public class HelpTags implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        return "> https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide";
+        for (TagObject t : TagList.get()) {
+            if (t.name.equalsIgnoreCase(args) || t.name.equalsIgnoreCase("<" + args + ">")) {
+                Utility.sendEmbedMessage("", t.getInfo(command), command.channel.get());
+                return null;
+            }
+        }
+        return "> Could not find tag.";
     }
 
     @Override
     public String[] names() {
-        return new String[]{"HelpTags"};
+        return new String[]{"HelpTag", "HelpTags"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Gives you information about tags that you can use with S.A.I.L.";
+        return "Gives you information about a specific tag";
     }
 
     @Override
     public String usage() {
-        return null;
+        return "[TagName]";
     }
 
     @Override
@@ -45,7 +54,7 @@ public class HelpTags implements Command {
 
     @Override
     public boolean requiresArgs() {
-        return false;
+        return true;
     }
 
     @Override

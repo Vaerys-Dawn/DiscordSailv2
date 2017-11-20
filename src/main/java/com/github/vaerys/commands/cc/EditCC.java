@@ -1,13 +1,12 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import org.apache.commons.lang3.StringUtils;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -30,56 +29,59 @@ public class EditCC implements Command {
             return "> You have been denied the modification of custom commands.";
         }
         SplitFirstObject getName = new SplitFirstObject(args);
-        if (getName.getRest() == null) {
-            return Utility.getCommandInfo(this, command);
+        String rest = getName.getRest();
+        if (rest == null) {
+            rest = "";
         }
-        SplitFirstObject getMode = new SplitFirstObject(getName.getRest());
-        String mode = getMode.getFirstWord();
-        String content = getMode.getRest();
-        for (CCommandObject c : command.guild.customCommands.getCommandList()) {
-            if (c.getName().equalsIgnoreCase(getName.getFirstWord())) {
-                boolean canBypass = false;
-                canBypass = Utility.testForPerms(command,Permissions.MANAGE_MESSAGES);
-                if (canBypass ||
-                        command.user.longID == c.getUserID() && !c.isLocked() ||
-                        Utility.canBypass(command.user.get(), command.guild.get())) {
-                    if (command.guild.customCommands.checkblackList(args) != null) {
-                        return command.guild.customCommands.checkblackList(args);
-                    }
-                    if (StringUtils.countMatches(mode + " " + content, "#embedImage#{") > 1) {
-                        return "> Custom Commands Cannot have multiple #embedImage# tags";
-                    }
-                    if (c.isLocked() && !canBypass) {
-                        return "> This command is locked and cannot be edited.";
-                    }
-                    switch (mode.toLowerCase()) {
-                        case "replace":
-                            return CCEditModes.replace(c, content);
-                        case "toembed":
-                            return CCEditModes.toEmbed(c);
-                        case "append":
-                            return CCEditModes.append(c, content);
-                        case "delet":
-                            return CCEditModes.deleteTag(c);
-                        case "delcall":
-                            return CCEditModes.deleteTag(c);
-                        case "shitpost":
-                            return CCEditModes.shitPost(c, command, command.user.get(), command.guild.get());
-                        case "lock":
-                            return CCEditModes.lock(c, command, command.user.get(), command.guild.get());
-                        default:
-                            if (content == null || content.isEmpty()) {
-                                return CCEditModes.replace(c, mode);
-                            } else {
-                                return CCEditModes.replace(c, mode + " " + content);
-                            }
-                    }
-                } else {
-                    return "> You do not have permission to edit this command.";
-                }
+        if (command.message.get().getAttachments().size() != 0) {
+            String testLink = command.message.get().getAttachments().get(0).getUrl();
+            if (Utility.isImageLink(testLink)) {
+                rest += "<embedImage>{" + testLink + "}";
+            } else {
+                return "> Custom command attachment must be a valid Image.";
             }
         }
-        return "> Command Not found.";
+        SplitFirstObject getMode = new SplitFirstObject(rest);
+        String mode = getMode.getFirstWord();
+        String content = getMode.getRest();
+        CCommandObject customCommand = command.guild.customCommands.getCommand(getName.getFirstWord());
+        if (customCommand == null) {
+            return "> Command Not found.";
+        }
+        boolean canBypass = Utility.testForPerms(command, Permissions.MANAGE_MESSAGES);
+        boolean isAuthor = command.user.longID == customCommand.getUserID();
+        //test if can edit
+        if ((customCommand.isLocked() && !canBypass) || (!canBypass && !isAuthor)) {
+            return "> You do not have permission to edit this command.";
+        }
+        if (command.guild.customCommands.checkblackList(args) != null) {
+            return command.guild.customCommands.checkblackList(args);
+        }
+        if (customCommand.isLocked() && !canBypass) {
+            return "> This command is locked and cannot be edited.";
+        }
+        switch (mode.toLowerCase()) {
+            case "replace":
+                return CCEditModes.replace(customCommand, content, command);
+            case "toembed":
+                return CCEditModes.toEmbed(customCommand);
+            case "append":
+                return CCEditModes.append(customCommand, content, command);
+            case "delet":
+                return CCEditModes.deleteTag(customCommand);
+            case "delcall":
+                return CCEditModes.deleteTag(customCommand);
+            case "shitpost":
+                return CCEditModes.shitPost(customCommand, command, command.user.get(), command.guild.get());
+            case "lock":
+                return CCEditModes.lock(customCommand, command, command.user.get(), command.guild.get());
+            default:
+                if (content == null || content.isEmpty()) {
+                    return CCEditModes.replace(customCommand, mode, command);
+                } else {
+                    return CCEditModes.replace(customCommand, mode + " " + content, command);
+                }
+        }
     }
 
 
@@ -96,7 +98,7 @@ public class EditCC implements Command {
 
     @Override
     public String usage() {
-        return "[Command Name] (Mode) [New Contents]";
+        return "[Command Name] (Mode) [New Contents/Image]";
     }
 
     @Override

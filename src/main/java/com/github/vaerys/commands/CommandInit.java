@@ -7,14 +7,13 @@ import com.github.vaerys.commands.competition.*;
 import com.github.vaerys.commands.creator.*;
 import com.github.vaerys.commands.creator.Shutdown;
 import com.github.vaerys.commands.creator.directmessages.*;
-import com.github.vaerys.commands.dmCommands.ClearReminderDM;
-import com.github.vaerys.commands.dmCommands.HelpDM;
-import com.github.vaerys.commands.dmCommands.InfoDM;
-import com.github.vaerys.commands.dmCommands.ReminderDM;
+import com.github.vaerys.commands.dmCommands.*;
 import com.github.vaerys.commands.general.*;
 import com.github.vaerys.commands.groups.ClearGroupUp;
 import com.github.vaerys.commands.groups.GroupUp;
 import com.github.vaerys.commands.help.*;
+import com.github.vaerys.commands.mention.SetPrefix;
+import com.github.vaerys.commands.mention.SetPrefixCC;
 import com.github.vaerys.commands.pixels.*;
 import com.github.vaerys.commands.roleSelect.CosmeticRoles;
 import com.github.vaerys.commands.roleSelect.ListModifs;
@@ -22,8 +21,8 @@ import com.github.vaerys.commands.roleSelect.ListRoles;
 import com.github.vaerys.commands.roleSelect.ModifierRoles;
 import com.github.vaerys.commands.servers.*;
 import com.github.vaerys.commands.slash.*;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.SlashCommand;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SlashCommand;
 
 import java.util.ArrayList;
 
@@ -53,6 +52,7 @@ public class CommandInit {
         commands.add(new PruneEmptyProfiles());
         commands.add(new DenyXpPrefix());
         commands.add(new PurgeBannedData());
+        commands.add(new SetPinLimit());
         //General commands
         commands.add(new GetAvatar());
         commands.add(new Hello());
@@ -75,6 +75,11 @@ public class CommandInit {
         commands.add(new SilentReport());
         commands.add(new StartUpGuide());
         commands.add(new BotInfo());
+        commands.add(new ListTags());
+        commands.add(new HelpChannel());
+        commands.add(new HelpModules());
+        commands.add(new HelpSettings());
+        commands.add(new BotHelp());
         //RoleSelect commands
         commands.add(new CosmeticRoles());
         commands.add(new ModifierRoles());
@@ -104,7 +109,6 @@ public class CommandInit {
         commands.add(new ListCCs());
         commands.add(new NewCC());
         commands.add(new SearchCCs());
-        commands.add(new TransferCC());
         commands.add(new RandomCC());
         //Competition commands
         commands.add(new FinalTally());
@@ -137,6 +141,7 @@ public class CommandInit {
         commands.add(new InfoDM());
         commands.add(new ReminderDM());
         commands.add(new ClearReminderDM());
+        commands.add(new BotInfoDm());
         //slashCommands
         commands.add(new Disapproval());
         commands.add(new Lenny());
@@ -147,6 +152,9 @@ public class CommandInit {
         commands.add(new Fite());
         commands.add(new DealWithIt());
         commands.add(new PaintMe());
+        //mention Commands
+        commands.add(new SetPrefix());
+        commands.add(new SetPrefixCC());
 
         return commands;
     }
@@ -169,6 +177,7 @@ public class CommandInit {
         commands.add(new ToggleTypingStatus());
         commands.add(new SetPlayingStatus());
         commands.add(new DailyMsg());
+        commands.add(new EventSetup());
         //DM Creator Commands
         commands.add(new BlockUser());
         commands.add(new GetGuildList());
@@ -177,6 +186,7 @@ public class CommandInit {
         commands.add(new ShutdownDM());
         commands.add(new QuickRespond());
         commands.add(new TestDM());
+        commands.add(new Echo());
         return commands;
     }
 }

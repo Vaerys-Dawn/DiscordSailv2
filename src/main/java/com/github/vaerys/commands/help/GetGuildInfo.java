@@ -2,17 +2,12 @@ package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.guildtoggles.modules.ModuleRoles;
-import com.github.vaerys.interfaces.ChannelSetting;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildToggle;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.api.internal.DiscordClientImpl;
-import sx.blah.discord.api.internal.DiscordUtils;
-import sx.blah.discord.api.internal.Requests;
+import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRegion;
 import sx.blah.discord.handle.obj.IRole;
@@ -51,7 +46,7 @@ public class GetGuildInfo implements Command {
         boolean hasManageServer = Utility.testForPerms(command, Permissions.MANAGE_SERVER);
 
 
-        //todo change this to the proper impl
+        //todo change this to the proper impl when api allows it.
 
 
         boolean isVIP = command.guild.get().getRegion().isVIPOnly();
@@ -137,7 +132,7 @@ public class GetGuildInfo implements Command {
             channels.withColor(command.client.color);
 
             List<ChannelSetting> channelSettings = new ArrayList<>(command.guild.channelSettings);
-            channelSettings.sort(Comparator.comparing(ChannelSetting::type));
+            channelSettings.sort(Comparator.comparing(ChannelSetting::name));
             channelSettings.sort((o1, o2) -> Boolean.compare(o1.isSetting(), o2.isSetting()));
 
             for (ChannelSetting s : channelSettings) {
@@ -150,8 +145,8 @@ public class GetGuildInfo implements Command {
                 }
                 if (channelList.size() != 0) {
                     String content = Utility.listFormatter(channelList, true);
-                    channels = resetEmbed(channels, channel, command, s.type().length() + content.length());
-                    channels.appendField(s.type(), content, true);
+                    channels = resetEmbed(channels, channel, command, s.name().length() + content.length());
+                    channels.appendField(s.name(), content, true);
                 }
             }
             channels.withTitle("CHANNEL STATS");
@@ -224,7 +219,7 @@ public class GetGuildInfo implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"GuildStats", "GuildInfo", "ServerInfo", "GetGuildInfo"};
+        return new String[]{"GuildInfo", "GuildStats", "ServerInfo", "GetGuildInfo"};
     }
 
     @Override

@@ -2,59 +2,49 @@ package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Vaerys on 01/07/2017.
  */
 public class PixelHelp implements Command {
 
-    String modes = "\n**Modes:** \n> LevelToXp - `Gives the total pixels for that level.`\n" +
-            "`Aliases: level2xp, level->xp.`\n" +
-            "> XpToLevel - `Gives the level for that amount of pixels.`\n" +
-            "`Aliases: xp2level, xp->level.`";
-
     @Override
     public String execute(String args, CommandObject command) {
+        if (args.equalsIgnoreCase("Decay") && command.guild.config.xpDecay) return decay(command);
+        if (args.equalsIgnoreCase("Rules")) return rules(command);
         SplitFirstObject obe = new SplitFirstObject(args);
         String mode = obe.getFirstWord();
         switch (mode.toLowerCase()) {
             case "leveltoxp":
-                return leveltoxp(obe.getRest());
             case "level2xp":
-                return leveltoxp(obe.getRest());
             case "level->xp":
-                return leveltoxp(obe.getRest());
+                return levelToXp(obe.getRest());
             case "xptolevel":
-                return xptolevel(obe.getRest());
             case "xp2level":
-                return xptolevel(obe.getRest());
             case "xp->level":
-                return xptolevel(obe.getRest());
+                return xpToLevel(obe.getRest());
             default:
-                List<IChannel> channels = command.guild.config.getChannelsByType(CHANNEL_XP_DENIED, command.guild);
-                List<String> channelMentions = Utility.getChannelMentions(channels);
                 StringBuilder builder = new StringBuilder();
-                builder.append("**The rules for gaining xp are:**\n");
-                if (channelMentions.size() != 0) {
-                    builder.append("> Cannot gain xp in any of these channels: \n**>> " + Utility.listFormatter(channelMentions, true) + " <<**\n");
-                }
-                builder.append("> Cannot gain xp if the message starts with a command prefix.\n" +
-                        "> Cannot gain xp if the message contains less than 10 chars.\n" +
-                        "> Cannot gain xp if your profile has NoXp or XpDenied on it.\n" +
-                        "> Can only gain xp once per min\n\n");
+                XEmbedBuilder embed = new XEmbedBuilder();
+                embed.withTitle("Pixel System Information.");
+                embed.withColor(command.client.color);
+                embed.withDescription("Pixels are " + command.client.bot.getDisplayName(command.guild.get()) + "'s" +
+                        " form of xp, you can gain " + (int) (command.guild.config.xpRate * command.guild.config.xpModifier) + "xp" +
+                        " once per minute by sending a message that meets all of the specific message rules.\n\n");
                 if (command.guild.config.getRewardRoles().size() != 0) {
-                    builder.append("**Reward Roles:**");
                     for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
                         IRole reward = command.guild.getRoleByID(r.getRoleID());
                         if (reward == null) {
@@ -62,24 +52,64 @@ public class PixelHelp implements Command {
                         }
                         builder.append("\n> **" + reward.getName() + "** -> Level: **" + r.getLevel() + "**");
                     }
-                    builder.append("\n\n");
+                    embed.appendField("Reward Roles:", builder.toString(), true);
                 }
                 if (command.guild.config.xpModifier != 1) {
-                    builder.append("**Current Xp Modifier:**\n");
-                    builder.append("> **x" + command.guild.config.xpModifier + "**.\n\n");
+                    embed.appendField("\n**Current Xp Modifier:**\n", "> **x" + command.guild.config.xpModifier + "**.\n", true);
                 }
-                return builder.toString() + Utility.getCommandInfo(this, command);
+                int random = new Random().nextInt(50);
+                if (random == 1) {
+                    embed.withThumbnail(Constants.RANK_UP_IMAGE_URL);
+                } else {
+                    embed.withThumbnail(Constants.LEVEL_UP_IMAGE_URL);
+                }
+                embed.appendField("Pixel and Level Calculators:", getModes(command) + "\n\n" + Utility.getCommandInfo(this, command), false);
+                Utility.sendEmbedMessage("", embed, command.channel.get());
+                return null;
         }
     }
 
-    private String leveltoxp(String args) {
+    private String rules(CommandObject command) {
+        List<IChannel> channels = command.guild.config.getChannelsByType(CHANNEL_XP_DENIED, command.guild);
+        List<String> channelMentions = Utility.getChannelMentions(channels);
+        String rules = "**The rules for gaining pixels are:**\n" +
+                "> Cannot gain pixels if the message starts with a command prefix.\n" +
+                "> Cannot gain pixels if the message contains less than 10 chars.\n" +
+                "> Cannot gain pixels if your profile has NoXp or XpDenied on it.\n" +
+                "> When submitting an image only, ignore the above rules.\n";
+        if (channelMentions.size() != 0)
+            rules += "> Cannot gain pixels in any of these channels: \n**>> " + Utility.listFormatter(channelMentions, true) + " <<**\n";
+        rules += "> You can only gain one chunk of pixels a minute.\n\n";
+        return rules;
+    }
+
+    private String decay(CommandObject command) {
+        String rules = "";
+        if (command.guild.config.xpDecay) {
+            rules += "**How pixel decay works:** \n" +
+                    "> Pixel decay starts after 7 days of no messages sent.\n" +
+                    "> The decay amount gets larger until it plateaus at day 30.\n";
+            if (command.guild.config.getRewardRoles().size() != 0) {
+                rules += "> There is a level floor below every reward role which sits at 100 pixels below the pixels required to receive that role.\n" +
+                        "> If you reach a multiple of 30 days and you are at a reward's pixel floor it will decay you past the level floor.\n" +
+                        "> Decay cannot decay you past the lowest reward role.\n" +
+                        "> Decay does not affect you if you are below the lowest reward role.\n";
+            }
+            rules += "> Any message regardless of size or channel will reset the decay timer.\n\n";
+            return rules;
+        } else {
+            return "> Decay is not currently active on this server.";
+        }
+    }
+
+    private String levelToXp(String args) {
         try {
             long level = Long.parseLong(args);
             if (level < 0) {
                 return "> Please use a positive number.";
             }
             if (level > 1000) {
-                return "> No, I don't want to calculate the total xp for level " + level + "!";
+                return "> No, I don't want to calculate the total xp for level " + NumberFormat.getInstance().format(level) + "!";
             }
             return "> Level: " + level + " = " + NumberFormat.getInstance().format(XpHandler.totalXPForLevel(level)) + " pixels.";
         } catch (NumberFormatException e) {
@@ -87,7 +117,7 @@ public class PixelHelp implements Command {
         }
     }
 
-    private String xptolevel(String args) {
+    private String xpToLevel(String args) {
         try {
             long xp = Long.parseLong(args);
             if (xp < 0) {
@@ -96,7 +126,7 @@ public class PixelHelp implements Command {
             if (xp > 1345412000) {
                 return "> Its something over level 1000, could you leave me alone.";
             }
-            return "> " + xp + "XP = Level: " + XpHandler.xpToLevel(xp);
+            return "> " + NumberFormat.getInstance().format(xp) + "XP = Level: " + XpHandler.xpToLevel(xp);
         } catch (NumberFormatException e) {
             return "> You must supply a valid number.";
         }
@@ -109,12 +139,27 @@ public class PixelHelp implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Gives you information about pixels." + modes;
+        return "Gives you information about pixels." + getModes(command);
+    }
+
+    public String getModes(CommandObject command) {
+        String modes = "\n**Modes:** " +
+                "\n> LevelToXp, Level2Xp, Level->Xp.\n" +
+                "`Gives the total pixels for that level.`\n" +
+                "> XpToLevel, Xp2level, Xp->level.\n" +
+                "`Gives the level for that amount of pixels.`\n" +
+                "> Rules\n" +
+                "`Gives information about the rules messages must follow to gain pixels.`\n";
+        if (command.guild.config.xpDecay) {
+            modes += "> Decay\n" +
+                    "`Gives information about the decay system.`\n";
+        }
+        return modes;
     }
 
     @Override
     public String usage() {
-        return ("(mode) (args)");
+        return ("(Mode) (args)");
     }
 
     @Override

@@ -1,12 +1,11 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.interfaces.GuildFile;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CompObject;
 import com.github.vaerys.objects.PollObject;
+import com.github.vaerys.templates.GuildFile;
 
-import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

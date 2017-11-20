@@ -2,6 +2,8 @@ package com.github.vaerys.masterobjects;
 
 import sx.blah.discord.handle.obj.IMessage;
 
+import java.util.List;
+
 public class MessageObject {
 
     public ClientObject client;
@@ -17,5 +19,9 @@ public class MessageObject {
 
     public IMessage get() {
         return object;
+    }
+
+    public List<IMessage.Attachment> getAttachments() {
+        return object.getAttachments();
     }
 }

@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -26,6 +26,10 @@ public class SetQuote implements Command {
                 user = command.user;
             }
         }
+        int maxlength = 140;
+        if (user.isPatron) {
+            maxlength += 140;
+        }
         ProfileObject u = user.getProfile(command.guild);
         if (u == null) {
             return "> " + user.displayName + " Has not Spoken yet thus they have nothing to edit.";
@@ -37,14 +41,14 @@ public class SetQuote implements Command {
                 }
             }
             if (adminEdit) {
-                if (userCall.getRest().length() > 140) {
-                    return "> Quote is too long...\n(must be under 140 chars)";
+                if (userCall.getRest().length() > maxlength) {
+                    return "> Quote is too long...\n(must be under " + maxlength + " chars)";
                 }
                 u.setQuote(userCall.getRest());
                 return "> " + user.displayName + "'s Quote Edited.";
             } else {
-                if (args.length() > 140) {
-                    return "> Your Quote is too long...\n(must be under 140 chars)";
+                if (args.length() > maxlength) {
+                    return "> Your Quote is too long...\n(must be under " + maxlength + " chars)";
                 }
                 u.setQuote(args);
                 return "> Quote Edited.";
@@ -59,7 +63,7 @@ public class SetQuote implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows you to set your quote. Limit 140 chars.";
+        return "Allows you to set your quote. Limit 140 chars (or 280 if you are a patron)";
     }
 
     @Override

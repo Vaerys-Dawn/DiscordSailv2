@@ -1,10 +1,10 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.interfaces.GlobalFile;
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.objects.DailyMessageObject;
-import com.github.vaerys.objects.DailyUserMessageObject;
+import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.QueueObject;
+import com.github.vaerys.templates.GlobalFile;
 
 import java.time.DayOfWeek;
 import java.time.ZoneOffset;
@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class DailyMessages extends GlobalFile {
     private double fileVersion = 1.1;
-    ArrayList<DailyUserMessageObject> dailyMessages = new ArrayList<>();
+    ArrayList<DailyMessage> dailyMessages = new ArrayList<>();
     ArrayList<QueueObject> queuedRequests = new ArrayList<>();
     public static final String FILE_PATH = "DailyMessages.json";
 
@@ -23,7 +23,7 @@ public class DailyMessages extends GlobalFile {
         long result;
         Random random = new Random();
         List<Long> uIDs = new ArrayList<>();
-        for (DailyUserMessageObject d : dailyMessages) {
+        for (DailyMessage d : dailyMessages) {
             if (d.getUID() != -1) {
                 uIDs.add(d.getUID());
             }
@@ -38,7 +38,7 @@ public class DailyMessages extends GlobalFile {
         return result;
     }
 
-    public ArrayList<DailyUserMessageObject> getMessages() {
+    public ArrayList<DailyMessage> getMessages() {
         return dailyMessages;
     }
 
@@ -46,9 +46,9 @@ public class DailyMessages extends GlobalFile {
         return queuedRequests;
     }
 
-    public ArrayList<DailyUserMessageObject> getDailyMessages(DayOfWeek day) {
+    public ArrayList<DailyMessage> getDailyMessages(DayOfWeek day) {
         ArrayList dailyMessages = new ArrayList();
-        for (DailyUserMessageObject d : this.dailyMessages) {
+        for (DailyMessage d : this.dailyMessages) {
             if (d.getDay() == day) {
                 dailyMessages.add(d);
             }
@@ -56,16 +56,16 @@ public class DailyMessages extends GlobalFile {
         return dailyMessages;
     }
 
-    public DailyUserMessageObject getMessageByUID(long dailyMessageID) {
+    public DailyMessage getMessageByUID(long dailyMessageID, CommandObject command) {
         DayOfWeek today = ZonedDateTime.now(ZoneOffset.UTC).getDayOfWeek();
-        DailyMessageObject configMessage = null;
-        for (DailyMessageObject d : Globals.configDailyMessages) {
-            if (d.getDayOfWeek() == today) {
+        DailyMessage configMessage = null;
+        for (DailyMessage d : Globals.configDailyMessages) {
+            if (d.getDay() == today) {
                 configMessage = d;
             }
         }
-        DailyUserMessageObject object = new DailyUserMessageObject(configMessage.getContents(), today, Globals.client.getOurUser().getLongID(), 0000);
-        for (DailyUserMessageObject d : dailyMessages) {
+        DailyMessage object = new DailyMessage(configMessage.getContents(command), today, Globals.client.getOurUser().getLongID(), 0000);
+        for (DailyMessage d : dailyMessages) {
             if (d.getUID() == dailyMessageID) {
                 return d;
             }

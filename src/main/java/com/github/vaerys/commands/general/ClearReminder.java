@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.ReminderObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -12,17 +12,17 @@ import sx.blah.discord.handle.obj.Permissions;
 public class ClearReminder implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        boolean wasfound = false;
+        ReminderObject object = null;
         for (ReminderObject r : Globals.getGlobalData().getReminders()) {
             if (r.getUserID() == command.user.longID) {
-                wasfound = true;
-                if (r.isSent()) {
-                    return "> I could not clear your reminder as it is about to be sent.";
-                }
+                object = r;
             }
         }
-        if (wasfound) {
-            Globals.getGlobalData().removeReminder(command.user.longID);
+        if (object != null) {
+            if (object.isSent()) {
+                return "> Cannot clear reminder, reminder about to be sent.";
+            }
+            Globals.getGlobalData().removeReminder(object);
             return "> Reminder cleared";
         } else {
             return "> You have no reminders set";
@@ -36,7 +36,7 @@ public class ClearReminder implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Removes your global reminder";
+        return "Removes the most recent reminder you set.";
     }
 
     @Override

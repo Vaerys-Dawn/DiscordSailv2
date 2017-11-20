@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.roleSelect;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -90,7 +90,12 @@ public class CosmeticRoles implements Command {
             List<IRole> userRoles = command.user.roles;
             String response = Constants.ERROR_UPDATING_ROLE;
             //check if role is valid
-            IRole role = Utility.getRoleFromName(args, command.guild.get());
+            IRole role;
+            if (args.length() > 3) {
+                role = Utility.getRoleFromName(args, command.guild.get(), true);
+            }else {
+                role = Utility.getRoleFromName(args, command.guild.get());
+            }
             if (role == null && !args.equalsIgnoreCase("remove")) {
                 Utility.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListRoles.getList(command), command.channel.get());
                 return null;

@@ -2,10 +2,11 @@ package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.QueueHandler;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -31,37 +32,23 @@ public class NewDailyMessage implements Command {
         }
     }
 
-//    public static void checkIsEnabled(boolean enabled) {
-//        boolean commandFound = false;
-//        for (Command c : Globals.commands) {
-//            if (Arrays.equals(c.names(), new NewDailyMessage().names())) {
-//                commandFound = true;
-//            }
-//        }
-//        if (!commandFound && enabled) {
-//            Globals.commands.add(new NewDailyMessage());
-//        } else if (commandFound && !enabled) {
-//            for (Command c : Globals.commands) {
-//                if (Arrays.equals(c.names(), new NewDailyMessage().names())) {
-//                    Globals.commands.remove(c);
-//                    return;
-//                }
-//            }
-//        } else {
-//            return;
-//        }
-//    }
-
     @Override
     public String[] names() {
-        return new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg"};
+        return new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg","NewDailyMsg","NewDailyMessage"};
     }
 
     @Override
     public String description(CommandObject command) {
         return "Allows you to request a new Daily message to be added.\n" +
-                "**Available Tags:**\n" +
-                "<random>, <randEmote>, <randNum>.";
+                "**Tags:** " + Utility.listFormatter(TagList.getNames(TagList.DAILY), true) +
+                "\n\n**Themes:**\n" +
+                "Monday - Cat\n" +
+                "Tuesday - Portal\n" +
+                "Wednesday - Avali\n" +
+                "Thursday - Joke\n" +
+                "Friday - Ruin\n" +
+                "Saturday - Anything\n" +
+                "Sunday - Anything\n";
     }
 
     @Override

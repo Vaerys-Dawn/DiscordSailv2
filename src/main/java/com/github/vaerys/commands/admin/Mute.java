@@ -1,11 +1,10 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -19,7 +18,7 @@ public class Mute implements Command {
         SplitFirstObject userCall = new SplitFirstObject(args);
         IRole mutedRole = command.client.get().getRoleByID(command.guild.config.getMutedRoleID());
         SplitFirstObject modifier = new SplitFirstObject(userCall.getRest());
-        UserObject muted = Utility.getUser(command, userCall.getFirstWord(), false);
+        UserObject muted = Utility.getUser(command, userCall.getFirstWord(), false,false);
         if (muted == null) {
             return "> Could not find user.";
         }
@@ -55,7 +54,7 @@ public class Mute implements Command {
             if (time.getFirstWord() == null || timeSecs == -1) {
                 return "> " + muted.displayName + " was Muted.";
             } else {
-                return "> " + muted.displayName + " was Muted for " + time.getFirstWord() + ".";
+                return "> " + muted.displayName + " was Muted for " + Utility.formatTime(timeSecs,true) + ".";
             }
         } else {
             command.guild.users.unMuteUser(muted.longID, command.guild.longID);

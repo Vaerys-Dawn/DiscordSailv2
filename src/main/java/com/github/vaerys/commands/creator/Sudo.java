@@ -2,12 +2,11 @@ package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.MessageHandler;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -17,7 +16,7 @@ public class Sudo implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject sudo = new SplitFirstObject(args);
-        UserObject user = Utility.getUser(command, sudo.getFirstWord(), false);
+        UserObject user = Utility.getUser(command, sudo.getFirstWord(), false,false);
         if (user == null) {
             return "> Could not find user.";
         }

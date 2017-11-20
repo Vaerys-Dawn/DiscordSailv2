@@ -1,19 +1,19 @@
 package com.github.vaerys.guildtoggles.modules;
 
+import com.github.vaerys.channelsettings.settings.Groups;
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildModule;
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildModule;
 
 /**
  * Created by Vaerys on 31/05/2017.
  */
-public class ModuleGroups implements GuildModule{
+public class ModuleGroups extends GuildModule {
+
     @Override
     public String name() {
-        return "Groups";
+        return Command.TYPE_GROUPS;
     }
 
     @Override
@@ -32,9 +32,13 @@ public class ModuleGroups implements GuildModule{
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommandsByType(Command.TYPE_GROUPS);
-        guild.removeChannel(Command.CHANNEL_GROUPS);
+    public String desc(CommandObject command) {
+        return "This module is to help user find other people to play together by letting them group up with each other.";
+    }
+
+    @Override
+    public void setup() {
+        channels.add(new Groups());
     }
 
     @Override

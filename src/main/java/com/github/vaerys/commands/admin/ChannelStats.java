@@ -1,13 +1,12 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.ChannelSetting;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -26,21 +25,20 @@ public class ChannelStats implements Command {
         ArrayList<String> channelTypes = new ArrayList<>();
         ArrayList<String> channelSettings = new ArrayList<>();
 
-        ArrayList<String> channelNames = new ArrayList<>();
         if (args != null && !args.isEmpty()) {
             for (ChannelSetting s : command.guild.channelSettings) {
-                if (s.type().equalsIgnoreCase(args)) {
-                    List<IChannel> channels = command.guild.config.getChannelsByType(s.type(), command.guild);
+                if (s.name().equalsIgnoreCase(args)) {
+                    List<IChannel> channels = command.guild.config.getChannelsByType(s.name(), command.guild);
                     List<String> channelMentions = Utility.getChannelMentions(channels);
                     if (channels.size() != 0) {
-                        builder.appendField(s.type(), Utility.listFormatter(channelMentions, true), false);
+                        builder.appendField(s.name(), Utility.listFormatter(channelMentions, true), false);
                         Utility.sendEmbedMessage("", builder, command.channel.get());
                         return null;
                     } else {
                         if (s.isSetting()) {
-                            return "> Could not find any channels with the **" + s.type() + "** setting enabled.";
+                            return "> Could not find any channels with the **" + s.name() + "** setting enabled.";
                         } else {
-                            return "> Could not find a channel with the **" + s.type() + "** type enabled.";
+                            return "> Could not find a channel with the **" + s.name() + "** type enabled.";
                         }
                     }
                 }
@@ -51,7 +49,7 @@ public class ChannelStats implements Command {
         for (ChannelSettingObject c : command.guild.config.getChannelSettings()) {
             if (c.getChannelIDs().contains(command.channel.longID)) {
                 for (ChannelSetting setting : Globals.getChannelSettings()) {
-                    if (c.getType().equalsIgnoreCase(setting.type())) {
+                    if (c.getType().equalsIgnoreCase(setting.name())) {
                         if (setting.isSetting()) {
                             channelSettings.add(c.getType());
                         } else {

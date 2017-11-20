@@ -1,7 +1,8 @@
 package com.github.vaerys.masterobjects;
 
-import com.github.vaerys.interfaces.ChannelSetting;
+import com.github.vaerys.templates.ChannelSetting;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class ChannelObject {
                 if (setting.getIDs(guild.config).size() == 0) {
                     break;
                 } else if (setting.getIDs(guild.config).contains(Long.toUnsignedString(longID))) {
-                    settings.add(setting.type());
+                    settings.add(setting.name());
                 }
             }
         }
@@ -34,5 +35,9 @@ public class ChannelObject {
 
     public IChannel get() {
         return object;
+    }
+
+    public IMessage getMessageByID(long next) {
+        return object.getMessageByID(next);
     }
 }

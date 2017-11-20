@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.UserLinkObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.net.MalformedURLException;
@@ -51,14 +51,18 @@ public class EditLinks implements Command {
                 }
             }
         }
+        int maxLinks = 5;
+        if (user.isPatron) {
+            maxLinks += 5;
+        }
         if (linkName.getRest() == null) {
             return "> Cannot add link, Must specify a URL.";
         } else {
-            if (userObject.getLinks().size() > 4) {
+            if (userObject.getLinks().size() >= maxLinks) {
                 if (adminEdit) {
-                    return "> " + user.displayName + " already has 5 links, a link must be removed to add a new one.";
+                    return "> " + user.displayName + " already has " + maxLinks + " links, a link must be removed to add a new one.";
                 } else {
-                    return "> You already have 5 links, you must remove one to add a new one.";
+                    return "> You already have " + maxLinks + " links, you must remove one to add a new one.";
                 }
             }
             if (linkName.getFirstWord().length() > 15) {
@@ -89,7 +93,7 @@ public class EditLinks implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows uses to manage the links attached to their profile (Max 5 links per user).";
+        return "Allows uses to manage the links attached to their profile. Max 5 links per user (10 if user is a patron).";
     }
 
     @Override

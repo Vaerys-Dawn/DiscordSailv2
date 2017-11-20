@@ -1,13 +1,13 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.handle.obj.StatusType;
@@ -15,7 +15,6 @@ import sx.blah.discord.handle.obj.StatusType;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,16 +79,18 @@ public class UserInfo implements Command {
         roleNames.addAll(roles.stream().filter(role -> !role.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
 
         if (profile.getLinks() != null && profile.getLinks().size() > 0) {
-            links.addAll(profile.getLinks().stream().map(link -> "[" + link.getName() + "](" + link.getLink() + ")").collect(Collectors.toList()));
+            links.addAll(profile.getLinks().stream().map(link -> link.toString()).collect(Collectors.toList()));
         }
 
         //builds desc
-        DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
         StringBuilder desc = new StringBuilder();
         if (command.guild.config.userInfoShowsDate) {
-            desc.append("**Account Created: **" + creationDate.format(formatter));
+            builder.withTimestamp(user.get().getCreationDate());
+            builder.withFooterText("UserID: " + profile.getUserID() + ", Creation Date");
+//            desc.append("**Account Created: **" + creationDate.format(formatter));
         } else {
             desc.append("**Account Created: **" + Utility.formatTimeDifference(difference));
+            builder.withFooterText("User ID: " + profile.getUserID());
         }
         desc.append("\n**Gender: **" + profile.getGender());
 
@@ -113,8 +114,12 @@ public class UserInfo implements Command {
         desc.append("\n\n*" + profile.getQuote() + "*");
         desc.append("\n" + Utility.listFormatter(links, true));
 
+        if (user.isPatron) {
+            builder.withAuthorIcon("https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/1024px-Patreon_logo.svg.png");
+        }
+
         builder.withDesc(desc.toString());
-        builder.withFooterText("User ID: " + profile.getUserID());
+//        builder.withFooterText("User ID: " + profile.getUserID());
 
         //sends Message
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {

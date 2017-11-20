@@ -2,7 +2,7 @@ package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.creator.Shutdown;
-import com.github.vaerys.interfaces.DMCommand;
+import com.github.vaerys.templates.DMCommand;
 
 
 /**

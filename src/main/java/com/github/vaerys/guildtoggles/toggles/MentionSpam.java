@@ -1,13 +1,13 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class MentionSpam implements GuildSetting {
+public class MentionSpam extends GuildSetting {
 
     @Override
     public String name() {
@@ -30,7 +30,12 @@ public class MentionSpam implements GuildSetting {
     }
 
     @Override
-    public void execute(GuildObject guild) {
+    public String desc(CommandObject command) {
+        return "Enables the mention spam prevention feature, any message with 8 or more mentions will be automatically deleted.";
+    }
+
+    @Override
+    public void setup() {
 
     }
 }

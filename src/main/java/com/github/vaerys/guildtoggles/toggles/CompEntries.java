@@ -1,15 +1,13 @@
 package com.github.vaerys.guildtoggles.toggles;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class CompEntries implements GuildSetting {
+public class CompEntries extends GuildSetting {
 
     @Override
     public String name() {
@@ -32,7 +30,12 @@ public class CompEntries implements GuildSetting {
     }
 
     @Override
-    public void execute(GuildObject guild) {
+    public String desc(CommandObject command) {
+        return "Enables the ability to allow users to submit entries to the currently active competition.";
+    }
+
+    @Override
+    public void setup() {
 
     }
 }

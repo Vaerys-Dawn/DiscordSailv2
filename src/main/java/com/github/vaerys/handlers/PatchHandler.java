@@ -6,14 +6,9 @@ import com.github.vaerys.pogos.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import jdk.nashorn.internal.ir.IfNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * Created by Vaerys on 05/04/2017.
@@ -37,6 +32,65 @@ public class PatchHandler {
         guildConfigRemoveUnicodeEmoji(guild);
         //1.2 fixes
         removeMentionRestriction(guild);
+
+        //1.3 fixes
+        sanitizer(guild);
+    }
+
+    public static void preInitPatches() {
+        // 1.0 patches
+        overhaulGlobalData();
+        overhaulConfig();
+        fixUnicodeDaily();
+        //1.1 patches
+        fixDefaultDailyMessages();
+    }
+
+    private static void fixDefaultDailyMessages() {
+        String path = Constants.DIRECTORY_STORAGE + Constants.FILE_CONFIG;
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
+        if (checkPatch(1.1, null, "Fix_Default_Daily_Messages_Config", json)) return;
+        JsonArray oldMessages = json.getAsJsonArray("dailyMessages");
+        JsonArray array = new JsonArray();
+        long creatorID = json.get("creatorID").getAsLong();
+        oldMessages.forEach(jsonElement -> {
+            String contents = jsonElement.getAsJsonObject().get("content").getAsString();
+            String dayOfWeek = jsonElement.getAsJsonObject().get("dayOfWeek").getAsString();
+            JsonObject newObject = new JsonObject();
+            newObject.addProperty("content", contents);
+            newObject.addProperty("day", dayOfWeek);
+            newObject.addProperty("userID", creatorID);
+            newObject.addProperty("specialID", Constants.DAILY_SPECIALID);
+            newObject.addProperty("uID", -1);
+            array.add(newObject);
+        });
+        json.remove("dailyMessages");
+        json.add("dailyMessages", array);
+        newPatchID(1.1, json);
+        FileHandler.writeToJson(path, json);
+    }
+
+    private static void sanitizer(IGuild guild) {
+        String path = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH);
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
+        if (checkPatch(1.3, guild, "Append_DeSanitizer_CustomCommands", json)) return;
+        JsonArray object = json.getAsJsonArray("commands");
+        for (int i = 0; i < object.size(); i++) {
+            JsonObject blacklisted = object.get(i).getAsJsonObject();
+            String name = blacklisted.get("name").getAsString();
+            if (name.equalsIgnoreCase("echo")) {
+                JsonArray newArray = new JsonArray();
+                newArray.add("<args><dontSanitize>");
+                blacklisted.remove("contents");
+                blacklisted.add("contents", newArray);
+            }
+        }
+        newPatchID(1.3, json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void removeMentionRestriction(IGuild guild) {
@@ -339,15 +393,9 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    public static void preInitPatches() {
-        // 1.0 patches
-        overhaulGlobalData();
-        overhaulConfig();
-        fixUnicodeDaily();
-    }
 
     private static void overhaulConfig() {
-        String path = Constants.FILE_CONFIG;
+        String path = Constants.DIRECTORY_STORAGE + Constants.FILE_CONFIG;
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(Constants.FILE_CONFIG);
@@ -368,7 +416,7 @@ public class PatchHandler {
     }
 
     private static void overhaulGlobalData() {
-        String path = Constants.FILE_GLOBAL_DATA;
+        String path = Constants.DIRECTORY_STORAGE + Constants.FILE_GLOBAL_DATA;
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(Constants.FILE_GLOBAL_DATA);

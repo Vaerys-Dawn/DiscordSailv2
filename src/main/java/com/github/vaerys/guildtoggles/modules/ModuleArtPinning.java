@@ -1,20 +1,20 @@
 package com.github.vaerys.guildtoggles.modules;
 
+import com.github.vaerys.channelsettings.types.Art;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.admin.SetPinLimit;
 import com.github.vaerys.guildtoggles.toggles.AutoArtPinning;
 import com.github.vaerys.guildtoggles.toggles.LikeArt;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildModule;
-import com.github.vaerys.interfaces.GuildToggle;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 13/05/2017.
  */
-public class ModuleArtPinning implements GuildModule {
+public class ModuleArtPinning extends GuildModule {
+
     @Override
     public String name() {
         return "ArtPinning";
@@ -36,10 +36,16 @@ public class ModuleArtPinning implements GuildModule {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeChannel(Command.CHANNEL_ART);
-        guild.removeToggle(new AutoArtPinning().name());
-        guild.removeToggle(new LikeArt().name());
+    public String desc(CommandObject command) {
+        return "This module allows users to pin their art to the specified art channel using the \uD83D\uDCCC reaction.";
+    }
+
+    @Override
+    public void setup() {
+        channels.add(new Art());
+        commands.add(new SetPinLimit());
+        settings.add(new AutoArtPinning());
+        settings.add(new LikeArt());
     }
 
     @Override

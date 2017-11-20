@@ -1,13 +1,13 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class MuteRepeatOffender implements GuildSetting {
+public class MuteRepeatOffender extends GuildSetting {
 
     @Override
     public String name() {
@@ -30,7 +30,12 @@ public class MuteRepeatOffender implements GuildSetting {
     }
 
     @Override
-    public void execute(GuildObject guild) {
+    public String desc(CommandObject command) {
+        return "If the " + new MentionSpam().name() + " setting is enabled, after 3 times of triggering the feature it will automatically mute the user.";
+    }
+
+    @Override
+    public void setup() {
 
     }
 }

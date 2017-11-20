@@ -1,13 +1,12 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.TrackLikes;
-import com.github.vaerys.objects.XRequestBuffer;
+import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
@@ -27,6 +26,14 @@ public class ArtHandler {
 
     final static Logger logger = LoggerFactory.getLogger(ArtHandler.class);
 
+    private static final List<String> hosts = new ArrayList<String>() {{
+        add("https://gfycat.com/");
+        add("https://imgur.com/");
+        add("https://gyazo.com/");
+        add("https://steamuserimages-a.akamaihd.net/");
+        add("http://fav.me/");
+    }};
+
     public static void pinMessage(CommandObject command) {
         List<IChannel> channelIDS = command.guild.config.getChannelsByType(Command.CHANNEL_ART, command.guild);
         List<TrackLikes> likes = command.guild.channelData.getLikes();
@@ -34,6 +41,10 @@ public class ArtHandler {
 
         //exit if not pinning art
         if (!command.guild.config.artPinning) return;
+        //checks the list if something seems off
+        if (pins.size() > command.guild.config.pinLimit) checkList(command);
+        //exit if the art is already pinned
+        if (command.message.get().isPinned()) return;
         //exit if message owner is a bot
         if (command.message.get().getAuthor().isBot()) return;
         //exit if user has art pinning denied.
@@ -43,103 +54,108 @@ public class ArtHandler {
         if (channelIDS.size() == 0) return;
         //exit if this is not the art channel
         if (channelIDS.get(0).getLongID() != command.channel.longID) return;
+        //exit if there is no art to be found
+        if (!checkAttachments(command) && !checkMessage(command)) return;
 
-        if (command.message.get().getAttachments().size() != 0) {
-            if (Utility.isImageLink(command.message.get().getAttachments().get(0).getUrl())) {
-                try {
-                    //pin message
-                    command.channel.get().pin(command.message.get());
-                    //add to pins
-                    pins.add(command.message.longID);
-                    //add pin response
-                    RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction("pushpin")));
-                    //if likeart
-                    if (command.guild.config.likeArt) {
-                        //add heart
-                        RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction("heart")));
-                        //add to list
-                        likes.add(new TrackLikes(command.message.longID));
-                    }
-                    checkList(command);
-                    return;
-                } catch (DiscordException e) {
-                    if (e.getErrorMessage().contains("already pinned")) {
-                        return;
-                    } else {
-                        Utility.sendStack(e);
-                    }
-                }
-
+        try {
+            //pin message
+            RequestBuffer.request(() -> command.channel.get().pin(command.message.get())).get();
+            //add to ping
+            pins.add(command.message.longID);
+            //add pin response
+            RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction("pushpin")));
+            //if like art
+            if (command.guild.config.likeArt) {
+                //add heart
+                RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction("heart")));
+                //add to list
+                likes.add(new TrackLikes(command.message.longID));
             }
-        } else {
-            for (String nl : command.message.get().getContent().split("/n")) {
-                for (String s : nl.split(" ")) {
-                    if (Utility.isImageLink(s) || isHostingWebsite(s)) {
-                        try {
-                            //pin message
-                            command.message.get().getChannel().pin(command.message.get());
-                            //add to ping
-                            pins.add(command.message.longID);
-                            //add pin response
-                            RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction("pushpin")));
-                            //if like art
-                            if (command.guild.config.likeArt) {
-                                //add heart
-                                RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction("heart")));
-                                //add to list
-                                likes.add(new TrackLikes(command.message.longID));
-                            }
-                            checkList(command);
-                            return;
-                        } catch (DiscordException e) {
-                            //do nothing
-                        }
-                    }
-                }
-            }
+            checkList(command);
             return;
+        } catch (DiscordException e) {
+            if (e.getErrorMessage().contains("already pinned")) {
+                return;
+            } else {
+                Utility.sendStack(e);
+            }
         }
     }
 
+    private static boolean checkAttachments(CommandObject command) {
+        for (IMessage.Attachment a : command.message.getAttachments()) {
+            if (Utility.isImageLink(a.getUrl()))
+                return true;
+        }
+        return false;
+    }
+
+    private static boolean checkMessage(CommandObject command) {
+        for (String nl : command.message.get().getContent().split("/n")) {
+            for (String s : nl.split(" ")) {
+                if (Utility.isImageLink(s) || isHostingWebsite(s))
+                    return true;
+            }
+        }
+        return false;
+    }
+
     private static void checkList(CommandObject command) {
-        ArrayList<Long> pinnedMessages = command.guild.channelData.getPinnedMessages();
+        List<Long> pinnedMessages = command.guild.channelData.getPinnedMessages();
         List<TrackLikes> likes = command.guild.channelData.getLikes();
+        List<IMessage> pins = command.channel.get().getPinnedMessages();
+        List<IMessage> markedForUnpin = new ArrayList<>();
+        int tries = 0;
+
 
         ListIterator iterator = pinnedMessages.listIterator();
-
-        //remove null or non pinned items
         try {
             while (iterator.hasNext()) {
                 Long id = (Long) iterator.next();
-                IMessage pinned = command.channel.get().getMessageByID(id);
-                if (pinned == null) iterator.remove();
-                else if (!pinned.isPinned()) iterator.remove();
+                IMessage pin = command.channel.get().getMessageByID(id);
+                if (pin == null) iterator.remove();
+                else if (!pin.isPinned()) iterator.remove();
             }
-        }catch (ConcurrentModificationException e){
+        } catch (ConcurrentModificationException e) {
             //skip, this happens if hearts are added too quickly
         }
 
+        int pinLimit = command.guild.config.pinLimit;
 
-        //keep list at 25 or less
-        int tries = 0;
-        List<IMessage> pins = command.channel.get().getPinnedMessages();
-        List<IMessage> markedForUnpin = new ArrayList<>();
-        while (pinnedMessages.size() > 26 && tries < 25) {
+        while (pinnedMessages.size() > pinLimit && tries < 50) {
             for (IMessage p : pins) {
-                if (p.getLongID() == pinnedMessages.get(0)) {
+                if (pinnedMessages.contains(p.getLongID()) && pinnedMessages.get(0) == p.getLongID()) {
+                    //adds the pin to the messages to be unpinned
                     markedForUnpin.add(p);
-                    pinnedMessages.remove(0);
+                    removePin(p, pinnedMessages);
                 }
             }
             tries++;
         }
-        for (IMessage m : markedForUnpin) {
-            RequestBuffer.request(() -> {
-                if (m.isPinned()) {
-                    unPin(m, command);
+        tries = 0;
+        boolean flag = markedForUnpin.size() != 0;
+        while (flag && tries < 20) {
+            flag = false;
+            final int[] expectedSize = {command.channel.get().getPinnedMessages().size()};
+            for (IMessage message : markedForUnpin) {
+                RequestBuffer.request(() -> {
+                    try {
+                        if (message.isPinned()) {
+                            command.channel.get().unpin(message);
+                            expectedSize[0]--;
+                        }
+                    } catch (DiscordException e) {
+                        Utility.sendStack(e);
+                    }
+                }).get();
+                int size = command.channel.get().getPinnedMessages().size();
+                if (size > expectedSize[0]) {
+                    flag = true;
                 }
-            });
+            }
+            tries++;
         }
+
         iterator = likes.listIterator();
         while (iterator.hasNext()) {
             TrackLikes like = (TrackLikes) iterator.next();
@@ -149,16 +165,23 @@ public class ArtHandler {
         }
     }
 
-    private static void unPin(IMessage message, CommandObject command) {
-        if (message.isPinned()) {
-            XRequestBuffer.request(() -> command.channel.get().unpin(message));
+    private static void removePin(IMessage p, List<Long> pins) {
+        ListIterator iterator = pins.listIterator();
+        while (iterator.hasNext()) {
+            long id = (long) iterator.next();
+            if (id == p.getLongID()) {
+                iterator.remove();
+            }
         }
     }
 
     public static boolean isHostingWebsite(String word) {
-        boolean hostingWebsite = false;
-        if (word.toLowerCase().toLowerCase().contains("https://gfycat.com/")) hostingWebsite = true;
-        return hostingWebsite;
+        for (String s : hosts) {
+            if (word.startsWith(s)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void pinLiked(CommandObject command) {
@@ -180,7 +203,7 @@ public class ArtHandler {
         //you cant give yourself pixels via your own art
         if (command.message.get().getAuthor().getLongID() == command.user.longID) return;
 
-        checkList(command);
+//        checkList(command);
 
         //exit if not pinned art
         if (!command.guild.channelData.getPinnedMessages().contains(command.message.longID)) return;

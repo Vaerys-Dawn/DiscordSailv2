@@ -1,13 +1,13 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 12/03/2017.
  */
-public class UseTimeStamps implements GuildSetting {
+public class UseTimeStamps extends GuildSetting {
 
     @Override
     public String name() {
@@ -30,7 +30,12 @@ public class UseTimeStamps implements GuildSetting {
     }
 
     @Override
-    public void execute(GuildObject guild) {
+    public String desc(CommandObject command) {
+        return "Changes all logging messages to use timestamps based at UTC-00 instead of time since.";
+    }
+
+    @Override
+    public void setup() {
 
     }
 }

@@ -1,12 +1,32 @@
 package com.github.vaerys.objects;
 
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.ChannelObject;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.RequestBuffer;
 
 /**
  * Created by Vaerys on 12/03/2017.
  */
 public class XEmbedBuilder extends EmbedBuilder {
+
+    public XEmbedBuilder() {
+    }
+
+    public RequestBuffer.RequestFuture<IMessage> send(IChannel channel) {
+        return Utility.sendEmbedMessage("", this, channel);
+    }
+
+    public RequestBuffer.RequestFuture<IMessage> send(ChannelObject channel) {
+        return Utility.sendEmbedMessage("", this, channel.get());
+    }
+
+    public XEmbedBuilder(CommandObject command) {
+        withColor(command.client.color);
+    }
 
     @Override
     public EmbedBuilder withTitle(String title) {
@@ -19,7 +39,7 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     @Override
-    public EmbedBuilder withDescription(String desc){
+    public EmbedBuilder withDescription(String desc) {
         return super.withDescription(Utility.removeMentions(desc));
     }
 

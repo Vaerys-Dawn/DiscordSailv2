@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.DMCommand;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.DMCommand;
 
 import java.util.ArrayList;
 import java.util.Collections;

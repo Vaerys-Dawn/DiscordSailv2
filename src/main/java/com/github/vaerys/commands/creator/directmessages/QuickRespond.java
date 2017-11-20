@@ -1,9 +1,8 @@
 package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.DMCommand;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.templates.DMCommand;
 import sx.blah.discord.handle.obj.IUser;
 
 /**
@@ -15,7 +14,7 @@ public class QuickRespond implements DMCommand {
     public String execute(String args, CommandObject command) {
         IUser recipient = command.client.get().getUserByID(Globals.lastDmUserID);
         if (recipient != null){
-            return Respond.sendDM(args,command,recipient);
+            return Respond.sendDM(args,command,recipient,command.user.username + ": ");
         }else {
             return "> no user to respond to.";
         }

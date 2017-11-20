@@ -1,8 +1,8 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.templates.Command;
 
 /**
  * Created by Vaerys on 30/01/2017.

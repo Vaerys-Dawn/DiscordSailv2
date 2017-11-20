@@ -1,5 +1,7 @@
 package com.github.vaerys.objects;
 
+import com.github.vaerys.commands.CommandObject;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -66,5 +68,9 @@ public class CCommandObject {
 
     public boolean isShitPost() {
         return shitPost;
+    }
+
+    public String getName(CommandObject command) {
+        return command.guild.config.getPrefixCC() + name;
     }
 }

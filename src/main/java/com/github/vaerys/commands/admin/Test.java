@@ -1,53 +1,23 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.guildtoggles.modules.ModuleCC;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.DiscordException;
 
 /**
  * Created by Vaerys on 30/01/2017.
  */
 public class Test implements Command {
 
-    /**
-     * Important ass code do not delete plserino
-     * //        if (obe.getFirstWord().equalsIgnoreCase("Mention")) {
-     * //            if (obe.getRest() != null) {
-     * //                IUser user = null;
-     * //                SplitFirstObject mentionee = new SplitFirstObject(obe.getRest());
-     * //                String toTest = Matcher.quoteReplacement(mentionee.getFirstWord()).replace("_", "[_| ]");
-     * //                for (IUser u : command.guild.getProfiles()) {
-     * //                    try {
-     * //                        if ((u.getName() + "#" + u.getDiscriminator()).matches(toTest)) {
-     * //                            user = u;
-     * //                        }
-     * //                    } catch (PatternSyntaxException e) {
-     * //                        //do nothing.
-     * //                    }
-     * //                }
-     * //                try {
-     * //                    long uID = Long.parseLong(mentionee.getFirstWord());
-     * //                    user = command.client.getUserByID(uID);
-     * //                } catch (NumberFormatException e) {
-     * //                    if (command.message.getMentions().size() > 0) {
-     * //                        user = command.message.getMentions().get(0);
-     * //                    }
-     * //                }
-     * //                if (user != null) {
-     * //                    return "> User was found.";
-     * //                } else {
-     * //                    return "> user could not be found.";
-     * //                }
-     * //            }
-     * //        }
-     */
-
-    String nothing = "> Nothing to see here move along.";
+    String nothing = "> You didn't see anything.";
 
     @Override
     public String execute(String args, CommandObject command) {
-        throw new DiscordException("TestException");
+        Utility.sendEmbedMessage("", new ModuleCC().info(command), command.channel.get());
+        return null;
+//        throw new DiscordException("TestException");
 //        return nothing;
     }
 
@@ -74,12 +44,12 @@ public class Test implements Command {
 
     @Override
     public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+        return null;
     }
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[]{Permissions.ADMINISTRATOR};
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

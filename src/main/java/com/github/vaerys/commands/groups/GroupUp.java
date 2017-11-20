@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.groups;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.GroupUpObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IPresence;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
@@ -30,7 +30,11 @@ public class GroupUp implements Command {
         }
         list.add(new GroupUpObject(presence, command.user.longID));
         //person added to list :D
+
         ArrayList<String> completeList = new ArrayList<>();
+
+
+
         for (GroupUpObject g : list) {
             IUser user = command.client.get().getUserByID(g.getUserID());
             if (user != null) {

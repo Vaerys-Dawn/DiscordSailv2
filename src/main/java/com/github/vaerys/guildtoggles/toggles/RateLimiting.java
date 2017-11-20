@@ -1,14 +1,14 @@
 package com.github.vaerys.guildtoggles.toggles;
 
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.SetRateLimit;
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 21/02/2017.
  */
-public class RateLimiting implements GuildSetting {
+public class RateLimiting extends GuildSetting {
 
     @Override
     public String name() {
@@ -31,7 +31,12 @@ public class RateLimiting implements GuildSetting {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommand(new SetRateLimit().names());
+    public String desc(CommandObject command) {
+        return "Enables the ability to set a custom rate limit for the server.";
+    }
+
+    @Override
+    public void setup() {
+        commands.add(new SetRateLimit());
     }
 }

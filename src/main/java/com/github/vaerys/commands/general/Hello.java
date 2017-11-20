@@ -1,20 +1,25 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.Globals;
+import com.github.vaerys.objects.TimedEvent;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 30/01/2017.
  */
 public class Hello implements Command {
-    
+
     @Override
     public String execute(String args, CommandObject command) {
+        String message = "> Hello <user>.";
+        TimedEvent event = Globals.getCurrentEvent();
+        if (event != null && event.getHelloMessage() != null) message = event.getHelloMessage();
         if (command.user.longID == 153159020528533505L) {
-            return "> Hello Mum.";
+            message = message.replace("<user>", "Mum");
         }
-        return "> Hello " + command.user.displayName + ".";
+        return message.replace("<user>", command.user.displayName);
     }
 
     @Override

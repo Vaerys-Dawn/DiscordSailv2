@@ -3,7 +3,6 @@ package com.github.vaerys.pogos;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.interfaces.GuildFile;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -11,6 +10,7 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.BlackListObject;
 import com.github.vaerys.objects.CCommandObject;
+import com.github.vaerys.templates.GuildFile;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
  */
 public class CustomCommands extends GuildFile {
     public static final String FILE_PATH = "Custom_Commands.json";
-    private double fileVersion = 1.2;
+    private double fileVersion = 1.3;
     ArrayList<BlackListObject> blackList = new ArrayList<BlackListObject>() {{
         add(new BlackListObject("discord.gg", "Please do not put **invites** in Custom Commands."));
         add(new BlackListObject("discordapp.com/Invite/", "Please do not put **invites** in Custom Commands."));
@@ -40,7 +40,6 @@ public class CustomCommands extends GuildFile {
     ArrayList<CCommandObject> commands = new ArrayList<>();
 
     public int maxCCs(UserObject user, GuildObject guild) {
-        // TODO: 03/07/2017 move this to grant ccs based on reward roles.
         int total = 10;
         boolean hasManagePerms = Utility.testForPerms(user, guild, Permissions.MANAGE_MESSAGES);
         boolean hasAdminPerms = Utility.testForPerms(user, guild, Permissions.ADMINISTRATOR);
@@ -54,6 +53,9 @@ public class CustomCommands extends GuildFile {
             total += (XpHandler.getRewardCount(guild, user.longID) * 10);
         } else {
             total += 40;
+        }
+        if (user.isPatron) {
+            total += 20;
         }
         if (guild.getOwnerID() == user.longID) {
             total = 200;
@@ -88,31 +90,46 @@ public class CustomCommands extends GuildFile {
             }
         }
         if (counter < limitCCs) {
-            if (commandContents.length() < 1500) {
-                commands.add(new CCommandObject(isLocked, object.user.longID, commandName, commandContents, isShitPost));
-                return "> Command Added you have " + (limitCCs - counter - 1) + " custom command slots left.\n" +
-                        Constants.PREFIX_INDENT + "You can run your new command by performing `" + object.guild.config.getPrefixCC() + commandName + "`.";
+            commands.add(new CCommandObject(isLocked, object.user.longID, commandName, commandContents, isShitPost));
+            long remaining = limitCCs - counter - 1;
+            String response = "> Command Added, you have ";
+            if (remaining > 1) {
+                response += remaining + " custom command slots left.\n";
             } else {
-                return "> Command Contents to long. max length = 1500 chars.";
+                response += remaining + " custom command slot left.\n";
             }
+            response += Constants.PREFIX_INDENT + "You can run your new command by performing `" + object.guild.config.getPrefixCC() + commandName + "`.";
+            return response;
+
         } else {
             return "> You have run out of custom command slots. you can make room by deleting or editing old custom commands.";
         }
     }
 
-    public void initCustomCommands() {
-        boolean echoExists = false;
-        boolean wikiExists = false;
-        for (CCommandObject c : commands) {
-            if (c.getName().equalsIgnoreCase("Echo"))
-                echoExists = true;
-            if (c.getName().equalsIgnoreCase("Wiki"))
-                wikiExists = true;
+    public void initCustomCommands(IGuild guild) {
+        //make sure that echo works properly
+        boolean echoExists = true;
+        CCommandObject echo = getCommand("echo");
+        if (echo != null && echo.getContents(false).contains("#")) {
+            delCommand("echo", Globals.getClient().getOurUser(), guild);
+            echoExists = false;
+        } else if (echo == null) {
+            echoExists = false;
         }
         if (!echoExists)
-            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getLongID(), "Echo", "#args#", false));
+            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getLongID(), "Echo", "<args><dontSanitize>", false));
+
+        //make sure that wiki works properly
+        boolean wikiExists = true;
+        CCommandObject wiki = getCommand("wiki");
+        if (wiki != null && wiki.getContents(false).contains("#")) {
+            delCommand("wiki", Globals.getClient().getOurUser(), guild);
+            wikiExists = false;
+        } else if (wiki == null) {
+            wikiExists = false;
+        }
         if (!wikiExists)
-            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getLongID(), "Wiki", "http://starbounder.org/Special:Search/#args##regex#{ ;_}", false));
+            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getLongID(), "Wiki", "http://starbounder.org/Special:Search/<args><replace>{ ;;_}", false));
     }
 
     public ArrayList<CCommandObject> getCommandList() {
@@ -123,6 +140,7 @@ public class CustomCommands extends GuildFile {
         return Utility.checkBlacklist(args, blackList);
     }
 
+    @Deprecated
     public String sendCCasJSON(long channelID, String commandName) {
         IChannel channel = Globals.getClient().getChannelByID(channelID);
         for (CCommandObject c : commands) {
@@ -150,11 +168,13 @@ public class CustomCommands extends GuildFile {
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(args)) {
                 boolean canBypass = Utility.testForPerms(author, guild, Permissions.MANAGE_MESSAGES);
-                if (author.getLongID() == guild.getOwnerLongID() || author.getLongID() == Globals.creatorID) {
+                if (author.getLongID() == guild.getOwnerLongID()
+                        || author.getLongID() == Globals.creatorID
+                        || author.getLongID() == Globals.client.getOurUser().getLongID()) {
                     canBypass = true;
                 }
                 if (author.getLongID() == c.getUserID() || canBypass) {
-                    if (c.isLocked()) {
+                    if (c.isLocked() && Globals.client.getOurUser().getLongID() != author.getLongID()) {
                         return "> This command is locked and must be unlocked to be deleted.";
                     } else {
                         commands.remove(i);
@@ -178,5 +198,23 @@ public class CustomCommands extends GuildFile {
             }
         }
         return totalCommands + "/" + ccMax;
+    }
+
+    public CCommandObject getCommand(String name) {
+        for (CCommandObject c : commands) {
+            if (c.getName().equalsIgnoreCase(name)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public CCommandObject getCommand(String name, CommandObject command) {
+        for (CCommandObject c : commands) {
+            if ((command.guild.config.prefixCC + c.getName()).equalsIgnoreCase(name)) {
+                return c;
+            }
+        }
+        return null;
     }
 }

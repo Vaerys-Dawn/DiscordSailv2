@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -27,18 +27,22 @@ public class SetGender implements Command {
         }
 
         ProfileObject u = user.getProfile(command.guild);
+        int maxlength = 20;
+        if (user.isPatron) {
+            maxlength += 20;
+        }
         if (u == null) {
             return "> " + user.displayName + " Has not Spoken yet thus they have nothing to edit.";
         } else {
             if (adminEdit) {
-                if (userCall.getRest().length() > 20) {
-                    return "> Gender's Length is too long...\n(Must be under 20 chars)";
+                if (userCall.getRest().length() > maxlength) {
+                    return "> Gender's Length is too long...\n(Must be under " + maxlength + " chars)";
                 }
                 u.setGender(userCall.getRest());
                 return "> " + user.displayName + "'s Gender Edited";
             } else {
-                if (args.length() > 20) {
-                    return "> Your Gender's Length is too long...\n(Must be under 20 chars)";
+                if (args.length() > maxlength) {
+                    return "> Your Gender's Length is too long...\n(Must be under " + maxlength + "chars)";
                 }
                 u.setGender(args);
                 return "> Gender Edited";
@@ -53,7 +57,7 @@ public class SetGender implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows you to set your Gender on your User Card.";
+        return "Allows you to set your Gender. Limit 20 chars (or 40 if you are a patron).";
     }
 
     @Override

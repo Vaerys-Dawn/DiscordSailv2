@@ -1,9 +1,7 @@
 package com.github.vaerys.commands.slash;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.SlashCommand;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.templates.SlashCommand;
 
 public class PaintMe implements SlashCommand {
     @Override

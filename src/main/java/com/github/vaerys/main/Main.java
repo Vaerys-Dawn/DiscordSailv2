@@ -15,6 +15,7 @@ import sx.blah.discord.util.RateLimitException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -55,6 +56,7 @@ public class Main {
 
 
         String token = null;
+
         // you need to set a token in Token/Token.txt for the bot to run
         try {
             Discord4J.disableAudio();
@@ -73,12 +75,10 @@ public class Main {
             }
 
             //load config phase 1
-            Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
-            GlobalData globalData = (GlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, GlobalData.class);
+            Config config = (Config) Config.create(Constants.FILE_CONFIG, new Config());
+            GlobalData globalData = (GlobalData) GlobalData.create(Constants.FILE_GLOBAL_DATA, new GlobalData());
 
-
-            config.initObject(config);
-            FileHandler.writeToJson(Constants.FILE_CONFIG, config);
+            config = Config.check(config);
 
             //getting bot token
             try {
@@ -88,7 +88,15 @@ public class Main {
                 System.exit(-1);
             }
 
-            IDiscordClient client = Client.getClient(token, false);
+            try {
+                List<String> patreonToken = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN);
+                Client.initPatreon(patreonToken);
+            } catch (IndexOutOfBoundsException e) {
+                logger.info("No Patreon Token found.");
+            }
+
+
+            IDiscordClient client = Client.createClient(token, false);
 
             //load config phase 2
             Globals.initConfig(client, config, globalData);
@@ -120,7 +128,7 @@ public class Main {
 
 
             //timed events getSlashCommands
-            new EventHandler();
+            new TimerHandler();
 
 
         } catch (DiscordException ex) {

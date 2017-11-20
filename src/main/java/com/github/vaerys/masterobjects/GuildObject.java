@@ -2,13 +2,15 @@ package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.NewDailyMessage;
-import com.github.vaerys.interfaces.ChannelSetting;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildFile;
-import com.github.vaerys.interfaces.GuildToggle;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.UserRateObject;
 import com.github.vaerys.pogos.*;
+import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GuildToggle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
@@ -58,7 +60,7 @@ public class GuildObject {
             add(users);
             add(channelData);
         }};
-        customCommands.initCustomCommands();
+        customCommands.initCustomCommands(get());
         this.client = new ClientObject(object.getClient(), this);
         loadCommandData();
     }
@@ -148,9 +150,9 @@ public class GuildObject {
         ListIterator iterator = channelSettings.listIterator();
         while (iterator.hasNext()) {
             ChannelSetting c = (ChannelSetting) iterator.next();
-            if (c.type().equals(channel)) {
+            if (c.name().equals(channel)) {
                 iterator.remove();
-                logger.trace("Channel Setting: " + c.type() + " removed.");
+                logger.trace("Channel Setting: " + c.name() + " removed.");
             }
         }
     }
@@ -267,5 +269,43 @@ public class GuildObject {
 
     public List<IUser> getUsers() {
         return object.getUsers();
+    }
+
+    public IEmoji getEmojiByName(String name) {
+        return object.getEmojiByName(name);
+    }
+
+    public IChannel getChannelByType(String type) {
+        List<IChannel> channels = config.getChannelsByType(type, this);
+        if (channels.size() != 0) {
+            return channels.get(0);
+        }
+        return null;
+    }
+
+    public void handleWelcome(CommandObject command) {
+        if (config.welcomeMessage) {
+            return;
+        }
+        if (command.guild.get() == null || command.channel == null){
+            return;
+        }
+        IChannel general = getChannelByType(Command.TYPE_GENERAL);
+        if (general != null && command.channel.longID != general.getLongID()) {
+            return;
+        }
+        IMessage message = Utility.sendMessage(Constants.getWelcomeMessage(command), command.channel.get()).get();
+        if (message != null) {
+            command.guild.config.welcomeMessage = true;
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5 * 60 * 1000);
+                    Utility.deleteMessage(message);
+                } catch (InterruptedException e) {
+                    // do nothing
+                }
+            });
+            thread.start();
+        }
     }
 }

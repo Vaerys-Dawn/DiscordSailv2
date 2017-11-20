@@ -8,14 +8,15 @@ import java.util.regex.Pattern;
 public class SplitFirstObject {
     String firstWord = null;
     String rest = null;
-    public SplitFirstObject(String from){
+
+    public SplitFirstObject(String from) {
         String[] splitFrom = from.split(" ");
-        if (splitFrom.length != 0 || splitFrom != null){
+        if (splitFrom.length != 0 || splitFrom != null) {
             firstWord = splitFrom[0];
-            if (splitFrom.length == 1){
+            if (splitFrom.length == 1) {
                 return;
-            }else {
-                rest = from.replaceFirst(Pattern.quote(firstWord + " "),"");
+            } else {
+                rest = from.replaceFirst(Pattern.quote(firstWord + " "), "");
             }
         }
     }
@@ -29,8 +30,12 @@ public class SplitFirstObject {
     }
 
     public void editRestReplace(String from, String to) {
-        if (rest != null){
-            rest = rest.replace(from,to);
+        if (rest != null) {
+            rest = rest.replace(from, to);
         }
+    }
+
+    public String getAll() {
+        return firstWord + " " + rest;
     }
 }

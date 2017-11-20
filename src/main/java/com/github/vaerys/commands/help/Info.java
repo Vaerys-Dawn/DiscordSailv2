@@ -1,9 +1,8 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -20,8 +19,8 @@ public class Info implements Command {
         String error = "> Could not find information on any commands named **" + args + "**.";
         for (Command c : commands) {
             for (String s : c.names()) {
-                if (args.equalsIgnoreCase(s)) {
-                    if (!Utility.testForPerms(command,c.perms())) {
+                if (args.equalsIgnoreCase(s) || args.equalsIgnoreCase(command.guild.config.getPrefixCommand() + s)) {
+                    if (!Utility.testForPerms(command, c.perms())) {
                         return error;
                     }
                     Utility.sendEmbedMessage("", c.getCommandInfo(command), command.channel.get());
@@ -35,7 +34,7 @@ public class Info implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"Info"};
+        return new String[]{"Help"};
     }
 
     @Override

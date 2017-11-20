@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -12,7 +12,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class GetAvatar implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        UserObject user = Utility.getUser(command, args, true);
+        UserObject user = Utility.getUser(command, args, true,false);
         if (user != null) {
             String message = user.displayName + ":\n" + user.get().getAvatarURL();
             if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {

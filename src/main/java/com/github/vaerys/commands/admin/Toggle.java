@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildToggle;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class Toggle implements Command {
             if (isModule) {
                 builder.append("> Could not find Module \"" + args + "\".\n");
             } else {
-                builder.append("> Could not find Toggle \"" + args + "\".\n");
+                builder.append("> Could not find Setting \"" + args + "\".\n");
             }
 
         }
@@ -43,7 +43,7 @@ public class Toggle implements Command {
         if (isModule) {
             title = "> Here is a list of available Guild Modules:\n";
         } else {
-            title = "> Here is a list of available Guild Toggles:\n";
+            title = "> Here is a list of available Guild Settings:\n";
         }
         ArrayList<String> types = new ArrayList<>();
         for (GuildToggle t : command.guild.toggles) {
@@ -63,17 +63,17 @@ public class Toggle implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"Toggle"};
+        return new String[]{"Setting","Toggle","Settings","Toggles"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Toggles Certain Parts of the Guild Config.";
+        return "Toggles the specified setting of the Guild Config.";
     }
 
     @Override
     public String usage() {
-        return "(Toggle Type)";
+        return "(Setting)";
     }
 
     @Override

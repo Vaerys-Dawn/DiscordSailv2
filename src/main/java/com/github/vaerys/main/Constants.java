@@ -1,7 +1,10 @@
 package com.github.vaerys.main;
 
-import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.help.StartUpGuide;
+import com.github.vaerys.objects.DailyMessage;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 
 /**
@@ -10,21 +13,8 @@ import java.util.ArrayList;
 public class Constants {
 
     //Command prefix constants
-    public static final String PREFIX_COMMAND = "$";
-    public static final String PREFIX_CC = "$$";
     public static final String PREFIX_INDENT = "    ";
     public static final String PREFIX_EDT_LOGGER_INDENT = "                                     ";
-
-
-    //-------Command Constants---------
-
-    //Tag Types
-    public static final String TAG_TYPE_ALL = "all";
-    public static final String TAG_TYPE_CC = "CC";
-    public static final String TAG_TYPE_ADMIN = "Admin";
-    public static final String TAG_TYPE_INFO = "Info";
-
-    //------------------------------------
 
     //BlackList Types
     public static final String BL_PENDING = "!PENDING";
@@ -32,16 +22,6 @@ public class Constants {
     public static final String BL_CC = "CC";
     public static final String BL_SERVER = "SERVER";
     public static final String BL_TRUSTED = "TRUSTED";
-
-    //Patch Levels
-    public static final String PATCH_1 = "UPDATE_TAGS_1";
-    public static final String PATCH_2 = "UPDATE_CHANNELS";
-    public static final String PATCH_3 = "UPDATE_TAGS_2";
-    public static final String PATCH_4 = "RESET_XP";
-    public static final String PATCH_5 = "UPDATE_ROLES_1";
-    public static final String PATCH_6 = "UPDATE_GLOBAL_DATA_1";
-    public static final String PATCH_GLOBAL_1 = "UPDATE_CONFIG";
-    public static final String PATCH_GLOBAL_2 = "INIT_RANDOM_GAMES";
 
     //Error Constants
     public static final String ERROR = "> An Error Occurred";
@@ -51,6 +31,13 @@ public class Constants {
     public static final String ERROR_CHAR_NOT_FOUND = "> Character with that name could not be found.";
     public static final String ERROR_BRACKETS = "> Brackets `[]` and Parentheses `()` are not required, " +
             "they mean that a variable is required or optional respectively, so don't use them.";
+
+    public static String getWelcomeMessage(CommandObject object) {
+        return "> I am S.A.I.L, your Server-Based Artificial Intelligence Lattice. I help manage servers.\n" +
+                "I am also programmed to offer you information and tools.\n\n" +
+                "The **" + new StartUpGuide().getCommand(object) + "** command will tell you more.\n\n" +
+                "`(This message will remove itself in 5 mins)`";
+    }
 
     //-------FilePath Constants--------
 
@@ -63,24 +50,13 @@ public class Constants {
     public static final String DIRECTORY_TEMP = DIRECTORY_STORAGE + "Temp/";
     public static final String DIRECTORY_OLD_FILES = DIRECTORY_STORAGE + "Old_Files/";
     public static final String DIRECTORY_ERROR = DIRECTORY_STORAGE + "Error/";
-    public static final String DIRECTORY_WIKI = "DiscordSailv2.wiki/";
-    public static final String DIRECTORY_WIKI_COMMANDS = DIRECTORY_WIKI + "com/github/vaerys/commands/";
 
     //Files
     public static final String FILE_TOKEN = DIRECTORY_STORAGE + "Token.txt";
-    public static final String FILE_CUSTOM = "Custom_Commands.json";
-    public static final String FILE_GUILD_CONFIG = "Guild_Config.json";
-    public static final String FILE_SERVERS = "Servers.json";
-    public static final String FILE_CHARACTERS = "Characters.json";
-    public static final String FILE_GUILD_USERS = "Guild_Users.json";
-    public static final String FILE_CHANNEl_DATA = "Channel_Data.json";
+    public static final String FILE_PATREON_TOKEN = DIRECTORY_STORAGE + "Patreon_Token.txt";
     public static final String FILE_INFO = "Info.txt";
-    public static final String FILE_CONFIG = DIRECTORY_STORAGE + "Config.json";
-    public static final String FILE_CONFIG_BACKUP = DIRECTORY_BACKUPS + "Config.json";
-    public static final String FILE_GLOBAL_DATA = DIRECTORY_STORAGE + "Global_Data.json";
-    public static final String FILE_GLOBAL_DATA_BACKUP = DIRECTORY_BACKUPS + "Global_Data.json";
-
-    public static final String FILE_COMPETITION = "Competition.json";
+    public static final String FILE_CONFIG = "Config.json";
+    public static final String FILE_GLOBAL_DATA = "Global_Data.json";
 
     public static final String LEVEL_UP_IMAGE_URL = "http://i.imgur.com/Vdt2DkK.gif";
     public static final String RANK_UP_IMAGE_URL = "http://i.imgur.com/MwsPixA.gif";
@@ -142,4 +118,18 @@ public class Constants {
 
     //queue types
     public static final String QUEUE_DAILY = "DAILY_MESSAGE";
+    public static final String DAILY_SPECIALID = "Default Daily Message.";
+
+    public static ArrayList<DailyMessage> defaultDailyMessages(long creatorID) {
+        ArrayList<DailyMessage> dailyMessages = new ArrayList<DailyMessage>() {{
+            add(new DailyMessage(Constants.DAILY_MESSAGE_1, DayOfWeek.MONDAY, creatorID, DAILY_SPECIALID));
+            add(new DailyMessage(Constants.DAILY_MESSAGE_2, DayOfWeek.TUESDAY, creatorID, DAILY_SPECIALID));
+            add(new DailyMessage(Constants.DAILY_MESSAGE_3, DayOfWeek.WEDNESDAY, creatorID, DAILY_SPECIALID));
+            add(new DailyMessage(Constants.DAILY_MESSAGE_4, DayOfWeek.THURSDAY, creatorID, DAILY_SPECIALID));
+            add(new DailyMessage(Constants.DAILY_MESSAGE_5, DayOfWeek.FRIDAY, creatorID, DAILY_SPECIALID));
+            add(new DailyMessage(Constants.DAILY_MESSAGE_6, DayOfWeek.SATURDAY, creatorID, DAILY_SPECIALID));
+            add(new DailyMessage(Constants.DAILY_MESSAGE_7, DayOfWeek.SUNDAY, creatorID, DAILY_SPECIALID));
+        }};
+        return dailyMessages;
+    }
 }

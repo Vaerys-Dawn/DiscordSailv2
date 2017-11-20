@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -64,6 +64,7 @@ public class Help implements Command {
                         }
                         commandNames.add(commandCall.toString());
                     }
+                    Collections.sort(commandNames);
                     builder.append(Utility.listFormatter(commandNames, false));
                     builder.append(codeBlock + "\n");
                     builder.append(suffix);
@@ -78,7 +79,7 @@ public class Help implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"Help"};
+        return new String[]{"Commands"};
     }
 
     @Override

@@ -1,12 +1,13 @@
 package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.DailyUserMessageObject;
+import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -26,8 +27,8 @@ public class DailyMsg implements Command {
         SplitFirstObject uIDString = new SplitFirstObject(args);
         try {
             long uID = Long.parseLong(uIDString.getFirstWord());
-            DailyUserMessageObject messageObject = null;
-            for (DailyUserMessageObject u : Globals.getDailyMessages().getMessages()) {
+            DailyMessage messageObject = null;
+            for (DailyMessage u : Globals.getDailyMessages().getMessages()) {
                 if (u.getUID() == uID) {
                     messageObject = u;
                 }
@@ -35,7 +36,6 @@ public class DailyMsg implements Command {
             if (messageObject == null) {
                 return "> Could not find daily message with that UID.";
             }
-//            if (uIDString.getRest() != null) {
             SplitFirstObject mode = null;
             String totest;
             if (uIDString.getRest() == null) {
@@ -54,7 +54,7 @@ public class DailyMsg implements Command {
                 case "delete":
                     ListIterator iterator = Globals.getDailyMessages().getMessages().listIterator();
                     while (iterator.hasNext()) {
-                        DailyUserMessageObject object = (DailyUserMessageObject) iterator.next();
+                        DailyMessage object = (DailyMessage) iterator.next();
                         if (object.getUID() == uID) {
                             iterator.remove();
                         }
@@ -84,21 +84,28 @@ public class DailyMsg implements Command {
         }
     }
 
-    public XEmbedBuilder getInfo(DailyUserMessageObject messageObject, CommandObject command) {
+    public XEmbedBuilder getInfo(DailyMessage messageObject, CommandObject command) {
         XEmbedBuilder embedBuilder = new XEmbedBuilder();
         embedBuilder.withColor(Utility.getUsersColour(command.client.bot, command.guild.get()));
         IUser user = command.client.get().getUserByID(messageObject.getUserID());
         if (user != null) {
             embedBuilder.withAuthorName(user.getName() + "#" + user.getDiscriminator());
         }
-        embedBuilder.withTitle(messageObject.getDay() + "");
-        String contents = messageObject.getContents(command.guild);
+        if (messageObject.getDay() != null) {
+            embedBuilder.withTitle(messageObject.getDay() + "");
+        }
+        String contents = messageObject.getContents(new CommandObject(command.guild, command.channel.get()));
         if (contents.matches("^(> |\\*> |\\*\\*> |\\*\\*\\*> |_> |__> |`> |```> ).*$") || contents.startsWith("> ")) {
             embedBuilder.withDesc(contents);
         } else {
             embedBuilder.withDesc("> " + contents);
         }
-        String formattedFooter = new Formatter().format("UID: %04d", messageObject.getUID()).toString();
+        String formattedFooter;
+        if (messageObject.getUID() != -1) {
+            formattedFooter = new Formatter().format("UID: %04d", messageObject.getUID()).toString();
+        } else {
+            formattedFooter = messageObject.getSpecialID();
+        }
         embedBuilder.withFooterText(formattedFooter);
         return embedBuilder;
     }
@@ -110,7 +117,7 @@ public class DailyMsg implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "allows for editing of the daily message list.\n" + modes;
+        return "allows for editing of the daily message list.\n**Tags:** " + Utility.listFormatter(TagList.getNames(TagList.DAILY), true) +"\n" + modes;
     }
 
     @Override

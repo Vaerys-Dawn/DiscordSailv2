@@ -5,13 +5,16 @@ import com.github.vaerys.commands.CommandInit;
 import com.github.vaerys.commands.admin.ChannelHere;
 import com.github.vaerys.guildtoggles.ToggleInit;
 import com.github.vaerys.handlers.FileHandler;
-import com.github.vaerys.interfaces.*;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.objects.DailyMessageObject;
+import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.RandomStatusObject;
+import com.github.vaerys.objects.TimedEvent;
 import com.github.vaerys.pogos.Config;
 import com.github.vaerys.pogos.DailyMessages;
+import com.github.vaerys.pogos.Events;
 import com.github.vaerys.pogos.GlobalData;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
@@ -21,6 +24,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
 import java.util.*;
 import java.util.List;
 
@@ -45,22 +49,20 @@ public class Globals {
     public static boolean isReady = false;
     public static String version;
     public static long consoleMessageCID = -1;
-    public static ArrayList<DailyMessageObject> configDailyMessages = new ArrayList<>();
+    public static ArrayList<DailyMessage> configDailyMessages = new ArrayList<>();
     public static IDiscordClient client;
     public static boolean showSaveWarning = false;
     public static boolean shuttingDown = false;
     public static boolean savingFiles = false;
-    //    private static ArrayList<GuildContentObject> guildContentObjects = new ArrayList<>();
     private static List<GuildObject> guilds = new ArrayList<>();
     public static List<Command> commands = new ArrayList<>();
-    //    private static List<Command> commandsDM = new ArrayList<>();
     private static ArrayList<String> commandTypes = new ArrayList<>();
     private static ArrayList<ChannelSetting> channelSettings = new ArrayList<>();
     private static ArrayList<GuildToggle> guildGuildToggles = new ArrayList<>();
     private static ArrayList<SlashCommand> slashCommands = new ArrayList<>();
     private static ArrayList<RandomStatusObject> randomStatuses = new ArrayList<>();
+    private static List<TagObject> tags = new ArrayList<>();
     private static List<String> blacklistedURls;
-
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
     private static GlobalData globalData;
@@ -70,6 +72,11 @@ public class Globals {
     public static long lastDmUserID = -1;
     public static Color pixelColour = new Color(226, 218, 117);
     private static ArrayList<Command> creatorCommands = new ArrayList<>();
+    private static List<Long> patrons = new ArrayList<>();
+    public static int maxReminderSlots = 5;
+    private static Events events;
+    private static String currentEvent = null;
+
 
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
         if (newGlobalData != null) {
@@ -96,6 +103,8 @@ public class Globals {
         queueChannelID = config.queueChannelID;
         blacklistedURls = FileHandler.readFromFile("website.blacklist");
         dailyMessages = (DailyMessages) DailyMessages.create(DailyMessages.FILE_PATH, new DailyMessages());
+        events = (Events) Events.create(Events.FILE_PATH, new Events());
+        updateEvent();
         initCommands();
     }
 
@@ -103,8 +112,9 @@ public class Globals {
         //Load Commands
         commands = CommandInit.get();
         //Load DM Commands
-//        commandsDM = CommandInit.getDM();
-        //Load Guild Toggles
+
+
+        // Load Guild Toggles
         guildGuildToggles = ToggleInit.get();
 
         slashCommands = CommandInit.getSlashCommands();
@@ -112,6 +122,8 @@ public class Globals {
         channelSettings = InitChannels.get();
 
         creatorCommands = CommandInit.getCreatorCommands();
+
+        TagList.init();
 
         //validate commands
         validate();
@@ -141,10 +153,11 @@ public class Globals {
         Collections.sort(commandTypes);
 
         logger.info(commands.size() + " Commands Loaded.");
+        logger.info(creatorCommands.size() + " Creator Commands Loaded.");
         logger.info(commandTypes.size() + " Command Types Loaded.");
         logger.info(channelSettings.size() + " Channel Types Loaded.");
         logger.info(guildGuildToggles.size() + " Guild Toggles Loaded.");
-        logger.info(creatorCommands.size() + " Creator Commands Loaded.");
+        logger.info(TagList.get().size() + " Tags Loaded.");
     }
 
     private static void validate() throws IllegalArgumentException {
@@ -182,14 +195,14 @@ public class Globals {
                 throw new IllegalArgumentException(g.getClass().getName() + "Toggle Name cannot contain Newlines.");
         }
         for (ChannelSetting s : channelSettings) {
-            if (s.type() == null || s.type().isEmpty()) {
+            if (s.name() == null || s.name().isEmpty()) {
                 throw new IllegalArgumentException(s.getClass().getName() + " Channel Type cannot be null.");
             }
         }
     }
 
     public static void validateConfig() throws IllegalArgumentException {
-        IUser creator = client.getUserByID(creatorID);
+        IUser creator = Client.getClient().fetchUser(creatorID);
         if (creator == null)
             throw new IllegalArgumentException("Creator ID is invalid.");
         if (botName == null || botName.isEmpty())
@@ -211,14 +224,24 @@ public class Globals {
         if (defaultPrefixCC.contains("\n"))
             throw new IllegalArgumentException("defaultPrefixCommand cannot contain Newlines.");
         if (doDailyAvatars) {
+            if (dailyAvatarName == null || dailyAvatarName.isEmpty())
+                throw new IllegalArgumentException("dailyAvatarName cannot be empty.");
             if (!dailyAvatarName.contains("#day#"))
                 throw new IllegalArgumentException("dailyAvatarName must contain #day# for the feature to work as intended.");
-            for (DailyMessageObject d : configDailyMessages) {
-                if (!Files.exists(Paths.get(Constants.DIRECTORY_GLOBAL_IMAGES + d.getFileName())))
-                    throw new IllegalArgumentException("File " + Constants.DIRECTORY_GLOBAL_IMAGES + d.getFileName() + " does not exist.");
-                else if (!Files.exists(Paths.get(Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile)))
-                    throw new IllegalArgumentException("File" + Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile + " does not exist.");
+            if (!Utility.isImageLink(dailyAvatarName)) {
+                throw new IllegalArgumentException("dailyAvatarName must be a valid image link.");
             }
+            for (DayOfWeek d : DayOfWeek.values()) {
+                String dailyPath = Constants.DIRECTORY_GLOBAL_IMAGES + dailyAvatarName.replace("#day#", d.toString());
+                if (!Files.exists(Paths.get(dailyPath)))
+                    throw new IllegalArgumentException("File " + dailyPath + " does not exist.");
+            }
+        } else {
+            if (!Utility.isImageLink(defaultAvatarFile)) {
+                throw new IllegalArgumentException("defaultAvatarFile must be a valid image link.");
+            }
+            if (!Files.exists(Paths.get(Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile)))
+                throw new IllegalArgumentException("File " + Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile + " does not exist.");
         }
         if (argsMax <= 0)
             throw new IllegalArgumentException("argsMax cannot be less than or equal 0.");
@@ -273,14 +296,35 @@ public class Globals {
         }
         savingFiles = true;
         logger.debug("Saving Files.");
-        if (dailyMessages == null) return;
-        dailyMessages.flushFile();
+        //global files
+        if (dailyMessages != null) dailyMessages.flushFile();
+        if (events != null) events.flushFile();
+        if (globalData != null) globalData.flushFile();
+        //guild files
         for (GuildObject g : guilds) {
             for (GuildFile file : g.guildFiles) {
                 file.flushFile();
             }
         }
-        FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, getGlobalData());
+        savingFiles = false;
+    }
+
+    public static void backupAll() {
+        if (shuttingDown) {
+            return;
+        }
+        savingFiles = true;
+        logger.debug("Backing up Files.");
+        //global files
+        if (dailyMessages != null) dailyMessages.backUp();
+        if (events != null) events.backUp();
+        if (globalData != null) globalData.backUp();
+        //guild files
+        for (GuildObject g : guilds) {
+            for (GuildFile file : g.guildFiles) {
+                file.backUp();
+            }
+        }
         savingFiles = false;
     }
 
@@ -370,4 +414,51 @@ public class Globals {
     public static List<Command> getALLCreatorCommands() {
         return creatorCommands;
     }
+
+    public static List<TagObject> getTags() {
+        return tags;
+    }
+
+    public static void setPatrons(List<Long> patrons) {
+        Globals.patrons = patrons;
+    }
+
+    public static List<Long> getPatrons() {
+        return patrons;
+    }
+
+    public static List<TimedEvent> getEvents() {
+        return events.getEvents();
+    }
+
+    public static Events getEvent() {
+        return events;
+    }
+
+    public static TimedEvent getCurrentEvent() {
+        for (TimedEvent e : events.getEvents()) {
+            if (e.getEventName().equalsIgnoreCase(currentEvent)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    public static void updateEvent() {
+        for (TimedEvent e : events.getEvents()) {
+            e.sanitizeDates();
+            if (e.isEventActive()) {
+                currentEvent = e.getEventName();
+            }
+        }
+    }
+
+    public static DailyMessage getDailyMessage(DayOfWeek day) {
+        for (DailyMessage d : configDailyMessages) {
+            if (d.getDay() == day)
+                return d;
+        }
+        return null;
+    }
+
 }

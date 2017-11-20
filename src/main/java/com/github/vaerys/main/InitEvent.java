@@ -12,7 +12,12 @@ public class InitEvent {
     @EventSubscriber
     public void initBot(ReadyEvent event) {
         //makes sure that nothing in the config file will cause an error
-        Globals.validateConfig();
+        try {
+            Globals.validateConfig();
+        }catch (Exception e){
+            Utility.sendStack(e);
+            System.exit(-1);
+        }
         Globals.setVersion();
 //        if (args.length > 0 && args[0].equals("-w")) {
 //            WikiBuilder.handleCommandLists();

@@ -1,13 +1,12 @@
 package com.github.vaerys.objects;
 
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.MessageHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.UserSetting;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.pogos.GuildConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -16,16 +15,17 @@ import java.util.ListIterator;
  * Created by Vaerys on 27/08/2016.
  */
 public class ProfileObject {
+    private static final String defaultQuote = "This person doesn't seem to have much to say for themselves.";
+    private static final String defaultGender = "Unknown";
+
     long userID;
     long xp = 0;
     long currentLevel = -1;
     String gender = "Unknown";
-    String quote = "This person doesn't seem to have much to say for themselves.";
+    String quote = defaultQuote;
     ArrayList<UserSetting> settings = new ArrayList<>();
     ArrayList<UserLinkObject> links = new ArrayList<>();
     public long lastTalked = -1;
-
-    private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
     public String getQuote() {
         if (quote == null) {
@@ -42,7 +42,7 @@ public class ProfileObject {
         if (gender == null) {
             gender = "Unknown";
         }
-        return gender;
+        return Utility.removeFun(gender);
     }
 
     public void setGender(String gender) {
@@ -132,5 +132,18 @@ public class ProfileObject {
                 iterator.remove();
             }
         }
+    }
+
+    public UserObject getUser(GuildObject content) {
+        return new UserObject(content.get().getUserByID(userID), content);
+    }
+
+    public boolean isEmpty() {
+        return xp == 0 &&
+                (currentLevel == -1 || currentLevel == 0) &&
+                quote.equals(defaultQuote) &&
+                gender.equals(defaultGender) &&
+                links.size() == 0 &&
+                settings.size() == 0;
     }
 }

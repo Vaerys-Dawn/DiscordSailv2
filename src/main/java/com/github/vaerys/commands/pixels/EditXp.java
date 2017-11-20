@@ -2,10 +2,10 @@ package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 
@@ -25,6 +25,10 @@ public class EditXp implements Command {
         // Get user specified in command
         UserObject user = Utility.getUser(command, splitArgs[0], false);
         if (user == null) return "> Could not find user.";
+        if (Utility.testUserHierarchy(user, command.user, command.guild)) {
+            return "> You do not have permission to edit " + user.displayName + "'s pixels.";
+        }
+
         // Parse passed XP into a number
         long xp;
         try {
@@ -105,7 +109,7 @@ public class EditXp implements Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+        return new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
     }
 
     @Override

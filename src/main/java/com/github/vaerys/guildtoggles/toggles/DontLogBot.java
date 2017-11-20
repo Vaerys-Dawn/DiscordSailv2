@@ -1,13 +1,13 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 09/04/2017.
  */
-public class DontLogBot implements GuildSetting{
+public class DontLogBot extends GuildSetting{
 
     @Override
     public String name() {
@@ -30,7 +30,12 @@ public class DontLogBot implements GuildSetting{
     }
 
     @Override
-    public void execute(GuildObject guild) {
+    public String desc(CommandObject command) {
+        return "Disables the logging of bot actions for the logging system.";
+    }
+
+    @Override
+    public void setup() {
 
     }
 }

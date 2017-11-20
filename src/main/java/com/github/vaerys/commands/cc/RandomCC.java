@@ -1,24 +1,20 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.TagHandler;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
-import org.apache.commons.lang3.StringUtils;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.tags.cctags.TagEmbedImage;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.TagObject;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 public class RandomCC implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        String prefixEmbedImage = "<embedImage>{";
-        String tagDeleteMessage = "<delCall>";
         Random random = new Random();
         int counter = 0;
         List<CCommandObject> commands = command.guild.customCommands.getCommandList();
@@ -36,36 +32,11 @@ public class RandomCC implements Command {
             counter++;
         }
         String response = randCC.getContents(true);
-        int argsCount = StringUtils.countMatches(response, "<args>");
-        if (argsCount != 0) {
-            if (args.length() * argsCount > Globals.argsMax) {
-                return "> Args to large for this command. Max args size : " + Globals.argsMax;
-            }
-        }
-        response = TagHandler.tagSystem(response, command, args);
-        response = TagHandler.tagMentionRemover(response);
-        response = response.replace("<DELCALL>", "<delCall>");
-        response = response.replace("<EMBEDIMAGE>", "<embedImage>");
-        response = response + "\n`" + command.guild.config.getPrefixCC() + randCC.getName() + "`";
-        if (command.guild.customCommands.checkblackList(response) != null) {
-            return command.guild.customCommands.checkblackList(response);
-        }
-        if (response.contains(tagDeleteMessage)) {
-            response = response.replace(tagDeleteMessage, "");
-//            Utility.deleteMessage(command.message.get());
-        }
-        if (response.contains("<embedImage>{")) {
-            String imageURL = TagHandler.tagEmbedImage(response, prefixEmbedImage);
-            if (imageURL != null || !imageURL.isEmpty()) {
-                if (command.channel.get().getModifiedPermissions(command.user.get()).contains(Permissions.EMBED_LINKS)) {
-                    response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "");
-                    response = TagHandler.tagToCaps(response);
-                    Utility.sendFileURL(response, imageURL, command.channel.get(), true);
-                    return null;
-                } else {
-                    response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "<" + imageURL + ">");
-                    return response;
-                }
+        for (TagObject t : TagList.getType(TagList.CC)) {
+            if (t.name.equals(new TagEmbedImage(0).name)) {
+                response = t.handleTag(response + "\n`" + command.guild.config.getPrefixCC() + randCC.getName() + "`", command, args);
+            } else {
+                response = t.handleTag(response, command, args);
             }
         }
         return response;
@@ -73,7 +44,7 @@ public class RandomCC implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"RandomCC","RandCC"};
+        return new String[]{"RandomCC", "RandCC"};
     }
 
     @Override

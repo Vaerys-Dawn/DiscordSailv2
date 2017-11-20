@@ -2,7 +2,7 @@ package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.RemindMe;
-import com.github.vaerys.interfaces.DMCommand;
+import com.github.vaerys.templates.DMCommand;
 
 /**
  * Created by Vaerys on 19/04/2017.

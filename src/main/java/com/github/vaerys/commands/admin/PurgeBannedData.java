@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.*;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -97,7 +97,7 @@ public class PurgeBannedData implements Command {
         }
         iterator = Globals.getDailyMessages().getMessages().listIterator();
         while (iterator.hasNext()) {
-            DailyUserMessageObject dailyObject = (DailyUserMessageObject) iterator.next();
+            DailyMessage dailyObject = (DailyMessage) iterator.next();
             if (dailyObject.getUserID() == userID) {
                 iterator.remove();
                 purgedDailyMessages++;

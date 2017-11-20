@@ -1,15 +1,14 @@
 package com.github.vaerys.guildtoggles.toggles;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 12/03/2017.
  */
-public class ChannelLogging implements GuildSetting {
+public class ChannelLogging extends GuildSetting {
 
     @Override
     public String name() {
@@ -32,7 +31,12 @@ public class ChannelLogging implements GuildSetting {
     }
 
     @Override
-    public void execute(GuildObject guild) {
+    public String desc(CommandObject command) {
+        return "Enables the logging of channel updates. Requires the " + Command.CHANNEL_SERVER_LOG + " Channel to be set up.";
+    }
+
+    @Override
+    public void setup() {
 
     }
 }

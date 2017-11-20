@@ -61,6 +61,14 @@ public class CommandObject {
         this.client = new ClientObject(message.getClient(), this.guild);
     }
 
+    public CommandObject(GuildObject task, IChannel channel) {
+        this.client = task.client;
+        this.guild = task;
+        this.channel = new ChannelObject(channel, task);
+        this.message = null;
+        this.user = null;
+    }
+
     public CommandObject setAuthor(IUser author) {
         this.user = new UserObject(author, guild);
         return this;

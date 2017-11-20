@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.roleSelect;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -78,7 +78,12 @@ public class ModifierRoles implements Command {
                 return command.user.notAllowed;
             }
         } else {
-            IRole role = Utility.getRoleFromName(args, command.guild.get());
+            IRole role;
+            if (args.length() > 3) {
+                role = Utility.getRoleFromName(args, command.guild.get(), true);
+            } else {
+                role = Utility.getRoleFromName(args, command.guild.get());
+            }
             List<IRole> userRoles = command.user.roles;
             String response = Constants.ERROR_UPDATING_ROLE;
             if (role == null) {

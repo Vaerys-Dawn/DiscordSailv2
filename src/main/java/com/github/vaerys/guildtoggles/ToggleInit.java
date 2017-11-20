@@ -2,14 +2,20 @@ package com.github.vaerys.guildtoggles;
 
 import com.github.vaerys.guildtoggles.modules.*;
 import com.github.vaerys.guildtoggles.toggles.*;
-import com.github.vaerys.interfaces.GuildToggle;
+import com.github.vaerys.templates.GuildToggle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
 public class ToggleInit {
+
+    final static Logger logger = LoggerFactory.getLogger(ToggleInit.class);
+
     public static ArrayList<GuildToggle> get() {
         ArrayList<GuildToggle> guildToggles = new ArrayList<>();
 
@@ -25,7 +31,7 @@ public class ToggleInit {
         guildToggles.add(new EditLogging());
         guildToggles.add(new ExtendEditLog());
         guildToggles.add(new GeneralLogging());
-        guildToggles.add(new JoinLeaveLgging());
+        guildToggles.add(new JoinLeaveLogging());
         guildToggles.add(new MentionSpam());
         guildToggles.add(new MuteRepeatOffender());
         guildToggles.add(new RateLimiting());
@@ -42,6 +48,7 @@ public class ToggleInit {
         guildToggles.add(new SelfDestructLevelUps());
         guildToggles.add(new ReactToLevelUp());
         guildToggles.add(new LikeArt());
+        guildToggles.add(new DebugMode());
 
         //modules
         guildToggles.add(new ModuleGroups());
@@ -55,11 +62,19 @@ public class ToggleInit {
         guildToggles.add(new ModuleArtPinning());
         guildToggles.add(new ModulePixels());
 
+        validate(guildToggles);
+
         return guildToggles;
     }
 
-    // TODO: 23/04/2017 add global toggles i.e. allow multiple reminders.
-    public static ArrayList<GuildToggle> globalToggles() {
-        return null;
+    private static void validate(List<GuildToggle> settings) {
+        for (GuildToggle t : settings) {
+            logger.trace("Validating Tag: " + t.getClass().getName());
+            String errorReport = t.validate();
+            if (errorReport != null) {
+                logger.error(errorReport);
+                System.exit(-1);
+            }
+        }
     }
 }

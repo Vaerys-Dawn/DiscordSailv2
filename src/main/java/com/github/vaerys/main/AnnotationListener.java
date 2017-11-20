@@ -4,13 +4,13 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.ArtHandler;
 import com.github.vaerys.handlers.MessageHandler;
 import com.github.vaerys.handlers.QueueHandler;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
+import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
@@ -60,32 +60,20 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onSystemMessageReceivedEvent(MessageSendEvent event) {
-        // TODO: 19/09/2017 make a better deletion system, don't use a sleep on its own.
-        if (!event.getMessage().getContent().isEmpty()) {
-            return;
-        }
-        if (event.getMessage().getAttachments().size() != 0) {
-            return;
-        }
-        if (event.getMessage().getEmbeds().size() != 0) {
-            return;
-        }
+        IMessage message = event.getMessage();
+        if (message.getType() != IMessage.Type.CHANEL_PINNED_MESSAGE) return;
+        if (!message.getAuthor().equals(event.getClient().getOurUser())) return;
         Thread thread = new Thread(() -> {
             try {
                 logger.trace("Found my pin message, Deleting in 2 minutes.");
                 Thread.sleep(2 * 60 * 1000);
-                Utility.deleteMessage(event.getMessage());
+                Utility.deleteMessage(message);
             } catch (InterruptedException e) {
                 // do nothing
             }
         });
         thread.start();
     }
-//
-//    @EventSubscriber
-//    public void onCategoryCreateEvent(CategoryCreateEvent event){
-//
-//    }
 
     @EventSubscriber
     public void onMessageReceivedEvent(MessageReceivedEvent event) {
@@ -98,6 +86,10 @@ public class AnnotationListener {
             if (command.user.get().equals(command.client.creator)) {
                 Globals.consoleMessageCID = command.channel.longID;
             }
+
+            command.guild.handleWelcome(command);
+
+
             //message and command handling
             new MessageHandler(command.message.get().getContent(), command, event.getChannel().isPrivate());
         } catch (Exception e) {
@@ -125,49 +117,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMentionEvent(MentionEvent event) {
-        IChannel channel = event.getMessage().getChannel();
-        if (channel.isPrivate()) {
-            return;
-        }
-        IGuild guild = event.getMessage().getGuild();
-        IUser author = event.getMessage().getAuthor();
-        long guildOwnerID = guild.getOwner().getLongID();
-        String sailMention = event.getClient().getOurUser().mention(false);
-        String sailMentionNick = event.getClient().getOurUser().mention(true);
-        String prefix;
-        String message = event.getMessage().toString();
-        String[] splitMessage;
-
-        if (event.getMessage().mentionsEveryone() || event.getMessage().mentionsHere()) {
-            return;
-        }
-        if (author.getLongID() == Globals.getClient().getOurUser().getLongID()) {
-            return;
-        }
-
-        /**This lets you set the guild's Prefix if you run "@Bot SetCommandPrefix [New Prefix]"*/
-        if (author.getLongID() == guildOwnerID || author.getLongID() == Globals.creatorID) {
-            SplitFirstObject mentionSplit = new SplitFirstObject(message);
-            SplitFirstObject getArgs = new SplitFirstObject(mentionSplit.getRest());
-            if (mentionSplit.getFirstWord() != null) {
-                if (mentionSplit.getFirstWord().equals(sailMention) || mentionSplit.getFirstWord().equals(sailMentionNick)) {
-                    long guildID = guild.getLongID();
-                    GuildConfig guildConfig = Globals.getGuildContent(guildID).config;
-                    if (getArgs.getRest() != null && !getArgs.getRest().contains(" ") && !getArgs.getRest().contains("\n")) {
-                        prefix = getArgs.getRest();
-                        if (getArgs.getFirstWord() != null && getArgs.getFirstWord().equalsIgnoreCase("setCommandPrefix")) {
-                            Utility.sendMessage("> Updated Command Prefix to be : " + prefix, channel);
-                            guildConfig.setPrefixCommand(prefix);
-                        } else if (getArgs.getFirstWord() != null && getArgs.getFirstWord().equalsIgnoreCase("setCCPrefix")) {
-                            Utility.sendMessage("> Updated CC Prefix to be : " + prefix, channel);
-                            guildConfig.setPrefixCC(prefix);
-                        }
-                    } else {
-                        Utility.sendMessage("> An error occurred trying to set Prefix\n" + Constants.PREFIX_INDENT + "Be sure that the prefix does not contain a newline or any spaces.", channel);
-                    }
-                }
-            }
-        }
+        // nothing interesting happens.
     }
 
     @EventSubscriber
@@ -312,6 +262,7 @@ public class AnnotationListener {
         CommandObject command = new CommandObject(event.getMessage());
         String content;
         IUser ourUser = Globals.client.getOurUser();
+        EmbedObject object = null;
 
         if (!shouldLog(command)) {
             return;
@@ -320,7 +271,8 @@ public class AnnotationListener {
         if (command.guild.config.deleteLogging) {
             if ((command.message.get().getContent() == null ||
                     command.message.get().getContent().isEmpty()) &&
-                    command.message.get().getAttachments().size() == 0) {
+                    command.message.get().getAttachments().size() == 0 &&
+                    command.message.get().getEmbeds().size() == 0) {
                 return;
             }
             int charLimit = 1800;
@@ -348,7 +300,15 @@ public class AnnotationListener {
             } else {
                 formatted = "from " + Utility.formatTimeDifference(difference);
             }
-            Utility.sendLog("> **@" + command.user.username + "'s** Message " + formatted + " was **Deleted** in channel: " + command.channel.get().mention() + " with contents:\n" + content, command.guild, false);
+            if (event.getMessage().getEmbeds().size() != 0) {
+                object = new EmbedObject(command.message.get().getEmbeds().get(0));
+            }
+            String compiled = "> **@" + command.user.username + "'s** Message " + formatted + " was **Deleted** in channel: " + command.channel.get().mention() + " with contents:\n";
+            if (object != null) {
+                Utility.sendLog(compiled + content, command.guild, false, object);
+            } else {
+                Utility.sendLog(compiled + content, command.guild, false);
+            }
         }
     }
 
@@ -414,23 +374,16 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMessageUpdateEvent(MessageUpdateEvent event) {
-        if (event.getNewMessage().getContent() == null || event.getOldMessage().getContent() == null) {
-            return;
-        }
-        if (event.getNewMessage().getContent().isEmpty() || event.getOldMessage().getContent().isEmpty()) {
-            return;
-        }
-        if (event.getNewMessage().getContent().equals(event.getOldMessage().getContent())) {
-            return;
-        }
-        if (event.getChannel().isPrivate()) {
-            return;
-        }
+        if (event.getOldMessage() == null || event.getNewMessage() == null) return;
+        if (event.getNewMessage().getContent() == null || event.getOldMessage().getContent() == null) return;
+        if (event.getNewMessage().getContent().isEmpty() || event.getOldMessage().getContent().isEmpty()) return;
+        if (event.getNewMessage().getContent().equals(event.getOldMessage().getContent())) return;
+        if (event.getChannel().isPrivate()) return;
+
         CommandObject command = new CommandObject(event.getMessage());
         IUser ourUser = command.client.bot;
-        if (!shouldLog(command)) {
-            return;
-        }
+
+        if (!shouldLog(command)) return;
 
         if (command.guild.config.editLogging) {
             //formats how long ago this was.

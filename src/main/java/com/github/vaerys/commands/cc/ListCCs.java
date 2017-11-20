@@ -1,17 +1,20 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -46,14 +49,23 @@ public class ListCCs implements Command {
         int max = command.guild.customCommands.maxCCs(command.user, command.guild);
         XEmbedBuilder builder = new XEmbedBuilder();
         String title = "> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.";
-        ArrayList<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
             if (c.getUserID() == userID) {
                 list.add(command.guild.config.getPrefixCC() + c.getName());
                 total++;
             }
         }
-        Utility.listFormatterEmbed(title, builder, list, true);
+        builder.withTitle(title);
+        String content = Utility.listFormatter(list, true);
+        if (content.length() > 2000) {
+            String path = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
+            FileHandler.writeToFile(path, content, false);
+            File file = new File(path);
+            Utility.sendFile(title, file, command.channel.get());
+            return null;
+        }
+        builder.withDescription("```\n" + content + "```");
         builder.withColor(command.client.color);
         builder.withFooterText("Total Custom commands: " + total + "/" + max + ".");
         Utility.sendEmbedMessage("", builder, command.channel.get());

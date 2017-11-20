@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -15,7 +15,7 @@ public class EditChar implements Command {
     String modes = "**Modes:**\n" +
             "> Age - `Max Chars: 20`\n" +
             "> Gender - `Max Chars: 20`\n" +
-            "> Avatar - `Needs Valid Image URL`\n" +
+            "> Avatar - `Needs Valid Image URL or Image`\n" +
             "> Bio - `Max Chars: 300`\n" +
             "> LongDesc - `Needs Valid URL`";
 
@@ -29,20 +29,21 @@ public class EditChar implements Command {
         for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
             if (c.getName().equalsIgnoreCase(charName.getFirstWord())) {
                 if (c.getUserID() == command.user.longID || Utility.canBypass(command.user.get(), command.guild.get())) {
-                    if (mode.getRest() == null || mode.getRest().isEmpty()) {
-                        return "> Missing Arguments for Editing.";
+                    String rest = mode.getRest();
+                    if (rest == null) {
+                        rest = "";
                     }
                     switch (mode.getFirstWord().toLowerCase()) {
                         case "age":
-                            return CharEditModes.age(mode.getRest(), c);
+                            return CharEditModes.age(rest, c);
                         case "gender":
-                            return CharEditModes.gender(mode.getRest(), c);
+                            return CharEditModes.gender(rest, c);
                         case "avatar":
-                            return CharEditModes.avatar(mode.getRest(), c);
+                            return CharEditModes.avatar(rest, c, command);
                         case "bio":
-                            return CharEditModes.desc(mode.getRest(), c);
+                            return CharEditModes.desc(rest, c);
                         case "longdesc":
-                            return CharEditModes.longDesc(mode.getRest(), c);
+                            return CharEditModes.longDesc(rest, c);
                         default:
                             return "> Mode not Valid.";
                     }

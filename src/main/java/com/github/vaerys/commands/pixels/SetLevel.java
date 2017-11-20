@@ -2,11 +2,11 @@ package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -24,14 +24,16 @@ public class SetLevel implements Command {
             long level = Long.parseLong(xpArgs.getRest());
             long xp = XpHandler.totalXPForLevel(level);
             ProfileObject userObject = user.getProfile(command.guild);
-            if (userObject != null) {
-                userObject.setXp(xp);
-                userObject.removeLevelFloor();
-                XpHandler.checkUsersRoles(user.longID, command.guild);
-                return "> " + user.displayName + "'s Level is now set to: **" + level + "**";
-            } else {
+            if (userObject == null) {
                 return "> User does not have a profile.";
             }
+            if (Utility.testUserHierarchy(user, command.user, command.guild)) {
+                return "> You do not have permission to edit " + user.displayName + "'s pixels.";
+            }
+            userObject.setXp(xp);
+            userObject.removeLevelFloor();
+            XpHandler.checkUsersRoles(user.longID, command.guild);
+            return "> " + user.displayName + "'s Level is now set to: **" + level + "**";
         } catch (NumberFormatException e) {
             return "> Invalid number";
         }
@@ -64,7 +66,7 @@ public class SetLevel implements Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+        return new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
     }
 
     @Override

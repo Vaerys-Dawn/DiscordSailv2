@@ -1,8 +1,8 @@
 package com.github.vaerys.masterobjects;
 
-import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.*;
 import sx.blah.discord.handle.obj.*;
@@ -26,8 +26,9 @@ public class UserObject {
     public List<CCommandObject> customCommands;
     public List<CharacterObject> characters;
     public List<ServerObject> servers;
-    public List<DailyUserMessageObject> dailyMessages;
+    public List<DailyMessage> dailyMessages;
     public String notAllowed;
+    public boolean isPatron;
 
 
     public UserObject(IUser object, GuildObject guild) {
@@ -55,6 +56,27 @@ public class UserObject {
             dailyMessages = new ArrayList<>();
         }
         notAllowed = "> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
+        isPatron = Globals.getPatrons().contains(longID);
+    }
+
+    public UserObject(IUser object, GuildObject guild, boolean light) {
+        if (object == null) return;
+        this.client = new ClientObject(object.getClient(), guild);
+        this.object = object;
+        this.longID = object.getLongID();
+        this.name = object.getName();
+        this.username = object.getName() + "#" + object.getDiscriminator();
+        if (guild.get() != null) {
+            this.displayName = object.getDisplayName(guild.get());
+            this.roles = object.getRolesForGuild(guild.get());
+            this.color = Utility.getUsersColour(get(), guild.get());
+        } else {
+            this.displayName = name;
+            this.roles = new ArrayList<>();
+            this.color = Color.white;
+        }
+        notAllowed = "> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
+        isPatron = Globals.getPatrons().contains(longID);
     }
 
     public List<IChannel> getVisibleChannels(List<IChannel> channels) {

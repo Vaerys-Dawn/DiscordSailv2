@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
@@ -27,7 +27,7 @@ public class Report implements Command {
         if (channels.size() != 0) {
             IChannel channel = channels.get(0);
             SplitFirstObject split = new SplitFirstObject(args);
-            UserObject reported = Utility.getUser(command, split.getFirstWord(), false);
+            UserObject reported = Utility.getUser(command, split.getFirstWord(), false,false);
             if (reported == null) {
                 return "> Cannot send report. Could not find user.";
             }

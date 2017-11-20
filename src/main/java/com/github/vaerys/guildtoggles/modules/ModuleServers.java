@@ -1,20 +1,19 @@
 package com.github.vaerys.guildtoggles.modules;
 
+import com.github.vaerys.channelsettings.settings.Servers;
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildModule;
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildModule;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class ModuleServers implements GuildModule {
+public class ModuleServers extends GuildModule {
 
     @Override
     public String name() {
-        return "Servers";
+        return Command.TYPE_SERVERS;
     }
 
     @Override
@@ -33,9 +32,13 @@ public class ModuleServers implements GuildModule {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommandsByType(Command.TYPE_SERVERS);
-        guild.removeChannel(Command.CHANNEL_SERVERS);
+    public String desc(CommandObject command) {
+        return "This module allows the creation of server listings allowing users to advertise their servers.";
+    }
+
+    @Override
+    public void setup() {
+        channels.add(new Servers());
     }
 
     @Override

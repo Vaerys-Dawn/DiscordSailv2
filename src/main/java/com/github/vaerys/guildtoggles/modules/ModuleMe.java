@@ -6,15 +6,13 @@ import com.github.vaerys.commands.general.SetGender;
 import com.github.vaerys.commands.general.SetQuote;
 import com.github.vaerys.commands.general.UserInfo;
 import com.github.vaerys.guildtoggles.toggles.UserInfoShowsDate;
-import com.github.vaerys.interfaces.GuildModule;
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildModule;
 
 /**
  * Created by Vaerys on 02/03/2017.
  */
-public class ModuleMe implements GuildModule {
+public class ModuleMe extends GuildModule {
 
     @Override
     public String name() {
@@ -37,12 +35,17 @@ public class ModuleMe implements GuildModule {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommand(new UserInfo().names());
-        guild.removeCommand(new SetGender().names());
-        guild.removeCommand(new SetQuote().names());
-        guild.removeCommand(new EditLinks().names());
-        guild.removeToggle(new UserInfoShowsDate().name());
+    public String desc(CommandObject command) {
+        return "This module automatically generates a profile for each user that they can then customise.";
+    }
+
+    @Override
+    public void setup() {
+        commands.add(new UserInfo());
+        commands.add(new SetGender());
+        commands.add(new SetQuote());
+        commands.add(new EditLinks());
+        settings.add(new UserInfoShowsDate());
     }
 
     @Override

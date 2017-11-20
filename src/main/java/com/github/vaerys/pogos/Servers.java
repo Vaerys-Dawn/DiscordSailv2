@@ -1,10 +1,10 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.interfaces.GuildFile;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.BlackListObject;
 import com.github.vaerys.objects.ServerObject;
+import com.github.vaerys.templates.GuildFile;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.Permissions;

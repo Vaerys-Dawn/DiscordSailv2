@@ -1,10 +1,9 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.interfaces.GuildFile;
 import com.github.vaerys.objects.GroupUpObject;
 import com.github.vaerys.objects.TrackLikes;
+import com.github.vaerys.templates.GuildFile;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 

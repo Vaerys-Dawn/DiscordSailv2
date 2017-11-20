@@ -1,8 +1,8 @@
 package com.github.vaerys.pogos;
 
 
-import com.github.vaerys.interfaces.GlobalFile;
 import com.github.vaerys.objects.ReminderObject;
+import com.github.vaerys.templates.GlobalFile;
 
 import java.util.ArrayList;
 
@@ -33,18 +33,19 @@ public class GlobalData extends GlobalFile {
         reminders.add(object);
     }
 
-    public void removeReminder(long userID) {
-        for (int i = 0; i < reminders.size(); i++) {
-            if (reminders.get(i).getUserID() == userID) {
-                reminders.remove(i);
-            }
-        }
-    }
+//    public void removeReminder(long userID) {
+//        for (int i = 0; i < reminders.size(); i++) {
+//            if (reminders.get(i).getUserID() == userID) {
+//                reminders.remove(i);
+//            }
+//        }
+//    }
 
-    public void removeReminder(long userID, String reminder) {
+    public void removeReminder(ReminderObject object) {
         for (int i = 0; i < reminders.size(); i++) {
-            if (reminders.get(i).getUserID() == userID && reminders.get(i).getMessage().equals(reminder)) {
+            if (reminders.get(i).getUserID() == object.getUserID()  && reminders.get(i).getExecuteTime() == object.getExecuteTime()) {
                 reminders.remove(i);
+                return;
             }
         }
     }

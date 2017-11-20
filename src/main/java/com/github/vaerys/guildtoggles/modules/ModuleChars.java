@@ -1,22 +1,20 @@
 package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildModule;
-import com.github.vaerys.interfaces.GuildToggle;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class ModuleChars implements GuildModule {
+public class ModuleChars extends GuildModule {
 
     @Override
     public String name() {
-        return "Chars";
+        return Command.TYPE_CHARACTER;
     }
 
     @Override
@@ -35,8 +33,15 @@ public class ModuleChars implements GuildModule {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommandsByType(Command.TYPE_CHARACTER);
+    public String desc(CommandObject command) {
+        return "This module allows users to create and use character profiles.\n" +
+                "> This module is primarily role play based.\n" +
+                "> Character profiles store the role and nickname when created or updated.\n" +
+                "> Users can also assign extra information to each character.";
+    }
+
+    @Override
+    public void setup() {
     }
 
     @Override

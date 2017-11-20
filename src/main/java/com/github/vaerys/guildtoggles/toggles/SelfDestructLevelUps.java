@@ -1,10 +1,11 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildSetting;
 
-public class SelfDestructLevelUps implements GuildSetting {
+public class SelfDestructLevelUps extends GuildSetting {
     @Override
     public String name() {
         return "SelfDestructLevelUps";
@@ -26,7 +27,12 @@ public class SelfDestructLevelUps implements GuildSetting {
     }
 
     @Override
-    public void execute(GuildObject guild) {
+    public String desc(CommandObject command) {
+        return "Enables the automatic deletion of level up messages (in every channel except for the " + Command.CHANNEL_LEVEL_UP + " channel and Direct messages) after 1 minute.";
+    }
+
+    @Override
+    public void setup() {
 
     }
 }

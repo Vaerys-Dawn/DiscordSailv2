@@ -4,10 +4,9 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.DailyUserMessageObject;
+import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.QueueObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.pogos.DailyMessages;
 import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;
@@ -122,7 +121,7 @@ public class QueueHandler {
                             //do if accepted
                             if (reaction.getEmoji().equals(thumbsUp)) {
                                 Utility.sendDM("> A daily message you sent was approved. **[" + uID + "]**", userID);
-                                Globals.getDailyMessages().getMessages().add(new DailyUserMessageObject(embed.getDescription(), day, userID, uID));
+                                Globals.getDailyMessages().getMessages().add(new DailyMessage(embed.getDescription(), day, userID, uID));
                                 RequestBuffer.request(() -> message.addReaction(ok)).get();
                                 q.toggleMarkedForRemoval();
                                 return;

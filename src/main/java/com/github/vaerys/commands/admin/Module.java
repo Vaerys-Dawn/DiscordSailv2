@@ -1,8 +1,7 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -16,17 +15,17 @@ public class Module implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"Module"};
+        return new String[]{"Module","Modules"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Allows for the toggle of certain commands.";
+        return "Toggles the specified module.";
     }
 
     @Override
     public String usage() {
-        return "(Module Type)";
+        return "(Module)";
     }
 
     @Override

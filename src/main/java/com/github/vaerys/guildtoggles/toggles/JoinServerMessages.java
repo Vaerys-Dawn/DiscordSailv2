@@ -1,14 +1,14 @@
 package com.github.vaerys.guildtoggles.toggles;
 
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.SetJoinMessage;
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 07/07/2017.
  */
-public class JoinServerMessages implements GuildSetting {
+public class JoinServerMessages extends GuildSetting {
     @Override
     public String name() {
         return "JoinServerMessages";
@@ -30,7 +30,12 @@ public class JoinServerMessages implements GuildSetting {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommand(new SetJoinMessage().names());
+    public String desc(CommandObject command) {
+        return "Enables the sending of a welcome message to user's dms when they join the server.";
+    }
+
+    @Override
+    public void setup() {
+        commands.add(new SetJoinMessage());
     }
 }

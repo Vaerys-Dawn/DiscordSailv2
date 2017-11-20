@@ -1,12 +1,11 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.OffenderObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
@@ -42,7 +41,7 @@ public class MessageHandler {
             }
             if (command.guild.config.moduleCC) {
                 if (args.toLowerCase().startsWith(command.guild.config.getPrefixCC().toLowerCase())) {
-                    new CCHandler(args, command);
+                    CCHandler.handleCommand(args, command);
                 }
             }
         }

@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XRequestBuffer;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -31,7 +31,7 @@ public class UpdateRolePerms implements Command {
             if (command.guild.config.isRoleCosmetic(r.getLongID())) {
                 if (!r.getPermissions().containsAll(parentPerms)) {
                     EnumSet finalParentPerms = parentPerms;
-                    XRequestBuffer.request(() -> r.changePermissions(finalParentPerms));
+                    RequestBuffer.request(() -> r.changePermissions(finalParentPerms));
                 }
             }
         }

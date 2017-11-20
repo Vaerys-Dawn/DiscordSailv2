@@ -1,10 +1,10 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildSetting;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
-public class LikeArt implements GuildSetting{
+public class LikeArt extends GuildSetting{
     @Override
     public String name() {
         return "LikeArt";
@@ -26,7 +26,13 @@ public class LikeArt implements GuildSetting{
     }
 
     @Override
-    public void execute(GuildObject guild) {
+    public String desc(CommandObject command) {
+        return "Enables the art liking feature, When this feature is enabled if a ❤ " +
+                "reaction is added to an image pinned by the art pinning feature will grant a small amount of pixels to the author." ;
+    }
+
+    @Override
+    public void setup() {
 
     }
 }

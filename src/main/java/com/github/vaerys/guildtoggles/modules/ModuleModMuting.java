@@ -2,18 +2,17 @@ package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.Mute;
-import com.github.vaerys.interfaces.GuildModule;
-import com.github.vaerys.interfaces.GuildToggle;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 02/03/2017.
  */
-public class ModuleModMuting implements GuildModule {
+public class ModuleModMuting extends GuildModule {
+
     @Override
     public String name() {
         return "ModMute";
@@ -35,8 +34,13 @@ public class ModuleModMuting implements GuildModule {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommand(new Mute().names());
+    public String desc(CommandObject command) {
+        return "This module enables the **" + new Mute().getCommand(command) + "** command";
+    }
+
+    @Override
+    public void setup() {
+        commands.add(new Mute());
     }
 
     @Override

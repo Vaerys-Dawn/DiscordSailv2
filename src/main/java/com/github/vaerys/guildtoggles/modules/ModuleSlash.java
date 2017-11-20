@@ -1,19 +1,18 @@
 package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildModule;
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildModule;
 
 /**
  * Created by Vaerys on 13/03/2017.
  */
-public class ModuleSlash implements GuildModule {
+public class ModuleSlash extends GuildModule {
+
     @Override
     public String name() {
-        return "SlashCommands";
+        return Command.TYPE_SLASH;
     }
 
     @Override
@@ -32,8 +31,12 @@ public class ModuleSlash implements GuildModule {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommandsByType(Command.TYPE_SLASH);
+    public String desc(CommandObject command) {
+        return "This module enables Slash commands.";
+    }
+
+    @Override
+    public void setup() {
     }
 
     @Override
