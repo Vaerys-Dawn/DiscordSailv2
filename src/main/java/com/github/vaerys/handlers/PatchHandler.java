@@ -2,6 +2,7 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.pogos.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -9,6 +10,8 @@ import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
+
+import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 05/04/2017.
@@ -44,6 +47,36 @@ public class PatchHandler {
         fixUnicodeDaily();
         //1.1 patches
         fixDefaultDailyMessages();
+
+        //1.2 patches
+        fixMultipleDailies();
+    }
+
+    private static void fixMultipleDailies() {
+        String path = Constants.DIRECTORY_STORAGE + DailyMessages.FILE_PATH;
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
+        if (checkPatch(1.2, null, "Fix_Multiple_Daily_Messages", json)) return;
+        DailyMessages messages = (DailyMessages) DailyMessages.create(DailyMessages.FILE_PATH, new DailyMessages());
+        ArrayList<DailyMessage> dailyMessages = new ArrayList<>();
+
+        for (DailyMessage message : messages.getMessages()) {
+            boolean foundMessage = false;
+            for (DailyMessage m : dailyMessages) {
+                if (m.getUID() == message.getUID()) {
+                    foundMessage = true;
+                }
+            }
+            if (!foundMessage) {
+                dailyMessages.add(message);
+            }
+        }
+        messages.setMessages(dailyMessages);
+        messages.flushFile();
+        json = FileHandler.fileToJsonObject(path);
+        newPatchID(1.2, json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void fixDefaultDailyMessages() {

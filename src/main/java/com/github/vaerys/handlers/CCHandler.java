@@ -12,6 +12,7 @@ import com.github.vaerys.templates.TagObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
 
@@ -33,30 +34,27 @@ public class CCHandler {
         SplitFirstObject commandName = new SplitFirstObject(args);
         CCommandObject commandObject = command.guild.customCommands.getCommand(commandName.getFirstWord(), command);
 
-        if (commandObject == null) return;
-        String contents = commandObject.getContents(true);
-        //shitpost handling
-        if (commandObject.isShitPost() && command.guild.config.shitPostFiltering && !Utility.canBypass(command)) {
-            List<IChannel> channels = command.guild.config.getChannelsByType(Command.CHANNEL_SHITPOST, command.guild);
-            if (!channels.contains(command.channel.get())) {
-                channels = command.user.getVisibleChannels(channels);
-                List<String> channelMentions = Utility.getChannelMentions(channels);
-                if (channelMentions.size() == 0) {
-                    Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.", command.channel.get());
-                    return;
-                } else if (channelMentions.size() > 1) {
-                    Utility.sendMessage("> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true), command.channel.get());
-                    return;
-                } else if (channelMentions.size() == 1) {
-                    Utility.sendMessage("> Command must be performed in: " + channelMentions.get(0), command.channel.get());
-                    return;
-                }
-            }
-        }
         String ccArgs = commandName.getRest();
         if (ccArgs == null) {
             ccArgs = "";
         }
+
+        if (commandObject == null) return;
+
+        logger.debug(Utility.loggingFormatter(command, "CUSTOM_COMMAND", commandObject.getName(command), ccArgs));
+
+        String contents = commandObject.getContents(true);
+        //shitpost handling
+        if (commandObject.isShitPost() && command.guild.config.shitPostFiltering && !Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+            List<IChannel> channels = command.guild.config.getChannelsByType(Command.CHANNEL_SHITPOST, command.guild);
+            if (channels.size() != 0 && !channels.contains(command.channel.get())) {
+                channels = command.user.getVisibleChannels(channels);
+                List<String> channelMentions = Utility.getChannelMentions(channels);
+                Utility.sendMessage(Utility.getChannelMessage(channelMentions), command.channel.get());
+                return;
+            }
+        }
+
         //tag handling
         for (TagObject t : TagList.getType(TagList.CC)) {
             contents = t.handleTag(contents, command, ccArgs);

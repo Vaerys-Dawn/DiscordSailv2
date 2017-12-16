@@ -17,7 +17,8 @@ public class EditCC implements Command {
     String modes = "**Modes: **\n" +
             "> Replace\n" +
             "> ToEmbed\n" +
-            "> DelCall\n";
+            "> DelCall\n" +
+            "> AddSearch\n";
     String adminModes = "**Admin Modes:**\n" +
             "> Shitpost\n" +
             "> Lock\n";
@@ -68,13 +69,14 @@ public class EditCC implements Command {
             case "append":
                 return CCEditModes.append(customCommand, content, command);
             case "delet":
-                return CCEditModes.deleteTag(customCommand);
             case "delcall":
                 return CCEditModes.deleteTag(customCommand);
             case "shitpost":
                 return CCEditModes.shitPost(customCommand, command, command.user.get(), command.guild.get());
             case "lock":
                 return CCEditModes.lock(customCommand, command, command.user.get(), command.guild.get());
+            case "addsearch":
+                return CCEditModes.addReplaceTag(customCommand,content);
             default:
                 if (content == null || content.isEmpty()) {
                     return CCEditModes.replace(customCommand, mode, command);

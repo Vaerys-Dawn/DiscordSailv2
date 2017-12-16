@@ -17,7 +17,7 @@ public class Hello implements Command {
         TimedEvent event = Globals.getCurrentEvent();
         if (event != null && event.getHelloMessage() != null) message = event.getHelloMessage();
         if (command.user.longID == 153159020528533505L) {
-            message = message.replace("<user>", "Mum");
+            message = message.replace("<user>", "Mother");
         }
         return message.replace("<user>", command.user.displayName);
     }

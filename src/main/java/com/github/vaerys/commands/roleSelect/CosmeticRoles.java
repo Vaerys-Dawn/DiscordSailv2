@@ -91,10 +91,9 @@ public class CosmeticRoles implements Command {
             String response = Constants.ERROR_UPDATING_ROLE;
             //check if role is valid
             IRole role;
-            if (args.length() > 3) {
+            role = Utility.getRoleFromName(args, command.guild.get());
+            if (role == null && args.length() > 3) {
                 role = Utility.getRoleFromName(args, command.guild.get(), true);
-            }else {
-                role = Utility.getRoleFromName(args, command.guild.get());
             }
             if (role == null && !args.equalsIgnoreCase("remove")) {
                 Utility.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListRoles.getList(command), command.channel.get());

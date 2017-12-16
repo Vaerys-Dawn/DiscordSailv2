@@ -25,7 +25,7 @@ public class RemindMe implements Command {
             long timeSecs = 0;
             List<String> list = new ArrayList<>();
             for (String s : args.split(" ")) {
-                if (Pattern.compile("[0-9]*(s|m|h|d)").matcher(s).matches()) {
+                if (Pattern.compile("(?i)[0-9]*(s|m|h|d)").matcher(s).matches()) {
                     list.add(s);
                 } else {
                     break;
@@ -44,13 +44,12 @@ public class RemindMe implements Command {
                 message = StringUtils.replaceOnce(message, " ", "");
             }
             if (timeSecs < 30) {
-                return "> you can't set a reminder for less than 30 seconds.";
+                return "> You can't set a reminder for less than 30 seconds.";
             }
             if (timeSecs > 60 * 24 * 365 * 60) {
                 return "> What are you doing... that reminder is set for over a year from now... you cant do that.";
             }
 
-//            return "> " + timeSecs + " " + message;
             ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
             now = now.plusSeconds(timeSecs);
             String response = TimerHandler.addReminder(command.user.longID, command.channel.longID, now.toEpochSecond(), message);

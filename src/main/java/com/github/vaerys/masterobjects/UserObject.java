@@ -6,6 +6,7 @@ import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.*;
 import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.RequestBuffer;
 import sx.blah.discord.util.cache.LongMap;
 
 import java.awt.*;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class UserObject {
     public ClientObject client;
-    private IUser object;
+    IUser object;
     public long longID;
     public String name;
     public String displayName;
@@ -38,7 +39,7 @@ public class UserObject {
         this.longID = object.getLongID();
         this.name = object.getName();
         this.username = object.getName() + "#" + object.getDiscriminator();
-        if (guild.get() != null) {
+        if (guild != null && guild.get() != null) {
             this.displayName = object.getDisplayName(guild.get());
             this.roles = object.getRolesForGuild(guild.get());
             this.color = Utility.getUsersColour(get(), guild.get());
@@ -130,5 +131,13 @@ public class UserObject {
 
     public boolean showRank(GuildObject guild) {
         return XpHandler.rank(guild.users, guild.get(), longID) != -1;
+    }
+
+    public RequestBuffer.RequestFuture<IMessage> sendDm(String s) {
+        return Utility.sendMessage(s, object.getOrCreatePMChannel());
+    }
+
+    public String mention() {
+        return object.mention();
     }
 }

@@ -42,7 +42,7 @@ public class SetGender implements Command {
                 return "> " + user.displayName + "'s Gender Edited";
             } else {
                 if (args.length() > maxlength) {
-                    return "> Your Gender's Length is too long...\n(Must be under " + maxlength + "chars)";
+                    return "> Your Gender's Length is too long...\n(Must be under " + maxlength + " chars)";
                 }
                 u.setGender(args);
                 return "> Gender Edited";

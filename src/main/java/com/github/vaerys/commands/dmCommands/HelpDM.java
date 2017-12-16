@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.help.Help;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
@@ -34,7 +35,7 @@ public class HelpDM implements DMCommand {
 
     @Override
     public String[] names() {
-        return new String[]{"Help"};
+        return new Help().names();
     }
 
     @Override

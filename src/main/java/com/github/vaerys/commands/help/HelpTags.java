@@ -24,7 +24,7 @@ public class HelpTags implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"HelpTag", "HelpTags"};
+        return new String[]{"HelpTag", "HelpTags","TagHelp"};
     }
 
     @Override

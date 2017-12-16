@@ -2,6 +2,7 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Client;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
@@ -13,7 +14,9 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.RequestBuffer;
 
+import java.io.File;
 import java.time.DayOfWeek;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -45,7 +48,7 @@ public class TimerHandler {
             logger.error("Five Min Timer Failed to respond to keep alive. resetting.");
             doEventFiveMin(ZonedDateTime.now(ZoneOffset.UTC));
         }
-        if (keepAliveDaily - now > 25 * 60 * 60 * 1000){
+        if (keepAliveDaily - now > 25 * 60 * 60 * 1000) {
             logger.error("Daily Timer failed to respond to keep alive. resetting.");
             doEventDaily(ZonedDateTime.now(ZoneOffset.UTC));
         }
@@ -76,6 +79,11 @@ public class TimerHandler {
                 logger.trace("Reset speakers.");
                 for (GuildObject g : Globals.getGuilds()) {
                     g.getSpokenUsers().clear();
+                }
+                File file = new File(Constants.DIRECTORY_STORAGE + "/logs/bot.log");
+                long fileSize = file.length();
+                if (fileSize > 100000000L) {
+                    RequestBuffer.request(() -> Client.getClient().getUserByID(Globals.creatorID).getOrCreatePMChannel().sendMessage("!!!ERROR LOG FILE IS AT ABNORMAL SIZE!!!"));
                 }
             }
         }, initialDelay, 60 * 1000);
@@ -116,54 +124,61 @@ public class TimerHandler {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                keepAliveDaily = System.currentTimeMillis();
-                //init vars
-                ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
-                DayOfWeek day = timeNow.getDayOfWeek();
+                try {
+                    keepAliveDaily = System.currentTimeMillis();
+                    //init vars
+                    ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
+                    DayOfWeek day = timeNow.getDayOfWeek();
 
-                Random random = new Random();
+                    Random random = new Random();
 
 //                day = DayOfWeek.values()[random.nextInt(DayOfWeek.values().length)];
-                //do checks
-                Client.checkPatrons();
-                checkKeepAlive();
+                    //do checks
+                    Client.checkPatrons();
+                    checkKeepAlive();
 
-                //update Active Event
-                Globals.updateEvent();
-                TimedEvent event = Globals.getCurrentEvent();
+                    //update Active Event
+                    Globals.updateEvent();
+                    TimedEvent event = Globals.getCurrentEvent();
 
-                //handle avatars
-                Client.handleAvatars();
+                    //handle avatars
+                    Client.handleAvatars();
 
-                //backups
-                Globals.backupAll();
+                    //backups
+                    Globals.backupAll();
 
-                logger.info("Running Daily tasks for " + day);
+                    logger.info("Running Daily tasks for " + day);
 
-                for (GuildObject task : Globals.getGuilds()) {
-                    GuildConfig guildconfig = task.config;
-                    //do decay
-                    XpHandler.doDecay(task, nowUTC);
+                    for (GuildObject task : Globals.getGuilds()) {
+                        GuildConfig guildconfig = task.config;
+                        //do decay
+                        XpHandler.doDecay(task, nowUTC);
 
-                    //get general channel
-                    IChannel generalChannel = task.getChannelByType(Command.CHANNEL_GENERAL);
+                        //reset offenders
+                        task.resetOffenders();
 
-                    //do daily messages
-                    if (generalChannel != null && guildconfig.dailyMessage) {
-                        DailyMessage finalMessage;
-                        List<DailyMessage> messages;
-                        if (event != null && event.doSpecialMessages() && event.getMessagesDay(day).size() != 0) {
-                            messages = event.getMessagesDay(day);
-                        } else {
-                            messages = new ArrayList<>(Globals.getDailyMessages().getDailyMessages(day));
-                            messages.add(Globals.getDailyMessage(day));
+                        //get general channel
+                        IChannel generalChannel = task.getChannelByType(Command.CHANNEL_GENERAL);
+
+                        //do daily messages
+                        if (generalChannel != null && guildconfig.dailyMessage) {
+                            DailyMessage finalMessage;
+                            List<DailyMessage> messages;
+                            if (event != null && event.doSpecialMessages() && event.getMessagesDay(day).size() != 0) {
+                                messages = event.getMessagesDay(day);
+                            } else {
+                                messages = new ArrayList<>(Globals.getDailyMessages().getDailyMessages(day));
+                                messages.add(Globals.getDailyMessage(day));
+                            }
+                            int randomMessage = random.nextInt(messages.size());
+                            finalMessage = messages.get(randomMessage);
+                            task.config.setLastDailyMessage(finalMessage);
+                            CommandObject command = new CommandObject(task, generalChannel);
+                            Utility.sendMessage(finalMessage.getContents(command), generalChannel);
                         }
-                        int randomMessage = random.nextInt(messages.size());
-                        finalMessage = messages.get(randomMessage);
-                        task.config.setLastDailyMessage(finalMessage);
-                        CommandObject command = new CommandObject(task, generalChannel);
-                        Utility.sendMessage(finalMessage.getContents(command), generalChannel);
                     }
+                } catch (Exception e) {
+                    Utility.sendStack(e);
                 }
             }
         }, initialDelay * 1000, period);
@@ -253,24 +268,24 @@ public class TimerHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-                keepAliveFiveMin = System.currentTimeMillis();
-                checkKeepAlive();
-                for (ReminderObject object : Globals.getGlobalData().getReminders()) {
-                    if (object.getExecuteTime() - now.toEpochSecond() < 350) {
-                        if (!object.isSent()) {
-                            sendReminder(object);
-                            object.setSent(true);
-                        } else {
-                            if (object.getExecuteTime() - now.toEpochSecond() < 0) {
+                try {
+                    ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+                    keepAliveFiveMin = System.currentTimeMillis();
+                    checkKeepAlive();
+                    for (ReminderObject object : Globals.getGlobalData().getReminders()) {
+                        if (object.getExecuteTime() - now.toEpochSecond() < 350) {
+                            if (!object.isSent()) {
                                 sendReminder(object);
+                                object.setSent(true);
+                            } else {
+                                if (object.getExecuteTime() - now.toEpochSecond() < 0) {
+                                    sendReminder(object);
+                                }
                             }
                         }
                     }
-                }
 
-                //Sending isAlive Check.
-                try {
+                    //Sending isAlive Check.
                     if (Globals.showSaveWarning) {
                         logger.info("Total active threads: " + Thread.activeCount());
                         logger.info("Backup in 5 seconds do not restart.");
@@ -279,30 +294,36 @@ public class TimerHandler {
                         logger.debug("Backup in 5 seconds do not restart.");
                     }
                     Thread.sleep(5000);
-                    Globals.getClient().checkLoggedIn("IsAlive");
+                    Globals.getClient().checkLoggedIn("Check Online status");
+                    randomPlayingStatus();
+                    Globals.saveFiles();
+                    if (Globals.showSaveWarning) {
+                        logger.info("Files Saved.");
+                    } else {
+                        logger.debug("Files Saved.");
+                    }
                 } catch (DiscordException e) {
                     logger.error(e.getErrorMessage());
                     logger.info("Logging back in.");
                     try {
-                        Globals.client.logout();
+//                        Globals.client.logout();
                         Thread.sleep(4000);
                         Globals.getClient().login();
                         Globals.getClient().changePlayingText("Recovered From Crash.");
                         return;
+                    } catch (DiscordException e2) {
+                        if (!e2.getMessage().contains("login")) {
+                            Utility.sendStack(e2);
+                        }
                     } catch (IllegalStateException ex) {
                         //ignore exception
                     } catch (InterruptedException e1) {
-                        e1.printStackTrace();
+                        Utility.sendStack(e1);
                     }
                 } catch (InterruptedException e) {
                     Utility.sendStack(e);
-                }
-                randomPlayingStatus();
-                Globals.saveFiles();
-                if (Globals.showSaveWarning) {
-                    logger.info("Files Saved.");
-                } else {
-                    logger.debug("Files Saved.");
+                } catch (Exception e) {
+                    Utility.sendStack(e);
                 }
             }
         }, initialDelay * 1000, 5 * 60 * 1000);

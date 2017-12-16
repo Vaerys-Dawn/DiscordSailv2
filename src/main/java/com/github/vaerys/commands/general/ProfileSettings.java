@@ -33,9 +33,16 @@ public class ProfileSettings implements Command {
                 return error;
             }
             if (pixels && levelChannel && toTest == UserSetting.SEND_LVLUP_RANK_CHANNEL) {
-                removeLevelSettings(userObject);
-                userObject.getSettings().add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
-                builder.append(message + "the server's level up channel.");
+                IChannel levelUp = command.guild.getChannelByType(CHANNEL_LEVEL_UP);
+                if (levelUp != null) {
+                    removeLevelSettings(userObject);
+                    userObject.getSettings().add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
+                    builder.append(message + levelUp.mention() + ".");
+                } else {
+                    removeLevelSettings(userObject);
+                    userObject.getSettings().add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
+                    builder.append(message + "the current channel.");
+                }
             } else if (pixels && toTest == UserSetting.SEND_LVLUP_CURRENT_CHANNEL) {
                 removeLevelSettings(userObject);
                 userObject.getSettings().add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
@@ -65,7 +72,7 @@ public class ProfileSettings implements Command {
                         "> Your profile is now public.",
                         "> Your profile is now private."));
             } else {
-                if (!builder.toString().contains(error)){
+                if (!builder.toString().contains(error)) {
                     builder.append(error);
                 }
             }
@@ -87,7 +94,7 @@ public class ProfileSettings implements Command {
             }
             builder.append("> CurrentChannel - `Level up messages will be sent to the current channel.`\n" +
                     "> DMs - `Level up messages will be sent to your DMs.`\n" +
-                    "> NoLvLMessages - `Hides your Level up messages.`\n" +
+                    "> NoLevelMessages - `Hides your Level up messages.`\n" +
                     "> NoXP - `Stops you from gaining pixels.`\n" +
                     "> HideRank - `Hides your rank on the server.`\n" +
                     "> NoLevelUpReactions - `Stops level up reactions.`\n");

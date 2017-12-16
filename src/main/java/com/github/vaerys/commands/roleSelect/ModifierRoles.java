@@ -79,10 +79,9 @@ public class ModifierRoles implements Command {
             }
         } else {
             IRole role;
-            if (args.length() > 3) {
+            role = Utility.getRoleFromName(args, command.guild.get());
+            if (role == null && args.length() > 3) {
                 role = Utility.getRoleFromName(args, command.guild.get(), true);
-            } else {
-                role = Utility.getRoleFromName(args, command.guild.get());
             }
             List<IRole> userRoles = command.user.roles;
             String response = Constants.ERROR_UPDATING_ROLE;

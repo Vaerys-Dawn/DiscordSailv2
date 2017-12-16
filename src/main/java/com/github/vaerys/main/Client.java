@@ -1,8 +1,10 @@
 package com.github.vaerys.main;
 
+import com.github.kennedyoliveira.pastebin4j.AccountCredentials;
+import com.github.kennedyoliveira.pastebin4j.PasteBin;
 import com.github.vaerys.objects.EventAvatar;
-import com.github.vaerys.objects.PatreonAPI;
 import com.github.vaerys.objects.TimedEvent;
+import com.patreon.PatreonAPI;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
 import org.apache.commons.io.FilenameUtils;
@@ -29,6 +31,9 @@ public class Client {
     final static Logger logger = LoggerFactory.getLogger(Client.class);
     private static PatreonAPI patreonApi = null;
     private static IDiscordClient client = null;
+    private static AccountCredentials credentials = null;
+    private static PasteBin pasteBin = null;
+//    private static ImgurAPI imgurAPI = null;
 
     public static IDiscordClient createClient(String token, boolean login) throws DiscordException {
         ClientBuilder clientBuilder = new ClientBuilder();
@@ -64,6 +69,26 @@ public class Client {
 
         checkPatrons();
         return patreonApi;
+    }
+
+    public static void initPastebin(List<String> pastebinToken) {
+        credentials = new AccountCredentials(pastebinToken.get(0));
+        pasteBin = new PasteBin(credentials);
+        logger.info("Pastebin Account Linked.");
+    }
+
+//    public static ImgurAPI initImgur(List<String> imgurToken) throws IndexOutOfBoundsException {
+//        imgurAPI = new ImgurAPI(imgurToken.get(0), imgurToken.get(1));
+//        logger.info("Imgur Account Linked.");
+//        return imgurAPI;
+//    }
+//
+//    public static ImgurAPI getImgurAPI() {
+//        return imgurAPI;
+//    }
+
+    public static PasteBin getPastebin() {
+        return pasteBin;
     }
 
     public static PatreonAPI getPatreonApi() {

@@ -68,7 +68,7 @@ public class NewCC implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"NewCC"};
+        return new String[]{"NewCC","CCNew"};
     }
 
     @Override

@@ -60,6 +60,23 @@ public class ArtHandler {
         try {
             //pin message
             RequestBuffer.request(() -> command.channel.get().pin(command.message.get())).get();
+
+            String name;
+            if (checkAttachments(command)) {
+                name = "ATTACHMENT_PIN";
+            } else {
+                name = "MESSAGE_PIN";
+            }
+            String args;
+            args = command.message.getContent();
+            for (IMessage.Attachment a : command.message.getAttachments()) {
+                args += " <" + a.getUrl() + ">";
+            }
+            if (command.message.getContent() == null || command.message.getContent().isEmpty()) {
+                args = args.replace("  ", "");
+            }
+
+            logger.debug(Utility.loggingFormatter(command, "ART_PINNED", name, args));
             //add to ping
             pins.add(command.message.longID);
             //add pin response
@@ -91,11 +108,8 @@ public class ArtHandler {
     }
 
     private static boolean checkMessage(CommandObject command) {
-        for (String nl : command.message.get().getContent().split("/n")) {
-            for (String s : nl.split(" ")) {
-                if (Utility.isImageLink(s) || isHostingWebsite(s))
-                    return true;
-            }
+        for (String s : command.message.get().getContent().split("( |\n)")) {
+            if (Utility.isImageLink(s) || isHostingWebsite(s)) return true;
         }
         return false;
     }
@@ -103,7 +117,9 @@ public class ArtHandler {
     private static void checkList(CommandObject command) {
         List<Long> pinnedMessages = command.guild.channelData.getPinnedMessages();
         List<TrackLikes> likes = command.guild.channelData.getLikes();
-        List<IMessage> pins = command.channel.get().getPinnedMessages();
+        List<IMessage> pins = RequestBuffer.request(() -> {
+            return command.channel.get().getPinnedMessages();
+        }).get();
         List<IMessage> markedForUnpin = new ArrayList<>();
         int tries = 0;
 
@@ -135,21 +151,26 @@ public class ArtHandler {
         tries = 0;
         boolean flag = markedForUnpin.size() != 0;
         while (flag && tries < 20) {
-            flag = false;
-            final int[] expectedSize = {command.channel.get().getPinnedMessages().size()};
+            int expectedSize = RequestBuffer.request(() -> {
+                return command.channel.get().getPinnedMessages().size();
+            }).get();
             for (IMessage message : markedForUnpin) {
-                RequestBuffer.request(() -> {
-                    try {
-                        if (message.isPinned()) {
-                            command.channel.get().unpin(message);
-                            expectedSize[0]--;
-                        }
-                    } catch (DiscordException e) {
-                        Utility.sendStack(e);
+                try {
+                    if (message.isPinned()) {
+                        RequestBuffer.request(() -> command.channel.get().unpin(message));
+                        expectedSize--;
                     }
+
+                } catch (DiscordException e) {
+                    if (!e.getMessage().contains("Message is not pinned!")) {
+                        throw (e);
+                    }
+                }
+                List<IMessage> pinned = RequestBuffer.request(() -> {
+                    return command.channel.get().getPinnedMessages();
                 }).get();
-                int size = command.channel.get().getPinnedMessages().size();
-                if (size > expectedSize[0]) {
+                int size = pinned.size();
+                if (size > expectedSize) {
                     flag = true;
                 }
             }

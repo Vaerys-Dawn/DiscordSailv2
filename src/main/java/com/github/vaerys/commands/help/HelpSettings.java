@@ -21,7 +21,7 @@ public class HelpSettings implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"HelpSetting","HelpSettings"};
+        return new String[]{"HelpSetting","HelpSettings","SettingHelp","HelpToggle","ToggleHelp"};
     }
 
     @Override

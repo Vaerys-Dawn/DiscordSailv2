@@ -115,7 +115,7 @@ public class TimedEvent {
         if (avatar == null) {
             return getDefaultAvatar();
         }
-        return null;
+        return avatar;
     }
 
     public EventAvatar getDefaultAvatar() {
@@ -184,8 +184,11 @@ public class TimedEvent {
         desc.append("\n**Does Special Messages:** " + specialMessages);
         String dayStart = startDay + Utility.getDateSuffix(startDay);
         String dayEnd = endDay + Utility.getDateSuffix(endDay);
-        String monthStart = new DateFormatSymbols().getMonths()[startMonth - 1];
-        String monthEnd = new DateFormatSymbols().getMonths()[endMonth - 1];
+        String monthStart = "null";
+        String monthEnd = "null";
+        if (startMonth != -1) monthStart = new DateFormatSymbols().getMonths()[startMonth - 1];
+        if (endMonth != -1) monthEnd = new DateFormatSymbols().getMonths()[endMonth - 1];
+
         if (isSingleDayEvent()) {
             desc.append("\n**Date:** " + dayStart + " of " + monthStart + ".");
         } else {

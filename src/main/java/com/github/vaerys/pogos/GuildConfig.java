@@ -57,6 +57,7 @@ public class GuildConfig extends GuildFile {
     public boolean maxMentions = true;
     public boolean shitPostFiltering = false;
     public boolean muteRepeatOffenders = true;
+    public boolean stopSpamWalls = true;
     public boolean rateLimiting = false;
     public boolean slashCommands = false;
     public boolean roleIsToggle = false;
@@ -102,7 +103,8 @@ public class GuildConfig extends GuildFile {
     ArrayList<Long> modifierRoleIDs = new ArrayList<>();
     ArrayList<Long> trustedRoleIDs = new ArrayList<>();
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
-    ArrayList<OffenderObject> repeatOffenders = new ArrayList<>();
+    ArrayList<OffenderObject> offenders = new ArrayList<>();
+
 
     public void setLastDailyMessage(DailyMessage lastDailyMessage) {
         this.lastDailyMessage = lastDailyMessage;
@@ -150,14 +152,6 @@ public class GuildConfig extends GuildFile {
         guildID = guild.getLongID();
 
         validateRoles();
-
-        //update repeat offenders.
-        for (int i = 0; i < repeatOffenders.size(); i++) {
-            IUser offender = Globals.getClient().getUserByID(repeatOffenders.get(i).getID());
-            if (offender != null) {
-                repeatOffenders.get(i).setDisplayName(offender.getName() + "#" + offender.getDiscriminator());
-            }
-        }
 
         //update channels
         for (ChannelSettingObject c : channelSettings) {
@@ -255,19 +249,21 @@ public class GuildConfig extends GuildFile {
     }
 
     public void addOffender(OffenderObject offenderObject) {
-        repeatOffenders.add(offenderObject);
+        offenders.add(offenderObject);
     }
 
-    public ArrayList<OffenderObject> getRepeatOffenders() {
-        return repeatOffenders;
+    public ArrayList<OffenderObject> getOffenders() {
+        return offenders;
     }
 
     public void addOffence(long userID) {
-        for (int i = 0; i < repeatOffenders.size(); i++) {
-            if (repeatOffenders.get(i).getID() == userID) {
-                repeatOffenders.get(i).addOffence();
+        for (OffenderObject o: offenders) {
+            if (o.getID() == userID) {
+                o.addOffence();
+                return;
             }
         }
+        addOffender(new OffenderObject(userID));
     }
 
     public void setMutedRoleID(long mutedRole) {
@@ -461,5 +457,18 @@ public class GuildConfig extends GuildFile {
 
     public void setPinLimit(int pinLimit) {
         this.pinLimit = pinLimit;
+    }
+
+    public OffenderObject getOffender(long userID) {
+        for (OffenderObject o : offenders) {
+            if (o.getID() == userID) {
+                return o;
+            }
+        }
+        return null;
+    }
+
+    public void resetOffenders() {
+        offenders = new ArrayList<>();
     }
 }

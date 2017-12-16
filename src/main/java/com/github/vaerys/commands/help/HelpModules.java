@@ -31,7 +31,7 @@ public class HelpModules implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"HelpModule","HelpModules"};
+        return new String[]{"HelpModule","HelpModules","ModuleHelp"};
     }
 
     @Override

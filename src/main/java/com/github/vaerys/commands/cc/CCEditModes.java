@@ -3,6 +3,7 @@ package com.github.vaerys.commands.cc;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
+import com.github.vaerys.tags.cctags.TagSearchTags;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
@@ -78,5 +79,13 @@ public class CCEditModes {
         }
         command.setContents(command.getContents(false) + content);
         return "> Content appended to end of command.";
+    }
+
+    public static String addReplaceTag(CCommandObject customCommand, String content) {
+        if (content == null || content.isEmpty()) {
+            return "> Missing Any new search tags to be added.";
+        }
+        new TagSearchTags(0).addTag(customCommand, content);
+        return "> Search Tag added.";
     }
 }

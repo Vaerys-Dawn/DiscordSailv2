@@ -38,7 +38,7 @@ public enum UserSetting {
                 return SEND_LVLUP_CURRENT_CHANNEL;
             case "dms":
                 return SEND_LVLUP_DMS;
-            case "nolevelmessage":
+            case "nolevelmessages":
                 return DONT_SEND_LVLUP;
             case "noxp":
                 return NO_XP_GAIN;

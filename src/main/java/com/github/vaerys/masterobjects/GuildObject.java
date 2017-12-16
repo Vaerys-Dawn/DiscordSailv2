@@ -308,4 +308,8 @@ public class GuildObject {
             thread.start();
         }
     }
+
+    public void resetOffenders() {
+        config.resetOffenders();
+    }
 }

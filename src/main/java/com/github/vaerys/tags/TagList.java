@@ -30,9 +30,10 @@ public class TagList {
 
     public static void init() {
         //args
-        tags.add(new TagIfArgsEmpty(0, CC));
-        tags.add(new TagIfArgsEmptyReplace(1, CC));
-        tags.add(new TagArgs(2, CC));
+        tags.add(new TagSearchTags(0, CC));
+        tags.add(new TagIfArgsEmpty(1, CC));
+        tags.add(new TagIfArgsEmptyReplace(2, CC));
+        tags.add(new TagArgs(3, CC));
         //simple string replaces
         tags.add(new TagNoBreak(10, CC, INFO, DAILY));
         tags.add(new TagSpacer(10, CC, INFO, DAILY));

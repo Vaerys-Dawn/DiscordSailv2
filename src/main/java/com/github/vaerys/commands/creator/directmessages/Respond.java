@@ -5,6 +5,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.templates.DMCommand;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 
 /**
@@ -16,7 +17,7 @@ public class Respond implements DMCommand {
     public String execute(String args, CommandObject command) {
         SplitFirstObject response = new SplitFirstObject(args);
         IUser recipient = command.client.get().getUserByID(Utility.stringLong(response.getFirstWord()));
-        return sendDM(response.getRest(), command, recipient,command.user.username + ": " );
+        return sendDM(response.getRest(), command, recipient, command.user.username + ": ");
     }
 
     public static String sendDM(String args, CommandObject command, IUser recipient, String prefix) {
@@ -27,7 +28,12 @@ public class Respond implements DMCommand {
             return "> Could Not Send Response, Contents cannot be empty.";
         }
         IChannel channel = recipient.getOrCreatePMChannel();
-        if (Utility.sendMessage(prefix +  args, channel).get() == null) {
+        if (command.message.getAttachments().size() != 0) {
+            for (IMessage.Attachment a : command.message.getAttachments()) {
+                args += "\n" + a.getUrl();
+            }
+        }
+        if (Utility.sendMessage(prefix + args, channel).get() == null) {
             return "> An Error occurred while attempting to run this command.";
         } else {
             return "> Message Sent.";

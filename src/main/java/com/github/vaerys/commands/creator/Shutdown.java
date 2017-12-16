@@ -18,7 +18,7 @@ public class Shutdown implements Command {
         try {
             Thread.sleep(4000);
             Globals.getClient().logout();
-            Runtime.getRuntime().exit(0);
+            System.exit(1);
         } catch (DiscordException e) {
             Utility.sendStack(e);
         } catch (InterruptedException e) {

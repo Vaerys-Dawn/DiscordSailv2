@@ -10,7 +10,7 @@ public class DealWithIt implements SlashCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return "(•\\_•) ( •\\_•)>⌐■-■ (⌐■_■)";
+        return "(•\\_•)\n( •\\_•)>⌐■-■\n(⌐■_■)";
     }
 
     @Override

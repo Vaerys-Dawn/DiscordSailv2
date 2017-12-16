@@ -2,6 +2,7 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.guildtoggles.modules.ModuleCC;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
@@ -15,8 +16,7 @@ public class Test implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        Utility.sendEmbedMessage("", new ModuleCC().info(command), command.channel.get());
-        return null;
+        return nothing;
 //        throw new DiscordException("TestException");
 //        return nothing;
     }

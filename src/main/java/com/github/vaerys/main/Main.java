@@ -42,6 +42,7 @@ public class Main {
             @Override
             public void run() {
                 logger.info(">>> Running Shutdown Process <<<");
+                Globals.shuttingDown = true;
                 if (Globals.savingFiles) {
                     try {
                         Thread.sleep(1000);
@@ -50,7 +51,6 @@ public class Main {
                     }
                 }
                 Globals.saveFiles();
-                Globals.shuttingDown = true;
             }
         });
 
@@ -89,11 +89,35 @@ public class Main {
             }
 
             try {
+                List<String> pastebinToken = FileHandler.readFromFile(Constants.FILE_PASTEBIN_TOKEN);
+                Client.initPastebin(pastebinToken);
+            }catch (IndexOutOfBoundsException e){
+                logger.info("No Pastebin Token found.");
+            }
+
+            try {
                 List<String> patreonToken = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN);
                 Client.initPatreon(patreonToken);
             } catch (IndexOutOfBoundsException e) {
                 logger.info("No Patreon Token found.");
             }
+
+
+            //stuff that i cant get to work because reasons, ignore completely
+
+//            try{
+//                List<String> richPresesnce = FileHandler.readFromFile(Constants.FILE_RPC_TOKEN);
+//                Client.initRichPresence(richPresesnce);
+//            }catch (IndexOutOfBoundsException e){
+//                logger.info("Rich presence information missing.");
+//            }
+
+//            try {
+//                List<String> imgurToken = FileHandler.readFromFile(Constants.FILE_IMGUR_TOKEN);
+//                Client.initImgur(imgurToken);
+//            } catch (IndexOutOfBoundsException e) {
+//                logger.info("No Patreon Token found.");
+//            }
 
 
             IDiscordClient client = Client.createClient(token, false);
@@ -143,9 +167,14 @@ public class Main {
         logger.info("Console input initiated.");
 
         while (scanner.hasNextLine()) {
+            String message = scanner.nextLine();
+            if (message.equalsIgnoreCase("!Shutdown")){
+                System.exit(-1);
+                return;
+            }
             if (Globals.consoleMessageCID != -1) {
                 IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
-                String message = scanner.nextLine();
+
                 message = message.replace("#Dawn#", Globals.getClient().getUserByID(153159020528533505L).getName());
                 message = message.replace("teh", "the");
                 message = message.replace("Teh", "The");

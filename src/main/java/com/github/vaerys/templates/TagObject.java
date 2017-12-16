@@ -5,6 +5,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,6 +72,15 @@ public abstract class TagObject {
             }
         } else {
             return "";
+        }
+    }
+
+    public List<String> getSpliContents(String from){
+        String contents = contents(from);
+        if (contents != null){
+            return Arrays.asList(contents.split(splitter));
+        }else {
+            return new ArrayList<>();
         }
     }
 

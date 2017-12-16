@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Zip: me.rabrg.imgur.imgur-api">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../imgur-api-master.zip!/imgur-api-master/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/../imgur-api-master.zip!/imgur-api-master/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

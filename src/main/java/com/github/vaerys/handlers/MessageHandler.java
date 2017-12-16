@@ -30,9 +30,10 @@ public class MessageHandler {
 
     public MessageHandler(String args, CommandObject command, boolean isPrivate) {
         if (!isPrivate) {
-            if (checkForInvites(command)) return;
-            if (checkMentionCount(command)) return;
-            if (rateLimiting(command)) return;
+            if (SpamHandler.checkForInvites(command)) return;
+            if (SpamHandler.checkMentionCount(command)) return;
+            if (SpamHandler.rateLimiting(command)) return;
+            if (SpamHandler.catchWalls(command)) return;
             XpHandler.grantXP(command);
             if (command.guild.config.artPinning) {
                 if (command.guild.config.autoArtPinning) {
@@ -61,7 +62,7 @@ public class MessageHandler {
             if (c.isCall(args, command)) {
                 commandArgs = c.getArgs(args, command);
                 //log command
-                logger.debug(Utility.loggingFormatter(command, "COMMAND"));
+                logger.debug(Utility.loggingFormatter(command, "COMMAND", c.getCommand(command), c.getArgs(args, command)));
                 //test if user has permissions
                 if (!Utility.testForPerms(command, c.perms())) {
                     Utility.sendMessage(command.user.notAllowed, currentChannel);
@@ -71,15 +72,9 @@ public class MessageHandler {
                 if (!currentChannel.isPrivate()) {
                     if (c.channel() != null && !Utility.canBypass(command.user.get(), command.guild.get())) {
                         List<IChannel> channels = command.guild.config.getChannelsByType(c.channel(), command.guild);
-                        if (!channels.contains(command.channel.get()) && channels.size() != 0) {
+                        if (channels.size() != 0 && !channels.contains(command.channel.get())) {
                             List<String> list = Utility.getChannelMentions(command.user.getVisibleChannels(channels));
-                            if (list.size() == 0) {
-                                Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.", currentChannel);
-                            } else if (list.size() > 1) {
-                                Utility.sendMessage("> Command must be performed in any of the following channels: \n" + Utility.listFormatter(list, true), currentChannel);
-                            } else {
-                                Utility.sendMessage("> Command must be performed in: " + list.get(0), currentChannel);
-                            }
+                            Utility.sendMessage(Utility.getChannelMessage(list),command.channel.get());
                             return true;
                         }
                     }
@@ -115,123 +110,5 @@ public class MessageHandler {
         }
         builder.append(" in channel " + commandObject.channel.get().mention() + ".");
         Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging());
-    }
-
-    private boolean checkMentionCount(CommandObject command) {
-        IMessage message = command.message.get();
-        GuildConfig guildconfig = command.guild.config;
-        IUser author = command.user.get();
-        List<IRole> oldRoles = command.user.roles;
-        IGuild guild = command.guild.get();
-
-        if (message.toString().contains("@everyone") || message.toString().contains("@here")) {
-            return false;
-        }
-        if (guildconfig.maxMentions) {
-            if (message.getMentions().size() > 8) {
-                Utility.deleteMessage(message);
-                int i = 0;
-                boolean offenderFound = false;
-                for (OffenderObject o : guildconfig.getRepeatOffenders()) {
-                    if (author.getLongID() == o.getID()) {
-                        guildconfig.addOffence(o.getID());
-                        offenderFound = true;
-                        i++;
-                        if (o.getCount() >= Globals.maxWarnings) {
-                            Utility.roleManagement(author, guild, guildconfig.getMutedRoleID(), true);
-                            command.client.get().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, author, oldRoles, command.user.get().getRolesForGuild(guild)));
-                            Utility.sendMessage("> " + author.mention() + " Has been Muted for repeat offences of spamming Mentions.", command.channel.get());
-                        }
-                    }
-                }
-                if (!offenderFound) {
-                    guildconfig.addOffender(new OffenderObject(author.getLongID()));
-                }
-                String response = "> #mentionAdmin# " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message.";
-                IRole roleToMention = command.guild.getRoleByID(guildconfig.getRoleToMentionID());
-                if (roleToMention != null) {
-                    response = response.replaceAll("#mentionAdmin#", roleToMention.mention());
-                } else {
-                    response = response.replaceAll("#mentionAdmin#", "Admin");
-                }
-                Utility.sendMessage(response, command.channel.get());
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean rateLimiting(CommandObject command) {
-        //make sure that the rate limiting should actually happen
-        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
-        if (!command.guild.config.rateLimiting) return false;
-        if (!command.guild.rateLimit(command.user.longID)) return false;
-
-        //send a dm to let the user know that they are being rate limited
-        IChannel userDMs = command.user.get().getOrCreatePMChannel();
-        if (userDMs != null) {
-            Utility.sendMessage("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guild.config.messageLimit, userDMs);
-        }
-
-        //user is now being rate limited
-        Utility.deleteMessage(command.message.get());
-        if (command.guild.config.deleteLogging) {
-            Utility.sendLog("> **@" + command.user.username + "** is being rate limited", command.guild, false);
-        }
-
-        //if mute continue
-        if (!command.guild.config.muteRepeatOffenders) return true;
-        IRole muteRole = command.guild.getRoleByID(command.guild.config.getMutedRoleID());
-        if (muteRole == null) return true;
-
-        //if they are over the rate limit start muting
-        int rate = command.guild.getUserRate(command.user.longID);
-        if (rate - 3 < command.guild.config.messageLimit) return true;
-
-        //this mutes them
-        RequestBuffer.request(() -> command.user.get().addRole(muteRole));
-
-        //setup of the admin channel
-        IChannel adminChannel = null;
-        List<IChannel> adminChannels = command.guild.config.getChannelsByType(Command.CHANNEL_ADMIN, command.guild);
-        if (adminChannels.size() != 0) adminChannel = adminChannels.get(0);
-        if (adminChannel == null) adminChannel = command.channel.get();
-
-        //sends the response if they got muted
-        Utility.sendDM("You have been muted for abusing the Guild rate limit.", command.user.longID);
-        Utility.sendMessage("> " + command.user.get().mention() + " has been muted for repetitively abusing Guild rateLimit.", adminChannel);
-        return true;
-    }
-
-    //File com.github.vaerys.handlers
-
-    //BlackListed Phrase Remover
-    private boolean checkForInvites(CommandObject command) {
-        GuildConfig guildconfig = command.guild.config;
-        IMessage message = command.message.get();
-        IGuild guild = command.guild.get();
-        IUser author = command.user.get();
-        List<String> inviteformats = new ArrayList<String>() {{
-            add("discord.gg");
-            add("discordapp.com/Invite/");
-        }};
-
-        boolean inviteFound = false;
-        if (guildconfig.denyInvites) {
-            for (String s : inviteformats) {
-                if (message.toString().toLowerCase().contains(s.toLowerCase())) {
-                    if (guildconfig.testIsTrusted(author, guild)) {
-                        return false;
-                    }
-                    inviteFound = true;
-                }
-            }
-        }
-        if (inviteFound) {
-            String response = "> Please do not post Instant Invites.";
-            Utility.deleteMessage(message);
-            Utility.sendMessage(response, command.channel.get());
-        }
-        return inviteFound;
     }
 }

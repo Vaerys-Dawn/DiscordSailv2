@@ -32,6 +32,7 @@ public class Constants {
     public static final String ERROR_BRACKETS = "> Brackets `[]` and Parentheses `()` are not required, " +
             "they mean that a variable is required or optional respectively, so don't use them.";
 
+
     public static String getWelcomeMessage(CommandObject object) {
         return "> I am S.A.I.L, your Server-Based Artificial Intelligence Lattice. I help manage servers.\n" +
                 "I am also programmed to offer you information and tools.\n\n" +
@@ -54,13 +55,16 @@ public class Constants {
     //Files
     public static final String FILE_TOKEN = DIRECTORY_STORAGE + "Token.txt";
     public static final String FILE_PATREON_TOKEN = DIRECTORY_STORAGE + "Patreon_Token.txt";
+    public static final String FILE_PASTEBIN_TOKEN = DIRECTORY_STORAGE + "Pastebin_Token.txt";
+    public static final String FILE_IMGUR_TOKEN = DIRECTORY_STORAGE + "Imgur_Token.txt";
+    public static final String FILE_RPC_TOKEN = DIRECTORY_STORAGE + "Rich_token.txt";
     public static final String FILE_INFO = "Info.txt";
     public static final String FILE_CONFIG = "Config.json";
     public static final String FILE_GLOBAL_DATA = "Global_Data.json";
 
     public static final String LEVEL_UP_IMAGE_URL = "http://i.imgur.com/Vdt2DkK.gif";
     public static final String RANK_UP_IMAGE_URL = "http://i.imgur.com/MwsPixA.gif";
-
+    public static final String PATREON_ICON_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/1024px-Patreon_logo.svg.png";
 
     //EnumSets
     public static final ArrayList<UserSetting> levelUpStates = new ArrayList<UserSetting>() {{

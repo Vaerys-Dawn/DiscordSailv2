@@ -72,4 +72,8 @@ public class DailyMessages extends GlobalFile {
         }
         return object;
     }
+
+    public void setMessages(ArrayList<DailyMessage> messages) {
+        this.dailyMessages = messages;
+    }
 }

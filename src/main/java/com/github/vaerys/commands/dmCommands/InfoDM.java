@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.help.Info;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.DMCommand;
@@ -69,7 +70,7 @@ public class InfoDM implements DMCommand {
 
     @Override
     public String[] names() {
-        return new String[]{"Info"};
+        return new Info().names();
     }
 
     @Override

@@ -66,6 +66,7 @@ public class CommandInit {
         commands.add(new Ping());
         commands.add(new LastDailyMessage());
         commands.add(new NewDailyMessage());
+        commands.add(new Patreon());
         //Help commands
         commands.add(new GetGuildInfo());
         commands.add(new Help());
@@ -117,6 +118,7 @@ public class CommandInit {
         commands.add(new EnterVote());
         commands.add(new PurgeComp());
         commands.add(new WeightedFinalTally());
+        commands.add(new RemoveEntry());
         //Groups commands
         commands.add(new GroupUp());
         commands.add(new ClearGroupUp());
@@ -178,6 +180,7 @@ public class CommandInit {
         commands.add(new SetPlayingStatus());
         commands.add(new DailyMsg());
         commands.add(new EventSetup());
+        commands.add(new WhoIsThis());
         //DM Creator Commands
         commands.add(new BlockUser());
         commands.add(new GetGuildList());
@@ -187,6 +190,7 @@ public class CommandInit {
         commands.add(new QuickRespond());
         commands.add(new TestDM());
         commands.add(new Echo());
+        commands.add(new WhoWasThat());
         return commands;
     }
 }

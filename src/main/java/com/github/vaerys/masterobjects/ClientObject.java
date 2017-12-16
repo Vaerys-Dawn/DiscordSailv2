@@ -23,7 +23,7 @@ public class ClientObject {
         if (!client.isReady()) return;
         this.bot = object.getOurUser();
         this.longID = bot.getLongID();
-        if (guild.get() != null) {
+        if (guild != null && guild.get() != null) {
             roles = bot.getRolesForGuild(guild.get());
             color = Utility.getUsersColour(bot, guild.get());
         } else {
@@ -35,5 +35,9 @@ public class ClientObject {
 
     public IDiscordClient get() {
         return object;
+    }
+
+    public IUser getUserByID(long userID) {
+        return object.getUserByID(userID);
     }
 }

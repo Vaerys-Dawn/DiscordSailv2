@@ -36,6 +36,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
@@ -83,12 +84,12 @@ public class Utility {
         EnumSet<Permissions> toMatch = EnumSet.noneOf(Permissions.class);
         toMatch.addAll(Arrays.asList(perms));
         //Debug code.
-        List<String> toMatchList = new ArrayList<String>() {{
-            addAll(toMatch.stream().map(Enum::toString).collect(Collectors.toList()));
-        }};
-        List<String> userList = new ArrayList<String>() {{
-            addAll(user.getPermissionsForGuild(guild).stream().map(Enum::toString).collect(Collectors.toList()));
-        }};
+//        List<String> toMatchList = new ArrayList<String>() {{
+//            addAll(toMatch.stream().map(Enum::toString).collect(Collectors.toList()));
+//        }};
+//        List<String> userList = new ArrayList<String>() {{
+//            addAll(user.getPermissionsForGuild(guild).stream().map(Enum::toString).collect(Collectors.toList()));
+//        }};
 //        if (true) {
 //            logger.trace("To Match : " + Utility.listFormatter(toMatchList, true));
 //            logger.trace("User Perms : " + Utility.listFormatter(userList, true));
@@ -901,8 +902,11 @@ public class Utility {
         return roles;
     }
 
-    public static String loggingFormatter(CommandObject commandObject, String type) {
-        return "TYPE: \"" + type + "\", GUILD : \"" + commandObject.guild.longID +
+    public static String loggingFormatter(CommandObject commandObject, String type, String name, String contents) {
+        return "TYPE : \"" + type +
+                "\", " + type + "_NAME : " + name +
+                "\", CONTENTS : \"" + contents +
+                "\", GUILD : \"" + commandObject.guild.longID +
                 "\", CHANNEL : \"" + commandObject.channel.longID +
                 "\", USER : \"" + commandObject.user.longID +
                 "\", MESSAGE : \"" + commandObject.message.longID +
@@ -1324,11 +1328,11 @@ public class Utility {
                     break;
                 }
                 try {
-                    UserObject object = new UserObject(u,command.guild, true);
+                    UserObject object = new UserObject(u, command.guild, true);
                     if (object == null) throw new IllegalStateException("User is null");
-                    if (hasProfile){
+                    if (hasProfile) {
                         ProfileObject profile = object.getProfile(command.guild);
-                        if (profile == null || profile.isEmpty()){
+                        if (profile == null || profile.isEmpty()) {
                             throw new IllegalStateException("Profile Is Null");
                         }
                     }
@@ -1343,16 +1347,16 @@ public class Utility {
                         user = u;
                     }
                     if (doContains && conUser == null) {
-                        if (u.getName().matches("(?i)^" + toTest + ".*")) {
+                        if (u.getName().matches("(?i).*" + toTest + ".*")) {
                             conUser = u;
                         }
-                        if (displayName.matches("(?i)^" + toTest + ".*") && conUser == null) {
+                        if (displayName.matches("(?i).*" + toTest + ".*") && conUser == null) {
                             conUser = u;
                         }
                     }
                 } catch (PatternSyntaxException e) {
                     //continue.
-                } catch (IllegalStateException e){
+                } catch (IllegalStateException e) {
                     //continue.
                 }
             }
@@ -1376,7 +1380,7 @@ public class Utility {
     }
 
     public static UserObject getUser(CommandObject command, String args, boolean doContains) {
-        return getUser(command,args,doContains,true);
+        return getUser(command, args, doContains, true);
     }
 
     public static String escapeRegex(String args) {
@@ -1489,4 +1493,77 @@ public class Utility {
         }
         return mostCorrect;
     }
+
+    public static String getChannelMessage(List<String> channelMentions) {
+        if (channelMentions.size() == 0) {
+            return "> You do not have access to any channels that you are able to run this command in.";
+        } else if (channelMentions.size() == 1) {
+            return "> Command must be performed in: " + channelMentions.get(0);
+        } else {
+            return "> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true);
+        }
+    }
+
+    public static boolean isImgurAlbum(String fileURL) {
+        return Pattern.compile("https?://imgur\\.com/a/.*").matcher(fileURL).matches();
+    }
+
+    public static boolean muteUser(CommandObject command, boolean b) {
+        return muteUser(command.guild.longID,command.user.longID,b);
+    }
 }
+
+//    public static List<String> getAlbumIUrls(String fileURL) {
+//        String id = getImgurID(fileURL);
+//        if (id == null) return new ArrayList<>();
+//        Album album = getAlbum(id);
+//        if (album != null) {
+//            return album.getImages().stream().map(image -> image.getLink()).collect(Collectors.toList());
+//        } else return new ArrayList<>();
+//    }
+
+//    private static String getImgurID(String fileURL) {
+//        if (!isImgurAlbum(fileURL)) return null;
+//        return fileURL.replaceAll("https?://imgur\\.com/a/", "");
+//    }
+
+//    public static Album getAlbum(String id) {
+//        String albulUrl = "https://api.imgur.com/3/album/";
+//        albulUrl += id;
+//        HttpURLConnection request;
+//        try {
+//            URL url = new URL(albulUrl);
+//            request = (HttpURLConnection) url.openConnection();
+//            request.setDoOutput(true);
+//            request.setRequestMethod("GET");
+//            request.connect();
+//            JsonParser parser = new JsonParser();
+//            JsonElement element = parser.parse(new InputStreamReader((org.omg.CORBA.portable.InputStream) request.getContent()));
+//            if (request.getResponseCode() == HttpURLConnection.HTTP_OK) {
+//                Album album = new Gson().fromJson(element.getAsJsonObject().getAsString(), Album.class);
+//                return album;
+//            }
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
+//    public static HttpResponse requestPOST(String requestURL, StringEntity entity) {
+//        String postUrl = requestURL;// put in your url
+//        HttpClient httpClient = HttpClientBuilder.create().build();
+//        HttpPost post = new HttpPost(postUrl);
+//        post.setEntity(entity);
+//        post.setHeader("Content-type", "application/json");
+//        try {
+//            return httpClient.execute(post);
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//}

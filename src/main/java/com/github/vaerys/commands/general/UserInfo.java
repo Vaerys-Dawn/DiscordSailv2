@@ -2,6 +2,7 @@ package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -115,7 +116,7 @@ public class UserInfo implements Command {
         desc.append("\n" + Utility.listFormatter(links, true));
 
         if (user.isPatron) {
-            builder.withAuthorIcon("https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/1024px-Patreon_logo.svg.png");
+            builder.withAuthorIcon(Constants.PATREON_ICON_URL);
         }
 
         builder.withDesc(desc.toString());

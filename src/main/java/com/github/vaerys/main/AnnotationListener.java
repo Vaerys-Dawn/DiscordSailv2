@@ -78,17 +78,14 @@ public class AnnotationListener {
     @EventSubscriber
     public void onMessageReceivedEvent(MessageReceivedEvent event) {
         try {
-            if (event.getAuthor().isBot()) {
-                return;
-            }
+            if (event.getAuthor().isBot()) return;
+
             CommandObject command = new CommandObject(event.getMessage());
             //Set Console Response Channel.
             if (command.user.get().equals(command.client.creator)) {
                 Globals.consoleMessageCID = command.channel.longID;
             }
-
             command.guild.handleWelcome(command);
-
 
             //message and command handling
             new MessageHandler(command.message.get().getContent(), command, event.getChannel().isPrivate());
@@ -259,6 +256,7 @@ public class AnnotationListener {
         if (event.getMessage() == null) {
             return;
         }
+        if (event.getGuild().getUserByID(event.getMessage().getAuthor().getLongID()) == null) return;
         CommandObject command = new CommandObject(event.getMessage());
         String content;
         IUser ourUser = Globals.client.getOurUser();

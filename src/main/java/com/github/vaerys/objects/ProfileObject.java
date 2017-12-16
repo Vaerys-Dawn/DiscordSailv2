@@ -140,7 +140,6 @@ public class ProfileObject {
 
     public boolean isEmpty() {
         return xp == 0 &&
-                (currentLevel == -1 || currentLevel == 0) &&
                 quote.equals(defaultQuote) &&
                 gender.equals(defaultGender) &&
                 links.size() == 0 &&

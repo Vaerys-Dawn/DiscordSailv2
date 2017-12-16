@@ -32,7 +32,7 @@ public class UpdateChar implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Updates/Creates a Character.";
+        return "Updates/Creates or loads the character with the data from your discord account into the character. (Cosmetic roles and Nickname)";
     }
 
     @Override

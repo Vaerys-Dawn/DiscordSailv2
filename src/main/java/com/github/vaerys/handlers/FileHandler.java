@@ -1,5 +1,6 @@
 package com.github.vaerys.handlers;
 
+import com.github.vaerys.main.Utility;
 import com.google.gson.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +82,7 @@ public class FileHandler {
             }
             logger.trace("Writing to file: " + file);
         } catch (IOException e) {
-            logger.error(e.getCause().toString());
+            Utility.sendStack(e);
         }
     }
 

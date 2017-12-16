@@ -49,6 +49,7 @@ public class ToggleInit {
         guildToggles.add(new ReactToLevelUp());
         guildToggles.add(new LikeArt());
         guildToggles.add(new DebugMode());
+        guildToggles.add(new StopSpamWalls());
 
         //modules
         guildToggles.add(new ModuleGroups());

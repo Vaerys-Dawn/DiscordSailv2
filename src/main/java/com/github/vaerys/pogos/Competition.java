@@ -1,6 +1,5 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CompObject;
 import com.github.vaerys.objects.PollObject;
@@ -34,11 +33,12 @@ public class Competition extends GuildFile {
     }
 
     public String addVote(long voterID, String vote) {
-        StringBuilder builder = new StringBuilder();
+        if (voterID == 137281607638843392L && vote.startsWith("-")) {
+            return "> Ha ha very funny dark, not this time.";
+        }
         boolean userFound = false;
         int position = -1;
         ArrayList<String> userVotes;
-        ArrayList<String> newVotes = new ArrayList<>(Arrays.asList(vote.split(" ")));
         for (int i = 0; i < voting.size(); i++) {
             String[] testVotes = voting.get(i).split(",");
             if (voterID == Utility.stringLong(testVotes[0])) {
@@ -55,30 +55,15 @@ public class Competition extends GuildFile {
         if (userVotes.size() == voteLimit + 1) {
             return "> You have already used up all of your votes.";
         }
-        int x = 0;
-        builder.append("> Your votes for entries: \n");
-        for (int i = 0; newVotes.size() > i; i++) {
-            if (x < voteLimit && userVotes.size() < voteLimit + 1) {
-                try {
-                    int entry = Integer.parseInt(newVotes.get(i));
-                    if (entry > entries.size()) {
-                        //builder.append("    **Vote Not Counted. Reason: Number too high**\n");
-                    } else if (entry <= 0) {
-                        //builder.append("    **Vote Not Counted. Reason: Number = 0\n");
-                    } else {
-                        userVotes.add("" + entry);
-                        builder.append(Constants.PREFIX_INDENT + "Entry: **" + entry + "**\n");
-                        x++;
-                    }
-                } catch (NumberFormatException e) {
-                    //builder.append("    **Vote Not Counted. Reason: Not a number**\n");
-                }
+        try {
+            int voteNumber = Integer.parseInt(vote);
+            if (voteNumber > entries.size() || voteNumber < 1) {
+                return "> Your vote was not counted because it was not a valid entry number.";
             }
+            userVotes.add(vote);
+        } catch (NumberFormatException e) {
+            return "> Your vote was not counted because it wasn't a number.";
         }
-        if (newVotes.size() > voteLimit) {
-            //builder.append("    **Rest of Votes Not Counted: Reason Max votes = " + Globals.voteLimit + "**\n");
-        }
-        builder.append(Constants.PREFIX_INDENT + "Have been saved. you now have: **" + (voteLimit - userVotes.size() + 1) + "** Vote token(s) left.");
 
         StringBuilder finalVotes = new StringBuilder();
         for (String s : userVotes) {
@@ -90,7 +75,7 @@ public class Competition extends GuildFile {
         } else {
             voting.add(finalVotes.toString());
         }
-        return builder.toString();
+        return "> Thank you for voting.";
     }
 
     public void purgeVotes() {
