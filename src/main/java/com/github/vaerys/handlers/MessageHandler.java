@@ -86,9 +86,9 @@ public class MessageHandler {
                 }
                 //command logging
                 handleLogging(command, c, commandArgs);
-//                if (!command.channel.get().getTypingStatus()) {
-//                    command.channel.get().toggleTypingStatus();
-//                }
+                if (!command.channel.get().getTypingStatus()) {
+                    command.channel.get().toggleTypingStatus();
+                }
                 String response = c.execute(commandArgs, command);
                 Utility.sendMessage(response, currentChannel);
                 return true;
