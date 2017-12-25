@@ -18,7 +18,7 @@ public class Restart implements Command {
         try {
             Thread.sleep(4000);
             Globals.getClient().logout();
-            System.exit(2);
+            System.exit(Globals.EXITCODE_RESTART);
         } catch (DiscordException e) {
             Utility.sendStack(e);
         } catch (InterruptedException e) {
