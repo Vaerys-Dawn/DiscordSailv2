@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.templates.Command;
 
 /**
@@ -14,8 +14,8 @@ public class SilentReport extends Report implements Command {
         if (command.channel.get().getTypingStatus()) {
             command.channel.get().toggleTypingStatus();
         }
-        Utility.deleteMessage(command.message.get());
-        Utility.sendMessage(Report.report(args, command, true), command.user.get().getOrCreatePMChannel());
+        RequestHandler.deleteMessage(command.message.get());
+        RequestHandler.sendMessage(Report.report(args, command, true), command.user.get().getOrCreatePMChannel());
         return null;
     }
 

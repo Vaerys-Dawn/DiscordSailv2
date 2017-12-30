@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
@@ -15,7 +15,7 @@ public class HelpTags implements Command {
     public String execute(String args, CommandObject command) {
         for (TagObject t : TagList.get()) {
             if (t.name.equalsIgnoreCase(args) || t.name.equalsIgnoreCase("<" + args + ">")) {
-                Utility.sendEmbedMessage("", t.getInfo(command), command.channel.get());
+                RequestHandler.sendEmbedMessage("", t.getInfo(command), command.channel.get());
                 return null;
             }
         }

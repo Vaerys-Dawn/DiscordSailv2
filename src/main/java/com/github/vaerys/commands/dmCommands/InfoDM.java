@@ -2,7 +2,7 @@ package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.Info;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.DMCommand;
 
@@ -23,7 +23,7 @@ public class InfoDM implements DMCommand {
 //                    if (!Utility.testForPerms(c.perms(), command.user.get(), command.guild.get())) {
 //                        return error;
 //                    }
-                    Utility.sendEmbedMessage("", c.getCommandInfo(command), command.channel.get());
+                    RequestHandler.sendEmbedMessage("", c.getCommandInfo(command), command.channel.get());
                     return "";
                 }
             }

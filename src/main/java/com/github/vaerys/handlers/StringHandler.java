@@ -1,0 +1,124 @@
+package com.github.vaerys.handlers;
+
+public class StringHandler {
+    private StringBuffer string;
+
+    public StringHandler(String s) {
+        this.string = new StringBuffer(s);
+    }
+
+    public StringHandler(StringBuffer string) {
+        this.string = string;
+    }
+
+    public StringHandler() {
+        this.string = new StringBuffer();
+    }
+
+    public StringHandler setContent(String content) {
+        string.replace(0, string.length(), content);
+        return null;
+    }
+
+    public StringHandler emptyContent() {
+        string.replace(0, string.length(), "");
+        return this;
+    }
+
+    public StringHandler replace(String replaceFrom, String replaceTo) {
+        setContent(string.toString().replace(replaceFrom, replaceTo));
+        return this;
+    }
+
+    public StringHandler replace(StringBuffer toReplace, StringBuffer replaceWith) {
+        return replace(toReplace.toString(), replaceWith.toString());
+    }
+
+    public StringHandler replace(StringHandler toReplace, StringHandler replaceWith) {
+        return replace(toReplace.toString(), replaceWith.toString());
+    }
+
+    public StringHandler replace(int start, int end, String replacement) {
+        string.replace(start, end, replacement);
+        return this;
+    }
+
+    public StringHandler replaceRegex(String regex, String replacement) {
+        setContent(string.toString().replaceAll(regex, replacement));
+        return this;
+    }
+
+    public StringHandler replaceRegex(StringBuffer regex, StringBuffer replacement) {
+        return replaceRegex(regex.toString(), replacement.toString());
+    }
+
+    public StringHandler replaceRegex(StringHandler regex, StringHandler replacement) {
+        return replaceRegex(regex.toString(), replacement.toString());
+    }
+
+    public StringBuffer get() {
+        return string;
+    }
+
+    @Override
+    public String toString() {
+        return string.toString();
+    }
+
+    public StringHandler append(String s) {
+        string.append(s);
+        return this;
+    }
+
+    public StringHandler append(float f) {
+        string.append(f);
+        return this;
+    }
+
+    public StringHandler append(double d) {
+        string.append(d);
+        return this;
+    }
+
+    public StringHandler append(char[] str) {
+        string.append(str);
+        return this;
+    }
+
+    public StringHandler append(CharSequence s) {
+        string.append(s);
+        return this;
+    }
+
+    public StringHandler append(StringBuffer s) {
+        string.append(s);
+        return this;
+    }
+
+    public StringHandler append(boolean b) {
+        string.append(b);
+        return this;
+    }
+
+    public StringHandler append(int i) {
+        string.append(i);
+        return this;
+    }
+
+    public StringHandler append(char c) {
+        string.append(c);
+        return this;
+    }
+
+    public StringHandler append(long l) {
+        string.append(l);
+        return this;
+    }
+
+    public StringHandler append(Object o) {
+        string.append(o);
+        return this;
+    }
+
+
+}

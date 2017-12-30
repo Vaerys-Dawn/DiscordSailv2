@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.XEmbedBuilder;
@@ -18,7 +19,7 @@ public class CharInfo implements Command {
     public String execute(String args, CommandObject command) {
         for (CharacterObject object : command.guild.characters.getCharacters(command.guild.get())) {
             if (object.getName().equalsIgnoreCase(args)) {
-                XEmbedBuilder builder = new XEmbedBuilder();
+                XEmbedBuilder builder = new XEmbedBuilder(command);
                 builder.withTitle(object.getNickname());
 
                 ArrayList<IRole> roles = new ArrayList<>();
@@ -31,8 +32,6 @@ public class CharInfo implements Command {
                 }
                 if (roles.size() != 0) {
                     builder.withColor(Utility.getUsersColour(roles, command.guild.get()));
-                } else {
-                    builder.withColor(command.client.color);
                 }
 
                 StringBuilder description = new StringBuilder();
@@ -56,7 +55,7 @@ public class CharInfo implements Command {
                     }
                     builder.withThumbnail(object.getAvatarURL());
                 }
-                Utility.sendEmbedMessage("", builder, command.channel.get());
+                RequestHandler.sendEmbedMessage("", builder, command.channel.get());
                 return null;
             }
         }

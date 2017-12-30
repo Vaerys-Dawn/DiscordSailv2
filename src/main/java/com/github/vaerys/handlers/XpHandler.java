@@ -187,7 +187,7 @@ public class XpHandler {
         //only do a role update if the role count changes
         List<IRole> currentRoles = user.getRolesForGuild(content.get());
         if (!currentRoles.containsAll(userRoles) || currentRoles.size() != userRoles.size()) {
-            Utility.roleManagement(user, content.get(), userRoles);
+            RequestHandler.roleManagement(user, content.get(), userRoles);
         }
     }
 
@@ -237,7 +237,7 @@ public class XpHandler {
                 object.message.get().getAttachments().isEmpty()) return;
 
         //you cannot gain xp in an xpDenied channel
-        List<IChannel> xpChannels = object.guild.config.getChannelsByType(Command.CHANNEL_XP_DENIED, object.guild);
+        List<IChannel> xpChannels = object.guild.getChannelsByType(Command.CHANNEL_XP_DENIED);
         if (xpChannels.size() > 0) {
             if (xpChannels.contains(object.channel.get())) {
                 return;
@@ -306,8 +306,8 @@ public class XpHandler {
             } else {
                 userOverride = object.guild.config.defaultLevelMode;
             }
-            List<IChannel> levelDenied = object.guild.config.getChannelsByType(Command.CHANNEL_LEVEL_UP_DENIED, object.guild);
-            List<IChannel> levelUpChannel = object.guild.config.getChannelsByType(Command.CHANNEL_LEVEL_UP, object.guild);
+            List<IChannel> levelDenied = object.guild.getChannelsByType(Command.CHANNEL_LEVEL_UP_DENIED);
+            List<IChannel> levelUpChannel = object.guild.getChannelsByType(Command.CHANNEL_LEVEL_UP);
             if (levelDenied.size() != 0 && levelDenied.contains(object.channel.get())) {
                 if (userOverride != SEND_LVLUP_DMS || userOverride != SEND_LVLUP_RANK_CHANNEL && levelUpChannel.size() == 0) {
                     userOverride = DONT_SEND_LVLUP;
@@ -315,7 +315,7 @@ public class XpHandler {
             }
             switch (userOverride) {
                 case SEND_LVLUP_CURRENT_CHANNEL:
-                    selfDestruct = Utility.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
+                    selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
                     break;
                 case SEND_LVLUP_RANK_CHANNEL:
                     IChannel channel = null;
@@ -323,24 +323,24 @@ public class XpHandler {
                         channel = levelUpChannel.get(0);
                     }
                     if (channel != null) {
-                        if (channel.getModifiedPermissions(object.client.bot).contains(Permissions.ATTACH_FILES)) {
+                        if (channel.getModifiedPermissions(object.client.bot.get()).contains(Permissions.ATTACH_FILES)) {
                             if (rankedup) {
-                                Utility.sendFileURL(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, channel, false);
+                                RequestHandler.sendFileURL(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, channel, false);
                             } else {
-                                Utility.sendFileURL(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, channel, false);
+                                RequestHandler.sendFileURL(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, channel, false);
                             }
                         } else {
-                            Utility.sendMessage(levelUpMessage.toString(), channel).get();
+                            RequestHandler.sendMessage(levelUpMessage.toString(), channel).get();
                         }
                     } else {
-                        selfDestruct = Utility.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
+                        selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
                     }
                     break;
                 case SEND_LVLUP_DMS:
                     if (rankedup) {
-                        Utility.sendFileURL(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel(), false);
+                        RequestHandler.sendFileURL(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel(), false);
                     } else {
-                        Utility.sendFileURL(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel(), false);
+                        RequestHandler.sendFileURL(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel(), false);
                     }
                     break;
                 case DONT_SEND_LVLUP:
@@ -363,7 +363,7 @@ public class XpHandler {
                 }
                 //self destruct messages after 1 min.
                 Thread.sleep(60 * 1000);
-                Utility.deleteMessage(selfDestruct);
+                RequestHandler.deleteMessage(selfDestruct);
             } catch (InterruptedException e) {
                 Utility.sendStack(e);
             }

@@ -101,8 +101,7 @@ public interface SlashCommand extends Command {
 
     @Override
     default XEmbedBuilder getCommandInfo(CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder();
-        builder.withColor(command.client.color);
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(getCommand(command));
         builder.withDescription(description(command));
         if (names().length != 1) {

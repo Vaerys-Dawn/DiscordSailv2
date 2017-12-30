@@ -1,8 +1,10 @@
 package com.github.vaerys.masterobjects;
 
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.RequestHandler;
 import sx.blah.discord.handle.obj.IMessage;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 public class MessageObject {
@@ -35,6 +37,10 @@ public class MessageObject {
     }
 
     public void delete() {
-        Utility.deleteMessage(object);
+        RequestHandler.deleteMessage(object);
+    }
+
+    public LocalDateTime getTimestamp() {
+        return object.getTimestamp();
     }
 }

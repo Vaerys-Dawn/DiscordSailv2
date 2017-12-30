@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.DMCommand;
@@ -18,9 +19,9 @@ public class GetGuildList implements DMCommand {
         for (IGuild g: command.client.get().getGuilds()){
             guilds.add(g.getName() +": " + g.getLongID());
         }
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         Utility.listFormatterEmbed("List Of Guilds", builder, guilds, false);
-        Utility.sendDMEmbed("",builder,command.user.longID);
+        command.user.sendEmbededDm("",builder);
         return null;
     }
 

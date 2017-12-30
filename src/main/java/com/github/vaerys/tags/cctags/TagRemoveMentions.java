@@ -38,8 +38,7 @@ public class TagRemoveMentions extends TagObject {
                     throw new NumberFormatException("You shouldn't see this.");
                 }
             } catch (NumberFormatException e) {
-                from = from.replace("<@!" + id + ">", "null");
-                from = from.replace("<@" + id + ">", "null");
+                from = from.replaceAll("<@!?" + id + ">", "null");
             }
         } else {
             //remove role mentions

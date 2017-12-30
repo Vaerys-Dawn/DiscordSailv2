@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.templates.DMCommand;
@@ -33,7 +34,7 @@ public class Respond implements DMCommand {
                 args += "\n" + a.getUrl();
             }
         }
-        if (Utility.sendMessage(prefix + args, channel).get() == null) {
+        if (RequestHandler.sendMessage(prefix + args, channel).get() == null) {
             return "> An Error occurred while attempting to run this command.";
         } else {
             return "> Message Sent.";

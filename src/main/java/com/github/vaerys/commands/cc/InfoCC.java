@@ -1,8 +1,8 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
@@ -20,8 +20,7 @@ public class InfoCC implements Command {
             return Constants.ERROR_CC_NOT_FOUND;
         }
         StringBuilder builder = new StringBuilder();
-        XEmbedBuilder embedBuilder = new XEmbedBuilder();
-        embedBuilder.withColor(command.client.color);
+        XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String title = "> Here is the information for command: **" + customCommand.getName() + "**\n";
         IUser createdBy = command.guild.getUserByID(customCommand.getUserID());
         if (createdBy == null) createdBy = command.client.get().fetchUser(customCommand.getUserID());
@@ -31,7 +30,7 @@ public class InfoCC implements Command {
         builder.append("Is Locked: **" + customCommand.isLocked() + "**\n");
         builder.append("Is ShitPost: **" + customCommand.isShitPost() + "**");
         embedBuilder.appendField(title, builder.toString(), false);
-        Utility.sendEmbedMessage("", embedBuilder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
         return null;
 
     }

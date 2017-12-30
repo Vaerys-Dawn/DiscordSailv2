@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
@@ -15,7 +15,7 @@ public class HelpModules implements Command {
         if (builder == null) {
             return "> Could not find any modules named **" + args + "**.";
         } else {
-            Utility.sendEmbedMessage("", builder, command.channel.get());
+            RequestHandler.sendEmbedMessage("", builder, command.channel.get());
             return null;
         }
     }

@@ -1,16 +1,14 @@
 package com.github.vaerys.main;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.ArtHandler;
-import com.github.vaerys.handlers.MessageHandler;
-import com.github.vaerys.handlers.QueueHandler;
+import com.github.vaerys.handlers.*;
 import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
@@ -55,7 +53,7 @@ public class AnnotationListener {
     public void onReadyEvent(ReadyEvent event) {
         Globals.isReady = true;
         event.getClient().changePlayingText(Globals.playing);
-        Utility.updateUsername(Globals.botName);
+        RequestHandler.updateUsername(Globals.botName);
     }
 
     @EventSubscriber
@@ -67,7 +65,7 @@ public class AnnotationListener {
             try {
                 logger.trace("Found my pin message, Deleting in 2 minutes.");
                 Thread.sleep(2 * 60 * 1000);
-                Utility.deleteMessage(message);
+                RequestHandler.deleteMessage(message);
             } catch (InterruptedException e) {
                 // do nothing
             }
@@ -106,7 +104,7 @@ public class AnnotationListener {
                 builder.append("\n" + Constants.PREFIX_INDENT + "at " + errorPos);
             }
             builder.append("```");
-            Utility.sendMessage(builder.toString(), event.getChannel());
+            RequestHandler.sendMessage(builder.toString(), event.getChannel());
             Utility.sendStack(e);
             return;
         }
@@ -200,124 +198,51 @@ public class AnnotationListener {
 
         if (emoji == null) return;
 
-        CommandObject object = new CommandObject(event.getMessage());
+        IMessage message = event.getMessage();
+        if (message == null) message = event.getChannel().getMessageByID(event.getMessageID());
+
+        CommandObject object = new CommandObject(message);
 
         //do only on server channels
-        if (!event.getChannel().isPrivate()) {
-            if (!emoji.isUnicode()) {
-                return;
-            } else {
-                //if is pushpin
-                if (emoji.equals(pin)) {
-                    ArtHandler.pinMessage(object.setAuthor(event.getUser()));
-                }
-                //if is thumbsup or thumbs down and is creator.
-                if (emoji.equals(thumbsUp) || emoji.equals(thumbsDown)) {
-                    QueueHandler.reactionAdded(object, event.getReaction());
-                }
-                //if is hear and is pinned then give xp
-                if (emoji.equals(heart)) {
-                    ArtHandler.pinLiked(object.setAuthor(event.getUser()));
-                }
-                //if is x and can bypass
-                if (emoji.equals(x)) {
-                    if (Utility.testForPerms(event.getUser(), event.getGuild(), Permissions.MANAGE_MESSAGES)) {
-                        if (object.client.longID == object.user.longID) {
-                            Utility.deleteMessage(event.getMessage());
-                            return;
-                        }
-                    }
-                }
-            }
+        if (!event.getChannel().isPrivate() && emoji.isUnicode()) {
+            //if is x and can bypass
+            if (emoji.equals(x) && Utility.testForPerms(object, Permissions.MANAGE_MESSAGES)
+                    && object.client.bot.longID == object.user.longID)
+                RequestHandler.deleteMessage(object.message);
+            //if is pushpin
+            if (emoji.equals(pin)) ArtHandler.pinMessage(object.setAuthor(event.getUser()));
+            //if is thumbsup or thumbs down and is creator.
+            if (emoji.equals(thumbsUp) || emoji.equals(thumbsDown))
+                QueueHandler.reactionAdded(object, event.getReaction());
+            //if is hear and is pinned then give xp
+            if (emoji.equals(heart))
+                ArtHandler.pinLiked(object.setAuthor(event.getUser()));
             //do only within Direct messages
-        } else {
-            if (!emoji.isUnicode()) {
-                return;
-            } else {
-                //if anyone uses x
-                if (emoji.equals(x)) {
-                    if (object.client.longID == object.user.longID) {
-                        Utility.deleteMessage(event.getMessage());
-                        return;
-                    }
-                }
+        } else if (event.getChannel().isPrivate() && emoji.isUnicode()) {
+            //if anyone uses x
+            if (emoji.equals(x) && object.client.bot.longID == object.user.longID) {
+                RequestHandler.deleteMessage(message);
             }
         }
     }
 
     @EventSubscriber
     public void onMessageDeleteEvent(MessageDeleteEvent event) {
-        if (event.getChannel().isPrivate()) {
-            return;
-        }
-        if (!Globals.isReady) {
-            return;
-        }
-        if (event.getMessage() == null) {
-            return;
-        }
-        if (event.getGuild().getUserByID(event.getMessage().getAuthor().getLongID()) == null) return;
+        if (!Globals.isReady) return;
+        if (event.getMessage() == null) return;
+        if (event.getGuild().getUserByID(event.getAuthor().getLongID()) == null) return;
         CommandObject command = new CommandObject(event.getMessage());
-        String content;
-        IUser ourUser = Globals.client.getOurUser();
-        EmbedObject object = null;
-
-        if (!shouldLog(command)) {
-            return;
-        }
-
-        if (command.guild.config.deleteLogging) {
-            if ((command.message.get().getContent() == null ||
-                    command.message.get().getContent().isEmpty()) &&
-                    command.message.get().getAttachments().size() == 0 &&
-                    command.message.get().getEmbeds().size() == 0) {
-                return;
-            }
-            int charLimit = 1800;
-            if (command.message.get().getContent().length() > charLimit) {
-                content = Utility.unFormatMentions(command.message.get()).substring(0, 1800) + "...";
-            } else {
-                content = Utility.unFormatMentions(command.message.get());
-            }
-            if (event.getMessage().getAttachments().size() != 0) {
-                for (IMessage.Attachment atc : event.getMessage().getAttachments()) {
-                    if (content.length() != 0) {
-                        content += "\n<" + atc.getUrl() + ">";
-                    } else {
-                        content = "<" + atc.getUrl() + ">";
-                    }
-                }
-            }
-            if ((content.equals("`Loading...`") || content.equals("`Working...`")) && command.user.longID == command.client.longID) {
-                return;
-            }
-            long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - event.getMessage().getTimestamp().atZone(ZoneOffset.UTC).toEpochSecond();
-            String formatted;
-            if (command.guild.config.useTimeStamps) {
-                formatted = "at `" + Utility.formatTimestamp(event.getMessage().getTimestamp().atZone(ZoneOffset.UTC)) + " - UTC`";
-            } else {
-                formatted = "from " + Utility.formatTimeDifference(difference);
-            }
-            if (event.getMessage().getEmbeds().size() != 0) {
-                object = new EmbedObject(command.message.get().getEmbeds().get(0));
-            }
-            String compiled = "> **@" + command.user.username + "'s** Message " + formatted + " was **Deleted** in channel: " + command.channel.get().mention() + " with contents:\n";
-            if (object != null) {
-                Utility.sendLog(compiled + content, command.guild, false, object);
-            } else {
-                Utility.sendLog(compiled + content, command.guild, false);
-            }
-        }
+        LoggingHandler.logDelete(command, event.getMessage());
     }
 
     private boolean shouldLog(CommandObject command) {
         if (command.guild == null) {
             return false;
         }
-        List<IChannel> infoID = command.guild.config.getChannelsByType(Command.CHANNEL_INFO, command.guild);
-        List<IChannel> serverLogID = command.guild.config.getChannelsByType(Command.CHANNEL_SERVER_LOG, command.guild);
-        List<IChannel> adminLogID = command.guild.config.getChannelsByType(Command.CHANNEL_ADMIN_LOG, command.guild);
-        List<IChannel> dontLog = command.guild.config.getChannelsByType(Command.CHANNEL_DONT_LOG, command.guild);
+        List<IChannel> infoID = command.guild.getChannelsByType(Command.CHANNEL_INFO);
+        List<IChannel> serverLogID = command.guild.getChannelsByType(Command.CHANNEL_SERVER_LOG);
+        List<IChannel> adminLogID = command.guild.getChannelsByType(Command.CHANNEL_ADMIN_LOG);
+        List<IChannel> dontLog = command.guild.getChannelsByType(Command.CHANNEL_DONT_LOG);
         if (dontLog.size() != 0) {
             if (dontLog.contains(command.channel.get())) {
                 return false;
@@ -329,13 +254,13 @@ public class AnnotationListener {
         if (command.message.get() == null) {
             return false;
         }
-        if (serverLogID.size() != 0 && serverLogID.get(0).equals(command.channel.get()) && command.client.longID == command.user.longID) {
+        if (serverLogID.size() != 0 && serverLogID.get(0).equals(command.channel.get()) && command.client.bot.longID == command.user.longID) {
             return false;
         }
-        if (infoID.size() != 0 && infoID.get(0).equals(command.channel.get()) && command.client.longID == command.user.longID) {
+        if (infoID.size() != 0 && infoID.get(0).equals(command.channel.get()) && command.client.bot.longID == command.user.longID) {
             return false;
         }
-        if (adminLogID.size() != 0 && adminLogID.get(0).equals(command.channel.get()) && command.client.longID == command.user.longID) {
+        if (adminLogID.size() != 0 && adminLogID.get(0).equals(command.channel.get()) && command.client.bot.longID == command.user.longID) {
             return false;
         }
         return true;
@@ -348,7 +273,8 @@ public class AnnotationListener {
             String message = content.config.getJoinMessage();
             message = message.replace("<server>", event.getGuild().getName());
             message = message.replace("<user>", event.getUser().getName());
-            Utility.sendDM(message, event.getUser().getLongID());
+            UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getLongID()));
+            user.sendDm(message);
         }
         joinLeaveLogging(event, true);
     }
@@ -379,7 +305,7 @@ public class AnnotationListener {
         if (event.getChannel().isPrivate()) return;
 
         CommandObject command = new CommandObject(event.getMessage());
-        IUser ourUser = command.client.bot;
+        IUser ourUser = command.client.bot.get();
 
         if (!shouldLog(command)) return;
 

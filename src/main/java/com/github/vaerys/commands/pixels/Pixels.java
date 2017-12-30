@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.UserSetting;
@@ -75,10 +76,10 @@ public class Pixels implements Command {
             builder.withDescription("**You have decayed to the level floor,\nYou will need to level up again to see your rank.**");
         }
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
-            Utility.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
+            RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
             return "> Pixels sent to your Direct messages.";
         }
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
 
     }

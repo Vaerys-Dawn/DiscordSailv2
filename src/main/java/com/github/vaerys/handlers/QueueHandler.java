@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.QueueObject;
 import com.github.vaerys.objects.XEmbedBuilder;
@@ -32,15 +33,14 @@ public class QueueHandler {
             switch (type) {
                 case Constants.QUEUE_DAILY:
                     long uID = Globals.getDailyMessages().newDailyMsgUID();
-                    XEmbedBuilder embedBuilder = new XEmbedBuilder();
+                    XEmbedBuilder embedBuilder = new XEmbedBuilder(object);
                     embedBuilder.withAuthorName("New Daily Message - " + object.guild.get().getName());
                     embedBuilder.withFooterText(object.user.longID + "");
                     embedBuilder.withTitle(object.user.username);
                     embedBuilder.withDesc(content);
                     embedBuilder.appendField(dowString, dayOfWeek + "", true);
                     embedBuilder.appendField(uIDString, uID + "", true);
-                    embedBuilder.withColor(Utility.getUsersColour(object.client.bot, object.guild.get()));
-                    IMessage message = Utility.sendEmbedMessage("", embedBuilder, channel).get();
+                    IMessage message = RequestHandler.sendEmbedMessage("", embedBuilder, channel).get();
                     RequestBuffer.request(() -> message.addReaction(thumbsUp)).get();
                     RequestBuffer.request(() -> message.addReaction(thumbsDown)).get();
                     Globals.getDailyMessages().getQueue().add(new QueueObject(message.getLongID(), uID, type));
@@ -75,7 +75,7 @@ public class QueueHandler {
         ReactionEmoji no = Utility.getReaction("no_entry_sign");
         ArrayList<QueueObject> queuedMessages = Globals.getDailyMessages().getQueue();
         IMessage message = object.message.get();
-        IUser owner = object.client.creator;
+        IUser owner = object.client.creator.get();
         //exit if not the queue channel
         if (object.channel.longID != Globals.queueChannelID) {
             return;
@@ -118,16 +118,18 @@ public class QueueHandler {
                                     uID = Long.parseLong(f.getValue());
                                 }
                             }
+                            UserObject user = new UserObject(object.client.getUserByID(userID),null);
                             //do if accepted
                             if (reaction.getEmoji().equals(thumbsUp)) {
-                                Utility.sendDM("> A daily message you sent was approved. **[" + uID + "]**", userID);
+
+                                user.sendDm("> A daily message you sent was approved. **[" + uID + "]**");
                                 Globals.getDailyMessages().getMessages().add(new DailyMessage(embed.getDescription(), day, userID, uID));
                                 RequestBuffer.request(() -> message.addReaction(ok)).get();
                                 q.toggleMarkedForRemoval();
                                 return;
                                 //do if denied
                             } else if (reaction.getEmoji().equals(thumbsDown)) {
-                                Utility.sendDM("> A daily message you sent was denied. **[" + uID + "]**", userID);
+                                user.sendDm("> A daily message you sent was denied. **[" + uID + "]**");
                                 q.toggleMarkedForRemoval();
                                 RequestBuffer.request(() -> message.addReaction(no)).get();
                                 return;

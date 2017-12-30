@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.roleSelect;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -41,7 +42,7 @@ public class ModifierRoles implements Command {
                     return "> **" + modif.getRest() + "** is not a valid Role Name.";
                 }
                 //tests to see if the bot is allowed to mess with a role.
-                if (!Utility.testUserHierarchy(command.client.bot, role, command.guild.get())) {
+                if (!Utility.testUserHierarchy(command.client.bot.get(), role, command.guild.get())) {
                     return "> I do not have permission to modify the **" + role.getName() + "** role.";
                 }
                 //test the user's hierarchy to make sure that the are allowed to mess with that role.
@@ -86,7 +87,7 @@ public class ModifierRoles implements Command {
             List<IRole> userRoles = command.user.roles;
             String response = Constants.ERROR_UPDATING_ROLE;
             if (role == null) {
-                Utility.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListModifs.getList(command), command.channel.get());
+                RequestHandler.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListModifs.getList(command), command.channel.get());
                 return null;
             } else {
                 if (command.guild.config.isRoleModifier(role.getLongID())) {
@@ -106,13 +107,13 @@ public class ModifierRoles implements Command {
                         response = "> You have been granted the **" + role.getName() + "** role.";
                     }
                     //push changes
-                    if (Utility.roleManagement(command.user.get(), command.guild.get(), userRoles).get()) {
+                    if (RequestHandler.roleManagement(command.user.get(), command.guild.get(), userRoles).get()) {
                         return response;
                     } else {
                         return Constants.ERROR_UPDATING_ROLE;
                     }
                 } else {
-                    Utility.sendEmbedMessage("> The **" + role.getName() + "** role is not listed as a modifier role.", ListModifs.getList(command), command.channel.get());
+                    RequestHandler.sendEmbedMessage("> The **" + role.getName() + "** role is not listed as a modifier role.", ListModifs.getList(command), command.channel.get());
                     return null;
                 }
             }

@@ -2,6 +2,7 @@ package com.github.vaerys.main;
 
 import com.github.kennedyoliveira.pastebin4j.AccountCredentials;
 import com.github.kennedyoliveira.pastebin4j.PasteBin;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.objects.EventAvatar;
 import com.github.vaerys.objects.TimedEvent;
 import com.patreon.PatreonAPI;
@@ -142,7 +143,7 @@ public class Client {
                 avatar = Image.forUrl(FilenameUtils.getExtension(eventAvatar.getLink()), eventAvatar.getLink());
             }
         }
-        Utility.updateAvatar(avatar);
+        RequestHandler.updateAvatar(avatar);
         //wait for the avatar to update properly
         try {
             Thread.sleep(3000);

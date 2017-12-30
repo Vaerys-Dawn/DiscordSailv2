@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.tags.TagList;
@@ -19,13 +20,12 @@ public class ListTags implements Command {
         if (list.size() == 0) {
             list = TagList.getNames(TagList.CC);
         }
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         if (args.isEmpty()) args = TagList.CC;
         builder.withTitle("> Here are all of the " + StringUtils.capitalize(args) + " tags:");
         builder.withDesc("```\n" + Utility.listFormatter(list, true) + "```\n" +
                 "Tags are run in the order listed above.\n\n" + new HelpTags().missingArgs(command));
-        builder.withColor(command.client.color);
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 

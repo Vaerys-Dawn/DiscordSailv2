@@ -1,6 +1,6 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.UserCountDown;
 import com.github.vaerys.templates.GuildFile;
@@ -31,7 +31,7 @@ public class GuildUsers extends GuildFile {
         if (!found) {
             mutedUsers.add(new UserCountDown(userID, time));
         }
-        return Utility.muteUser(guildID, userID, true);
+        return RequestHandler.muteUser(guildID, userID, true);
     }
 
     public boolean unMuteUser(long userID, long guildID) {
@@ -40,7 +40,7 @@ public class GuildUsers extends GuildFile {
                 mutedUsers.remove(i);
             }
         }
-        return Utility.muteUser(guildID, userID, false);
+        return RequestHandler.muteUser(guildID, userID, false);
     }
 
     public ArrayList<UserCountDown> getMutedUsers() {

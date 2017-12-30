@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IMessage;
@@ -21,7 +22,7 @@ public class UpdateRolePerms implements Command {
         List<IRole> parentRole = Utility.getRolesByName(command.guild.get(), args);
         EnumSet parentPerms = command.guild.get().getEveryoneRole().getPermissions();
         ArrayList<String> permList = new ArrayList<>();
-        IMessage workingMsg = Utility.sendMessage("`Working...`", command.channel.get()).get();
+        IMessage workingMsg = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
         if (parentRole.size() != 0) {
             if (command.guild.config.isRoleCosmetic(parentRole.get(0).getLongID())) {
                 parentPerms = parentRole.get(0).getPermissions();
@@ -38,7 +39,7 @@ public class UpdateRolePerms implements Command {
         for (Object p : parentPerms.toArray()) {
             permList.add(p.toString());
         }
-        Utility.deleteMessage(workingMsg);
+        RequestHandler.deleteMessage(workingMsg);
         return "> Cosmetic Roles Perms set to : " + Utility.listFormatter(permList, true);
     }
 

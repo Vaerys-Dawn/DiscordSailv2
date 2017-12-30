@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -14,31 +15,19 @@ import sx.blah.discord.handle.obj.IUser;
 public class BlockUser implements DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
-        if (command.user.longID == Globals.creatorID) {
-            GlobalData globalData = Globals.getGlobalData();
-            boolean worked = false;
-            SplitFirstObject object = new SplitFirstObject(args);
-            if (globalData != null) {
-                long id = Utility.stringLong(object.getFirstWord());
-                IUser user = command.client.get().fetchUser(id);
-                if (id == Globals.creatorID) {
-                    return "> What are you doing. Don't try to block yourself.";
-                }
-                if (user != null) {
-                    globalData.blockUserFromDMS(id);
-                    worked = true;
-                } else {
-                    worked = false;
-                }
-            }
-            if (worked) {
-                return "> User was Blocked.";
-            } else {
-                return "> An Error Occurred.";
-            }
-        } else {
-            return command.user.notAllowed;
+        long userId = Globals.lastDmUserID;
+        if (args != null && !args.isEmpty()) {
+            userId = Utility.stringLong(args.split("")[0]);
         }
+        GlobalData globalData = Globals.getGlobalData();
+        if (userId == Globals.creatorID) {
+            return "> What are you doing. Don't try to block yourself.";
+        }
+        if (Client.getClient().fetchUser(userId) != null){
+            globalData.blockUserFromDMS(userId);
+            return "> User was blocked";
+        }
+        return "> Could not find a valid userID";
     }
 
     @Override
@@ -53,7 +42,7 @@ public class BlockUser implements DMCommand {
 
     @Override
     public String usage() {
-        return "[User ID]";
+        return "(User ID)";
     }
 
     @Override

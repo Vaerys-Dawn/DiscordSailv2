@@ -2,7 +2,6 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
@@ -17,17 +16,15 @@ public class DMHandler {
 
     public DMHandler(CommandObject command) {
         IChannel channel = command.user.get().getOrCreatePMChannel();
-        IChannel ownerDm = command.client.creator.getOrCreatePMChannel();
+        IChannel ownerDm = command.client.creator.getDmChannel();
         command.message.get().getTimestamp();
-        if (command.message.get().getAuthor().isBot()) {
+        if (command.message.get().getAuthor().isBot()) return;
+
+        if (command.user.isBlockedFromDms()) {
+            command.user.sendDm("> You have been blocked from sending DMs to S.A.I.L by the Bot Creator.");
             return;
         }
-        for (long blocked : Globals.getGlobalData().getBlockedFromDMS()) {
-            if (command.user.longID == blocked) {
-                Utility.sendDM("> You have been blocked from sending DMs to S.A.I.L by the Bot Creator.", blocked);
-                return;
-            }
-        }
+
         if (command.user.longID != Globals.creatorID) {
             String logging = "[" + command.message.get().getAuthor().getLongID() + "] " + command.message.get().getAuthor().getName() + "#" + command.message.get().getAuthor().getDiscriminator() + ": " + command.message.get().toString();
             logger.info(logging);
@@ -37,11 +34,11 @@ public class DMHandler {
                 for (IMessage.Attachment a : command.message.get().getAttachments()) {
                     attachmemts = "\n" + a.getUrl();
                 }
-                Utility.sendMessage(logging + attachmemts, ownerDm);
+                RequestHandler.sendMessage(logging + attachmemts, ownerDm);
             } else {
-                Utility.sendMessage(logging, ownerDm);
+                RequestHandler.sendMessage(logging, ownerDm);
             }
-            Utility.sendMessage("> Thank you for your message.", channel);
+            RequestHandler.sendMessage("> Thank you for your message.", channel);
         }
     }
 }

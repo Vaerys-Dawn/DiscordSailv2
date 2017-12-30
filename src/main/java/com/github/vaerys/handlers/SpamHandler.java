@@ -39,15 +39,15 @@ public class SpamHandler {
                 int offenceCount = command.guild.config.getOffender(command.user.longID).getCount();
                 if (offenceCount > 2) {
                     if (command.guild.config.muteRepeatOffenders) {
-                        Utility.muteUser(command, true);
+                        RequestHandler.muteUser(command, true);
                         command.user.sendDm("You were muted for spamming.");
                         logger.debug(Utility.loggingFormatter(command, "CATCH_SPAM_WALLS", "MUTE", offenceCount + " Offences"));
                         IChannel admin = command.guild.getChannelByType(Command.TYPE_ADMIN);
                         String report = command.user.mention() + " was muted for spamming";
                         if (admin != null) {
-                            Utility.sendMessage(report + " in " + command.channel.get().mention() + ".", admin);
+                            RequestHandler.sendMessage(report + " in " + command.channel.get().mention() + ".", admin);
                         } else {
-                            Utility.sendMessage(report + ".", command.channel.get());
+                            RequestHandler.sendMessage(report + ".", command.channel.get());
                         }
                         return true;
                     }
@@ -66,12 +66,14 @@ public class SpamHandler {
         List<IRole> oldRoles = command.user.roles;
         IGuild guild = command.guild.get();
 
+        if (Utility.testForPerms(command,Permissions.MENTION_EVERYONE)) return false;
+
         if (message.toString().contains("@everyone") || message.toString().contains("@here")) {
             return false;
         }
         if (guildconfig.maxMentions) {
             if (message.getMentions().size() > 8) {
-                Utility.deleteMessage(message);
+                RequestHandler.deleteMessage(message);
                 int i = 0;
                 boolean offenderFound = false;
                 for (OffenderObject o : guildconfig.getOffenders()) {
@@ -81,10 +83,10 @@ public class SpamHandler {
                         offenderFound = true;
                         i++;
                         if (o.getCount() >= Globals.maxWarnings) {
-                            Utility.roleManagement(author, guild, guildconfig.getMutedRoleID(), true);
+                            RequestHandler.roleManagement(author, guild, guildconfig.getMutedRoleID(), true);
                             logger.debug(Utility.loggingFormatter(command, "STOP_MASS_MENTIONS", "MUTE", o.getCount() + " Offences"));
                             command.client.get().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, author, oldRoles, command.user.get().getRolesForGuild(guild)));
-                            Utility.sendMessage("> " + author.mention() + " Has been Muted for repeat offences of spamming Mentions.", command.channel.get());
+                            RequestHandler.sendMessage("> " + author.mention() + " Has been Muted for repeat offences of spamming Mentions.", command.channel.get());
                         }
                     }
                 }
@@ -98,7 +100,7 @@ public class SpamHandler {
                 } else {
                     response = response.replaceAll("#mentionAdmin#", "Admin");
                 }
-                Utility.sendMessage(response, command.channel.get());
+                RequestHandler.sendMessage(response, command.channel.get());
                 return true;
             }
         }
@@ -115,7 +117,7 @@ public class SpamHandler {
         //send a dm to let the user know that they are being rate limited
         IChannel userDMs = command.user.get().getOrCreatePMChannel();
         if (userDMs != null) {
-            Utility.sendMessage("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guild.config.messageLimit, userDMs);
+            RequestHandler.sendMessage("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guild.config.messageLimit, userDMs);
         }
         String contents = command.message.getContent();
         for (IMessage.Attachment a : command.message.getAttachments()) {
@@ -127,7 +129,7 @@ public class SpamHandler {
         logger.debug(Utility.loggingFormatter(command, "RATE_LIMITING", "MESSAGE_DELETED", contents));
 
         //user is now being rate limited
-        Utility.deleteMessage(command.message.get());
+        RequestHandler.deleteMessage(command.message.get());
         if (command.guild.config.deleteLogging) {
             Utility.sendLog("> **@" + command.user.username + "** is being rate limited", command.guild, false);
         }
@@ -148,13 +150,13 @@ public class SpamHandler {
 
         //setup of the admin channel
         IChannel adminChannel = null;
-        List<IChannel> adminChannels = command.guild.config.getChannelsByType(Command.CHANNEL_ADMIN, command.guild);
+        List<IChannel> adminChannels = command.guild.getChannelsByType(Command.CHANNEL_ADMIN);
         if (adminChannels.size() != 0) adminChannel = adminChannels.get(0);
         if (adminChannel == null) adminChannel = command.channel.get();
 
         //sends the response if they got muted
-        Utility.sendDM("You have been muted for abusing the Guild rate limit.", command.user.longID);
-        Utility.sendMessage("> " + command.user.get().mention() + " has been muted for repetitively abusing Guild rateLimit.", adminChannel);
+        command.user.sendDm("You have been muted for abusing the Guild rate limit.");
+        RequestHandler.sendMessage("> " + command.user.get().mention() + " has been muted for repetitively abusing Guild rateLimit.", adminChannel);
         return true;
     }
 
@@ -167,6 +169,7 @@ public class SpamHandler {
             add("discord.gg");
             add("discordapp.com/Invite/");
         }};
+        if (Utility.testForPerms(command,Permissions.MANAGE_MESSAGES)) return false;
 
         boolean inviteFound = false;
         if (guildconfig.denyInvites) {
@@ -181,9 +184,9 @@ public class SpamHandler {
         }
         if (inviteFound) {
             String response = "> Please do not post Instant Invites.";
-            Utility.deleteMessage(message);
+            RequestHandler.deleteMessage(message);
             logger.debug(Utility.loggingFormatter(command, "INVITE_REMOVAL", "REMOVED", message.getContent()));
-            Utility.sendMessage(response, command.channel.get());
+            RequestHandler.sendMessage(response, command.channel.get());
         }
         return inviteFound;
     }

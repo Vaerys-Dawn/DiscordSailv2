@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -80,15 +81,14 @@ public class UserSettings implements Command {
                     for (UserSetting s : profile.getSettings()) {
                         userSettings.add(UserSetting.get(s));
                     }
-                    XEmbedBuilder builder = new XEmbedBuilder();
+                    XEmbedBuilder builder = new XEmbedBuilder(command);
                     builder.withTitle(user.displayName + "'s User settings:");
                     if (userSettings.size() == 0) {
                         return "> **" + user.displayName + "** has no settings on their profile.";
                     } else {
                         builder.withDesc("```\n" + Utility.listFormatter(userSettings, true) + "```");
                     }
-                    builder.withColor(command.client.color);
-                    Utility.sendEmbedMessage("", builder, command.channel.get());
+                    RequestHandler.sendEmbedMessage("", builder, command.channel.get());
                     return "";
                 default:
                     return settings + "\n\n" + Utility.getCommandInfo(this, command);

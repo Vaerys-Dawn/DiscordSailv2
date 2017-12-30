@@ -2,6 +2,7 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
@@ -66,7 +67,7 @@ public class SearchCCs implements Command {
             String path = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
             FileHandler.writeToFile(path, complete.toString(), false);
             File file = new File(path);
-            Utility.sendFile(title, file, command.channel.get());
+            RequestHandler.sendFile(title, file, command.channel.get());
             try {
                 Thread.sleep(4000);
                 Files.delete(Paths.get(path));
@@ -79,7 +80,7 @@ public class SearchCCs implements Command {
         } else {
             embedBuilder.withTitle(title);
             embedBuilder.withDesc("```\n" + contents + spacer + "```");
-            Utility.sendEmbedMessage("", embedBuilder, command.channel.get());
+            RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
             return null;
         }
     }

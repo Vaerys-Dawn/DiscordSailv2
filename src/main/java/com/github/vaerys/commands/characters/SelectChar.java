@@ -1,8 +1,8 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
@@ -35,8 +35,8 @@ public class SelectChar implements Command {
                     for (long r : c.getRoleIDs()) {
                         userRoles.add(command.guild.getRoleByID(r));
                     }
-                    Utility.roleManagement(command.user.get(), command.guild.get(), userRoles);
-                    Utility.updateUserNickName(command.user.get(), command.guild.get(), c.getNickname());
+                    RequestHandler.roleManagement(command.user.get(), command.guild.get(), userRoles);
+                    RequestHandler.updateUserNickName(command.user.get(), command.guild.get(), c.getNickname());
                     return "> Character " + c.getNickname() + " Loaded.";
                 } else {
                     return "> " + c.getName() + " is not your character.";

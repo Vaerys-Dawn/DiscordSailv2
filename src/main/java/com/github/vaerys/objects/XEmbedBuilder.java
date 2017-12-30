@@ -1,8 +1,10 @@
 package com.github.vaerys.objects;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.ChannelObject;
+import com.github.vaerys.masterobjects.UserObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
@@ -16,16 +18,20 @@ public class XEmbedBuilder extends EmbedBuilder {
     public XEmbedBuilder() {
     }
 
+    public XEmbedBuilder(UserObject user) {
+        withColor(user.color);
+    }
+
     public RequestBuffer.RequestFuture<IMessage> send(IChannel channel) {
-        return Utility.sendEmbedMessage("", this, channel);
+        return RequestHandler.sendEmbedMessage("", this, channel);
     }
 
     public RequestBuffer.RequestFuture<IMessage> send(ChannelObject channel) {
-        return Utility.sendEmbedMessage("", this, channel.get());
+        return RequestHandler.sendEmbedMessage("", this, channel.get());
     }
 
     public XEmbedBuilder(CommandObject command) {
-        withColor(command.client.color);
+        withColor(command.client.bot.color);
     }
 
     @Override

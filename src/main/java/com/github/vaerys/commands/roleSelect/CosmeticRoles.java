@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.roleSelect;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -42,7 +43,7 @@ public class CosmeticRoles implements Command {
                     return "> **" + modif.getRest() + "** is not a valid Role Name.";
                 }
                 //tests to see if the bot is allowed to mess with a role.
-                if (!Utility.testUserHierarchy(command.client.bot, role, command.guild.get())) {
+                if (!Utility.testUserHierarchy(command.client.bot.get(), role, command.guild.get())) {
                     return "> I do not have permission to modify the **" + role.getName() + "** role.";
                 }
                 //test the user's hierarchy to make sure that the are allowed to mess with that role.
@@ -96,7 +97,7 @@ public class CosmeticRoles implements Command {
                 role = Utility.getRoleFromName(args, command.guild.get(), true);
             }
             if (role == null && !args.equalsIgnoreCase("remove")) {
-                Utility.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListRoles.getList(command), command.channel.get());
+                RequestHandler.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListRoles.getList(command), command.channel.get());
                 return null;
                 //if args = remove. remove the user's cosmetic role
             } else if (args.equalsIgnoreCase("remove")) {
@@ -154,12 +155,12 @@ public class CosmeticRoles implements Command {
                         }
                     }
                 } else {
-                    Utility.sendEmbedMessage("> **" + args + "** is not a valid cosmetic role.", ListRoles.getList(command), command.channel.get());
+                    RequestHandler.sendEmbedMessage("> **" + args + "** is not a valid cosmetic role.", ListRoles.getList(command), command.channel.get());
                     return null;
                 }
             }
             // push the changes to the user's roles.
-            if (Utility.roleManagement(command.user.get(), command.guild.get(), userRoles).get()) {
+            if (RequestHandler.roleManagement(command.user.get(), command.guild.get(), userRoles).get()) {
                 return response;
             } else {
                 return Constants.ERROR_UPDATING_ROLE;

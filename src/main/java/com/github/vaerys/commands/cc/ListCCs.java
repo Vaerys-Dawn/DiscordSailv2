@@ -2,6 +2,7 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -47,7 +48,7 @@ public class ListCCs implements Command {
         int total = 0;
         command.setAuthor(user);
         int max = command.guild.customCommands.maxCCs(command.user, command.guild);
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         String title = "> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.";
         List<String> list = new ArrayList<>();
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
@@ -62,13 +63,12 @@ public class ListCCs implements Command {
             String path = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
             FileHandler.writeToFile(path, content, false);
             File file = new File(path);
-            Utility.sendFile(title, file, command.channel.get());
+            RequestHandler.sendFile(title, file, command.channel.get());
             return null;
         }
         builder.withDescription("```\n" + content + "```");
-        builder.withColor(command.client.color);
         builder.withFooterText("Total Custom commands: " + total + "/" + max + ".");
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 
@@ -77,8 +77,7 @@ public class ListCCs implements Command {
         int counter = 0;
         int totalCCs = 0;
         ArrayList<String> list = new ArrayList<>();
-        XEmbedBuilder builder = new XEmbedBuilder();
-        builder.withColor(command.client.color);
+        XEmbedBuilder builder = new XEmbedBuilder(command);
 
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
             if (counter > 15) {
@@ -95,7 +94,7 @@ public class ListCCs implements Command {
             String title = "> Here is Page **" + page + "/" + pages.size() + "** of Custom Commands:";
             builder.appendField(title, pages.get(page - 1), false);
             builder.withFooterText("Total Custom Commands stored on this Server: " + totalCCs);
-            Utility.sendEmbedMessage("", builder, command.channel.get());
+            RequestHandler.sendEmbedMessage("", builder, command.channel.get());
             return null;
         } catch (IndexOutOfBoundsException e) {
             return "> That Page does not exist.";

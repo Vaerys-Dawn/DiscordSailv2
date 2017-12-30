@@ -35,7 +35,7 @@ public class ArtHandler {
     }};
 
     public static void pinMessage(CommandObject command) {
-        List<IChannel> channelIDS = command.guild.config.getChannelsByType(Command.CHANNEL_ART, command.guild);
+        List<IChannel> channelIDS = command.guild.getChannelsByType(Command.CHANNEL_ART);
         List<TrackLikes> likes = command.guild.channelData.getLikes();
         List<Long> pins = command.guild.channelData.getPinnedMessages();
 
@@ -206,7 +206,7 @@ public class ArtHandler {
     }
 
     public static void pinLiked(CommandObject command) {
-        List<IChannel> channelIDS = command.guild.config.getChannelsByType(Command.CHANNEL_ART, command.guild);
+        List<IChannel> channelIDS = command.guild.getChannelsByType(Command.CHANNEL_ART);
         //exit if not pinning art
         if (!command.guild.config.artPinning) return;
         //exit if pixels is off

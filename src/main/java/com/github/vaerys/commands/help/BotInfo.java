@@ -2,8 +2,8 @@ package com.github.vaerys.commands.help;
 
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
@@ -13,7 +13,7 @@ public class BotInfo implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         StringBuilder response = new StringBuilder();
         IUser creator = command.client.get().fetchUser(153159020528533505L);
         builder.withTitle("Information about " + Globals.botName);
@@ -25,11 +25,10 @@ public class BotInfo implements Command {
         response.append("\n\nBy inviting " + Globals.botName + " to your server you are to understand that " + Globals.botName + " will only store data on user's request. " +
                 "The only exception to this is the bot's profile system which stores the user's Id after they send a messages to the server, " +
                 "this is so that " + Globals.botName + " can associate later user created data to that user.");
-        builder.withColor(command.client.color);
         builder.withDesc(response.toString());
         builder.withThumbnail(command.client.bot.getAvatarURL());
         builder.withFooterText("Bot Version: " + Globals.version);
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 

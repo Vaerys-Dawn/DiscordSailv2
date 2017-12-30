@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 public class ListChars implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         UserObject user = command.user;
         String title = "> Here are all of your characters.";
         if (args != null && !args.isEmpty()) {
@@ -40,12 +41,11 @@ public class ListChars implements Command {
         }
         Utility.listFormatterEmbed(title, builder, list, true);
         builder.appendField(spacer, Utility.getCommandInfo(new CharInfo(), command), false);
-        builder.withColor(Utility.getUsersColour(command.client.bot, command.guild.get()));
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
-            Utility.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
+            RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
             return "> Char list sent to your Direct messages.";
         }
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 

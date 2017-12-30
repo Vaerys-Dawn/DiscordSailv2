@@ -101,7 +101,7 @@ public class TimerHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Utility.sendMessage(object.getMessage(), Globals.getClient().getChannelByID(object.getChannelID()));
+                RequestHandler.sendMessage(object.getMessage(), Globals.getClient().getChannelByID(object.getChannelID()));
                 Globals.getGlobalData().removeReminder(object);
             }
         }, initialDelay * 1000);
@@ -174,7 +174,7 @@ public class TimerHandler {
                             finalMessage = messages.get(randomMessage);
                             task.config.setLastDailyMessage(finalMessage);
                             CommandObject command = new CommandObject(task, generalChannel);
-                            Utility.sendMessage(finalMessage.getContents(command), generalChannel);
+                            RequestHandler.sendMessage(finalMessage.getContents(command), generalChannel);
                         }
                     }
                 } catch (Exception e) {
@@ -224,7 +224,7 @@ public class TimerHandler {
                 keepAliveTenSec = System.currentTimeMillis();
                 for (GuildObject task : Globals.getGuilds()) {
                     task.resetRateLimit();
-                    if (task.getRatelimiting().size() != 0) {
+                    if (task.getRateLimiting().size() != 0) {
                         logger.error("Failed to clear list, forcing it to clear.");
                         task.forceClearRate();
                     }
@@ -296,7 +296,7 @@ public class TimerHandler {
                     Thread.sleep(5000);
                     Globals.getClient().checkLoggedIn("Check Online status");
                     randomPlayingStatus();
-                    Globals.saveFiles();
+                    Globals.saveFiles(false);
                     if (Globals.showSaveWarning) {
                         logger.info("Files Saved.");
                     } else {

@@ -1,16 +1,12 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.OffenderObject;
-import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
-import sx.blah.discord.handle.obj.*;
-import sx.blah.discord.util.RequestBuffer;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,32 +61,32 @@ public class MessageHandler {
                 logger.debug(Utility.loggingFormatter(command, "COMMAND", c.getCommand(command), c.getArgs(args, command)));
                 //test if user has permissions
                 if (!Utility.testForPerms(command, c.perms())) {
-                    Utility.sendMessage(command.user.notAllowed, currentChannel);
+                    RequestHandler.sendMessage(command.user.notAllowed, currentChannel);
                     return true;
                 }
                 //check if it is a valid channel
                 if (!currentChannel.isPrivate()) {
-                    if (c.channel() != null && !Utility.canBypass(command.user.get(), command.guild.get())) {
-                        List<IChannel> channels = command.guild.config.getChannelsByType(c.channel(), command.guild);
+                    if (c.channel() != null && !Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+                        List<IChannel> channels = command.guild.getChannelsByType(c.channel());
                         if (channels.size() != 0 && !channels.contains(command.channel.get())) {
                             List<String> list = Utility.getChannelMentions(command.user.getVisibleChannels(channels));
-                            Utility.sendMessage(Utility.getChannelMessage(list),command.channel.get());
+                            RequestHandler.sendMessage(Utility.getChannelMessage(list), command.channel.get());
                             return true;
                         }
                     }
                 }
                 if (c.requiresArgs() && (commandArgs == null || commandArgs.isEmpty())) {
 
-                    Utility.sendMessage(Utility.getCommandInfo(c, command), currentChannel);
+                    RequestHandler.sendMessage(Utility.getCommandInfo(c, command), currentChannel);
                     return true;
                 }
                 //command logging
                 handleLogging(command, c, commandArgs);
-                if (!command.channel.get().getTypingStatus()) {
-                    command.channel.get().toggleTypingStatus();
-                }
+//                if (!command.channel.get().getTypingStatus()) {
+//                    command.channel.get().toggleTypingStatus();
+//                }
                 String response = c.execute(commandArgs, command);
-                Utility.sendMessage(response, currentChannel);
+                RequestHandler.sendMessage(response, currentChannel);
                 return true;
             }
         }

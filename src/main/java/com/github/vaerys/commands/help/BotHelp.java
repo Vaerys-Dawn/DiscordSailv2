@@ -28,7 +28,7 @@ public class BotHelp implements Command {
                 "> **Arguments**\n" +
                 "Gives you information about how to use command arguments.\n" +
                 "> **DMs**\n" +
-                "Gives you information about how Direct messages work for **" + command.client.bot.getDisplayName(command.guild.get()) + "**.\n" +
+                "Gives you information about how Direct messages work for **" + command.client.bot.displayName + "**.\n" +
                 "> **Tags**\n" +
                 "Gives you information explaining what tags are.\n\n" + missingArgs(command));
         builder.send(command.channel);
@@ -46,7 +46,7 @@ public class BotHelp implements Command {
     private String directMessages(CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle("Direct messages.");
-        builder.withDesc("> When you send a non command Direct message to " + command.client.bot.getDisplayName(command.guild.get()) + " it will send it to the bot developer.");
+        builder.withDesc("> When you send a non command Direct message to " + command.client.bot.displayName + " it will send it to the bot developer.");
         builder.send(command.channel);
         return null;
     }

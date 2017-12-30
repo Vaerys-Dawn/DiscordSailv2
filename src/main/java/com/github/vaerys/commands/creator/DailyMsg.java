@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.DailyMessage;
@@ -73,10 +74,10 @@ public class DailyMsg implements Command {
                         return "> Not a valid day of the week.";
                     }
                 case "info":
-                    Utility.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
+                    RequestHandler.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
                     return null;
                 default:
-                    Utility.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
+                    RequestHandler.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
                     return null;
             }
         } catch (NumberFormatException e) {
@@ -85,8 +86,7 @@ public class DailyMsg implements Command {
     }
 
     public XEmbedBuilder getInfo(DailyMessage messageObject, CommandObject command) {
-        XEmbedBuilder embedBuilder = new XEmbedBuilder();
-        embedBuilder.withColor(Utility.getUsersColour(command.client.bot, command.guild.get()));
+        XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         IUser user = command.client.get().getUserByID(messageObject.getUserID());
         if (user != null) {
             embedBuilder.withAuthorName(user.getName() + "#" + user.getDiscriminator());

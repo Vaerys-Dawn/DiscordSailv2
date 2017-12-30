@@ -1,5 +1,6 @@
 package com.github.vaerys.masterobjects;
 
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.UserSetting;
@@ -35,6 +36,22 @@ public class UserObject {
     public UserObject(IUser object, GuildObject guild) {
         if (object == null) return;
         this.client = new ClientObject(object.getClient(), guild);
+        init(object, guild, false);
+    }
+
+    public UserObject(IUser object, GuildObject guild, boolean light) {
+        if (object == null) return;
+        this.client = new ClientObject(object.getClient(), guild);
+        init(object, guild, light);
+    }
+
+    public UserObject(IUser object, GuildObject guild, ClientObject client) {
+        this.client = client;
+        init(object, guild, false);
+    }
+
+    private void init(IUser object, GuildObject guild, boolean light) {
+        if (object == null) return;
         this.object = object;
         this.longID = object.getLongID();
         this.name = object.getName();
@@ -43,10 +60,17 @@ public class UserObject {
             this.displayName = object.getDisplayName(guild.get());
             this.roles = object.getRolesForGuild(guild.get());
             this.color = Utility.getUsersColour(get(), guild.get());
-            customCommands = guild.customCommands.getCommandList().stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
-            characters = guild.characters.getCharacters(guild.get()).stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
-            servers = guild.servers.getServers().stream().filter(s -> s.getCreatorID() == longID).collect(Collectors.toList());
-            dailyMessages = Globals.getDailyMessages().getMessages().stream().filter(d -> d.getUserID() == longID).collect(Collectors.toList());
+            if (!light) {
+                customCommands = guild.customCommands.getCommandList().stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
+                characters = guild.characters.getCharacters(guild.get()).stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
+                servers = guild.servers.getServers().stream().filter(s -> s.getCreatorID() == longID).collect(Collectors.toList());
+                dailyMessages = Globals.getDailyMessages().getMessages().stream().filter(d -> d.getUserID() == longID).collect(Collectors.toList());
+            } else {
+                customCommands = new ArrayList<>();
+                characters = new ArrayList<>();
+                servers = new ArrayList<>();
+                dailyMessages = new ArrayList<>();
+            }
         } else {
             this.displayName = name;
             this.roles = new ArrayList<>();
@@ -60,24 +84,12 @@ public class UserObject {
         isPatron = Globals.getPatrons().contains(longID);
     }
 
-    public UserObject(IUser object, GuildObject guild, boolean light) {
-        if (object == null) return;
-        this.client = new ClientObject(object.getClient(), guild);
-        this.object = object;
-        this.longID = object.getLongID();
-        this.name = object.getName();
-        this.username = object.getName() + "#" + object.getDiscriminator();
-        if (guild.get() != null) {
-            this.displayName = object.getDisplayName(guild.get());
-            this.roles = object.getRolesForGuild(guild.get());
-            this.color = Utility.getUsersColour(get(), guild.get());
-        } else {
-            this.displayName = name;
-            this.roles = new ArrayList<>();
-            this.color = Color.white;
-        }
-        notAllowed = "> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
-        isPatron = Globals.getPatrons().contains(longID);
+    public UserObject loadExtraData(GuildObject guild){
+        customCommands = guild.customCommands.getCommandList().stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
+        characters = guild.characters.getCharacters(guild.get()).stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
+        servers = guild.servers.getServers().stream().filter(s -> s.getCreatorID() == longID).collect(Collectors.toList());
+        dailyMessages = Globals.getDailyMessages().getMessages().stream().filter(d -> d.getUserID() == longID).collect(Collectors.toList());
+        return this;
     }
 
     public List<IChannel> getVisibleChannels(List<IChannel> channels) {
@@ -133,11 +145,30 @@ public class UserObject {
         return XpHandler.rank(guild.users, guild.get(), longID) != -1;
     }
 
+
+    public IChannel getDmChannel() {
+        return RequestBuffer.request(() -> {
+            return object.getOrCreatePMChannel();
+        }).get();
+    }
+
     public RequestBuffer.RequestFuture<IMessage> sendDm(String s) {
-        return Utility.sendMessage(s, object.getOrCreatePMChannel());
+        return RequestHandler.sendMessage(s, getDmChannel());
     }
 
     public String mention() {
         return object.mention();
+    }
+
+    public boolean isBlockedFromDms() {
+        return Globals.getGlobalData().getBlockedFromDMS().contains(longID);
+    }
+
+    public RequestBuffer.RequestFuture<IMessage> sendEmbededDm(String s, XEmbedBuilder builder) {
+        return RequestHandler.sendEmbedMessage(s, builder, getDmChannel());
+    }
+
+    public String getAvatarURL() {
+        return object.getAvatarURL();
     }
 }

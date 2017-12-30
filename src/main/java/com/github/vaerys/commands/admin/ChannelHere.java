@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.ChannelSetting;
@@ -28,7 +29,7 @@ public class ChannelHere implements Command {
             }
             desc = "> Could not find channel type \"" + args + "\"\n";
         }
-        XEmbedBuilder embedBuilder = new XEmbedBuilder();
+        XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String title = "> Here is a list of available Channel Types:\n";
 
         List<ChannelSetting> channelSettings = command.guild.channelSettings;
@@ -37,8 +38,7 @@ public class ChannelHere implements Command {
         embedBuilder.withDesc(desc);
         Utility.listFormatterEmbed(title, embedBuilder, types, true);
         embedBuilder.appendField(spacer, Utility.getCommandInfo(this, command), false);
-        embedBuilder.withColor(command.client.color);
-        Utility.sendEmbedMessage("", embedBuilder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
         return null;
     }
 

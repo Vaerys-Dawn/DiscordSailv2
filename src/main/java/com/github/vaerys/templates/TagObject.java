@@ -177,9 +177,8 @@ public abstract class TagObject {
     }
 
     public XEmbedBuilder getInfo(CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(name);
-        builder.withColor(command.client.color);
         StringBuilder descContents = new StringBuilder();
         descContents.append(desc);
 

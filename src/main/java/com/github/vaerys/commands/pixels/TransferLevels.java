@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
@@ -26,7 +27,7 @@ public class TransferLevels implements Command {
         if (command.guild.config.getRewardRoles().size() == 0) {
             return "> No rewards available to grant. cannot transfer levels";
         }
-        IMessage message = Utility.sendMessage("`Working...`", command.channel.get()).get();
+        IMessage message = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
 
         Utility.sortRewards(command.guild.config.getRewardRoles());
         for (IUser user : command.guild.getUsers()) {
@@ -52,7 +53,7 @@ public class TransferLevels implements Command {
                 XpHandler.checkUsersRoles(uObject.getUserID(), command.guild);
             }
         }
-        Utility.deleteMessage(message);
+        RequestHandler.deleteMessage(message);
         command.guild.config.xpGain = true;
         return "> Transfer Complete.";
     }

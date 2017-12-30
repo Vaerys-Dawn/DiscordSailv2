@@ -50,7 +50,7 @@ public class ModulePixels extends GuildModule {
         if (command.guild.get() == null) {
             return "Error, you should not get this message. if you do please report this to the bot developer.";
         }
-        return "This module enables **" + command.client.bot.getDisplayName(command.guild.get()) + "'s** XP system known as pixels.\n" +
+        return "This module enables **" + command.client.bot.displayName + "'s** XP system known as pixels.\n" +
                 "> Pixels are a xp system that allows the **granting of roles** at certain levels.\n" +
                 "> When a user levels up a **level up message** will be sent to them based on specific settings.\n" +
                 "> Level up messages can be **customised completely**, from where they are sent by default to the text that they send.\n" +

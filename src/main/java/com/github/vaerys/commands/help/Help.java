@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
@@ -20,11 +21,10 @@ public class Help implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder helpEmbed = new XEmbedBuilder();
+        XEmbedBuilder helpEmbed = new XEmbedBuilder(command);
         List<String> types = new ArrayList<>(command.guild.getAllTypes(command));
         List<Command> commands = new ArrayList<>(command.guild.getAllCommands(command));
         String error = "> There are no commands with the type: **" + args + "**.\n\n" + Utility.getCommandInfo(this, command);
-        helpEmbed.withColor(command.client.color);
         ListIterator iterator = types.listIterator();
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
@@ -41,7 +41,7 @@ public class Help implements Command {
             helpEmbed.withTitle("Here are the Command Types I have available for use:");
             builder.append(Utility.getCommandInfo(this, command) + "\n");
             helpEmbed.withDescription(builder.toString());
-            Utility.sendEmbedMessage("", helpEmbed, command.channel.get());
+            RequestHandler.sendEmbedMessage("", helpEmbed, command.channel.get());
             return null;
         } else {
             for (String s : types) {
@@ -69,7 +69,7 @@ public class Help implements Command {
                     builder.append(codeBlock + "\n");
                     builder.append(suffix);
                     helpEmbed.withDescription(builder.toString());
-                    Utility.sendEmbedMessage("", helpEmbed, command.channel.get());
+                    RequestHandler.sendEmbedMessage("", helpEmbed, command.channel.get());
                     return null;
                 }
             }

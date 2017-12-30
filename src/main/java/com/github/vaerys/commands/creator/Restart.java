@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.Command;
@@ -13,7 +14,7 @@ import sx.blah.discord.util.DiscordException;
 public class Restart implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        Utility.sendMessage("> Restarting.", command.channel.get());
+        RequestHandler.sendMessage("> Restarting.", command.channel.get());
         Utility.sendGlobalAdminLogging(this, args, command);
         try {
             Thread.sleep(4000);

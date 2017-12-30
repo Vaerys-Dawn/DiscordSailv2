@@ -37,15 +37,14 @@ public interface ChannelSetting {
     }
 
     default XEmbedBuilder getInfo(CommandObject object) {
-        XEmbedBuilder builder = new XEmbedBuilder();
-        builder.withColor(object.client.color);
+        XEmbedBuilder builder = new XEmbedBuilder(object);
         if (isSetting()) {
             builder.withTitle("Channel Setting - " + name());
         } else {
             builder.withTitle("Channel Type - " + name());
         }
         builder.withDesc(desc(object));
-        List<IChannel> channels = object.guild.config.getChannelsByType(name(), object.guild);
+        List<IChannel> channels = object.guild.getChannelsByType(name());
         channels = object.user.getVisibleChannels(channels);
         String title;
         if (isSetting()){

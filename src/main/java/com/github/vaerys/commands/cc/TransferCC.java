@@ -2,9 +2,9 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.pogos.CustomCommands;
 import com.github.vaerys.templates.Command;
@@ -40,12 +40,12 @@ public class TransferCC implements Command {
             boolean locked = transfering.isLocked();
             long userID = transfering.getUserID();
             if (guild.getUserByID(userID) == null) {
-                Utility.sendMessage("> This command's old owner no longer is part of this server.\n" + Constants.PREFIX_INDENT +
+                RequestHandler.sendMessage("> This command's old owner no longer is part of this server.\n" + Constants.PREFIX_INDENT +
                         author.getDisplayName(guild) + " will become the new owner of this command.\n" +
                         "> I am now attempting to transfer the command over.", channel);
                 userID = author.getLongID();
             } else {
-                Utility.sendMessage("> I am now attempting to transfer " + guild.getUserByID(userID).getDisplayName(guild) + "'s command.", channel);
+                RequestHandler.sendMessage("> I am now attempting to transfer " + guild.getUserByID(userID).getDisplayName(guild) + "'s command.", channel);
             }
             String name = transfering.getName();
             String contents = transfering.getContents(false);

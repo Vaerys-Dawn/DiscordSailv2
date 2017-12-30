@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
@@ -38,10 +39,9 @@ public class PixelHelp implements Command {
                 return xpToLevel(obe.getRest());
             default:
                 StringBuilder builder = new StringBuilder();
-                XEmbedBuilder embed = new XEmbedBuilder();
+                XEmbedBuilder embed = new XEmbedBuilder(command);
                 embed.withTitle("Pixel System Information.");
-                embed.withColor(command.client.color);
-                embed.withDescription("Pixels are " + command.client.bot.getDisplayName(command.guild.get()) + "'s" +
+                embed.withDescription("Pixels are " + command.client.bot.displayName + "'s" +
                         " form of xp, you can gain " + (int) (command.guild.config.xpRate * command.guild.config.xpModifier) + "xp" +
                         " once per minute by sending a message that meets all of the specific message rules.\n\n");
                 if (command.guild.config.getRewardRoles().size() != 0) {
@@ -64,13 +64,13 @@ public class PixelHelp implements Command {
                     embed.withThumbnail(Constants.LEVEL_UP_IMAGE_URL);
                 }
                 embed.appendField("Pixel and Level Calculators:", getModes(command) + "\n\n" + Utility.getCommandInfo(this, command), false);
-                Utility.sendEmbedMessage("", embed, command.channel.get());
+                RequestHandler.sendEmbedMessage("", embed, command.channel.get());
                 return null;
         }
     }
 
     private String rules(CommandObject command) {
-        List<IChannel> channels = command.guild.config.getChannelsByType(CHANNEL_XP_DENIED, command.guild);
+        List<IChannel> channels = command.guild.getChannelsByType(CHANNEL_XP_DENIED);
         List<String> channelMentions = Utility.getChannelMentions(channels);
         String rules = "**The rules for gaining pixels are:**\n" +
                 "> Cannot gain pixels if the message starts with a command prefix.\n" +

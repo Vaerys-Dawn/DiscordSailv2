@@ -25,17 +25,17 @@ public class EditInfoFiles implements Command {
         SplitFirstObject object = new SplitFirstObject(args);
         switch (object.getFirstWord().toLowerCase()) {
             case "uploadimage":
-                return InfoEditModes.uploadFile(command.message.get());
+                return InfoEditModes.uploadFile(command);
             case "removeimage":
-                return InfoEditModes.removeFile(object.getRest(), command.message.get());
+                return InfoEditModes.removeFile(object.getRest(), command);
             case "listimages":
-                return InfoEditModes.listFiles(command.message.get());
+                return InfoEditModes.listFiles(command);
             case "listfiles":
-                return InfoEditModes.listFiles(command.message.get());
+                return InfoEditModes.listFiles(command);
             case "uploadinfo":
-                return InfoEditModes.uploadInfo(command.message.get());
+                return InfoEditModes.uploadInfo(command);
             case "getinfofile": {
-                return InfoEditModes.getInfoFile(command.message.get());
+                return InfoEditModes.getInfoFile(command);
             }
             default:
                 return "Invalid Edit Mode.\n" + Utility.getCommandInfo(this, command);

@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ChannelSettingObject;
@@ -19,20 +20,19 @@ import java.util.List;
 public class ChannelStats implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle("Channel Stats");
-        builder.withColor(command.client.color);
         ArrayList<String> channelTypes = new ArrayList<>();
         ArrayList<String> channelSettings = new ArrayList<>();
 
         if (args != null && !args.isEmpty()) {
             for (ChannelSetting s : command.guild.channelSettings) {
                 if (s.name().equalsIgnoreCase(args)) {
-                    List<IChannel> channels = command.guild.config.getChannelsByType(s.name(), command.guild);
+                    List<IChannel> channels = command.guild.getChannelsByType(s.name());
                     List<String> channelMentions = Utility.getChannelMentions(channels);
                     if (channels.size() != 0) {
                         builder.appendField(s.name(), Utility.listFormatter(channelMentions, true), false);
-                        Utility.sendEmbedMessage("", builder, command.channel.get());
+                        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
                         return null;
                     } else {
                         if (s.isSetting()) {
@@ -69,7 +69,7 @@ public class ChannelStats implements Command {
         if (channelSettings.size() != 0) {
             builder.appendField("Settings:", Utility.listFormatter(channelSettings, true), false);
         }
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 

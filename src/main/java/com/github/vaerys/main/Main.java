@@ -42,7 +42,6 @@ public class Main {
             @Override
             public void run() {
                 logger.info(">>> Running Shutdown Process <<<");
-                Globals.shuttingDown = true;
                 if (Globals.savingFiles) {
                     try {
                         Thread.sleep(1000);
@@ -50,7 +49,7 @@ public class Main {
                         e.printStackTrace();
                     }
                 }
-                Globals.saveFiles();
+                Globals.saveFiles(true);
             }
         });
 
@@ -91,7 +90,7 @@ public class Main {
             try {
                 List<String> pastebinToken = FileHandler.readFromFile(Constants.FILE_PASTEBIN_TOKEN);
                 Client.initPastebin(pastebinToken);
-            }catch (IndexOutOfBoundsException e){
+            } catch (IndexOutOfBoundsException e) {
                 logger.info("No Pastebin Token found.");
             }
 
@@ -168,7 +167,7 @@ public class Main {
 
         while (scanner.hasNextLine()) {
             String message = scanner.nextLine();
-            if (message.equalsIgnoreCase("!Shutdown")){
+            if (message.equalsIgnoreCase("!Shutdown")) {
                 System.exit(-1);
                 return;
             }
@@ -180,7 +179,7 @@ public class Main {
                 message = message.replace("Teh", "The");
 //            System.out.println(message);
                 if (!message.equals("")) {
-                    Utility.sendMessage(message, channel);
+                    RequestHandler.sendMessage(message, channel);
                 }
             }
         }

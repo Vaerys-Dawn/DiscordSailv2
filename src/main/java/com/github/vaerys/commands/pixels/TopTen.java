@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
@@ -39,11 +40,10 @@ public class TopTen implements Command {
                 response.add(rankPos + toFormat);
             }
         }
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle("Top Ten Users for the " + command.guild.get().getName() + " Server.");
         builder.withDesc(Utility.listFormatter(response, false));
-        builder.withColor(Utility.getUsersColour(command.client.bot, command.guild.get()));
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 

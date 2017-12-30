@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -23,7 +24,7 @@ public class Report implements Command {
     }
 
     public static String report(String args, CommandObject command, boolean isSilent) {
-        List<IChannel> channels = command.guild.config.getChannelsByType(CHANNEL_ADMIN, command.guild);
+        List<IChannel> channels = command.guild.getChannelsByType(CHANNEL_ADMIN);
         if (channels.size() != 0) {
             IChannel channel = channels.get(0);
             SplitFirstObject split = new SplitFirstObject(args);
@@ -52,7 +53,7 @@ public class Report implements Command {
                 }
                 builder.append("Reporter: " + command.user.get().mention() + "\nReported: " + reported.get().mention() + "\nReason: `" + reason + "`");
                 builder.append("\n" + command.channel.get().mention());
-                IMessage message = Utility.sendMessage(builder.toString(), channel).get();
+                IMessage message = RequestHandler.sendMessage(builder.toString(), channel).get();
                 if (message == null) {
                     return "> User report was not be sent. Looks like I can't send messages to " + channel.mention() + ".";
                 } else {

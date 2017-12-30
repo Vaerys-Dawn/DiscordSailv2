@@ -1,6 +1,7 @@
 package com.github.vaerys.objects;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.Command;
@@ -85,7 +86,7 @@ public class TimedEvent {
     public List<DailyMessage> getMessagesDay(DayOfWeek day) {
         List<DailyMessage> messageList = new ArrayList<>();
         for (DailyMessage d : messages) {
-            if (d.day.equals(day)) {
+            if (d.day != null && d.day.equals(day)) {
                 messageList.add(d);
             }
         }
@@ -108,7 +109,7 @@ public class TimedEvent {
     public EventAvatar getAvatarDay(DayOfWeek day) {
         EventAvatar avatar = null;
         for (EventAvatar a : avatars) {
-            if (a.day == day) {
+            if (a.day != null && a.day == day) {
                 avatar = a;
             }
         }
@@ -131,6 +132,7 @@ public class TimedEvent {
         if (!isValid()) return false;
         //get instance
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        now.plusMinutes(30);
         ZonedDateTime start = now.withMonth(startMonth).withDayOfMonth(startDay);
         ZonedDateTime end = now.withMonth(endMonth).withDayOfMonth(endDay);
         //tests to see if the current date is the same as the start or end date
@@ -173,8 +175,7 @@ public class TimedEvent {
     }
 
     public String getInfo(CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder();
-        builder.withColor(command.client.color);
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle("Event - " + eventName);
         StringBuilder desc = new StringBuilder();
         desc.append("**Position:** " + Globals.getEvents().indexOf(this));
@@ -204,7 +205,7 @@ public class TimedEvent {
         if (messageList.length() != 0) desc.append("\n**Messages:**\n```\n" + messageList + Command.spacer + "```");
         if (avatarList.length() != 0) desc.append("\n**Avatars:**\n```\n" + avatarList + Command.spacer + "```");
         builder.withDesc(desc.toString());
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 

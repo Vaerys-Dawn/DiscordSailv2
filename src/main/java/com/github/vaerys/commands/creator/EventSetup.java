@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.DailyMessage;
@@ -20,12 +21,11 @@ public class EventSetup implements Command {
         SplitFirstObject eventName = new SplitFirstObject(args);
         TimedEvent event = null;
         if (eventName.getFirstWord().equalsIgnoreCase("list")) {
-            XEmbedBuilder builder = new XEmbedBuilder();
-            builder.withColor(command.client.color);
+            XEmbedBuilder builder = new XEmbedBuilder(command);
             builder.withTitle("All Events:");
             String eventList = Utility.listFormatter(Globals.getEvents().stream().map(event1 -> event1.getEventName()).collect(Collectors.toList()), true);
             builder.withDesc("```\n" + eventList + spacer + "```");
-            Utility.sendEmbedMessage("", builder, command.channel.get());
+            RequestHandler.sendEmbedMessage("", builder, command.channel.get());
             return null;
         }
         if (eventName.getRest() == null) {

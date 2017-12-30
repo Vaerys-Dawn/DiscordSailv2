@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
@@ -20,7 +21,7 @@ public class TopUserForRole implements Command {
         if (role == null) {
             return "> Invalid Role.";
         }
-        IMessage working = Utility.sendMessage("`Working...`", command.channel.get()).get();
+        IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
         IUser topUser = null;
         ProfileObject topUserObject;
         ProfileObject userTypeObject;
@@ -49,7 +50,7 @@ public class TopUserForRole implements Command {
         }
         try {
             topUserObject = command.guild.users.getUserByID(topUser.getLongID());
-            Utility.deleteMessage(working);
+            RequestHandler.deleteMessage(working);
             if (topUserObject != null) {
                 return "> @" + topUser.getName() + "#" + topUser.getDiscriminator() + ", Pixels: " + NumberFormat.getInstance().format(topUserObject.getXP()) + ", Level: " + topUserObject.getCurrentLevel() + ", UserID: " + topUserObject.getUserID();
             } else {

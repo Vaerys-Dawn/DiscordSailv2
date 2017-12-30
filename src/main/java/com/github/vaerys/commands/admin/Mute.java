@@ -28,7 +28,7 @@ public class Mute implements Command {
         if (userCall.getRest() == null) {
             return "> Cannot Mute/UnMute " + muted.displayName + ". No modifier specified.";
         }
-        if (!Utility.testUserHierarchy(command.client.bot, mutedRole, command.guild.get())) {
+        if (!Utility.testUserHierarchy(command.client.bot.get(), mutedRole, command.guild.get())) {
             return "> Cannot Mute/UnMute " + muted.displayName + ". **" + mutedRole.getName() + "** role has a higher hierarchy than me.";
         }
         if (muted.longID == command.user.longID) {
@@ -40,7 +40,7 @@ public class Mute implements Command {
         if (!Utility.testUserHierarchy(command.user.get(), muted.get(), command.guild.get())) {
             return "> Cannot Mute/UnMute " + muted.displayName + ". User hierarchy higher than yours.";
         }
-        if (!Utility.testUserHierarchy(command.client.bot, muted.get(), command.guild.get())) {
+        if (!Utility.testUserHierarchy(command.client.bot.get(), muted.get(), command.guild.get())) {
             return "> Cannot Mute/UnMute " + muted.displayName + ". My hierarchy level is too low.";
         }
         if (Utility.testModifier(modifier.getFirstWord())) {

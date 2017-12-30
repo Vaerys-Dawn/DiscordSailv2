@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public interface MentionCommand extends Command {
     @Override
     default String getCommand(CommandObject command) {
-        return "@" + command.client.bot.getName() + " " + names()[0];
+        return "@" + command.client.bot.name + " " + names()[0];
     }
 
     default boolean isCall(String args, CommandObject command) {
@@ -23,7 +23,7 @@ public interface MentionCommand extends Command {
         }
         SplitFirstObject call = new SplitFirstObject(mention.getRest());
         for (String s : names()) {
-            String regex = "^(<@|<@!)" + command.client.longID + "> " + s.toLowerCase();
+            String regex = "^(<@|<@!)" + command.client.bot.longID + "> " + s.toLowerCase();
             String toMatch = mention.getFirstWord() + " " + call.getFirstWord().toLowerCase();
             Matcher matcher = Pattern.compile(regex).matcher(toMatch);
             if (matcher.matches()) {

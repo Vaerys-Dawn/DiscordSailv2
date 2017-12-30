@@ -1,6 +1,7 @@
 package com.github.vaerys.tags.cctags;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.TagObject;
 import sx.blah.discord.handle.obj.Permissions;
@@ -21,10 +22,10 @@ public class TagEmbedImage extends TagObject {
             URL url = new URL(imageURL);
             if (Utility.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS)) {
                 from = removeAllTag(from);
-                Utility.sendFileURL(from, imageURL, command.channel.get(), true);
+                RequestHandler.sendFileURL(from, imageURL, command.channel.get(), true);
             } else {
                 from = replaceAllTag(from, "<" + imageURL + ">");
-                Utility.sendMessage(from, command.channel.get());
+                RequestHandler.sendMessage(from, command.channel.get());
             }
         } catch (MalformedURLException e) {
             return replaceFirstTag(from, imageURL);

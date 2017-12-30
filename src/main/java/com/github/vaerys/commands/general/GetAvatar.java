@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.templates.Command;
@@ -18,7 +19,7 @@ public class GetAvatar implements Command {
             if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
                 return "> User has set their profile to private.";
             } else if (user.isPrivateProfile(command.guild) && user.longID == command.user.longID) {
-                Utility.sendMessage(message, user.get().getOrCreatePMChannel());
+                RequestHandler.sendMessage(message, user.get().getOrCreatePMChannel());
                 return "> Avatar sent to your direct messages.";
             }
             return message;

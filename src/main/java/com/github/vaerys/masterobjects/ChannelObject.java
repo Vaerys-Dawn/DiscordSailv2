@@ -13,6 +13,7 @@ public class ChannelObject {
     public long longID;
     public String name;
     public long position;
+    public String mention = "#DM";
     public List<String> settings = new ArrayList<>();
 
     public ChannelObject(IChannel channel, GuildObject guild) {
@@ -22,6 +23,7 @@ public class ChannelObject {
         this.longID = channel.getLongID();
         this.name = channel.getName();
         if (guild.get() != null) {
+            this.mention = channel.mention();
             this.position = channel.getPosition();
             for (ChannelSetting setting : guild.channelSettings) {
                 if (setting.getIDs(guild.config).size() == 0) {

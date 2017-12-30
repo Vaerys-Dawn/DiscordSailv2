@@ -27,7 +27,7 @@ public class CCHandler {
         //cc lockout handling
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
-            Utility.sendMessage("> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
+            RequestHandler.sendMessage("> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
             return;
         }
 
@@ -46,11 +46,11 @@ public class CCHandler {
         String contents = commandObject.getContents(true);
         //shitpost handling
         if (commandObject.isShitPost() && command.guild.config.shitPostFiltering && !Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
-            List<IChannel> channels = command.guild.config.getChannelsByType(Command.CHANNEL_SHITPOST, command.guild);
+            List<IChannel> channels = command.guild.getChannelsByType(Command.CHANNEL_SHITPOST);
             if (channels.size() != 0 && !channels.contains(command.channel.get())) {
                 channels = command.user.getVisibleChannels(channels);
                 List<String> channelMentions = Utility.getChannelMentions(channels);
-                Utility.sendMessage(Utility.getChannelMessage(channelMentions), command.channel.get());
+                RequestHandler.sendMessage(Utility.getChannelMessage(channelMentions), command.channel.get());
                 return;
             }
         }
@@ -60,6 +60,6 @@ public class CCHandler {
             contents = t.handleTag(contents, command, ccArgs);
             if (contents == null) return;
         }
-        Utility.sendMessage(contents, command.channel.get());
+        RequestHandler.sendMessage(contents, command.channel.get());
     }
 }

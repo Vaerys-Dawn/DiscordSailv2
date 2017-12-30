@@ -94,7 +94,7 @@ public class EditCC implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows you to edit a custom command.\n" + modes + adminModes +
+        return "Allows you to edit a custom command.\n" + modes +
                 "**[Custom Command Guide](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide)**";
     }
 
@@ -130,21 +130,21 @@ public class EditCC implements Command {
 
     @Override
     public String dualDescription() {
-        return null;
+        return "allows editing of other user's commands or editing toggles.\n" + adminModes;
     }
 
     @Override
     public String dualUsage() {
-        return null;
+        return "[Command Name] (Mode)";
     }
 
     @Override
     public String dualType() {
-        return null;
+        return TYPE_ADMIN;
     }
 
     @Override
     public Permissions[] dualPerms() {
-        return new Permissions[0];
+        return new Permissions[]{Permissions.MANAGE_MESSAGES};
     }
 }

@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
@@ -77,7 +78,7 @@ public class GetGlobalStats implements Command {
         output.append(Utility.listFormatter(outModules, false));
         output.append("\n\n**[PIXEL STATS]**");
         output.append("\nAvg Pixels: " + totalXP / totalXpUsers);
-        Utility.sendDM(output.toString(), command.user.longID);
+        command.user.sendDm(output.toString());
         return "> Data sent to Your DMs";
 
 //        int totalGlobalUsers = 0;

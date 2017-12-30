@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.UserSetting;
@@ -51,7 +52,7 @@ public class UserInfo implements Command {
         }
 
         //start of the profile builder.
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command.user);
         List<IRole> roles = user.roles;
         ArrayList<String> roleNames = new ArrayList<>();
         ArrayList<String> links = new ArrayList<>();
@@ -72,9 +73,6 @@ public class UserInfo implements Command {
         long creationUTC = creationDate.toEpochSecond();
 
         long difference = nowUTC - creationUTC;
-
-        //sets sidebar colour
-        builder.withColor(user.color);
 
         //collect role names;
         roleNames.addAll(roles.stream().filter(role -> !role.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
@@ -124,10 +122,10 @@ public class UserInfo implements Command {
 
         //sends Message
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
-            Utility.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
+            RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
             return "> Profile sent to your Direct messages.";
         }
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 

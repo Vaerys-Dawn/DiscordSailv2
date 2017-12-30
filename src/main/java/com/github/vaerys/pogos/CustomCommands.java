@@ -2,6 +2,7 @@ package com.github.vaerys.pogos;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -147,8 +148,8 @@ public class CustomCommands extends GuildFile {
             if (c.getName().equalsIgnoreCase(commandName)) {
                 FileHandler.writeToJson(Constants.DIRECTORY_TEMP + c.getName() + ".json", c);
                 File file = new File(Constants.DIRECTORY_TEMP + c.getName() + ".json");
-                if (Utility.sendFile("> Here is the Raw Data for Custom Command: **" + c.getName() + "**", file, channel).get()) {
-                    Utility.sendMessage("> An error occurred when attempting to getSlashCommands CC data.", channel);
+                if (RequestHandler.sendFile("> Here is the Raw Data for Custom Command: **" + c.getName() + "**", file, channel).get() == null) {
+                    RequestHandler.sendMessage("> An error occurred when attempting to getSlashCommands CC data.", channel);
                 }
                 try {
                     Thread.sleep(5000);
@@ -159,7 +160,7 @@ public class CustomCommands extends GuildFile {
                 return null;
             }
         }
-        Utility.sendMessage(Constants.ERROR_CC_NOT_FOUND, channel);
+        RequestHandler.sendMessage(Constants.ERROR_CC_NOT_FOUND, channel);
         return null;
     }
 

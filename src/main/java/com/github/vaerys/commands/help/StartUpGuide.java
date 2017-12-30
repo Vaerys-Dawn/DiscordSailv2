@@ -4,7 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.ChannelHere;
 import com.github.vaerys.commands.admin.Module;
 import com.github.vaerys.commands.admin.Toggle;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
@@ -45,7 +45,7 @@ public class StartUpGuide implements Command {
                 new BotHelp().getUsage(command) + "**\n" +
                 "Gives you information about various bot features.";
         builder.withDesc(desc);
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 

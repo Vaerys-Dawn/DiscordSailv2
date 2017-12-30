@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.roleSelect;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
@@ -17,20 +18,19 @@ public class ListRoles implements Command {
     public static XEmbedBuilder getList(CommandObject command) {
         String title = "> Here are the **Cosmetic** roles you can choose from:\n";
         ArrayList<String> list = new ArrayList<>();
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         for (long l : command.guild.config.getCosmeticRoleIDs()) {
             IRole role = command.guild.getRoleByID(l);
             list.add(role.getName());
         }
         Utility.listFormatterEmbed(title, builder, list, true);
         builder.appendField(spacer, Utility.getCommandInfo(new CosmeticRoles(), command), false);
-        builder.withColor(Utility.getUsersColour(command.client.bot, command.guild.get()));
         return builder;
     }
 
     @Override
     public String execute(String args, CommandObject command) {
-        Utility.sendEmbedMessage("", getList(command), command.channel.get());
+        RequestHandler.sendEmbedMessage("", getList(command), command.channel.get());
         return null;
     }
 

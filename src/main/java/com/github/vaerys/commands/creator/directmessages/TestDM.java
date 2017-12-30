@@ -15,6 +15,7 @@ public class TestDM implements DMCommand {
 //            }
 //        }
 //        return "channel could not be found";
+//        return command.guild.get().getLongID() + "";
         return "> You've done your testing";
     }
 

@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
@@ -93,11 +94,10 @@ public class Rank implements Command {
                         response.add(rankPos + toFormat);
                     }
                 }
-                XEmbedBuilder builder = new XEmbedBuilder();
+                XEmbedBuilder builder = new XEmbedBuilder(command);
                 builder.withTitle("Rank stats for: " + user.displayName);
                 builder.withDesc(Utility.listFormatter(response, false));
-                builder.withColor(command.client.color);
-                Utility.sendEmbedMessage("", builder, command.channel.get());
+                RequestHandler.sendEmbedMessage("", builder, command.channel.get());
                 return null;
             }
         }

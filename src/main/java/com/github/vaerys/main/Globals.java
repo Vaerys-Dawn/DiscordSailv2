@@ -202,7 +202,7 @@ public class Globals {
     }
 
     public static void validateConfig() throws IllegalArgumentException {
-        IUser creator = Client.getClient().fetchUser(creatorID);
+        IUser creator = Client.getClient().getUserByID(creatorID);
         if (creator == null)
             throw new IllegalArgumentException("Creator ID is invalid.");
         if (botName == null || botName.isEmpty())
@@ -290,10 +290,9 @@ public class Globals {
         return guilds;
     }
 
-    public static void saveFiles() {
-        if (shuttingDown) {
-            return;
-        }
+    public static void saveFiles(boolean shuttingDown) {
+        if (shuttingDown) Globals.shuttingDown = true;
+        else if (Globals.shuttingDown || Globals.savingFiles) return;
         savingFiles = true;
         logger.debug("Saving Files.");
         //global files
@@ -460,5 +459,4 @@ public class Globals {
         }
         return null;
     }
-
 }

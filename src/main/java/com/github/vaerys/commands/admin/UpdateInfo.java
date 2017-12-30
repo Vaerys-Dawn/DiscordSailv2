@@ -15,7 +15,7 @@ import java.util.List;
 public class UpdateInfo implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        List<IChannel> channels = command.guild.config.getChannelsByType(Command.CHANNEL_INFO, command.guild);
+        List<IChannel> channels = command.guild.getChannelsByType(Command.CHANNEL_INFO);
         if (channels.size() == 0) {
             return "> No Info channel set up yet, you need to set one up in order to run this command.\n" + Utility.getCommandInfo(this, command);
         }

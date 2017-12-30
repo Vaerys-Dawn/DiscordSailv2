@@ -24,7 +24,7 @@ public class NewCC implements Command {
         boolean isShitpost = false;
         boolean isLocked = false;
         SplitFirstObject splitFirst = new SplitFirstObject(args);
-        List<IChannel> shitpostChannels = command.guild.config.getChannelsByType(Command.CHANNEL_SHITPOST, command.guild);
+        List<IChannel> shitpostChannels = command.guild.getChannelsByType(Command.CHANNEL_SHITPOST);
         if (shitpostChannels != null) {
             for (IChannel channel : shitpostChannels) {
                 if (command.channel.longID == channel.getLongID()) {

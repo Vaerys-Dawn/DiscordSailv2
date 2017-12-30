@@ -2,9 +2,10 @@ package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.NewDailyMessage;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.UserRateObject;
 import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.ChannelSetting;
@@ -35,7 +36,7 @@ public class GuildObject {
     public List<GuildToggle> toggles;
     public List<ChannelSetting> channelSettings;
     public List<String> commandTypes;
-    private List<UserRateObject> ratelimiting = new ArrayList<>();
+    private List<UserRateObject> rateLimiting = new ArrayList<>();
     private List<Long> spokenUsers = new ArrayList<>();
     private List<GuildToggle> toRemove = new ArrayList<>();
 
@@ -176,8 +177,8 @@ public class GuildObject {
         }
     }
 
-    public List<UserRateObject> getRatelimiting() {
-        return ratelimiting;
+    public List<UserRateObject> getRateLimiting() {
+        return rateLimiting;
     }
 
     public List<Long> getSpokenUsers() {
@@ -185,7 +186,7 @@ public class GuildObject {
     }
 
     public void forceClearRate() {
-        ratelimiting = new ArrayList<>();
+        rateLimiting = new ArrayList<>();
     }
 
     public boolean rateLimit(long userID) {
@@ -194,7 +195,7 @@ public class GuildObject {
             return false;
         }
         boolean isfound = false;
-        for (UserRateObject r : ratelimiting) {
+        for (UserRateObject r : rateLimiting) {
             if (r.getID() == userID) {
                 r.counterUp();
                 isfound = true;
@@ -204,13 +205,13 @@ public class GuildObject {
             }
         }
         if (!isfound) {
-            ratelimiting.add(new UserRateObject(userID));
+            rateLimiting.add(new UserRateObject(userID));
         }
         return false;
     }
 
     public int getUserRate(long userID) {
-        for (UserRateObject u : ratelimiting) {
+        for (UserRateObject u : rateLimiting) {
             if (u.getID() == userID) {
                 return u.counter;
             }
@@ -219,7 +220,7 @@ public class GuildObject {
     }
 
     public void resetRateLimit() {
-        ratelimiting.clear();
+        rateLimiting.clear();
     }
 
     public List<String> getAllTypes(CommandObject command) {
@@ -275,32 +276,26 @@ public class GuildObject {
         return object.getEmojiByName(name);
     }
 
-    public IChannel getChannelByType(String type) {
-        List<IChannel> channels = config.getChannelsByType(type, this);
-        if (channels.size() != 0) {
-            return channels.get(0);
-        }
-        return null;
-    }
+
 
     public void handleWelcome(CommandObject command) {
         if (config.welcomeMessage) {
             return;
         }
-        if (command.guild.get() == null || command.channel == null){
+        if (command.guild.get() == null || command.channel == null) {
             return;
         }
         IChannel general = getChannelByType(Command.TYPE_GENERAL);
         if (general != null && command.channel.longID != general.getLongID()) {
             return;
         }
-        IMessage message = Utility.sendMessage(Constants.getWelcomeMessage(command), command.channel.get()).get();
+        IMessage message = RequestHandler.sendMessage(Constants.getWelcomeMessage(command), command.channel.get()).get();
         if (message != null) {
             command.guild.config.welcomeMessage = true;
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(5 * 60 * 1000);
-                    Utility.deleteMessage(message);
+                    RequestHandler.deleteMessage(message);
                 } catch (InterruptedException e) {
                     // do nothing
                 }
@@ -311,5 +306,28 @@ public class GuildObject {
 
     public void resetOffenders() {
         config.resetOffenders();
+    }
+
+    public IChannel getChannelByType(String type) {
+        List<IChannel> channels = getChannelsByType(type);
+        if (channels.size() != 0) {
+            return channels.get(0);
+        }
+        return null;
+    }
+
+    public List<IChannel> getChannelsByType(String type) {
+        List<IChannel> channels = new ArrayList<>();
+        for (ChannelSettingObject c : config.getChannelSettings()) {
+            if (c.getType().equalsIgnoreCase(type)) {
+                for (long s : c.getChannelIDs()) {
+                    IChannel channel = getChannelByID(s);
+                    if (channel != null) {
+                        channels.add(channel);
+                    }
+                }
+            }
+        }
+        return channels;
     }
 }

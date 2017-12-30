@@ -2,6 +2,7 @@ package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.QueueHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -20,9 +21,9 @@ public class NewDailyMessage implements Command {
             SplitFirstObject day = new SplitFirstObject(args);
             DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.getFirstWord().toUpperCase());
             if (day.getRest() != null) {
-                IMessage working = Utility.sendMessage("`Working...`", command.channel.get()).get();
+                IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
                 QueueHandler.addToQueue(command, day.getRest(), dayOfWeek, Constants.QUEUE_DAILY);
-                Utility.deleteMessage(working);
+                RequestHandler.deleteMessage(working);
                 return "> Request Sent.";
             } else {
                 return Utility.getCommandInfo(this, command);

@@ -440,20 +440,7 @@ public class GuildConfig extends GuildFile {
         return currentReward;
     }
 
-    public List<IChannel> getChannelsByType(String type, GuildObject guild) {
-        List<IChannel> channels = new ArrayList<>();
-        for (ChannelSettingObject c : channelSettings) {
-            if (c.getType().equalsIgnoreCase(type)) {
-                for (long s : c.getChannelIDs()) {
-                    IChannel channel = guild.getChannelByID(s);
-                    if (channel != null) {
-                        channels.add(channel);
-                    }
-                }
-            }
-        }
-        return channels;
-    }
+
 
     public void setPinLimit(int pinLimit) {
         this.pinLimit = pinLimit;

@@ -127,11 +127,7 @@ public interface Command {
     }
 
     default XEmbedBuilder getCommandInfo(CommandObject command) {
-        XEmbedBuilder infoEmbed = new XEmbedBuilder();
-        Color color = command.client.color;
-        if (color != null) {
-            infoEmbed.withColor(color);
-        }
+        XEmbedBuilder infoEmbed = new XEmbedBuilder(command);
 
         //command info
         StringBuilder builder = new StringBuilder();
@@ -162,10 +158,10 @@ public interface Command {
                 builder.append(Utility.listFormatter(permList, true));
             }
         }
-        infoEmbed.appendField("> Info - " + names()[0], builder.toString(), false);
+        infoEmbed.appendField("> Help - " + names()[0], builder.toString(), false);
 
         //Handle channels
-        List<IChannel> channels = command.guild.config.getChannelsByType(channel(), command.guild);
+        List<IChannel> channels = command.guild.getChannelsByType(channel());
         List<String> channelMentions = Utility.getChannelMentions(channels);
 
         //channel

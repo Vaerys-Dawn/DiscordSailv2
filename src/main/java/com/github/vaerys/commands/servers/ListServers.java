@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.servers;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ServerObject;
 import com.github.vaerys.objects.XEmbedBuilder;
@@ -18,20 +19,19 @@ public class ListServers implements Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         String title = "> Here are the Servers I have Listed:";
         ArrayList<String> serverNames = command.guild.servers.getServers().stream().map(ServerObject::getName).collect(Collectors.toCollection(ArrayList::new));
         Collections.sort(serverNames);
         String suffix = Utility.getCommandInfo(new Server(), command);
-        Utility.listFormatterEmbed(title,builder,serverNames,false,suffix);
-        builder.withColor(Utility.getUsersColour(command.client.bot, command.guild.get()));
-        Utility.sendEmbedMessage("",builder,command.channel.get());
+        Utility.listFormatterEmbed(title, builder, serverNames, false, suffix);
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 
     @Override
     public String[] names() {
-        return new String[]{"ListServers","Servers","ServerList"};
+        return new String[]{"ListServers", "Servers", "ServerList"};
     }
 
     @Override

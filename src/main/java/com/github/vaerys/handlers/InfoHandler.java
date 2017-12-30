@@ -28,7 +28,7 @@ public class InfoHandler {
         this.object = object;
         this.channel = object.channel.get();
         this.guild = object.guild.get();
-        Utility.deleteMessage(object.message.get());
+        RequestHandler.deleteMessage(object.message.get());
         infoContents = FileHandler.readFromFile(Utility.getFilePath(guild.getLongID(), Constants.FILE_INFO));
         updateChannel();
     }
@@ -87,9 +87,9 @@ public class InfoHandler {
             if (contents.contains(imagePrefix)) {
                 image = StringUtils.substringBetween(contents, imagePrefix, imageSuffix);
                 File file = new File(Utility.getGuildImageDir(guild.getLongID()) + image);
-                Utility.sendFile("", file, channel).get();
+                RequestHandler.sendFile("", file, channel).get();
             } else {
-                Utility.sendMessage(contents, channel).get();
+                RequestHandler.sendMessage(contents, channel).get();
             }
             try {
                 Thread.sleep(1000);

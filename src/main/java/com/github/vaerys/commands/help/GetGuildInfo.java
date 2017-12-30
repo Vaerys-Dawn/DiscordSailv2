@@ -2,6 +2,7 @@ package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.guildtoggles.modules.ModuleRoles;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.XEmbedBuilder;
@@ -27,18 +28,17 @@ public class GetGuildInfo implements Command {
     private XEmbedBuilder resetEmbed(XEmbedBuilder builder, IChannel channel, CommandObject command, int extraLength) {
         if ((builder.getTotalVisibleCharacters() + extraLength) > 2000 ||
                 builder.getFieldCount() + 1 > EmbedBuilder.FIELD_COUNT_LIMIT) {
-            Utility.sendEmbedMessage("", builder, channel).get();
-            builder = new XEmbedBuilder();
-            builder.withColor(command.client.color);
+            RequestHandler.sendEmbedMessage("", builder, channel).get();
+            builder = new XEmbedBuilder(command);
         }
         return builder;
     }
 
     @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder serverInfo = new XEmbedBuilder();
-        XEmbedBuilder toggles = new XEmbedBuilder();
-        XEmbedBuilder channels = new XEmbedBuilder();
+        XEmbedBuilder serverInfo = new XEmbedBuilder(command);
+        XEmbedBuilder toggles = new XEmbedBuilder(command);
+        XEmbedBuilder channels = new XEmbedBuilder(command);
 
         boolean isGuildStats = isSubtype(command, "GuildStats");
 
@@ -54,7 +54,6 @@ public class GetGuildInfo implements Command {
             serverInfo.withAuthorIcon("https://i.imgur.com/m0jqzBn.png");
         }
 
-        serverInfo.withColor(command.client.color);
         serverInfo.withThumbnail(command.guild.get().getIconURL());
         serverInfo.withAuthorName(command.guild.get().getName());
         serverInfo.withFooterText("Creation Date");
@@ -104,14 +103,13 @@ public class GetGuildInfo implements Command {
         serverInfo.withDescription(serverStats.toString());
 
         if (isGuildStats) {
-            Utility.sendEmbedMessage("", serverInfo, command.channel.get()).get();
+            RequestHandler.sendEmbedMessage("", serverInfo, command.channel.get()).get();
             return null;
         } else {
-            Utility.sendEmbedMessage("", serverInfo, channel).get();
+            RequestHandler.sendEmbedMessage("", serverInfo, channel).get();
         }
 
         if (hasManageServer) {
-            toggles.withColor(command.client.color);
             List<String> modules = new ArrayList<>();
             List<String> settings = new ArrayList<>();
             for (GuildToggle t : command.guild.toggles) {
@@ -124,12 +122,11 @@ public class GetGuildInfo implements Command {
             }
             toggles.appendField("**TOGGLES**", Utility.listFormatter(settings, false), true);
             toggles.appendField("**MODULES**", Utility.listFormatter(modules, false), true);
-            Utility.sendEmbedMessage("", toggles, channel).get();
+            RequestHandler.sendEmbedMessage("", toggles, channel).get();
         }
 
 
         if (Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
-            channels.withColor(command.client.color);
 
             List<ChannelSetting> channelSettings = new ArrayList<>(command.guild.channelSettings);
             channelSettings.sort(Comparator.comparing(ChannelSetting::name));
@@ -150,12 +147,11 @@ public class GetGuildInfo implements Command {
                 }
             }
             channels.withTitle("CHANNEL STATS");
-            Utility.sendEmbedMessage("", channels, channel).get();
+            RequestHandler.sendEmbedMessage("", channels, channel).get();
         }
 
         //module builders.
-        XEmbedBuilder moduleStats = new XEmbedBuilder();
-        moduleStats.withColor(command.client.color);
+        XEmbedBuilder moduleStats = new XEmbedBuilder(command);
         List<GuildToggle> guildmodules = new ArrayList(command.guild.toggles);
         GuildToggle roleModule = null;
         for (GuildToggle t : guildmodules) {
@@ -212,7 +208,7 @@ public class GetGuildInfo implements Command {
                 }
             }
         }
-        Utility.sendEmbedMessage("", moduleStats, channel).get();
+        RequestHandler.sendEmbedMessage("", moduleStats, channel).get();
 
         return "> Info sent to Dms.";
     }

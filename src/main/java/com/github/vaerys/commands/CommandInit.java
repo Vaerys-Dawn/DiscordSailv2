@@ -191,6 +191,8 @@ public class CommandInit {
         commands.add(new TestDM());
         commands.add(new Echo());
         commands.add(new WhoWasThat());
+        commands.add(new PatreonToken());
+        commands.add(new UnBlockUser());
         return commands;
     }
 }

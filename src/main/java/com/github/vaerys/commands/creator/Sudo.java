@@ -2,6 +2,7 @@ package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.MessageHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -43,7 +44,7 @@ public class Sudo implements Command {
                 builder.append("\n" + Constants.PREFIX_INDENT + "at " + errorPos);
             }
             builder.append("```");
-            Utility.sendMessage(builder.toString(), command.channel.get());
+            RequestHandler.sendMessage(builder.toString(), command.channel.get());
             Utility.sendStack(e);
         }
         return null;

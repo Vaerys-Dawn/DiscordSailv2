@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
@@ -38,7 +39,7 @@ public class Toggle implements Command {
             }
 
         }
-        XEmbedBuilder embedBuilder = new XEmbedBuilder();
+        XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String title;
         if (isModule) {
             title = "> Here is a list of available Guild Modules:\n";
@@ -55,8 +56,7 @@ public class Toggle implements Command {
         embedBuilder.withDesc(builder.toString());
         Utility.listFormatterEmbed(title, embedBuilder, types, true);
         embedBuilder.appendField(spacer, Utility.getCommandInfo(classObject, command), false);
-        embedBuilder.withColor(command.client.color);
-        Utility.sendEmbedMessage("", embedBuilder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
 //        command.guild.loadCommandData();
         return null;
     }

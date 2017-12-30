@@ -24,7 +24,7 @@ public class ProfileSettings implements Command {
         ProfileObject userObject = command.guild.users.getUserByID(command.user.longID);
         StringBuilder builder = new StringBuilder();
         boolean pixels = command.guild.config.modulePixels;
-        boolean levelChannel = command.guild.config.getChannelsByType(CHANNEL_LEVEL_UP, command.guild).size() != 0;
+        boolean levelChannel = command.guild.getChannelsByType(CHANNEL_LEVEL_UP).size() != 0;
         String error = getSettings(command) + "\n" + Utility.getCommandInfo(this, command);
 
         for (String s : args.split(" ")) {
@@ -86,7 +86,7 @@ public class ProfileSettings implements Command {
 
     private String getSettings(CommandObject object) {
         StringBuilder builder = new StringBuilder();
-        List<IChannel> levelUp = object.guild.config.getChannelsByType(CHANNEL_LEVEL_UP, object.guild);
+        List<IChannel> levelUp = object.guild.getChannelsByType(CHANNEL_LEVEL_UP);
         builder.append("**Settings:**\n");
         if (object.guild.config.modulePixels) {
             if (levelUp.size() != 0) {
