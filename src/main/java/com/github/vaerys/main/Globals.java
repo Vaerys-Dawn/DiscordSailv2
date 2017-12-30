@@ -166,7 +166,7 @@ public class Globals {
             String errorReport = c.validate();
             if (errorReport != null) {
                 logger.error(errorReport);
-                System.exit(-1);
+                System.exit(Constants.EXITCODE_CONF_ERROR);
             }
         }
         for (Command c : creatorCommands) {
@@ -174,7 +174,7 @@ public class Globals {
             String errorReport = c.validate();
             if (errorReport != null) {
                 logger.error(errorReport);
-                System.exit(-1);
+                System.exit(Constants.EXITCODE_CONF_ERROR);
             }
         }
         for (Command c : slashCommands) {
@@ -182,7 +182,7 @@ public class Globals {
             String errorReport = c.validate();
             if (errorReport != null) {
                 logger.error(errorReport);
-                System.exit(-1);
+                System.exit(Constants.EXITCODE_CONF_ERROR);
             }
         }
         for (GuildToggle g : guildGuildToggles) {

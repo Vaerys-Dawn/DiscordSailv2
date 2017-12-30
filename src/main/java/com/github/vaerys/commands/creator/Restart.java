@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.Command;
@@ -18,7 +19,7 @@ public class Restart implements Command {
         try {
             Thread.sleep(4000);
             Globals.getClient().logout();
-            System.exit(2);
+            System.exit(Constants.EXITCODE_RESTART);
         } catch (DiscordException e) {
             Utility.sendStack(e);
         } catch (InterruptedException e) {
