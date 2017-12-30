@@ -2,6 +2,7 @@ package com.github.vaerys.guildtoggles;
 
 import com.github.vaerys.guildtoggles.modules.*;
 import com.github.vaerys.guildtoggles.toggles.*;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.templates.GuildToggle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +75,7 @@ public class ToggleInit {
             String errorReport = t.validate();
             if (errorReport != null) {
                 logger.error(errorReport);
-                System.exit(-1);
+                System.exit(Constants.EXITCODE_CONF_ERROR);
             }
         }
     }
