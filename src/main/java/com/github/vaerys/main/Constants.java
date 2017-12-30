@@ -32,6 +32,13 @@ public class Constants {
     public static final String ERROR_BRACKETS = "> Brackets `[]` and Parentheses `()` are not required, " +
             "they mean that a variable is required or optional respectively, so don't use them.";
 
+    // constants reperesenting different exit codes
+    public static final short EXITCODE_NORMAL = 0;
+    public static final short EXITCODE_RESTART = 1;
+    public static final short EXITCODE_CONF_ERROR = 2;
+    public static final short EXITCODE_OTHER_ERROR = 3;
+    public static final short EXITCODE_UNKNOWN = 255;
+
 
     public static String getWelcomeMessage(CommandObject object) {
         return "> I am S.A.I.L, your Server-Based Artificial Intelligence Lattice. I help manage servers.\n" +

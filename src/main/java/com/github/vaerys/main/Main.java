@@ -85,7 +85,7 @@ public class Main {
                 token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
             } catch (IndexOutOfBoundsException e) {
                 logger.error("!!!BOT TOKEN NOT VALID PLEASE CHECK \"Storage/Token.txt\" AND UPDATE THE TOKEN!!!");
-                System.exit(Globals.EXITCODE_CONF_ERROR);
+                System.exit(Constants.EXITCODE_CONF_ERROR);
             }
 
             try {
@@ -169,7 +169,7 @@ public class Main {
         while (scanner.hasNextLine()) {
             String message = scanner.nextLine();
             if (message.equalsIgnoreCase("!Shutdown")){
-                System.exit(Globals.EXITCODE_NORMAL);
+                System.exit(Constants.EXITCODE_NORMAL);
                 return;
             }
             if (Globals.consoleMessageCID != -1) {

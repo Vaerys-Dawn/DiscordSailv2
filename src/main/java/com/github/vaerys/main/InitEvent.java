@@ -16,7 +16,7 @@ public class InitEvent {
             Globals.validateConfig();
         }catch (Exception e){
             Utility.sendStack(e);
-            System.exit(Globals.EXITCODE_UNKNOWN);
+            System.exit(Constants.EXITCODE_UNKNOWN);
         }
         Globals.setVersion();
 //        if (args.length > 0 && args[0].equals("-w")) {

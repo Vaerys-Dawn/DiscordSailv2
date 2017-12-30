@@ -2,7 +2,7 @@ package com.github.vaerys.channelsettings;
 
 import com.github.vaerys.channelsettings.settings.*;
 import com.github.vaerys.channelsettings.types.*;
-import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.templates.ChannelSetting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ public class InitChannels {
             String errorReport = s.validate();
             if (errorReport != null) {
                 logger.error(errorReport);
-                System.exit(Globals.EXITCODE_CONF_ERROR);
+                System.exit(Constants.EXITCODE_CONF_ERROR);
             }
         }
     }
