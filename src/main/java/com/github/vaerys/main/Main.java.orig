@@ -167,8 +167,13 @@ public class Main {
 
         while (scanner.hasNextLine()) {
             String message = scanner.nextLine();
-            if (message.equalsIgnoreCase("!Shutdown")) {
+<<<<<<< HEAD
+            if (message.equalsIgnoreCase("!Shutdown")){
                 System.exit(Constants.EXITCODE_NORMAL);
+=======
+            if (message.equalsIgnoreCase("!Shutdown")) {
+                System.exit(-1);
+>>>>>>> master
                 return;
             }
             if (Globals.consoleMessageCID != -1) {

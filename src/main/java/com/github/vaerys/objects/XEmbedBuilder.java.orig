@@ -22,10 +22,13 @@ public class XEmbedBuilder extends EmbedBuilder {
         withColor(user.color);
     }
 
+<<<<<<< HEAD
     public XEmbedBuilder(CommandObject command) {
-        withColor(command.client.bot.color);
+        withColor(command.client.color);
     }
 
+=======
+>>>>>>> master
     public RequestBuffer.RequestFuture<IMessage> send(IChannel channel) {
         return RequestHandler.sendEmbedMessage("", this, channel);
     }
@@ -34,6 +37,13 @@ public class XEmbedBuilder extends EmbedBuilder {
         return RequestHandler.sendEmbedMessage("", this, channel.get());
     }
 
+<<<<<<< HEAD
+=======
+    public XEmbedBuilder(CommandObject command) {
+        withColor(command.client.bot.color);
+    }
+
+>>>>>>> master
     @Override
     public EmbedBuilder withTitle(String title) {
         return super.withTitle(Utility.removeMentions(title));

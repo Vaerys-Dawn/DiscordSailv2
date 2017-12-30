@@ -1,7 +1,10 @@
 package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
+<<<<<<< HEAD
+=======
 import com.github.vaerys.handlers.RequestHandler;
+>>>>>>> master
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -12,15 +15,15 @@ import sx.blah.discord.util.DiscordException;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class Restart implements Command {
+public class Shutdown implements Command {
     @Override
     public String execute(String args, CommandObject command) {
-        RequestHandler.sendMessage("> Restarting.", command.channel.get());
+        RequestHandler.sendMessage("> Shutting Down.", command.channel.get());
         Utility.sendGlobalAdminLogging(this, args, command);
         try {
             Thread.sleep(4000);
             Globals.getClient().logout();
-            System.exit(Constants.EXITCODE_RESTART);
+            System.exit(Constants.EXITCODE_NORMAL);
         } catch (DiscordException e) {
             Utility.sendStack(e);
         } catch (InterruptedException e) {
@@ -31,12 +34,12 @@ public class Restart implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"Restart"};
+        return new String[]{"Shutdown"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Restarts the bot.\n" + ownerOnly;
+        return "Shuts the bot down safely.\n" + ownerOnly;
     }
 
     @Override

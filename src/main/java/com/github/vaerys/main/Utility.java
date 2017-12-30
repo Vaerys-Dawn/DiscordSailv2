@@ -523,6 +523,32 @@ public class Utility {
         return from;
     }
 
+    public static String truncateString(String str, int maxLength, boolean truncateAtSpace){
+        String result = str;
+
+        if (str.length() >= maxLength) {
+            int endI = maxLength;
+            if (truncateAtSpace) {
+                // want to truncate the message at the last valid space
+                // see if we can't find it.
+                if (str.substring(0, maxLength).lastIndexOf(' ') != -1) {
+                    endI = str.substring(0, maxLength).lastIndexOf(' ');
+                } else {
+                    // was not able to find a space
+                    endI = maxLength;
+                }
+            }
+            result = str.substring(0, endI) + "...";
+        }
+
+        return result;
+    }
+
+
+    public static String truncateString(String str, int maxLength) {
+        return truncateString(str, maxLength, true);
+    }
+
     public static boolean isImageLink(String link) {
         if (!checkURL(link)) {
             return false;
