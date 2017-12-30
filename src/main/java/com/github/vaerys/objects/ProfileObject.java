@@ -9,6 +9,7 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.pogos.GuildConfig;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 
 /**
@@ -25,6 +26,7 @@ public class ProfileObject {
     String quote = defaultQuote;
     ArrayList<UserSetting> settings = new ArrayList<>();
     ArrayList<UserLinkObject> links = new ArrayList<>();
+    public ArrayList<ModNoteObject> modNotes;
     public long lastTalked = -1;
 
     public String getQuote() {

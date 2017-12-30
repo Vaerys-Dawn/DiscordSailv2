@@ -29,11 +29,13 @@ public class UserObject {
     public List<CharacterObject> characters;
     public List<ServerObject> servers;
     public List<DailyMessage> dailyMessages;
+
     public String notAllowed;
     public boolean isPatron;
 
 
     public UserObject(IUser object, GuildObject guild) {
+        //TODO: Add ModNoteObject to User
         if (object == null) return;
         this.client = new ClientObject(object.getClient(), guild);
         init(object, guild, false);

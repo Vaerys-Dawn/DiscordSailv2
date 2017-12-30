@@ -77,7 +77,6 @@ public class Globals {
     private static Events events;
     private static String currentEvent = null;
 
-
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
         if (newGlobalData != null) {
             globalData = newGlobalData;
