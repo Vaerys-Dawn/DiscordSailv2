@@ -41,6 +41,7 @@ public class CommandInit {
         commands.add(new Module());
         commands.add(new Mute());
         commands.add(new EditInfoFiles());
+        commands.add(new ModNote());
         commands.add(new SetAdminRole());
         commands.add(new SetMutedRole());
         commands.add(new SetTrustedRoles());
