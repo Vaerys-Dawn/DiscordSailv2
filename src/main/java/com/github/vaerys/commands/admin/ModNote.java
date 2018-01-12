@@ -15,6 +15,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class ModNote implements Command {
 
@@ -86,7 +87,7 @@ public class ModNote implements Command {
                     return "> Note #" + index + " for " + user.displayName + " deleted.";
             }
         } else {
-            if (profile.modNotes == null) profile.modNotes = new ArrayList<>();
+            if (profile.modNotes == null) profile.modNotes = new LinkedList<>();
             profile.modNotes.add(new ModNoteObject(argsRest, command.user.longID, timestamp));
             return String.format("> Note added for %s at index %d.", user.displayName, profile.modNotes.size());
         }

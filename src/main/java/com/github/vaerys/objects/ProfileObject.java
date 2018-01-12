@@ -26,7 +26,7 @@ public class ProfileObject {
     String quote = defaultQuote;
     ArrayList<UserSetting> settings = new ArrayList<>();
     ArrayList<UserLinkObject> links = new ArrayList<>();
-    public ArrayList<ModNoteObject> modNotes;
+    public List<ModNoteObject> modNotes;
     public long lastTalked = -1;
 
     public String getQuote() {
