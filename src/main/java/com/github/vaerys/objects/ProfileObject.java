@@ -11,6 +11,7 @@ import com.github.vaerys.pogos.GuildConfig;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +31,7 @@ public class ProfileObject {
     String quote = defaultQuote;
     ArrayList<UserSetting> settings = new ArrayList<>();
     ArrayList<UserLinkObject> links = new ArrayList<>();
+    public List<ModNoteObject> modNotes;
     public long lastTalked = -1;
 
     public String getQuote() {
