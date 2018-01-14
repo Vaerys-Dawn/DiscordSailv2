@@ -176,7 +176,7 @@ public class GuildConfig extends GuildFile {
         return roleToMentionID;
     }
 
-    private void validateRoles() {
+    public void validateRoles() {
         IGuild guild = Globals.client.getGuildByID(guildID);
         if (guild == null) {
             return;

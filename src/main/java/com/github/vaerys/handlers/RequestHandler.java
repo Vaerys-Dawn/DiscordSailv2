@@ -1,6 +1,7 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -323,6 +324,7 @@ public class RequestHandler {
     public static RequestBuffer.RequestFuture<Boolean> updateUsername(String botName) {
         return RequestBuffer.request(() -> {
             try {
+                if (Client.getClient().getOurUser().getName().equals(botName)) return false;
                 Globals.getClient().changeUsername(botName);
             } catch (DiscordException e) {
                 if (e.getMessage().contains("CloudFlare")) {
@@ -422,6 +424,10 @@ public class RequestHandler {
 
     public static boolean muteUser(CommandObject command, boolean b) {
         return muteUser(command.guild.longID, command.user.longID, b);
+    }
+
+    public static void changePresence(String s) {
+        Client.getClient().changePresence(StatusType.ONLINE, ActivityType.PLAYING, s);
     }
 
 

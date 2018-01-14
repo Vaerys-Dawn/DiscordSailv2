@@ -10,6 +10,8 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
 import sx.blah.discord.util.RequestBuffer;
 
+import java.awt.*;
+
 /**
  * Created by Vaerys on 12/03/2017.
  */
@@ -20,6 +22,10 @@ public class XEmbedBuilder extends EmbedBuilder {
 
     public XEmbedBuilder(UserObject user) {
         withColor(user.color);
+    }
+
+    public XEmbedBuilder(Color color) {
+        withColor(color);
     }
 
     public RequestBuffer.RequestFuture<IMessage> send(IChannel channel) {

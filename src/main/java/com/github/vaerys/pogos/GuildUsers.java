@@ -47,9 +47,10 @@ public class GuildUsers extends GuildFile {
         return mutedUsers;
     }
 
-    public void addUser(long id) {
+    public ProfileObject addUser(long id) {
         ProfileObject user = new ProfileObject(id);
         profiles.add(user);
+        return user;
     }
 
     public ProfileObject getUserByID(long authorID) {

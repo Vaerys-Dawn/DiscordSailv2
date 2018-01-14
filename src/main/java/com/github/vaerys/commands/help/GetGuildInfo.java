@@ -96,7 +96,7 @@ public class GetGuildInfo implements Command {
                 adminBuilder.append(Utility.listFormatter(trustedRoles, true));
             }
             if (adminBuilder.length() != 0) {
-                serverStats.append("\n\n**[ADMIN STATS]**" + adminBuilder.length());
+                serverStats.append("\n\n**[ADMIN STATS]**" + adminBuilder.toString());
             }
         }
 

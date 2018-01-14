@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class DailyMessages extends GlobalFile {
     private double fileVersion = 1.1;
@@ -22,15 +23,22 @@ public class DailyMessages extends GlobalFile {
     public long newDailyMsgUID() {
         long result;
         Random random = new Random();
-        List<Long> uIDs = new ArrayList<>();
-        for (DailyMessage d : dailyMessages) {
-            if (d.getUID() != -1) {
-                uIDs.add(d.getUID());
-            }
+        List<Long> uIDs = dailyMessages.stream().filter(dailyMessage ->
+                dailyMessage.getUID() != -1).map(dailyMessage ->
+                dailyMessage.getUID()).collect(Collectors.toList());
+        uIDs.addAll(queuedRequests.stream().map(queueObject ->
+                queueObject.getuID()).collect(Collectors.toList()));
+        if (uIDs.size() >= 8999){
+            return -1;
         }
-        for (QueueObject o : queuedRequests) {
-            uIDs.add(o.getuID());
-        }
+//        for (DailyMessage d : dailyMessages) {
+//            if (d.getUID() != -1) {
+//                uIDs.add(d.getUID());
+//            }
+//        }
+//        for (QueueObject o : queuedRequests) {
+//            uIDs.add(o.getuID());
+//        }
         result = random.nextInt(9000) + 1000;
         while (uIDs.contains(result)) {
             result = random.nextInt(9000) + 1000;

@@ -2,6 +2,7 @@ package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
@@ -22,8 +23,14 @@ public class Help implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder helpEmbed = new XEmbedBuilder(command);
-        List<String> types = new ArrayList<>(command.guild.getAllTypes(command));
+        List<String> types = new ArrayList<>();
         List<Command> commands = new ArrayList<>(command.guild.getAllCommands(command));
+        if (command.user.longID == command.client.creator.longID) {
+            commands.addAll(Globals.getCreatorCommands(false));
+        }
+        commands.forEach(command1 -> {
+            if (!types.contains(command1.type())) types.add(command1.type());
+        });
         String error = "> There are no commands with the type: **" + args + "**.\n\n" + Utility.getCommandInfo(this, command);
         ListIterator iterator = types.listIterator();
         while (iterator.hasNext()) {
@@ -59,7 +66,7 @@ public class Help implements Command {
                     List<String> commandNames = new ArrayList<>();
                     for (Command c : Utility.getCommandsByType(commands, command, s, true)) {
                         StringBuilder commandCall = new StringBuilder(c.getCommand(command));
-                        if (c.dualType() != null && Utility.testForPerms(command,c.dualPerms())) {
+                        if (c.dualType() != null && Utility.testForPerms(command, c.dualPerms())) {
                             commandCall.append(indent + "*");
                         }
                         commandNames.add(commandCall.toString());

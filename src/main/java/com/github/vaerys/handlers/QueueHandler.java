@@ -33,6 +33,10 @@ public class QueueHandler {
             switch (type) {
                 case Constants.QUEUE_DAILY:
                     long uID = Globals.getDailyMessages().newDailyMsgUID();
+                    if (uID == -1) {
+                        object.client.creator.sendDm("> Max limit of Daily messages hit.");
+                        break;
+                    }
                     XEmbedBuilder embedBuilder = new XEmbedBuilder(object);
                     embedBuilder.withAuthorName("New Daily Message - " + object.guild.get().getName());
                     embedBuilder.withFooterText(object.user.longID + "");

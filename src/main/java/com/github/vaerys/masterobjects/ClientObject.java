@@ -3,6 +3,7 @@ package com.github.vaerys.masterobjects;
 import com.github.vaerys.main.Globals;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.RequestBuffer;
 
 public class ClientObject {
     private IDiscordClient object;
@@ -23,5 +24,11 @@ public class ClientObject {
 
     public IUser getUserByID(long userID) {
         return object.getUserByID(userID);
+    }
+
+    public IUser fetchUser(long l) {
+        return RequestBuffer.request(() -> {
+            return object.fetchUser(l);
+        }).get();
     }
 }

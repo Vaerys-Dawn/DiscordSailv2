@@ -1,10 +1,12 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.templates.Command;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -18,7 +20,7 @@ public class Mute implements Command {
         SplitFirstObject userCall = new SplitFirstObject(args);
         IRole mutedRole = command.client.get().getRoleByID(command.guild.config.getMutedRoleID());
         SplitFirstObject modifier = new SplitFirstObject(userCall.getRest());
-        UserObject muted = Utility.getUser(command, userCall.getFirstWord(), false,false);
+        UserObject muted = Utility.getUser(command, userCall.getFirstWord(), false, false);
         if (muted == null) {
             return "> Could not find user.";
         }
@@ -51,11 +53,19 @@ public class Mute implements Command {
                 timeSecs = Utility.textToSeconds(time.getFirstWord());
             }
             command.guild.users.muteUser(muted.longID, timeSecs, command.guild.longID);
+            String content;
             if (time.getFirstWord() == null || timeSecs == -1) {
-                return "> " + muted.displayName + " was Muted.";
+                content = "> " + muted.displayName + " was Muted";
             } else {
-                return "> " + muted.displayName + " was Muted for " + Utility.formatTime(timeSecs,true) + ".";
+                content = "> " + muted.displayName + " was Muted for " + Utility.formatTime(timeSecs, true);
             }
+            IChannel adminChannel = command.guild.getChannelByType(CHANNEL_ADMIN);
+            if (adminChannel != null) {
+                String reason = time.getRest();
+                if (reason == null) reason = "No reason given.";
+                RequestHandler.sendMessage(content + " in channel " + command.channel.mention + " with reason `" + reason + "`.", adminChannel);
+            }
+            return content + ".";
         } else {
             command.guild.users.unMuteUser(muted.longID, command.guild.longID);
             return "> " + muted.displayName + " was UnMuted.";

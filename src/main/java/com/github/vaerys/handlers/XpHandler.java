@@ -23,7 +23,6 @@ import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RequestBuffer;
 
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -40,31 +39,26 @@ public class XpHandler {
 
     final static Logger logger = LoggerFactory.getLogger(XpHandler.class);
 
-    public static void doDecay(GuildObject content, ZonedDateTime nowUTC) {
+    public static void doDecay(GuildObject content) {
         if (!content.config.modulePixels || !content.config.xpDecay) return;
         for (ProfileObject u : content.users.getProfiles()) {
-            if (u.getLastTalked() != -1 && !u.getSettings().contains(DONT_DECAY)) {
-                long diff = nowUTC.toEpochSecond() - u.getLastTalked();
-                long days = TimeUnit.DAYS.convert(diff, TimeUnit.SECONDS);
-                float temp = 0;
+            long days = u.daysDecayed(content);
+            if (7 > days) {
                 long decay;
                 u.setCurrentLevel(XpHandler.xpToLevel(u.getXP()));
                 //modifiable min and max decay days needs to be implemented.
-                if (days > 7 && days < 30) {
-                    //normal xp decay formula
-                    temp = (days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
-                } else if (days > 15) {
+                if (days > 15) {
                     //plateaued xp decay
-                    temp = (15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
+                    decay = (long) ((15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
+                } else {
+                    //normal xp decay formula
+                    decay = (long) ((days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
                 }
-                decay = (long) temp;
                 //half decay if you turn you xp gain off but only if it is voluntary
-                if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) {
-                    decay = decay / 2;
-                }
-                if (u.getUser(content).isPatron) {
-                    decay = decay / 2;
-                }
+                if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) decay = decay / 2;
+                //half decay for patreon supporters
+                if (u.getUser(content).isPatron) decay = decay / 2;
+                //reward handlers
                 if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
                     long pseudoLevel = xpToLevel(u.getXP() + 120);
                     RewardRoleObject rewardRole = content.config.getCurrentReward(pseudoLevel);
@@ -109,9 +103,9 @@ public class XpHandler {
             if (days > 7 && days < 30) {
                 //normal xp decay formula
                 temp = (days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
-            } else if (days > 15) {
+            } else if (days > 20) {
                 //plateaued xp decay
-                temp = (15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
+                temp = (8) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
             }
             decay = (long) temp;
             //half decay if you turn you xp gain off but only if it is voluntary
@@ -207,7 +201,7 @@ public class XpHandler {
         if (!object.guild.config.modulePixels) return;
         if (!object.guild.config.xpGain) return;
 
-        user.lastTalked = object.message.get().getTimestamp().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toEpochSecond();
+        user.lastTalked = object.message.getTimestamp().toEpochSecond();
 
         //user setting no xp gain
         if (user.getSettings().contains(NO_XP_GAIN)) return;
@@ -368,7 +362,6 @@ public class XpHandler {
                 Utility.sendStack(e);
             }
         }
-
     }
 
     private static void reactTolevelUp(CommandObject object) {

@@ -332,7 +332,7 @@ public class Globals {
         while (iterator.hasNext()) {
             GuildObject guild = (GuildObject) iterator.next();
             if (guild.longID == id) {
-                logger.trace("Guild: " + guild.get().getName() + " unloaded.");
+                logger.info("Guild: " + guild.get().getName() + " unloaded.");
                 iterator.remove();
             }
         }
@@ -444,11 +444,16 @@ public class Globals {
     }
 
     public static void updateEvent() {
+        boolean eventFound = false;
         for (TimedEvent e : events.getEvents()) {
             e.sanitizeDates();
             if (e.isEventActive()) {
+                eventFound = true;
                 currentEvent = e.getEventName();
             }
+        }
+        if (eventFound == false){
+            currentEvent = null;
         }
     }
 

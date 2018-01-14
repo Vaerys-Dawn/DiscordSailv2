@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +18,8 @@ import java.util.List;
  */
 
 
-@SuppressWarnings({"unused", "StringConcatenationInsideStringBufferAppend"})
+@SuppressWarnings({"StringConcatenationInsideStringBufferAppend"})
 public class MessageHandler {
-
-    private FileHandler handler = new FileHandler();
 
     private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
@@ -82,6 +81,7 @@ public class MessageHandler {
                 }
                 //command logging
                 handleLogging(command, c, commandArgs);
+                RequestBuffer.request(() -> command.channel.get().setTypingStatus(true)).get();
 //                if (!command.channel.get().getTypingStatus()) {
 //                    command.channel.get().toggleTypingStatus();
 //                }
@@ -93,18 +93,17 @@ public class MessageHandler {
         return false;
     }
 
-    public static void handleLogging(CommandObject commandObject, Command command, String args) {
+    protected static void handleLogging(CommandObject commandObject, Command command, String args) {
         if (!command.doAdminLogging() && !commandObject.guild.config.adminLogging) {
             return;
         } else if (!commandObject.guild.config.generalLogging) {
             return;
         }
-        StringBuilder builder = new StringBuilder();
-        builder.append("> **@" + commandObject.user.username + "** Has Used Command `" + command.getCommand(commandObject) + "`");
+        StringHandler builder = new StringHandler("> **@").append(commandObject.user.username).append("** Has Used Command `").append(command.getCommand(commandObject)).append("`");
         if (args != null && !args.isEmpty()) {
-            builder.append(" with args: `" + args + "`");
+            builder.append(" with args: `").append(args).append("`");
         }
-        builder.append(" in channel " + commandObject.channel.get().mention() + ".");
+        builder.append(" in channel ").append(commandObject.channel.get().mention()).append(".");
         Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging());
     }
 }

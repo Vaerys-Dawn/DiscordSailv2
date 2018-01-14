@@ -67,6 +67,7 @@ public class CommandInit {
         commands.add(new LastDailyMessage());
         commands.add(new NewDailyMessage());
         commands.add(new Patreon());
+        commands.add(new WhatsMyColour());
         //Help commands
         commands.add(new GetGuildInfo());
         commands.add(new Help());

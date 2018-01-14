@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
@@ -11,7 +12,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class ResetPlayingStatus implements Command{
     @Override
     public String execute(String args, CommandObject command) {
-        command.client.get().changePlayingText(Globals.playing);
+        RequestHandler.changePresence(Globals.playing);
         return "> Status reset.";
     }
 

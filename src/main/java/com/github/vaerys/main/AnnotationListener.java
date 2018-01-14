@@ -52,7 +52,7 @@ public class AnnotationListener {
     @EventSubscriber
     public void onReadyEvent(ReadyEvent event) {
         Globals.isReady = true;
-        event.getClient().changePlayingText(Globals.playing);
+        RequestHandler.changePresence(Globals.playing);
         RequestHandler.updateUsername(Globals.botName);
     }
 

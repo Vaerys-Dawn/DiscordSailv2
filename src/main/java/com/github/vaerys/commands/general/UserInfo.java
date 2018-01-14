@@ -52,7 +52,7 @@ public class UserInfo implements Command {
         }
 
         //start of the profile builder.
-        XEmbedBuilder builder = new XEmbedBuilder(command.user);
+        XEmbedBuilder builder = new XEmbedBuilder(user);
         List<IRole> roles = user.roles;
         ArrayList<String> roleNames = new ArrayList<>();
         ArrayList<String> links = new ArrayList<>();

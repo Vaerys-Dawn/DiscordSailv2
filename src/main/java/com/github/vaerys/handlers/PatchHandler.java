@@ -38,6 +38,9 @@ public class PatchHandler {
 
         //1.3 fixes
         sanitizer(guild);
+
+        //1.4 fixes
+        removeNullPrefix(guild);
     }
 
     public static void preInitPatches() {
@@ -50,6 +53,27 @@ public class PatchHandler {
 
         //1.2 patches
         fixMultipleDailies();
+    }
+
+    private static void removeNullPrefix(IGuild guild) {
+        String path = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH);
+        //check file
+        if (!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
+        if (checkPatch(1.5, guild, "Remove_Null_Prefixes_CustomCommands", json)) return;
+
+        CustomCommands commands = (CustomCommands) CustomCommands.create(CustomCommands.FILE_PATH, guild.getLongID(), new CustomCommands());
+        commands.getCommandList().forEach(object -> {
+            String contents = object.getContents(false);
+            if (contents.startsWith("null")) {
+                object.setContents(contents.replaceFirst("null", ""));
+            }
+        });
+        commands.flushFile();
+
+        json = FileHandler.fileToJsonObject(path);
+        newPatchID(1.5, json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void fixMultipleDailies() {

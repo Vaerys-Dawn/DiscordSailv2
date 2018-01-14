@@ -40,10 +40,10 @@ public class GroupUp implements Command {
             if (user != null) {
                 IPresence userPres = user.getPresence();
                 if (!userPres.getStatus().equals(StatusType.DND) && !userPres.getStatus().equals(StatusType.OFFLINE) && !userPres.getStatus().equals(StatusType.UNKNOWN)) {
-                    if (g.getPresence() != null || userPres.getPlayingText().isPresent()) {
+                    if (g.getPresence() != null || userPres.getText().isPresent()) {
                         String newPres;
                         if (g.getPresence() == null) {
-                            newPres = userPres.getPlayingText().get();
+                            newPres = userPres.getText().get();
                         } else {
                             newPres = g.getPresence();
                         }

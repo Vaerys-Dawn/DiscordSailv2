@@ -37,6 +37,9 @@ public class EditCC implements Command {
         if (command.message.get().getAttachments().size() != 0) {
             String testLink = command.message.get().getAttachments().get(0).getUrl();
             if (Utility.isImageLink(testLink)) {
+                if (rest.length() > 0) {
+                    rest += " ";
+                }
                 rest += "<embedImage>{" + testLink + "}";
             } else {
                 return "> Custom command attachment must be a valid Image.";
@@ -76,7 +79,7 @@ public class EditCC implements Command {
             case "lock":
                 return CCEditModes.lock(customCommand, command, command.user.get(), command.guild.get());
             case "addsearch":
-                return CCEditModes.addReplaceTag(customCommand,content);
+                return CCEditModes.addReplaceTag(customCommand, content);
             default:
                 if (content == null || content.isEmpty()) {
                     return CCEditModes.replace(customCommand, mode, command);

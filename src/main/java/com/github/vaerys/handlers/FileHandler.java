@@ -144,4 +144,13 @@ public class FileHandler {
         }
         return jsonObject;
     }
+
+    public static void writeToFile(List<String> contents, String path) {
+        String toSave = "";
+        for (String s : contents) {
+            if (toSave.length() != 0) s += "\n";
+            toSave += s;
+        }
+        writeToFile(path, toSave, true);
+    }
 }

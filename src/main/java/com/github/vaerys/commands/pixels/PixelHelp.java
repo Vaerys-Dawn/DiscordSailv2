@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -86,9 +87,16 @@ public class PixelHelp implements Command {
     private String decay(CommandObject command) {
         String rules = "";
         if (command.guild.config.xpDecay) {
+            long maxDecay = (long) ((8) * (Globals.avgMessagesPerDay * command.guild.config.xpRate * command.guild.config.xpModifier) / 8);
+            long minDecay = (long) ((Globals.avgMessagesPerDay * command.guild.config.xpRate * command.guild.config.xpModifier) / 8);
+            long minMessageCount = (long) (minDecay / (command.guild.config.xpRate * command.guild.config.xpModifier));
+            long messageCount = (long) (maxDecay / (command.guild.config.xpRate * command.guild.config.xpModifier));
             rules += "**How pixel decay works:** \n" +
                     "> Pixel decay starts after 7 days of no messages sent.\n" +
-                    "> The decay amount gets larger until it plateaus at day 30.\n";
+                    "> The value for the first day of decay is " + minDecay + " pixels.\n" +
+                    "> Decay then increases at a rate of " + minDecay + " pixels per day before reaching a max of " + maxDecay + " pixels per day.\n" +
+                    "> Decay only reaches its maximum after 15 days of inactivity.\n";
+//                    "> The max decay value per day is " + maxDecay + " pixels or about " + messageCount + " messages worth of pixels.\n";
             if (command.guild.config.getRewardRoles().size() != 0) {
                 rules += "> There is a level floor below every reward role which sits at 100 pixels below the pixels required to receive that role.\n" +
                         "> If you reach a multiple of 30 days and you are at a reward's pixel floor it will decay you past the level floor.\n" +

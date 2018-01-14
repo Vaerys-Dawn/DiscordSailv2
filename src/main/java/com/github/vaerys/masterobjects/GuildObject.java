@@ -276,8 +276,6 @@ public class GuildObject {
         return object.getEmojiByName(name);
     }
 
-
-
     public void handleWelcome(CommandObject command) {
         if (config.welcomeMessage) {
             return;

@@ -21,6 +21,9 @@ public class HelpDM implements DMCommand {
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         List<Command> commands = Utility.getCommandsByType(Globals.getAllCommands(), command, TYPE_DM, true);
+        if (command.user.longID == command.client.creator.longID) {
+            commands.addAll(Globals.getCreatorCommands(true));
+        }
         List<String> list = new ArrayList<>();
         for (Command c : commands) {
             list.add(c.getCommand(command));

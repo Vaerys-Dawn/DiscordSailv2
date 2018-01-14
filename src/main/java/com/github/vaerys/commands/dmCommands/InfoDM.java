@@ -3,6 +3,7 @@ package com.github.vaerys.commands.dmCommands;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.Info;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.DMCommand;
 
@@ -15,6 +16,9 @@ public class InfoDM implements DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         List<Command> commands = command.guild.getAllCommands(command);
+        if (command.user.longID == command.client.creator.longID) {
+            commands.addAll(Globals.getCreatorCommands(true));
+        }
 
         String error = "> Could not find information on any commands named **" + args + "**.";
         for (Command c : commands) {

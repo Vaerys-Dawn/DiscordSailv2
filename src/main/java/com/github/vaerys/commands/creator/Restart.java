@@ -20,7 +20,7 @@ public class Restart implements Command {
         try {
             Thread.sleep(4000);
             Globals.getClient().logout();
-            System.exit(Constants.EXITCODE_CONF_ERROR);
+            System.exit(Constants.EXITCODE_RESTART);
         } catch (DiscordException e) {
             Utility.sendStack(e);
         } catch (InterruptedException e) {

@@ -17,7 +17,14 @@ public class TagRandEmote extends TagObject {
     public String execute(String from, CommandObject command, String args) {
         List<IEmoji> emojis = command.guild.get().getEmojis();
         Random random = new Random();
-        return replaceFirstTag(from, emojis.get(random.nextInt(emojis.size())).toString());
+        IEmoji emoji = emojis.get(random.nextInt(emojis.size()));
+        String output;
+        if (emoji.getImageUrl().endsWith(".gif")) {
+            output = "<a:" + emoji.getName() + ":" + emoji.getLongID() + ">";
+        } else {
+            output = emoji.toString();
+        }
+        return replaceFirstTag(from, output);
     }
 
     @Override

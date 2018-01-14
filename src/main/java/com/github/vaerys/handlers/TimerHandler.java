@@ -12,7 +12,10 @@ import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
+import sx.blah.discord.handle.obj.ActivityType;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.StatusType;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RequestBuffer;
 
@@ -101,8 +104,13 @@ public class TimerHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                RequestHandler.sendMessage(object.getMessage(), Globals.getClient().getChannelByID(object.getChannelID()));
-                Globals.getGlobalData().removeReminder(object);
+                IMessage message = RequestHandler.sendMessage(object.getMessage(), Globals.getClient().getChannelByID(object.getChannelID())).get();
+                if (message == null) {
+                    logger.error("REMINDER FAILED FOR USER WITH ID \"" + object.getUserID() + "\" TO SEND. WILL ATTEMPT TO SEND AGAIN IN 5 MINS.");
+                    object.setSent(false);
+                } else {
+                    Globals.getGlobalData().removeReminder(object);
+                }
             }
         }, initialDelay * 1000);
     }
@@ -152,7 +160,7 @@ public class TimerHandler {
                     for (GuildObject task : Globals.getGuilds()) {
                         GuildConfig guildconfig = task.config;
                         //do decay
-                        XpHandler.doDecay(task, nowUTC);
+                        XpHandler.doDecay(task);
 
                         //reset offenders
                         task.resetOffenders();
@@ -309,7 +317,7 @@ public class TimerHandler {
 //                        Globals.client.logout();
                         Thread.sleep(4000);
                         Globals.getClient().login();
-                        Globals.getClient().changePlayingText("Recovered From Crash.");
+                        RequestHandler.changePresence("Recovered From Crash.");
                         return;
                     } catch (DiscordException e2) {
                         if (!e2.getMessage().contains("login")) {
@@ -342,7 +350,7 @@ public class TimerHandler {
             int nextRand = random.nextInt(games.size());
             status = games.get(nextRand);
         }
-        Globals.client.changePlayingText(status);
+        RequestHandler.changePresence(status);
         return;
     }
 }

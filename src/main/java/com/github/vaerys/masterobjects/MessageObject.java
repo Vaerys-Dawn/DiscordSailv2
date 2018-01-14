@@ -5,6 +5,7 @@ import sx.blah.discord.handle.obj.IMessage;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class MessageObject {
@@ -40,7 +41,7 @@ public class MessageObject {
         RequestHandler.deleteMessage(object);
     }
 
-    public LocalDateTime getTimestamp() {
-        return object.getTimestamp();
+    public ZonedDateTime getTimestamp() {
+        return ZonedDateTime.ofInstant(object.getTimestamp(),ZoneOffset.UTC);
     }
 }

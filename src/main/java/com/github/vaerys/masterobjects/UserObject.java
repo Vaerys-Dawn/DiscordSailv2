@@ -14,6 +14,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class UserObject {
@@ -84,7 +85,7 @@ public class UserObject {
         isPatron = Globals.getPatrons().contains(longID);
     }
 
-    public UserObject loadExtraData(GuildObject guild){
+    public UserObject loadExtraData(GuildObject guild) {
         customCommands = guild.customCommands.getCommandList().stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
         characters = guild.characters.getCharacters(guild.get()).stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
         servers = guild.servers.getServers().stream().filter(s -> s.getCreatorID() == longID).collect(Collectors.toList());
@@ -126,7 +127,11 @@ public class UserObject {
     }
 
     public ProfileObject getProfile(GuildObject guild) {
-        return guild.users.getUserByID(longID);
+        ProfileObject profile = guild.users.getUserByID(longID);
+        if (profile == null && object.isBot()) {
+            profile = guild.users.addUser(longID);
+        }
+        return profile;
     }
 
     public boolean isPrivateProfile(GuildObject guild) {
@@ -170,5 +175,17 @@ public class UserObject {
 
     public String getAvatarURL() {
         return object.getAvatarURL();
+    }
+
+    public Color getRandomColour() {
+        Random random = new Random(longID);
+        int red = random.nextInt(255);
+        int green = random.nextInt(255);
+        int blue = random.nextInt(255);
+        return new Color(red, green, blue);
+    }
+
+    public boolean isDecaying(GuildObject guild) {
+        return getProfile(guild).daysDecayed(guild) > 7;
     }
 }

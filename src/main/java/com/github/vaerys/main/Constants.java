@@ -72,6 +72,7 @@ public class Constants {
     public static final String LEVEL_UP_IMAGE_URL = "http://i.imgur.com/Vdt2DkK.gif";
     public static final String RANK_UP_IMAGE_URL = "http://i.imgur.com/MwsPixA.gif";
     public static final String PATREON_ICON_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/1024px-Patreon_logo.svg.png";
+    public static final String PIXELS_ICON = "http://i.imgur.com/r5usgN7.png";
 
     //EnumSets
     public static final ArrayList<UserSetting> levelUpStates = new ArrayList<UserSetting>() {{

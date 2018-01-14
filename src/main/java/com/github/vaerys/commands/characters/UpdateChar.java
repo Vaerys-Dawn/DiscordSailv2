@@ -1,12 +1,15 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -22,12 +25,34 @@ public class UpdateChar implements Command {
                 }
             }
         }
-        return command.guild.characters.updateChar(new CharacterObject(args.split(" ")[0], command.user.longID, command.user.displayName, charRoles), command.guild.get());
+        command.guild.characters.validateRoles(command.guild.get());
+        int position = 0;
+        CharacterObject newCharacter = new CharacterObject(args.split(" ")[0], command.user.longID, command.user.displayName, charRoles);
+        List<CharacterObject> characters = command.guild.characters.getCharacters(command.guild.get());
+        for (CharacterObject c : characters) {
+            if (c.getName().equalsIgnoreCase(newCharacter.getName())) {
+                IUser author = Globals.getClient().getUserByID(newCharacter.getUserID());
+                if (c.getUserID() == author.getLongID()) {
+                    characters.get(position).update(newCharacter);
+                    return "> Character Updated.";
+                } else {
+                    return "> " + author.getName() + "#" + author.getDiscriminator() + "'s Character: \"" + newCharacter.getName() + "\" Could not be added as that name is already in use.";
+                }
+            }
+            position++;
+        }
+        characters.add(newCharacter);
+        if (isSubtype(command, names()[0])) {
+            return "> Character: \"" + newCharacter.getName() + "\" Added.\n\n" +
+                    "To update the name or roles linked to this character just run this command again.";
+        } else {
+            return "> Character: \"" + newCharacter.getName() + "\" Added.";
+        }
     }
 
     @Override
     public String[] names() {
-        return new String[]{"UpdateChar", "NewChar"};
+        return new String[]{"NewChar", "UpdateChar"};
     }
 
     @Override

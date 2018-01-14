@@ -3,6 +3,7 @@ package com.github.vaerys.commands.pixels;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
@@ -58,12 +59,16 @@ public class Pixels implements Command {
         if (pos > xpBar.length()) {
             pos = xpBar.length();
         }
-        xpBar.replace(pos, pos, "**>**");
+        if (user.isDecaying(command.guild)){
+            xpBar.replace(pos, pos, "**<**");
+        }else {
+            xpBar.replace(pos, pos, "**>**");
+        }
         String levelTotal = "**" + profile.getCurrentLevel() + "** [" + xpBar.toString() + "] **" + (profile.getCurrentLevel() + 1) + "**";
 
         builder.withColor(Globals.pixelColour); //colour of pixels
         builder.withAuthorName(user.displayName + "'s Pixel stats.");
-        builder.withAuthorIcon("http://i.imgur.com/r5usgN7.png"); //pixel icon
+        builder.withAuthorIcon(Constants.PIXELS_ICON); //pixel icon
         builder.appendField(xpTitle, xpTotal, true);
         builder.appendField(rankTitle, rankTotal, true);
         if (profile.getXP() != 0) {

@@ -8,8 +8,13 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.pogos.GuildConfig;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.concurrent.TimeUnit;
+
+import static com.github.vaerys.main.UserSetting.DONT_DECAY;
 
 /**
  * Created by Vaerys on 27/08/2016.
@@ -144,5 +149,18 @@ public class ProfileObject {
                 gender.equals(defaultGender) &&
                 links.size() == 0 &&
                 settings.size() == 0;
+    }
+
+    public long daysDecayed(GuildObject guild) {
+        if (!guild.config.modulePixels || !guild.config.xpDecay) return -1;
+        ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
+        if (lastTalked != -1 && !settings.contains(DONT_DECAY)) {
+            long diff = nowUTC.toEpochSecond() - lastTalked;
+            long days = TimeUnit.DAYS.convert(diff, TimeUnit.SECONDS);
+            if (days > 7) {
+                return days;
+            }
+        }
+        return -1;
     }
 }

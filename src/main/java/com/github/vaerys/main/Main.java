@@ -66,12 +66,6 @@ public class Main {
             FileHandler.createDirectory(Constants.DIRECTORY_TEMP);
             FileHandler.createDirectory(Constants.DIRECTORY_OLD_FILES);
             FileHandler.createDirectory(Constants.DIRECTORY_ERROR);
-            if (!Files.exists(Paths.get(Constants.FILE_CONFIG))) {
-                FileHandler.writeToJson(Constants.FILE_CONFIG, new Config());
-            }
-            if (!Files.exists(Paths.get(Constants.FILE_GLOBAL_DATA))) {
-                FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, new GlobalData());
-            }
 
             //load config phase 1
             Config config = (Config) Config.create(Constants.FILE_CONFIG, new Config());
@@ -84,7 +78,7 @@ public class Main {
                 token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
             } catch (IndexOutOfBoundsException e) {
                 logger.error("!!!BOT TOKEN NOT VALID PLEASE CHECK \"Storage/Token.txt\" AND UPDATE THE TOKEN!!!");
-                System.exit(-1);
+                System.exit(Constants.EXITCODE_CONF_ERROR);
             }
 
             try {
@@ -168,7 +162,7 @@ public class Main {
         while (scanner.hasNextLine()) {
             String message = scanner.nextLine();
             if (message.equalsIgnoreCase("!Shutdown")) {
-                System.exit(-1);
+                System.exit(Constants.EXITCODE_NORMAL);
                 return;
             }
             if (Globals.consoleMessageCID != -1) {

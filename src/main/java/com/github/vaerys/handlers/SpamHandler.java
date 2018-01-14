@@ -29,10 +29,11 @@ public class SpamHandler {
         String message = command.message.getContent();
         if (StringUtils.startsWithIgnoreCase(message, new NewCC().getCommand(command))) return false;
         if (StringUtils.startsWithIgnoreCase(message, new EditCC().getCommand(command))) return false;
-        List<String> chunks = Arrays.asList(message.split("(?<=\\G..........)"));
+        List<String> chunks = Arrays.asList(message.split("(?<=\\G............)"));
+        int maxCount = message.length() / 100;
         for (String chunk : chunks) {
             int count = StringUtils.countMatches(message, chunk);
-            if (count > 7) {
+            if (count > maxCount) {
                 command.message.delete();
                 command.guild.config.addOffence(command.user.longID);
                 logger.debug(Utility.loggingFormatter(command, "CATCH_SPAM_WALLS", "OFFENCE_ADDED", count + " Occurrences"));
@@ -66,7 +67,7 @@ public class SpamHandler {
         List<IRole> oldRoles = command.user.roles;
         IGuild guild = command.guild.get();
 
-        if (Utility.testForPerms(command,Permissions.MENTION_EVERYONE)) return false;
+        if (Utility.testForPerms(command, Permissions.MENTION_EVERYONE)) return false;
 
         if (message.toString().contains("@everyone") || message.toString().contains("@here")) {
             return false;
@@ -169,7 +170,7 @@ public class SpamHandler {
             add("discord.gg");
             add("discordapp.com/Invite/");
         }};
-        if (Utility.testForPerms(command,Permissions.MANAGE_MESSAGES)) return false;
+        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
 
         boolean inviteFound = false;
         if (guildconfig.denyInvites) {

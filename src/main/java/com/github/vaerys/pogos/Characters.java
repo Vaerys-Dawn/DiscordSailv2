@@ -21,25 +21,6 @@ public class Characters extends GuildFile {
     ArrayList<CharacterObject> characters = new ArrayList<>();
     private String rolePrefix = "";
 
-    public String updateChar(CharacterObject newCharacter, IGuild guild) {
-        validateRoles(guild);
-        int position = 0;
-        for (CharacterObject c : characters) {
-            if (c.getName().equalsIgnoreCase(newCharacter.getName())) {
-                IUser author = Globals.getClient().getUserByID(newCharacter.getUserID());
-                if (c.getUserID() == author.getLongID()) {
-                    characters.get(position).update(newCharacter);
-                    return "> Character Updated.";
-                } else {
-                    return "> " + author.getName() + "#" + author.getDiscriminator() + "'s Character: \"" + newCharacter.getName() + "\" Could not be added as that name is already in use.";
-                }
-            }
-            position++;
-        }
-        characters.add(newCharacter);
-        return "> Character: \"" + newCharacter.getName() + "\" Added";
-    }
-
     public ArrayList<CharacterObject> getCharacters(IGuild guild) {
         validateRoles(guild);
         return characters;
@@ -67,7 +48,7 @@ public class Characters extends GuildFile {
         return rolePrefix;
     }
 
-    private void validateRoles(IGuild guild) {
+    public void validateRoles(IGuild guild) {
         if (guild == null) {
             return;
         }

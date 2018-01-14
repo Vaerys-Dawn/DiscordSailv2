@@ -756,7 +756,7 @@ public class Utility {
             }
             if (ctype.equalsIgnoreCase(type) || isDualType) {
                 if (testPerms) {
-                    if (c.type().equalsIgnoreCase(Command.TYPE_CREATOR) && !commandObject.user.get().equals(commandObject.client.creator)) {
+                    if (c.type().equalsIgnoreCase(Command.TYPE_CREATOR) && commandObject.user.longID != commandObject.client.creator.longID) {
                         //do nothing
                     } else if (isDualType && testForPerms(commandObject, c.dualPerms())) {
                         toReturn.add(c);

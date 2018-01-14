@@ -2,6 +2,7 @@ package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
@@ -16,6 +17,9 @@ public class Info implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         List<Command> commands = command.guild.getAllCommands(command);
+        if (command.user.longID == command.client.creator.longID) {
+            commands.addAll(Globals.getCreatorCommands(false));
+        }
 
         String error = "> Could not find information on any commands named **" + args + "**.";
         for (Command c : commands) {

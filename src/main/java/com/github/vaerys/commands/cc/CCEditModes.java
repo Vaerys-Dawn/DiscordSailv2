@@ -71,7 +71,7 @@ public class CCEditModes {
         if ((command.getContents(false) + content).length() > 2000) {
             return "> Cannot append content, would make command to large.";
         }
-        if (StringUtils.countMatches(command.getContents(false) + content + " " + content, "<embedImage>{") > 1) {
+        if (StringUtils.countMatches(command.getContents(false) + content, "<embedImage>{") > 1) {
             if (commandObject.message.get().getAttachments().size() != 0) {
                 return "> Custom commands cannot contain more than one image.";
             }

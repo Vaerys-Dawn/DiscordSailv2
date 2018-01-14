@@ -16,54 +16,61 @@ public class SetQuote implements Command {
     @Override
     public String execute(String args, CommandObject command) {
         UserObject user = command.user;
-        SplitFirstObject userCall = new SplitFirstObject(args);
+        String quote = args;
         boolean adminEdit = false;
-        if (Utility.testForPerms(command, dualPerms()) || Utility.canBypass(command.user.get(), command.guild.get())) {
-            user = Utility.getUser(command, userCall.getFirstWord(), false);
-            if (user != null && userCall.getRest() != null && user.getProfile(command.guild) != null) {
+        if (isSubtype(command, "SetUserQuote")) {
+            if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+                SplitFirstObject userCall = new SplitFirstObject(quote);
+                user = Utility.getUser(command, userCall.getFirstWord(), false, true);
+                if (user == null) return "> Could not find user.";
+                quote = userCall.getRest();
                 adminEdit = true;
             } else {
-                user = command.user;
+                return command.user.notAllowed;
             }
         }
-        int maxlength = 140;
+        int maxLength = 140;
         if (user.isPatron) {
-            maxlength += 140;
+            maxLength += 140;
         }
         ProfileObject u = user.getProfile(command.guild);
-        if (u == null) {
-            return "> " + user.displayName + " Has not Spoken yet thus they have nothing to edit.";
+        quote = Utility.removeFun(quote);
+        if (quote == null || quote.isEmpty()) return "> You can't have an empty quote.";
+        for (String s : quote.split(" ")) {
+            if (!Utility.checkURL(s)) {
+                return "> Cannot add quote. Malicious link found.";
+            }
+        }
+        if (adminEdit) {
+            if (quote.length() > maxLength) {
+                return "> Quote is too long...\n(must be under " + maxLength + " chars)";
+            }
+            u.setQuote(quote);
+            return "> " + user.displayName + "'s Quote Edited.";
         } else {
-            args = Utility.removeFun(args);
-            for (String s : args.split(" ")) {
-                if (!Utility.checkURL(s)) {
-                    return "> Cannot add quote. Malicious link found.";
-                }
+            if (quote.length() > maxLength) {
+                return "> Your Quote is too long...\n(must be under " + maxLength + " chars)";
             }
-            if (adminEdit) {
-                if (userCall.getRest().length() > maxlength) {
-                    return "> Quote is too long...\n(must be under " + maxlength + " chars)";
-                }
-                u.setQuote(userCall.getRest());
-                return "> " + user.displayName + "'s Quote Edited.";
-            } else {
-                if (args.length() > maxlength) {
-                    return "> Your Quote is too long...\n(must be under " + maxlength + " chars)";
-                }
-                u.setQuote(args);
-                return "> Quote Edited.";
-            }
+            u.setQuote(quote);
+            return "> Quote Edited.";
         }
     }
 
     @Override
     public String[] names() {
-        return new String[]{"SetQuote"};
+        return new String[]{"SetQuote", "SetUserQuote"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Allows you to set your quote. Limit 140 chars (or 280 if you are a patron)";
+        String response = "Allows you to set your quote. Limit 140 chars (or 280 if you are a patron)";
+        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+            response += "\n\n**" + command.guild.config.getPrefixCommand() + names()[1] + " [@User] [Quote...]**\n" +
+                    "**Desc:** Edits a user's quote.\n" +
+                    "**Permissions:** " + Permissions.MANAGE_MESSAGES + ".\n";
+        }
+        return response;
+
     }
 
     @Override
@@ -98,21 +105,21 @@ public class SetQuote implements Command {
 
     @Override
     public String dualDescription() {
-        return "Allows you to set the quote of a user.";
+        return null;
     }
 
     @Override
     public String dualUsage() {
-        return "[@User] [Quote]";
+        return null;
     }
 
     @Override
     public String dualType() {
-        return TYPE_ADMIN;
+        return null;
     }
 
     @Override
     public Permissions[] dualPerms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES};
+        return new Permissions[0];
     }
 }
