@@ -20,6 +20,9 @@ import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
+import com.sun.management.OperatingSystemMXBean;
+import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -36,6 +39,7 @@ public class TimerHandler {
     private static long keepAliveMin;
     private static long keepAliveFiveMin;
     private static long keepAliveDaily;
+    private static List<Double> cpuUsage = new LinkedList<>();
 
     public static void checkKeepAlive() {
         long now = System.currentTimeMillis();
@@ -80,6 +84,14 @@ public class TimerHandler {
                 keepAliveMin = System.currentTimeMillis();
                 checkKeepAlive();
                 logger.trace("Reset speakers.");
+
+                OperatingSystemMXBean operatingSystemMXBean = (OperatingSystemMXBean)ManagementFactory.getOperatingSystemMXBean();
+                cpuUsage.add(operatingSystemMXBean.getProcessCpuLoad());
+
+                if (cpuUsage.size() > 5) {
+                    cpuUsage.remove(0);
+                }
+
                 for (GuildObject g : Globals.getGuilds()) {
                     g.getSpokenUsers().clear();
                 }
@@ -292,13 +304,30 @@ public class TimerHandler {
                             }
                         }
                     }
-
+                    // grab current memory usage
+                    long freeMemory = Runtime.getRuntime().freeMemory();
+                    long totalMemory = Runtime.getRuntime().totalMemory();
+                    long usedMemory = totalMemory - freeMemory;
+                    // and make it look pretty
+                    StringBuilder memString = new StringBuilder();
+                    NumberFormat nf = NumberFormat.getInstance();
+                    memString.append("Memory Usage: ");
+                    memString.append(nf.format(totalMemory / 1024)).append("KB total\t");
+                    memString.append(nf.format(usedMemory / 1024)).append("KB used\t");
+                    memString.append(nf.format(freeMemory / 1024)).append("KB free");
+                    double avgCpu=0;
+                    for (Double i : cpuUsage) {
+                        avgCpu += i;
+                    }
+                    avgCpu /= cpuUsage.size();
                     //Sending isAlive Check.
                     if (Globals.showSaveWarning) {
-                        logger.info("Total active threads: " + Thread.activeCount());
+                        logger.info("Total active threads: " + Thread.activeCount() + "\tCPU Usage: " + nf.format(avgCpu * 100) + "%");
+                        logger.info(memString.toString());
                         logger.info("Backup in 5 seconds do not restart.");
                     } else {
-                        logger.debug("Total active threads: " + Thread.activeCount());
+                        logger.debug("Total active threads: " + Thread.activeCount() + "\tCPU Usage: " + nf.format(avgCpu * 100) + "%");
+                        logger.debug(memString.toString());
                         logger.debug("Backup in 5 seconds do not restart.");
                     }
                     Thread.sleep(5000);
