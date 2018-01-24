@@ -2,6 +2,7 @@ package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
@@ -25,7 +26,7 @@ public class EditXp implements Command {
         // Get user specified in command
         UserObject user = Utility.getUser(command, splitArgs[0], false);
         if (user == null) return "> Could not find user.";
-        if (Utility.testUserHierarchy(user, command.user, command.guild)) {
+        if ((!Utility.canBypass(command.user.get(), command.guild.get())) && Utility.testUserHierarchy(user, command.user, command.guild)) {
             return "> You do not have permission to edit " + user.displayName + "'s pixels.";
         }
 
@@ -34,6 +35,7 @@ public class EditXp implements Command {
         try {
             xp = Long.parseLong(splitArgs[2]);
             if (xp < 0) return "> I don't know what negative pixels are. What are you trying to do?";
+            if (xp > Constants.PIXELS_CAP) return "> I can't give you that many pixels!";
         } catch (NumberFormatException e) {
             return "> **" + splitArgs[2] + "** is not a number.";
         }
