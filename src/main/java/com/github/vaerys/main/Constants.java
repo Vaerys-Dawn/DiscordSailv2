@@ -76,7 +76,7 @@ public class Constants {
     public static final String PATREON_ICON_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/1024px-Patreon_logo.svg.png";
     public static final String PIXELS_ICON = "http://i.imgur.com/r5usgN7.png";
 
-    public static final Long LEVEL_CAP = 1000l; //Anything more than this is too much CPU time to calculate
+    public static final Long LEVEL_CAP = 1000; //Anything more than this is too much CPU time to calculate
     public static final Long PIXELS_CAP = XpHandler.levelToXP(LEVEL_CAP); //1000 levels.
 
 
