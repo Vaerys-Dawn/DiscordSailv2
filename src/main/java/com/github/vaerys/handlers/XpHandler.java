@@ -14,6 +14,7 @@ import com.github.vaerys.pogos.GuildUsers;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import org.slf4j.Logger;
@@ -239,6 +240,13 @@ public class XpHandler {
             }
         }
 
+        // check level cap, don't grant xp to level-capped users
+        if (object.user.getProfile(object.guild) != null) {
+            if (object.user.getProfile(object.guild).getXP() >= Constants.PIXELS_CAP) {
+                user.setXp(Constants.PIXELS_CAP);
+                return;
+            }
+        }
         //gives them their xp.
         user.addXP(object.guild.config);
         object.guild.getSpokenUsers().add(object.user.longID);

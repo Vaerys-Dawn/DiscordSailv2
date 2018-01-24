@@ -3,11 +3,13 @@ package com.github.vaerys.objects;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -77,7 +79,9 @@ public class ProfileObject {
     }
 
     public void setXp(long xp, boolean levelUp) {
+        if (xp > Constants.PIXELS_CAP) throw new IllegalArgumentException("argument out of valid range");
         this.xp = xp;
+
         if (levelUp) {
             this.currentLevel = XpHandler.xpToLevel(xp);
         }

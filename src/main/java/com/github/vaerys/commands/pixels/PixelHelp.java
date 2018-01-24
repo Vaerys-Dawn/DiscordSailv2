@@ -116,7 +116,7 @@ public class PixelHelp implements Command {
             if (level < 0) {
                 return "> Please use a positive number.";
             }
-            if (level > 1000) {
+            if (level > Constants.LEVEL_CAP) {
                 return "> No, I don't want to calculate the total xp for level " + NumberFormat.getInstance().format(level) + "!";
             }
             return "> Level: " + level + " = " + NumberFormat.getInstance().format(XpHandler.totalXPForLevel(level)) + " pixels.";
@@ -131,7 +131,7 @@ public class PixelHelp implements Command {
             if (xp < 0) {
                 return "> Please use a positive number.";
             }
-            if (xp > 1345412000) {
+            if (xp > Constants.PIXELS_CAP) {
                 return "> Its something over level 1000, could you leave me alone.";
             }
             return "> " + NumberFormat.getInstance().format(xp) + "XP = Level: " + XpHandler.xpToLevel(xp);
