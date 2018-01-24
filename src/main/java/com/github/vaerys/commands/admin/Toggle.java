@@ -8,8 +8,9 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -42,28 +43,31 @@ public class Toggle implements Command {
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String title;
         if (isModule) {
-            title = "> Here is a list of available Guild Modules:\n";
+            title = "> Here are all of the available Modules:\n";
         } else {
-            title = "> Here is a list of available Guild Settings:\n";
+            title = "> Here are all of the available Settings:\n";
         }
-        ArrayList<String> types = new ArrayList<>();
+        List<String> typesActive = new LinkedList<>();
+        List<String> typesDeactivated = new LinkedList<>();
         for (GuildToggle t : command.guild.toggles) {
             if (t.isModule() == isModule) {
-                types.add(t.name());
+                if (t.get(command.guild.config)) typesActive.add(t.name());
+                else typesDeactivated.add(t.name());
             }
         }
-        Collections.sort(types);
-        embedBuilder.withDesc(builder.toString());
-        Utility.listFormatterEmbed(title, embedBuilder, types, true);
-        embedBuilder.appendField(spacer, Utility.getCommandInfo(classObject, command), false);
+        Collections.sort(typesActive);
+        Collections.sort(typesDeactivated);
+        embedBuilder.withTitle(title);
+        embedBuilder.withDescription("**Activated**\n```\n" + Utility.listFormatter(typesActive, true) + "```\n" +
+                "**Deactivated**\n```\n" + Utility.listFormatter(typesDeactivated, true) + "```\n" +
+                missingArgs(command));
         RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
-//        command.guild.loadCommandData();
         return null;
     }
 
     @Override
     public String[] names() {
-        return new String[]{"Setting","Toggle","Settings","Toggles"};
+        return new String[]{"Setting", "Toggle", "Settings", "Toggles"};
     }
 
     @Override

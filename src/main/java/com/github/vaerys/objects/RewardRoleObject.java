@@ -1,6 +1,8 @@
 package com.github.vaerys.objects;
 
 import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.masterobjects.GuildObject;
+import sx.blah.discord.handle.obj.IRole;
 
 /**
  * Created by Vaerys on 11/05/2017.
@@ -32,5 +34,9 @@ public class RewardRoleObject {
 
     public long getXp() {
         return XpHandler.totalXPForLevel(level);
+    }
+
+    public IRole get(GuildObject guild) {
+        return guild.getRoleByID(roleID);
     }
 }

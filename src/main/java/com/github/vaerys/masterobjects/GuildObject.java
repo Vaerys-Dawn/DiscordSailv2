@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -327,5 +328,11 @@ public class GuildObject {
             }
         }
         return channels;
+    }
+
+    public List<IRole> getRewardRoles() {
+        List<IRole> roles = new LinkedList<>();
+        config.getRewardRoles().forEach(rewardRoleObject -> roles.add(object.getRoleByID(rewardRoleObject.getRoleID())));
+        return roles;
     }
 }

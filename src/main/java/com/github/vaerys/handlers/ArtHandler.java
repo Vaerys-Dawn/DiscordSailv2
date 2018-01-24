@@ -14,10 +14,8 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RequestBuffer;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 12/05/2017.
@@ -42,7 +40,7 @@ public class ArtHandler {
         //exit if not pinning art
         if (!command.guild.config.artPinning) return;
         //checks the list if something seems off
-        if (pins.size() > command.guild.config.pinLimit) checkList(command);
+//        if (pins.size() > command.guild.config.pinLimit) checkList(command);
         //exit if the art is already pinned
         if (command.message.get().isPinned()) return;
         //exit if message owner is a bot
@@ -61,6 +59,7 @@ public class ArtHandler {
             //pin message
             RequestBuffer.request(() -> command.channel.get().pin(command.message.get())).get();
 
+            //debug builder
             String name;
             if (checkAttachments(command)) {
                 name = "ATTACHMENT_PIN";
@@ -77,6 +76,8 @@ public class ArtHandler {
             }
 
             logger.debug(Utility.loggingFormatter(command, "ART_PINNED", name, args));
+            //end debug
+
             //add to ping
             pins.add(command.message.longID);
             //add pin response
@@ -117,29 +118,28 @@ public class ArtHandler {
     private static void checkList(CommandObject command) {
         List<Long> pinnedMessages = command.guild.channelData.getPinnedMessages();
         List<TrackLikes> likes = command.guild.channelData.getLikes();
-        List<IMessage> pins = RequestBuffer.request(() -> {
+        List<IMessage> channelpins = RequestBuffer.request(() -> {
             return command.channel.get().getPinnedMessages();
         }).get();
-        List<IMessage> markedForUnpin = new ArrayList<>();
+        List<IMessage> markedForUnpin = new LinkedList<>();
+        int pinLimit = command.guild.config.pinLimit;
         int tries = 0;
 
-
         ListIterator iterator = pinnedMessages.listIterator();
+        List<Long> channelPinsLong = channelpins.stream().map(iMessage -> iMessage.getLongID()).collect(Collectors.toList());
         try {
             while (iterator.hasNext()) {
-                Long id = (Long) iterator.next();
-                IMessage pin = command.channel.get().getMessageByID(id);
-                if (pin == null) iterator.remove();
-                else if (!pin.isPinned()) iterator.remove();
+                long item = (long) iterator.next();
+                if (!channelPinsLong.contains(item)) {
+                    iterator.remove();
+                }
             }
         } catch (ConcurrentModificationException e) {
-            //skip, this happens if hearts are added too quickly
+            return;
         }
 
-        int pinLimit = command.guild.config.pinLimit;
-
         while (pinnedMessages.size() > pinLimit && tries < 50) {
-            for (IMessage p : pins) {
+            for (IMessage p : channelpins) {
                 if (pinnedMessages.contains(p.getLongID()) && pinnedMessages.get(0) == p.getLongID()) {
                     //adds the pin to the messages to be unpinned
                     markedForUnpin.add(p);
@@ -148,34 +148,23 @@ public class ArtHandler {
             }
             tries++;
         }
-        tries = 0;
-        boolean flag = markedForUnpin.size() != 0;
-        while (flag && tries < 20) {
-            int expectedSize = RequestBuffer.request(() -> {
-                return command.channel.get().getPinnedMessages().size();
-            }).get();
-            for (IMessage message : markedForUnpin) {
-                try {
-                    if (message.isPinned()) {
-                        RequestBuffer.request(() -> command.channel.get().unpin(message));
-                        expectedSize--;
-                    }
 
-                } catch (DiscordException e) {
-                    if (!e.getMessage().contains("Message is not pinned!")) {
-                        throw (e);
-                    }
+        tries = 0;
+        for (IMessage message : markedForUnpin) {
+            try {
+                if (message.isPinned()) {
+                    RequestBuffer.request(() -> command.channel.get().unpin(message)).get();
+                    logger.debug(Utility.loggingFormatter(command.setMessage(message), "ART_PINNED", "UNPIN", "PIN TOTAL = " +
+                            command.channel.getPinCount() + "/" + command.guild.config.pinLimit));
                 }
-                List<IMessage> pinned = RequestBuffer.request(() -> {
-                    return command.channel.get().getPinnedMessages();
-                }).get();
-                int size = pinned.size();
-                if (size > expectedSize) {
-                    flag = true;
+            } catch (DiscordException e) {
+                if (!e.getMessage().contains("Message is not pinned!")) {
+                    throw (e);
                 }
             }
-            tries++;
         }
+        tries++;
+
 
         iterator = likes.listIterator();
         while (iterator.hasNext()) {
@@ -184,7 +173,83 @@ public class ArtHandler {
                 iterator.remove();
             }
         }
+
     }
+
+//    private static void checkList(CommandObject command) {
+//        List<Long> pinnedMessages = command.guild.channelData.getPinnedMessages();
+//        List<TrackLikes> likes = command.guild.channelData.getLikes();
+//        List<IMessage> pins = RequestBuffer.request(() -> {
+//            return command.channel.get().getPinnedMessages();
+//        }).get();
+//        List<IMessage> markedForUnpin = new ArrayList<>();
+//        int tries = 0;
+//
+//
+//        ListIterator iterator = pinnedMessages.listIterator();
+//        try {
+//            while (iterator.hasNext()) {
+//                Long id = (Long) iterator.next();
+//                IMessage pin = command.channel.get().getMessageByID(id);
+//                if (pin == null) {
+//                    pin = RequestBuffer.request(() -> {
+//                        return command.channel.get().fetchMessage(id);
+//                    }).get();
+//                }
+//                if (pin == null) iterator.remove();
+//                else if (!pin.isPinned()) iterator.remove();
+//            }
+//        } catch (ConcurrentModificationException e) {
+//            //skip, this happens if hearts are added too quickly
+//        }
+//
+//        int pinLimit = command.guild.config.pinLimit;
+//
+//        while (pinnedMessages.size() > pinLimit && tries < 50) {
+//            for (IMessage p : pins) {
+//                if (pinnedMessages.contains(p.getLongID()) && pinnedMessages.get(0) == p.getLongID()) {
+//                    //adds the pin to the messages to be unpinned
+//                    markedForUnpin.add(p);
+//                    removePin(p, pinnedMessages);
+//                }
+//            }
+//            tries++;
+//        }
+//        tries = 0;
+//        boolean flag = markedForUnpin.size() != 0;
+////        while (flag && tries < 20) {
+//            int expectedSize = command.channel.getPinCount();
+//            for (IMessage message : markedForUnpin) {
+//                try {
+//                    if (message.isPinned()) {
+//                        RequestBuffer.request(() -> command.channel.get().unpin(message)).get();
+//                        logger.debug(Utility.loggingFormatter(command.setMessage(message), "ART_PINNED", "UNPIN", "PIN TOTAL = " + command.channel.getPinCount()));
+//                        expectedSize--;
+//                    }
+//                } catch (DiscordException e) {
+//                    if (!e.getMessage().contains("Message is not pinned!")) {
+//                        throw (e);
+//                    }
+//                }
+////                List<IMessage> pinned = RequestBuffer.request(() -> {
+////                    return command.channel.get().getPinnedMessages();
+////                }).get();
+////                int size = pinned.size();
+////                if (size > expectedSize) {
+////                    flag = true;
+////                }
+//            }
+//            tries++;
+////        }
+//
+//        iterator = likes.listIterator();
+//        while (iterator.hasNext()) {
+//            TrackLikes like = (TrackLikes) iterator.next();
+//            if (!pinnedMessages.contains(like.getMessageID())) {
+//                iterator.remove();
+//            }
+//        }
+//    }
 
     private static void removePin(IMessage p, List<Long> pins) {
         ListIterator iterator = pins.listIterator();
@@ -196,6 +261,14 @@ public class ArtHandler {
         }
     }
 
+
+    /**
+     * handles detection of hosting websites within link values.
+     *
+     * @param word String that may contain a URL of a hosting website.
+     * @return if param word is considered a hosting website defined by values in @hosts then return true
+     *         else return false.
+     */
     public static boolean isHostingWebsite(String word) {
         for (String s : hosts) {
             if (word.startsWith(s)) {
@@ -205,6 +278,13 @@ public class ArtHandler {
         return false;
     }
 
+    /**
+     * Handles the granting of xp to user's when their art has a :heart: reaction applied to their
+     * message that was pinned with the artPinning module.
+     *
+     * @param command Used to parse in the variables needed to access the guild, channel, message,
+     *                and user objects. these objects allows access to the api.
+     */
     public static void pinLiked(CommandObject command) {
         List<IChannel> channelIDS = command.guild.getChannelsByType(Command.CHANNEL_ART);
         //exit if not pinning art
@@ -223,8 +303,6 @@ public class ArtHandler {
         if (channelIDS.get(0).getLongID() != command.channel.longID) return;
         //you cant give yourself pixels via your own art
         if (command.message.get().getAuthor().getLongID() == command.user.longID) return;
-
-//        checkList(command);
 
         //exit if not pinned art
         if (!command.guild.channelData.getPinnedMessages().contains(command.message.longID)) return;

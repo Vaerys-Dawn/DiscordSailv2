@@ -14,6 +14,12 @@ public class ModNoteObject {
     private long lastEditedTimestamp = -1;
     private long editorId = -1;
 
+
+    /**
+     * @param note contents of the note.
+     * @param modId the userId of the creator of the note.
+     * @param time timestamp epoch second value.
+     */
     public ModNoteObject(String note, long modId, long time) {
         this.note = note;
         this.creatorId = modId;

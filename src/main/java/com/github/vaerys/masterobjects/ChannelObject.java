@@ -3,6 +3,7 @@ package com.github.vaerys.masterobjects;
 import com.github.vaerys.templates.ChannelSetting;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,5 +42,11 @@ public class ChannelObject {
 
     public IMessage getMessageByID(long next) {
         return object.getMessageByID(next);
+    }
+
+    public int getPinCount() {
+        return RequestBuffer.request(() -> {
+            return object.getPinnedMessages().size();
+        }).get();
     }
 }

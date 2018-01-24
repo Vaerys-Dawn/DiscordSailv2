@@ -523,7 +523,7 @@ public class Utility {
         return from;
     }
 
-    public static String truncateString(String str, int maxLength, boolean truncateAtSpace){
+    public static String truncateString(String str, int maxLength, boolean truncateAtSpace) {
         String result = str;
 
         if (str.length() >= maxLength) {
@@ -596,6 +596,7 @@ public class Utility {
     }
 
     public static boolean testUserHierarchy(UserObject higherUser, UserObject lowerUser, GuildObject guild) {
+        if (canBypass(lowerUser.get(), guild.get())) return false;
         return testUserHierarchy(higherUser.get(), lowerUser.get(), guild.get());
     }
 
@@ -816,7 +817,10 @@ public class Utility {
             } else {
                 toTest = escapeRegex(args).replace("_", "[_| ]");
             }
-            for (IUser u : command.guild.getUsers()) {
+            List<IUser> guildUsers = command.guild.getUsers();
+            guildUsers.sort(Comparator.comparing(o -> o.getRolesForGuild(command.guild.get()).size()));
+            Collections.reverse(guildUsers);
+            for (IUser u : guildUsers) {
                 if (user != null) {
                     break;
                 }

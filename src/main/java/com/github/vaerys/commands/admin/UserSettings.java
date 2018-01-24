@@ -77,25 +77,37 @@ public class UserSettings implements Command {
                             "> **" + user.displayName + "** can now pin art.",
                             "> **" + user.displayName + "** can no longer pin art.");
                 case "list":
-                    List<String> userSettings = new ArrayList<>();
-                    for (UserSetting s : profile.getSettings()) {
-                        userSettings.add(UserSetting.get(s));
-                    }
-                    XEmbedBuilder builder = new XEmbedBuilder(command);
-                    builder.withTitle(user.displayName + "'s User settings:");
-                    if (userSettings.size() == 0) {
-                        return "> **" + user.displayName + "** has no settings on their profile.";
-                    } else {
-                        builder.withDesc("```\n" + Utility.listFormatter(userSettings, true) + "```");
-                    }
-                    RequestHandler.sendEmbedMessage("", builder, command.channel.get());
-                    return "";
+                    return sendList(profile, command, user, false);
                 default:
-                    return settings + "\n\n" + Utility.getCommandInfo(this, command);
+                    if (profile.getSettings().size() == 0) {
+                        return "> **" + user.displayName + "** has no settings attached to their profile.\n\n" + settings + "\n\n" + Utility.getCommandInfo(this, command);
+                    } else {
+                        return sendList(profile, command, user, true);
+                    }
             }
         } else {
             return "> Invalid user.";
         }
+    }
+
+    private String sendList(ProfileObject profile, CommandObject command, UserObject user, boolean showCommand) {
+        List<String> userSettings = new ArrayList<>();
+        for (UserSetting s : profile.getSettings()) {
+            userSettings.add(UserSetting.get(s));
+        }
+        XEmbedBuilder builder = new XEmbedBuilder(command);
+        builder.withTitle(user.displayName + "'s User settings:");
+        if (userSettings.size() == 0) {
+            return "> **" + user.displayName + "** has no settings on their profile.";
+        } else {
+            String desc = "```\n" + Utility.listFormatter(userSettings, true) + "```";
+            if (showCommand) {
+                desc += "\n" + Utility.getCommandInfo(this, command);
+            }
+            builder.withDesc(desc);
+        }
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        return "";
     }
 
     private String toggleSetting(ProfileObject user, UserSetting setting, String remove, String add) {

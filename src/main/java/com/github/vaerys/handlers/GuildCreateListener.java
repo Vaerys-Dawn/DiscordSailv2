@@ -21,7 +21,7 @@ public class GuildCreateListener {
     public void onGuildCreateEvent(GuildCreateEvent event) {
         IGuild guild = event.getGuild();
         long guildID = guild.getLongID();
-        logger.debug("Starting Initialisation process for Guild with ID: " + guildID);
+        logger.debug("Starting Loading process for Guild with ID: " + guildID);
 
         if (new File(Utility.getDirectory(guildID)).exists()) {
             PatchHandler.guildPatches(guild);
@@ -34,7 +34,7 @@ public class GuildCreateListener {
 
         GuildObject guildObject = new GuildObject(guild);
         Globals.initGuild(guildObject);
-        logger.info("Finished Initialising Guild With ID: " + guildID);
+        logger.info("Finished Loading Guild With ID: " + guildID);
     }
 }
 

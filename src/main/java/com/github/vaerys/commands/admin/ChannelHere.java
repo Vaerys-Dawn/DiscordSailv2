@@ -35,16 +35,16 @@ public class ChannelHere implements Command {
         List<ChannelSetting> channelSettings = command.guild.channelSettings;
         List<String> types = channelSettings.stream().map(ChannelSetting::name).collect(Collectors.toList());
         Collections.sort(types);
+        desc += "```\n" + Utility.listFormatter(types, true) + "```\n" + missingArgs(command);
         embedBuilder.withDesc(desc);
-        Utility.listFormatterEmbed(title, embedBuilder, types, true);
-        embedBuilder.appendField(spacer, Utility.getCommandInfo(this, command), false);
+        embedBuilder.withTitle(title);
         RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
         return null;
     }
 
     @Override
     public String[] names() {
-        return new String[]{"Channel", "ChannelHere", "ChannelSetting","Channels"};
+        return new String[]{"Channel", "ChannelHere", "ChannelSetting", "Channels"};
     }
 
     @Override

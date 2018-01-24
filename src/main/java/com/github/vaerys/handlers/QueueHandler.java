@@ -63,7 +63,13 @@ public class QueueHandler {
         ListIterator iterator = queuedMessages.listIterator();
         while (iterator.hasNext()) {
             QueueObject object = (QueueObject) iterator.next();
-            if (queueChannel.getMessageByID(object.getMessageId()) == null) {
+            IMessage item = queueChannel.getMessageByID(object.getMessageId());
+            if (item == null) {
+                item = RequestBuffer.request(() -> {
+                    return queueChannel.fetchMessage(object.getMessageId());
+                }).get();
+            }
+            if (item == null) {
                 iterator.remove();
             } else if (object.isMarkedForRemoval()) {
                 iterator.remove();
@@ -85,7 +91,7 @@ public class QueueHandler {
             return;
         }
         //exit if not the owner.
-        if (reaction.getCount() == 0){
+        if (reaction.getCount() == 0) {
             return;
         }
         if (!reaction.getUserReacted(owner)) {
@@ -122,7 +128,7 @@ public class QueueHandler {
                                     uID = Long.parseLong(f.getValue());
                                 }
                             }
-                            UserObject user = new UserObject(object.client.getUserByID(userID),null);
+                            UserObject user = new UserObject(object.client.getUserByID(userID), null);
                             //do if accepted
                             if (reaction.getEmoji().equals(thumbsUp)) {
 

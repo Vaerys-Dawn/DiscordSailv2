@@ -1,5 +1,6 @@
 package com.github.vaerys.objects;
 
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.UserSetting;
@@ -11,6 +12,7 @@ import com.github.vaerys.pogos.GuildConfig;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
@@ -164,5 +166,15 @@ public class ProfileObject {
             }
         }
         return -1;
+    }
+
+    /**
+     * @param contents the contents of the new mod note.
+     * @param command Used to parse in the variables needed to access the guild, channel, message,
+     *                and user objects. these objects allows access to the api.
+     */
+    public void addSailModNote(String contents, CommandObject command) {
+        if (modNotes == null) modNotes = new LinkedList<>();
+        modNotes.add(new ModNoteObject(contents, command.client.bot.longID, command.message.getTimestamp().toEpochSecond()));
     }
 }

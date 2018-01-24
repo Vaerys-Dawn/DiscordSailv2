@@ -16,8 +16,9 @@ import sx.blah.discord.handle.obj.Permissions;
 public class Sudo implements Command {
     @Override
     public String execute(String args, CommandObject command) {
+        if (!command.guild.config.debugMode) return "> Debug mode is disabled. No Sudo for you missy.";
         SplitFirstObject sudo = new SplitFirstObject(args);
-        UserObject user = Utility.getUser(command, sudo.getFirstWord(), false,false);
+        UserObject user = Utility.getUser(command, sudo.getFirstWord(), false, false);
         if (user == null) {
             return "> Could not find user.";
         }

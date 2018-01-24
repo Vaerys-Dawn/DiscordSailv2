@@ -197,11 +197,12 @@ public class XpHandler {
             user = object.guild.users.getUserByID(object.user.longID);
         }
 
+        user.lastTalked = object.message.getTimestamp().toEpochSecond();
+
         //ony do xp checks if module is true
         if (!object.guild.config.modulePixels) return;
         if (!object.guild.config.xpGain) return;
 
-        user.lastTalked = object.message.getTimestamp().toEpochSecond();
 
         //user setting no xp gain
         if (user.getSettings().contains(NO_XP_GAIN)) return;
@@ -372,22 +373,31 @@ public class XpHandler {
             }
             IEmoji customEmoji = null;
             Emoji emoji = EmojiManager.getByUnicode(object.guild.config.levelUpReaction);
+            boolean found = false;
             for (IGuild g : object.client.get().getGuilds()) {
-                IEmoji test = null;
+                IEmoji test;
                 try {
                     long emojiId = Long.parseLong(object.guild.config.levelUpReaction);
                     test = g.getEmojiByID(emojiId);
                     if (test != null) {
                         customEmoji = test;
-                        break;
+                        found = true;
                     }
                 } catch (NumberFormatException e) {
                     test = g.getEmojiByName(object.guild.config.levelUpReaction);
                     if (test != null) {
                         customEmoji = test;
+                        found = true;
                         break;
                     }
                 }
+            }
+            if (object.guild.config.levelUpReaction.equalsIgnoreCase("null")) return;
+            if (found == false) {
+                IChannel adminChannel = object.guild.getChannelByType(Command.CHANNEL_ADMIN);
+                if (adminChannel == null) adminChannel = object.channel.get();
+                RequestHandler.sendMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
+                return;
             }
             IEmoji finalCustomEmoji = customEmoji;
             RequestBuffer.request(() -> {
@@ -403,6 +413,8 @@ public class XpHandler {
                         logger.error(emoji.getUnicode());
                     } else if (finalCustomEmoji != null) {
                         logger.error(finalCustomEmoji.toString());
+                    } else {
+                        throw e;
                     }
                     //do nothing
                 } catch (MissingPermissionsException e) {

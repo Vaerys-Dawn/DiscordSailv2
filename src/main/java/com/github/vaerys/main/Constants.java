@@ -26,7 +26,8 @@ public class Constants {
     //Error Constants
     public static final String ERROR = "> An Error Occurred";
     public static final String ERROR_ROLE_NOT_FOUND = "> I found no roles with that name.";
-    public static final String ERROR_UPDATING_ROLE = "> An Error Occurred when trying to Update your roles.";
+    public static final String ERROR_UPDATING_ROLE = "> An Error Occurred when trying to Update your roles.\n" +
+            "This is usually due to my Heirachey being lower than yours. I will need a role higher than yours to edit your roles.";
     public static final String ERROR_CC_NOT_FOUND = "> Command with that name could not be found.";
     public static final String ERROR_CHAR_NOT_FOUND = "> Character with that name could not be found.";
     public static final String ERROR_BRACKETS = "> Brackets `[]` and Parentheses `()` are not required, " +
@@ -36,7 +37,8 @@ public class Constants {
     public static final short EXITCODE_NORMAL = 0;
     public static final short EXITCODE_RESTART = 1;
     public static final short EXITCODE_CONF_ERROR = 2;
-    public static final short EXITCODE_OTHER_ERROR = 3;
+    public static final short EXITCODE_UPDATE = 3;
+    public static final short EXITCODE_OTHER_ERROR = 4;
     public static final short EXITCODE_UNKNOWN = 255;
 
 

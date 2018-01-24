@@ -68,3 +68,4 @@ bot.log
 .idea/workspace.xml
 *.ttf
 .idea/dictionaries/Vaerys.xml
+*.orig

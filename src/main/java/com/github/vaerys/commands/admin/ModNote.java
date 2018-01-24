@@ -12,9 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class ModNote implements Command {
@@ -41,8 +38,7 @@ public class ModNote implements Command {
         if (profile == null) return "> No profile found for " + user.displayName;
 
         // gather necessary extra bits
-        long timestamp = command.message.get().getTimestamp().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toEpochSecond();
-        logger.debug("message ts: " + timestamp);
+        long timestamp = command.message.getTimestamp().toEpochSecond();
         SplitFirstObject mode = new SplitFirstObject(argsRest);
 
         // Handle Command execution
@@ -112,14 +108,14 @@ public class ModNote implements Command {
         StringBuilder content = new StringBuilder();
 
         for (ModNoteObject noteObject : user.modNotes) {
-            String shortNote = Utility.truncateString(noteObject.getNote(), 35);
+            String shortNote = Utility.truncateString(Utility.removeFun(noteObject.getNote()), 55);
             content.append(String.format(noteLine, ++counter, shortNote));
         }
         builder.withDesc(content.toString());
 
         // finalize and send message:
         builder.withFooterText("Total Notes: " + user.modNotes.size());
-        builder.send(command.channel.get());
+        builder.send(command.channel);
 
         return null; // no need to send a message, we're sending an embed instead.
     }
@@ -150,7 +146,7 @@ public class ModNote implements Command {
             builder.appendDesc(String.format(editFieldText, editor.displayName, Utility.formatTime(diff, true)));
         }
 
-        builder.send(command.channel.get());
+        builder.send(command.channel);
     }
 
     //region Command Details

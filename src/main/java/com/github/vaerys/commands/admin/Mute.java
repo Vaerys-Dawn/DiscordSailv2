@@ -47,24 +47,34 @@ public class Mute implements Command {
         }
         if (Utility.testModifier(modifier.getFirstWord())) {
             SplitFirstObject time = new SplitFirstObject("");
+            //get mute length
             long timeSecs = -1;
             if (modifier.getRest() != null) {
                 time = new SplitFirstObject(modifier.getRest());
                 timeSecs = Utility.textToSeconds(time.getFirstWord());
             }
+            //mute the offender
             command.guild.users.muteUser(muted.longID, timeSecs, command.guild.longID);
-            String content;
-            if (time.getFirstWord() == null || timeSecs == -1) {
-                content = "> " + muted.displayName + " was Muted";
-            } else {
-                content = "> " + muted.displayName + " was Muted for " + Utility.formatTime(timeSecs, true);
+            //build the response
+            //time value
+            String timeValue = "";
+            if (time.getFirstWord() != null && timeSecs != -1) {
+                timeValue = " for " + Utility.formatTime(timeSecs, true);
             }
+            //builds prefix
+            String content = "> **" + muted.displayName + "** was Muted" + timeValue;
             IChannel adminChannel = command.guild.getChannelByType(CHANNEL_ADMIN);
+            //builds reason
+            String reason = time.getRest();
+            if (reason == null) reason = "No reason given";
+            //builds final response
+            String response = content + " by **" + command.user.displayName + "** in channel " + command.channel.mention + " with reason `" + reason + "`.";
+            //sends response to admin channel
             if (adminChannel != null) {
-                String reason = time.getRest();
-                if (reason == null) reason = "No reason given.";
-                RequestHandler.sendMessage(content + " in channel " + command.channel.mention + " with reason `" + reason + "`.", adminChannel);
+                RequestHandler.sendMessage(response, adminChannel);
             }
+            //adds note to modnotes
+            muted.getProfile(command.guild).addSailModNote(response, command);
             return content + ".";
         } else {
             command.guild.users.unMuteUser(muted.longID, command.guild.longID);

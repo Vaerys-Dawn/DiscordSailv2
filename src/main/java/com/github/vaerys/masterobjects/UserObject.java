@@ -188,4 +188,8 @@ public class UserObject {
     public boolean isDecaying(GuildObject guild) {
         return getProfile(guild).daysDecayed(guild) > 7;
     }
+
+    public ProfileObject addProfile(GuildObject guild) {
+        return guild.users.addUser(longID);
+    }
 }

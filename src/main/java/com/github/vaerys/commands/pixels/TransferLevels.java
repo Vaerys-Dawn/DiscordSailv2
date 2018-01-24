@@ -8,7 +8,6 @@ import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -30,24 +29,20 @@ public class TransferLevels implements Command {
         IMessage message = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
 
         Utility.sortRewards(command.guild.config.getRewardRoles());
+
         for (IUser user : command.guild.getUsers()) {
             if (!user.isBot()) {
                 ProfileObject uObject = command.guild.users.getUserByID(user.getLongID());
                 if (uObject == null) {
-                    uObject = new ProfileObject(user.getLongID());
+                    uObject = command.guild.users.addUser(user.getLongID());
                 }
                 uObject.lastTalked = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
-//                uObject.setRewardID(-1);
                 uObject.setXp(0);
                 uObject.setCurrentLevel(-1);
-
                 for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
-                    for (IRole uRole : user.getRolesForGuild(command.guild.get())) {
-                        if (r.getRoleID() == uRole.getLongID()) {
-                            uObject.setXp(XpHandler.totalXPForLevel(r.getLevel()));
-//                            uObject.setRewardID(r.getRoleID());
-                            uObject.setCurrentLevel(r.getLevel());
-                        }
+                    if (user.getRolesForGuild(command.guild.get()).contains(r.get(command.guild))) {
+                        uObject.setXp(r.getXp());
+                        uObject.setCurrentLevel(r.getLevel());
                     }
                 }
                 XpHandler.checkUsersRoles(uObject.getUserID(), command.guild);

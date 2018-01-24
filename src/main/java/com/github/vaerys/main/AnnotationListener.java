@@ -287,11 +287,12 @@ public class AnnotationListener {
     public void joinLeaveLogging(GuildMemberEvent event, boolean joining) {
         IGuild guild = event.getGuild();
         GuildObject content = Globals.getGuildContent(guild.getLongID());
+        String builder = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **%s** the server.\n**Current Users:** "  + event.getGuild().getUsers().size() + ".";
         if (content.config.joinLeaveLogging) {
             if (joining) {
-                Utility.sendLog("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **Joined** the server.", content, false);
+                Utility.sendLog(String.format(builder,"Joined"), content, false);
             } else {
-                Utility.sendLog("> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **Left** the server.", content, false);
+                Utility.sendLog(String.format(builder,"Left"), content, false);
             }
         }
     }

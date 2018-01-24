@@ -2,22 +2,20 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Client;
-import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.*;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.handle.obj.ActivityType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.StatusType;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.RequestBuffer;
 
 import java.io.File;
 import java.time.DayOfWeek;
@@ -83,10 +81,20 @@ public class TimerHandler {
                 for (GuildObject g : Globals.getGuilds()) {
                     g.getSpokenUsers().clear();
                 }
-                File file = new File(Constants.DIRECTORY_STORAGE + "/logs/bot.log");
-                long fileSize = file.length();
-                if (fileSize > 100000000L) {
-                    RequestBuffer.request(() -> Client.getClient().getUserByID(Globals.creatorID).getOrCreatePMChannel().sendMessage("!!!ERROR LOG FILE IS AT ABNORMAL SIZE!!!"));
+                if (FileHandler.exists("screenlog.0") && FileHandler.exists("screenlog.closed")) {
+                    File file = new File("screenlog.0");
+                    if (file.length() > 1048576 * 10) {
+                        file.delete();
+                    }
+                } else if (FileHandler.exists("screenlog.0")) {
+                    File file = new File("screenlog.0");
+                    if (file.length() > 1048576 * 10) {
+                        IUser creator = Client.getClient().getUserByID(Globals.creatorID);
+                        if (creator == null) return;
+                        UserObject creatorUser = new UserObject(creator, null);
+                        creatorUser.sendDm("> screenlog.0 got too big, potential log spam, archived log to prevent loss of usage.");
+                        file.renameTo(new File("screenlog.closed"));
+                    }
                 }
             }
         }, initialDelay, 60 * 1000);

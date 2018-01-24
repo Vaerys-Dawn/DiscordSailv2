@@ -192,13 +192,6 @@ public class RequestHandler {
                                 ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
                         return null;
                     }
-                } catch (DiscordException e) {
-                    if (e.getMessage().contains("CloudFlare")) {
-                        return sendFileURL(message, imageURL, channel, false);
-                    } else {
-                        Utility.sendStack(e);
-                        return null;
-                    }
                 } catch (MalformedURLException e) {
                     return sendMessage(message + " " + imageURL, channel).get();
                 } catch (MissingPermissionsException e) {
