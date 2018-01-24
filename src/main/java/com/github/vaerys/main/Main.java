@@ -13,8 +13,6 @@ import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RateLimitException;
 
 import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;

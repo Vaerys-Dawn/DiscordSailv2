@@ -1,7 +1,6 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.templates.GuildFile;
 import sx.blah.discord.handle.obj.IGuild;

@@ -3,7 +3,6 @@ package com.github.vaerys.pogos;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.OffenderObject;
@@ -15,7 +14,6 @@ import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
 

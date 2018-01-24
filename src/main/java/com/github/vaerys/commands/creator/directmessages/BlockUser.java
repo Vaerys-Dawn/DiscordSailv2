@@ -4,10 +4,8 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.templates.DMCommand;
-import sx.blah.discord.handle.obj.IUser;
 
 /**
  * Created by Vaerys on 10/02/2017.

@@ -12,7 +12,6 @@ import sx.blah.discord.handle.obj.IMessage;
 
 import java.awt.*;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Vaerys on 27/08/2016.

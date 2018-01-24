@@ -1,7 +1,6 @@
 package com.github.vaerys.commands.servers;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.objects.ServerObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;

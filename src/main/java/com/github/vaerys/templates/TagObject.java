@@ -5,7 +5,6 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

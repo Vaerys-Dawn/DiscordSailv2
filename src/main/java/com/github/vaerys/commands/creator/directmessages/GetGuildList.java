@@ -1,7 +1,6 @@
 package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.DMCommand;

@@ -10,7 +10,6 @@ import com.github.vaerys.objects.TokenRefreshObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
 import org.apache.commons.io.FilenameUtils;

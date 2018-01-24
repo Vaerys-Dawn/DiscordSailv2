@@ -1,8 +1,5 @@
 package com.github.vaerys.objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Written by AndrielChaoti 24-Dec-2017
  */

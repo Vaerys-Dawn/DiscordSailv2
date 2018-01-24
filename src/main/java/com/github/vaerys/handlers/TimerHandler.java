@@ -9,6 +9,7 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.*;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
+import com.sun.management.OperatingSystemMXBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
@@ -19,7 +20,6 @@ import sx.blah.discord.util.DiscordException;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import com.sun.management.OperatingSystemMXBean;
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.ZoneOffset;

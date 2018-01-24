@@ -8,7 +8,6 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import com.sun.corba.se.impl.orbutil.closure.Constant;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -24,7 +23,7 @@ public class SetLevel implements Command {
         }
         try {
             long level = Long.parseLong(xpArgs.getRest());
-            if (level > Constants.LEVEL_CAP) return "> I can't set your level that high.";
+            if (level > Constants.LEVEL_CAP) return "> No... " + level + " Is way too many levels. Im not setting your level that high.";
             long xp = XpHandler.totalXPForLevel(level);
             ProfileObject userObject = user.getProfile(command.guild);
             if (userObject == null) {

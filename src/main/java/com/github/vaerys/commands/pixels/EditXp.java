@@ -26,7 +26,7 @@ public class EditXp implements Command {
         // Get user specified in command
         UserObject user = Utility.getUser(command, splitArgs[0], false);
         if (user == null) return "> Could not find user.";
-        if ((!Utility.canBypass(command.user.get(), command.guild.get())) && Utility.testUserHierarchy(user, command.user, command.guild)) {
+        if (Utility.testUserHierarchy(user, command.user, command.guild)) {
             return "> You do not have permission to edit " + user.displayName + "'s pixels.";
         }
 

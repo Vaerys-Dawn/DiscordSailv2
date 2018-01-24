@@ -8,7 +8,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

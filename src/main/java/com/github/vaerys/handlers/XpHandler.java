@@ -14,7 +14,6 @@ import com.github.vaerys.pogos.GuildUsers;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import org.slf4j.Logger;
