@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.Date;
 import java.util.LinkedList;
 
 public class ModNote implements Command {
@@ -143,7 +144,12 @@ public class ModNote implements Command {
             UserObject editor = new UserObject(command.guild.getUserByID(noteObject.getEditorId()), command.guild);
             String editFieldText = "\n\n*Last edited by %s %s ago.*";
             long diff = (System.currentTimeMillis() / 1000) - noteObject.getLastEditedTimestamp();
-            builder.appendDesc(String.format(editFieldText, editor.displayName, Utility.formatTime(diff, true)));
+            if (diff >= 86400*7) { // 7d
+                String editDate = new Date(noteObject.getLastEditedTimestamp()*1000).toString();
+                builder.appendDesc(String.format(editFieldText, editor.displayName, editDate));
+            } else {
+                builder.appendDesc(String.format(editFieldText, editor.displayName, Utility.formatTime(diff, true)));
+            }
         }
 
         builder.send(command.channel);
