@@ -165,7 +165,7 @@ public class ModNote implements Command {
                 String editDate = new SimpleDateFormat("dd/MMM/yyyy").format(noteObject.getLastEditedTimestamp() * 1000);
                 builder.appendDesc(String.format(editFieldText, editor.displayName, "on " + editDate));
             } else {
-                builder.appendDesc(String.format(editFieldText, editor.displayName, Utility.formatTime(diff, true)) + " ago.");
+                builder.appendDesc(String.format(editFieldText, editor.displayName, Utility.formatTimeDifference(diff)));
             }
         }
 
