@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ModNoteObject;
@@ -12,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 
 public class ModNote implements Command {
@@ -41,15 +42,17 @@ public class ModNote implements Command {
         // gather necessary extra bits
         long timestamp = command.message.getTimestamp().toEpochSecond();
         SplitFirstObject mode = new SplitFirstObject(argsRest);
+        String modeString = mode.getFirstWord();
 
         // Handle Command execution
-        if (mode.getFirstWord().equalsIgnoreCase("list")) {
+        if (modeString.equalsIgnoreCase("list")) {
             return createListEmbed(profile, command);
 
-        } else if (mode.getFirstWord().equalsIgnoreCase("info") ||
-                mode.getFirstWord().equalsIgnoreCase("edit") ||
-                mode.getFirstWord().equalsIgnoreCase("del") ||
-                mode.getFirstWord().equalsIgnoreCase("delete")) {
+        } else if (modeString.equalsIgnoreCase("info") ||
+                modeString.equalsIgnoreCase("edit") ||
+                modeString.equalsIgnoreCase("del") ||
+                modeString.equalsIgnoreCase("delete") ||
+                modeString.equalsIgnoreCase("strike")) {
 
             if (mode.getRest() == null) return missingArgs(command);
             String modeArg = new SplitFirstObject(mode.getRest()).getFirstWord();
@@ -77,7 +80,15 @@ public class ModNote implements Command {
 
                     profile.modNotes.get(index - 1).editNote(newNote, command.user.longID, timestamp);
                     return "> Note #" + index + " edited for user " + user.displayName + ".";
-
+                case "strike":
+                    boolean strike = profile.modNotes.get(index - 1).getStrike();
+                    if (strike) {
+                        profile.modNotes.get(index - 1).setStrike(false);
+                        return "> Strike cleared for note " + index + " for user " + user.displayName + ".";
+                    } else {
+                        profile.modNotes.get(index - 1).setStrike(true);
+                        return "> Strike set for note " + index + " for user " + user.displayName + ".";
+                    }
                 case "delete":
                 case "del":
                     profile.modNotes.remove(index - 1);
@@ -100,16 +111,19 @@ public class ModNote implements Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
 
         builder.withColor(userObject.color);
-        builder.withAuthorName("Notes for " + userObject.displayName);
+        builder.withTitle("Notes for " + userObject.displayName);
         builder.withThumbnail(userObject.get().getAvatarURL());
 
         // get all notes and put together the bits and bobs
         int counter = 0;
         String noteLine = "**Note #%d:**\n%s\n";
-        StringBuilder content = new StringBuilder();
+        StringHandler content = new StringHandler();
 
         for (ModNoteObject noteObject : user.modNotes) {
             String shortNote = Utility.truncateString(Utility.removeFun(noteObject.getNote()), 55);
+            if (noteObject.getStrike()) {
+                content.append("⚠ ");
+            }
             content.append(String.format(noteLine, ++counter, shortNote));
         }
         builder.withDesc(content.toString());
@@ -127,12 +141,15 @@ public class ModNote implements Command {
         ModNoteObject noteObject = user.modNotes.get(index);
 
         // title and avatar of user in question.
-        builder.withAuthorName("Note " + (index + 1) + " - " + userObject.displayName);
-        builder.withAuthorIcon(userObject.get().getAvatarURL());
+        if (noteObject.getStrike()) {
+            builder.withTitle("⚠ Note " + (index + 1) + " - " + userObject.displayName);
+        } else {
+            builder.withTitle("Note " + (index + 1) + " - " + userObject.displayName);
+        }
+        builder.withThumbnail(userObject.get().getAvatarURL());
 
         // add note to embed
         builder.appendDesc(noteObject.getNote());
-
         // Get a UserObject from the stored ID to add to the embed.
         UserObject creator = new UserObject(command.guild.getUserByID(noteObject.getCreatorId()), command.guild);
         builder.withFooterText("Created by " + creator.displayName);
@@ -142,13 +159,13 @@ public class ModNote implements Command {
         if (noteObject.getEditorId() != -1) {
             // get editor's info and display it?
             UserObject editor = new UserObject(command.guild.getUserByID(noteObject.getEditorId()), command.guild);
-            String editFieldText = "\n\n*Last edited by %s %s ago.*";
-            long diff = (System.currentTimeMillis() / 1000) - noteObject.getLastEditedTimestamp();
+            String editFieldText = "\n\n*Last edited by %s %s*";
+            long diff = command.message.getTimestamp().toEpochSecond() - noteObject.getLastEditedTimestamp();
             if (diff >= 86400*7) { // 7d
-                String editDate = new Date(noteObject.getLastEditedTimestamp()*1000).toString();
-                builder.appendDesc(String.format(editFieldText, editor.displayName, editDate));
+                String editDate = new SimpleDateFormat("dd/MMM/yyyy").format(noteObject.getLastEditedTimestamp() * 1000);
+                builder.appendDesc(String.format(editFieldText, editor.displayName, "on " + editDate));
             } else {
-                builder.appendDesc(String.format(editFieldText, editor.displayName, Utility.formatTime(diff, true)));
+                builder.appendDesc(String.format(editFieldText, editor.displayName, Utility.formatTime(diff, true)) + " ago.");
             }
         }
 

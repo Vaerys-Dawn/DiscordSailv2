@@ -35,6 +35,7 @@ public class PatchHandler {
         guildConfigRemoveUnicodeEmoji(guild);
         //1.2 fixes
         removeMentionRestriction(guild);
+        switchModNotesToStrikes(guild);
 
         //1.3 fixes
         sanitizer(guild);
@@ -53,6 +54,33 @@ public class PatchHandler {
 
         //1.2 patches
         fixMultipleDailies();
+    }
+
+    private static void switchModNotesToStrikes(IGuild guild){
+        String path = Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH);
+        // check file
+        if(!FileHandler.exists(path)) return;
+        JsonObject json = FileHandler.fileToJsonObject(path);
+        if (checkPatch(1.2, guild, "Update_Notes_To_Strikes", json)) return;
+
+        // patch
+        GuildUsers guildUsers = (GuildUsers) GuildUsers.create(GuildUsers.FILE_PATH, guild.getLongID(), new GuildUsers());
+        guildUsers.profiles.forEach(object -> {
+            if (object.modNotes == null) return;
+
+            object.modNotes.forEach( note -> {
+                if (note.getNote().contains("⚠")) {
+                    note.setStrike(true);
+                    note.setNote(note.getNote().replaceAll("(^⚠ | ⚠|⚠)", ""));
+                }
+
+            });
+        });
+        guildUsers.flushFile();
+
+        json = FileHandler.fileToJsonObject(path);
+        newPatchID(1.2, json);
+        FileHandler.writeToJson(path, json);
     }
 
     private static void removeNullPrefix(IGuild guild) {
