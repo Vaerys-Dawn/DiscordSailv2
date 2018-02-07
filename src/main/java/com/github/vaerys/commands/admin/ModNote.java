@@ -184,6 +184,7 @@ public class ModNote implements Command {
                 "**Modes**\n" +
                 "> `list` - List any notes attached to **[@User]**.\n" +
                 "> `edit [index] [new note]` - Edit an existing note.\n" +
+                "> `strike [index]` - Toggle the strike status of an existing note.\n" +
                 "> `info [index]` - Show details of a specific note.\n" +
                 "> `delete [index]` - Remove an existing note.\n";
     }
