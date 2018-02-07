@@ -10,7 +10,7 @@ public class ModNoteObject {
     private long timestamp;
     private long lastEditedTimestamp = -1;
     private long editorId = -1;
-
+    private boolean isStrike = false;
 
     /**
      * @param note contents of the note.
@@ -37,6 +37,10 @@ public class ModNoteObject {
     public void setNote(String note) {
         this.note = note;
     }
+
+    public boolean getStrike() { return this.isStrike; }
+
+    public void setStrike(boolean strike) { this.isStrike = strike; }
 
     public long getCreatorId() {
         return creatorId;
