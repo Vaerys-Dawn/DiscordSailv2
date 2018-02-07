@@ -179,4 +179,8 @@ public class ProfileObject {
         if (modNotes == null) modNotes = new LinkedList<>();
         modNotes.add(new ModNoteObject(contents, command.client.bot.longID, command.message.getTimestamp().toEpochSecond()));
     }
+
+    public void setSettings(ArrayList<UserSetting> settings) {
+        this.settings = settings;
+    }
 }

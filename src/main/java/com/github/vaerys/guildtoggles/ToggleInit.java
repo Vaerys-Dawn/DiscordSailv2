@@ -2,7 +2,7 @@ package com.github.vaerys.guildtoggles;
 
 import com.github.vaerys.guildtoggles.modules.*;
 import com.github.vaerys.guildtoggles.toggles.*;
-import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.templates.GuildToggle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +51,7 @@ public class ToggleInit {
         guildToggles.add(new LikeArt());
         guildToggles.add(new DebugMode());
         guildToggles.add(new StopSpamWalls());
+        guildToggles.add(new ReadRuleRewards());
 
         //modules
         guildToggles.add(new ModuleGroups());
@@ -69,14 +70,11 @@ public class ToggleInit {
         return guildToggles;
     }
 
-    private static void validate(List<GuildToggle> settings) {
+    public static void validate(List<GuildToggle> settings) {
         for (GuildToggle t : settings) {
             logger.trace("Validating Tag: " + t.getClass().getName());
             String errorReport = t.validate();
-            if (errorReport != null) {
-                logger.error(errorReport);
-                System.exit(Constants.EXITCODE_CONF_ERROR);
-            }
+            Globals.addToErrorStack(errorReport);
         }
     }
 }

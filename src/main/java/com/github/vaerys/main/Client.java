@@ -21,6 +21,8 @@ import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
+import sx.blah.discord.util.cache.ICacheDelegate;
+import sx.blah.discord.util.cache.ICacheDelegateProvider;
 
 import java.io.*;
 import java.net.HttpURLConnection;

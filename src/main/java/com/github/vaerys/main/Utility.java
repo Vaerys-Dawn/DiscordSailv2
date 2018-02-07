@@ -1015,6 +1015,40 @@ public class Utility {
         }
         return emoji.getUnicode();
     }
+
+    public static String formatError(Object object) {
+        return "at " + object.getClass().getName() + "(" + object.getClass().getSimpleName() + ".java:0)\n";
+    }
+
+    public static long getRepeatTimeValue(StringHandler reason) {
+        try {
+            String timeString = reason.split(" ")[0];
+            long timeSecs = 0;
+            List<String> list = new ArrayList<>();
+            for (String s : reason.toString().split(" ")) {
+                if (Pattern.compile("(?i)[0-9]*(s|m|h|d)").matcher(s).matches()) {
+                    list.add(s);
+                } else {
+                    break;
+                }
+            }
+            if (list.size() == 0) {
+                timeSecs = Long.parseLong(timeString) * 60;
+                list.add(timeString);
+            } else {
+                for (String s : list) {
+                    timeSecs += Utility.textToSeconds(s);
+                }
+            }
+            reason.replaceOnce(String.join(" ", list), "");
+            if (reason.startsWith(" ")) {
+                reason.replaceOnce(" ", "");
+            }
+            return timeSecs;
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
 }
 
 //    public static List<String> getAlbumIUrls(String fileURL) {

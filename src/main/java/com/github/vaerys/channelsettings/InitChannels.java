@@ -2,7 +2,7 @@ package com.github.vaerys.channelsettings;
 
 import com.github.vaerys.channelsettings.settings.*;
 import com.github.vaerys.channelsettings.types.*;
-import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.templates.ChannelSetting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,10 +48,7 @@ public class InitChannels {
         for (ChannelSetting s : settings) {
             logger.trace("Validating Tag: " + s.getClass().getName());
             String errorReport = s.validate();
-            if (errorReport != null) {
-                logger.error(errorReport);
-                System.exit(Constants.EXITCODE_CONF_ERROR);
-            }
+            Globals.addToErrorStack(errorReport);
         }
     }
 }

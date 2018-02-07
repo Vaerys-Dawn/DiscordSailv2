@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -111,7 +112,7 @@ public class PatreonAPI {
         }
         String nextLinkString = nextLink.toString();
         try {
-            List<NameValuePair> queryParameters = URLEncodedUtils.parse(new URI(nextLinkString), "utf8");
+            List<NameValuePair> queryParameters = URLEncodedUtils.parse(new URI(nextLinkString), Charset.forName("UTF-8"));
             for (NameValuePair pair : queryParameters) {
                 String name = pair.getName();
                 if (name.equals("page[cursor]")) {

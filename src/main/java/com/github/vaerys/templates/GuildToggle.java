@@ -84,18 +84,20 @@ public abstract class GuildToggle {
 
     public String validate() {
         StringBuilder response = new StringBuilder();
-        boolean isErrored = false;
-        response.append("\n>> Begin Error Report: " + this.getClass().getName() + " <<\n");
+        boolean isError = false;
+        response.append(Utility.formatError(this));
+        String prefix;
+        if (isModule()) prefix = "Module";
+        else prefix = "Setting";
         if (name() == null || name().isEmpty()) {
-            response.append("> TYPE IS EMPTY.\n");
-            isErrored = true;
+            response.append("   > " + prefix + " type is empty.\n");
+            isError = true;
         }
         if (desc(new CommandObject()) == null || desc(new CommandObject()).isEmpty()) {
-            response.append("> DESCRIPTION IS EMPTY.\n");
-            isErrored = true;
+            response.append("   > " + prefix + " description is empty.\n");
+            isError = true;
         }
-        response.append(">> End Error Report <<");
-        if (isErrored) {
+        if (isError) {
             return response.toString();
         } else {
             return null;

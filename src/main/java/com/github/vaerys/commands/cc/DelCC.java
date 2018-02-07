@@ -15,7 +15,7 @@ public class DelCC implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"DelCC"};
+        return new String[]{"DelCC","DeleteCC","RemoveCC"};
     }
 
     @Override

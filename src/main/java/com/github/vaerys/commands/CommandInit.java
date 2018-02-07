@@ -21,8 +21,10 @@ import com.github.vaerys.commands.roleSelect.ListRoles;
 import com.github.vaerys.commands.roleSelect.ModifierRoles;
 import com.github.vaerys.commands.servers.*;
 import com.github.vaerys.commands.slash.*;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.SlashCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,8 @@ import java.util.ArrayList;
  * Created by Vaerys on 20/02/2017.
  */
 public class CommandInit {
+
+    final static Logger logger = LoggerFactory.getLogger(CommandInit.class);
 
     public static ArrayList<Command> get() {
         ArrayList<Command> commands = new ArrayList<>();
@@ -54,6 +58,7 @@ public class CommandInit {
         commands.add(new DenyXpPrefix());
         commands.add(new PurgeBannedData());
         commands.add(new SetPinLimit());
+        commands.add(new SetRuleCode());
         //General commands
         commands.add(new GetAvatar());
         commands.add(new Hello());
@@ -69,6 +74,7 @@ public class CommandInit {
         commands.add(new NewDailyMessage());
         commands.add(new Patreon());
         commands.add(new WhatsMyColour());
+        commands.add(new RulesCode());
         //Help commands
         commands.add(new GetGuildInfo());
         commands.add(new Help());
@@ -160,12 +166,7 @@ public class CommandInit {
         commands.add(new SetPrefix());
         commands.add(new SetPrefixCC());
 
-        return commands;
-    }
-
-    public static ArrayList<SlashCommand> getSlashCommands() {
-        ArrayList<SlashCommand> commands = new ArrayList<>();
-
+        validate(commands);
 
         return commands;
     }
@@ -195,6 +196,17 @@ public class CommandInit {
         commands.add(new WhoWasThat());
         commands.add(new PatreonToken());
         commands.add(new UnBlockUser());
+
+        validate(commands);
+
         return commands;
+    }
+
+    private static void validate(ArrayList<Command> commands) {
+        for (Command c : commands) {
+            logger.trace("Validating Command: " + c.getClass().getName());
+            String errorReport = c.validate();
+            Globals.addToErrorStack(errorReport);
+        }
     }
 }

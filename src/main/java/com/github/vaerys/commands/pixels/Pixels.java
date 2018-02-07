@@ -4,7 +4,6 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -66,7 +65,7 @@ public class Pixels implements Command {
         }
         String levelTotal = "**" + profile.getCurrentLevel() + "** [" + xpBar.toString() + "] **" + (profile.getCurrentLevel() + 1) + "**";
 
-        builder.withColor(Globals.pixelColour); //colour of pixels
+        builder.withColor(Constants.pixelColour); //colour of pixels
         builder.withAuthorName(user.displayName + "'s Pixel stats.");
         builder.withAuthorIcon(Constants.PIXELS_ICON); //pixel icon
         builder.appendField(xpTitle, xpTotal, true);

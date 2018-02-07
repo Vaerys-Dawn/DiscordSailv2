@@ -187,52 +187,51 @@ public interface Command {
 
     default String validate() {
         StringBuilder response = new StringBuilder();
-        boolean isErrored = false;
-        response.append("\n>> Begin Error Report: " + this.getClass().getName() + " <<\n");
+        boolean isError = false;
+        response.append(Utility.formatError(this));
         if (names().length == 0 || names()[0].isEmpty()) {
-            response.append("> NAME IS EMPTY.\n");
-            isErrored = true;
+            response.append("   > Command name is empty.\n");
+            isError = true;
         }
         if (description(new CommandObject()) == null || description(new CommandObject()).isEmpty()) {
-            response.append("> DESCRIPTION IS EMPTY.\n");
-            isErrored = true;
+            response.append("   > Command description is empty.\n");
+            isError = true;
         }
         if (type() == null || type().isEmpty()) {
-            response.append("> TYPE IS EMPTY.\n");
-            isErrored = true;
+            response.append("   > Command type is empty.\n");
+            isError = true;
         }
         if (requiresArgs() && (usage() == null || usage().isEmpty())) {
-            response.append("> USAGE IS NULL WHEN REQUIRES_ARGS IS TRUE.\n");
-            isErrored = true;
+            response.append("   > Command usage is null when requiresArgs is true.\n");
+            isError = true;
         }
         if (dualDescription() != null || dualType() != null) {
             if (dualType() == null || dualType().isEmpty()) {
-                response.append("> DUAL TYPE IS EMPTY.\n");
-                isErrored = true;
+                response.append("   > Command dual type is empty.\n");
+                isError = true;
             }
             if (dualType().equalsIgnoreCase(type())) {
-                response.append("> DUAL TYPE IS EQUAL TO TYPE.\n");
-                isErrored = true;
+                response.append("   > Command dual type is equal to type.\n");
+                isError = true;
             }
             if (dualDescription() == null || dualDescription().isEmpty()) {
-                response.append("> DUAL DESCRIPTION IS EMPTY.\n");
-                isErrored = true;
+                response.append("   > Command dual description is empty.\n");
+                isError = true;
             }
             if (dualDescription().equalsIgnoreCase(description(new CommandObject()))) {
-                response.append("> DUAL DESCRIPTION IS EQUAL TO DESCRIPTION.\n");
-                isErrored = true;
+                response.append("   > Command dual description is equal to description.\n");
+                isError = true;
             }
             if (dualUsage() == null || dualUsage().isEmpty()) {
-                response.append("> DUAL USAGE IS EMPTY.\n");
-                isErrored = true;
+                response.append("   > Command dual usage is empty.\n");
+                isError = true;
             }
             if (usage() != null && usage().equalsIgnoreCase(dualUsage())) {
-                response.append("> DUAL USAGE IS EQUAL TO USAGE.\n");
-                isErrored = true;
+                response.append("   > Command dual usage is equal to usage.\n");
+                isError = true;
             }
         }
-        response.append(">> End Error Report <<");
-        if (isErrored) {
+        if (isError) {
             return response.toString();
         } else {
             return null;

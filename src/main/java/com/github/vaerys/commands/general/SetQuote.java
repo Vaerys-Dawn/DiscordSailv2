@@ -58,7 +58,7 @@ public class SetQuote implements Command {
 
     @Override
     public String[] names() {
-        return new String[]{"SetQuote", "SetUserQuote"};
+        return new String[]{"SetQuote", "SetUserQuote", "SetDesc", "SetDescription"};
     }
 
     @Override

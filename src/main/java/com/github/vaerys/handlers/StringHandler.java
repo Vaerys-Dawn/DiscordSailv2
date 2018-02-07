@@ -1,10 +1,14 @@
 package com.github.vaerys.handlers;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class StringHandler {
     private StringBuffer string;
 
     public StringHandler(String s) {
-        this.string = new StringBuffer(s);
+        if (s == null) this.string = new StringBuffer("");
+        else this.string = new StringBuffer(s);
+
     }
 
     public StringHandler(StringBuffer string) {
@@ -120,5 +124,15 @@ public class StringHandler {
         return this;
     }
 
+    public String[] split(String s) {
+        return string.toString().split(s);
+    }
 
+    public void replaceOnce(String replace, String withThis) {
+        setContent(StringUtils.replaceOnce(string.toString(), replace, withThis));
+    }
+
+    public boolean startsWith(String s) {
+        return s.startsWith(s);
+    }
 }

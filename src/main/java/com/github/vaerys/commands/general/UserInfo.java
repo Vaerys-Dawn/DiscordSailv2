@@ -62,7 +62,10 @@ public class UserInfo implements Command {
             builder.withAuthorIcon("http://i.imgur.com/aRJpAP4.png");
         }
         //sets title to user Display Name;
+
+
         builder.withAuthorName(user.displayName);
+
 
         //sets thumbnail to user Avatar.
         builder.withThumbnail(user.get().getAvatarURL());
@@ -83,14 +86,20 @@ public class UserInfo implements Command {
 
         //builds desc
         StringBuilder desc = new StringBuilder();
+        StringBuilder footer = new StringBuilder();
+        if (profile.getSettings().contains(UserSetting.READ_RULES) && command.guild.config.readRuleReward) {
+            builder.withFooterIcon(Constants.STICKER_STAR_URL);
+//            builder.withFooterIcon("https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/glowing-star_1f31f.png");
+        }
         if (command.guild.config.userInfoShowsDate) {
             builder.withTimestamp(user.get().getCreationDate());
-            builder.withFooterText("UserID: " + profile.getUserID() + ", Creation Date");
+            footer.append("UserID: " + profile.getUserID() + ", Creation Date");
 //            desc.append("**Account Created: **" + creationDate.format(formatter));
         } else {
             desc.append("**Account Created: **" + Utility.formatTimeDifference(difference));
-            builder.withFooterText("User ID: " + profile.getUserID());
+            footer.append("User ID: " + profile.getUserID());
         }
+        builder.withFooterText(footer.toString());
         desc.append("\n**Gender: **" + profile.getGender());
 
         boolean showLevel = true;

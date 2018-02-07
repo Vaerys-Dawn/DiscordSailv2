@@ -131,6 +131,9 @@ public class UserObject {
         if (profile == null && object.isBot()) {
             profile = guild.users.addUser(longID);
         }
+        if (profile != null && profile.getSettings() != null && profile.getSettings().size() != 0) {
+            profile.setSettings(new ArrayList<>(profile.getSettings().stream().distinct().collect(Collectors.toList())));
+        }
         return profile;
     }
 

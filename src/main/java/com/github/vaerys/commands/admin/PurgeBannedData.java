@@ -58,8 +58,8 @@ public class PurgeBannedData implements Command {
         return "> Purged Profiles: **" + purgedProfiles + "**." +
                 "\n> Purged CCs: **" + purgedCCs + "**." +
                 "\n> Purged Characters: **" + purgedCharacters + "**." +
-                "\n> Purged Server Listings: **" + purgedServers + "**." +
-                "\n> Purged Daily Messages: **" + purgedDailyMessages + "**.";
+                "\n> Purged Server Listings: **" + purgedServers + "**.";
+//                "\n> Purged Daily Messages: **" + purgedDailyMessages + "**.";
     }
 
     public void purgeData(long userID, CommandObject command) {
@@ -95,14 +95,14 @@ public class PurgeBannedData implements Command {
                 purgedServers++;
             }
         }
-        iterator = Globals.getDailyMessages().getMessages().listIterator();
-        while (iterator.hasNext()) {
-            DailyMessage dailyObject = (DailyMessage) iterator.next();
-            if (dailyObject.getUserID() == userID) {
-                iterator.remove();
-                purgedDailyMessages++;
-            }
-        }
+//        iterator = Globals.getDailyMessages().getMessages().listIterator();
+//        while (iterator.hasNext()) {
+//            DailyMessage dailyObject = (DailyMessage) iterator.next();
+//            if (dailyObject.getUserID() == userID) {
+//                iterator.remove();
+//                purgedDailyMessages++;
+//            }
+//        }
     }
 
     @Override

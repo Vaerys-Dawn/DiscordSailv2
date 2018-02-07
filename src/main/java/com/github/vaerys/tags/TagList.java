@@ -1,5 +1,6 @@
 package com.github.vaerys.tags;
 
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.tags.cctags.*;
 import com.github.vaerys.tags.infotags.TagChannel;
 import com.github.vaerys.tags.infotags.TagDisplayName;
@@ -97,10 +98,7 @@ public class TagList {
         for (TagObject c : tags) {
             logger.trace("Validating Tag: " + c.getClass().getName());
             String errorReport = c.validate();
-            if (errorReport != null) {
-                logger.error(errorReport);
-                System.exit(-1);
-            }
+            Globals.addToErrorStack(errorReport);
         }
         sort(tags);
     }

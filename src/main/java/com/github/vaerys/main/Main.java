@@ -138,6 +138,15 @@ public class Main {
             dispatcher.registerListener(creatorService, new CreatorHandler());
             dispatcher.registerTemporaryListener(new InitEvent());
 
+            //validate config file
+            Globals.validateConfig();
+            if (Globals.errorStack != null) {
+                logger.error(">\n> Begin Config Error Report <<\n" +
+                        "at " + Constants.DIRECTORY_STORAGE + Constants.FILE_CONFIG +
+                        "\n" + Globals.errorStack + ">> End Error Report <<");
+                System.exit(Constants.EXITCODE_CONF_ERROR);
+            }
+            Globals.setVersion();
 
             //Init Patch system.
 

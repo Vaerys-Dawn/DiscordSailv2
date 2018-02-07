@@ -69,7 +69,7 @@ public class GuildObject {
 
     public void loadCommandData() {
         this.commands = new ArrayList<>(Globals.getCommands(false));
-        this.toggles = new ArrayList<>(Globals.getGuildGuildToggles());
+        this.toggles = new ArrayList<>(Globals.getGuildToggles());
         this.channelSettings = new ArrayList<>(Globals.getChannelSettings());
         this.commandTypes = new ArrayList<>(Globals.getCommandTypes());
         checkToggles();
@@ -334,5 +334,9 @@ public class GuildObject {
         List<IRole> roles = new LinkedList<>();
         config.getRewardRoles().forEach(rewardRoleObject -> roles.add(object.getRoleByID(rewardRoleObject.getRoleID())));
         return roles;
+    }
+
+    public IRole getMutedRole() {
+        return object.getRoleByID(config.getMutedRoleID());
     }
 }

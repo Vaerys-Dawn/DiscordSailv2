@@ -8,6 +8,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.ChannelObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.MessageObject;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -421,6 +422,29 @@ public class RequestHandler {
 
     public static void changePresence(String s) {
         Client.getClient().changePresence(StatusType.ONLINE, ActivityType.PLAYING, s);
+    }
+
+    public static RequestBuffer.RequestFuture<IMessage> sendEmbededImage(String s, String imageUrl, IChannel channel) {
+        XEmbedBuilder builder = new XEmbedBuilder(Constants.pixelColour);
+        builder.withImage(imageUrl);
+        if (s.length() > 2000) {
+            sendError("Could not send message, Too Large.", s, channel);
+            return null;
+        }
+        if (!Utility.isImageLink(imageUrl)) {
+            sendError("Could not send Embed, link is not a valid image URL", imageUrl, channel);
+            return null;
+        }
+        return RequestBuffer.request(() -> {
+            if (s == null || s.isEmpty()) {
+                return channel.sendMessage(builder.build());
+            }
+            return channel.sendMessage(s, builder.build());
+        });
+    }
+
+    public static RequestBuffer.RequestFuture<Boolean> roleManagement(UserObject user, GuildObject content, long mutedRoleID, boolean isAdding) {
+        return roleManagement(user.get(),content.get(),mutedRoleID,isAdding);
     }
 
 

@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.*;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.UserCountDown;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
@@ -269,12 +270,17 @@ public class AnnotationListener {
     @EventSubscriber
     public void onUserJoinEvent(UserJoinEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getLongID()));
         if (content.config.joinsServerMessages) {
             String message = content.config.getJoinMessage();
             message = message.replace("<server>", event.getGuild().getName());
             message = message.replace("<user>", event.getUser().getName());
-            UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getLongID()));
             user.sendDm(message);
+        }
+        for (UserCountDown u : content.users.mutedUsers) {
+            if (u.getID() == event.getUser().getLongID()) {
+                RequestHandler.roleManagement(user, content, content.config.getMutedRoleID(), true);
+            }
         }
         joinLeaveLogging(event, true);
     }
@@ -287,12 +293,12 @@ public class AnnotationListener {
     public void joinLeaveLogging(GuildMemberEvent event, boolean joining) {
         IGuild guild = event.getGuild();
         GuildObject content = Globals.getGuildContent(guild.getLongID());
-        String builder = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **%s** the server.\n**Current Users:** "  + event.getGuild().getUsers().size() + ".";
+        String builder = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **%s** the server.\n**Current Users:** " + event.getGuild().getUsers().size() + ".";
         if (content.config.joinLeaveLogging) {
             if (joining) {
-                Utility.sendLog(String.format(builder,"Joined"), content, false);
+                Utility.sendLog(String.format(builder, "Joined"), content, false);
             } else {
-                Utility.sendLog(String.format(builder,"Left"), content, false);
+                Utility.sendLog(String.format(builder, "Left"), content, false);
             }
         }
     }

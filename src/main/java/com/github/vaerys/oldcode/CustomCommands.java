@@ -21,27 +21,27 @@ public class CustomCommands {
 //    final String[] commandNotFound = {"noUser", "404", "No Command with that name found."};
 
     public CCommandObject convertCommand(String command) {
-        boolean islocked = false;
-        boolean isfound = false;
+        boolean isLocked = false;
+        boolean isFound = false;
         String commandName = null;
         long userID = -1;
         String commandContents = null;
         for (String[] c : commands) {
             if (c[1].equalsIgnoreCase(command)) {
-                isfound = true;
+                isFound = true;
                 commandName = c[1];
                 commandContents = c[2];
                 if (c[0].contains("LockedCommand")) {
-                    islocked = true;
+                    isLocked = true;
                     userID = Globals.getClient().getOurUser().getLongID();
                 } else {
-                    islocked = false;
+                    isLocked = false;
                     userID = Utility.stringLong(c[0]);
                 }
             }
         }
-        if (isfound) {
-            return new CCommandObject(islocked, userID, commandName, commandContents, false);
+        if (isFound) {
+            return new CCommandObject(isLocked, userID, commandName, commandContents, false);
         } else {
             return null;
         }

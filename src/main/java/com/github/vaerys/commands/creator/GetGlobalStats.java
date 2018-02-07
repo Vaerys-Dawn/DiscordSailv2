@@ -22,7 +22,7 @@ public class GetGlobalStats implements Command {
         ArrayList<String> outToggles = new ArrayList<>();
         ArrayList<String> outModules = new ArrayList<>();
 //        ArrayList<ChannelStatsObject> channelStats = new ArrayList<>();
-        for (GuildToggle g : Globals.getGuildGuildToggles()) {
+        for (GuildToggle g : Globals.getGuildToggles()) {
             toggleStats.add(new ToggleStatsObject(g.name(), g.isModule()));
         }
 //        for (ChannelSetting c : Globals.getChannelSettings()) {

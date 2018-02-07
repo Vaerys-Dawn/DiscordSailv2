@@ -58,7 +58,7 @@ public class Globals {
     public static List<Command> commands = new ArrayList<>();
     private static ArrayList<String> commandTypes = new ArrayList<>();
     private static ArrayList<ChannelSetting> channelSettings = new ArrayList<>();
-    private static ArrayList<GuildToggle> guildGuildToggles = new ArrayList<>();
+    private static ArrayList<GuildToggle> guildToggles = new ArrayList<>();
     private static ArrayList<SlashCommand> slashCommands = new ArrayList<>();
     private static ArrayList<RandomStatusObject> randomStatuses = new ArrayList<>();
     private static List<TagObject> tags = new ArrayList<>();
@@ -70,12 +70,12 @@ public class Globals {
     public static int baseXPModifier;
     public static int xpForLevelOne;
     public static long lastDmUserID = -1;
-    public static Color pixelColour = new Color(226, 218, 117);
     private static ArrayList<Command> creatorCommands = new ArrayList<>();
     private static List<Long> patrons = new ArrayList<>();
     public static int maxReminderSlots = 5;
     private static Events events;
     private static String currentEvent = null;
+    public static String errorStack = null;
 
 
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
@@ -115,9 +115,7 @@ public class Globals {
 
 
         // Load Guild Toggles
-        guildGuildToggles = ToggleInit.get();
-
-        slashCommands = CommandInit.getSlashCommands();
+        guildToggles = ToggleInit.get();
 
         channelSettings = InitChannels.get();
 
@@ -126,7 +124,10 @@ public class Globals {
         TagList.init();
 
         //validate commands
-        validate();
+        if (errorStack != null) {
+            logger.error("\n>> Begin Error Report <<\n" + errorStack + ">> End Error Report <<");
+            System.exit(Constants.EXITCODE_CONF_ERROR);
+        }
 
         //auto remover code for Commands.Admin.ChannelHere, will remove if channels are not in use.
         if (channelSettings.size() == 0) {
@@ -156,99 +157,58 @@ public class Globals {
         logger.info(creatorCommands.size() + " Creator Commands Loaded.");
         logger.info(commandTypes.size() + " Command Types Loaded.");
         logger.info(channelSettings.size() + " Channel Types Loaded.");
-        logger.info(guildGuildToggles.size() + " Guild Toggles Loaded.");
+        logger.info(guildToggles.size() + " Guild Toggles Loaded.");
         logger.info(TagList.get().size() + " Tags Loaded.");
     }
 
-    private static void validate() throws IllegalArgumentException {
-        for (Command c : commands) {
-            logger.trace("Validating Command: " + c.getClass().getName());
-            String errorReport = c.validate();
-            if (errorReport != null) {
-                logger.error(errorReport);
-                System.exit(Constants.EXITCODE_CONF_ERROR);
-            }
-        }
-        for (Command c : creatorCommands) {
-            logger.trace("Validating Command: " + c.getClass().getName());
-            String errorReport = c.validate();
-            if (errorReport != null) {
-                logger.error(errorReport);
-                System.exit(Constants.EXITCODE_CONF_ERROR);
-            }
-        }
-        for (Command c : slashCommands) {
-            logger.trace("Validating Command: " + c.getClass().getName());
-            String errorReport = c.validate();
-            if (errorReport != null) {
-                logger.error(errorReport);
-                System.exit(Constants.EXITCODE_CONF_ERROR);
-            }
-        }
-        for (GuildToggle g : guildGuildToggles) {
-            logger.trace("Validating Toggle: " + g.getClass().getName());
-            if (g.name() == null || g.name().isEmpty())
-                throw new IllegalArgumentException(g.getClass().getName() + " Toggle Name cannot be null.");
-            if (g.name().contains(" "))
-                throw new IllegalArgumentException(g.getClass().getName() + "Toggle Name cannot contain spaces.");
-            if (g.name().contains("\n"))
-                throw new IllegalArgumentException(g.getClass().getName() + "Toggle Name cannot contain Newlines.");
-        }
-        for (ChannelSetting s : channelSettings) {
-            if (s.name() == null || s.name().isEmpty()) {
-                throw new IllegalArgumentException(s.getClass().getName() + " Channel Type cannot be null.");
-            }
-        }
-    }
-
     public static void validateConfig() throws IllegalArgumentException {
-        IUser creator = Client.getClient().getUserByID(creatorID);
+        IUser creator = Client.getClient().fetchUser(creatorID);
         if (creator == null)
-            throw new IllegalArgumentException("Creator ID is invalid.");
+            addToErrorStack("   > creatorID is invalid.\n");
         if (botName == null || botName.isEmpty())
-            throw new IllegalArgumentException("Bot name cannot be empty.");
+            addToErrorStack("   > botName cannot be empty.\n");
         if (botName.contains("\n"))
-            throw new IllegalArgumentException("botName cannot contain Newlines.");
+            addToErrorStack("   > botName cannot contain Newlines.\n");
         if (botName.length() > 32)
-            throw new IllegalArgumentException("botName cannot be longer than 32 chars.");
+            addToErrorStack("   > botName cannot be longer than 32 chars.\n");
         if (defaultPrefixCommand == null || defaultPrefixCommand.isEmpty())
-            throw new IllegalArgumentException("defaultPrefixCommand cannot be empty.");
+            addToErrorStack("   > defaultPrefixCommand cannot be empty.\n");
         if (defaultPrefixCC == null || defaultPrefixCC.isEmpty())
-            throw new IllegalArgumentException("defaultPrefixCC cannot be empty.");
+            addToErrorStack("   > defaultPrefixCC cannot be empty.\n");
         if (defaultPrefixCommand.contains(" "))
-            throw new IllegalArgumentException("defaultPrefixCommand cannot contain spaces.");
+            addToErrorStack("   > defaultPrefixCommand cannot contain spaces.\n");
         if (defaultPrefixCC.contains(" "))
-            throw new IllegalArgumentException("defaultPrefixCC cannot contain spaces.");
+            addToErrorStack("   > defaultPrefixCC cannot contain spaces.\n");
         if (defaultPrefixCommand.contains("\n"))
-            throw new IllegalArgumentException("defaultPrefixCommand cannot contain Newlines.");
+            addToErrorStack("   > defaultPrefixCommand cannot contain Newlines.\n");
         if (defaultPrefixCC.contains("\n"))
-            throw new IllegalArgumentException("defaultPrefixCommand cannot contain Newlines.");
+            addToErrorStack("   > defaultPrefixCommand cannot contain Newlines.\n");
         if (doDailyAvatars) {
             if (dailyAvatarName == null || dailyAvatarName.isEmpty())
-                throw new IllegalArgumentException("dailyAvatarName cannot be empty.");
+                addToErrorStack("   > dailyAvatarName cannot be empty.\n");
             if (!dailyAvatarName.contains("#day#"))
-                throw new IllegalArgumentException("dailyAvatarName must contain #day# for the feature to work as intended.");
+                addToErrorStack("   > dailyAvatarName must contain #day# for the feature to work as intended.\n");
             if (!Utility.isImageLink(dailyAvatarName)) {
-                throw new IllegalArgumentException("dailyAvatarName must be a valid image link.");
+                addToErrorStack("   > dailyAvatarName must be a valid image link.\n");
             }
             for (DayOfWeek d : DayOfWeek.values()) {
                 String dailyPath = Constants.DIRECTORY_GLOBAL_IMAGES + dailyAvatarName.replace("#day#", d.toString());
                 if (!Files.exists(Paths.get(dailyPath)))
-                    throw new IllegalArgumentException("File " + dailyPath + " does not exist.");
+                    addToErrorStack("   > File " + dailyPath + " does not exist.\n");
             }
         } else {
             if (!Utility.isImageLink(defaultAvatarFile)) {
-                throw new IllegalArgumentException("defaultAvatarFile must be a valid image link.");
+                addToErrorStack("   > defaultAvatarFile must be a valid image link.\n");
             }
             if (!Files.exists(Paths.get(Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile)))
-                throw new IllegalArgumentException("File " + Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile + " does not exist.");
+                addToErrorStack("   > File " + Constants.DIRECTORY_GLOBAL_IMAGES + defaultAvatarFile + " does not exist.\n");
         }
         if (argsMax <= 0)
-            throw new IllegalArgumentException("argsMax cannot be less than or equal 0.");
+            addToErrorStack("   > argsMax cannot be less than or equal 0.\n");
         if (maxWarnings <= 0)
-            throw new IllegalArgumentException("maxWarnings cannot be less than or equal 0");
+            addToErrorStack("   > maxWarnings cannot be less than or equal 0.\n");
         if (avgMessagesPerDay <= 0) {
-            throw new IllegalArgumentException("avgMessagesPerDay cannot be less than or equal 0");
+            addToErrorStack("   > avgMessagesPerDay cannot be less than or equal 0.\n");
         }
     }
 
@@ -377,8 +337,8 @@ public class Globals {
         return channelSettings;
     }
 
-    public static ArrayList<GuildToggle> getGuildGuildToggles() {
-        return guildGuildToggles;
+    public static ArrayList<GuildToggle> getGuildToggles() {
+        return guildToggles;
     }
 
     public static ArrayList<SlashCommand> getSlashCommands() {
@@ -452,7 +412,7 @@ public class Globals {
                 currentEvent = e.getEventName();
             }
         }
-        if (eventFound == false){
+        if (eventFound == false) {
             currentEvent = null;
         }
     }
@@ -464,4 +424,14 @@ public class Globals {
         }
         return null;
     }
+
+    public static void addToErrorStack(String errorReport) {
+        if (errorReport == null) return;
+        if (errorStack == null) {
+            errorStack = errorReport;
+        } else {
+            errorStack += errorReport;
+        }
+    }
+
 }

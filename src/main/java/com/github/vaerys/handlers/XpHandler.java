@@ -93,56 +93,56 @@ public class XpHandler {
         }
     }
 
-    //for testing purposes only
-    public static void doDeacyUser(ProfileObject u, GuildObject content, long days) {
-        if (u.getLastTalked() != -1) {
-            float temp = 0;
-            long decay;
-            u.setCurrentLevel(XpHandler.xpToLevel(u.getXP()));
-            //modifiable min and max decay days needs to be implemented.
-            if (days > 7 && days < 30) {
-                //normal xp decay formula
-                temp = (days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
-            } else if (days > 20) {
-                //plateaued xp decay
-                temp = (8) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
-            }
-            decay = (long) temp;
-            //half decay if you turn you xp gain off but only if it is voluntary
-            if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) {
-                decay = decay / 2;
-            }
-            if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
-                long pseudoLevel = xpToLevel(u.getXP() + 120);
-                RewardRoleObject rewardRole = content.config.getCurrentReward(pseudoLevel);
-                if (rewardRole != null) {
-                    long rewardFloor = rewardRole.getXp() - 100;
-                    if (u.getXP() > rewardFloor) {
-                        u.setXp(u.getXP() - decay);
-                        // your total xp should never reach below 0;
-                        if (u.getXP() < 0) {
-                            u.setXp(0);
-                        }
-                        //decay should never lower your total xp below the reward floor.
-                        if (u.getXP() < rewardFloor) {
-                            u.setXp(rewardFloor);
-                        }
-                        //if user is at level floor add setting.
-                        if (u.getXP() == rewardFloor && !u.getSettings().contains(HIT_LEVEL_FLOOR)) {
-                            u.getSettings().add(HIT_LEVEL_FLOOR);
-                        }
-                    }
-                    //if your days away is a multiple of 30 you should be checked if you are at the
-                    //reward floor, if you are reward decay occurs
-                    if (days % 30 == 0 && u.getXP() == rewardFloor) {
-                        u.setXp(u.getXP() - 100);
-                    }
-                }
-            }
-            //check user's roles and make sure that they have the right roles.
-        }
-        checkUsersRoles(u.getUserID(), content);
-    }
+//    //for testing purposes only
+//    public static void doDeacyUser(ProfileObject u, GuildObject content, long days) {
+//        if (u.getLastTalked() != -1) {
+//            float temp = 0;
+//            long decay;
+//            u.setCurrentLevel(XpHandler.xpToLevel(u.getXP()));
+//            //modifiable min and max decay days needs to be implemented.
+//            if (days > 7 && days < 30) {
+//                //normal xp decay formula
+//                temp = (days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
+//            } else if (days > 20) {
+//                //plateaued xp decay
+//                temp = (8) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
+//            }
+//            decay = (long) temp;
+//            //half decay if you turn you xp gain off but only if it is voluntary
+//            if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) {
+//                decay = decay / 2;
+//            }
+//            if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
+//                long pseudoLevel = xpToLevel(u.getXP() + 120);
+//                RewardRoleObject rewardRole = content.config.getCurrentReward(pseudoLevel);
+//                if (rewardRole != null) {
+//                    long rewardFloor = rewardRole.getXp() - 100;
+//                    if (u.getXP() > rewardFloor) {
+//                        u.setXp(u.getXP() - decay);
+//                        // your total xp should never reach below 0;
+//                        if (u.getXP() < 0) {
+//                            u.setXp(0);
+//                        }
+//                        //decay should never lower your total xp below the reward floor.
+//                        if (u.getXP() < rewardFloor) {
+//                            u.setXp(rewardFloor);
+//                        }
+//                        //if user is at level floor add setting.
+//                        if (u.getXP() == rewardFloor && !u.getSettings().contains(HIT_LEVEL_FLOOR)) {
+//                            u.getSettings().add(HIT_LEVEL_FLOOR);
+//                        }
+//                    }
+//                    //if your days away is a multiple of 30 you should be checked if you are at the
+//                    //reward floor, if you are reward decay occurs
+//                    if (days % 30 == 0 && u.getXP() == rewardFloor) {
+//                        u.setXp(u.getXP() - 100);
+//                    }
+//                }
+//            }
+//            //check user's roles and make sure that they have the right roles.
+//        }
+//        checkUsersRoles(u.getUserID(), content);
+//    }
 
     public static void checkUsersRoles(long id, GuildObject content) {
         //do code.
@@ -327,9 +327,9 @@ public class XpHandler {
                     if (channel != null) {
                         if (channel.getModifiedPermissions(object.client.bot.get()).contains(Permissions.ATTACH_FILES)) {
                             if (rankedup) {
-                                RequestHandler.sendFileURL(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, channel, false);
+                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, channel);
                             } else {
-                                RequestHandler.sendFileURL(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, channel, false);
+                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, channel);
                             }
                         } else {
                             RequestHandler.sendMessage(levelUpMessage.toString(), channel).get();
@@ -340,9 +340,9 @@ public class XpHandler {
                     break;
                 case SEND_LVLUP_DMS:
                     if (rankedup) {
-                        RequestHandler.sendFileURL(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel(), false);
+                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel());
                     } else {
-                        RequestHandler.sendFileURL(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel(), false);
+                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel());
                     }
                     break;
                 case DONT_SEND_LVLUP:

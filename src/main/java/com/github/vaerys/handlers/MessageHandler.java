@@ -87,6 +87,7 @@ public class MessageHandler {
 //                }
                 String response = c.execute(commandArgs, command);
                 RequestHandler.sendMessage(response, currentChannel);
+                RequestBuffer.request(() -> command.channel.get().setTypingStatus(false)).get();
                 return true;
             }
         }

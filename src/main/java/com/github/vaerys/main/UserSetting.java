@@ -27,7 +27,7 @@ public enum UserSetting {
     DENY_ART_PINNING, //stop users from pinning art.
 
     //bot assigned
-    HIT_LEVEL_FLOOR;//added when the user reaches the xp floor of a reward, used to welcome
+    HIT_LEVEL_FLOOR, READ_RULES;//added when the user reaches the xp floor of a reward, used to welcome
     // profiles back when the level up again
 
     public static UserSetting get(String setting){

@@ -61,6 +61,7 @@ public class GuildConfig extends GuildFile {
     public boolean roleIsToggle = false;
     public boolean userInfoShowsDate = false;
     public boolean debugMode = true;
+    public boolean readRuleReward = false;
     //--Competition
     public boolean compEntries = false;
     public boolean compVoting = false;
@@ -102,6 +103,7 @@ public class GuildConfig extends GuildFile {
     ArrayList<Long> trustedRoleIDs = new ArrayList<>();
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     ArrayList<OffenderObject> offenders = new ArrayList<>();
+    private String ruleCode = null;
 
 
     public void setLastDailyMessage(DailyMessage lastDailyMessage) {
@@ -255,7 +257,7 @@ public class GuildConfig extends GuildFile {
     }
 
     public void addOffence(long userID) {
-        for (OffenderObject o: offenders) {
+        for (OffenderObject o : offenders) {
             if (o.getID() == userID) {
                 o.addOffence();
                 return;
@@ -439,7 +441,6 @@ public class GuildConfig extends GuildFile {
     }
 
 
-
     public void setPinLimit(int pinLimit) {
         this.pinLimit = pinLimit;
     }
@@ -455,5 +456,13 @@ public class GuildConfig extends GuildFile {
 
     public void resetOffenders() {
         offenders = new ArrayList<>();
+    }
+
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
     }
 }

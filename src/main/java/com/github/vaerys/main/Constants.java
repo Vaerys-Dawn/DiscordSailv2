@@ -5,6 +5,7 @@ import com.github.vaerys.commands.help.StartUpGuide;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.objects.DailyMessage;
 
+import java.awt.*;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 
@@ -43,6 +44,7 @@ public class Constants {
     public static final short EXITCODE_UNKNOWN = 255;
 
 
+
     public static String getWelcomeMessage(CommandObject object) {
         return "> I am S.A.I.L, your Server-Based Artificial Intelligence Lattice. I help manage servers.\n" +
                 "I am also programmed to offer you information and tools.\n\n" +
@@ -75,6 +77,7 @@ public class Constants {
     public static final String LEVEL_UP_IMAGE_URL = "http://i.imgur.com/Vdt2DkK.gif";
     public static final String RANK_UP_IMAGE_URL = "http://i.imgur.com/MwsPixA.gif";
     public static final String PATREON_ICON_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/1024px-Patreon_logo.svg.png";
+    public static final String STICKER_STAR_URL = "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/white-medium-star_2b50.png";
     public static final String PIXELS_ICON = "http://i.imgur.com/r5usgN7.png";
 
     public static final Long LEVEL_CAP = 1000L; //Anything more than this is too much CPU time to calculate
@@ -138,6 +141,9 @@ public class Constants {
     //queue types
     public static final String QUEUE_DAILY = "DAILY_MESSAGE";
     public static final String DAILY_SPECIALID = "Default Daily Message.";
+
+    //colours
+    public static Color pixelColour = new Color(226, 218, 117);
 
     public static ArrayList<DailyMessage> defaultDailyMessages(long creatorID) {
         ArrayList<DailyMessage> dailyMessages = new ArrayList<DailyMessage>() {{

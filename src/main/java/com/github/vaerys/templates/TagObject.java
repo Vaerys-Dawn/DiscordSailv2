@@ -197,20 +197,19 @@ public abstract class TagObject {
     public String validate() {
         StringBuilder response = new StringBuilder();
         boolean isErrored = false;
-        response.append("\n>> Begin Error Report: " + this.getClass().getName() + " <<\n");
+        response.append(Utility.formatError(this));
         if (name == null || name.isEmpty()) {
-            response.append("> NAME IS EMPTY.\n");
+            response.append("   > Tag name is empty.\n");
             isErrored = true;
         }
         if (desc == null || desc.isEmpty()) {
-            response.append("> DESCRIPTION IS EMPTY.\n");
+            response.append("   > Tag description is empty.\n");
             isErrored = true;
         }
         if (requiredArgs != 0 && (usage == null || usage.isEmpty())) {
-            response.append("> USAGE IS EMPTY WHEN ARGS IS REQUIRED.\n");
+            response.append("   > Tag usage is empty when args is required.\n");
             isErrored = true;
         }
-        response.append(">> End Error Report <<");
         if (isErrored) {
             return response.toString();
         } else {
