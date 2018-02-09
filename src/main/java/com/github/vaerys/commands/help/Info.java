@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 29/01/2017.
  */
-public class Info implements Command {
+public class Info extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -75,6 +75,11 @@ public class Info implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

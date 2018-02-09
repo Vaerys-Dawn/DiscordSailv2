@@ -6,7 +6,7 @@ import com.github.vaerys.templates.SlashCommand;
 /**
  * Created by Vaerys on 13/03/2017.
  */
-public class TableFlip implements SlashCommand {
+public class TableFlip extends SlashCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -16,5 +16,10 @@ public class TableFlip implements SlashCommand {
     @Override
     public String[] names() {
         return new String[]{"TableFlip"};
+    }
+
+    @Override
+    public void init() {
+
     }
 }

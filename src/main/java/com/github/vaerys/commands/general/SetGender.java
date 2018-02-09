@@ -11,7 +11,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 27/02/2017.
  */
-public class SetGender implements Command {
+public class SetGender extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         UserObject user = command.user;
@@ -95,6 +95,11 @@ public class SetGender implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

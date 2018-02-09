@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class HelpModules implements Command {
+public class HelpModules extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -67,6 +67,11 @@ public class HelpModules implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

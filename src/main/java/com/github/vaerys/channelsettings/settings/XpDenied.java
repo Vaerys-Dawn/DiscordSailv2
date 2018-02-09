@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 17/06/2017.
  */
-public class XpDenied implements ChannelSetting {
+public class XpDenied extends ChannelSetting {
     @Override
     public String name() {
         return Command.CHANNEL_XP_DENIED;

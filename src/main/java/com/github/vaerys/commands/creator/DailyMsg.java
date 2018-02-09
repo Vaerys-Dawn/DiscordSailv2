@@ -16,7 +16,7 @@ import java.time.DayOfWeek;
 import java.util.Formatter;
 import java.util.ListIterator;
 
-public class DailyMsg implements Command {
+public class DailyMsg extends Command {
 
     String modes = "> Edit - `args = new Contents`\n" +
             "> Delete\n" +
@@ -148,6 +148,11 @@ public class DailyMsg implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.ListIterator;
  */
 
 
-public class Help implements Command {
+public class Help extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -122,6 +122,11 @@ public class Help implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -10,7 +10,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class SetMutedRole implements Command{
+public class SetMutedRole extends Command{
     @Override
     public String execute(String args, CommandObject command) {
         if (args.equalsIgnoreCase("Remove")) {
@@ -64,6 +64,11 @@ public class SetMutedRole implements Command{
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

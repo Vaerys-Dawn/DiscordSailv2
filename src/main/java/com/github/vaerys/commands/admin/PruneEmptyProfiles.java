@@ -9,7 +9,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
-public class PruneEmptyProfiles implements Command {
+public class PruneEmptyProfiles extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -70,6 +70,11 @@ public class PruneEmptyProfiles implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

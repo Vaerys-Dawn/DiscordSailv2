@@ -8,7 +8,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 02/07/2017.
  */
-public class DefaultLevelMode implements Command {
+public class DefaultLevelMode extends Command {
     private String settings = "**Settings:**\n" +
             "- LevelChannel\n" +
             "- CurrentChannel\n" +
@@ -74,6 +74,11 @@ public class DefaultLevelMode implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 26/02/2017.
  */
-public class CharInfo implements Command {
+public class CharInfo extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         for (CharacterObject object : command.guild.characters.getCharacters(command.guild.get())) {
@@ -100,6 +100,11 @@ public class CharInfo implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -12,7 +12,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class EditCC implements Command {
+public class EditCC extends Command {
 
     String modes = "**Modes: **\n" +
             "> Replace\n" +
@@ -129,6 +129,11 @@ public class EditCC implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

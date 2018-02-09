@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class EnterComp implements Command {
+public class EnterComp extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         GuildConfig guildconfig = command.guild.config;
@@ -84,6 +84,11 @@ public class EnterComp implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

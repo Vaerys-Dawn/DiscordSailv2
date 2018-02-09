@@ -5,7 +5,7 @@ import com.github.vaerys.main.Globals;
 import com.github.vaerys.templates.DMCommand;
 import sx.blah.discord.handle.obj.IUser;
 
-public class Echo implements DMCommand {
+public class Echo extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         IUser recipient = command.client.get().getUserByID(Globals.lastDmUserID);
@@ -39,5 +39,10 @@ public class Echo implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

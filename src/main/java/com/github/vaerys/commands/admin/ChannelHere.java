@@ -15,7 +15,10 @@ import java.util.stream.Collectors;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class ChannelHere implements Command {
+public class ChannelHere extends Command {
+
+    public ChannelHere() {
+    }
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -80,6 +83,11 @@ public class ChannelHere implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

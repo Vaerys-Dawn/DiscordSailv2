@@ -13,7 +13,7 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.time.DayOfWeek;
 
-public class NewDailyMessage implements Command {
+public class NewDailyMessage extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -80,6 +80,11 @@ public class NewDailyMessage implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

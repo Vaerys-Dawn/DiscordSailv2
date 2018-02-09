@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class NewCC implements Command {
+public class NewCC extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
@@ -104,6 +104,11 @@ public class NewCC implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

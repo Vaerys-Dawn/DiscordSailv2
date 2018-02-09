@@ -6,7 +6,7 @@ import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class HelpChannel implements Command {
+public class HelpChannel extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -57,6 +57,11 @@ public class HelpChannel implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

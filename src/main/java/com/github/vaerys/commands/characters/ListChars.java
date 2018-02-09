@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class ListChars implements Command {
+public class ListChars extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
@@ -87,6 +87,11 @@ public class ListChars implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

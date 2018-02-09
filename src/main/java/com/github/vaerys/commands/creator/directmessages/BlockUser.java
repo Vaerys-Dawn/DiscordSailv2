@@ -10,7 +10,7 @@ import com.github.vaerys.templates.DMCommand;
 /**
  * Created by Vaerys on 10/02/2017.
  */
-public class BlockUser implements DMCommand {
+public class BlockUser extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         long userId = Globals.lastDmUserID;
@@ -51,5 +51,10 @@ public class BlockUser implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

@@ -25,8 +25,8 @@ public class QueueHandler {
     private static String uIDString = "UID";
 
     public static void addToQueue(CommandObject object, String content, DayOfWeek dayOfWeek, String type) {
-        ReactionEmoji thumbsUp = Utility.getReaction("thumbsup");
-        ReactionEmoji thumbsDown = Utility.getReaction("thumbsdown");
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
         IChannel channel = object.client.get().getChannelByID(Globals.queueChannelID);
 
         if (channel != null) {
@@ -79,10 +79,10 @@ public class QueueHandler {
 
 
     public static void reactionAdded(CommandObject object, IReaction reaction) {
-        ReactionEmoji thumbsUp = Utility.getReaction("thumbsup");
-        ReactionEmoji thumbsDown = Utility.getReaction("thumbsdown");
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
         ReactionEmoji ok = Utility.getReaction("white_check_mark");
-        ReactionEmoji no = Utility.getReaction("no_entry_sign");
+        ReactionEmoji no = Utility.getReaction(Constants.EMOJI_REMOVE_PIN);
         ArrayList<QueueObject> queuedMessages = Globals.getDailyMessages().getQueue();
         IMessage message = object.message.get();
         IUser owner = object.client.creator.get();

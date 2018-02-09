@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 09/04/2017.
  */
-public class DontLog implements ChannelSetting {
+public class DontLog extends ChannelSetting {
     @Override
     public String name() {
         return Command.CHANNEL_DONT_LOG;

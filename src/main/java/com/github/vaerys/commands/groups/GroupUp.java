@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 31/05/2017.
  */
-public class GroupUp implements Command {
+public class GroupUp extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         String presence = null;
@@ -102,6 +102,11 @@ public class GroupUp implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

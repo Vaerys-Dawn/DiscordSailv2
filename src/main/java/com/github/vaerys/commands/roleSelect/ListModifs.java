@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class ListModifs implements Command {
+public class ListModifs extends Command {
     public static XEmbedBuilder getList(CommandObject command) {
         String title = "> Here are the **Modifier** roles you can choose from:\n";
         ArrayList<String> list = new ArrayList<>();
@@ -71,6 +71,11 @@ public class ListModifs implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

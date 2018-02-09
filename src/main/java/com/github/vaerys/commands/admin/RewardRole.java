@@ -8,7 +8,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 11/05/2017.
  */
-public class RewardRole implements Command{
+public class RewardRole extends Command{
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject split = new SplitFirstObject(args);
@@ -53,6 +53,11 @@ public class RewardRole implements Command{
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

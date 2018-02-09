@@ -11,7 +11,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.util.List;
 import java.util.Random;
 
-public class RandomCC implements Command {
+public class RandomCC extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -80,6 +80,11 @@ public class RandomCC implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

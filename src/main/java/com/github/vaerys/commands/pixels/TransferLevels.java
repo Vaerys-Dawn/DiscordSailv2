@@ -17,7 +17,7 @@ import java.time.ZonedDateTime;
 /**
  * Created by Vaerys on 06/07/2017.
  */
-public class TransferLevels implements Command {
+public class TransferLevels extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.config.xpGain) {
@@ -91,6 +91,11 @@ public class TransferLevels implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

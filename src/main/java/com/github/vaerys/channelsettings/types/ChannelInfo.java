@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 09/04/2017.
  */
-public class ChannelInfo implements ChannelSetting{
+public class ChannelInfo extends ChannelSetting{
     @Override
     public String name() {
         return Command.CHANNEL_INFO;

@@ -8,7 +8,7 @@ import com.github.vaerys.templates.DMCommand;
 /**
  * Created by Vaerys on 23/04/2017.
  */
-public class ShutdownDM implements DMCommand {
+public class ShutdownDM extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         return new Shutdown().execute(args,command);
@@ -37,5 +37,10 @@ public class ShutdownDM implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

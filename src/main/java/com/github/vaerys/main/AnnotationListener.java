@@ -5,7 +5,6 @@ import com.github.vaerys.handlers.*;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.UserCountDown;
-import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,8 +180,9 @@ public class AnnotationListener {
 
     public static void updateVariables(IGuild guild) {
         long guildID = guild.getLongID();
-        GuildConfig guildConfig = Globals.getGuildContent(guildID).config;
-        guildConfig.updateVariables(guild);
+        GuildObject guildObject = Globals.getGuildContent(guildID);
+        guildObject.config.updateVariables(guild);
+        guildObject.characters.updateVars(guild);
     }
 
     @EventSubscriber
@@ -191,10 +191,11 @@ public class AnnotationListener {
             return;
         }
         ReactionEmoji x = Utility.getReaction("x");
-        ReactionEmoji pin = Utility.getReaction("pushpin");
-        ReactionEmoji thumbsUp = Utility.getReaction("thumbsup");
-        ReactionEmoji thumbsDown = Utility.getReaction("thumbsdown");
-        ReactionEmoji heart = Utility.getReaction("heart");
+        ReactionEmoji pin = Utility.getReaction(Constants.EMOJI_ADD_PIN);
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
+        ReactionEmoji heart = Utility.getReaction(Constants.EMOJI_LIKE_PIN);
+        ReactionEmoji remove = Utility.getReaction(Constants.EMOJI_REMOVE_PIN);
         ReactionEmoji emoji = event.getReaction().getEmoji();
 
         if (emoji == null) return;
@@ -207,11 +208,14 @@ public class AnnotationListener {
         //do only on server channels
         if (!event.getChannel().isPrivate() && emoji.isUnicode()) {
             //if is x and can bypass
+            if (emoji.equals(remove)) ArtHandler.unPin(object);
             if (emoji.equals(x) && Utility.testForPerms(object, Permissions.MANAGE_MESSAGES)
                     && object.client.bot.longID == object.user.longID)
                 RequestHandler.deleteMessage(object.message);
             //if is pushpin
             if (emoji.equals(pin)) ArtHandler.pinMessage(object.setAuthor(event.getUser()));
+
+
             //if is thumbsup or thumbs down and is creator.
             if (emoji.equals(thumbsUp) || emoji.equals(thumbsDown))
                 QueueHandler.reactionAdded(object, event.getReaction());

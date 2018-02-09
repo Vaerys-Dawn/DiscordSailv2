@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class Report implements Command {
+public class Report extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -104,6 +104,11 @@ public class Report implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

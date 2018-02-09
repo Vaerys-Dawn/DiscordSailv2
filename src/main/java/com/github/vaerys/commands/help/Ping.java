@@ -9,7 +9,7 @@ import java.text.NumberFormat;
 /**
  * Created by Vaerys on 12/07/2017.
  */
-public class Ping implements Command {
+public class Ping extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -54,6 +54,11 @@ public class Ping implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

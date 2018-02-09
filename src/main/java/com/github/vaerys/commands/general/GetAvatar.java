@@ -10,7 +10,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class GetAvatar implements Command {
+public class GetAvatar extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         UserObject user = Utility.getUser(command, args, true,false);
@@ -66,6 +66,11 @@ public class GetAvatar implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

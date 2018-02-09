@@ -44,7 +44,6 @@ public class Constants {
     public static final short EXITCODE_UNKNOWN = 255;
 
 
-
     public static String getWelcomeMessage(CommandObject object) {
         return "> I am S.A.I.L, your Server-Based Artificial Intelligence Lattice. I help manage servers.\n" +
                 "I am also programmed to offer you information and tools.\n\n" +
@@ -157,4 +156,13 @@ public class Constants {
         }};
         return dailyMessages;
     }
+
+
+    //Emoji Constants
+
+    public static final String EMOJI_REMOVE_PIN = "x";
+    public static final String EMOJI_ADD_PIN = "pushpin";
+    public static final String EMOJI_LIKE_PIN = "heart";
+    public static final String EMOJI_DISAPPROVE = "thumbsdown";
+    public static final String EMOJI_APPROVE = "thumbsup";
 }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 17/02/2017.
  */
-public class GetGuildList implements DMCommand {
+public class GetGuildList extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<String> guilds = new ArrayList<>();
@@ -47,5 +47,10 @@ public class GetGuildList implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

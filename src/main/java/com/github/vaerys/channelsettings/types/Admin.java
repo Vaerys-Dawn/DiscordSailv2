@@ -9,7 +9,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 09/04/2017.
  */
-public class Admin implements ChannelSetting {
+public class Admin extends ChannelSetting {
     @Override
     public String name() {
         return Command.CHANNEL_ADMIN;

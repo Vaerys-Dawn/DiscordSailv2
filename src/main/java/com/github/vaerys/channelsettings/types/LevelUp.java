@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 02/07/2017.
  */
-public class LevelUp implements ChannelSetting {
+public class LevelUp extends ChannelSetting {
     @Override
     public String name() {
         return Command.CHANNEL_LEVEL_UP;

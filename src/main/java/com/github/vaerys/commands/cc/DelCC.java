@@ -7,7 +7,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class DelCC implements Command {
+public class DelCC extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         return command.guild.customCommands.delCommand(args, command.user.get(), command.guild.get());
@@ -51,6 +51,11 @@ public class DelCC implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

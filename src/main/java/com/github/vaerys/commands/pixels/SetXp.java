@@ -19,7 +19,7 @@ import sx.blah.discord.handle.obj.Permissions;
  * Please use EditXP [user] "=" [amount] instead.
  */
 @Deprecated
-public class SetXp implements Command {
+public class SetXp extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject xpArgs = new SplitFirstObject(args);
@@ -81,6 +81,11 @@ public class SetXp implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

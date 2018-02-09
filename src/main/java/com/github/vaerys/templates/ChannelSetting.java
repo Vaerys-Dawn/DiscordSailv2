@@ -15,15 +15,15 @@ import java.util.stream.Collectors;
 /**
  * Created by Vaerys on 09/04/2017.
  */
-public interface ChannelSetting {
+public abstract class ChannelSetting {
 
-    String name();
+    public abstract String name();
 
-    boolean isSetting();
+    public abstract boolean isSetting();
 
-    String desc(CommandObject command);
+    public abstract String desc(CommandObject command);
 
-    default ArrayList<Long> getIDs(GuildConfig config) {
+    public ArrayList<Long> getIDs(GuildConfig config) {
         for (ChannelSettingObject o : config.getChannelSettings()) {
             if (o.getType().equals(name())) {
                 if (o.getChannelIDs().size() != 0) {
@@ -36,7 +36,7 @@ public interface ChannelSetting {
         return new ArrayList<>();
     }
 
-    default XEmbedBuilder getInfo(CommandObject object) {
+    public XEmbedBuilder getInfo(CommandObject object) {
         XEmbedBuilder builder = new XEmbedBuilder(object);
         if (isSetting()) {
             builder.withTitle("Channel Setting - " + name());
@@ -68,7 +68,7 @@ public interface ChannelSetting {
         return builder;
     }
 
-    default String toggleSetting(GuildConfig config, long channelID) {
+    public String toggleSetting(GuildConfig config, long channelID) {
         ArrayList<ChannelSettingObject> objects = config.getChannelSettings();
         boolean isFound = false;
         for (ChannelSettingObject s : objects) {
@@ -111,7 +111,7 @@ public interface ChannelSetting {
         return "> Error toggling channel setting.";
     }
 
-    default String validate() {
+    public String validate() {
         StringBuilder response = new StringBuilder();
         boolean isError = false;
         response.append(Utility.formatError(this));

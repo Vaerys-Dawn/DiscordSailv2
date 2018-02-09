@@ -8,7 +8,7 @@ import com.github.vaerys.templates.DMCommand;
 
 import java.util.ListIterator;
 
-public class UnBlockUser implements DMCommand {
+public class UnBlockUser extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         GlobalData globalData = Globals.getGlobalData();
@@ -47,5 +47,10 @@ public class UnBlockUser implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

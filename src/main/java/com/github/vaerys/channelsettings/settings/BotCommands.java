@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 09/04/2017.
  */
-public class BotCommands implements ChannelSetting {
+public class BotCommands extends ChannelSetting {
     @Override
     public String name() {
         return Command.CHANNEL_BOT_COMMANDS;

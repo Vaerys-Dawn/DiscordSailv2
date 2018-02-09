@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 05/02/2017.
  */
-public class InfoDM implements DMCommand {
+public class InfoDM extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         List<Command> commands = command.guild.getAllCommands(command);
@@ -95,5 +95,10 @@ public class InfoDM implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

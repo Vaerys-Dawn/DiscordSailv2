@@ -18,7 +18,7 @@ import java.util.ListIterator;
 /**
  * Created by Vaerys on 06/07/2017.
  */
-public class UserSettings implements Command {
+public class UserSettings extends Command {
     private String settings = "**Settings**\n" +
             "> DeniedXp\n" +
             "> DontShowRank\n" +
@@ -164,6 +164,11 @@ public class UserSettings implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

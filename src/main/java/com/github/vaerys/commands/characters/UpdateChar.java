@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class UpdateChar implements Command {
+public class UpdateChar extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<Long> charRoles = new ArrayList<>();
@@ -88,6 +88,11 @@ public class UpdateChar implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

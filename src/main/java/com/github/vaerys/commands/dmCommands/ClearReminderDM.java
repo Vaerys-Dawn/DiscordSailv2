@@ -7,7 +7,7 @@ import com.github.vaerys.templates.DMCommand;
 /**
  * Created by Vaerys on 19/04/2017.
  */
-public class ClearReminderDM implements DMCommand{
+public class ClearReminderDM extends DMCommand{
     @Override
     public String execute(String args, CommandObject command) {
         return new ClearReminder().execute(args,command);
@@ -36,5 +36,10 @@ public class ClearReminderDM implements DMCommand{
     @Override
     public boolean requiresArgs() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

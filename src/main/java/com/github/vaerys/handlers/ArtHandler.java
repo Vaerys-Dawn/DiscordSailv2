@@ -1,6 +1,7 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -11,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IReaction;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RequestBuffer;
 
@@ -32,26 +35,52 @@ public class ArtHandler {
         add("http://fav.me/");
     }};
 
+    public static void unPin(CommandObject command) {
+        IChannel channel = command.guild.getChannelByType(Command.CHANNEL_ART);
+        List<Long> pins = command.guild.channelData.getPinnedMessages();
+        //exit if channel is wrong
+        if (channel == null || !command.channel.get().equals(channel)) return;
+        //exit if message isn't pinned
+        if (!command.message.get().isPinned()) return;
+        for (long l : pins) {
+            if (command.message.longID == l && command.message.author.longID == command.user.longID) {
+                RequestBuffer.request(() -> channel.unpin(command.message.get()));
+                RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_REMOVE_PIN)));
+                IReaction reaction = command.message.getReationByName(Constants.EMOJI_ADD_PIN);
+                for (IUser user : reaction.getUsers()) {
+                    RequestBuffer.request(() -> command.message.get().removeReaction(user, reaction));
+                }
+                checkList(command);
+                return;
+            }
+        }
+    }
+
     public static void pinMessage(CommandObject command) {
-        List<IChannel> channelIDS = command.guild.getChannelsByType(Command.CHANNEL_ART);
+        IChannel channelIDS = command.guild.getChannelByType(Command.CHANNEL_ART);
         List<TrackLikes> likes = command.guild.channelData.getLikes();
         List<Long> pins = command.guild.channelData.getPinnedMessages();
 
         //exit if not pinning art
         if (!command.guild.config.artPinning) return;
-        //checks the list if something seems off
-//        if (pins.size() > command.guild.config.pinLimit) checkList(command);
         //exit if the art is already pinned
         if (command.message.get().isPinned()) return;
         //exit if message owner is a bot
         if (command.message.get().getAuthor().isBot()) return;
+        //exit if message has already been unpinned.
+        IReaction reaction = command.message.getReationByName(Constants.EMOJI_REMOVE_PIN);
+        if (reaction != null && reaction.getUserReacted(command.client.bot.get())) {
+            RequestBuffer.request(() ->
+                    command.message.get().removeReaction(command.user.get(), Utility.getReaction(Constants.EMOJI_ADD_PIN))).get();
+            return;
+        }
         //exit if user has art pinning denied.
         ProfileObject profile = command.user.getProfile(command.guild);
         if (profile != null && profile.getSettings().contains(UserSetting.DENY_ART_PINNING)) return;
         //exit if there is no art channel
-        if (channelIDS.size() == 0) return;
+        if (channelIDS == null) return;
         //exit if this is not the art channel
-        if (channelIDS.get(0).getLongID() != command.channel.longID) return;
+        if (channelIDS.getLongID() != command.channel.longID) return;
         //exit if there is no art to be found
         if (!checkAttachments(command) && !checkMessage(command)) return;
 
@@ -81,11 +110,11 @@ public class ArtHandler {
             //add to ping
             pins.add(command.message.longID);
             //add pin response
-            RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction("pushpin")));
+            RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_ADD_PIN)));
             //if like art
             if (command.guild.config.likeArt) {
                 //add heart
-                RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction("heart")));
+                RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_LIKE_PIN)));
                 //add to list
                 likes.add(new TrackLikes(command.message.longID));
             }
@@ -267,7 +296,7 @@ public class ArtHandler {
      *
      * @param word String that may contain a URL of a hosting website.
      * @return if param word is considered a hosting website defined by values in @hosts then return true
-     *         else return false.
+     * else return false.
      */
     public static boolean isHostingWebsite(String word) {
         for (String s : hosts) {

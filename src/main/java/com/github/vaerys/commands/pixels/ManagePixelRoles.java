@@ -11,7 +11,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 04/07/2017.
  */
-public class ManagePixelRoles implements Command {
+public class ManagePixelRoles extends Command {
 
     private static String modes = "**Modes**\n" +
             "> Any positive number up to 256\n" +
@@ -126,6 +126,11 @@ public class ManagePixelRoles implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

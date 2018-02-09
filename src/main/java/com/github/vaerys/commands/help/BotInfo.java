@@ -9,7 +9,7 @@ import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class BotInfo implements Command {
+public class BotInfo extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -69,6 +69,11 @@ public class BotInfo implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -13,7 +13,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by AndrielChaoti 22-Aug-17
  */
-public class EditXp implements Command {
+public class EditXp extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -122,6 +122,11 @@ public class EditXp implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

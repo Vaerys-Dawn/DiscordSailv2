@@ -6,7 +6,7 @@ import com.github.vaerys.templates.DMCommand;
 /**
  * Created by Vaerys on 15/07/2017.
  */
-public class TestDM implements DMCommand {
+public class TestDM extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
 //        for (IChannel c : command.client.getGuildByID(176434793674833920L).getChannels()) {
@@ -42,5 +42,10 @@ public class TestDM implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

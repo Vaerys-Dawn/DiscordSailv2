@@ -8,7 +8,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 31/05/2017.
  */
-public class SetPlayingStatus implements Command {
+public class SetPlayingStatus extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         RequestHandler.changePresence(args);
@@ -53,6 +53,11 @@ public class SetPlayingStatus implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

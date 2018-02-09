@@ -15,7 +15,7 @@ import java.io.File;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class GetCCData implements Command {
+public class GetCCData extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
@@ -81,6 +81,11 @@ public class GetCCData implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

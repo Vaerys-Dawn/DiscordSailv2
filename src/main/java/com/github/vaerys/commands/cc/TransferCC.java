@@ -19,7 +19,7 @@ import java.nio.file.Paths;
  * Created by Vaerys on 01/02/2017.
  */
 @Deprecated
-public class TransferCC implements Command {
+public class TransferCC extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         String filePath = Constants.DIRECTORY_OLD_FILES + command.guild.longID + "_CustomCommands.json";
@@ -97,6 +97,11 @@ public class TransferCC implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -7,7 +7,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class EnterVote implements Command {
+public class EnterVote extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.config.compVoting) {
@@ -55,6 +55,11 @@ public class EnterVote implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

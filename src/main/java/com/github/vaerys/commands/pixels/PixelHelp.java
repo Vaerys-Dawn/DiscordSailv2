@@ -21,7 +21,7 @@ import java.util.Random;
 /**
  * Created by Vaerys on 01/07/2017.
  */
-public class PixelHelp implements Command {
+public class PixelHelp extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -193,6 +193,11 @@ public class PixelHelp implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -9,7 +9,7 @@ import sx.blah.discord.handle.obj.IEmoji;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.MessageTokenizer;
 
-public class SetLevelUpReaction implements Command {
+public class SetLevelUpReaction extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -72,6 +72,11 @@ public class SetLevelUpReaction implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.text.NumberFormat;
 /**
  * Created by Vaerys on 01/07/2017.
  */
-public class Pixels implements Command {
+public class Pixels extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder();
@@ -126,6 +126,11 @@ public class Pixels implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

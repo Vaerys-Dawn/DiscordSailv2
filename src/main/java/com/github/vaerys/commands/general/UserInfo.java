@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Vaerys on 27/02/2017.
  */
-public class UserInfo implements Command {
+public class UserInfo extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -176,6 +176,11 @@ public class UserInfo implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

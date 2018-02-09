@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 09/04/2017.
  */
-public class Shitpost implements ChannelSetting{
+public class Shitpost extends ChannelSetting{
     @Override
     public String name() {
         return Command.CHANNEL_SHITPOST;

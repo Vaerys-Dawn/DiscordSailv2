@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class SelectChar implements Command {
+public class SelectChar extends Command {
 
     private final static Logger logger = LoggerFactory.getLogger(SelectChar.class);
 
@@ -84,6 +84,11 @@ public class SelectChar implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

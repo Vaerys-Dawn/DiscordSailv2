@@ -12,7 +12,7 @@ import sx.blah.discord.handle.obj.IUser;
 /**
  * Created by Vaerys on 05/02/2017.
  */
-public class Respond implements DMCommand {
+public class Respond extends DMCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -64,5 +64,10 @@ public class Respond implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

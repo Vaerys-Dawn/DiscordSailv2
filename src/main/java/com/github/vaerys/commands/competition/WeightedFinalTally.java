@@ -10,7 +10,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WeightedFinalTally implements Command {
+public class WeightedFinalTally extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -87,6 +87,11 @@ public class WeightedFinalTally implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

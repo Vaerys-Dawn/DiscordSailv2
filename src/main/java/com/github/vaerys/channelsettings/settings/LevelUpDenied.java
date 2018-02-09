@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 04/07/2017.
  */
-public class LevelUpDenied implements ChannelSetting {
+public class LevelUpDenied extends ChannelSetting {
     @Override
     public String name() {
         return Command.CHANNEL_LEVEL_UP_DENIED;

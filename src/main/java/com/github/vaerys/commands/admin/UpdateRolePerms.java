@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 06/02/2017.
  */
-public class UpdateRolePerms implements Command {
+public class UpdateRolePerms extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         List<IRole> parentRole = Utility.getRolesByName(command.guild.get(), args);
@@ -81,6 +81,11 @@ public class UpdateRolePerms implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

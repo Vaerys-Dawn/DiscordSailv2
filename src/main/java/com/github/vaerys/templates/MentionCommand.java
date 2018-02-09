@@ -7,13 +7,15 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public interface MentionCommand extends Command {
+public abstract class MentionCommand extends Command {
+
     @Override
-    default String getCommand(CommandObject command) {
+    public String getCommand(CommandObject command) {
         return "@" + command.client.bot.name + " " + names()[0];
     }
 
-    default boolean isCall(String args, CommandObject command) {
+    @Override
+    public boolean isCall(String args, CommandObject command) {
         SplitFirstObject mention = new SplitFirstObject(args);
         if (mention.getRest() == null) {
             return false;
@@ -34,7 +36,7 @@ public interface MentionCommand extends Command {
     }
 
     @Override
-    default String getArgs(String args, CommandObject command) {
+    public String getArgs(String args, CommandObject command) {
         SplitFirstObject mention = new SplitFirstObject(args);
         SplitFirstObject call = new SplitFirstObject(mention.getRest());
         if (call.getRest() == null) {
@@ -43,28 +45,28 @@ public interface MentionCommand extends Command {
         return call.getRest();
     }
 
-    @Override
-    default String type() {
+    public String type() {
         return Command.TYPE_MENTION;
     }
 
     @Override
-    default String dualType() {
+    public void init() {
+
+    }
+
+    public String dualType() {
         return null;
     }
 
-    @Override
-    default String dualDescription() {
+    public String dualDescription() {
         return null;
     }
 
-    @Override
-    default Permissions[] dualPerms() {
+    public Permissions[] dualPerms() {
         return new Permissions[0];
     }
 
-    @Override
-    default String dualUsage() {
+    public String dualUsage() {
         return null;
     }
 }

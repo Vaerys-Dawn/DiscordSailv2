@@ -14,7 +14,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.time.DayOfWeek;
 import java.util.stream.Collectors;
 
-public class EventSetup implements Command {
+public class EventSetup extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -340,6 +340,11 @@ public class EventSetup implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class SilentReport extends Report implements Command {
+public class SilentReport extends Report {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -33,5 +33,10 @@ public class SilentReport extends Report implements Command {
     @Override
     public String usage() {
         return "[@User] [Report]";
+    }
+
+    @Override
+    public void init() {
+
     }
 }

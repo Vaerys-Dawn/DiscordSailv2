@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 09/04/2017.
  */
-public class Servers implements ChannelSetting {
+public class Servers extends ChannelSetting {
     @Override
     public String name() {
         return Command.CHANNEL_SERVERS;

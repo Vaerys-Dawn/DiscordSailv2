@@ -7,7 +7,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 30/06/2017.
  */
-public class SetBioRolePrefix implements Command {
+public class SetBioRolePrefix extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (args == null || args.isEmpty()){
@@ -60,6 +60,11 @@ public class SetBioRolePrefix implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

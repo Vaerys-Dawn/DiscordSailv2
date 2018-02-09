@@ -12,7 +12,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.util.List;
 
 
-public class ListTags implements Command {
+public class ListTags extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -72,6 +72,11 @@ public class ListTags implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

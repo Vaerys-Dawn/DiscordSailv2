@@ -16,7 +16,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 
-public class ModNote implements Command {
+public class ModNote extends Command {
 
     private static final Logger logger = LoggerFactory.getLogger(ModNote.class);
 
@@ -217,6 +217,11 @@ public class ModNote implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     //region dual-mode(unused)

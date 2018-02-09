@@ -11,96 +11,94 @@ import java.util.Arrays;
 /**
  * Created by Vaerys on 13/03/2017.
  */
-public interface SlashCommand extends Command {
+public abstract class SlashCommand extends Command {
 
-    @Override
-    default String description(CommandObject command) {
+    public String description(CommandObject command) {
         return "Returns with " + execute(null, null) + ".";
     }
 
-    @Override
-    default String usage() {
+    public String usage() {
         return null;
     }
 
-    @Override
-    default String type() {
+
+    public String type() {
         return TYPE_SLASH;
     }
 
-    @Override
-    default String channel() {
+
+    public String channel() {
         return null;
     }
 
-    @Override
-    default Permissions[] perms() {
+
+    public Permissions[] perms() {
         return new Permissions[0];
     }
 
-    @Override
-    default boolean requiresArgs() {
+
+    public boolean requiresArgs() {
+        return false;
+    }
+
+    public boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    default boolean doAdminLogging() {
-        return false;
+    public void init() {
+
     }
 
-    @Override
-    default String dualDescription() {
+    public String dualDescription() {
         return null;
     }
 
-    @Override
-    default String dualUsage() {
+    public String dualUsage() {
         return null;
     }
 
-    @Override
-    default String dualType() {
+    public String dualType() {
         return null;
     }
 
-    @Override
-    default Permissions[] dualPerms() {
+    public Permissions[] dualPerms() {
         return new Permissions[0];
     }
 
     @Override
-    default String getCommand(CommandObject command) {
+    public String getCommand(CommandObject command) {
         return "/" + names()[0];
     }
 
     @Override
-    default String getUsage(CommandObject command) {
+    public String getUsage(CommandObject command) {
         return getCommand(command);
     }
 
     @Override
-    default String getDualUsage(CommandObject command) {
+    public String getDualUsage(CommandObject command) {
         return getCommand(command);
     }
 
     @Override
-    default String missingArgs(CommandObject command) {
+    public String missingArgs(CommandObject command) {
         return null;
     }
 
     @Override
-    default boolean isCall(String args, CommandObject command) {
+    public boolean isCall(String args, CommandObject command) {
         SplitFirstObject object = new SplitFirstObject(args);
         return object.getFirstWord().equalsIgnoreCase(getCommand(command));
     }
 
     @Override
-    default String getArgs(String args, CommandObject command) {
+    public String getArgs(String args, CommandObject command) {
         return null;
     }
 
     @Override
-    default XEmbedBuilder getCommandInfo(CommandObject command) {
+    public XEmbedBuilder getCommandInfo(CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(getCommand(command));
         builder.withDescription(description(command));
@@ -111,7 +109,7 @@ public interface SlashCommand extends Command {
     }
 
     @Override
-    default String validate() {
+    public String validate() {
         StringBuilder response = new StringBuilder();
         boolean isErrored = false;
         response.append("\n>> Begin Error Report: " + this.getClass().getName() + " <<\n");

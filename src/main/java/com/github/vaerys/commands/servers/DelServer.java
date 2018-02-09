@@ -7,7 +7,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class DelServer implements Command {
+public class DelServer extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         return command.guild.servers.deleteServer(command.user.get().getLongID(), args, command.guild.get());
@@ -51,6 +51,11 @@ public class DelServer implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

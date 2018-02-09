@@ -3,91 +3,97 @@ package com.github.vaerys.templates;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
 /**
  * Created by Vaerys on 29/01/2017.
  */
-public interface Command {
+public abstract class Command {
     //Type Constants
-    String TYPE_GENERAL = "General";
-    String TYPE_ADMIN = "Admin";
-    String TYPE_ROLE_SELECT = "Role";
-    String TYPE_CHARACTER = "Chars";
-    String TYPE_SERVERS = "Servers";
-    String TYPE_CC = "CC";
-    String TYPE_HELP = "Help";
-    String TYPE_COMPETITION = "Comp";
-    String TYPE_DM = "DM";
-    String TYPE_CREATOR = "Creator";
-    String TYPE_PIXEL = "Pixels";
-    String TYPE_GROUPS = "Groups";
-    String TYPE_SLASH = "Slash";
-    String TYPE_MENTION = "Mention";
+    public static final String TYPE_GENERAL = "General";
+    public static final String TYPE_ADMIN = "Admin";
+    public static final String TYPE_ROLE_SELECT = "Role";
+    public static final String TYPE_CHARACTER = "Chars";
+    public static final String TYPE_SERVERS = "Servers";
+    public static final String TYPE_CC = "CC";
+    public static final String TYPE_HELP = "Help";
+    public static final String TYPE_COMPETITION = "Comp";
+    public static final String TYPE_DM = "DM";
+    public static final String TYPE_CREATOR = "Creator";
+    public static final String TYPE_PIXEL = "Pixels";
+    public static final String TYPE_GROUPS = "Groups";
+    public static final String TYPE_SLASH = "Slash";
+    public static final String TYPE_MENTION = "Mention";
 
     //Channel Constants
-    String CHANNEL_GENERAL = "General";
-    String CHANNEL_SERVERS = "Servers";
-    String CHANNEL_BOT_COMMANDS = "BotCommands";
-    String CHANNEL_SERVER_LOG = "ServerLog";
-    String CHANNEL_ADMIN_LOG = "AdminLog";
-    String CHANNEL_ADMIN = "Admin";
-    String CHANNEL_INFO = "Info";
-    String CHANNEL_SHITPOST = "ShitPost";
-    String CHANNEL_DONT_LOG = "DontLog";
-    String CHANNEL_ART = "Art";
-    String CHANNEL_GROUPS = "Groups";
-    String CHANNEL_XP_DENIED = "XpDenied";
-    String CHANNEL_PIXELS = "Pixels";
-    String CHANNEL_LEVEL_UP = "LevelUp";
-    String CHANNEL_LEVEL_UP_DENIED = "LevelUpDenied";
-    String CHANNEL_DM = "DirectMessages";
+    public static final String CHANNEL_GENERAL = "General";
+    public static final String CHANNEL_SERVERS = "Servers";
+    public static final String CHANNEL_BOT_COMMANDS = "BotCommands";
+    public static final String CHANNEL_SERVER_LOG = "ServerLog";
+    public static final String CHANNEL_ADMIN_LOG = "AdminLog";
+    public static final String CHANNEL_ADMIN = "Admin";
+    public static final String CHANNEL_INFO = "Info";
+    public static final String CHANNEL_SHITPOST = "ShitPost";
+    public static final String CHANNEL_DONT_LOG = "DontLog";
+    public static final String CHANNEL_ART = "Art";
+    public static final String CHANNEL_GROUPS = "Groups";
+    public static final String CHANNEL_XP_DENIED = "XpDenied";
+    public static final String CHANNEL_PIXELS = "Pixels";
+    public static final String CHANNEL_LEVEL_UP = "LevelUp";
+    public static final String CHANNEL_LEVEL_UP_DENIED = "LevelUpDenied";
+    public static final String CHANNEL_DM = "DirectMessages";
 
-    String spacer = "\u200B";
-    String indent = "    ";
-    String codeBlock = "```";
-    String ownerOnly = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
+    public static final String spacer = "\u200B";
+    public static final String indent = "    ";
+    public static final String codeBlock = "```";
+    public static final String ownerOnly = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
 
 
-    String execute(String args, CommandObject command);
+    public List<SubCommandObject> subCommands = new LinkedList<>();
+
+    public abstract String execute(String args, CommandObject command);
 
     //descriptors
-    String[] names();
+    public abstract String[] names();
 
-    String description(CommandObject command);
+    public abstract String description(CommandObject command);
 
-    String usage();
+    public abstract String usage();
 
-    String type();
+    public abstract String type();
 
-    String channel();
+    public abstract String channel();
 
-    Permissions[] perms();
+    public abstract Permissions[] perms();
 
-    boolean requiresArgs();
+    public abstract boolean requiresArgs();
 
-    boolean doAdminLogging();
+    public abstract boolean doAdminLogging();
 
-    String dualDescription();
+    public abstract void init();
 
-    String dualUsage();
+    public abstract String dualDescription();
 
-    String dualType();
+    public abstract String dualUsage();
 
-    Permissions[] dualPerms();
+    public abstract String dualType();
 
-    default String getCommand(CommandObject command) {
+    public abstract Permissions[] dualPerms();
+
+    public String getCommand(CommandObject command) {
         return command.guild.config.getPrefixCommand() + names()[0];
     }
 
-    default String getUsage(CommandObject command) {
+    public String getUsage(CommandObject command) {
         if (usage() == null || usage().isEmpty()) {
             return getCommand(command);
         } else {
@@ -95,7 +101,7 @@ public interface Command {
         }
     }
 
-    default String getDualUsage(CommandObject command) {
+    public String getDualUsage(CommandObject command) {
         if (dualUsage() == null || dualUsage().isEmpty()) {
             return getUsage(command);
         } else {
@@ -103,11 +109,11 @@ public interface Command {
         }
     }
 
-    default String missingArgs(CommandObject command) {
+    public String missingArgs(CommandObject command) {
         return ">> **" + getUsage(command) + "** <<";
     }
 
-    default boolean isCall(String args, CommandObject command) {
+    public boolean isCall(String args, CommandObject command) {
         SplitFirstObject call = new SplitFirstObject(args);
         for (String s : names()) {
             if ((command.guild.config.getPrefixCommand() + s).equalsIgnoreCase(call.getFirstWord())) {
@@ -117,7 +123,7 @@ public interface Command {
         return false;
     }
 
-    default String getArgs(String args, CommandObject command) {
+    public String getArgs(String args, CommandObject command) {
         SplitFirstObject call = new SplitFirstObject(args);
         if (call.getRest() == null) {
             return "";
@@ -125,7 +131,7 @@ public interface Command {
         return call.getRest();
     }
 
-    default XEmbedBuilder getCommandInfo(CommandObject command) {
+    public XEmbedBuilder getCommandInfo(CommandObject command) {
         XEmbedBuilder infoEmbed = new XEmbedBuilder(command);
 
         //command info
@@ -185,7 +191,7 @@ public interface Command {
         return infoEmbed;
     }
 
-    default String validate() {
+    public String validate() {
         StringBuilder response = new StringBuilder();
         boolean isError = false;
         response.append(Utility.formatError(this));
@@ -238,7 +244,7 @@ public interface Command {
         }
     }
 
-    default boolean isSubtype(CommandObject command, String subType) {
+    public boolean isSubtype(CommandObject command, String subType) {
         return command.message.get().getContent().toLowerCase().startsWith(command.guild.config.getPrefixCommand() + subType.toLowerCase());
     }
 }

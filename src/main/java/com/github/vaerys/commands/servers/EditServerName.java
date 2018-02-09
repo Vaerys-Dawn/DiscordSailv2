@@ -10,7 +10,7 @@ import java.util.Arrays;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class EditServerName implements Command{
+public class EditServerName extends Command{
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<String> splitArgs = new ArrayList<>(Arrays.asList(args.split(" ")));
@@ -58,6 +58,11 @@ public class EditServerName implements Command{
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -59,6 +59,7 @@ public class CommandInit {
         commands.add(new PurgeBannedData());
         commands.add(new SetPinLimit());
         commands.add(new SetRuleCode());
+        commands.add(new AdminEcho());
         //General commands
         commands.add(new GetAvatar());
         commands.add(new Hello());

@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 01/07/2017.
  */
-public class ChannelStats implements Command {
+public class ChannelStats extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
@@ -111,6 +111,11 @@ public class ChannelStats implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

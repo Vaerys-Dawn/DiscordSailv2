@@ -7,7 +7,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class Module implements Command {
+public class Module extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         return new Toggle().getContent(args, command, true, this);
@@ -51,6 +51,11 @@ public class Module implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

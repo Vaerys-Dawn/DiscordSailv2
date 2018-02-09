@@ -148,7 +148,7 @@ public class PatreonAPI {
             connection.setRequestProperty("Authorization", "Bearer ".concat(this.accessToken));
             return connection.getInputStream();
         } catch (IOException e) {
-            LOG.debug(e.getMessage());
+            LOG.trace(e.getMessage());
             throw e;
         }
     }

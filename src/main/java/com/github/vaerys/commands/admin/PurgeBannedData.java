@@ -9,7 +9,7 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ListIterator;
 
-public class PurgeBannedData implements Command {
+public class PurgeBannedData extends Command {
     long purgedProfiles = 0;
     long purgedCCs = 0;
     long purgedCharacters = 0;
@@ -144,6 +144,11 @@ public class PurgeBannedData implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

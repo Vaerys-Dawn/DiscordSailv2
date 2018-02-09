@@ -9,7 +9,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class Server implements Command {
+public class Server extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         for (ServerObject s : command.guild.servers.getServers()) {
@@ -75,6 +75,11 @@ public class Server implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

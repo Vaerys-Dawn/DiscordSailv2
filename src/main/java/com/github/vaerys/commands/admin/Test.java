@@ -8,7 +8,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class Test implements Command {
+public class Test extends Command {
 
     String nothing = "> You didn't see anything.";
 
@@ -71,6 +71,11 @@ public class Test implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -11,10 +11,12 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by Vaerys on 02/03/2017.
  */
-public class Mute implements Command {
+public class Mute extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -38,6 +40,7 @@ public class Mute implements Command {
             return "> Cannot Mute/UnMute " + muted.displayName + ". User hierarchy higher than yours.";
         StringHandler reason = new StringHandler(userCall.getRest());
         long timeSecs = Utility.getRepeatTimeValue(reason);
+        boolean isStrike = false;
 //        if (reason.toString().isEmpty()) return "> Reason Cannot be empty";
 
         //mute the offender
@@ -49,6 +52,11 @@ public class Mute implements Command {
 
         if (timeSecs > 0) {
             timeValue = " for " + Utility.formatTime(timeSecs, true);
+        }
+
+        if (Pattern.compile("(^⚠ | ⚠|⚠)").matcher(reason.toString()).find()) {
+            reason.replaceRegex("(^⚠ | ⚠|⚠)", "");
+            isStrike = true;
         }
 
         //builds prefix
@@ -63,7 +71,7 @@ public class Mute implements Command {
             RequestHandler.sendMessage(response, adminChannel);
         }
         //adds note to modnotes
-        muted.getProfile(command.guild).addSailModNote(response, command);
+        muted.getProfile(command.guild).addSailModNote(response, command, isStrike);
         return content + ".";
     }
 
@@ -74,7 +82,7 @@ public class Mute implements Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows for Users with ManageMessages to mute a user.\n" +
+        return "Mutes a user and adds a modnote to the user. if a ⚠ emoji is added to the mute reason the note will be a strike.\n" +
                 "\n" +
                 "**Sub Command - " + command.guild.config.getPrefixCommand() + "UnMute [@User]**\n" +
                 "**Desc:** Allows for Users with ManageMessages to remove a mute from a user.\n";
@@ -108,6 +116,11 @@ public class Mute implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

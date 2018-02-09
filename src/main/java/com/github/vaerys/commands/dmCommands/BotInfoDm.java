@@ -8,4 +8,9 @@ public class BotInfoDm extends BotInfo {
     public String channel() {
         return CHANNEL_DM;
     }
+
+    @Override
+    public void init() {
+
+    }
 }

@@ -8,7 +8,7 @@ import sx.blah.discord.handle.obj.IUser;
 /**
  * Created by Vaerys on 12/06/2017.
  */
-public class QuickRespond implements DMCommand {
+public class QuickRespond extends DMCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -43,5 +43,10 @@ public class QuickRespond implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

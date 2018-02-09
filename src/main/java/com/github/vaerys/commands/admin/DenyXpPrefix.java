@@ -8,7 +8,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
-public class DenyXpPrefix implements Command {
+public class DenyXpPrefix extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -86,6 +86,11 @@ public class DenyXpPrefix implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

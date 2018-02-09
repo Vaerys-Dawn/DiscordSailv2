@@ -5,7 +5,7 @@ import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class BotHelp implements Command {
+public class BotHelp extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -102,6 +102,11 @@ public class BotHelp implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

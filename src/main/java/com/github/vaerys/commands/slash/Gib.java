@@ -6,7 +6,7 @@ import com.github.vaerys.templates.SlashCommand;
 /**
  * Created by Vaerys on 13/03/2017.
  */
-public class Gib implements SlashCommand {
+public class Gib extends SlashCommand {
     @Override
     public String execute(String args, CommandObject command) {
         return "༼ つ ◕_◕ ༽つ";
@@ -15,5 +15,10 @@ public class Gib implements SlashCommand {
     @Override
     public String[] names() {
         return new String[]{"Gib"};
+    }
+
+    @Override
+    public void init() {
+
     }
 }

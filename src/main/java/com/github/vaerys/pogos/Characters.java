@@ -61,4 +61,16 @@ public class Characters extends GuildFile {
             }
         }
     }
+
+    public void updateVars(IGuild guild) {
+        for (CharacterObject c : characters) {
+            ListIterator iterator = c.getRoleIDs().listIterator();
+            while (iterator.hasNext()) {
+                long id = (long) iterator.next();
+                if (guild.getRoleByID(id) == null) {
+                    iterator.remove();
+                }
+            }
+        }
+    }
 }

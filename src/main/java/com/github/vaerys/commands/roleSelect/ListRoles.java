@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class ListRoles implements Command {
+public class ListRoles extends Command {
 
     public static XEmbedBuilder getList(CommandObject command) {
         String title = "> Here are the **Cosmetic** roles you can choose from:\n";
@@ -72,6 +72,11 @@ public class ListRoles implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

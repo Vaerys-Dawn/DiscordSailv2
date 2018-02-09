@@ -15,7 +15,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
-public class Rank implements Command {
+public class Rank extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -142,6 +142,11 @@ public class Rank implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

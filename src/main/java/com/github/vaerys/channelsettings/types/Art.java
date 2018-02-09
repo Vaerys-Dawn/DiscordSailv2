@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 12/05/2017.
  */
-public class Art implements ChannelSetting {
+public class Art extends ChannelSetting {
     @Override
     public String name() {
         return Command.CHANNEL_ART;

@@ -4,7 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.MentionCommand;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class SetPrefixCC implements MentionCommand {
+public class SetPrefixCC extends MentionCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -58,6 +58,11 @@ public class SetPrefixCC implements MentionCommand {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

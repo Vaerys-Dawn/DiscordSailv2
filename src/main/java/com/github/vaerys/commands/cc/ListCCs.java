@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class ListCCs implements Command {
+public class ListCCs extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (args.length() > 3) {
@@ -139,6 +139,11 @@ public class ListCCs implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

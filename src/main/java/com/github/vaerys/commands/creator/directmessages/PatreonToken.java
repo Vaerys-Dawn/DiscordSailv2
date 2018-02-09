@@ -8,7 +8,7 @@ import com.github.vaerys.templates.DMCommand;
 
 import java.util.ArrayList;
 
-public class PatreonToken implements DMCommand {
+public class PatreonToken extends DMCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -43,5 +43,10 @@ public class PatreonToken implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

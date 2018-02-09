@@ -172,12 +172,17 @@ public class ProfileObject {
 
     /**
      * @param contents the contents of the new mod note.
-     * @param command Used to parse in the variables needed to access the guild, channel, message,
-     *                and user objects. these objects allows access to the api.
+     * @param command  Used to parse in the variables needed to access the guild, channel, message,
+     *                 and user objects. these objects allows access to the api.
+     * @param isStrike weather the note is a strike or not.
      */
-    public void addSailModNote(String contents, CommandObject command) {
+    public void addSailModNote(String contents, CommandObject command, boolean isStrike) {
         if (modNotes == null) modNotes = new LinkedList<>();
-        modNotes.add(new ModNoteObject(contents, command.client.bot.longID, command.message.getTimestamp().toEpochSecond()));
+        modNotes.add(new ModNoteObject(contents, command.client.bot.longID, command.message.getTimestamp().toEpochSecond(), isStrike));
+    }
+
+    public void addSailModNote(String contents, CommandObject command) {
+        addSailModNote(contents, command, false);
     }
 
     public void setSettings(ArrayList<UserSetting> settings) {

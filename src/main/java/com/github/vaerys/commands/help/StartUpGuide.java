@@ -12,7 +12,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 22/02/2017.
  */
-public class StartUpGuide implements Command {
+public class StartUpGuide extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
@@ -87,6 +87,11 @@ public class StartUpGuide implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

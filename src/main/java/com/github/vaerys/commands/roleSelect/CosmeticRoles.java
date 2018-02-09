@@ -16,7 +16,7 @@ import java.util.ListIterator;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class CosmeticRoles implements Command {
+public class CosmeticRoles extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (args == null || args.isEmpty()) {
@@ -206,6 +206,11 @@ public class CosmeticRoles implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

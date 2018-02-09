@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 05/02/2017.
  */
-public class HelpDM implements DMCommand {
+public class HelpDM extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
@@ -56,5 +56,10 @@ public class HelpDM implements DMCommand {
     @Override
     public boolean requiresArgs() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

@@ -9,7 +9,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 21/03/2017.
  */
-public class ResetPlayingStatus implements Command{
+public class ResetPlayingStatus extends Command{
     @Override
     public String execute(String args, CommandObject command) {
         RequestHandler.changePresence(Globals.playing);
@@ -54,6 +54,11 @@ public class ResetPlayingStatus implements Command{
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

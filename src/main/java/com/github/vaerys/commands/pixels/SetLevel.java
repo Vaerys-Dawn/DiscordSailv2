@@ -13,7 +13,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 06/07/2017.
  */
-public class SetLevel implements Command {
+public class SetLevel extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject xpArgs = new SplitFirstObject(args);
@@ -79,6 +79,11 @@ public class SetLevel implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

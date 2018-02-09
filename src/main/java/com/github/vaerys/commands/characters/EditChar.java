@@ -10,7 +10,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 26/02/2017.
  */
-public class EditChar implements Command {
+public class EditChar extends Command {
 
     String modes = "**Modes:**\n" +
             "> Age - `Max Chars: 20`\n" +
@@ -93,6 +93,11 @@ public class EditChar implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

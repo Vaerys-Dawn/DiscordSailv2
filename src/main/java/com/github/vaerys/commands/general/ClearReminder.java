@@ -9,7 +9,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 05/04/2017.
  */
-public class ClearReminder implements Command {
+public class ClearReminder extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         ReminderObject object = null;
@@ -67,6 +67,11 @@ public class ClearReminder implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

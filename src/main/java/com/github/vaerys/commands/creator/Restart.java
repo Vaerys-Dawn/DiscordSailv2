@@ -12,7 +12,7 @@ import sx.blah.discord.util.DiscordException;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class Restart implements Command {
+public class Restart extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         RequestHandler.sendMessage("> Restarting.", command.channel.get());
@@ -67,6 +67,11 @@ public class Restart implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

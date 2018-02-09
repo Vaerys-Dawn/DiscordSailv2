@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 01/07/2017.
  */
-public class Pixels implements ChannelSetting{
+public class Pixels extends ChannelSetting{
     @Override
     public String name() {
         return Command.CHANNEL_PIXELS;

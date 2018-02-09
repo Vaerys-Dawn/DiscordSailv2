@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class FinalTally implements Command {
+public class FinalTally extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         StringBuilder builder = new StringBuilder();
@@ -78,6 +78,11 @@ public class FinalTally implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

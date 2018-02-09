@@ -1,7 +1,9 @@
 package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Utility;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IReaction;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -12,12 +14,14 @@ public class MessageObject {
     public ClientObject client;
     private IMessage object;
     public long longID;
+    public UserObject author;
 
     public MessageObject(IMessage message, GuildObject guild) {
         if (message == null) return;
         client = new ClientObject(message.getClient(), guild);
         this.object = message;
         this.longID = message.getLongID();
+        this.author = new UserObject(message.getAuthor(), guild);
     }
 
     public IMessage get() {
@@ -41,6 +45,16 @@ public class MessageObject {
     }
 
     public ZonedDateTime getTimestamp() {
-        return ZonedDateTime.ofInstant(object.getTimestamp(),ZoneOffset.UTC);
+        return ZonedDateTime.ofInstant(object.getTimestamp(), ZoneOffset.UTC);
     }
+
+    public List<IReaction> getReactions() {
+        return object.getReactions();
+    }
+
+    public IReaction getReationByName(String s){
+        return object.getReactionByEmoji(Utility.getReaction(s));
+    }
+
+
 }

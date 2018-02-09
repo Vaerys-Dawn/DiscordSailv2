@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class GetCompEntries implements Command {
+public class GetCompEntries extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.competition.getEntries().size() == 0) {
@@ -85,6 +85,11 @@ public class GetCompEntries implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

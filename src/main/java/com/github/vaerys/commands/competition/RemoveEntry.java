@@ -5,7 +5,7 @@ import com.github.vaerys.objects.CompObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class RemoveEntry implements Command {
+public class RemoveEntry extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -58,6 +58,11 @@ public class RemoveEntry implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

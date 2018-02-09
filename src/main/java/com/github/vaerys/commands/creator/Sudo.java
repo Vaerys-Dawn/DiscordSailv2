@@ -13,7 +13,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 02/02/2017.
  */
-public class Sudo implements Command {
+public class Sudo extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (!command.guild.config.debugMode) return "> Debug mode is disabled. No Sudo for you missy.";
@@ -89,6 +89,11 @@ public class Sudo implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

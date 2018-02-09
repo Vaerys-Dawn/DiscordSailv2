@@ -7,7 +7,7 @@ import com.github.vaerys.templates.Command;
 /**
  * Created by Vaerys on 31/05/2017.
  */
-public class Groups implements ChannelSetting{
+public class Groups extends ChannelSetting{
     @Override
     public String name() {
         return Command.CHANNEL_GROUPS;

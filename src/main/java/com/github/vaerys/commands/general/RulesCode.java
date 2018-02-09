@@ -9,7 +9,7 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.regex.Pattern;
 
-public class RulesCode implements Command {
+public class RulesCode extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -93,6 +93,11 @@ public class RulesCode implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

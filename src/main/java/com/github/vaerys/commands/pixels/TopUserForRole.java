@@ -13,7 +13,7 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.text.NumberFormat;
 
-public class TopUserForRole implements Command {
+public class TopUserForRole extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -99,6 +99,11 @@ public class TopUserForRole implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

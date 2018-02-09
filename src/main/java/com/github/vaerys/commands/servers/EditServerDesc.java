@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class EditServerDesc implements Command{
+public class EditServerDesc extends Command{
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<String> splitArgs = new ArrayList<>(Arrays.asList(args.split(" ")));
@@ -61,6 +61,11 @@ public class EditServerDesc implements Command{
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

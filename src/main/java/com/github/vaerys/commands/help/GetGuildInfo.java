@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class GetGuildInfo implements Command {
+public class GetGuildInfo extends Command {
 
 
     private XEmbedBuilder resetEmbed(XEmbedBuilder builder, IChannel channel, CommandObject command, int extraLength) {
@@ -253,6 +253,11 @@ public class GetGuildInfo implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

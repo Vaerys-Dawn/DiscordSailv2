@@ -7,7 +7,7 @@ import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class LastDailyMessage implements Command {
+public class LastDailyMessage extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -56,6 +56,11 @@ public class LastDailyMessage implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

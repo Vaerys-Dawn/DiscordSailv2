@@ -9,7 +9,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class Hello implements Command {
+public class Hello extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -60,6 +60,11 @@ public class Hello implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

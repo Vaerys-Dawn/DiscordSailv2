@@ -15,7 +15,7 @@ import java.util.ListIterator;
 /**
  * Created by Vaerys on 02/07/2017.
  */
-public class ProfileSettings implements Command {
+public class ProfileSettings extends Command {
 
 
     @Override
@@ -174,6 +174,11 @@ public class ProfileSettings implements Command {
     @Override
     public boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -7,7 +7,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 21/02/2017.
  */
-public class SetRateLimit implements Command {
+public class SetRateLimit extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -64,6 +64,11 @@ public class SetRateLimit implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override

@@ -5,36 +5,40 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 05/02/2017.
  */
-public interface DMCommand extends Command {
+public abstract class DMCommand extends Command {
 
     //Channel Constants
 
-    @Override
-    default String channel() {
+    public String channel() {
         return CHANNEL_DM;
     }
 
-    default Permissions[] perms() {
+    public Permissions[] perms() {
         return new Permissions[0];
     }
 
-    default boolean doAdminLogging() {
+    public boolean doAdminLogging() {
         return false;
     }
 
-    default String dualDescription() {
+    @Override
+    public void init() {
+
+    }
+
+    public String dualDescription() {
         return null;
     }
 
-    default String dualUsage() {
+    public String dualUsage() {
         return null;
     }
 
-    default String dualType() {
+    public String dualType() {
         return null;
     }
 
-    default Permissions[] dualPerms() {
+    public Permissions[] dualPerms() {
         return new Permissions[0];
     }
 }

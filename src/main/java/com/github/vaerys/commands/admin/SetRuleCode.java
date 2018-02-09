@@ -4,7 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class SetRuleCode implements Command {
+public class SetRuleCode extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -60,6 +60,11 @@ public class SetRuleCode implements Command {
     @Override
     public boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override
