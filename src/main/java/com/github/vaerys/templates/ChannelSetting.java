@@ -156,7 +156,7 @@ public enum ChannelSetting {
      * @return the description of the channel setting
      */
     public String getDesc(CommandObject command) {
-        if (desc == null) {
+        if (command == null) {
             return desc;
         } else {
             return String.format(desc, new Report().getCommand(command), new SilentReport().getCommand(command));
