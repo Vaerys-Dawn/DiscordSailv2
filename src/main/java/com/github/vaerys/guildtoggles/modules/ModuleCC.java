@@ -1,13 +1,10 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.channelsettings.settings.CCDenied;
-import com.github.vaerys.channelsettings.settings.ChannelCC;
-import com.github.vaerys.channelsettings.settings.CreateCC;
-import com.github.vaerys.channelsettings.settings.Shitpost;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.HelpTags;
 import com.github.vaerys.guildtoggles.toggles.ShitpostFiltering;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 
@@ -46,11 +43,11 @@ public class ModuleCC extends GuildModule {
 
     @Override
     public void setup() {
-        channels.add(new Shitpost());
+        channels.add(ChannelSetting.SHITPOST);
         settings.add(new ShitpostFiltering());
-        channels.add(new ChannelCC());
-        channels.add(new CCDenied());
-        channels.add(new CreateCC());
+        channels.add(ChannelSetting.CHANNEL_CC);
+        channels.add(ChannelSetting.CC_DENIED);
+        channels.add(ChannelSetting.CREATE_CC);
     }
 
 

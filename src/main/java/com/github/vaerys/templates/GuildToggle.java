@@ -31,7 +31,7 @@ public abstract class GuildToggle {
             guild.removeCommand(c.names());
         }
         for (ChannelSetting c : channels) {
-            guild.removeChannel(c.name());
+            guild.removeChannelSetting(c.name());
         }
         for (GuildSetting s : settings) {
             guild.removeToggle(s.name());

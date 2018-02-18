@@ -1,12 +1,12 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.channelsettings.types.Art;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.SetPinLimit;
 import com.github.vaerys.guildtoggles.toggles.AutoArtPinning;
 import com.github.vaerys.guildtoggles.toggles.LikeArt;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -38,12 +38,12 @@ public class ModuleArtPinning extends GuildModule {
     @Override
     public String desc(CommandObject command) {
         return "This module allows users to pin their art to the specified art channel using the \uD83D\uDCCC reaction.\n" +
-                "Users can unpin their artworks with a ❌ reaction.";
+                "Users can unpin their artworks with a â�Œ reaction.";
     }
 
     @Override
     public void setup() {
-        channels.add(new Art());
+        channels.add(ChannelSetting.ART);
         commands.add(new SetPinLimit());
         settings.add(new AutoArtPinning());
         settings.add(new LikeArt());

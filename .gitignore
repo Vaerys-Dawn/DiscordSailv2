@@ -69,3 +69,5 @@ bot.log
 *.ttf
 .idea/dictionaries/Vaerys.xml
 *.orig
+/bin/
+/target/

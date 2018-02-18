@@ -1,8 +1,18 @@
 package com.github.vaerys.main;
 
-import com.github.vaerys.channelsettings.InitChannels;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.DayOfWeek;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandInit;
-import com.github.vaerys.commands.admin.ChannelHere;
 import com.github.vaerys.guildtoggles.ToggleInit;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.masterobjects.GuildObject;
@@ -15,17 +25,14 @@ import com.github.vaerys.pogos.DailyMessages;
 import com.github.vaerys.pogos.Events;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.templates.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GuildToggle;
+import com.github.vaerys.templates.SlashCommand;
+import com.github.vaerys.templates.TagObject;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IUser;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.DayOfWeek;
-import java.util.*;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -56,7 +63,7 @@ public class Globals {
     private static List<GuildObject> guilds = new LinkedList<>();
     public static List<Command> commands = new LinkedList<>();
     private static List<String> commandTypes = new LinkedList<>();
-    private static List<ChannelSetting> channelSettings = new LinkedList<>();
+    private static ChannelSetting[] channelSettings;
     private static List<GuildToggle> guildToggles = new LinkedList<>();
     private static List<SlashCommand> slashCommands = new LinkedList<>();
     private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
@@ -118,7 +125,7 @@ public class Globals {
         // Load Guild Toggles
         guildToggles = ToggleInit.get();
 
-        channelSettings = InitChannels.get();
+        channelSettings = ChannelSetting.values();
 
         creatorCommands = CommandInit.getCreatorCommands();
 
@@ -130,14 +137,7 @@ public class Globals {
             System.exit(Constants.EXITCODE_CONF_ERROR);
         }
 
-        //auto remover code for Commands.Admin.ChannelHere, will remove if channels are not in use.
-        if (channelSettings.size() == 0) {
-            for (int i = 0; i < commands.size(); i++) {
-                if (commands.get(i).names()[0].equalsIgnoreCase(new ChannelHere().names()[0])) {
-                    commands.remove(i);
-                }
-            }
-        }
+
 
 
         //Init Command Types.
@@ -157,7 +157,7 @@ public class Globals {
         logger.info(commands.size() + " Commands Loaded.");
         logger.info(creatorCommands.size() + " Creator Commands Loaded.");
         logger.info(commandTypes.size() + " Command Types Loaded.");
-        logger.info(channelSettings.size() + " Channel Types Loaded.");
+        logger.info(channelSettings.length + " Channel Types Loaded.");
         logger.info(guildToggles.size() + " Guild Toggles Loaded.");
         logger.info(TagList.get().size() + " Tags Loaded.");
     }
@@ -341,7 +341,7 @@ public class Globals {
         return commandTypes;
     }
 
-    public static List<ChannelSetting> getChannelSettings() {
+    public static ChannelSetting[] getChannelSettings() {
         return channelSettings;
     }
 
