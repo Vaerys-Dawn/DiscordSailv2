@@ -27,18 +27,18 @@ public class ChannelStats extends Command {
 
         if (args != null && !args.isEmpty()) {
             for (ChannelSetting s : command.guild.channelSettings) {
-                if (s.name().equalsIgnoreCase(args)) {
-                    List<IChannel> channels = command.guild.getChannelsByType(s.name());
+                if (s.toString().equalsIgnoreCase(args)) {
+                    List<IChannel> channels = command.guild.getChannelsByType(s.toString());
                     List<String> channelMentions = Utility.getChannelMentions(channels);
                     if (channels.size() != 0) {
-                        builder.appendField(s.name(), Utility.listFormatter(channelMentions, true), false);
+                        builder.appendField(s.toString(), Utility.listFormatter(channelMentions, true), false);
                         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
                         return null;
                     } else {
                         if (s.isSetting()) {
-                            return "> Could not find any channels with the **" + s.name() + "** setting enabled.";
+                            return "> Could not find any channels with the **" + s.toString() + "** setting enabled.";
                         } else {
-                            return "> Could not find a channel with the **" + s.name() + "** type enabled.";
+                            return "> Could not find a channel with the **" + s.toString() + "** type enabled.";
                         }
                     }
                 }
@@ -49,11 +49,11 @@ public class ChannelStats extends Command {
         for (ChannelSettingObject c : command.guild.channelData.getChannelSettings()) {
             if (c.getChannelIDs().contains(command.channel.longID)) {
                 for (ChannelSetting setting : Globals.getChannelSettings()) {
-                    if (c.getType().equalsIgnoreCase(setting.name())) {
+                    if (c.getType() == setting) {
                         if (setting.isSetting()) {
-                            channelSettings.add(c.getType());
+                            channelSettings.add(c.getType().toString());
                         } else {
-                            channelTypes.add(c.getType());
+                            channelTypes.add(c.getType().toString());
                         }
                     }
                 }
