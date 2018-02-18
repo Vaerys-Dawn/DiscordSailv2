@@ -1,6 +1,7 @@
 package com.github.vaerys.objects;
 
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.templates.ChannelSetting;
 
 import java.util.ArrayList;
 
@@ -8,19 +9,19 @@ import java.util.ArrayList;
  * Created by Vaerys on 07/04/2017.
  */
 public class ChannelSettingObject {
-    String type;
+    ChannelSetting type;
     ArrayList<Long> channelIDs = new ArrayList<>();
 
-    public ChannelSettingObject(String type, long id) {
+    public ChannelSettingObject(ChannelSetting type, long id) {
         this.type = type;
         channelIDs.add(id);
     }
 
     public ChannelSettingObject(String type) {
-        this.type = type;
+        this.type = ChannelSetting.get(type);
     }
 
-    public String getType() {
+    public ChannelSetting getType() {
         return type;
     }
 

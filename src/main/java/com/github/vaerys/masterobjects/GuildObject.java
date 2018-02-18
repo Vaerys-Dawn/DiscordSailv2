@@ -332,7 +332,7 @@ public class GuildObject {
     public List<IChannel> getChannelsByType(String type) {
         List<IChannel> channels = new ArrayList<>();
         for (ChannelSettingObject c : channelData.getChannelSettings()) {
-            if (c.getType().equalsIgnoreCase(type)) {
+            if (c.getType().toString().equalsIgnoreCase(type)) {
                 for (long s : c.getChannelIDs()) {
                     IChannel channel = getChannelByID(s);
                     if (channel != null) {

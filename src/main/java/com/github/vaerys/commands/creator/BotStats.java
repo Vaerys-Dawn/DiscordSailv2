@@ -31,7 +31,7 @@ public class BotStats extends Command {
         StringHandler handler = new StringHandler();
         handler.append("**Total Servers**: ").append(command.client.get().getGuilds().size());
         handler.append("\n**Total Active Threads**: ").append(Thread.activeCount());
-        handler.append("\n**CPU Usage**: ").append(nf.format(usage / 100)).append("%");
+        handler.append("\n**CPU Usage**: ").append(nf.format(usage * 100)).append("%");
         handler.append("\n**Memory Usage**: ");
         nf.setMaximumFractionDigits(1);
         handler.append(nf.format(totalMemory / mb)).append("MB total\t");

@@ -79,7 +79,6 @@ public class PatchHandler {
         FileHandler.writeToJson(patch.getPath(), patch.getObject());
     }
 
-
     private static void changeChannelSettingsToEnum(IGuild guild) {
         PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
                 1.2, "Change_ChannelSettings_To_Enum");
@@ -91,17 +90,15 @@ public class PatchHandler {
             String type = object.get("type").getAsString();
             object.remove("type");
             ChannelSetting setting = ChannelSetting.get(type);
-            if (setting == null){
+            if (setting == null) {
                 channelSettings.remove(i);
                 i--;
-            }else {
+            } else {
                 object.addProperty("type", setting.name());
             }
         }
-//        for (JsonElement channelSetting : channelSettings) {
-
-//        }
         finalizePatch(json);
+    }
 
     private static void moveChannelsToChannelData(IGuild guild) {
         PatchObject jsonConfig = getJsonConfig(guild, GuildConfig.FILE_PATH,
