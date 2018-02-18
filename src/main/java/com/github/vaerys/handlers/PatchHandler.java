@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 05/04/2017.
@@ -52,7 +53,6 @@ public class PatchHandler {
     }
 
 
-
     public static void preInitPatches() {
         // 1.0 patches
         overhaulGlobalData();
@@ -86,12 +86,21 @@ public class PatchHandler {
         if (json == null) return;
 
         JsonArray channelSettings = json.getObject().getAsJsonArray("channelSettings");
-        for (JsonElement channelSetting : channelSettings) {
-            JsonObject object = channelSetting.getAsJsonObject();
+        for (int i = 0; i < channelSettings.size(); i++) {
+            JsonObject object = channelSettings.get(i).getAsJsonObject();
             String type = object.get("type").getAsString();
             object.remove("type");
-            object.addProperty("type", ChannelSetting.get(type).name());
+            ChannelSetting setting = ChannelSetting.get(type);
+            if (setting == null){
+                channelSettings.remove(i);
+                i--;
+            }else {
+                object.addProperty("type", setting.name());
+            }
         }
+//        for (JsonElement channelSetting : channelSettings) {
+
+//        }
         finalizePatch(json);
     }
 
