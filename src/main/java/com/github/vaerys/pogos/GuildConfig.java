@@ -3,6 +3,7 @@ package com.github.vaerys.pogos;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.OffenderObject;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
  */
 public class GuildConfig extends GuildFile {
     public static final String FILE_PATH = "Guild_Config.json";
-    private double fileVersion = 1.1;
+    private double fileVersion = 1.2;
     String prefixCommand = Globals.defaultPrefixCommand;
     String prefixCC = Globals.defaultPrefixCC;
     String guildName = "";
@@ -98,7 +99,7 @@ public class GuildConfig extends GuildFile {
     private ArrayList<String> xpDeniedPrefixes = new ArrayList<>();
 
     // TODO: 04/10/2016 let the mention limit be customisable.
-    ArrayList<ChannelSettingObject> channelSettings = new ArrayList<>();
+
     ArrayList<Long> cosmeticRoleIDs = new ArrayList<>();
     ArrayList<Long> modifierRoleIDs = new ArrayList<>();
     ArrayList<Long> trustedRoleIDs = new ArrayList<>();
@@ -136,36 +137,23 @@ public class GuildConfig extends GuildFile {
         this.prefixCC = prefixCC;
     }
 
-    public void addChannelSetting(String type, long id) {
-        channelSettings.add(new ChannelSettingObject(type, id));
-    }
+//    public void addChannelSetting(String type, long id) {
+//        channelSettings.add(new ChannelSettingObject(type, id));
+//    }
 
     public void setGuildName(String guildName) {
         this.guildName = guildName;
     }
 
-    public ArrayList<ChannelSettingObject> getChannelSettings() {
-        return channelSettings;
-    }
+
 
     public void updateVariables(IGuild guild) {
         //update Guild Name
         setGuildName(guild.getName());
         guildID = guild.getLongID();
-
+        GuildObject object = Globals.getGuildContent(guildID);
+        object.channelData.updateVariables(guild);
         validateRoles();
-
-        //update channels
-        for (ChannelSettingObject c : channelSettings) {
-            ListIterator iterator = c.getChannelIDs().listIterator();
-            while (iterator.hasNext()) {
-                IChannel channel = guild.getChannelByID((Long) iterator.next());
-                if (channel == null) {
-                    iterator.remove();
-                }
-            }
-        }
-
     }
 
     public void setRoleToMentionID(long roleID) {

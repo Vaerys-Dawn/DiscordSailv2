@@ -46,7 +46,7 @@ public class ChannelStats extends Command {
             return "> Could not any channel settings with that name.";
         }
 
-        for (ChannelSettingObject c : command.guild.config.getChannelSettings()) {
+        for (ChannelSettingObject c : command.guild.channelData.getChannelSettings()) {
             if (c.getChannelIDs().contains(command.channel.longID)) {
                 for (ChannelSetting setting : Globals.getChannelSettings()) {
                     if (c.getType().equalsIgnoreCase(setting.name())) {

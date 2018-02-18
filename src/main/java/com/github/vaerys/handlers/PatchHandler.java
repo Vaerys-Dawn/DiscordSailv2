@@ -3,7 +3,9 @@ package com.github.vaerys.handlers;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.DailyMessage;
+import com.github.vaerys.objects.PatchObject;
 import com.github.vaerys.pogos.*;
+import com.github.vaerys.templates.ChannelSetting;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,12 +39,19 @@ public class PatchHandler {
         removeMentionRestriction(guild);
         switchModNotesToStrikes(guild);
 
+        //1.2 for GuildConfog 1.1 for Channel Data
+        moveChannelsToChannelData(guild);
+        //1.2
+        changeChannelSettingsToEnum(guild);
+
         //1.3 fixes
         sanitizer(guild);
 
         //1.4 fixes
         removeNullPrefix(guild);
     }
+
+
 
     public static void preInitPatches() {
         // 1.0 patches
@@ -56,10 +65,56 @@ public class PatchHandler {
         fixMultipleDailies();
     }
 
-    private static void switchModNotesToStrikes(IGuild guild){
+    private static PatchObject getJsonConfig(IGuild guild, String file, double patchID, String patch) {
+        String path = Utility.getFilePath(guild.getLongID(), file);
+        // check if file exists:
+        if (!FileHandler.exists(path)) return null;
+        JsonObject json = FileHandler.fileToJsonObject(path);
+        if (checkPatch(patchID, guild, patch, json)) return null;
+        return new PatchObject(json, path, patchID);
+    }
+
+    private static void finalizePatch(PatchObject patch) {
+        newPatchID(patch.getPatchID(), patch.getObject());
+        FileHandler.writeToJson(patch.getPath(), patch.getObject());
+    }
+
+
+    private static void changeChannelSettingsToEnum(IGuild guild) {
+        PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
+                1.2, "Change_ChannelSettings_To_Enum");
+        if (json == null) return;
+
+        JsonArray channelSettings = json.getObject().getAsJsonArray("channelSettings");
+        for (JsonElement channelSetting : channelSettings) {
+            JsonObject object = channelSetting.getAsJsonObject();
+            String type = object.get("type").getAsString();
+            object.remove("type");
+            object.add("type", ChannelSetting.get(type));
+        }
+        finalizePatch(json);
+    }
+
+    private static void moveChannelsToChannelData(IGuild guild) {
+        PatchObject jsonConfig = getJsonConfig(guild, GuildConfig.FILE_PATH,
+                1.2, "Move_Channels_To_Channel_Data_2");
+        PatchObject jsonChannel = getJsonConfig(guild, ChannelData.FILE_PATH,
+                1.1, "Move_Channels_To_Channel_Data_1");
+        if (jsonConfig == null || jsonChannel == null) return;
+
+        JsonArray array = jsonConfig.getObject().getAsJsonArray("channelSettings");
+
+        jsonChannel.getObject().add("channelSettings", array);
+
+        finalizePatch(jsonConfig);
+        finalizePatch(jsonChannel);
+    }
+
+
+    private static void switchModNotesToStrikes(IGuild guild) {
         String path = Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH);
         // check file
-        if(!FileHandler.exists(path)) return;
+        if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.2, guild, "Update_Notes_To_Strikes", json)) return;
 
@@ -68,7 +123,7 @@ public class PatchHandler {
         guildUsers.profiles.forEach(object -> {
             if (object.modNotes == null) return;
 
-            object.modNotes.forEach( note -> {
+            object.modNotes.forEach(note -> {
                 if (note.getNote().contains("⚠")) {
                     note.setStrike(true);
                     note.setNote(note.getNote().replaceAll("(^⚠ | ⚠|⚠)", ""));

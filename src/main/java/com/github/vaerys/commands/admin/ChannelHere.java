@@ -26,7 +26,7 @@ public class ChannelHere extends Command {
         if (!args.isEmpty()) {
             for (ChannelSetting s : command.guild.channelSettings) {
                 if (args.equalsIgnoreCase(s.name())) {
-                    return s.toggleSetting(command.guild.config, command.channel.longID);
+                    return s.toggleSetting(command.guild, command.channel.longID);
                 }
 
             }

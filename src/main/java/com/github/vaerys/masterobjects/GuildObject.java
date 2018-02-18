@@ -334,7 +334,7 @@ public class GuildObject {
 
     public List<IChannel> getChannelsByType(String type) {
         List<IChannel> channels = new ArrayList<>();
-        for (ChannelSettingObject c : config.getChannelSettings()) {
+        for (ChannelSettingObject c : channelData.getChannelSettings()) {
             if (c.getType().equalsIgnoreCase(type)) {
                 for (long s : c.getChannelIDs()) {
                     IChannel channel = getChannelByID(s);

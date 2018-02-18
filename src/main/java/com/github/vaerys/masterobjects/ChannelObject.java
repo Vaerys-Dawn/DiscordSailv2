@@ -27,9 +27,9 @@ public class ChannelObject {
             this.mention = channel.mention();
             this.position = channel.getPosition();
             for (ChannelSetting setting : guild.channelSettings) {
-                if (setting.getIDs(guild.config).size() == 0) {
+                if (setting.getIDs(guild).size() == 0) {
                     break;
-                } else if (setting.getIDs(guild.config).contains(Long.toUnsignedString(longID))) {
+                } else if (setting.getIDs(guild).contains(Long.toUnsignedString(longID))) {
                     settings.add(setting.name());
                 }
             }

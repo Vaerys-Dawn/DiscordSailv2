@@ -141,7 +141,7 @@ public class GetGuildInfo extends Command {
 
             for (ChannelSetting s : channelSettings) {
                 List<String> channelList = new ArrayList<>();
-                for (long id : s.getIDs(command.guild.config)) {
+                for (long id : s.getIDs(command.guild)) {
                     IChannel ch = command.guild.getChannelByID(id);
                     if (ch != null) {
                         channelList.add("#" + ch.getName() + "");
