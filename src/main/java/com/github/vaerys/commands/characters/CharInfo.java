@@ -7,6 +7,7 @@ import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -21,6 +22,9 @@ public class CharInfo extends Command {
             if (object.getName().equalsIgnoreCase(args)) {
                 XEmbedBuilder builder = new XEmbedBuilder(command);
                 builder.withTitle(object.getNickname());
+
+                IUser user = command.guild.getUserByID(object.getUserID());
+                builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
 
                 ArrayList<IRole> roles = new ArrayList<>();
                 ArrayList<String> roleNames = new ArrayList<>();
@@ -74,7 +78,7 @@ public class CharInfo extends Command {
 
     @Override
     public String usage() {
-        return "[Character name]";
+        return "[Character ID]";
     }
 
     @Override
@@ -84,7 +88,7 @@ public class CharInfo extends Command {
 
     @Override
     public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+        return CHANNEL_CHAR;
     }
 
     @Override

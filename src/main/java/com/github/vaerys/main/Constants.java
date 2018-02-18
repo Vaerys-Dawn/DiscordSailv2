@@ -72,6 +72,8 @@ public class Constants {
     public static final String FILE_INFO = "Info.txt";
     public static final String FILE_CONFIG = "Config.json";
     public static final String FILE_GLOBAL_DATA = "Global_Data.json";
+    public static final String FILE_AUTH_TO_RESTART = DIRECTORY_STORAGE + "Auth_Restart.txt";
+
 
     public static final String LEVEL_UP_IMAGE_URL = "http://i.imgur.com/Vdt2DkK.gif";
     public static final String RANK_UP_IMAGE_URL = "http://i.imgur.com/MwsPixA.gif";

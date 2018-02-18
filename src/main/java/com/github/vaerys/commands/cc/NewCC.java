@@ -21,6 +21,8 @@ public class NewCC extends Command {
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
             return "> You have been denied the creation of custom commands.";
         }
+        if (command.guild.getChannelsByType(CHANNEL_CC_DENIED).contains(command.channel.get()))
+            return "> This Channel has CCs Denied, You cannot create ccs here.";
         boolean isShitpost = false;
         boolean isLocked = false;
         SplitFirstObject splitFirst = new SplitFirstObject(args);
@@ -68,7 +70,7 @@ public class NewCC extends Command {
 
     @Override
     public String[] names() {
-        return new String[]{"NewCC","CCNew"};
+        return new String[]{"NewCC", "CCNew"};
     }
 
     @Override
@@ -88,7 +90,7 @@ public class NewCC extends Command {
 
     @Override
     public String channel() {
-        return null;
+        return CHANNEL_EDIT_CC;
     }
 
     @Override

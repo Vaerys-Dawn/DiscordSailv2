@@ -1,6 +1,8 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
@@ -11,16 +13,19 @@ public class WhatsMyColour extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        Color color = command.user.getRandomColour();
+        UserObject user = command.user;
+        if (args != null && !args.isEmpty()) {
+            user = Utility.getUser(command, args, true, false);
+            if (user == null) return "> Could not find user.";
+        }
+        boolean notAuthor = user.longID != command.user.longID;
+        Color color = user.getRandomColour();
         XEmbedBuilder builder = new XEmbedBuilder(color);
-        String desc = "";
-        String modif;
+        String desc = notAuthor ? "**" + user.displayName + "'s** " : "Your ";
         if (isSubtype(command, names()[2]) || isSubtype(command, names()[3])) {
-            desc += "Your color is : ";
-            modif = "color";
+            desc += "color is : ";
         } else {
-            desc += "Your colour is : ";
-            modif = "colour";
+            desc += "colour is : ";
         }
         desc += "**#" + Integer.toHexString(color.getRGB()).substring(2).toUpperCase() + "**";
         builder.withDescription(desc);
@@ -42,7 +47,7 @@ public class WhatsMyColour extends Command {
 
     @Override
     public String usage() {
-        return null;
+        return "(@User)";
     }
 
     @Override

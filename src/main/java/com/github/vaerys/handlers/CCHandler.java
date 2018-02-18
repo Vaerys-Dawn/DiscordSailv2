@@ -25,6 +25,13 @@ public class CCHandler {
 
     public static void handleCommand(String args, CommandObject command) {
         //cc lockout handling
+
+        List<IChannel> ccDenied = command.guild.getChannelsByType(Command.CHANNEL_CC_DENIED);
+        if (ccDenied.contains(command.channel.get())) {
+            RequestHandler.sendMessage("> Custom Command usage has been disabled for this channel.", command.channel);
+            return;
+        }
+
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
             RequestHandler.sendMessage("> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
@@ -41,7 +48,7 @@ public class CCHandler {
 
         if (commandObject == null) return;
 
-        logger.debug(Utility.loggingFormatter(command, "CUSTOM_COMMAND", commandObject.getName(command), ccArgs));
+        command.guild.sendDebugLog(command, "CUSTOM_COMMAND", commandObject.getName(command), ccArgs);
 
         String contents = commandObject.getContents(true);
         //shitpost handling

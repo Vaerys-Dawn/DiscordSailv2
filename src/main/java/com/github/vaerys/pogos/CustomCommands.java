@@ -50,11 +50,8 @@ public class CustomCommands extends GuildFile {
         if (hasAdminPerms) {
             total += 100;
         }
-        if (guild.config.modulePixels) {
-            total += (XpHandler.getRewardCount(guild, user.longID) * 10);
-        } else {
-            total += 40;
-        }
+        total += (XpHandler.getRewardCount(guild, user.longID) * 10);
+
         if (user.isPatron) {
             total += 20;
         }

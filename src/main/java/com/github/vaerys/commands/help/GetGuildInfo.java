@@ -17,6 +17,7 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -110,18 +111,24 @@ public class GetGuildInfo extends Command {
         }
 
         if (hasManageServer) {
-            List<String> modules = new ArrayList<>();
-            List<String> settings = new ArrayList<>();
+            List<String> enabledModules = new LinkedList<>();
+            List<String> disabledModules = new LinkedList<>();
+            List<String> enabledSettings = new LinkedList<>();
+            List<String> disabledSettings = new LinkedList<>();
             for (GuildToggle t : command.guild.toggles) {
-                String formatted = "**" + t.name() + "** - " + t.get(command.guild.config) + indent + spacer;
                 if (t.isModule()) {
-                    modules.add(formatted);
+                    if (t.get(command.guild.config)) enabledModules.add(t.name());
+                    else disabledModules.add(t.name());
                 } else {
-                    settings.add(formatted);
+                    if (t.get(command.guild.config)) enabledSettings.add(t.name());
+                    else disabledSettings.add(t.name());
                 }
             }
-            toggles.appendField("**TOGGLES**", Utility.listFormatter(settings, false), true);
-            toggles.appendField("**MODULES**", Utility.listFormatter(modules, false), true);
+
+            toggles.appendField("MODULES", "**Enabled**```\n" + Utility.listFormatter(enabledModules, true) + "```\n" +
+                    "**Disabled**```" + Utility.listFormatter(disabledModules, true) + "```\n" + Command.spacer , true);
+            toggles.appendField("SETTINGS", "**Enabled**```\n" + Utility.listFormatter(enabledSettings, true) + "```\n" +
+                    "**Disabled**```" + Utility.listFormatter(disabledSettings, true) + "```", true);
             RequestHandler.sendEmbedMessage("", toggles, channel).get();
         }
 

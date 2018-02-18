@@ -17,7 +17,7 @@ public class TagChannel extends TagObject {
         if (channel != null) {
             return replaceFirstTag(from, channel.mention());
         } else {
-            return replaceFirstTag(from, "#ERROR#:" + name);
+            return replaceFirstTag(from, error);
         }
     }
 

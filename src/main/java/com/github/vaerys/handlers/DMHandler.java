@@ -12,6 +12,7 @@ import sx.blah.discord.handle.obj.IMessage;
 
 import java.awt.*;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by Vaerys on 27/08/2016.
@@ -55,7 +56,7 @@ public class DMHandler {
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Utility.sendStack(e);
                 }
                 Globals.getGlobalData().getBlockedFromDMS().add(command.user.longID);
                 command.user.sendDm("> You were blocked.");
@@ -72,6 +73,15 @@ public class DMHandler {
                     return;
                 }
             }
+
+            if (Pattern.compile("(?i)(discord\\.gg/|discordapp\\.com/Invite/)").matcher(command.message.getContent()).find()) {
+                command.user.sendDm("> Hey it looks like you are trying to send me a Invite link to a server. If you want me to " +
+                        "join your server please send a request to the Support server found in my info command.\n" +
+                        "Note: My Creator may be busy or asleep when you send the request so please be polite, " +
+                        "I am still an invite only bot that still requires developer help to set up to keep that in mind.");
+                return;
+            }
+
             String content = command.message.getContent();
             XEmbedBuilder builder = new XEmbedBuilder();
             Color color = command.user.getRandomColour();

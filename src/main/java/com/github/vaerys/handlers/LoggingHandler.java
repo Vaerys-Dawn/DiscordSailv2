@@ -35,6 +35,7 @@ public class LoggingHandler {
 
     private static boolean shouldLog(CommandObject command) {
         if (command.guild == null) return false;
+        if (!command.guild.config.moduleLogging) return false;
         IChannel info = command.guild.getChannelByType(Command.CHANNEL_INFO);
         IChannel serverLog = command.guild.getChannelByType(Command.CHANNEL_SERVER_LOG);
         IChannel adminLog = command.guild.getChannelByType(Command.CHANNEL_ADMIN_LOG);
@@ -102,6 +103,12 @@ public class LoggingHandler {
         charLimit -= format.length() + Utility.embedToString(embed).length();
         //make sure that the length doesn't go over.
         content = new StringBuffer(Utility.unFormatMentions(command.message.get()));
+        if (charLimit < 0) {
+            logger.error("Message caused Charlimit to go under 0.\n" +
+                    "Content:" + content +
+                    "\nExtra Content:" + extraContent);
+            return;
+        }
         if (content.length() > charLimit) {
             content.setLength(charLimit);
             content.append("...");
@@ -124,6 +131,14 @@ public class LoggingHandler {
     }
 
     public static void logChannelDelete(CommandObject command, IChannel deletedChannel) {
+
+    }
+
+    public static void logChannelEdit(CommandObject command, IChannel editedChannel) {
+
+    }
+
+    public static void logUserRolesUpdate(CommandObject command, IUser user) {
 
     }
 

@@ -61,16 +61,7 @@ public class AnnotationListener {
         IMessage message = event.getMessage();
         if (message.getType() != IMessage.Type.CHANEL_PINNED_MESSAGE) return;
         if (!message.getAuthor().equals(event.getClient().getOurUser())) return;
-        Thread thread = new Thread(() -> {
-            try {
-                logger.trace("Found my pin message, Deleting in 2 minutes.");
-                Thread.sleep(2 * 60 * 1000);
-                RequestHandler.deleteMessage(message);
-            } catch (InterruptedException e) {
-                // do nothing
-            }
-        });
-        thread.start();
+        RequestHandler.deleteMessage(message);
     }
 
     @EventSubscriber
@@ -133,6 +124,7 @@ public class AnnotationListener {
         updateVariables(event.getNewChannel().getGuild());
 
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             if (!event.getOldChannel().getName().equalsIgnoreCase(event.getNewChannel().getName())) {
                 String log = "> Channel " + event.getNewChannel().mention() + "'s name was changed.\nOld name : #" + event.getOldChannel().getName() + ".";
@@ -162,6 +154,7 @@ public class AnnotationListener {
             return;
         }
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel #" + event.getChannel().getName() + " was deleted.";
             Utility.sendLog(log, content, false);
@@ -172,6 +165,7 @@ public class AnnotationListener {
     @EventSubscriber
     public void onChannelCreateEvent(ChannelCreateEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel " + event.getChannel().mention() + " was created.";
             Utility.sendLog(log, content, false);
@@ -237,6 +231,7 @@ public class AnnotationListener {
         if (event.getMessage() == null) return;
         if (event.getGuild().getUserByID(event.getAuthor().getLongID()) == null) return;
         CommandObject command = new CommandObject(event.getMessage());
+        if (!command.guild.config.moduleLogging) return;
         LoggingHandler.logDelete(command, event.getMessage());
     }
 
@@ -244,6 +239,7 @@ public class AnnotationListener {
         if (command.guild == null) {
             return false;
         }
+        if (!command.guild.config.moduleLogging) return false;
         List<IChannel> infoID = command.guild.getChannelsByType(Command.CHANNEL_INFO);
         List<IChannel> serverLogID = command.guild.getChannelsByType(Command.CHANNEL_SERVER_LOG);
         List<IChannel> adminLogID = command.guild.getChannelsByType(Command.CHANNEL_ADMIN_LOG);
@@ -274,8 +270,9 @@ public class AnnotationListener {
     @EventSubscriber
     public void onUserJoinEvent(UserJoinEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        if (!content.config.moduleLogging) return;
         UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getLongID()));
-        if (content.config.joinsServerMessages) {
+        if (content.config.joinsServerMessages && !user.get().isBot()){
             String message = content.config.getJoinMessage();
             message = message.replace("<server>", event.getGuild().getName());
             message = message.replace("<user>", event.getUser().getName());
@@ -297,6 +294,7 @@ public class AnnotationListener {
     public void joinLeaveLogging(GuildMemberEvent event, boolean joining) {
         IGuild guild = event.getGuild();
         GuildObject content = Globals.getGuildContent(guild.getLongID());
+        if (!content.config.moduleLogging) return;
         String builder = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **%s** the server.\n**Current Users:** " + event.getGuild().getUsers().size() + ".";
         if (content.config.joinLeaveLogging) {
             if (joining) {
@@ -367,6 +365,7 @@ public class AnnotationListener {
     public void onUserRoleUpdateEvent(UserRoleUpdateEvent event) {
         IGuild guild = event.getGuild();
         GuildObject content = Globals.getGuildContent(guild.getLongID());
+        if (!content.config.moduleLogging) return;
         if (content.config.userRoleLogging) {
             ArrayList<String> oldRoles = new ArrayList<>();
             ArrayList<String> newRoles = new ArrayList<>();
@@ -380,10 +379,6 @@ public class AnnotationListener {
             for (String r : newRoles) {
                 newRoleList.append(r + ", ");
             }
-            logger.debug("Old Roles:");
-            logger.debug(oldRoleList.toString());
-            logger.debug("New Roles:");
-            logger.debug(newRoleList.toString());
             String prefix = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "'s** Role have been Updated.";
             Utility.sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content, false);
         }

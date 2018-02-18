@@ -1,6 +1,10 @@
 package com.github.vaerys.handlers;
 
+import com.github.vaerys.objects.LogObject;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StringHandler {
     private StringBuffer string;
@@ -8,7 +12,6 @@ public class StringHandler {
     public StringHandler(String s) {
         if (s == null) this.string = new StringBuffer("");
         else this.string = new StringBuffer(s);
-
     }
 
     public StringHandler(StringBuffer string) {
@@ -134,5 +137,9 @@ public class StringHandler {
 
     public boolean startsWith(String s) {
         return s.startsWith(s);
+    }
+
+    public void addViaJoin(List<LogObject> allLogs, String s) {
+        append(String.join(s, allLogs.stream().map(logObject -> logObject.getOutput()).collect(Collectors.toList())));
     }
 }

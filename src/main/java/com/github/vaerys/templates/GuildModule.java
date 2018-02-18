@@ -14,4 +14,7 @@ public abstract class GuildModule extends GuildToggle {
     public boolean statsOnInfo() {
         return true;
     }
+
+
+
 }

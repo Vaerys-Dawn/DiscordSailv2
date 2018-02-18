@@ -1,7 +1,9 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ import java.util.List;
 public class MessageHandler {
 
     private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
+
 
     public MessageHandler(String args, CommandObject command, boolean isPrivate) {
         if (!isPrivate) {
@@ -48,6 +51,18 @@ public class MessageHandler {
         }
     }
 
+//    public static boolean isActive(boolean isPrivate, CommandObject command) {
+//        if (!isPrivate) return false;
+//        for (GuildObject g : Globals.getGuilds()) {
+//            if (g.config.getSatrtupState().equals(BEGIN_SETUP) && command.user.longID == g.getSetupUser()) {
+//                command.setGuild(g.get());
+//                cont(command);
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
     //Command Handler
     private boolean handleCommand(CommandObject command, String args) {
         List<Command> commands = new ArrayList<>(command.guild.commands);
@@ -57,7 +72,7 @@ public class MessageHandler {
             if (c.isCall(args, command)) {
                 commandArgs = c.getArgs(args, command);
                 //log command
-                logger.debug(Utility.loggingFormatter(command, "COMMAND", c.getCommand(command), c.getArgs(args, command)));
+                command.guild.sendDebugLog(command, "COMMAND", c.getCommand(command), c.getArgs(args, command));
                 //test if user has permissions
                 if (!Utility.testForPerms(command, c.perms())) {
                     RequestHandler.sendMessage(command.user.notAllowed, currentChannel);

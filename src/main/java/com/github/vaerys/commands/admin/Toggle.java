@@ -1,6 +1,8 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.help.HelpModules;
+import com.github.vaerys.commands.help.HelpSettings;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
@@ -29,7 +31,12 @@ public class Toggle extends Command {
                     if (args.equalsIgnoreCase(t.name())) {
                         t.toggle(command.guild.config);
                         command.guild.loadCommandData();
-                        return "> **" + t.name() + "** is now **" + t.get(command.guild.config) + "**.";
+
+                        String mode = t.get(command.guild.config) ? "enabled" : "disabled";
+                        String type = t.isModule() ? "module" : "setting";
+                        String helpCommand = t.isModule() ? new HelpModules().getUsage(command) : new HelpSettings().getUsage(command);
+                        return "> **" + t.name() + "** is now **" + mode + "**.\n\n" +
+                                "To see more info about what this " + type + " " + mode + " you can run **" + helpCommand + "**.";
                     }
                 }
             }

@@ -14,7 +14,7 @@ public class TagEmoji extends TagObject {
     public String execute(String from, CommandObject command, String args) {
         IEmoji emoji = command.guild.getEmojiByName(contents(from));
         if (emoji == null) {
-            return replaceFirstTag(from, "#ERROR#:" + name);
+            return replaceFirstTag(from, error);
         }
         return replaceFirstTag(from, emoji.toString());
     }

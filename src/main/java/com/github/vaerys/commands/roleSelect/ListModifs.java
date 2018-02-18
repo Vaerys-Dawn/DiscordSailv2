@@ -29,6 +29,7 @@ public class ListModifs extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        if (command.guild.config.getModifierRoleIDs().size() == 0) return "> No Modifier roles are set up right now. Come back later.";
         RequestHandler.sendEmbedMessage("",getList(command),command.channel.get());
         return null;
     }

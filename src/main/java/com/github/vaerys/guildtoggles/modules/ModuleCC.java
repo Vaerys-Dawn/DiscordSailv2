@@ -1,5 +1,8 @@
 package com.github.vaerys.guildtoggles.modules;
 
+import com.github.vaerys.channelsettings.settings.CCDenied;
+import com.github.vaerys.channelsettings.settings.ChannelCC;
+import com.github.vaerys.channelsettings.settings.CreateCC;
 import com.github.vaerys.channelsettings.settings.Shitpost;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.HelpTags;
@@ -45,6 +48,9 @@ public class ModuleCC extends GuildModule {
     public void setup() {
         channels.add(new Shitpost());
         settings.add(new ShitpostFiltering());
+        channels.add(new ChannelCC());
+        channels.add(new CCDenied());
+        channels.add(new CreateCC());
     }
 
 

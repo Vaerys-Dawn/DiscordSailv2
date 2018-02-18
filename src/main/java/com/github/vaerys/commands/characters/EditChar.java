@@ -33,15 +33,16 @@ public class EditChar extends Command {
                     if (rest == null) {
                         rest = "";
                     }
+                    command.setAuthor(command.guild.getUserByID(c.getUserID()));
                     switch (mode.getFirstWord().toLowerCase()) {
                         case "age":
-                            return CharEditModes.age(rest, c);
+                            return CharEditModes.age(rest, c, command);
                         case "gender":
-                            return CharEditModes.gender(rest, c);
+                            return CharEditModes.gender(rest, c, command);
                         case "avatar":
                             return CharEditModes.avatar(rest, c, command);
                         case "bio":
-                            return CharEditModes.desc(rest, c);
+                            return CharEditModes.desc(rest, c, command);
                         case "longdesc":
                             return CharEditModes.longDesc(rest, c);
                         default:
@@ -67,7 +68,7 @@ public class EditChar extends Command {
 
     @Override
     public String usage() {
-        return "[Char Name] [Mode] [Args]";
+        return "[Character ID] [Mode] [Args]";
     }
 
     @Override
@@ -77,7 +78,7 @@ public class EditChar extends Command {
 
     @Override
     public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+        return CHANNEL_CHAR;
     }
 
     @Override

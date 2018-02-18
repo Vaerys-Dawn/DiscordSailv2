@@ -138,9 +138,9 @@ public class FileHandler {
             reader.close();
             jsonObject = jsonElement.getAsJsonObject();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Utility.sendStack(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Utility.sendStack(e);
         }
         return jsonObject;
     }

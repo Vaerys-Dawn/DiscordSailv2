@@ -16,6 +16,12 @@ public class Info extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+
+        if (args == null || args.isEmpty()) {
+            return "> If you are after a list of commands please run **" + new Help().getUsage(command) + "** instead.\n\n" +
+                    missingArgs(command);
+        }
+
         List<Command> commands = command.guild.getAllCommands(command);
         if (command.user.longID == command.client.creator.longID) {
             commands.addAll(Globals.getCreatorCommands(false));
@@ -69,7 +75,7 @@ public class Info extends Command {
 
     @Override
     public boolean requiresArgs() {
-        return true;
+        return false;
     }
 
     @Override

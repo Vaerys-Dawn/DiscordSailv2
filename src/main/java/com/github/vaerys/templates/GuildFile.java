@@ -1,6 +1,7 @@
 package com.github.vaerys.templates;
 
 import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.main.Utility;
 
 import java.io.IOException;
 
@@ -17,7 +18,7 @@ public class GuildFile extends GlobalFile {
             try {
                 throw new IOException("File is corrupt: " + path);
             } catch (IOException e) {
-                e.printStackTrace();
+                Utility.sendStack(e);
             }
         }
         object.setPath(guildID + "/" + newPath);

@@ -44,7 +44,7 @@ public class Main {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Utility.sendStack(e);
                     }
                 }
                 Globals.saveFiles(true);
@@ -70,6 +70,7 @@ public class Main {
             GlobalData globalData = (GlobalData) GlobalData.create(Constants.FILE_GLOBAL_DATA, new GlobalData());
 
             config = Config.check(config);
+
 
             //getting bot token
             try {
@@ -116,6 +117,14 @@ public class Main {
             //load config phase 2
             Globals.initConfig(client, config, globalData);
 
+            Globals.validateConfig();
+            if (Globals.errorStack != null) {
+                logger.error(">\n> Begin Config Error Report <<\n" +
+                        "at " + Constants.DIRECTORY_STORAGE + Constants.FILE_CONFIG +
+                        "\n" + Globals.errorStack + ">> End Error Report <<");
+                System.exit(Constants.EXITCODE_CONF_ERROR);
+            }
+
 
             ThreadGroup group = new ThreadGroup("GuildCreateGroup");
             final int[] count = new int[]{0};
@@ -139,13 +148,8 @@ public class Main {
             dispatcher.registerTemporaryListener(new InitEvent());
 
             //validate config file
-            Globals.validateConfig();
-            if (Globals.errorStack != null) {
-                logger.error(">\n> Begin Config Error Report <<\n" +
-                        "at " + Constants.DIRECTORY_STORAGE + Constants.FILE_CONFIG +
-                        "\n" + Globals.errorStack + ">> End Error Report <<");
-                System.exit(Constants.EXITCODE_CONF_ERROR);
-            }
+
+
             Globals.setVersion();
 
             //Init Patch system.

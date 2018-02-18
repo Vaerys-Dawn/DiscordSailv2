@@ -3,6 +3,7 @@ package com.github.vaerys.commands.characters;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CharacterObject;
+import org.apache.commons.lang3.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,21 +13,37 @@ import java.net.URL;
  */
 public class CharEditModes {
 
-    public static String age(String args, CharacterObject character) {
-        if (args.length() > 20) {
-            return "> Character age length must be under 20 characters.";
+    private static String getOverDraw(long amount) {
+        if (amount == 1) return "(over by " + amount + " character)";
+        return "(over by " + amount + " characters)";
+    }
+
+    public static String age(String args, CharacterObject character, CommandObject command) {
+        long maxChars = 20;
+        if (command.user.isPatron) maxChars += maxChars;
+        if (args.length() > maxChars) {
+            long overDraw = args.length() - maxChars;
+            return "> Character age length must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+        } else if (args.contains("\n")) {
+            return "> Character age cannot contain newlines.";
         } else {
             character.setAge(args);
             return "> Age Updated";
         }
     }
 
-    public static String gender(String args, CharacterObject character) {
-        if (args.length() > 20) {
-            return "> Gender Must be under 20 characters.";
+    public static String gender(String args, CharacterObject character, CommandObject command) {
+        long maxChars = 20;
+        if (command.user.isPatron) maxChars += maxChars;
+        if (args.length() > maxChars) {
+            long overDraw = args.length() - maxChars;
+            return "> Gender Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+        } else if (args.contains("\n")) {
+            return "> Character gender cannot contain newlines.";
+        } else {
+            character.setGender(args);
+            return "> Gender Updated";
         }
-        character.setGender(args);
-        return "> Gender Updated.";
     }
 
     public static String avatar(String args, CharacterObject character, CommandObject command) {
@@ -46,9 +63,16 @@ public class CharEditModes {
         }
     }
 
-    public static String desc(String args, CharacterObject character) {
-        if (args.length() > 300) {
-            return "> Character Description must be under 300 characters.";
+    public static String desc(String args, CharacterObject character, CommandObject command) {
+        long maxChars = 300;
+        if (command.user.isPatron) maxChars += maxChars;
+        long newlineCount = StringUtils.countMatches(args, "\n");
+        if (args.length() > maxChars) {
+            long overDraw = args.length() - maxChars;
+            return "> Character Description must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+        } else if (newlineCount > 5) {
+            long overdraw = newlineCount - 5;
+            return "> Character Description has too many Newline characters (over by " + overdraw + " newlines)";
         } else {
             character.setShortBio(args);
             return "> Description Updated.";

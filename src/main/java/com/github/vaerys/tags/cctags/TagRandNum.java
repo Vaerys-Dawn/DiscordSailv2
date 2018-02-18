@@ -20,9 +20,9 @@ public class TagRandNum extends TagObject {
             long maxNum = Long.parseLong(spitArgs.get(1));
             from = replaceFirstTag(from, ThreadLocalRandom.current().nextLong(minNum, maxNum + 1) + "");
         } catch (NumberFormatException e) {
-            from = replaceFirstTag(from, "#ERROR#:" + name);
+            from = replaceFirstTag(from, error);
         } catch (IllegalArgumentException e) {
-            from = replaceFirstTag(from, "#ERROR#:" + name);
+            from = replaceFirstTag(from, error);
         }
         return from;
     }

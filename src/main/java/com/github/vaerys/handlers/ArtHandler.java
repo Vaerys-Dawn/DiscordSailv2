@@ -104,7 +104,7 @@ public class ArtHandler {
                 args = args.replace("  ", "");
             }
 
-            logger.debug(Utility.loggingFormatter(command, "ART_PINNED", name, args));
+            command.guild.sendDebugLog(command, "ART_PINNED", name, args);
             //end debug
 
             //add to ping
@@ -112,13 +112,37 @@ public class ArtHandler {
             //add pin response
             RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_ADD_PIN)));
             //if like art
-            if (command.guild.config.likeArt) {
+            if (command.guild.config.likeArt && command.guild.config.modulePixels) {
                 //add heart
                 RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_LIKE_PIN)));
                 //add to list
                 likes.add(new TrackLikes(command.message.longID));
             }
             checkList(command);
+            String response;
+            if (!command.guild.config.autoArtPinning) {
+                if (command.user.longID == command.message.author.longID) {
+                    response = "> **" + command.user.displayName + "** Has pinned their art by reacting with the \uD83D\uDCCC emoji.";
+                } else {
+                    response = "> **" + command.user.displayName + "** Has pinned **" + command.message.author.displayName + "'s** art by reacting with the \uD83D\uDCCC emoji.";
+                }
+            } else {
+                response = "> I have pinned **" + command.message.author.displayName + "'s** art.";
+            }
+            if (command.guild.config.likeArt && command.guild.config.modulePixels) {
+                response += "\n You can now react with a ❤ emoji to give the user some pixels.";
+            }
+            IMessage pinResponse = RequestHandler.sendMessage(response, command.channel).get();
+            Thread thread = new Thread(() -> {
+                try {
+                    logger.trace("Deleting in 2 minutes.");
+                    Thread.sleep(2 * 60 * 1000);
+                    RequestHandler.deleteMessage(pinResponse);
+                } catch (InterruptedException e) {
+                    // do nothing
+                }
+            });
+            thread.start();
             return;
         } catch (DiscordException e) {
             if (e.getErrorMessage().contains("already pinned")) {
@@ -183,8 +207,8 @@ public class ArtHandler {
             try {
                 if (message.isPinned()) {
                     RequestBuffer.request(() -> command.channel.get().unpin(message)).get();
-                    logger.debug(Utility.loggingFormatter(command.setMessage(message), "ART_PINNED", "UNPIN", "PIN TOTAL = " +
-                            command.channel.getPinCount() + "/" + command.guild.config.pinLimit));
+                    command.guild.sendDebugLog(command.setMessage(message), "ART_PINNED", "UNPIN", "PIN TOTAL = " +
+                            command.channel.getPinCount() + "/" + command.guild.config.pinLimit);
                 }
             } catch (DiscordException e) {
                 if (!e.getMessage().contains("Message is not pinned!")) {

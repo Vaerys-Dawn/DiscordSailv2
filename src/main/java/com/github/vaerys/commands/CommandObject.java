@@ -81,6 +81,8 @@ public class CommandObject {
 
     public CommandObject setGuild(IGuild guild) {
         this.guild = Globals.getGuildContent(guild.getLongID());
+        this.user = new UserObject(user.get(), this.guild);
+        this.client = new ClientObject(client.get(), this.guild);
         return this;
     }
 

@@ -18,7 +18,7 @@ public class SetPrefix extends MentionCommand {
 
     @Override
     public String[] names() {
-        return new String[]{"SetCommandPrefix","SetPrefixCommand"};
+        return new String[]{"SetCommandPrefix","SetPrefixCommand","SetPrefix"};
     }
 
     @Override

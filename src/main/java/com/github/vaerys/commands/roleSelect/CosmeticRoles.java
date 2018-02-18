@@ -82,6 +82,8 @@ public class CosmeticRoles extends Command {
             //do user role modification
         } else {
             //check to make sure that the user isn't including the args brackets or the /remove at the end;
+            if (command.guild.config.getCosmeticRoleIDs().size() == 0)
+                return "> No Cosmetic roles are set up right now. Come back later.";
             if (args.startsWith("[") && args.endsWith("]")) {
                 return Constants.ERROR_BRACKETS + "\n" + Utility.getCommandInfo(this, command);
             }
@@ -128,13 +130,13 @@ public class CosmeticRoles extends Command {
                                 IRole userRole = (IRole) iterator.next();
                                 if (role.getLongID() == userRole.getLongID()) {
                                     iterator.remove();
-                                    response = "> You have been granted the **" + role.getName() + "** role.";
+                                    response = "> You have had the **" + role.getName() + "** role removed.";
                                 }
                             }
                             //else add that role.
                         } else {
                             userRoles.add(role);
-                            response = "> You have had the **" + role.getName() + "** role removed.";
+                            response = "> You have been granted the **" + role.getName() + "** role.";
                         }
                         //if roles arent toggles run this.
                     } else {
@@ -175,7 +177,13 @@ public class CosmeticRoles extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Modifies your cosmetic role from the list of cosmetic roles.";
+        if (!command.guild.config.roleIsToggle) {
+            return "Allows you to choose a role from a list of cosmetic roles.\n" +
+                    "You can only have one cosmetic role at a time, when choosing a new role it will remove your old one.";
+        } else {
+            return "Allows you to toggle a cosmetic role. You can have as many cosmetic roles as you like.";
+        }
+
     }
 
     @Override

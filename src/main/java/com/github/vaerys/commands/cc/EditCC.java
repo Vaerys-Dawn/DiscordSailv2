@@ -113,7 +113,7 @@ public class EditCC extends Command {
 
     @Override
     public String channel() {
-        return null;
+        return CHANNEL_EDIT_CC;
     }
 
     @Override

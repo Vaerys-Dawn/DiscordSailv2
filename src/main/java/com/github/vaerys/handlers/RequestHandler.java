@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 public class RequestHandler {
@@ -65,6 +66,15 @@ public class RequestHandler {
                 return channel.sendMessage(message);
             } catch (MissingPermissionsException e) {
                 missingPermissions(message, channel);
+                return null;
+            } catch (DiscordException e) {
+                String stackContents = Arrays.toString(Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString()).toArray());
+                if (stackContents.contains("sx.blah.discord.handle.impl.obj.PrivateChannel.sendMessage(PrivateChannel.java") &&
+                        e.getMessage().contains("Message was unable to be sent")) {
+                    sendError("Message was unable to be sent, User Dms might be off.", message, channel);
+                } else {
+                    Utility.sendStack(e);
+                }
                 return null;
             }
         });
@@ -444,7 +454,7 @@ public class RequestHandler {
     }
 
     public static RequestBuffer.RequestFuture<Boolean> roleManagement(UserObject user, GuildObject content, long mutedRoleID, boolean isAdding) {
-        return roleManagement(user.get(),content.get(),mutedRoleID,isAdding);
+        return roleManagement(user.get(), content.get(), mutedRoleID, isAdding);
     }
 
 

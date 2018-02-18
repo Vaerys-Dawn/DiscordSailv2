@@ -1,5 +1,6 @@
 package com.github.vaerys.masterobjects;
 
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Globals;
@@ -194,5 +195,17 @@ public class UserObject {
 
     public ProfileObject addProfile(GuildObject guild) {
         return guild.users.addUser(longID);
+    }
+
+    public int getRewardValue(CommandObject command) {
+        return XpHandler.getRewardCount(command.guild, longID);
+    }
+
+    public List<IRole> getCosmeticRoles(CommandObject command) {
+        return roles.stream().filter(iRole -> command.guild.config.isRoleCosmetic(iRole.getLongID())).collect(Collectors.toList());
+    }
+
+    public EnumSet<Permissions> getPermissions(GuildObject guild) {
+        return object.getPermissionsForGuild(guild.get());
     }
 }

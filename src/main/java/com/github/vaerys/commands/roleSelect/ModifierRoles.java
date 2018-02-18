@@ -79,6 +79,7 @@ public class ModifierRoles extends Command {
                 return command.user.notAllowed;
             }
         } else {
+            if (command.guild.config.getModifierRoleIDs().size() == 0) return "> No Modifier roles are set up right now. Come back later.";
             IRole role;
             role = Utility.getRoleFromName(args, command.guild.get());
             if (role == null && args.length() > 3) {
@@ -127,7 +128,7 @@ public class ModifierRoles extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows you to toggle a modifier role.";
+        return "Allows you to toggle a modifier role. You can have as many modifier roles as you like.";
     }
 
     @Override

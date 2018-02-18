@@ -33,12 +33,15 @@ public class ChannelHere extends Command {
             desc = "> Could not find channel type \"" + args + "\"\n";
         }
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
-        String title = "> Here is a list of available Channel Types:\n";
+        String title = "> Here are all of the channel Types and Settings:";
 
         List<ChannelSetting> channelSettings = command.guild.channelSettings;
-        List<String> types = channelSettings.stream().map(ChannelSetting::name).collect(Collectors.toList());
+        List<String> types = channelSettings.stream().filter(channelSetting -> !channelSetting.isSetting()).map(ChannelSetting::name).collect(Collectors.toList());
+        List<String> settings = channelSettings.stream().filter(channelSetting -> channelSetting.isSetting()).map(ChannelSetting::name).collect(Collectors.toList());
         Collections.sort(types);
-        desc += "```\n" + Utility.listFormatter(types, true) + "```\n" + missingArgs(command);
+        desc += "**Types**\n```\n" + Utility.listFormatter(types, true) + "```\n" +
+                "**Settings**\n```\n" + Utility.listFormatter(settings, true) + "```\n" + missingArgs(command);
+
         embedBuilder.withDesc(desc);
         embedBuilder.withTitle(title);
         RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());

@@ -7,6 +7,7 @@ import com.github.vaerys.guildtoggles.ToggleInit;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.DailyMessage;
+import com.github.vaerys.objects.LogObject;
 import com.github.vaerys.objects.RandomStatusObject;
 import com.github.vaerys.objects.TimedEvent;
 import com.github.vaerys.pogos.Config;
@@ -20,13 +21,11 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IUser;
 
-import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -54,15 +53,17 @@ public class Globals {
     public static boolean showSaveWarning = false;
     public static boolean shuttingDown = false;
     public static boolean savingFiles = false;
-    private static List<GuildObject> guilds = new ArrayList<>();
-    public static List<Command> commands = new ArrayList<>();
-    private static ArrayList<String> commandTypes = new ArrayList<>();
-    private static ArrayList<ChannelSetting> channelSettings = new ArrayList<>();
-    private static ArrayList<GuildToggle> guildToggles = new ArrayList<>();
-    private static ArrayList<SlashCommand> slashCommands = new ArrayList<>();
-    private static ArrayList<RandomStatusObject> randomStatuses = new ArrayList<>();
-    private static List<TagObject> tags = new ArrayList<>();
+    private static List<GuildObject> guilds = new LinkedList<>();
+    public static List<Command> commands = new LinkedList<>();
+    private static List<String> commandTypes = new LinkedList<>();
+    private static List<ChannelSetting> channelSettings = new LinkedList<>();
+    private static List<GuildToggle> guildToggles = new LinkedList<>();
+    private static List<SlashCommand> slashCommands = new LinkedList<>();
+    private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
+    private static List<LogObject> allLogs = new LinkedList<>();
+    private static List<TagObject> tags = new LinkedList<>();
     private static List<String> blacklistedURls;
+
 
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
     private static GlobalData globalData;
@@ -162,9 +163,6 @@ public class Globals {
     }
 
     public static void validateConfig() throws IllegalArgumentException {
-        IUser creator = Client.getClient().fetchUser(creatorID);
-        if (creator == null)
-            addToErrorStack("   > creatorID is invalid.\n");
         if (botName == null || botName.isEmpty())
             addToErrorStack("   > botName cannot be empty.\n");
         if (botName.contains("\n"))
@@ -210,6 +208,16 @@ public class Globals {
         if (avgMessagesPerDay <= 0) {
             addToErrorStack("   > avgMessagesPerDay cannot be less than or equal 0.\n");
         }
+    }
+
+    public static boolean isCreatorValid() {
+        IUser creator = Client.getClient().fetchUser(creatorID);
+        if (creator == null) {
+            logger.error("\nError:" +
+                    "   > creatorID is invalid.");
+            return false;
+        }
+        return true;
     }
 
     public static void initGuild(GuildObject guild) {
@@ -329,23 +337,23 @@ public class Globals {
 //        return commandsDM;
 //    }
 
-    public static ArrayList<String> getCommandTypes() {
+    public static List<String> getCommandTypes() {
         return commandTypes;
     }
 
-    public static ArrayList<ChannelSetting> getChannelSettings() {
+    public static List<ChannelSetting> getChannelSettings() {
         return channelSettings;
     }
 
-    public static ArrayList<GuildToggle> getGuildToggles() {
+    public static List<GuildToggle> getGuildToggles() {
         return guildToggles;
     }
 
-    public static ArrayList<SlashCommand> getSlashCommands() {
+    public static List<SlashCommand> getSlashCommands() {
         return slashCommands;
     }
 
-    public static ArrayList<RandomStatusObject> getRandomStatuses() {
+    public static List<RandomStatusObject> getRandomStatuses() {
         return randomStatuses;
     }
 
@@ -434,4 +442,12 @@ public class Globals {
         }
     }
 
+    public static void addToLog(LogObject object) {
+        allLogs.add(object);
+        if (allLogs.size() > 5) allLogs.remove(0);
+    }
+
+    public static List<LogObject> getAllLogs() {
+        return allLogs;
+    }
 }

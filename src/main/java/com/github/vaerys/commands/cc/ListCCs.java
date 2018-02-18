@@ -123,7 +123,7 @@ public class ListCCs extends Command {
 
     @Override
     public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+        return CHANNEL_CC_INFO;
     }
 
     @Override

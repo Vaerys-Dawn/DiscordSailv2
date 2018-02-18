@@ -1,9 +1,10 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IEmoji;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.DiscordException;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -14,10 +15,10 @@ public class Test extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-
-        IEmoji emoji = command.guild.getEmojiByName(args);
-        if (emoji == null) return "> Not a valid emoji name.";
-        return emoji.toString();
+//
+//        IEmoji emoji = command.guild.getEmojiByName(args);
+//        if (emoji == null) return "> Not a valid emoji name.";
+//        return emoji.toString();
 
 //        XEmbedBuilder builder = new XEmbedBuilder(command);
 //        builder.withAuthorName("Note 1 - " +command.user.displayName);
@@ -29,7 +30,8 @@ public class Test extends Command {
 //        builder.withFooterIcon(command.client.bot.getAvatarURL());
 //        builder.send(command.channel);
 //        return nothing;
-////        throw new DiscordException("TestException");
+//        return (long) ((90 - 7) * (Globals.avgMessagesPerDay * command.guild.config.xpRate * command.guild.config.xpModifier) / 8) + "";
+        throw new DiscordException("TestException");
     }
 
 

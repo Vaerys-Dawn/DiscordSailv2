@@ -33,6 +33,7 @@ public abstract class Command {
     public static final String TYPE_GROUPS = "Groups";
     public static final String TYPE_SLASH = "Slash";
     public static final String TYPE_MENTION = "Mention";
+    public static final String TYPE_LOGGING = "Logging";
 
     //Channel Constants
     public static final String CHANNEL_GENERAL = "General";
@@ -51,11 +52,17 @@ public abstract class Command {
     public static final String CHANNEL_LEVEL_UP = "LevelUp";
     public static final String CHANNEL_LEVEL_UP_DENIED = "LevelUpDenied";
     public static final String CHANNEL_DM = "DirectMessages";
+    public static final String CHANNEL_CC_INFO = "CustomCommands";
+    public static final String CHANNEL_EDIT_CC = "CreateCC";
+    public static final String CHANNEL_CC_DENIED = "CCDenied";
+    public static final String CHANNEL_CHAR = "Characters";
+
 
     public static final String spacer = "\u200B";
     public static final String indent = "    ";
     public static final String codeBlock = "```";
     public static final String ownerOnly = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
+
 
 
     public List<SubCommandObject> subCommands = new LinkedList<>();

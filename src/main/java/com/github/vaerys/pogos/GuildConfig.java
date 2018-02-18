@@ -40,10 +40,10 @@ public class GuildConfig extends GuildFile {
     public boolean likeArt = false;
     public boolean welcomeMessage = false;
     //--Logging
-    public boolean generalLogging = false;
-    public boolean adminLogging = false;
-    public boolean deleteLogging = false;
-    public boolean joinLeaveLogging = false;
+    public boolean generalLogging = true;
+    public boolean adminLogging = true;
+    public boolean deleteLogging = true;
+    public boolean joinLeaveLogging = true;
     public boolean userRoleLogging = false;
     public boolean editLogging = false;
     public boolean extendEditLog = false;
@@ -75,6 +75,7 @@ public class GuildConfig extends GuildFile {
     public boolean moduleModMute = false;
     public boolean moduleGroups = false;
     public boolean modulePixels = false;
+    public boolean moduleLogging = false;
 
     public int maxMentionLimit = 8;
     public int messageLimit = 10;
@@ -104,6 +105,7 @@ public class GuildConfig extends GuildFile {
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     ArrayList<OffenderObject> offenders = new ArrayList<>();
     private String ruleCode = null;
+
 
 
     public void setLastDailyMessage(DailyMessage lastDailyMessage) {

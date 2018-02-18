@@ -4,9 +4,12 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
 
 /**
  * Created by Vaerys on 04/07/2017.
@@ -17,10 +20,38 @@ public class ManagePixelRoles extends Command {
             "> Any positive number up to 256\n" +
             "> xpDenied\n" +
             "> topTen\n" +
-            "> Remove\n";
+            "> Remove\n" +
+            "> List\n";
 
     @Override
     public String execute(String args, CommandObject command) {
+        if (args.equalsIgnoreCase("list")){
+            XEmbedBuilder builder = new XEmbedBuilder(command);
+            builder.withTitle("Pixel Roles");
+            IRole xpDenied = command.guild.getXPDeniedRole();
+            IRole topTen = command.guild.getTopTenRole();
+            List<RewardRoleObject> rewardRoles = command.guild.config.getRewardRoles();
+            if (xpDenied == null && topTen == null && rewardRoles.size() == 0) {
+                return "> No roles are set up.\n" + missingArgs(command);
+            }
+            String desc = "";
+            if (rewardRoles.size() != 0) {
+                desc += "**Reward Roles**";
+                for (RewardRoleObject r : rewardRoles) {
+                    desc += "\n> **" + command.guild.getRoleByID(r.getRoleID()).getName() + "** -> Level: **" + r.getLevel() + "**";
+                }
+                desc += "\n\n";
+            }
+            if (topTen != null) {
+                desc += "**Top Ten Role**: " + topTen.getName() + "\n\n";
+            }
+            if (xpDenied != null) {
+                desc += "**Pixel Denied Role**: " + xpDenied.getName();
+            }
+            builder.withDesc(desc);
+            builder.send(command.channel);
+            return null;
+        }
         SplitFirstObject mode = new SplitFirstObject(args);
         IRole role = Utility.getRoleFromName(mode.getRest(), command.guild.get());
         if (role == null) {
@@ -83,7 +114,7 @@ public class ManagePixelRoles extends Command {
                     return "> **" + role.getName() + "** is not a valid Pixel role.";
                 default:
                     return "> Invalid Mode.\n" + modes +
-                Utility.getCommandInfo(this, command);
+                            Utility.getCommandInfo(this, command);
             }
         }
     }

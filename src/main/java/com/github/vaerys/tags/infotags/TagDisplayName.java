@@ -17,7 +17,7 @@ public class TagDisplayName extends TagObject {
         if (user != null) {
             return replaceFirstTag(from, user.getDisplayName(command.guild.get()));
         } else {
-            return replaceFirstTag(from, "#ERROR#:" + name);
+            return replaceFirstTag(from, error);
         }
     }
 

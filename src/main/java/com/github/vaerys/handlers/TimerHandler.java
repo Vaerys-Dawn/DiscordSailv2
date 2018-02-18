@@ -37,7 +37,7 @@ public class TimerHandler {
     private static long keepAliveMin;
     private static long keepAliveFiveMin;
     private static long keepAliveDaily;
-    private static List<Double> cpuUsage = new LinkedList<>();
+    public static List<Double> cpuUsage = new LinkedList<>();
 
     public static void checkKeepAlive() {
         long now = System.currentTimeMillis();

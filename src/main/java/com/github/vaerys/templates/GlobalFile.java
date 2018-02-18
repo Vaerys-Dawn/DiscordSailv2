@@ -31,7 +31,7 @@ public class GlobalFile {
             try {
                 throw new IOException("File is corrupt: " + path);
             } catch (IOException e) {
-                e.printStackTrace();
+                Utility.sendStack(e);
             }
         }
         object.setPath(newPath);

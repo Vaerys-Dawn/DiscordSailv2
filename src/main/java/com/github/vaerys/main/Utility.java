@@ -305,6 +305,10 @@ public class Utility {
         return canBypass(author, guild, true);
     }
 
+    public static boolean canBypass(UserObject user, GuildObject guild) {
+        return canBypass(user.get(),guild.get());
+    }
+
     public static long getMentionUserID(String content) {
         if (content.contains("<@")) {
             long userID = stringLong(StringUtils.substringBetween(content, "<@!", ">"));
@@ -398,19 +402,6 @@ public class Utility {
     public static List<IRole> getRolesByName(IGuild guild, String name) {
         List<IRole> roles = guild.getRoles().stream().filter(r -> r.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
         return roles;
-    }
-
-    public static String loggingFormatter(CommandObject command, String type, String name, String contents) {
-        String format = "{\"TYPE\": \"%s\", \"%s_NAME\": \"%s\", \"CONTENTS\": \"%s\", \"GUILD\": %d, \"CHANNEL\": %d, \"USER\": %d, \"MESSAGE\": %d}";
-        return String.format(format, type, type, name, contents, command.guild.longID, command.channel.longID, command.user.longID, command.message.longID);
-//        return "{\"TYPE\": \"" + type +
-//                "\", \"" + type + "_NAME\": \"" + name +
-//                "\", \"CONTENTS\": \"" + contents +
-//                "\", \"GUILD\": " + command.guild.longID +
-//                ", \"CHANNEL\": " + command.channel.longID +
-//                ", \"USER\": " + command.user.longID +
-//                ", \"MESSAGE\": " + command.message.longID +
-//                "}";
     }
 
     public static void sendGlobalAdminLogging(Command command, String args, CommandObject commandObject) {
@@ -671,6 +662,7 @@ public class Utility {
 
     public static String unFormatMentions(IMessage message) {
         StringHandler from = new StringHandler(message.getContent());
+        from.replaceRegex("(?i)(@here|@everyone)", "**[REDACTED]**");
         for (IUser user : message.getMentions()) {
             if (user != null) {
                 StringHandler regex = new StringHandler("<@!?").append(user.getLongID()).append(">");
@@ -767,7 +759,9 @@ public class Utility {
         if (!s.toString().endsWith(")")) {
             s.append(")");
         }
-        logger.error(s.toString());
+        StringHandler builder = new StringHandler();
+        builder.addViaJoin(Globals.getAllLogs(), "\n");
+        logger.error(s.toString() + "\n>> LAST " + Globals.getAllLogs().size() + " DEBUG LOGS<<\n" + builder.toString());
     }
 
     public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, String type, boolean testPerms) {
@@ -1049,6 +1043,8 @@ public class Utility {
             return -1;
         }
     }
+
+
 }
 
 //    public static List<String> getAlbumIUrls(String fileURL) {

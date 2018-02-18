@@ -38,6 +38,10 @@ public class InitChannels {
         channelSettings.add(new XpDenied());
         channelSettings.add(new LevelUpDenied());
         channelSettings.add(new DontLog());
+        channelSettings.add(new ChannelCC());
+        channelSettings.add(new CreateCC());
+        channelSettings.add(new CCDenied());
+        channelSettings.add(new ChannelCharacters());
 
         validate(channelSettings);
 

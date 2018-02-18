@@ -6,6 +6,8 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.ChannelSettingObject;
+import com.github.vaerys.objects.GuildLogObject;
+import com.github.vaerys.objects.LogObject;
 import com.github.vaerys.objects.UserRateObject;
 import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.ChannelSetting;
@@ -32,6 +34,7 @@ public class GuildObject {
     public Competition competition;
     public GuildUsers users;
     public ChannelData channelData;
+    public GuildLog guildLog;
     public List<GuildFile> guildFiles;
     public List<Command> commands;
     public List<GuildToggle> toggles;
@@ -53,6 +56,7 @@ public class GuildObject {
         this.competition = (Competition) Competition.create(Competition.FILE_PATH, longID, new Competition());
         this.users = (GuildUsers) GuildUsers.create(GuildUsers.FILE_PATH, longID, new GuildUsers());
         this.channelData = (ChannelData) ChannelData.create(ChannelData.FILE_PATH, longID, new ChannelData());
+        this.guildLog = (GuildLog) GuildLog.create(GuildLog.FILE_PATH, longID, new GuildLog());
         this.guildFiles = new ArrayList<GuildFile>() {{
             add(config);
             add(customCommands);
@@ -61,17 +65,30 @@ public class GuildObject {
             add(competition);
             add(users);
             add(channelData);
+            add(guildLog);
         }};
         customCommands.initCustomCommands(get());
         this.client = new ClientObject(object.getClient(), this);
         loadCommandData();
     }
 
+    public void sendDebugLog(CommandObject command, String type, String name, String contents) {
+        GuildLogObject object = new GuildLogObject(command, type, name, contents);
+        String output = object.getOutput(command);
+        if (command.guild.get() != null) {
+            guildLog.addLog(object, command.guild.longID);
+        } else {
+            Globals.addToLog(new LogObject(object, -1));
+        }
+        logger.trace(output);
+    }
+
+
     public void loadCommandData() {
-        this.commands = new ArrayList<>(Globals.getCommands(false));
-        this.toggles = new ArrayList<>(Globals.getGuildToggles());
-        this.channelSettings = new ArrayList<>(Globals.getChannelSettings());
-        this.commandTypes = new ArrayList<>(Globals.getCommandTypes());
+        this.commands = Globals.getCommands(false);
+        this.toggles = Globals.getGuildToggles();
+        this.channelSettings = Globals.getChannelSettings();
+        this.commandTypes = Globals.getCommandTypes();
         checkToggles();
     }
 
@@ -338,5 +355,14 @@ public class GuildObject {
 
     public IRole getMutedRole() {
         return object.getRoleByID(config.getMutedRoleID());
+    }
+
+
+    public IRole getXPDeniedRole() {
+        return object.getRoleByID(config.getMutedRoleID());
+    }
+
+    public IRole getTopTenRole() {
+        return object.getRoleByID(config.topTenRoleID);
     }
 }

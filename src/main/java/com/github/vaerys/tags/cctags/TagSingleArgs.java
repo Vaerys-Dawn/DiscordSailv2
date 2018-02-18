@@ -34,7 +34,7 @@ public class TagSingleArgs extends TagObject {
                 from = replaceFirstTag(from, splitArgs.get(position));
             }
         } catch (NumberFormatException e) {
-            from = replaceFirstTag(from, "#ERROR#:" + name);
+            from = replaceFirstTag(from, error);
         }
         return from;
     }

@@ -90,22 +90,22 @@ public class ProfileSettings extends Command {
         builder.append("**Settings:**\n");
         if (object.guild.config.modulePixels) {
             if (levelUp.size() != 0) {
-                builder.append("> LevelChannel - `Level up messages will be sent to `" + levelUp.get(0).mention() + "\n");
+                builder.append("> " + UserSetting.SEND_LVLUP_RANK_CHANNEL + " - `Level up messages will be sent to `" + levelUp.get(0).mention() + "\n");
             }
-            builder.append("> CurrentChannel - `Level up messages will be sent to the current channel.`\n" +
-                    "> DMs - `Level up messages will be sent to your DMs.`\n" +
-                    "> NoLevelMessages - `Hides your Level up messages.`\n" +
-                    "> NoXP - `Stops you from gaining pixels.`\n" +
-                    "> HideRank - `Hides your rank on the server.`\n" +
-                    "> NoLevelUpReactions - `Stops level up reactions.`\n");
+            builder.append("> " + UserSetting.SEND_LVLUP_CURRENT_CHANNEL + " - `Level up messages will be sent to the current channel.`\n" +
+                    "> " + UserSetting.SEND_LVLUP_DMS + " - `Level up messages will be sent to your DMs.`\n" +
+                    "> " + UserSetting.DONT_SEND_LVLUP + " - `Hides your Level up messages.`\n" +
+                    "> " + UserSetting.NO_XP_GAIN + " - `Stops you from gaining pixels.`\n" +
+                    "> " + UserSetting.HIDE_RANK + " - `Hides your rank on the server.`\n" +
+                    "> " + UserSetting.NO_LEVEL_UP_REACTIONS + " - `Stops level up reactions.`\n");
         }
-        builder.append("> PrivateProfile - `Hides your profile from other users.`");
+        builder.append("> " + UserSetting.PRIVATE_PROFILE + " - `Hides your profile from other users.`");
         if (object.guild.config.modulePixels) {
             UserSetting setting = object.guild.config.defaultLevelMode;
             if (setting == UserSetting.SEND_LVLUP_RANK_CHANNEL && levelUp.size() == 0) {
                 setting = UserSetting.SEND_LVLUP_CURRENT_CHANNEL;
             }
-            builder.append("\n\nCurrent Guild Default: **" + UserSetting.get(setting) + "**\n");
+            builder.append("\n\nCurrent Guild Default: **" + setting.toString() + "**\n");
         } else {
             builder.append("\n");
         }

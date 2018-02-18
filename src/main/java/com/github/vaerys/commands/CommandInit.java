@@ -111,6 +111,7 @@ public class CommandInit {
         commands.add(new SelectChar());
         commands.add(new UpdateChar());
         commands.add(new SetBioRolePrefix());
+        commands.add(new CharAvatar());
         //CC commands
         commands.add(new DelCC());
         commands.add(new EditCC());
@@ -197,6 +198,7 @@ public class CommandInit {
         commands.add(new WhoWasThat());
         commands.add(new PatreonToken());
         commands.add(new UnBlockUser());
+        commands.add(new BotStats());
 
         validate(commands);
 

@@ -20,7 +20,7 @@ public abstract class MentionCommand extends Command {
         if (mention.getRest() == null) {
             return false;
         }
-        if (!command.message.get().getMentions().contains(command.client.bot)) {
+        if (!command.message.get().getMentions().contains(command.client.bot.get())) {
             return false;
         }
         SplitFirstObject call = new SplitFirstObject(mention.getRest());

@@ -41,6 +41,7 @@ public class ListChars extends Command {
         }
         Utility.listFormatterEmbed(title, builder, list, true);
         builder.appendField(spacer, Utility.getCommandInfo(new CharInfo(), command), false);
+        builder.withFooterText(command.user.characters.size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
             return "> Char list sent to your Direct messages.";
@@ -71,7 +72,7 @@ public class ListChars extends Command {
 
     @Override
     public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+        return CHANNEL_CHAR;
     }
 
     @Override

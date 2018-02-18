@@ -57,7 +57,7 @@ public class InfoCC extends Command {
 
     @Override
     public String channel() {
-        return null;
+        return CHANNEL_CC_INFO;
     }
 
     @Override

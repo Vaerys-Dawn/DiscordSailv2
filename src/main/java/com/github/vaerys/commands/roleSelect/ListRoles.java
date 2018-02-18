@@ -30,6 +30,7 @@ public class ListRoles extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        if (command.guild.config.getCosmeticRoleIDs().size() == 0) return "> No Cosmetic roles are set up right now. Come back later.";
         RequestHandler.sendEmbedMessage("", getList(command), command.channel.get());
         return null;
     }

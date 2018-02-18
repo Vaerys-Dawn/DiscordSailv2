@@ -45,6 +45,8 @@ public class TagList {
         tags.add(new TagUser(10, LEVEL));
         tags.add(new TagChannel(10, INFO));
         tags.add(new TagDisplayName(10, INFO));
+        tags.add(new TagServer(10, CC));
+        tags.add(new TagChannelMention(10, CC));
         //single args
         tags.add(new TagSingleArgs(20, CC));
         //random tags (part 1)
@@ -54,6 +56,7 @@ public class TagList {
         tags.add(new TagIfRole(40, CC));
         tags.add(new TagIfName(41, CC));
         tags.add(new TagIfArgs(42, CC));
+        tags.add(new TagIfChannel(43,CC));
         //replace tags
         tags.add(new TagReplace(50, CC));
         tags.add(new TagReplaceSpecial(51, CC));

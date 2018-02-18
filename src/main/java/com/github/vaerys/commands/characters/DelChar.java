@@ -30,7 +30,7 @@ public class DelChar extends Command{
 
     @Override
     public String usage() {
-        return "[Character Name]";
+        return "[Character ID]";
     }
 
     @Override
@@ -40,7 +40,7 @@ public class DelChar extends Command{
 
     @Override
     public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+        return CHANNEL_CHAR;
     }
 
     @Override

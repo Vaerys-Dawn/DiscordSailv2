@@ -6,7 +6,7 @@
 
     <groupId>com.github.vaerys</groupId>
     <artifactId>DiscordSAIL</artifactId>
-    <version>2.9.1.5</version>
+    <version>2.9.1.6</version>
 
     <build>
         <resources>
@@ -88,7 +88,7 @@
         <dependency>
             <groupId>com.github.austinv11</groupId>
             <artifactId>Discord4j</artifactId>
-            <version>6c5ebe8</version>
+            <version>62e9cf1</version>
             <classifier>shaded</classifier>
         </dependency>
         <dependency>

@@ -1,14 +1,23 @@
 package com.github.vaerys.pogos;
 
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.templates.GuildFile;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -73,4 +82,43 @@ public class Characters extends GuildFile {
             }
         }
     }
+
+    public CharacterObject getCharByName(String args) {
+        for (CharacterObject c : characters) {
+            if (c.getName().equalsIgnoreCase(args)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public List<CharacterObject> getCharactersForUser(UserObject user) {
+        List<CharacterObject> charObjects = new LinkedList<>();
+        for (CharacterObject c : characters) {
+            if (c.getUserID() == user.longID) {
+                charObjects.add(c);
+            }
+        }
+        return charObjects;
+    }
+
+    public int maxCharsForUser(UserObject user, GuildObject guild) {
+        int maxChars = 4;
+        int rewardCount = XpHandler.getRewardCount(guild, user.longID);
+        maxChars += rewardCount * 2;
+        if (user.isPatron) maxChars += 4;
+        if (Utility.canBypass(user, guild)) maxChars += 4;
+        if (Utility.testForPerms(user, guild, Permissions.MANAGE_MESSAGES)) maxChars += 4;
+        return maxChars;
+    }
+
+    public int maxCharsForUser(CommandObject command) {
+        return maxCharsForUser(command.user, command.guild);
+    }
+
+    public void addChar(String characterID, List<IRole> roles, UserObject user) {
+        characters.add(new CharacterObject(characterID, user.longID, user.displayName, roles.stream().map(iRole -> iRole.getLongID()).collect(Collectors.toList())));
+    }
+
+
 }

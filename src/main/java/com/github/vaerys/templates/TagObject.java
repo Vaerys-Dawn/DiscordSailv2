@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public abstract class TagObject {
 
@@ -19,6 +18,7 @@ public abstract class TagObject {
     public String splitter;
     public String desc;
     public String usage;
+    public String error;
     public int requiredArgs;
     List<String> types = new ArrayList<>();
 
@@ -31,6 +31,7 @@ public abstract class TagObject {
         splitter = splitter();
         desc = desc();
         usage = usage();
+        error = "#ERROR#:" + tagName();
         this.types = Arrays.asList(types);
     }
 
@@ -54,11 +55,17 @@ public abstract class TagObject {
 
     public boolean cont(String from) {
         if (requiredArgs != 0) {
-            String toRegex = Utility.escapeRegex(prefix) + "(.|\n)*?" + Utility.escapeRegex(suffix);
-            return Pattern.compile(toRegex).matcher(from).find();
+            String tester = StringUtils.substringBetween(from, prefix, suffix);
+            return tester != null && !tester.isEmpty();
         } else {
-            return Pattern.compile(Utility.escapeRegex(prefix)).matcher(from).find();
+            return from.contains(prefix);
         }
+//        if (requiredArgs != 0) {
+//            String toRegex = Utility.escapeRegex(prefix) + "(.|\n)*?" + Utility.escapeRegex(suffix);
+//            return Pattern.compile(toRegex).matcher(from).find();
+//        } else {
+//            return Pattern.compile(Utility.escapeRegex(prefix)).matcher(from).find();
+//        }
     }
 
     public String contents(String from) {
@@ -74,11 +81,11 @@ public abstract class TagObject {
         }
     }
 
-    public List<String> getSpliContents(String from){
+    public List<String> getSpliContents(String from) {
         String contents = contents(from);
-        if (contents != null){
+        if (contents != null) {
             return Arrays.asList(contents.split(splitter));
-        }else {
+        } else {
             return new ArrayList<>();
         }
     }
@@ -168,7 +175,7 @@ public abstract class TagObject {
             } else if (requiredArgs == getSplit(from).size()) {
                 from = execute(from, command, args);
             } else {
-                from = replaceFirstTag(from, "#ERROR#:" + name);
+                from = replaceFirstTag(from, error);
             }
             if (from == null) from = "";
         }

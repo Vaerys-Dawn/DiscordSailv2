@@ -1,6 +1,14 @@
 package com.github.vaerys.objects;
 
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
+import sx.blah.discord.handle.obj.IIDLinkedObject;
+import sx.blah.discord.handle.obj.IRole;
+
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 17/11/2016.
@@ -24,11 +32,11 @@ public class CharacterObject {
     String avatarURL = "";
     String longBioURL = ""; //URL link linking to Character Bios
 
-    public CharacterObject(String name, long userID, String nickname, ArrayList<Long> roleIDs) {
+    public CharacterObject(String name, long userID, String nickname, List<Long> roleIDs) {
         this.name = name;
         this.userID = userID;
         this.nickname = nickname;
-        this.roleIDs = roleIDs;
+        this.roleIDs = (ArrayList<Long>) roleIDs;
     }
 
     public void setLongBioURL(String longBioURL) {
@@ -79,7 +87,7 @@ public class CharacterObject {
         return name;
     }
 
-    public ArrayList<Long> getRoleIDs() {
+    public List<Long> getRoleIDs() {
         return roleIDs;
     }
 
@@ -95,8 +103,12 @@ public class CharacterObject {
         return shortBio;
     }
 
-    public void update(CharacterObject newCharacter) {
-        this.nickname = newCharacter.getNickname();
-        this.roleIDs = newCharacter.getRoleIDs();
+    public void update(String name, List<IRole> roles) {
+        this.nickname = name;
+        this.roleIDs = new ArrayList<>(roles.stream().map(IIDLinkedObject::getLongID).collect(Collectors.toList()));
+    }
+
+    public Color getColor(GuildObject guild) {
+        return Utility.getUsersColour(roleIDs.stream().map(aLong -> guild.getRoleByID(aLong)).filter(iRole -> iRole != null).collect(Collectors.toList()), guild.get());
     }
 }

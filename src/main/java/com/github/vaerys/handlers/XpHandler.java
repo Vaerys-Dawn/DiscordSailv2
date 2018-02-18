@@ -50,6 +50,9 @@ public class XpHandler {
                 if (days > 15) {
                     //plateaued xp decay
                     decay = (long) ((15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
+                } else if (days > 90) {
+                    // kill the xp after 90 days of absences
+                    decay = (long) ((90 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
                 } else {
                     //normal xp decay formula
                     decay = (long) ((days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
@@ -296,6 +299,12 @@ public class XpHandler {
                     rankedup = true;
                 }
             }
+
+
+            String loggingType = rankedup ? "RANKUP" : "LEVELUP";
+            object.guild.sendDebugLog(object, "PIXELS", loggingType, user.getCurrentLevel() + "");
+
+
             //if the user only just reached level 1 send them a message telling them about the pixelSettings command.
             if (user.getCurrentLevel() == 1) {
                 levelUpMessage += "\n\n> If you want to change where these messages are sent or want to remove them completely you can change that with `" + new ProfileSettings().getUsage(object) + "`.";
@@ -533,18 +542,26 @@ public class XpHandler {
     }
 
     public static int getRewardCount(GuildObject object, long userID) {
+        if (!object.config.modulePixels) return 4;
         ProfileObject userObject = object.users.getUserByID(userID);
         if (userObject == null) {
             return 0;
         }
-        ArrayList<RewardRoleObject> allRewards = object.config.getAllRewards(userObject.getCurrentLevel());
-        if (allRewards.size() == 0) {
+        List<RewardRoleObject> userRewards = object.config.getAllRewards(userObject.getCurrentLevel());
+        List<RewardRoleObject> allRewards = object.config.getRewardRoles();
+        if (userRewards.size() == 0) {
             return 0;
         } else {
-            if (allRewards.size() > 4) {
-                return 4;
+            if (allRewards.size() < 4) {
+                float value = (userRewards.size() * 100.0f) / allRewards.size();
+                value = value / 25;
+                return (int) value;
             } else {
-                return allRewards.size();
+                if (userRewards.size() > 4) {
+                    return 4;
+                } else {
+                    return userRewards.size();
+                }
             }
         }
     }

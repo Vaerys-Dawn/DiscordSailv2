@@ -41,7 +41,7 @@ public class GetCompEntries extends Command {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Utility.sendStack(e);
             }
         }
         return "";

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class ToggleInit {
 
     final static Logger logger = LoggerFactory.getLogger(ToggleInit.class);
 
-    public static ArrayList<GuildToggle> get() {
+    public static List<GuildToggle> get() {
         ArrayList<GuildToggle> guildToggles = new ArrayList<>();
 
         //toggles
@@ -64,6 +65,7 @@ public class ToggleInit {
         guildToggles.add(new ModuleModMuting());
         guildToggles.add(new ModuleArtPinning());
         guildToggles.add(new ModulePixels());
+        guildToggles.add(new ModuleLogging());
 
         validate(guildToggles);
 
@@ -77,4 +79,16 @@ public class ToggleInit {
             Globals.addToErrorStack(errorReport);
         }
     }
+
+    public static List<GuildToggle> get(boolean isModule) {
+        List<GuildToggle> toggles = new LinkedList<>();
+        for (GuildToggle g : get()) {
+            if (g.isModule() == isModule) {
+                toggles.add(g);
+            }
+        }
+        return toggles;
+    }
+
+
 }
