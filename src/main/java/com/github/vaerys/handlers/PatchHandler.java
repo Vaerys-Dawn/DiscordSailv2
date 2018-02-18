@@ -102,7 +102,6 @@ public class PatchHandler {
 
 //        }
         finalizePatch(json);
-    }
 
     private static void moveChannelsToChannelData(IGuild guild) {
         PatchObject jsonConfig = getJsonConfig(guild, GuildConfig.FILE_PATH,

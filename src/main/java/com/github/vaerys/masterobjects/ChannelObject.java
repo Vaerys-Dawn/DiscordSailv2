@@ -30,7 +30,7 @@ public class ChannelObject {
                 if (setting.getIDs(guild).size() == 0) {
                     break;
                 } else if (setting.getIDs(guild).contains(Long.toUnsignedString(longID))) {
-                    settings.add(setting.name());
+                    settings.add(setting.toString());
                 }
             }
         }

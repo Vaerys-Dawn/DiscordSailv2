@@ -167,7 +167,7 @@ public class GuildObject {
 
     public void removeChannelSetting(String channel) {
         for (ChannelSetting s : channelSettings) {
-            if (s.name().equals(channel)) {
+            if (s.toString().equals(channel)) {
                 logger.trace("Channel Setting: " + s.toString() + " removed.");
             }
         }

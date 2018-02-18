@@ -31,7 +31,7 @@ public abstract class GuildToggle {
             guild.removeCommand(c.names());
         }
         for (ChannelSetting c : channels) {
-            guild.removeChannelSetting(c.name());
+            guild.removeChannelSetting(c.toString());
         }
         for (GuildSetting s : settings) {
             guild.removeToggle(s.name());
@@ -59,7 +59,7 @@ public abstract class GuildToggle {
                 .map(command1 -> command1.getCommand(command)).collect(Collectors.toList()));
         commandNames = commandNames.stream().distinct().collect(Collectors.toList());
         List<String> settingNames = settings.stream().map(guildSetting -> guildSetting.name()).collect(Collectors.toList());
-        List<String> channelNames = channels.stream().map(channelSetting -> channelSetting.name()).collect(Collectors.toList());
+        List<String> channelNames = channels.stream().map(channelSetting -> channelSetting.toString()).collect(Collectors.toList());
 
         if (commandNames.size() != 0) {
             builder.appendField("Commands:", "```\n" + Utility.listFormatter(commandNames, true) + Command.spacer + "```", true);
