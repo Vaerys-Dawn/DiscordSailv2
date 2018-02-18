@@ -150,8 +150,8 @@ public class GetGuildInfo extends Command {
                 }
                 if (channelList.size() != 0) {
                     String content = Utility.listFormatter(channelList, true);
-                    channels = resetEmbed(channels, channel, command, s.name().length() + content.length());
-                    channels.appendField(s.name(), content, true);
+                    channels = resetEmbed(channels, channel, command, s.toString().length() + content.length());
+                    channels.appendField(s.toString(), content, true);
                 }
             }
             channels.withTitle("CHANNEL STATS");

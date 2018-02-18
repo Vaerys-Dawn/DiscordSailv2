@@ -11,7 +11,7 @@ public class HelpChannel extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         for (ChannelSetting s : command.guild.channelSettings) {
-            if (s.name().equalsIgnoreCase(args)) {
+            if (s.toString().equalsIgnoreCase(args)) {
                 RequestHandler.sendEmbedMessage("", s.getInfo(command), command.channel.get());
                 return null;
             }

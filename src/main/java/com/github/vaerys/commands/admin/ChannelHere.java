@@ -25,7 +25,7 @@ public class ChannelHere extends Command {
         String desc = "";
         if (!args.isEmpty()) {
             for (ChannelSetting s : command.guild.channelSettings) {
-                if (args.equalsIgnoreCase(s.name())) {
+                if (args.equalsIgnoreCase(s.toString())) {
                     return s.toggleSetting(command.guild, command.channel.longID);
                 }
 
@@ -36,8 +36,8 @@ public class ChannelHere extends Command {
         String title = "> Here are all of the channel Types and Settings:";
 
         List<ChannelSetting> channelSettings = Arrays.asList(command.guild.channelSettings);
-        List<String> types = channelSettings.stream().filter(channelSetting -> !channelSetting.isSetting()).map(ChannelSetting::name).collect(Collectors.toList());
-        List<String> settings = channelSettings.stream().filter(channelSetting -> channelSetting.isSetting()).map(ChannelSetting::name).collect(Collectors.toList());
+        List<String> types = channelSettings.stream().filter(channelSetting -> !channelSetting.isSetting()).map(ChannelSetting::toString).collect(Collectors.toList());
+        List<String> settings = channelSettings.stream().filter(channelSetting -> channelSetting.isSetting()).map(ChannelSetting::toString).collect(Collectors.toList());
         Collections.sort(types);
         desc += "**Types**\n```\n" + Utility.listFormatter(types, true) + "```\n" +
                 "**Settings**\n```\n" + Utility.listFormatter(settings, true) + "```\n" + missingArgs(command);
