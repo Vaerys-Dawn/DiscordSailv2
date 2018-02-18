@@ -1,8 +1,8 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.channelsettings.settings.Groups;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 
@@ -38,7 +38,7 @@ public class ModuleGroups extends GuildModule {
 
     @Override
     public void setup() {
-        channels.add(new Groups());
+        channels.add(ChannelSetting.GROUPS);
     }
 
     @Override

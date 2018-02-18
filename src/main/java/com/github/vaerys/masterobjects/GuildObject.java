@@ -38,7 +38,7 @@ public class GuildObject {
     public List<GuildFile> guildFiles;
     public List<Command> commands;
     public List<GuildToggle> toggles;
-    public List<ChannelSetting> channelSettings;
+    public ChannelSetting[] channelSettings;
     public List<String> commandTypes;
     private List<UserRateObject> rateLimiting = new ArrayList<>();
     private List<Long> spokenUsers = new ArrayList<>();
@@ -165,13 +165,10 @@ public class GuildObject {
         }
     }
 
-    public void removeChannel(String channel) {
-        ListIterator iterator = channelSettings.listIterator();
-        while (iterator.hasNext()) {
-            ChannelSetting c = (ChannelSetting) iterator.next();
-            if (c.name().equals(channel)) {
-                iterator.remove();
-                logger.trace("Channel Setting: " + c.name() + " removed.");
+    public void removeChannelSetting(String channel) {
+        for (ChannelSetting s : channelSettings) {
+            if (s.name().equals(channel)) {
+                logger.trace("Channel Setting: " + s.toString() + " removed.");
             }
         }
     }

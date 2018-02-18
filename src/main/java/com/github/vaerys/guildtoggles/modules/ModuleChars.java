@@ -1,10 +1,10 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.channelsettings.settings.ChannelCharacters;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.guildtoggles.toggles.RoleIsToggle;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.Permissions;
@@ -44,7 +44,7 @@ public class ModuleChars extends GuildModule {
 
     @Override
     public void setup() {
-        channels.add(new ChannelCharacters());
+        channels.add(ChannelSetting.CHANNEL_CHARACTERS);
         settings.add(new RoleIsToggle());
     }
 

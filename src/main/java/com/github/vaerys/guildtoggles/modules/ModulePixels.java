@@ -1,17 +1,18 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.channelsettings.settings.LevelUpDenied;
-import com.github.vaerys.channelsettings.settings.Pixels;
-import com.github.vaerys.channelsettings.settings.XpDenied;
-import com.github.vaerys.channelsettings.types.LevelUp;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.DenyXpPrefix;
 import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.commands.pixels.PixelHelp;
-import com.github.vaerys.guildtoggles.toggles.*;
+import com.github.vaerys.guildtoggles.toggles.LikeArt;
+import com.github.vaerys.guildtoggles.toggles.ReactToLevelUp;
+import com.github.vaerys.guildtoggles.toggles.SelfDestructLevelUps;
+import com.github.vaerys.guildtoggles.toggles.XpDecay;
+import com.github.vaerys.guildtoggles.toggles.XpGain;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.IRole;
@@ -62,10 +63,12 @@ public class ModulePixels extends GuildModule {
     @Override
     public void setup() {
         commands.add(new DenyXpPrefix());
-        channels.add(new LevelUp());
-        channels.add(new Pixels());
-        channels.add(new LevelUpDenied());
-        channels.add(new XpDenied());
+        
+        channels.add(ChannelSetting.LEVEL_UP);
+        channels.add(ChannelSetting.PIXELS);
+        channels.add(ChannelSetting.LEVEL_UP_DENIED);
+        channels.add(ChannelSetting.XP_DENIED);
+        
         settings.add(new XpDecay());
         settings.add(new XpGain());
         settings.add(new SelfDestructLevelUps());

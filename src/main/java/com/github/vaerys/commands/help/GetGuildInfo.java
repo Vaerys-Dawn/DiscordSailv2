@@ -16,6 +16,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -135,8 +136,8 @@ public class GetGuildInfo extends Command {
 
         if (Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
 
-            List<ChannelSetting> channelSettings = new ArrayList<>(command.guild.channelSettings);
-            channelSettings.sort(Comparator.comparing(ChannelSetting::name));
+            List<ChannelSetting> channelSettings = Arrays.asList(command.guild.channelSettings);
+            channelSettings.sort(Comparator.comparing(ChannelSetting::toString));
             channelSettings.sort((o1, o2) -> Boolean.compare(o1.isSetting(), o2.isSetting()));
 
             for (ChannelSetting s : channelSettings) {

@@ -7,7 +7,7 @@ import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
-
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +35,7 @@ public class ChannelHere extends Command {
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String title = "> Here are all of the channel Types and Settings:";
 
-        List<ChannelSetting> channelSettings = command.guild.channelSettings;
+        List<ChannelSetting> channelSettings = Arrays.asList(command.guild.channelSettings);
         List<String> types = channelSettings.stream().filter(channelSetting -> !channelSetting.isSetting()).map(ChannelSetting::name).collect(Collectors.toList());
         List<String> settings = channelSettings.stream().filter(channelSetting -> channelSetting.isSetting()).map(ChannelSetting::name).collect(Collectors.toList());
         Collections.sort(types);

@@ -1,11 +1,18 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.channelsettings.settings.DontLog;
-import com.github.vaerys.channelsettings.types.AdminLog;
-import com.github.vaerys.channelsettings.types.ServerLog;
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.guildtoggles.toggles.*;
+import com.github.vaerys.guildtoggles.toggles.AdminLogging;
+import com.github.vaerys.guildtoggles.toggles.ChannelLogging;
+import com.github.vaerys.guildtoggles.toggles.DeleteLogging;
+import com.github.vaerys.guildtoggles.toggles.DontLogBot;
+import com.github.vaerys.guildtoggles.toggles.EditLogging;
+import com.github.vaerys.guildtoggles.toggles.ExtendEditLog;
+import com.github.vaerys.guildtoggles.toggles.GeneralLogging;
+import com.github.vaerys.guildtoggles.toggles.JoinLeaveLogging;
+import com.github.vaerys.guildtoggles.toggles.UseTimeStamps;
+import com.github.vaerys.guildtoggles.toggles.UserRoleLogging;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 
@@ -48,9 +55,9 @@ public class ModuleLogging extends GuildModule {
         settings.add(new UserRoleLogging());
         settings.add(new UseTimeStamps());
         settings.add(new ExtendEditLog());
-        channels.add(new AdminLog());
-        channels.add(new ServerLog());
-        channels.add(new DontLog());
+        channels.add(ChannelSetting.ADMIN_LOG);
+        channels.add(ChannelSetting.SERVER_LOG);
+        channels.add(ChannelSetting.DONT_LOG);
     }
 
     @Override

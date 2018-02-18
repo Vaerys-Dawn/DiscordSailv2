@@ -90,7 +90,7 @@ public class PatchHandler {
             JsonObject object = channelSetting.getAsJsonObject();
             String type = object.get("type").getAsString();
             object.remove("type");
-            object.add("type", ChannelSetting.get(type));
+            object.addProperty("type", ChannelSetting.get(type).name());
         }
         finalizePatch(json);
     }
