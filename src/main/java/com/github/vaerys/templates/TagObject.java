@@ -10,16 +10,17 @@ import com.github.vaerys.objects.XEmbedBuilder;
 
 public abstract class TagObject {
 
-    private int priority;
-    public String name;
-    public String prefix;
-    public String suffix;
-    public String splitter;
-    public String desc;
-    public String usage;
-    public String error;
-    public int requiredArgs;
+    private final int priority;
+    public final String name;
+    public final String prefix;
+    public final String suffix;
+    public final String splitter;
+    public final String desc;
+    public final String usage;
+    public final String error;
+    public final int requiredArgs;
     List<TagType> types = new ArrayList<>();
+
 
     public TagObject(int priority, TagType... types) {
         this.priority = priority;
@@ -34,10 +35,6 @@ public abstract class TagObject {
         this.types = Arrays.asList(types);
     }
 
-    public int getPriority() {
-        return priority;
-    }
-
     public abstract String execute(String from, CommandObject command, String args);
 
     protected abstract String tagName();
@@ -48,8 +45,16 @@ public abstract class TagObject {
 
     protected abstract String desc();
 
-    public boolean isPassive() {
+    protected boolean isPassive() {
         return false;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public List<String> getTypes() {
+        return types;
     }
 
     public boolean cont(String from) {
@@ -59,12 +64,6 @@ public abstract class TagObject {
         } else {
             return from.contains(prefix);
         }
-//        if (requiredArgs != 0) {
-//            String toRegex = Utility.escapeRegex(prefix) + "(.|\n)*?" + Utility.escapeRegex(suffix);
-//            return Pattern.compile(toRegex).matcher(from).find();
-//        } else {
-//            return Pattern.compile(Utility.escapeRegex(prefix)).matcher(from).find();
-//        }
     }
 
     public String contents(String from) {
@@ -147,7 +146,7 @@ public abstract class TagObject {
         return ";;";
     }
 
-    public String prefix() {
+    protected String prefix() {
         if (requiredArgs == 0) {
             return name;
         } else {
@@ -155,7 +154,7 @@ public abstract class TagObject {
         }
     }
 
-    public String suffix() {
+    protected String suffix() {
         if (requiredArgs == 0) {
             return "";
         } else {
@@ -222,7 +221,7 @@ public abstract class TagObject {
             return null;
         }
     }
-
+  
     public List<TagType> getTypes() {
         return types;
     }

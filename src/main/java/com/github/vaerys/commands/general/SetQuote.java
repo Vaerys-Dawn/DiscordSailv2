@@ -68,7 +68,7 @@ public class SetQuote extends Command {
     public String description(CommandObject command) {
         String response = "Allows you to set your quote. Limit 140 chars (or 280 if you are a patron)";
         if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
-            response += "\n\n**" + command.guild.config.getPrefixCommand() + names()[1] + " [@User] [Quote...]**\n" +
+            response += "\n\n**" + command.guild.config.getPrefixCommand() + names[1] + " [@User] [Quote...]**\n" +
                     "**Desc:** Edits a user's quote.\n" +
                     "**Permissions:** " + Permissions.MANAGE_MESSAGES + ".\n";
         }

@@ -58,7 +58,7 @@ public class ReminderDM extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"SetQuote", "SetUserQuote", "SetDesc", "SetDescription"};
+    protected static final String[] NAMES = new RemindMe().names;
     @Override
     protected String[] names() {
         return NAMES;

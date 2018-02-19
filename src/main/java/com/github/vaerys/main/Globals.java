@@ -153,6 +153,7 @@ public class Globals {
         // }
         //Collections.sort(commandTypes);
 
+
         logger.info(commands.size() + " Commands Loaded.");
         logger.info(creatorCommands.size() + " Creator Commands Loaded.");
         //logger.info(commandTypes.size() + " Command Types Loaded.");
@@ -381,7 +382,6 @@ public class Globals {
             } else {
                 if (c.channel == null || c.channel != ChannelSetting.FROM_DM)
                     getCommands.add(c);
-
             }
         }
         return getCommands;

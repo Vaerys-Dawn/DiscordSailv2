@@ -27,7 +27,7 @@ public abstract class GuildToggle {
     public void execute(GuildObject guild) {
         guild.removeCommandsByType(affectsType);
         for (Command c : commands) {
-            guild.removeCommand(c.names());
+            guild.removeCommand(c.names);
         }
         for (ChannelSetting c : channels) {
             guild.removeChannelSetting(c.toString());

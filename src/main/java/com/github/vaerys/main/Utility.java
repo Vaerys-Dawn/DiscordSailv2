@@ -323,7 +323,7 @@ public class Utility {
     }
 
     public static boolean canBypass(UserObject user, GuildObject guild) {
-        return canBypass(user.get(),guild.get());
+        return canBypass(user.get(), guild.get());
     }
 
     public static long getMentionUserID(String content) {
@@ -403,14 +403,14 @@ public class Utility {
         }
         if (singleLine) {
             for (String s : list) {
-                formattedList.append(s + ", ");
+                formattedList.append(s).append(", ");
             }
             formattedList.delete(formattedList.length() - 2, formattedList.length());
             formattedList.append(".");
             return formattedList.toString();
         } else {
             for (String s : list) {
-                formattedList.append(s + "\n");
+                formattedList.append(s).append("\n");
             }
             return formattedList.toString();
         }
@@ -440,6 +440,7 @@ public class Utility {
                     .append(command.names[0]).append("`");
             List<IChannel> adminlog = c.getChannelsByType(ChannelSetting.ADMIN_LOG);
             List<IChannel> serverLog = c.getChannelsByType(ChannelSetting.SERVER_LOG);
+
             IChannel channel = null;
 
             if (!(args == null || args.isEmpty())) {
@@ -804,6 +805,7 @@ public class Utility {
                     if (c.type == SAILType.CREATOR && commandObject.user.longID != commandObject.client.creator.longID) {
                         //do nothing
                     } else if (testForPerms(commandObject, c.perms)) {
+
                         toReturn.add(c);
                     }
                 } else {

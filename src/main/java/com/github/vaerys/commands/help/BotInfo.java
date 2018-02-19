@@ -19,13 +19,15 @@ public class BotInfo extends Command {
         StringBuilder response = new StringBuilder();
         IUser creator = command.client.fetchUser(153159020528533505L);
         IUser andriel = command.client.fetchUser(175442602508812288L);
+        IUser c0bra = command.client.fetchUser(222041304761237505L);
         builder.withTitle("Information about " + Globals.botName);
         response.append("Created by: **@" + creator.getName() + "#" + creator.getDiscriminator() + "**.");
         response.append("\nCreated entirely using Java 8 and the **[Discord4J Libraries](https://discord4j.com/)**.");
         response.append("\nSupport " + Globals.botName + " on **[Patreon](https://www.patreon.com/DawnFelstar)**.");
         response.append("\nFind " + Globals.botName + " on **[GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)**.");
         response.append("\nBot's Support Discord: **https://discord.gg/XSyQQrR**.");
-        response.append("\n\nContributors: **@" + andriel.getName() + "#" + andriel.getDiscriminator() + "**.");
+        response.append("\n\nContributors: **@" + andriel.getName() + "#" + andriel.getDiscriminator() + "**, ");
+        response.append("**@").append(c0bra.getName()).append("#").append(c0bra.getDiscriminator()).append("**.");
         builder.withDesc(response.toString());
         builder.withThumbnail(command.client.bot.getAvatarURL());
         builder.withFooterText("Bot Version: " + Globals.version);

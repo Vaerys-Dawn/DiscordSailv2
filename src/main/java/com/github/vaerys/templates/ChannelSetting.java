@@ -232,7 +232,7 @@ public enum ChannelSetting {
         }
         List<Command> commands = object.guild.commands.stream().filter(command -> {
             if (command.channel() != null && Utility.testForPerms(object, command.perms())) {
-                return command.channel() == this;
+                return command.channel == this;
             }
             return false;
         }).collect(Collectors.toList());

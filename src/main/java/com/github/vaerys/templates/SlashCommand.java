@@ -56,7 +56,12 @@ public abstract class SlashCommand extends Command {
     }
     @Override
     public String getCommand(CommandObject command) {
-        return "/" + names()[0];
+        return "/" + names[0];
+    }
+
+    @Override
+    public String getCommand(CommandObject command, int i) {
+        return "/" + names[i];
     }
 
     @Override
@@ -85,8 +90,8 @@ public abstract class SlashCommand extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(getCommand(command));
         builder.withDescription(description(command));
-        if (names().length != 1) {
-            builder.appendField("Aliases:", Utility.listFormatter(Arrays.asList(names()),true),true);
+        if (names.length != 1) {
+            builder.appendField("Aliases:", Utility.listFormatter(Arrays.asList(names), true), true);
         }
         return builder;
     }
@@ -96,7 +101,7 @@ public abstract class SlashCommand extends Command {
         StringBuilder response = new StringBuilder();
         boolean isErrored = false;
         response.append("\n>> Begin Error Report: " + this.getClass().getName() + " <<\n");
-        if (names().length == 0 || names()[0].isEmpty()) {
+        if (names.length == 0 || names[0].isEmpty()) {
             response.append("> NAME IS EMPTY.\n");
             isErrored = true;
         }

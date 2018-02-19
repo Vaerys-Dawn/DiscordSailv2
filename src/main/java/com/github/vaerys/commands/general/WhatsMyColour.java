@@ -23,7 +23,7 @@ public class WhatsMyColour extends Command {
         Color color = user.getRandomColour();
         XEmbedBuilder builder = new XEmbedBuilder(color);
         String desc = notAuthor ? "**" + user.displayName + "'s** " : "Your ";
-        if (isSubtype(command, names()[2]) || isSubtype(command, names()[3])) {
+        if (isSubtype(command, names[2]) || isSubtype(command, names[3])) {
             desc += "color is : ";
         } else {
             desc += "colour is : ";

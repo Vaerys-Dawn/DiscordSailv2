@@ -73,7 +73,7 @@ public class RequestHandler {
                         e.getMessage().contains("Message was unable to be sent")) {
                     sendError("Message was unable to be sent, User Dms might be off.", message, channel);
                 } else {
-                    Utility.sendStack(e);
+                    throw e;
                 }
                 return null;
             }

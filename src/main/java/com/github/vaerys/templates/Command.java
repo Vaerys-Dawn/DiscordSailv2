@@ -23,6 +23,7 @@ public abstract class Command {
     public static final String codeBlock = "```";
     public static final String ownerOnly = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
 
+
     public final ChannelSetting channel;
     public final SAILType type;
     public final String[] names;
@@ -42,6 +43,7 @@ public abstract class Command {
         this.doAdminLogging = doAdminLogging();
     };
     
+
     public List<SubCommandObject> subCommands = new LinkedList<>();
 
     /**
@@ -51,6 +53,7 @@ public abstract class Command {
      * @return The text or data to send back for the command
      */
     public abstract String execute(String args, CommandObject command);
+
 
     /**
      * Gets the list of names that are associated with the command
@@ -82,11 +85,6 @@ public abstract class Command {
      */
     protected abstract ChannelSetting channel();
     
-    
-    /**
-     * 
-     * @return
-     */
     protected abstract Permissions[] perms();
 
     protected abstract boolean requiresArgs();
@@ -96,7 +94,11 @@ public abstract class Command {
     protected abstract void init();
 
     public String getCommand(CommandObject command) {
-        return command.guild.config.getPrefixCommand() + names()[0];
+        return command.guild.config.getPrefixCommand() + names[0];
+    }
+
+    public String getCommand(CommandObject command, int i) {
+        return command.guild.config.getPrefixCommand() + names[i];
     }
 
     public String getUsage(CommandObject command) {
@@ -113,7 +115,7 @@ public abstract class Command {
 
     public boolean isCall(String args, CommandObject command) {
         SplitFirstObject call = new SplitFirstObject(args);
-        for (String s : names()) {
+        for (String s : names) {
             if ((command.guild.config.getPrefixCommand() + s).equalsIgnoreCase(call.getFirstWord())) {
                 return true;
             }
@@ -145,6 +147,7 @@ public abstract class Command {
         
         // display permissions
         if (perms != null && perms.length != 0) {
+
             builder.append("**Perms: **");
             ArrayList<String> permList = new ArrayList<>(perms.length);
             for (Permissions p : perms) {
@@ -152,12 +155,12 @@ public abstract class Command {
             }
             builder.append(Utility.listFormatter(permList, true));
         }
-        
-        
+
         infoEmbed.appendField("> Help - " + names()[0], builder.toString(), false);
 
+
         //Handle channels
-        List<IChannel> channels = command.guild.getChannelsByType(channel());
+        List<IChannel> channels = command.guild.getChannelsByType(channel);
         List<String> channelMentions = Utility.getChannelMentions(channels);
 
         //channel
@@ -170,10 +173,10 @@ public abstract class Command {
         }
 
         //aliases
-        if (names().length > 1) {
+        if (names.length > 1) {
             StringBuilder aliasBuilder = new StringBuilder();
-            for (int i = 1; i < names().length; i++) {
-                aliasBuilder.append(command.guild.config.getPrefixCommand() + names()[i] + ", ");
+            for (int i = 1; i < names.length; i++) {
+                aliasBuilder.append(getCommand(command, i) + ", ");
             }
             aliasBuilder.delete(aliasBuilder.length() - 2, aliasBuilder.length());
             aliasBuilder.append(".\n");
@@ -181,6 +184,7 @@ public abstract class Command {
         }
         return infoEmbed;
     }
+
 
     public String validate() {
         StringBuilder response = new StringBuilder();
