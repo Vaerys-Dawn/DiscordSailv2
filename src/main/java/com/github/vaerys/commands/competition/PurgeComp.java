@@ -1,7 +1,9 @@
 package com.github.vaerys.commands.competition;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -16,9 +18,10 @@ public class PurgeComp extends Command{
         return "> Purge Complete.";
     }
 
+    protected static final String[] NAMES = new String[]{"PurgeComp"};
     @Override
-    public String[] names() {
-        return new String[]{"PurgeComp"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -26,58 +29,44 @@ public class PurgeComp extends Command{
         return "Purges the Current Comp to make way for a new one.";
     }
 
+    protected static final String USAGE = null;
     @Override
-    public String usage() {
-        return null;
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.COMPETITION;
     @Override
-    public String type() {
-        return TYPE_COMPETITION;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.ADMINISTRATOR};
     @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.ADMINISTRATOR};
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

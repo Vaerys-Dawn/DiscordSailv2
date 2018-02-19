@@ -7,7 +7,9 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -41,9 +43,10 @@ public class SetLevel extends Command {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"SetLevel"};
     @Override
-    public String[] names() {
-        return new String[]{"SetLevel"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -51,58 +54,45 @@ public class SetLevel extends Command {
         return "Allows you to set the level of a user.";
     }
 
+    protected static final String USAGE = "[@User] [Level]";
     @Override
-    public String usage() {
-        return "[@User] [Level]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
-    public String type() {
-        return TYPE_PIXEL;
+    protected SAILType type() {
+        return COMMAND_TYPE;
+
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
     @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
-    public boolean doAdminLogging() {
-        return true;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

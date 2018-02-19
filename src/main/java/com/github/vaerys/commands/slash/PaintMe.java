@@ -9,9 +9,10 @@ public class PaintMe extends SlashCommand {
         return "∠( ᐛ 」∠)＿";
     }
 
+    protected static final String[] NAMES = new String[]{"PaintMe","PaintMeLike","FrenchGirl"};
     @Override
-    public String[] names() {
-        return new String[]{"PaintMe","PaintMeLike","FrenchGirl"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override

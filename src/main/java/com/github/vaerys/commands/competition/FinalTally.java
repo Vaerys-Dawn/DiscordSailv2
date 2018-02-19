@@ -1,10 +1,11 @@
 package com.github.vaerys.commands.competition;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
-
 import java.util.ArrayList;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
+import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -40,9 +41,10 @@ public class FinalTally extends Command {
         return builder.toString();
     }
 
+    protected static final String[] NAMES = new String[]{"FinalTally"};
     @Override
-    public String[] names() {
-        return new String[]{"FinalTally"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -50,58 +52,44 @@ public class FinalTally extends Command {
         return "Posts the final scores.";
     }
 
+    protected static final String USAGE = null;
     @Override
-    public String usage() {
-        return null;
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.COMPETITION;
     @Override
-    public String type() {
-        return TYPE_COMPETITION;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_MESSAGES,Permissions.MANAGE_ROLES};
     @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES,Permissions.MANAGE_ROLES};
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

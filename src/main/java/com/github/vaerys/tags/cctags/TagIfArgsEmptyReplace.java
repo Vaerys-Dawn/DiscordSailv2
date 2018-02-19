@@ -1,14 +1,14 @@
 package com.github.vaerys.tags.cctags;
 
+import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.objects.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
-
-import java.util.List;
+import com.github.vaerys.templates.TagType;
 
 public class TagIfArgsEmptyReplace extends TagReplaceObject {
 
-    public TagIfArgsEmptyReplace(int priority, String... types) {
+    public TagIfArgsEmptyReplace(int priority, TagType... types) {
         super(priority, types);
     }
 

@@ -1,16 +1,17 @@
 package com.github.vaerys.commands.creator.directmessages;
 
+import java.text.NumberFormat;
+import java.util.stream.Collectors;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GlobalUserObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.text.NumberFormat;
-import java.util.stream.Collectors;
 
 public class WhoWasThat extends Command {
 
@@ -79,9 +80,10 @@ public class WhoWasThat extends Command {
         return null;
     }
 
+    protected static final String[] NAMES = new String[]{"WhoWasThat", "Who"};
     @Override
-    public String[] names() {
-        return new String[]{"WhoWasThat", "Who"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -89,29 +91,34 @@ public class WhoWasThat extends Command {
         return "Gives information about the most recent Dm user.";
     }
 
+    protected static final String USAGE = null;
     @Override
-    public String usage() {
-        return null;
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.FROM_DM;
     @Override
-    public String channel() {
-        return CHANNEL_DM;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
     @Override
@@ -122,25 +129,5 @@ public class WhoWasThat extends Command {
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

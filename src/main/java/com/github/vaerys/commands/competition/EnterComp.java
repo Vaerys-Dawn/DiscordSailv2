@@ -1,17 +1,18 @@
 package com.github.vaerys.commands.competition;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.objects.CompObject;
-import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.objects.CompObject;
+import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -46,9 +47,10 @@ public class EnterComp extends Command {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"EnterComp","Comp","Enter"};
     @Override
-    public String[] names() {
-        return new String[]{"EnterComp","Comp","Enter"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -56,58 +58,44 @@ public class EnterComp extends Command {
         return "Enters your image into the Sail Competition.";
     }
 
+    protected static final String USAGE = "[Image Link or Image File]";
     @Override
-    public String usage() {
-        return "[Image Link or Image File]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.COMPETITION;
     @Override
-    public String type() {
-        return TYPE_COMPETITION;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
-    public boolean doAdminLogging() {
-        return true;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

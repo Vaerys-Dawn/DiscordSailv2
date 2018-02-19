@@ -1,5 +1,6 @@
 package com.github.vaerys.commands.cc;
 
+import java.nio.file.Paths;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
@@ -7,13 +8,13 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.pogos.CustomCommands;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.nio.file.Paths;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -59,9 +60,10 @@ public class TransferCC extends Command {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"TransferCC"};
     @Override
-    public String[] names() {
-        return new String[]{"TransferCC"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -69,58 +71,44 @@ public class TransferCC extends Command {
         return "Transfers a legacy command to the new system.";
     }
 
+    protected static final String USAGE = "[Command Name]";
     @Override
-    public String usage() {
-        return "[Command Name]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
-    public String type() {
-        return TYPE_CC;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.CC_INFO;
     @Override
-    public String channel() {
-        return CHANNEL_CC_INFO;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

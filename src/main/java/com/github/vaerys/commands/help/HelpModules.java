@@ -3,7 +3,9 @@ package com.github.vaerys.commands.help;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -22,16 +24,17 @@ public class HelpModules extends Command {
 
     public XEmbedBuilder getInfo(boolean isModule, String args, CommandObject command) {
         for (GuildToggle t : command.guild.toggles) {
-            if (t.isModule() == isModule && t.name().equalsIgnoreCase(args)) {
+            if (t.isModule() == isModule && t.name().toString().equalsIgnoreCase(args)) {
                 return t.info(command);
             }
         }
         return null;
     }
 
+    protected static final String[] NAMES = new String[]{"HelpModule","HelpModules","ModuleHelp"};
     @Override
-    public String[] names() {
-        return new String[]{"HelpModule","HelpModules","ModuleHelp"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -39,58 +42,45 @@ public class HelpModules extends Command {
         return "Gives you information about a module.";
     }
 
+    protected static final String USAGE = "[Module Name]";
     @Override
-    public String usage() {
-        return "[Module Name]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
-    public String type() {
-        return TYPE_HELP;
+    protected SAILType type() {
+        return COMMAND_TYPE;
+
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

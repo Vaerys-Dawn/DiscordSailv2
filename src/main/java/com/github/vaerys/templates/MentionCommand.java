@@ -14,7 +14,6 @@ public abstract class MentionCommand extends Command {
         return "@" + command.client.bot.name + " " + names[0];
     }
 
-    @Override
     public String getCommand(CommandObject command, int i) {
         return "@" + command.client.bot.name + " " + names[i];
     }
@@ -50,28 +49,21 @@ public abstract class MentionCommand extends Command {
         return call.getRest();
     }
 
-    public String type() {
-        return Command.TYPE_MENTION;
+    protected static final SAILType COMMAND_TYPE = SAILType.MENTION;
+    @Override
+    protected SAILType type() {
+        return COMMAND_TYPE;
+
+    }
+
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    @Override
+    protected ChannelSetting channel() {
+        return null;
     }
 
     @Override
     public void init() {
 
-    }
-
-    public String dualType() {
-        return null;
-    }
-
-    public String dualDescription() {
-        return null;
-    }
-
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
-    }
-
-    public String dualUsage() {
-        return null;
     }
 }

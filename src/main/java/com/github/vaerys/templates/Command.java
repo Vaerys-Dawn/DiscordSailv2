@@ -1,103 +1,90 @@
 package com.github.vaerys.templates;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import org.apache.commons.lang3.ArrayUtils;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import org.apache.commons.lang3.ArrayUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 
 /**
  * Created by Vaerys on 29/01/2017.
  */
 public abstract class Command {
-    //Type Constants
-    public static final String TYPE_GENERAL = "General";
-    public static final String TYPE_ADMIN = "Admin";
-    public static final String TYPE_ROLE_SELECT = "Role";
-    public static final String TYPE_CHARACTER = "Chars";
-    public static final String TYPE_SERVERS = "Servers";
-    public static final String TYPE_CC = "CC";
-    public static final String TYPE_HELP = "Help";
-    public static final String TYPE_COMPETITION = "Comp";
-    public static final String TYPE_DM = "DM";
-    public static final String TYPE_CREATOR = "Creator";
-    public static final String TYPE_PIXEL = "Pixels";
-    public static final String TYPE_GROUPS = "Groups";
-    public static final String TYPE_SLASH = "Slash";
-    public static final String TYPE_MENTION = "Mention";
-    public static final String TYPE_LOGGING = "Logging";
-
-    //Channel Constants
-    public static final String CHANNEL_GENERAL = "General";
-    public static final String CHANNEL_SERVERS = "Servers";
-    public static final String CHANNEL_BOT_COMMANDS = "BotCommands";
-    public static final String CHANNEL_SERVER_LOG = "ServerLog";
-    public static final String CHANNEL_ADMIN_LOG = "AdminLog";
-    public static final String CHANNEL_ADMIN = "Admin";
-    public static final String CHANNEL_INFO = "Info";
-    public static final String CHANNEL_SHITPOST = "ShitPost";
-    public static final String CHANNEL_DONT_LOG = "DontLog";
-    public static final String CHANNEL_ART = "Art";
-    public static final String CHANNEL_GROUPS = "Groups";
-    public static final String CHANNEL_XP_DENIED = "XpDenied";
-    public static final String CHANNEL_PIXELS = "Pixels";
-    public static final String CHANNEL_LEVEL_UP = "LevelUp";
-    public static final String CHANNEL_LEVEL_UP_DENIED = "LevelUpDenied";
-    public static final String CHANNEL_DM = "DirectMessages";
-    public static final String CHANNEL_CC_INFO = "CustomCommands";
-    public static final String CHANNEL_EDIT_CC = "CreateCC";
-    public static final String CHANNEL_CC_DENIED = "CCDenied";
-    public static final String CHANNEL_CHAR = "Characters";
-
 
     public static final String spacer = "\u200B";
     public static final String indent = "    ";
     public static final String codeBlock = "```";
     public static final String ownerOnly = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
 
+
+    public final ChannelSetting channel;
+    public final SAILType type;
     public final String[] names;
     public final String usage;
-    public final String type;
-    public final String channel;
     public final Permissions[] perms;
     public final boolean requiresArgs;
     public final boolean doAdminLogging;
-
+   
 
     public Command() {
-        this.names = names();
-        this.usage = usage();
         this.type = type();
         this.channel = channel();
+        this.names = names();
+        this.usage = usage();
         this.perms = perms();
         this.requiresArgs = requiresArgs();
         this.doAdminLogging = doAdminLogging();
-    }
-
+    };
+    
 
     public List<SubCommandObject> subCommands = new LinkedList<>();
 
+    /**
+     * The code to be executed when the command is ran
+     * @param args - The args passed to the command
+     * @param command - The command object to get data about where the command was sent from
+     * @return The text or data to send back for the command
+     */
     public abstract String execute(String args, CommandObject command);
 
-    //descriptors
-    protected abstract String[] names();
 
+    /**
+     * Gets the list of names that are associated with the command
+     * @return the list of names associated with he command
+     */
+    protected abstract String[] names();
+    
+    /**
+     * The description of the command
+     * @return the description of the command
+     */
     public abstract String description(CommandObject command);
 
+    /**
+     * Gets the usage of the command
+     * @return the usage of the command
+     */
     protected abstract String usage();
 
-    protected abstract String type();
+    /**
+     * Gets the command type
+     * @return the command type
+     */
+    protected abstract SAILType type();
 
-    protected abstract String channel();
-
+    /**
+     * The channel type the command can be ran in
+     * @return the type of channel it can be ran in
+     */
+    protected abstract ChannelSetting channel();
+    
     protected abstract Permissions[] perms();
 
     protected abstract boolean requiresArgs();
@@ -105,14 +92,6 @@ public abstract class Command {
     protected abstract boolean doAdminLogging();
 
     protected abstract void init();
-
-    public abstract String dualDescription();
-
-    public abstract String dualUsage();
-
-    public abstract String dualType();
-
-    public abstract Permissions[] dualPerms();
 
     public String getCommand(CommandObject command) {
         return command.guild.config.getPrefixCommand() + names[0];
@@ -127,14 +106,6 @@ public abstract class Command {
             return getCommand(command);
         } else {
             return getCommand(command) + " " + usage();
-        }
-    }
-
-    public String getDualUsage(CommandObject command) {
-        if (dualUsage() == null || dualUsage().isEmpty()) {
-            return getUsage(command);
-        } else {
-            return getCommand(command) + " " + dualUsage();
         }
     }
 
@@ -160,6 +131,11 @@ public abstract class Command {
         return call.getRest();
     }
 
+    /**
+     * Creates a message used to fetch the command's documentations
+     * @param command
+     * @return
+     */
     public XEmbedBuilder getCommandInfo(CommandObject command) {
         XEmbedBuilder infoEmbed = new XEmbedBuilder(command);
 
@@ -167,32 +143,21 @@ public abstract class Command {
         StringBuilder builder = new StringBuilder();
         builder.append("**" + getUsage(command) + "**\n");
         builder.append("**Desc: **" + description(command) + "\n");
-        builder.append("**Type: **" + type + "\n");
-        if (perms().length != 0) {
+        builder.append("**Type: **" + type.toString() + "\n");
+        
+        // display permissions
+        if (perms != null && perms.length != 0) {
+
             builder.append("**Perms: **");
-            ArrayList<String> permList = new ArrayList<>();
-            for (Permissions p : perms()) {
+            ArrayList<String> permList = new ArrayList<>(perms.length);
+            for (Permissions p : perms) {
                 permList.add(p.toString());
             }
             builder.append(Utility.listFormatter(permList, true));
         }
-        //dual command info
-        if (dualType() != null && Utility.testForPerms(command, dualPerms())) {
-            builder.append("\n**" + getDualUsage(command) + "**\n");
-            builder.append("**Desc: **" + dualDescription() + "\n");
-            builder.append("**Type: **" + dualType() + "\n");
-            if (perms().length != 0 || dualPerms().length != 0) {
-                Permissions[] perms;
-                perms = ArrayUtils.addAll(dualPerms(), perms());
-                builder.append("**Perms: **");
-                ArrayList<String> permList = new ArrayList<>();
-                for (Permissions p : perms) {
-                    permList.add(p.toString());
-                }
-                builder.append(Utility.listFormatter(permList, true));
-            }
-        }
-        infoEmbed.appendField("> Help - " + names[0], builder.toString(), false);
+
+        infoEmbed.appendField("> Help - " + names()[0], builder.toString(), false);
+
 
         //Handle channels
         List<IChannel> channels = command.guild.getChannelsByType(channel);
@@ -233,39 +198,13 @@ public abstract class Command {
             response.append("   > Command description is empty.\n");
             isError = true;
         }
-        if (type == null || type.isEmpty()) {
+        if (type == null) {
             response.append("   > Command type is empty.\n");
             isError = true;
         }
-        if (requiresArgs() && (usage() == null || usage().isEmpty())) {
+        if (requiresArgs && (usage == null || usage.isEmpty())) {
             response.append("   > Command usage is null when requiresArgs is true.\n");
             isError = true;
-        }
-        if (dualDescription() != null || dualType() != null) {
-            if (dualType() == null || dualType().isEmpty()) {
-                response.append("   > Command dual type is empty.\n");
-                isError = true;
-            }
-            if (dualType().equalsIgnoreCase(type)) {
-                response.append("   > Command dual type is equal to type.\n");
-                isError = true;
-            }
-            if (dualDescription() == null || dualDescription().isEmpty()) {
-                response.append("   > Command dual description is empty.\n");
-                isError = true;
-            }
-            if (dualDescription().equalsIgnoreCase(description(new CommandObject()))) {
-                response.append("   > Command dual description is equal to description.\n");
-                isError = true;
-            }
-            if (dualUsage() == null || dualUsage().isEmpty()) {
-                response.append("   > Command dual usage is empty.\n");
-                isError = true;
-            }
-            if (usage() != null && usage().equalsIgnoreCase(dualUsage())) {
-                response.append("   > Command dual usage is equal to usage.\n");
-                isError = true;
-            }
         }
         if (isError) {
             return response.toString();

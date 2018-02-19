@@ -10,7 +10,7 @@ public abstract class TagReplaceObject extends TagObject {
 
     public List<ReplaceObject> toReplace = new ArrayList<>();
 
-    public TagReplaceObject(int priority, String... types) {
+    public TagReplaceObject(int priority, TagType... types) {
         super(priority, types);
     }
 

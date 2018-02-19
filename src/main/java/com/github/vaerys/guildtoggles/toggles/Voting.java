@@ -3,6 +3,7 @@ package com.github.vaerys.guildtoggles.toggles;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 /**
  * Created by Vaerys on 20/02/2017.
@@ -10,8 +11,8 @@ import com.github.vaerys.templates.GuildSetting;
 public class Voting extends GuildSetting {
 
     @Override
-    public String name() {
-        return "Voting";
+    public SAILType name() {
+        return SAILType.VOTING;
     }
 
     @Override

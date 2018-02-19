@@ -1,13 +1,12 @@
 package com.github.vaerys.templates;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XEmbedBuilder;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.objects.XEmbedBuilder;
 
 public abstract class TagObject {
 
@@ -20,9 +19,10 @@ public abstract class TagObject {
     public final String usage;
     public final String error;
     public final int requiredArgs;
-    List<String> types = new ArrayList<>();
+    List<TagType> types = new ArrayList<>();
 
-    public TagObject(int priority, String... types) {
+
+    public TagObject(int priority, TagType... types) {
         this.priority = priority;
         requiredArgs = argsRequired();
         name = tagName();
@@ -51,10 +51,6 @@ public abstract class TagObject {
 
     public int getPriority() {
         return priority;
-    }
-
-    public List<String> getTypes() {
-        return types;
     }
 
     public boolean cont(String from) {
@@ -194,7 +190,7 @@ public abstract class TagObject {
         } else {
             descContents.append("\n**Usage:** `" + name + "`");
         }
-        descContents.append("\n\n**Types:** " + Utility.listFormatter(types, true));
+        descContents.append("\n\n**Types:** " + Utility.listEnumFormatter(types, true));
         builder.withDesc(descContents.toString());
         return builder;
     }
@@ -220,5 +216,9 @@ public abstract class TagObject {
         } else {
             return null;
         }
+    }
+  
+    public List<TagType> getTypes() {
+        return types;
     }
 }

@@ -1,5 +1,8 @@
 package com.github.vaerys.handlers;
 
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
@@ -7,14 +10,11 @@ import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.TagObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.vaerys.templates.TagType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.List;
 
 /**
  * Created by Vaerys on 27/08/2016.
@@ -26,7 +26,7 @@ public class CCHandler {
     public static void handleCommand(String args, CommandObject command) {
         //cc lockout handling
 
-        List<IChannel> ccDenied = command.guild.getChannelsByType(Command.CHANNEL_CC_DENIED);
+        List<IChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
         if (ccDenied.contains(command.channel.get())) {
             RequestHandler.sendMessage("> Custom Command usage has been disabled for this channel.", command.channel);
             return;
@@ -53,7 +53,7 @@ public class CCHandler {
         String contents = commandObject.getContents(true);
         //shitpost handling
         if (commandObject.isShitPost() && command.guild.config.shitPostFiltering && !Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
-            List<IChannel> channels = command.guild.getChannelsByType(Command.CHANNEL_SHITPOST);
+            List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
             if (channels.size() != 0 && !channels.contains(command.channel.get())) {
                 channels = command.user.getVisibleChannels(channels);
                 List<String> channelMentions = Utility.getChannelMentions(channels);
@@ -63,7 +63,7 @@ public class CCHandler {
         }
 
         //tag handling
-        for (TagObject t : TagList.getType(TagList.CC)) {
+        for (TagObject t : TagList.getType(TagType.CC)) {
             contents = t.handleTag(contents, command, ccArgs);
             if (contents == null) return;
         }

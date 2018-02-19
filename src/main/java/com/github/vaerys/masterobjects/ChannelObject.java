@@ -1,12 +1,11 @@
 package com.github.vaerys.masterobjects;
 
+import java.util.LinkedList;
+import java.util.List;
 import com.github.vaerys.templates.ChannelSetting;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.RequestBuffer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ChannelObject {
     public ClientObject client;
@@ -15,7 +14,7 @@ public class ChannelObject {
     public String name;
     public long position;
     public String mention = "#DM";
-    public List<String> settings = new ArrayList<>();
+    public List<ChannelSetting> settings = new LinkedList<>();
 
     public ChannelObject(IChannel channel, GuildObject guild) {
         if (channel == null) return;
@@ -30,7 +29,7 @@ public class ChannelObject {
                 if (setting.getIDs(guild).size() == 0) {
                     break;
                 } else if (setting.getIDs(guild).contains(Long.toUnsignedString(longID))) {
-                    settings.add(setting.toString());
+                    settings.add(setting);
                 }
             }
         }

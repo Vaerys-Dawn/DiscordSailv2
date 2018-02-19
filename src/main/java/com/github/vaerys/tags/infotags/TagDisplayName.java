@@ -3,11 +3,12 @@ package com.github.vaerys.tags.infotags;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 import sx.blah.discord.handle.obj.IUser;
 
 public class TagDisplayName extends TagObject {
 
-    public TagDisplayName(int priority, String... types) {
+    public TagDisplayName(int priority, TagType... types) {
         super(priority, types);
     }
 

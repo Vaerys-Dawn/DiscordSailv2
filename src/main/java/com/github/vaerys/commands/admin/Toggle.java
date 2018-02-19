@@ -1,18 +1,19 @@
 package com.github.vaerys.commands.admin;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.HelpModules;
 import com.github.vaerys.commands.help.HelpSettings;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -28,7 +29,7 @@ public class Toggle extends Command {
         if (!args.isEmpty()) {
             for (GuildToggle t : command.guild.toggles) {
                 if (t.isModule() == isModule) {
-                    if (args.equalsIgnoreCase(t.name())) {
+                    if (args.equalsIgnoreCase(t.name().toString())) {
                         t.toggle(command.guild.config);
                         command.guild.loadCommandData();
 
@@ -54,8 +55,8 @@ public class Toggle extends Command {
         } else {
             title = "> Here are all of the available Settings:\n";
         }
-        List<String> typesActive = new LinkedList<>();
-        List<String> typesDeactivated = new LinkedList<>();
+        List<SAILType> typesActive = new LinkedList<>();
+        List<SAILType> typesDeactivated = new LinkedList<>();
         for (GuildToggle t : command.guild.toggles) {
             if (t.isModule() == isModule) {
                 if (t.get(command.guild.config)) typesActive.add(t.name());
@@ -65,16 +66,17 @@ public class Toggle extends Command {
         Collections.sort(typesActive);
         Collections.sort(typesDeactivated);
         embedBuilder.withTitle(title);
-        embedBuilder.withDescription("**Activated**\n```\n" + Utility.listFormatter(typesActive, true) + "```\n" +
-                "**Deactivated**\n```\n" + Utility.listFormatter(typesDeactivated, true) + "```\n" +
+        embedBuilder.withDescription("**Activated**\n```\n" + Utility.listEnumFormatter(typesActive, true) + "```\n" +
+                "**Deactivated**\n```\n" + Utility.listEnumFormatter(typesDeactivated, true) + "```\n" +
                 missingArgs(command));
         RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
         return null;
     }
 
+    protected static final String[] NAMES = new String[]{"Setting", "Toggle", "Settings", "Toggles"};
     @Override
-    public String[] names() {
-        return new String[]{"Setting", "Toggle", "Settings", "Toggles"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -82,58 +84,44 @@ public class Toggle extends Command {
         return "Toggles the specified setting of the Guild Config.";
     }
 
+    protected static final String USAGE = "(Setting)";
     @Override
-    public String usage() {
-        return "(Setting)";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
-    public String type() {
-        return TYPE_ADMIN;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
-    public boolean doAdminLogging() {
-        return true;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

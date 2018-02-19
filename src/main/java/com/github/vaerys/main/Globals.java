@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -29,6 +28,7 @@ import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildFile;
 import com.github.vaerys.templates.GuildToggle;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.SlashCommand;
 import com.github.vaerys.templates.TagObject;
 import sx.blah.discord.api.IDiscordClient;
@@ -62,7 +62,7 @@ public class Globals {
     public static boolean savingFiles = false;
     private static List<GuildObject> guilds = new LinkedList<>();
     public static List<Command> commands = new LinkedList<>();
-    private static List<String> commandTypes = new LinkedList<>();
+    //private static List<String> commandTypes = new LinkedList<>();
     private static ChannelSetting[] channelSettings;
     private static List<GuildToggle> guildToggles = new LinkedList<>();
     private static List<SlashCommand> slashCommands = new LinkedList<>();
@@ -117,9 +117,9 @@ public class Globals {
     }
 
     private static void initCommands() {
-        //Load Commands
+        // Load Commands
         commands = CommandInit.get();
-        //Load DM Commands
+        // Load DM Commands
 
 
         // Load Guild Toggles
@@ -131,7 +131,7 @@ public class Globals {
 
         TagList.init();
 
-        //validate commands
+        // validate commands
         if (errorStack != null) {
             logger.error("\n>> Begin Error Report <<\n" + errorStack + ">> End Error Report <<");
             System.exit(Constants.EXITCODE_CONF_ERROR);
@@ -139,24 +139,24 @@ public class Globals {
 
 
 
+        // Init Command Types.
+        // for (Command c : commands) {
+        // boolean typeFound = false;
+        // for (String s : commandTypes) {
+        // if (c.type.equals(s)) {
+        // typeFound = true;
+        // }
+        // }
+        // if (!typeFound) {
+        // commandTypes.add(c.type());
+        // }
+        // }
+        //Collections.sort(commandTypes);
 
-        //Init Command Types.
-        for (Command c : commands) {
-            boolean typeFound = false;
-            for (String s : commandTypes) {
-                if (c.type.equals(s)) {
-                    typeFound = true;
-                }
-            }
-            if (!typeFound) {
-                commandTypes.add(c.type);
-            }
-        }
-        Collections.sort(commandTypes);
 
         logger.info(commands.size() + " Commands Loaded.");
         logger.info(creatorCommands.size() + " Creator Commands Loaded.");
-        logger.info(commandTypes.size() + " Command Types Loaded.");
+        //logger.info(commandTypes.size() + " Command Types Loaded.");
         logger.info(channelSettings.length + " Channel Types Loaded.");
         logger.info(guildToggles.size() + " Guild Toggles Loaded.");
         logger.info(TagList.get().size() + " Tags Loaded.");
@@ -213,8 +213,7 @@ public class Globals {
     public static boolean isCreatorValid() {
         IUser creator = Client.getClient().fetchUser(creatorID);
         if (creator == null) {
-            logger.error("\nError:" +
-                    "   > creatorID is invalid.");
+            logger.error("\nError:" + "   > creatorID is invalid.");
             return false;
         }
         return true;
@@ -259,15 +258,20 @@ public class Globals {
     }
 
     public static void saveFiles(boolean shuttingDown) {
-        if (shuttingDown) Globals.shuttingDown = true;
-        else if (Globals.shuttingDown || Globals.savingFiles) return;
+        if (shuttingDown)
+            Globals.shuttingDown = true;
+        else if (Globals.shuttingDown || Globals.savingFiles)
+            return;
         savingFiles = true;
         logger.debug("Saving Files.");
-        //global files
-        if (dailyMessages != null) dailyMessages.flushFile();
-        if (events != null) events.flushFile();
-        if (globalData != null) globalData.flushFile();
-        //guild files
+        // global files
+        if (dailyMessages != null)
+            dailyMessages.flushFile();
+        if (events != null)
+            events.flushFile();
+        if (globalData != null)
+            globalData.flushFile();
+        // guild files
         for (GuildObject g : guilds) {
             for (GuildFile file : g.guildFiles) {
                 file.flushFile();
@@ -282,11 +286,14 @@ public class Globals {
         }
         savingFiles = true;
         logger.debug("Backing up Files.");
-        //global files
-        if (dailyMessages != null) dailyMessages.backUp();
-        if (events != null) events.backUp();
-        if (globalData != null) globalData.backUp();
-        //guild files
+        // global files
+        if (dailyMessages != null)
+            dailyMessages.backUp();
+        if (events != null)
+            events.backUp();
+        if (globalData != null)
+            globalData.backUp();
+        // guild files
         for (GuildObject g : guilds) {
             for (GuildFile file : g.guildFiles) {
                 file.backUp();
@@ -310,10 +317,11 @@ public class Globals {
         List<Command> getCommands = new ArrayList<>();
         for (Command c : commands) {
             if (isDm) {
-                if (c.channel != null && c.channel.equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
+                if (c.channel != null && c.channel == ChannelSetting.FROM_DM)
+                    getCommands.add(c);
             } else {
-                if (c.channel == null || !c.channel.equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
-
+                if (c.channel == null || c.channel != ChannelSetting.FROM_DM)
+                    getCommands.add(c);
             }
         }
         return getCommands;
@@ -333,12 +341,12 @@ public class Globals {
         }
     }
 
-//    public static List<Command> getCommandsDM() {
-//        return commandsDM;
-//    }
+    // public static List<Command> getCommandsDM() {
+    // return commandsDM;
+    // }
 
-    public static List<String> getCommandTypes() {
-        return commandTypes;
+    public static SAILType[] getCommandTypes() {
+        return SAILType.values();
     }
 
     public static ChannelSetting[] getChannelSettings() {
@@ -369,10 +377,11 @@ public class Globals {
         List<Command> getCommands = new ArrayList<>();
         for (Command c : creatorCommands) {
             if (isDm) {
-                if (c.channel != null && c.channel.equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
+                if (c.channel != null && c.channel != ChannelSetting.FROM_DM)
+                    getCommands.add(c);
             } else {
-                if (c.channel == null || !c.channel.equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
-
+                if (c.channel == null || c.channel != ChannelSetting.FROM_DM)
+                    getCommands.add(c);
             }
         }
         return getCommands;
@@ -434,7 +443,8 @@ public class Globals {
     }
 
     public static void addToErrorStack(String errorReport) {
-        if (errorReport == null) return;
+        if (errorReport == null)
+            return;
         if (errorStack == null) {
             errorStack = errorReport;
         } else {
@@ -444,7 +454,8 @@ public class Globals {
 
     public static void addToLog(LogObject object) {
         allLogs.add(object);
-        if (allLogs.size() > 5) allLogs.remove(0);
+        if (allLogs.size() > 5)
+            allLogs.remove(0);
     }
 
     public static List<LogObject> getAllLogs() {

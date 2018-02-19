@@ -1,5 +1,12 @@
 package com.github.vaerys.masterobjects;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.NewDailyMessage;
 import com.github.vaerys.handlers.RequestHandler;
@@ -9,19 +16,26 @@ import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.GuildLogObject;
 import com.github.vaerys.objects.LogObject;
 import com.github.vaerys.objects.UserRateObject;
-import com.github.vaerys.pogos.*;
+import com.github.vaerys.pogos.ChannelData;
+import com.github.vaerys.pogos.Characters;
+import com.github.vaerys.pogos.Competition;
+import com.github.vaerys.pogos.CustomCommands;
+import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.pogos.GuildLog;
+import com.github.vaerys.pogos.GuildUsers;
+import com.github.vaerys.pogos.Servers;
 import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildFile;
 import com.github.vaerys.templates.GuildToggle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.*;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import com.github.vaerys.templates.SAILType;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IEmoji;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.IVoiceChannel;
 
 public class GuildObject {
     public ClientObject client;
@@ -39,7 +53,7 @@ public class GuildObject {
     public List<Command> commands;
     public List<GuildToggle> toggles;
     public ChannelSetting[] channelSettings;
-    public List<String> commandTypes;
+    public List<SAILType> commandTypes;
     private List<UserRateObject> rateLimiting = new ArrayList<>();
     private List<Long> spokenUsers = new ArrayList<>();
     private List<GuildToggle> toRemove = new ArrayList<>();
@@ -88,7 +102,7 @@ public class GuildObject {
         this.commands = Globals.getCommands(false);
         this.toggles = Globals.getGuildToggles();
         this.channelSettings = Globals.getChannelSettings();
-        this.commandTypes = Globals.getCommandTypes();
+        this.commandTypes = Arrays.asList(Globals.getCommandTypes());
         checkToggles();
     }
 
@@ -124,7 +138,7 @@ public class GuildObject {
             ListIterator iterator = toggles.listIterator();
             while (iterator.hasNext()) {
                 GuildToggle toggle = (GuildToggle) iterator.next();
-                if (toggle.name().equalsIgnoreCase(g.name())) {
+                if (toggle.name() ==g.name()) {
                     if (g.isModule()) {
                         logger.trace("Module: " + g.name() + " removed.");
                     } else {
@@ -147,24 +161,28 @@ public class GuildObject {
         }
     }
 
-    public void removeCommandsByType(String type) {
+    public void removeCommandsByType(SAILType type) {
         ListIterator iterator = commands.listIterator();
         while (iterator.hasNext()) {
             Command c = (Command) iterator.next();
-            if (c.type.equals(type)) {
+            if (c.type == type) {
                 logger.trace("Command: " + c.names[0] + " removed.");
                 iterator.remove();
             }
         }
-        for (String s : commandTypes) {
-            if (s.equals(type)) {
-                logger.trace("Type: " + s + " removed.");
-                commandTypes.remove(s);
+        for (SAILType t : commandTypes) {
+            if (t == type) {
+                logger.trace("Type: " + t.toString() + " removed.");
+                commandTypes.remove(t);
                 return;
             }
         }
     }
 
+    /**
+     * Removes a channel setting from the specified channel
+     * @param channel
+     */
     public void removeChannelSetting(String channel) {
         for (ChannelSetting s : channelSettings) {
             if (s.toString().equals(channel)) {
@@ -173,6 +191,10 @@ public class GuildObject {
         }
     }
 
+    /**
+     * 
+     * @param names
+     */
     public void removeCommand(String[] names) {
         ListIterator iterator = commands.listIterator();
         while (iterator.hasNext()) {
@@ -184,9 +206,9 @@ public class GuildObject {
         }
     }
 
-    public void removeToggle(String name) {
+    public void removeToggle(SAILType name) {
         for (GuildToggle g : toggles) {
-            if (g.name().equalsIgnoreCase(name)) {
+            if (g.name() == name) {
                 toRemove.add(g);
             }
         }
@@ -238,12 +260,12 @@ public class GuildObject {
         rateLimiting.clear();
     }
 
-    public List<String> getAllTypes(CommandObject command) {
-        List types = new ArrayList<>(commandTypes);
+    public List<SAILType> getAllTypes(CommandObject command) {
+        List<SAILType> types = new ArrayList<>(commandTypes.size());
         if (command.user.get().equals(command.client.creator)) {
-            types.add(Command.TYPE_CREATOR);
+            types.add(SAILType.CREATOR);
         }
-        types.add(Command.TYPE_DM);
+        types.add(SAILType.DM);
         return types;
     }
 
@@ -298,7 +320,7 @@ public class GuildObject {
         if (command.guild.get() == null || command.channel == null) {
             return;
         }
-        IChannel general = getChannelByType(Command.TYPE_GENERAL);
+        IChannel general = getChannelByType(ChannelSetting.GENERAL);
         if (general != null && command.channel.longID != general.getLongID()) {
             return;
         }
@@ -321,7 +343,7 @@ public class GuildObject {
         config.resetOffenders();
     }
 
-    public IChannel getChannelByType(String type) {
+    public IChannel getChannelByType(ChannelSetting type) {
         List<IChannel> channels = getChannelsByType(type);
         if (channels.size() != 0) {
             return channels.get(0);
@@ -329,10 +351,10 @@ public class GuildObject {
         return null;
     }
 
-    public List<IChannel> getChannelsByType(String type) {
+    public List<IChannel> getChannelsByType(ChannelSetting type) {
         List<IChannel> channels = new ArrayList<>();
         for (ChannelSettingObject c : channelData.getChannelSettings()) {
-            if (c.getType().toString().equalsIgnoreCase(type)) {
+            if (c.getType() == type) {
                 for (long s : c.getChannelIDs()) {
                     IChannel channel = getChannelByID(s);
                     if (channel != null) {

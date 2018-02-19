@@ -1,15 +1,16 @@
 package com.github.vaerys.commands.cc;
 
+import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.List;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -21,12 +22,12 @@ public class NewCC extends Command {
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
             return "> You have been denied the creation of custom commands.";
         }
-        if (command.guild.getChannelsByType(CHANNEL_CC_DENIED).contains(command.channel.get()))
+        if (command.guild.getChannelsByType(ChannelSetting.CC_DENIED).contains(command.channel.get()))
             return "> This Channel has CCs Denied, You cannot create ccs here.";
         boolean isShitpost = false;
         boolean isLocked = false;
         SplitFirstObject splitFirst = new SplitFirstObject(args);
-        List<IChannel> shitpostChannels = command.guild.getChannelsByType(Command.CHANNEL_SHITPOST);
+        List<IChannel> shitpostChannels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
         if (shitpostChannels != null) {
             for (IChannel channel : shitpostChannels) {
                 if (command.channel.longID == channel.getLongID()) {
@@ -68,9 +69,10 @@ public class NewCC extends Command {
         return command.guild.customCommands.addCommand(isLocked, nameCC, argsCC, isShitpost, command);
     }
 
+    protected static final String[] NAMES = new String[]{"NewCC", "CCNew"};
     @Override
-    public String[] names() {
-        return new String[]{"NewCC", "CCNew"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -78,58 +80,44 @@ public class NewCC extends Command {
         return "Creates a Custom Command.";
     }
 
+    protected static final String USAGE = "[Command Name] [Contents/Image]";
     @Override
-    public String usage() {
-        return "[Command Name] [Contents/Image]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
-    public String type() {
-        return TYPE_CC;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.MANAGE_CC;
     @Override
-    public String channel() {
-        return CHANNEL_EDIT_CC;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

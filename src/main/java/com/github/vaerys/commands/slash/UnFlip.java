@@ -13,9 +13,10 @@ public class UnFlip extends SlashCommand {
         return "┬─┬ ノ( ゜-゜ノ)";
     }
 
+    protected static final String[] NAMES = new String[]{"UnFlip"};
     @Override
-    public String[] names() {
-        return new String[]{"UnFlip"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override

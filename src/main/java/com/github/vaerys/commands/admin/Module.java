@@ -1,21 +1,29 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
 public class Module extends Command {
+    
+    // using static as it will cause less memory to be used overall by orphaned data
+    protected static final String[] NAMES = new String[]{"Module","Modules"};
+    protected static final String USAGE = "(Module)";
+    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = true;
+
+    
     @Override
     public String execute(String args, CommandObject command) {
         return new Toggle().getContent(args, command, true, this);
-    }
-
-    @Override
-    public String[] names() {
-        return new String[]{"Module","Modules"};
     }
 
     @Override
@@ -24,57 +32,42 @@ public class Module extends Command {
     }
 
     @Override
-    public String usage() {
-        return "(Module)";
-    }
-
-    @Override
-    public String type() {
-        return TYPE_ADMIN;
-    }
-
-    @Override
-    public String channel() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
-    }
-
-    @Override
-    public boolean requiresArgs() {
-        return false;
-    }
-
-    @Override
-    public boolean doAdminLogging() {
-        return true;
-    }
-
-    @Override
     public void init() {
 
     }
 
     @Override
-    public String dualDescription() {
-        return null;
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
-    public String dualUsage() {
-        return null;
+    protected String usage() {
+        return USAGE;
+    }
+    
+    @Override
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
     @Override
-    public String dualType() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
     @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
+    }
+
+    @Override
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
+    }
+
+    @Override
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 }

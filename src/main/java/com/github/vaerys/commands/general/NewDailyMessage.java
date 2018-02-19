@@ -1,5 +1,6 @@
 package com.github.vaerys.commands.general;
 
+import java.time.DayOfWeek;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.QueueHandler;
 import com.github.vaerys.handlers.RequestHandler;
@@ -7,11 +8,12 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.templates.TagType;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.time.DayOfWeek;
 
 public class NewDailyMessage extends Command {
 
@@ -33,15 +35,16 @@ public class NewDailyMessage extends Command {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg","NewDailyMsg","NewDailyMessage"};
     @Override
-    public String[] names() {
-        return new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg","NewDailyMsg","NewDailyMessage"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
     public String description(CommandObject command) {
         return "Allows you to request a new Daily message to be added.\n" +
-                "**Tags:** " + Utility.listFormatter(TagList.getNames(TagList.DAILY), true) +
+                "**Tags:** " + Utility.listFormatter(TagList.getNames(TagType.DAILY), true) +
                 "\n\n**Themes:**\n" +
                 "Monday - Cat\n" +
                 "Tuesday - Portal\n" +
@@ -52,58 +55,44 @@ public class NewDailyMessage extends Command {
                 "Sunday - Anything\n";
     }
 
+    protected static final String USAGE = "[DayOfWeek] [Message]";
     @Override
-    public String usage() {
-        return "[DayOfWeek] [Message]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
-    public String type() {
-        return TYPE_GENERAL;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

@@ -1,34 +1,50 @@
 package com.github.vaerys.main;
 
+import java.awt.Color;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.*;
+import com.github.vaerys.objects.BlackListObject;
+import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.objects.RewardRoleObject;
+import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.templates.TagType;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.obj.ReactionEmoji;
-import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
-
-import java.awt.*;
-import java.time.ZonedDateTime;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by Vaerys on 17/08/2016.
@@ -399,6 +415,17 @@ public class Utility {
             return formattedList.toString();
         }
     }
+    
+    public static String listEnumFormatter(List<? extends Enum<?>> list, boolean singleLine) {
+        return listFormatter(EnumListToStringList(list), singleLine);
+    }
+    
+    public static List<String> EnumListToStringList(List<? extends Enum<?>> list) {
+        Stream<? extends Enum<?>> EnumStream = list.stream();
+        List<String> lst = EnumStream.map(Enum::toString).collect(Collectors.toList());
+        EnumStream.close();
+        return lst;
+    }
 
     public static List<IRole> getRolesByName(IGuild guild, String name) {
         List<IRole> roles = guild.getRoles().stream().filter(r -> r.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
@@ -411,8 +438,9 @@ public class Utility {
                     .append(commandObject.user.username)
                     .append("** Has Used Command `")
                     .append(command.names[0]).append("`");
-            List<IChannel> adminlog = c.getChannelsByType(Command.CHANNEL_ADMIN_LOG);
-            List<IChannel> serverLog = c.getChannelsByType(Command.CHANNEL_SERVER_LOG);
+            List<IChannel> adminlog = c.getChannelsByType(ChannelSetting.ADMIN_LOG);
+            List<IChannel> serverLog = c.getChannelsByType(ChannelSetting.SERVER_LOG);
+
             IChannel channel = null;
 
             if (!(args == null || args.isEmpty())) {
@@ -625,8 +653,8 @@ public class Utility {
 
     public static void sendLog(String content, GuildObject guild, boolean isAdmin, EmbedObject... object) {
         IChannel logChannel = null;
-        List<IChannel> serverLog = guild.getChannelsByType(Command.CHANNEL_SERVER_LOG);
-        List<IChannel> adminLog = guild.getChannelsByType(Command.CHANNEL_ADMIN_LOG);
+        List<IChannel> serverLog = guild.getChannelsByType(ChannelSetting.SERVER_LOG);
+        List<IChannel> adminLog = guild.getChannelsByType(ChannelSetting.ADMIN_LOG);
         if (isAdmin) {
             if (adminLog.size() != 0) {
                 logChannel = adminLog.get(0);
@@ -765,24 +793,19 @@ public class Utility {
         logger.error(s.toString() + "\n>> LAST " + Globals.getAllLogs().size() + " DEBUG LOGS<<\n" + builder.toString());
     }
 
-    public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, String type, boolean testPerms) {
+    public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, SAILType type, boolean testPerms) {
         List<Command> toReturn = new ArrayList<>();
         for (Command c : commands) {
-            String ctype = c.type;
-            if (c.channel != null && c.channel.equalsIgnoreCase(Command.CHANNEL_DM)) {
-                ctype = Command.TYPE_DM;
+            SAILType ctype = c.type;
+            if (c.channel != null && c.channel == ChannelSetting.FROM_DM) {
+                ctype = SAILType.DM;
             }
-            boolean isDualType = false;
-            if (c.dualType() != null && c.dualType().equalsIgnoreCase(type)) {
-                isDualType = true;
-            }
-            if (ctype.equalsIgnoreCase(type) || isDualType) {
+            if (ctype == type) {
                 if (testPerms) {
-                    if (c.type.equalsIgnoreCase(Command.TYPE_CREATOR) && commandObject.user.longID != commandObject.client.creator.longID) {
+                    if (c.type == SAILType.CREATOR && commandObject.user.longID != commandObject.client.creator.longID) {
                         //do nothing
-                    } else if (isDualType && testForPerms(commandObject, c.dualPerms())) {
-                        toReturn.add(c);
-                    } else if (!isDualType && testForPerms(commandObject, c.perms)) {
+                    } else if (testForPerms(commandObject, c.perms)) {
+
                         toReturn.add(c);
                     }
                 } else {
@@ -821,7 +844,7 @@ public class Utility {
                 }
                 try {
                     UserObject object = new UserObject(u, command.guild, true);
-                    if (object == null) throw new IllegalStateException("User is null");
+
                     if (hasProfile) {
                         ProfileObject profile = object.getProfile(command.guild);
                         if (profile == null || profile.isEmpty()) {

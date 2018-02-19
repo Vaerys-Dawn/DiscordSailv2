@@ -8,6 +8,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.OffenderObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -44,7 +45,7 @@ public class SpamHandler {
                         RequestHandler.muteUser(command, true);
                         command.user.sendDm("You were muted for spamming.");
                         command.guild.sendDebugLog(command, "CATCH_SPAM_WALLS", "MUTE", offenceCount + " Offences");
-                        IChannel admin = command.guild.getChannelByType(Command.TYPE_ADMIN);
+                        IChannel admin = command.guild.getChannelByType(ChannelSetting.ADMIN);
                         String report = command.user.mention() + " was muted for spamming";
                         if (admin != null) {
                             RequestHandler.sendMessage(report + " in " + command.channel.get().mention() + ".", admin);
@@ -152,7 +153,7 @@ public class SpamHandler {
 
         //setup of the admin channel
         IChannel adminChannel = null;
-        List<IChannel> adminChannels = command.guild.getChannelsByType(Command.CHANNEL_ADMIN);
+        List<IChannel> adminChannels = command.guild.getChannelsByType(ChannelSetting.ADMIN);
         if (adminChannels.size() != 0) adminChannel = adminChannels.get(0);
         if (adminChannel == null) adminChannel = command.channel.get();
 

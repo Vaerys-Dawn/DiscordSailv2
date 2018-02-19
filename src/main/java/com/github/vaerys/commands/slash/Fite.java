@@ -13,9 +13,10 @@ public class Fite extends SlashCommand {
         return "(ง'̀-'́)ง";
     }
 
+    protected static final String[] NAMES = new String[]{"Fite"};
     @Override
-    public String[] names() {
-        return new String[]{"Fite"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override

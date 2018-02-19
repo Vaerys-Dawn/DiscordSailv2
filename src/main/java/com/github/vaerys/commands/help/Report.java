@@ -1,17 +1,18 @@
 package com.github.vaerys.commands.help;
 
+import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.List;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -24,7 +25,7 @@ public class Report extends Command {
     }
 
     public static String report(String args, CommandObject command, boolean isSilent) {
-        List<IChannel> channels = command.guild.getChannelsByType(CHANNEL_ADMIN);
+        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.ADMIN);
         if (channels.size() != 0) {
             IChannel channel = channels.get(0);
             SplitFirstObject split = new SplitFirstObject(args);
@@ -66,9 +67,10 @@ public class Report extends Command {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"Report"};
     @Override
-    public String[] names() {
-        return new String[]{"Report"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -76,58 +78,45 @@ public class Report extends Command {
         return "Can be used to send a user report to the server staff.";
     }
 
+    protected static final String USAGE = "[@User] [Reason]";
     @Override
-    public String usage() {
-        return "[@User] [Reason]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
-    public String type() {
-        return TYPE_HELP;
+    protected SAILType type() {
+        return COMMAND_TYPE;
+
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
-    public boolean doAdminLogging() {
-        return true;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

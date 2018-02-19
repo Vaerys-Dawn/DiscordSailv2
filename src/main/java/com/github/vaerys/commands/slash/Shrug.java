@@ -13,9 +13,10 @@ public class Shrug extends SlashCommand {
         return "¯\\_(ツ)_/¯";
     }
 
+    protected static final String[] NAMES = new String[]{"Shrug"};
     @Override
-    public String[] names() {
-        return new String[]{"Shrug"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override

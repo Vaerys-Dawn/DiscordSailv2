@@ -2,10 +2,11 @@ package com.github.vaerys.tags.cctags;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.TagReplaceObject;
+import com.github.vaerys.templates.TagType;
 
 public class TagReplaceError extends TagReplaceObject {
 
-    public TagReplaceError(int priority, String... types) {
+    public TagReplaceError(int priority, TagType... types) {
         super(priority, types);
     }
 

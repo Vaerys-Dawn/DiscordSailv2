@@ -3,12 +3,13 @@ package com.github.vaerys.guildtoggles.toggles;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 public class StopSpamWalls extends GuildSetting {
 
     @Override
-    public String name() {
-        return "StopSpamWalls";
+    public SAILType name() {
+        return SAILType.STOP_SPAM_WALLS;
     }
 
     @Override

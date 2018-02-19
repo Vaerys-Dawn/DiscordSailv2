@@ -1,5 +1,19 @@
 package com.github.vaerys.handlers;
 
+import static com.github.vaerys.main.UserSetting.DENY_AUTO_ROLE;
+import static com.github.vaerys.main.UserSetting.DONT_SEND_LVLUP;
+import static com.github.vaerys.main.UserSetting.HIT_LEVEL_FLOOR;
+import static com.github.vaerys.main.UserSetting.NO_XP_GAIN;
+import static com.github.vaerys.main.UserSetting.SEND_LVLUP_DMS;
+import static com.github.vaerys.main.UserSetting.SEND_LVLUP_RANK_CHANNEL;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.ProfileSettings;
 import com.github.vaerys.main.Constants;
@@ -12,25 +26,21 @@ import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.pogos.GuildUsers;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IEmoji;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RequestBuffer;
-
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.concurrent.TimeUnit;
-
-import static com.github.vaerys.main.UserSetting.*;
 
 /**
  * Created by Vaerys on 29/06/2017.
@@ -235,7 +245,7 @@ public class XpHandler {
                 object.message.get().getAttachments().isEmpty()) return;
 
         //you cannot gain xp in an xpDenied channel
-        List<IChannel> xpChannels = object.guild.getChannelsByType(Command.CHANNEL_XP_DENIED);
+        List<IChannel> xpChannels = object.guild.getChannelsByType(ChannelSetting.XP_DENIED);
         if (xpChannels.size() > 0) {
             if (xpChannels.contains(object.channel.get())) {
                 return;
@@ -276,7 +286,7 @@ public class XpHandler {
             String levelUpMessage = object.guild.config.levelUpMessage;
 
             //run tags
-            for (TagObject t : TagList.getType(TagList.LEVEL)) {
+            for (TagObject t : TagList.getType(TagType.LEVEL)) {
                 levelUpMessage = t.handleTag(levelUpMessage, object, "");
             }
 
@@ -317,8 +327,8 @@ public class XpHandler {
             } else {
                 userOverride = object.guild.config.defaultLevelMode;
             }
-            List<IChannel> levelDenied = object.guild.getChannelsByType(Command.CHANNEL_LEVEL_UP_DENIED);
-            List<IChannel> levelUpChannel = object.guild.getChannelsByType(Command.CHANNEL_LEVEL_UP);
+            List<IChannel> levelDenied = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP_DENIED);
+            List<IChannel> levelUpChannel = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP);
             if (levelDenied.size() != 0 && levelDenied.contains(object.channel.get())) {
                 if (userOverride != SEND_LVLUP_DMS || userOverride != SEND_LVLUP_RANK_CHANNEL && levelUpChannel.size() == 0) {
                     userOverride = DONT_SEND_LVLUP;
@@ -410,7 +420,7 @@ public class XpHandler {
             }
             if (object.guild.config.levelUpReaction.equalsIgnoreCase("null")) return;
             if (found == false) {
-                IChannel adminChannel = object.guild.getChannelByType(Command.CHANNEL_ADMIN);
+                IChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
                 if (adminChannel == null) adminChannel = object.channel.get();
                 RequestHandler.sendMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
                 return;

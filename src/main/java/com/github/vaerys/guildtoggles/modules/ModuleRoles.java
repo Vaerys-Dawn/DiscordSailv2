@@ -5,6 +5,7 @@ import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 
 /**
@@ -13,8 +14,8 @@ import sx.blah.discord.handle.obj.IRole;
 public class ModuleRoles extends GuildModule {
 
     @Override
-    public String name() {
-        return Command.TYPE_ROLE_SELECT;
+    public SAILType name() {
+        return SAILType.ROLE_SELECT;
     }
 
     @Override

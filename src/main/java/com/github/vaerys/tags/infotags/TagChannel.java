@@ -3,11 +3,12 @@ package com.github.vaerys.tags.infotags;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 import sx.blah.discord.handle.obj.IChannel;
 
 public class TagChannel extends TagObject {
 
-    public TagChannel(int priority, String... types) {
+    public TagChannel(int priority, TagType... types) {
         super(priority, types);
     }
 

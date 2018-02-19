@@ -1,5 +1,8 @@
 package com.github.vaerys.commands.pixels;
 
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Random;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
@@ -9,14 +12,12 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Vaerys on 01/07/2017.
@@ -71,7 +72,7 @@ public class PixelHelp extends Command {
     }
 
     private String rules(CommandObject command) {
-        List<IChannel> channels = command.guild.getChannelsByType(CHANNEL_XP_DENIED);
+        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.XP_DENIED);
         List<String> channelMentions = Utility.getChannelMentions(channels);
         String rules = "**The rules for gaining pixels are:**\n" +
                 "> Cannot gain pixels if the message starts with a command prefix.\n" +
@@ -140,9 +141,10 @@ public class PixelHelp extends Command {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"PixelHelp", "HelpPixels"};
     @Override
-    public String[] names() {
-        return new String[]{"PixelHelp", "HelpPixels"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -165,58 +167,44 @@ public class PixelHelp extends Command {
         return modes;
     }
 
+    protected static final String USAGE = ("(Mode) (args)");
     @Override
-    public String usage() {
-        return ("(Mode) (args)");
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
-    public String type() {
-        return TYPE_PIXEL;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.PIXELS;
     @Override
-    public String channel() {
-        return CHANNEL_PIXELS;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

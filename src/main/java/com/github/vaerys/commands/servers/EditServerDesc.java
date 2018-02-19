@@ -1,12 +1,13 @@
 package com.github.vaerys.commands.servers;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
+import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -23,9 +24,10 @@ public class EditServerDesc extends Command{
         return command.guild.servers.editServerDesc(command.user.get().getLongID(), splitArgs.get(0), desc, command.guild.get());
     }
 
+    protected static final String[] NAMES = new String[]{"EditServerDesc"};
     @Override
-    public String[] names() {
-        return new String[]{"EditServerDesc"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -33,58 +35,44 @@ public class EditServerDesc extends Command{
         return "Allows you to edit your server description.";
     }
 
+    protected static final String USAGE = "[Server Name] [Description]";
     @Override
-    public String usage() {
-        return "[Server Name] [Description]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.SERVERS;
     @Override
-    public String type() {
-        return TYPE_SERVERS;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.SERVERS;
     @Override
-    public String channel() {
-        return CHANNEL_SERVERS;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

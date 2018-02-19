@@ -12,9 +12,10 @@ public class Gib extends SlashCommand {
         return "༼ つ ◕_◕ ༽つ";
     }
 
+    protected static final String[] NAMES = new String[]{"Gib"};
     @Override
-    public String[] names() {
-        return new String[]{"Gib"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override

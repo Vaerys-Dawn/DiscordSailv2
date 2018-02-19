@@ -6,7 +6,10 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -14,12 +17,12 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 public class EditCC extends Command {
 
-    String modes = "**Modes: **\n" +
+    private static String modes = "**Modes: **\n" +
             "> Replace\n" +
             "> ToEmbed\n" +
             "> DelCall\n" +
             "> AddSearch\n";
-    String adminModes = "**Admin Modes:**\n" +
+    private static String adminModes = "**Admin Modes:**\n" +
             "> Shitpost\n" +
             "> Lock\n";
 
@@ -90,9 +93,10 @@ public class EditCC extends Command {
     }
 
 
+    protected static final String[] NAMES = new String[]{"EditCC"};
     @Override
-    public String[] names() {
-        return new String[]{"EditCC"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -101,58 +105,51 @@ public class EditCC extends Command {
                 "**[Custom Command Guide](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide)**";
     }
 
+    protected static final String USAGE = "[Command Name] (Mode) [New Contents/Image]";
     @Override
-    public String usage() {
-        return "[Command Name] (Mode) [New Contents/Image]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
-    public String type() {
-        return TYPE_CC;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.MANAGE_CC;
     @Override
-    public String channel() {
-        return CHANNEL_EDIT_CC;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
+    protected static final SubCommandObject SUB_1 = new SubCommandObject(
+        NAMES,
+        "[Command Name] (Mode)",
+        "allows editing of other user's commands or editing toggles.\n" + adminModes,
+        SAILType.ADMIN,
+        new Permissions[]{Permissions.MANAGE_MESSAGES}
+    );
     @Override
     public void init() {
-
-    }
-
-    @Override
-    public String dualDescription() {
-        return "allows editing of other user's commands or editing toggles.\n" + adminModes;
-    }
-
-    @Override
-    public String dualUsage() {
-        return "[Command Name] (Mode)";
-    }
-
-    @Override
-    public String dualType() {
-        return TYPE_ADMIN;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES};
+        subCommands.add(SUB_1);
     }
 }

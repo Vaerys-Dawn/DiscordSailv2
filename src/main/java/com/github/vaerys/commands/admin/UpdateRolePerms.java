@@ -1,17 +1,18 @@
 package com.github.vaerys.commands.admin;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.RequestBuffer;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 
 /**
  * Created by Vaerys on 06/02/2017.
@@ -43,9 +44,10 @@ public class UpdateRolePerms extends Command {
         return "> Cosmetic Roles Perms set to : " + Utility.listFormatter(permList, true);
     }
 
+    protected static final String[] NAMES = new String[]{"UpdateRolePerms"};
     @Override
-    public String[] names() {
-        return new String[]{"UpdateRolePerms"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -53,58 +55,44 @@ public class UpdateRolePerms extends Command {
         return "Sets permissions of all Cosmetic roles to mach those of a specific role.\nDefaults to Everyone Role.";
     }
 
+    protected static final String USAGE = "(Parent Role Name)";
     @Override
-    public String usage() {
-        return "(Parent Role Name)";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
-    public String type() {
-        return TYPE_ADMIN;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.ADMINISTRATOR};
     @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.ADMINISTRATOR};
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
-    public boolean doAdminLogging() {
-        return true;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

@@ -1,16 +1,17 @@
 package com.github.vaerys.commands.general;
 
+import java.util.List;
+import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 02/07/2017.
@@ -24,7 +25,7 @@ public class ProfileSettings extends Command {
         ProfileObject userObject = command.guild.users.getUserByID(command.user.longID);
         StringBuilder builder = new StringBuilder();
         boolean pixels = command.guild.config.modulePixels;
-        boolean levelChannel = command.guild.getChannelsByType(CHANNEL_LEVEL_UP).size() != 0;
+        boolean levelChannel = command.guild.getChannelsByType(ChannelSetting.LEVEL_UP).size() != 0;
         String error = getSettings(command) + "\n" + Utility.getCommandInfo(this, command);
 
         for (String s : args.split(" ")) {
@@ -33,7 +34,7 @@ public class ProfileSettings extends Command {
                 return error;
             }
             if (pixels && levelChannel && toTest == UserSetting.SEND_LVLUP_RANK_CHANNEL) {
-                IChannel levelUp = command.guild.getChannelByType(CHANNEL_LEVEL_UP);
+                IChannel levelUp = command.guild.getChannelByType(ChannelSetting.LEVEL_UP);
                 if (levelUp != null) {
                     removeLevelSettings(userObject);
                     userObject.getSettings().add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
@@ -86,7 +87,7 @@ public class ProfileSettings extends Command {
 
     private String getSettings(CommandObject object) {
         StringBuilder builder = new StringBuilder();
-        List<IChannel> levelUp = object.guild.getChannelsByType(CHANNEL_LEVEL_UP);
+        List<IChannel> levelUp = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP);
         builder.append("**Settings:**\n");
         if (object.guild.config.modulePixels) {
             if (levelUp.size() != 0) {
@@ -136,9 +137,10 @@ public class ProfileSettings extends Command {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"ProfileSettings", "PixelSettings"};
     @Override
-    public String[] names() {
-        return new String[]{"ProfileSettings", "PixelSettings"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -146,58 +148,44 @@ public class ProfileSettings extends Command {
         return "Allows you to set where your level up messages will be sent.\n" + getSettings(command);
     }
 
+    protected static final String USAGE = "(Setting...)";
     @Override
-    public String usage() {
-        return "(Setting...)";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
-    public String type() {
-        return TYPE_GENERAL;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

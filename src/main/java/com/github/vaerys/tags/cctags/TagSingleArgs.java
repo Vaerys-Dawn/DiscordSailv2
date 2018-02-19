@@ -1,16 +1,16 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.templates.TagObject;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 
 public class TagSingleArgs extends TagObject {
 
-    public TagSingleArgs(int priority, String... types) {
+    public TagSingleArgs(int priority, TagType... types) {
         super(priority, types);
     }
 

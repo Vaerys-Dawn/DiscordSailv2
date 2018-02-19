@@ -3,11 +3,12 @@ package com.github.vaerys.guildtoggles.toggles;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 public class LikeArt extends GuildSetting{
     @Override
-    public String name() {
-        return "LikeArt";
+    public SAILType name() {
+        return SAILType.LIKE_ART;
     }
 
     @Override

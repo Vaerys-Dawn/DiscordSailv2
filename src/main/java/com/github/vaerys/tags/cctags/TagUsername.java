@@ -2,10 +2,11 @@ package com.github.vaerys.tags.cctags;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 
 public class TagUsername extends TagObject {
 
-    public TagUsername(int priority, String... types) {
+    public TagUsername(int priority, TagType... types) {
         super(priority, types);
     }
 

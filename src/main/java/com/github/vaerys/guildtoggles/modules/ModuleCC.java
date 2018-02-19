@@ -6,6 +6,7 @@ import com.github.vaerys.guildtoggles.toggles.ShitpostFiltering;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.GuildModule;
 
 /**
@@ -14,8 +15,8 @@ import com.github.vaerys.templates.GuildModule;
 public class ModuleCC extends GuildModule {
 
     @Override
-    public String name() {
-        return Command.TYPE_CC;
+    public SAILType name() {
+        return SAILType.CC;
     }
 
     @Override
@@ -45,9 +46,9 @@ public class ModuleCC extends GuildModule {
     public void setup() {
         channels.add(ChannelSetting.SHITPOST);
         settings.add(new ShitpostFiltering());
-        channels.add(ChannelSetting.CHANNEL_CC);
+        channels.add(ChannelSetting.CC_INFO);
         channels.add(ChannelSetting.CC_DENIED);
-        channels.add(ChannelSetting.CREATE_CC);
+        channels.add(ChannelSetting.MANAGE_CC);
     }
 
 

@@ -3,6 +3,7 @@ package com.github.vaerys.guildtoggles.toggles;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 /**
  * Created by Vaerys on 20/02/2017.
@@ -10,8 +11,8 @@ import com.github.vaerys.templates.GuildSetting;
 public class MuteRepeatOffender extends GuildSetting {
 
     @Override
-    public String name() {
-        return "MuteRepeatOffender";
+    public SAILType name() {
+        return SAILType.MUTE_REPEAT_OFFENDER;
     }
 
     @Override

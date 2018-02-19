@@ -1,5 +1,10 @@
 package com.github.vaerys.commands.help;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.guildtoggles.modules.ModuleRoles;
 import com.github.vaerys.handlers.RequestHandler;
@@ -8,18 +13,13 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRegion;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -112,10 +112,10 @@ public class GetGuildInfo extends Command {
         }
 
         if (hasManageServer) {
-            List<String> enabledModules = new LinkedList<>();
-            List<String> disabledModules = new LinkedList<>();
-            List<String> enabledSettings = new LinkedList<>();
-            List<String> disabledSettings = new LinkedList<>();
+            List<SAILType> enabledModules = new LinkedList<>();
+            List<SAILType> disabledModules = new LinkedList<>();
+            List<SAILType> enabledSettings = new LinkedList<>();
+            List<SAILType> disabledSettings = new LinkedList<>();
             for (GuildToggle t : command.guild.toggles) {
                 if (t.isModule()) {
                     if (t.get(command.guild.config)) enabledModules.add(t.name());
@@ -126,10 +126,10 @@ public class GetGuildInfo extends Command {
                 }
             }
 
-            toggles.appendField("MODULES", "**Enabled**```\n" + Utility.listFormatter(enabledModules, true) + "```\n" +
-                    "**Disabled**```" + Utility.listFormatter(disabledModules, true) + "```\n" + Command.spacer , true);
-            toggles.appendField("SETTINGS", "**Enabled**```\n" + Utility.listFormatter(enabledSettings, true) + "```\n" +
-                    "**Disabled**```" + Utility.listFormatter(disabledSettings, true) + "```", true);
+            toggles.appendField("MODULES", "**Enabled**```\n" + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
+                    "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.spacer , true);
+            toggles.appendField("SETTINGS", "**Enabled**```\n" + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
+                    "**Disabled**```" + Utility.listEnumFormatter(disabledSettings, true) + "```", true);
             RequestHandler.sendEmbedMessage("", toggles, channel).get();
         }
 
@@ -163,7 +163,7 @@ public class GetGuildInfo extends Command {
         List<GuildToggle> guildmodules = new ArrayList(command.guild.toggles);
         GuildToggle roleModule = null;
         for (GuildToggle t : guildmodules) {
-            if (t.name().equalsIgnoreCase(new ModuleRoles().name())) {
+            if (t.name() == new ModuleRoles().name()) {
                 roleModule = t;
             }
         }
@@ -194,7 +194,7 @@ public class GetGuildInfo extends Command {
                     if (builder.length() != 0) {
                         toSend.add(builder.toString());
                     }
-                    String title = toggle.name().toUpperCase() + " STATS";
+                    String title = toggle.name().toString().toUpperCase() + " STATS";
                     if (toSend.size() != 0) {
                         for (int i = 0; i < toSend.size(); i++) {
                             moduleStats = resetEmbed(moduleStats, channel, command, title.length() + toSend.get(i).length());
@@ -221,9 +221,10 @@ public class GetGuildInfo extends Command {
         return "> Info sent to Dms.";
     }
 
+    protected static final String[] NAMES = new String[]{"GuildInfo", "GuildStats", "ServerInfo", "GetGuildInfo"};
     @Override
-    public String[] names() {
-        return new String[]{"GuildInfo", "GuildStats", "ServerInfo", "GetGuildInfo"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -233,58 +234,45 @@ public class GetGuildInfo extends Command {
                 "> " + command.guild.config.getPrefixCommand() + "GuildStats - `Posts a Short description of the server to the current channel.`";
     }
 
+    protected static final String USAGE = null;
     @Override
-    public String usage() {
-        return null;
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
-    public String type() {
-        return TYPE_HELP;
+    protected SAILType type() {
+        return COMMAND_TYPE;
+
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

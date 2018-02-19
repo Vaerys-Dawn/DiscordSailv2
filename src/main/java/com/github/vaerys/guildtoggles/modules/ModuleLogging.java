@@ -15,12 +15,13 @@ import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
+import com.github.vaerys.templates.SAILType;
 
 public class ModuleLogging extends GuildModule {
 
     @Override
-    public String name() {
-        return Command.TYPE_LOGGING;
+    public SAILType name() {
+        return SAILType.LOGGING;
     }
 
     @Override

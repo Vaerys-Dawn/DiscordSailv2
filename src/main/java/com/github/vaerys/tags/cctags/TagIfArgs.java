@@ -1,14 +1,14 @@
 package com.github.vaerys.tags.cctags;
 
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.TagObject;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
+import com.github.vaerys.templates.TagType;
 
 public class TagIfArgs extends TagObject {
 
-    public TagIfArgs(int priority, String... types) {
+    public TagIfArgs(int priority, TagType... types) {
         super(priority, types);
     }
 

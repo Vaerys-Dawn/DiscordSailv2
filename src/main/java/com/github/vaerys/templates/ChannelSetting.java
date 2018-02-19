@@ -15,12 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Vaerys on 09/04/2017. Edited by C0bra5 on 2018-feb-18
- */
-
-/**
  * This enum contains all the states in which a server can be set to.
- *
+ * 
+ * <p>
+ * Created by Vaerys on 09/04/2017.</br>
+ * Edited by C0bra5 on 2018-feb-18
+ * </p>
+ * 
  * @author C0bra5
  */
 public enum ChannelSetting {
@@ -30,63 +31,63 @@ public enum ChannelSetting {
     /**
      * General Bot Command Channel.
      */
-    BOT_COMMANDS(Command.CHANNEL_BOT_COMMANDS, true, "General Bot Command Channel."),
+    BOT_COMMANDS("BotCommands", true, "General Bot Command Channel."),
 
     /**
      * Channel for general use of the base CC commands.
      */
-    CHANNEL_CC(Command.CHANNEL_CC_INFO, true, "Channel for general use of the base CC commands."),
+    CC_INFO("CustomCommands", true, "Channel for general use of the base CC commands."),
 
     /**
      * When this setting is enabled on a channel it will deny the use of custom commands in it.
      */
-    CC_DENIED(Command.CHANNEL_CC_DENIED, true, "When this setting is enabled on a channel it will deny the use of custom commands in it."),
+    CC_DENIED("CCDenied", true, "When this setting is enabled on a channel it will deny the use of custom commands in it."),
 
     /**
      * General Channel for Character related commands.
      */
-    CHANNEL_CHARACTERS(Command.CHANNEL_CHAR, true, "General Channel for Character related commands."),
+    CHARACTER("Characters", true, "General Channel for Character related commands."),
 
     /**
      * Channel for creating, editing and deleting custom commands.
      */
-    CREATE_CC(Command.CHANNEL_EDIT_CC, true, "Channel for creating, editing and deleting custom commands."),
+    MANAGE_CC("ManageCC", true, "Channel for creating, editing and deleting custom commands."),
 
     /**
      * When enabled on a channel, no message logs will occur for the channel.
      */
-    DONT_LOG(Command.CHANNEL_DONT_LOG, true, "When enabled on a channel, no message logs will occur for the channel."),
+    DONT_LOG("DontLog", true, "When enabled on a channel, no message logs will occur for the channel."),
 
     /**
      * Channel for the group commands.
      */
-    GROUPS(Command.CHANNEL_GROUPS, true, "Channel for the group commands."),
+    GROUPS("Groups", true, "Channel for the group commands."),
 
     /**
      * When this setting is on a channel no level up messages will be sent to the channel.
      */
-    LEVEL_UP_DENIED(Command.CHANNEL_LEVEL_UP_DENIED, true, "When this setting is on a channel no level up messages will be sent to the channel."),
+    LEVEL_UP_DENIED("LevelUpDenied", true, "When this setting is on a channel no level up messages will be sent to the channel."),
 
     /**
      * Channel for pixel commands.
      */
-    PIXELS(Command.CHANNEL_PIXELS, true, "Channel for pixel commands."),
+    PIXELS("Pixels", true, "Channel for pixel commands."),
 
     /**
      * Channel for the server listing commands.
      */
-    SERVERS(Command.CHANNEL_SERVERS, true, "Channel for the server listing commands."),
+    SERVERS("Servers", true, "Channel for the server listing commands."),
 
     /**
      * When this setting is on a channel all custom commands create in it will be, automatically tagged
      * shitpost. shitpost commands can only be run in shitpost channels.
      */
-    SHITPOST(Command.CHANNEL_SHITPOST, true, "When this setting is on a channel all custom commands create in it will be, automatically tagged shitpost. shitpost commands can only be run in shitpost channels."),
+    SHITPOST("ShitPost", true, "When this setting is on a channel all custom commands create in it will be, automatically tagged shitpost. shitpost commands can only be run in shitpost channels."),
 
     /**
      * When this setting is on a channel no pixels will be gained in the channel.
      */
-    XP_DENIED(Command.CHANNEL_XP_DENIED, true, "When this setting is on a channel no pixels will be gained in the  channel."),
+    XP_DENIED("XpDenied", true, "When this setting is on a channel no pixels will be gained in the  channel."),
 
 
     // "Types"
@@ -94,37 +95,43 @@ public enum ChannelSetting {
     /**
      * Where messages created by the $1%s and $2%s commands are sent.
      */
-    ADMIN(Command.CHANNEL_ADMIN, false, "Where messages created by the $1%s and $2%s commands are sent."),
+    ADMIN("Admin", false, "Where messages created by the $1%s and $2%s commands are sent."),
 
     /**
      * Where all of the admin type logging will be sent.
      */
-    ADMIN_LOG(Command.CHANNEL_ADMIN_LOG, false, "Where all of the admin type logging will be sent."),
+    ADMIN_LOG("AdminLog", false, "Where all of the admin type logging will be sent."),
 
     /**
      * Where art is enabled to be pinned by users via sail.
      */
-    ART(Command.CHANNEL_ART, false, "Where art is enabled to be pinned by users via sail."),
+    ART("Art", false, "Where art is enabled to be pinned by users via sail."),
 
     /**
      * Command.CHANNEL_INFO, false, "Channel to post the contents of the Info.txt file."
      */
-    CHANNEL_INFO(Command.CHANNEL_INFO, false, "Channel to post the contents of the Info.txt file."),
+    INFO("Info", false, "Channel to post the contents of the Info.txt file."),
 
     /**
      * Where is where daily messages will be sent.
      */
-    GENERAL(Command.CHANNEL_GENERAL, false, "Where is where daily messages will be sent."),
+    GENERAL("General", false, "Where is where daily messages will be sent."),
 
     /**
      * Where the LevelChannel profile setting will send level up messages.
      */
-    LEVEL_UP(Command.CHANNEL_LEVEL_UP, false, "Where the LevelChannel profile setting will send level up messages."),
+    LEVEL_UP("LevelUp", false, "Where the LevelChannel profile setting will send level up messages."),
 
     /**
      * Where all the general type logging will be sent.
      */
-    SERVER_LOG(Command.CHANNEL_SERVER_LOG, false, "Where all the general type logging will be sent.");
+    SERVER_LOG("ServerLog", false, "Where all the general type logging will be sent."),
+
+    /**
+     * Where all the general type logging will be sent.
+     */
+    FROM_DM("DirectMessages", false, "The command can only be ran in DMs.");
+
 
     protected String name;
 
@@ -156,7 +163,7 @@ public enum ChannelSetting {
      * @return the description of the channel setting
      */
     public String getDesc(CommandObject command) {
-        if (desc == null) {
+        if (command == null) {
             return desc;
         } else {
             return String.format(desc, new Report().getCommand(command), new SilentReport().getCommand(command));
@@ -212,7 +219,7 @@ public enum ChannelSetting {
             builder.withTitle("Channel Type - " + name);
         }
         builder.withDesc(getDesc(object));
-        List<IChannel> channels = object.guild.getChannelsByType(name);
+        List<IChannel> channels = object.guild.getChannelsByType(this);
         channels = object.user.getVisibleChannels(channels);
         String title;
         if (isSetting()) {
@@ -224,8 +231,8 @@ public enum ChannelSetting {
             builder.appendField(title, Utility.listFormatter(channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()), true), false);
         }
         List<Command> commands = object.guild.commands.stream().filter(command -> {
-            if (command.channel != null && Utility.testForPerms(object, command.perms())) {
-                return command.channel.equalsIgnoreCase(name);
+            if (command.channel() != null && Utility.testForPerms(object, command.perms())) {
+                return command.channel == this;
             }
             return false;
         }).collect(Collectors.toList());

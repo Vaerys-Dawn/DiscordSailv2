@@ -1,5 +1,9 @@
 package com.github.vaerys.commands.admin;
 
+import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
@@ -8,18 +12,24 @@ import com.github.vaerys.objects.ModNoteObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.text.SimpleDateFormat;
-import java.util.LinkedList;
 
 public class ModNote extends Command {
 
     private static final Logger logger = LoggerFactory.getLogger(ModNote.class);
 
+    // using static as it will cause less memory to be used overall by orphaned data
+    protected static final String[] NAMES = new String[]{"ModNote", "Punish", "RecordIncident"};
+    protected static final String USAGE = "[@User] (Mode)|[Note ...]";
+    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_MESSAGES};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = true;
+    
     @Override
     public String execute(String args, CommandObject command) {
         // Start by breaking the arguments apart
@@ -172,12 +182,6 @@ public class ModNote extends Command {
         builder.send(command.channel);
     }
 
-    //region Command Details
-    @Override
-    public String[] names() {
-        return new String[]{"ModNote", "Punish", "RecordIncident"};
-    }
-
     @Override
     public String description(CommandObject command) {
         return "Allows staff members to create and manage notes about users\n\n" +
@@ -190,60 +194,43 @@ public class ModNote extends Command {
     }
 
     @Override
-    public String usage() {
-        return "[@User] (Mode)|[Note ...]";
-    }
-
-    @Override
-    public String type() {
-        return TYPE_ADMIN;
-    }
-
-    @Override
-    public String channel() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES};
-    }
-
-    @Override
-    public boolean requiresArgs() {
-        return true;
-    }
-
-    @Override
-    public boolean doAdminLogging() {
-        return true;
-    }
-
-    @Override
     public void init() {
 
     }
 
-    //region dual-mode(unused)
     @Override
-    public String dualDescription() {
-        return null;
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
-    public String dualUsage() {
-        return null;
+    protected String usage() {
+        return USAGE;
     }
 
     @Override
-    public String dualType() {
-        return null;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
     @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
-    //endregion
-    //endregion
+
+    @Override
+    protected Permissions[] perms() {
+        return PERMISSIONS;
+    }
+
+    @Override
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
+    }
+
+    @Override
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
+    }
+
 }

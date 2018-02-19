@@ -13,9 +13,10 @@ public class DealWithIt extends SlashCommand {
         return "(•\\_•)\n( •\\_•)>⌐■-■\n(⌐■_■)";
     }
 
+    protected static final String[] NAMES = new String[]{"DealWithIt"};
     @Override
-    public String[] names() {
-        return new String[]{"DealWithIt"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override

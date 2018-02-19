@@ -1,15 +1,16 @@
 package com.github.vaerys.commands.groups;
 
+import java.util.ArrayList;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.GroupUpObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IPresence;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.handle.obj.StatusType;
-
-import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 31/05/2017.
@@ -64,9 +65,10 @@ public class GroupUp extends Command {
                 Utility.getCommandInfo(this, command);
     }
 
+    protected static final String[] NAMES = new String[]{"GroupUp", "GroupMe"};
     @Override
-    public String[] names() {
-        return new String[]{"GroupUp", "GroupMe"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -74,58 +76,44 @@ public class GroupUp extends Command {
         return "Adds you to a list of people that will be mentioned when this command is run.\nRun this command again to leave the list.";
     }
 
+    protected static final String USAGE = "(Game)";
     @Override
-    public String usage() {
-        return "(Game)";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.GROUPS;
     @Override
-    public String type() {
-        return TYPE_GROUPS;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.GROUPS;
     @Override
-    public String channel() {
-        return CHANNEL_GROUPS;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

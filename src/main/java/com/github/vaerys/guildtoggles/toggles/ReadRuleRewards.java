@@ -5,14 +5,15 @@ import com.github.vaerys.commands.admin.SetRuleCode;
 import com.github.vaerys.commands.general.RulesCode;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 public class ReadRuleRewards extends GuildSetting {
 
     // TODO: 25/01/2018 add role giving for getting teh code right
 
     @Override
-    public String name() {
-        return "ReadRulesRewards";
+    public SAILType name() {
+        return SAILType.READ_RULES_REWARDS;
     }
 
     @Override

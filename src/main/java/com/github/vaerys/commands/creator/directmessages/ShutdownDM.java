@@ -2,6 +2,7 @@ package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.creator.Shutdown;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.DMCommand;
 
 
@@ -14,9 +15,10 @@ public class ShutdownDM extends DMCommand {
         return new Shutdown().execute(args,command);
     }
 
+    protected static final String[] NAMES = new String[]{"Shutdown"};
     @Override
-    public String[] names() {
-        return new String[]{"Shutdown"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -24,19 +26,22 @@ public class ShutdownDM extends DMCommand {
         return "Shuts the bot down.";
     }
 
+    protected static final String USAGE = null;
     @Override
-    public String usage() {
-        return null;
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
     @Override
