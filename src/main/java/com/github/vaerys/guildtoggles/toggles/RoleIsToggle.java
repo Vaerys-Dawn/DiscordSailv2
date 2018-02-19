@@ -4,14 +4,15 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.roleSelect.CosmeticRoles;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 /**
  * Created by Vaerys on 18/03/2017.
  */
 public class RoleIsToggle extends GuildSetting {
     @Override
-    public String name() {
-        return "RoleIsToggle";
+    public SAILType name() {
+        return SAILType.ROLE_IS_TOGGLE;
     }
 
     @Override

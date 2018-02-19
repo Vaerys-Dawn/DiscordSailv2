@@ -1,15 +1,25 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
-
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
+import sx.blah.discord.handle.obj.Permissions;
 
 public class PruneEmptyProfiles extends Command {
+
+    // using static as it will cause less memory to be used overall by orphaned data
+    protected static final String[] NAMES = new String[]{"PruneEmptyProfiles"};
+    protected static final String USAGE = null;
+    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = true;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -33,43 +43,8 @@ public class PruneEmptyProfiles extends Command {
     }
 
     @Override
-    public String[] names() {
-        return new String[]{"PruneEmptyProfiles"};
-    }
-
-    @Override
     public String description(CommandObject command) {
         return "Prunes all of the empty profiles on the server.";
-    }
-
-    @Override
-    public String usage() {
-        return null;
-    }
-
-    @Override
-    public String type() {
-        return TYPE_ADMIN;
-    }
-
-    @Override
-    public String channel() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
-    }
-
-    @Override
-    public boolean requiresArgs() {
-        return false;
-    }
-
-    @Override
-    public boolean doAdminLogging() {
-        return true;
     }
 
     @Override
@@ -78,22 +53,38 @@ public class PruneEmptyProfiles extends Command {
     }
 
     @Override
-    public String dualDescription() {
-        return null;
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
-    public String dualUsage() {
-        return null;
+    protected String usage() {
+        return USAGE;
     }
 
     @Override
-    public String dualType() {
-        return null;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
     @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
+
+    @Override
+    protected Permissions[] perms() {
+        return PERMISSIONS;
+    }
+
+    @Override
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
+    }
+
+    @Override
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
+    }
+
 }

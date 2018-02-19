@@ -1,13 +1,14 @@
 package com.github.vaerys.commands.admin;
 
+import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.InfoHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.List;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -15,7 +16,7 @@ import java.util.List;
 public class UpdateInfo extends Command {
     @Override
     public String execute(String args, CommandObject command) {
-        List<IChannel> channels = command.guild.getChannelsByType(Command.CHANNEL_INFO);
+        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.INFO);
         if (channels.size() == 0) {
             return "> No Info channel set up yet, you need to set one up in order to run this command.\n" + Utility.getCommandInfo(this, command);
         }
@@ -27,9 +28,10 @@ public class UpdateInfo extends Command {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"UpdateInfo"};
     @Override
-    public String[] names() {
-        return new String[]{"UpdateInfo"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -37,58 +39,44 @@ public class UpdateInfo extends Command {
         return "Posts the contents of the Guild's Info.TXT";
     }
 
+    protected static final String USAGE = null;
     @Override
-    public String usage() {
-        return null;
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
-    public String type() {
-        return TYPE_ADMIN;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.INFO;
     @Override
-    public String channel() {
-        return CHANNEL_INFO;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
-    public boolean doAdminLogging() {
-        return true;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

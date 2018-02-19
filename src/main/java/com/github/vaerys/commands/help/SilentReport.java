@@ -2,7 +2,6 @@ package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.templates.Command;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -19,9 +18,10 @@ public class SilentReport extends Report {
         return null;
     }
 
+    protected static final String[] NAMES = new String[]{"SilentReport"};
     @Override
-    public String[] names() {
-        return new String[]{"SilentReport"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -30,9 +30,10 @@ public class SilentReport extends Report {
                 indent + " It will also remove the message used to call the command.";
     }
 
+    protected static final String USAGE = "[@User] [Report]";
     @Override
-    public String usage() {
-        return "[@User] [Report]";
+    protected String usage() {
+        return USAGE;
     }
 
     @Override

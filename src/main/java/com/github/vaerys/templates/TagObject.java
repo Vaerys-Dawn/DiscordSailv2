@@ -1,13 +1,12 @@
 package com.github.vaerys.templates;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XEmbedBuilder;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.objects.XEmbedBuilder;
 
 public abstract class TagObject {
 
@@ -20,9 +19,9 @@ public abstract class TagObject {
     public String usage;
     public String error;
     public int requiredArgs;
-    List<String> types = new ArrayList<>();
+    List<TagType> types = new ArrayList<>();
 
-    public TagObject(int priority, String... types) {
+    public TagObject(int priority, TagType... types) {
         this.priority = priority;
         requiredArgs = argsRequired();
         name = tagName();
@@ -41,13 +40,13 @@ public abstract class TagObject {
 
     public abstract String execute(String from, CommandObject command, String args);
 
-    public abstract String tagName();
+    protected abstract String tagName();
 
-    public abstract int argsRequired();
+    protected abstract int argsRequired();
 
-    public abstract String usage();
+    protected abstract String usage();
 
-    public abstract String desc();
+    protected abstract String desc();
 
     public boolean isPassive() {
         return false;
@@ -196,7 +195,7 @@ public abstract class TagObject {
         } else {
             descContents.append("\n**Usage:** `" + name + "`");
         }
-        descContents.append("\n\n**Types:** " + Utility.listFormatter(types, true));
+        descContents.append("\n\n**Types:** " + Utility.listEnumFormatter(types, true));
         builder.withDesc(descContents.toString());
         return builder;
     }
@@ -224,7 +223,7 @@ public abstract class TagObject {
         }
     }
 
-    public List<String> getTypes() {
+    public List<TagType> getTypes() {
         return types;
     }
 }

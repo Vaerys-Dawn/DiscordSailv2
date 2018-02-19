@@ -5,6 +5,7 @@ import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.pogos.GlobalData;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.DMCommand;
 
 /**
@@ -28,9 +29,10 @@ public class BlockUser extends DMCommand {
         return "> Could not find a valid userID";
     }
 
+    protected static final String[] NAMES = new String[]{"BlockUser"};
     @Override
-    public String[] names() {
-        return new String[]{"BlockUser"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -38,19 +40,22 @@ public class BlockUser extends DMCommand {
         return "Allows the author to block a user from sending them DMs.";
     }
 
+    protected static final String USAGE = "(User ID)";
     @Override
-    public String usage() {
-        return "(User ID)";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
     @Override

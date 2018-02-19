@@ -1,15 +1,15 @@
 package com.github.vaerys.tags.cctags;
 
+import java.util.List;
+import java.util.Random;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.objects.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
-
-import java.util.List;
-import java.util.Random;
+import com.github.vaerys.templates.TagType;
 
 public class TagReplaceRandom extends TagReplaceObject {
 
-    public TagReplaceRandom(int priority, String... types) {
+    public TagReplaceRandom(int priority, TagType... types) {
         super(priority, types);
     }
 

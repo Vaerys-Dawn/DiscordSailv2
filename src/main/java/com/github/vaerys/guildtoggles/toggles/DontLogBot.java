@@ -3,6 +3,7 @@ package com.github.vaerys.guildtoggles.toggles;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 /**
  * Created by Vaerys on 09/04/2017.
@@ -10,8 +11,8 @@ import com.github.vaerys.templates.GuildSetting;
 public class DontLogBot extends GuildSetting{
 
     @Override
-    public String name() {
-        return "DontlogBot";
+    public SAILType name() {
+        return SAILType.DONT_LOG_BOT;
     }
 
     @Override

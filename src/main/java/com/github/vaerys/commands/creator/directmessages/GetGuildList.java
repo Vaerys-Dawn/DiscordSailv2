@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.creator.directmessages;
 
+import java.util.ArrayList;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.DMCommand;
 import sx.blah.discord.handle.obj.IGuild;
-
-import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 17/02/2017.
@@ -24,9 +24,10 @@ public class GetGuildList extends DMCommand {
         return null;
     }
 
+    protected static final String[] NAMES = new String[]{"GetGuildList"};
     @Override
-    public String[] names() {
-        return new String[]{"GetGuildList"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -34,19 +35,22 @@ public class GetGuildList extends DMCommand {
         return "Gives a list of all the Guilds the bot is connected to.";
     }
 
+    protected static final String USAGE = null;
     @Override
-    public String usage() {
-        return null;
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
     @Override

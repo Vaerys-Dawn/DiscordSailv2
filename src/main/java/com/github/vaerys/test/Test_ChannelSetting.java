@@ -21,10 +21,10 @@ public class Test_ChannelSetting extends TestCase {
         for (ChannelSetting setting : ChannelSetting.values()) {
             // name/tostring related
             if (setting.toString() == null) {
-                fail(String.format("The \"%s\" channel setting's name field isn't set.", setting.name()));
+                fail(String.format("The \"%s\" channel setting's name cannot be unset.", setting.name()));
             }
             if (setting.toString().trim().equalsIgnoreCase("")) {
-                fail(String.format("The \"%s\" channel setting's name field is blank.", setting.name()));
+                fail(String.format("The \"%s\" channel setting's name cannot be blank.", setting.name()));
             }
         }
     }
@@ -36,10 +36,10 @@ public class Test_ChannelSetting extends TestCase {
     public void testDescription() {
         for (ChannelSetting setting : ChannelSetting.values()) {
             if (setting.getDesc() == null) {
-                fail(String.format("The \"%s\" channel setting's description isn't set.", setting.name()));
+                fail(String.format("The \"%s\" channel setting's description cannot be unset.", setting.name()));
             }
             if (setting.getDesc().trim().equalsIgnoreCase("")) {
-                fail(String.format("The \"%s\" channel setting's name field is blank.", setting.name()));
+                fail(String.format("The \"%s\" channel setting's description cannot be blank.", setting.name()));
             }
         }
     }
@@ -55,10 +55,10 @@ public class Test_ChannelSetting extends TestCase {
         for (ChannelSetting setting : ChannelSetting.values()) {
             // other get desc
             if (setting.getDesc(null) == null) {
-                fail(String.format("The \"%s\" channel setting's description isn't set.", setting.name()));
+                fail(String.format("The \"%s\" channel setting's description cannot be unset.", setting.name()));
             }
             if (setting.getDesc(null).trim().equalsIgnoreCase("")) {
-                fail(String.format("The \"%s\" channel setting's name field is blank.", setting.name()));
+                fail(String.format("The \"%s\" channel setting's description cannot be blank.", setting.name()));
             }
             if (!setting.getDesc(null).equals(setting.getDesc())) {
                 fail("The getDesc method should output the same string as the getDesc method that has no parameter");

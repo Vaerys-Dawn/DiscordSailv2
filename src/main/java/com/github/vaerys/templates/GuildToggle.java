@@ -1,5 +1,8 @@
 package com.github.vaerys.templates;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -7,16 +10,12 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.pogos.GuildConfig;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * Created by Vaerys on 20/02/2017.
  */
 public abstract class GuildToggle {
 
-    public String affectsType;
+    public SAILType affectsType;
     public List<Command> commands = new ArrayList<>();
     public List<GuildSetting> settings = new ArrayList<>();
     public List<ChannelSetting> channels = new ArrayList<>();
@@ -55,22 +54,22 @@ public abstract class GuildToggle {
         builder.withDesc(fullDesc);
         List<String> commandNames = commands.stream().map(command1 -> command1.getCommand(command)).collect(Collectors.toList());
         commandNames.addAll(Globals.getAllCommands().stream()
-                .filter(command1 -> command1.type().equalsIgnoreCase(affectsType))
+                .filter(command1 -> command1.type() == affectsType)
                 .map(command1 -> command1.getCommand(command)).collect(Collectors.toList()));
         commandNames = commandNames.stream().distinct().collect(Collectors.toList());
-        List<String> settingNames = settings.stream().map(guildSetting -> guildSetting.name()).collect(Collectors.toList());
-        List<String> channelNames = channels.stream().map(channelSetting -> channelSetting.toString()).collect(Collectors.toList());
+        List<SAILType> settingNames = settings.stream().map(guildSetting -> guildSetting.name()).collect(Collectors.toList());
+        List<ChannelSetting> channelNames = channels.stream().map(channelSetting -> channelSetting).collect(Collectors.toList());
 
         if (commandNames.size() != 0) {
             builder.appendField("Commands:", "```\n" + Utility.listFormatter(commandNames, true) + Command.spacer + "```", true);
         }
 
         if (settingNames.size() != 0) {
-            builder.appendField("Settings:", "```\n" + Utility.listFormatter(settingNames, true) + Command.spacer + "```", true);
+            builder.appendField("Settings:", "```\n" + Utility.listEnumFormatter(settingNames, true) + Command.spacer + "```", true);
         }
 
         if (channelNames.size() != 0) {
-            builder.appendField("Channels:", "```\n" + Utility.listFormatter(channelNames, true) + Command.spacer + "```", true);
+            builder.appendField("Channels:", "```\n" + Utility.listEnumFormatter(channelNames, true) + Command.spacer + "```", true);
         }
 
         StringBuilder footer = new StringBuilder();
@@ -89,7 +88,7 @@ public abstract class GuildToggle {
         String prefix;
         if (isModule()) prefix = "Module";
         else prefix = "Setting";
-        if (name() == null || name().isEmpty()) {
+        if (name() == null) {
             response.append("   > " + prefix + " type is empty.\n");
             isError = true;
         }
@@ -104,7 +103,7 @@ public abstract class GuildToggle {
         }
     }
 
-    public abstract String name();
+    public abstract SAILType name();
 
     public abstract boolean toggle(GuildConfig config);
 

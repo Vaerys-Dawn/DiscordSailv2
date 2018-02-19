@@ -13,9 +13,10 @@ public class TableFlip extends SlashCommand {
         return "(╯°□°）╯︵ ┻━┻";
     }
 
+    protected static final String[] NAMES = new String[]{"TableFlip"};
     @Override
-    public String[] names() {
-        return new String[]{"TableFlip"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override

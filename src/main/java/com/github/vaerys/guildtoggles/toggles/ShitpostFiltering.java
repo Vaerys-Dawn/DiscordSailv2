@@ -2,8 +2,10 @@ package com.github.vaerys.guildtoggles.toggles;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 /**
  * Created by Vaerys on 20/02/2017.
@@ -11,8 +13,8 @@ import com.github.vaerys.templates.GuildSetting;
 public class ShitpostFiltering extends GuildSetting {
 
     @Override
-    public String name() {
-        return "ShitpostFiltering";
+    public SAILType name() {
+        return SAILType.SHITPOST_FILTERING;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class ShitpostFiltering extends GuildSetting {
 
     @Override
     public String desc(CommandObject command) {
-        return "Enables the locking the usage of Custom commands tagged with shitpost to " + Command.CHANNEL_SHITPOST + " channels.";
+        return "Enables the locking the usage of Custom commands tagged with shitpost to " + ChannelSetting.SHITPOST.toString() + " channels.";
     }
 
     @Override

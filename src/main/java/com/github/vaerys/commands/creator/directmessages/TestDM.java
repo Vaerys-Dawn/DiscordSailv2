@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.DMCommand;
 
 /**
@@ -19,9 +20,10 @@ public class TestDM extends DMCommand {
         return "> You've done your testing";
     }
 
+    protected static final String[] NAMES = new String[]{"Test"};
     @Override
-    public String[] names() {
-        return new String[]{"Test"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -29,19 +31,22 @@ public class TestDM extends DMCommand {
         return "Is a test";
     }
 
+    protected static final String USAGE = "[args]";
     @Override
-    public String usage() {
-        return "[args]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
     @Override

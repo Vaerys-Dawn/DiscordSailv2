@@ -1,8 +1,10 @@
 package com.github.vaerys.tags.cctags;
 
+import com.github.vaerys.templates.TagType;
+
 public class TagReplaceSpecial extends TagReplace {
 
-    public TagReplaceSpecial(int priority, String... types) {
+    public TagReplaceSpecial(int priority, TagType... types) {
         super(priority, types);
     }
 

@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.LastDailyMessage;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 /**
  * Created by Vaerys on 20/02/2017.
@@ -11,8 +12,8 @@ import com.github.vaerys.templates.GuildSetting;
 public class DailyMessage extends GuildSetting {
 
     @Override
-    public String name() {
-        return "DailyMessage";
+    public SAILType name() {
+        return SAILType.DAILY_MESSAGE;
     }
 
     @Override

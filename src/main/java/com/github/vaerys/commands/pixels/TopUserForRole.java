@@ -1,17 +1,18 @@
 package com.github.vaerys.commands.pixels;
 
+import java.text.NumberFormat;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.text.NumberFormat;
 
 public class TopUserForRole extends Command {
 
@@ -61,9 +62,10 @@ public class TopUserForRole extends Command {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"TopUserForRole"};
     @Override
-    public String[] names() {
-        return new String[]{"TopUserForRole"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -71,58 +73,46 @@ public class TopUserForRole extends Command {
         return "Gets the top user (Pixel wise) for a specific role.";
     }
 
+    protected static final String USAGE = "[Role Name]";
     @Override
-    public String usage() {
-        return "[Role Name]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
-    public String type() {
-        return TYPE_PIXEL;
+    protected SAILType type() {
+        return COMMAND_TYPE;
+
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES};
     @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_ROLES};
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
-    public boolean doAdminLogging() {
-        return true;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

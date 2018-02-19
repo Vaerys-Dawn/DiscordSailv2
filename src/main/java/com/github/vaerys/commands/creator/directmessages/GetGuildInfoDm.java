@@ -3,6 +3,7 @@ package com.github.vaerys.commands.creator.directmessages;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.DMCommand;
 import sx.blah.discord.handle.obj.IGuild;
 
@@ -21,9 +22,10 @@ public class GetGuildInfoDm extends DMCommand {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"GetGuildInfo"};
     @Override
-    public String[] names() {
-        return new String[]{"GetGuildInfo"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -31,19 +33,22 @@ public class GetGuildInfoDm extends DMCommand {
         return "Returns with all of the information about a specific Guild.";
     }
 
+    protected static final String USAGE = "[GuildID]";
     @Override
-    public String usage() {
-        return "[GuildID]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
     @Override

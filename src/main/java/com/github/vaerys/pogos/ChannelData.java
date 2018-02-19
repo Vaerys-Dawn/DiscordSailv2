@@ -16,7 +16,7 @@ import java.util.ListIterator;
  */
 public class ChannelData extends GuildFile {
     public static final String FILE_PATH = "Channel_Data.json";
-    private double fileVersion = 1.0;
+    private double fileVersion = 1.3;
     List<ChannelSettingObject> channelSettings = new ArrayList<>();
     ArrayList<Long> pinnedMessages = new ArrayList<>();
     ArrayList<GroupUpObject> groupUpObjects = new ArrayList<>();

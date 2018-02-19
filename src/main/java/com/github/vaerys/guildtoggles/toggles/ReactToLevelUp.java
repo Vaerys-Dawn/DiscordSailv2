@@ -4,11 +4,12 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.pixels.SetLevelUpReaction;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 public class ReactToLevelUp extends GuildSetting {
     @Override
-    public String name() {
-        return "ReactToLevelUp";
+    public SAILType name() {
+        return SAILType.REACT_TO_LEVEL_UP;
     }
 
     @Override

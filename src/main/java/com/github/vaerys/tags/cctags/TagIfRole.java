@@ -1,15 +1,15 @@
 package com.github.vaerys.tags.cctags;
 
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.TagObject;
-import org.apache.commons.lang3.StringUtils;
+import com.github.vaerys.templates.TagType;
 import sx.blah.discord.handle.obj.IRole;
-
-import java.util.List;
 
 public class TagIfRole extends TagObject {
 
-    public TagIfRole(int priority, String... types) {
+    public TagIfRole(int priority, TagType... types) {
         super(priority, types);
     }
 

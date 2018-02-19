@@ -7,6 +7,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.TrackLikes;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ public class ArtHandler {
     }};
 
     public static void unPin(CommandObject command) {
-        IChannel channel = command.guild.getChannelByType(Command.CHANNEL_ART);
+        IChannel channel = command.guild.getChannelByType(ChannelSetting.ART);
         List<Long> pins = command.guild.channelData.getPinnedMessages();
         //exit if channel is wrong
         if (channel == null || !command.channel.get().equals(channel)) return;
@@ -57,7 +58,7 @@ public class ArtHandler {
     }
 
     public static void pinMessage(CommandObject command) {
-        IChannel channelIDS = command.guild.getChannelByType(Command.CHANNEL_ART);
+        IChannel channelIDS = command.guild.getChannelByType(ChannelSetting.ART);
         List<TrackLikes> likes = command.guild.channelData.getLikes();
         List<Long> pins = command.guild.channelData.getPinnedMessages();
 
@@ -339,7 +340,7 @@ public class ArtHandler {
      *                and user objects. these objects allows access to the api.
      */
     public static void pinLiked(CommandObject command) {
-        List<IChannel> channelIDS = command.guild.getChannelsByType(Command.CHANNEL_ART);
+        List<IChannel> channelIDS = command.guild.getChannelsByType(ChannelSetting.ART);
         //exit if not pinning art
         if (!command.guild.config.artPinning) return;
         //exit if pixels is off
@@ -368,8 +369,7 @@ public class ArtHandler {
 
         UserObject user = new UserObject(command.message.get().getAuthor(), command.guild);
         ProfileObject profile = user.getProfile(command.guild);
-        //exit if user is null
-        if (user == null) return;
+
         //exit if profile doesn't exist
         if (profile == null) return;
         //exit if the user should not gain pixels

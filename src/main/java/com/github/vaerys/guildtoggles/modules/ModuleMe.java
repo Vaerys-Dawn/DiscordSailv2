@@ -8,6 +8,7 @@ import com.github.vaerys.commands.general.UserInfo;
 import com.github.vaerys.guildtoggles.toggles.UserInfoShowsDate;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
+import com.github.vaerys.templates.SAILType;
 
 /**
  * Created by Vaerys on 02/03/2017.
@@ -15,8 +16,8 @@ import com.github.vaerys.templates.GuildModule;
 public class ModuleMe extends GuildModule {
 
     @Override
-    public String name() {
-        return "Profiles";
+    public SAILType name() {
+        return SAILType.PROFILES;
     }
 
     @Override

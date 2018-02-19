@@ -2,10 +2,11 @@ package com.github.vaerys.tags.cctags;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 
 public class TagNoBreak extends TagObject {
 
-    public TagNoBreak(int priority, String... types) {
+    public TagNoBreak(int priority, TagType... types) {
         super(priority, types);
     }
 

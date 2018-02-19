@@ -1,19 +1,19 @@
 package com.github.vaerys.handlers;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.TagObject;
-import org.apache.commons.lang3.StringUtils;
+import com.github.vaerys.templates.TagType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.util.RequestBuffer;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * This Class Is the Handler for the updateInfo Method it pulls the info.txt doc and then updates the channel based on the contents of the file.
@@ -101,7 +101,7 @@ public class InfoHandler {
 
 
     private String doTextTags(String s) {
-        List<TagObject> tagObjects = TagList.getType(TagList.INFO);
+        List<TagObject> tagObjects = TagList.getType(TagType.INFO);
         for (TagObject t : tagObjects) {
             s = t.handleTag(s, object, "");
         }

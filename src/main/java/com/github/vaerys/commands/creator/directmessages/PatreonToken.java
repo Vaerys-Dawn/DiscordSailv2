@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.creator.directmessages;
 
+import java.util.ArrayList;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.DMCommand;
-
-import java.util.ArrayList;
 
 public class PatreonToken extends DMCommand {
 
@@ -20,9 +20,10 @@ public class PatreonToken extends DMCommand {
         return "> Token refreshed.";
     }
 
+    protected static final String[] NAMES = new String[]{"PatreonToken"};
     @Override
-    public String[] names() {
-        return new String[]{"PatreonToken"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -30,19 +31,22 @@ public class PatreonToken extends DMCommand {
         return "refreshes the token for the patreon integration.";
     }
 
+    protected static final String USAGE = "[New Token]";
     @Override
-    public String usage() {
-        return "[New Token]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
     @Override

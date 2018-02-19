@@ -1,16 +1,18 @@
 package com.github.vaerys.commands.general;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.objects.UserLinkObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Created by Vaerys on 17/06/2017.
@@ -21,7 +23,7 @@ public class EditLinks extends Command {
         UserObject user = command.user;
         SplitFirstObject userCall = new SplitFirstObject(args);
         boolean adminEdit = false;
-        if (Utility.testForPerms(command, dualPerms()) || Utility.canBypass(command.user.get(), command.guild.get())) {
+        if (Utility.testForPerms(command, SUB_1.getPermissions()) || Utility.canBypass(command.user.get(), command.guild.get())) {
             user = Utility.getUser(command, userCall.getFirstWord(), false);
             if (user != null && userCall.getRest() != null && user.getProfile(command.guild) != null) {
                 adminEdit = true;
@@ -86,9 +88,10 @@ public class EditLinks extends Command {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"EditLinks", "NewLink"};
     @Override
-    public String[] names() {
-        return new String[]{"EditLinks", "NewLink"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -96,58 +99,51 @@ public class EditLinks extends Command {
         return "Allows uses to manage the links attached to their profile. Max 5 links per user (10 if user is a patron).";
     }
 
+    protected static final String USAGE = "[Link Name] (Link)";
     @Override
-    public String usage() {
-        return "[Link Name] (Link)";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
-    public String type() {
-        return TYPE_GENERAL;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
+    protected static final SubCommandObject SUB_1 = new SubCommandObject(
+        NAMES,
+        "[@User] [Link Name] (Link)",
+        "Allows the modification of user links.",
+        SAILType.ADMIN,
+        new Permissions[]{Permissions.MANAGE_MESSAGES}
+    );
     @Override
     public void init() {
-
-    }
-
-    @Override
-    public String dualDescription() {
-        return "Allows the modification of user links.";
-    }
-
-    @Override
-    public String dualUsage() {
-        return "[@User] [Link Name] (Link)";
-    }
-
-    @Override
-    public String dualType() {
-        return TYPE_ADMIN;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES};
+        subCommands.add(SUB_1);
     }
 }

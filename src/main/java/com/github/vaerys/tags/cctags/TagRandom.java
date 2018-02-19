@@ -1,14 +1,14 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.templates.TagObject;
-
 import java.util.List;
 import java.util.Random;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 
 public class TagRandom extends TagObject {
 
-    public TagRandom(int priority, String... types) {
+    public TagRandom(int priority, TagType... types) {
         super(priority, types);
     }
 

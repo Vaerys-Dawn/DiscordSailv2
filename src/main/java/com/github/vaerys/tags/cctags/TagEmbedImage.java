@@ -1,17 +1,17 @@
 package com.github.vaerys.tags.cctags;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class TagEmbedImage extends TagObject {
 
-    public TagEmbedImage(int priority, String... types) {
+    public TagEmbedImage(int priority, TagType... types) {
         super(priority, types);
     }
 

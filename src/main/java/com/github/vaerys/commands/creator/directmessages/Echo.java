@@ -2,6 +2,7 @@ package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.DMCommand;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -16,9 +17,10 @@ public class Echo extends DMCommand {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"Echo","E"};
     @Override
-    public String[] names() {
-        return new String[]{"Echo","E"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -26,19 +28,22 @@ public class Echo extends DMCommand {
         return "Sail sends a response to the most recent user";
     }
 
+    protected static final String USAGE = "[Message]";
     @Override
-    public String usage() {
-        return "[Message]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
     @Override

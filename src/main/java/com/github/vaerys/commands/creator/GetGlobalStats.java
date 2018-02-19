@@ -1,16 +1,17 @@
 package com.github.vaerys.commands.creator;
 
+import java.util.ArrayList;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.ToggleStatsObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 25/02/2017.
@@ -23,7 +24,7 @@ public class GetGlobalStats extends Command {
         ArrayList<String> outModules = new ArrayList<>();
 //        ArrayList<ChannelStatsObject> channelStats = new ArrayList<>();
         for (GuildToggle g : Globals.getGuildToggles()) {
-            toggleStats.add(new ToggleStatsObject(g.name(), g.isModule()));
+            toggleStats.add(new ToggleStatsObject(g.name().toString(), g.isModule()));
         }
 //        for (ChannelSetting c : Globals.getChannelSettings()) {
 //            channelStats.add(new ChannelStatsObject(c.type(), c.isSetting()));
@@ -34,7 +35,7 @@ public class GetGlobalStats extends Command {
             CommandObject object = command.setGuild(g.get());
             for (ToggleStatsObject s : toggleStats) {
                 for (GuildToggle t : object.guild.toggles) {
-                    if (t.name().equalsIgnoreCase(s.getToggle())) {
+                    if (t.name().toString().equalsIgnoreCase(s.getToggle())) {
                         if (t.isModule()) {
                             s.addOne();
                         } else if (t.get(object.guild.config) != t.getDefault()) {
@@ -137,9 +138,10 @@ public class GetGlobalStats extends Command {
 //        return null;
     }
 
+    protected static final String[] NAMES = new String[]{"GetGlobalStats"};
     @Override
-    public String[] names() {
-        return new String[]{"GetGlobalStats"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -147,58 +149,44 @@ public class GetGlobalStats extends Command {
         return "Sends the owner captured message counters.";
     }
 
+    protected static final String USAGE = null;
     @Override
-    public String usage() {
-        return null;
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = false;
     @Override
-    public boolean requiresArgs() {
-        return false;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

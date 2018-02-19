@@ -1,20 +1,34 @@
 package com.github.vaerys.main;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.*;
+import com.github.vaerys.handlers.ArtHandler;
+import com.github.vaerys.handlers.LoggingHandler;
+import com.github.vaerys.handlers.MessageHandler;
+import com.github.vaerys.handlers.QueueHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.UserCountDown;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.*;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageSendEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.impl.events.guild.member.GuildMemberEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
@@ -23,13 +37,12 @@ import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
 import sx.blah.discord.handle.impl.obj.ReactionEmoji;
-import sx.blah.discord.handle.obj.*;
-
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 03/08/2016.
@@ -240,10 +253,10 @@ public class AnnotationListener {
             return false;
         }
         if (!command.guild.config.moduleLogging) return false;
-        List<IChannel> infoID = command.guild.getChannelsByType(Command.CHANNEL_INFO);
-        List<IChannel> serverLogID = command.guild.getChannelsByType(Command.CHANNEL_SERVER_LOG);
-        List<IChannel> adminLogID = command.guild.getChannelsByType(Command.CHANNEL_ADMIN_LOG);
-        List<IChannel> dontLog = command.guild.getChannelsByType(Command.CHANNEL_DONT_LOG);
+        List<IChannel> infoID = command.guild.getChannelsByType(ChannelSetting.INFO);
+        List<IChannel> serverLogID = command.guild.getChannelsByType(ChannelSetting.SERVER_LOG);
+        List<IChannel> adminLogID = command.guild.getChannelsByType(ChannelSetting.ADMIN_LOG);
+        List<IChannel> dontLog = command.guild.getChannelsByType(ChannelSetting.DONT_LOG);
         if (dontLog.size() != 0) {
             if (dontLog.contains(command.channel.get())) {
                 return false;

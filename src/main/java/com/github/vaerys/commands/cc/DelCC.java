@@ -1,7 +1,9 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -13,9 +15,10 @@ public class DelCC extends Command {
         return command.guild.customCommands.delCommand(args, command.user.get(), command.guild.get());
     }
 
+    protected static final String[] NAMES = new String[]{"DelCC","DeleteCC","RemoveCC"};
     @Override
-    public String[] names() {
-        return new String[]{"DelCC","DeleteCC","RemoveCC"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -23,58 +26,44 @@ public class DelCC extends Command {
         return "Deletes The custom command.";
     }
 
+    protected static final String USAGE = "[Command Name]";
     @Override
-    public String usage() {
-        return "[Command Name]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
-    public String type() {
-        return TYPE_CC;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.MANAGE_CC;
     @Override
-    public String channel() {
-        return CHANNEL_EDIT_CC;
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
+    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
-    public boolean doAdminLogging() {
-        return false;
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

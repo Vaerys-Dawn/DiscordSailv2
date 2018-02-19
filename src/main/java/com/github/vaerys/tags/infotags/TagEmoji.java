@@ -2,11 +2,12 @@ package com.github.vaerys.tags.infotags;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 import sx.blah.discord.handle.obj.IEmoji;
 
 public class TagEmoji extends TagObject {
 
-    public TagEmoji(int priority, String... types) {
+    public TagEmoji(int priority, TagType... types) {
         super(priority, types);
     }
 

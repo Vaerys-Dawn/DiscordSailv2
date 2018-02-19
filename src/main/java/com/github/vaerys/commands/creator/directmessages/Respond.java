@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.SAILType;
 import com.github.vaerys.templates.DMCommand;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
@@ -41,9 +42,10 @@ public class Respond extends DMCommand {
         }
     }
 
+    protected static final String[] NAMES = new String[]{"Respond"};
     @Override
-    public String[] names() {
-        return new String[]{"Respond"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override
@@ -51,19 +53,22 @@ public class Respond extends DMCommand {
         return "Sends a response to a user.";
     }
 
+    protected static final String USAGE = "[userID] [Contents]";
     @Override
-    public String usage() {
-        return "[userID] [Contents]";
+    protected String usage() {
+        return USAGE;
     }
 
+    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
+    protected static final boolean REQUIRES_ARGS = true;
     @Override
-    public boolean requiresArgs() {
-        return true;
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
 
     @Override

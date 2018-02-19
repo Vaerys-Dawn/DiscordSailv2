@@ -1,13 +1,13 @@
 package com.github.vaerys.tags.cctags;
 
+import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.TagObject;
-
-import java.util.List;
+import com.github.vaerys.templates.TagType;
 
 public class TagIfArgsEmpty extends TagObject {
 
-    public TagIfArgsEmpty(int priority, String... types) {
+    public TagIfArgsEmpty(int priority, TagType... types) {
         super(priority, types);
     }
 

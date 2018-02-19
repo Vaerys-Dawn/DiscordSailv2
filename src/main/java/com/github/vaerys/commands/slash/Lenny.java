@@ -13,9 +13,10 @@ public class Lenny extends SlashCommand {
         return "( ͡° ͜ʖ ͡°)";
     }
 
+    protected static final String[] NAMES = new String[]{"Lenny"};
     @Override
-    public String[] names() {
-        return new String[]{"Lenny"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override

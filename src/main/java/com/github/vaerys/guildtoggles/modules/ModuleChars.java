@@ -7,6 +7,7 @@ import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
+import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -15,8 +16,8 @@ import sx.blah.discord.handle.obj.Permissions;
 public class ModuleChars extends GuildModule {
 
     @Override
-    public String name() {
-        return Command.TYPE_CHARACTER;
+    public SAILType name() {
+        return SAILType.CHARACTER;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class ModuleChars extends GuildModule {
 
     @Override
     public void setup() {
-        channels.add(ChannelSetting.CHANNEL_CHARACTERS);
+        channels.add(ChannelSetting.CHARACTER);
         settings.add(new RoleIsToggle());
     }
 

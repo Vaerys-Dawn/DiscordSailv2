@@ -47,6 +47,7 @@ public class PatchHandler {
 
         //1.3 fixes
         sanitizer(guild);
+        UpdateChannelTypesForCodeConventions(guild);
 
         //1.4 fixes
         removeNullPrefix(guild);
@@ -95,6 +96,33 @@ public class PatchHandler {
                 i--;
             } else {
                 object.addProperty("type", setting.name());
+            }
+        }
+        finalizePatch(json);
+    }
+    
+    private static void UpdateChannelTypesForCodeConventions(IGuild guild) {
+        PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
+                1.3, "");
+        if (json == null) return;
+
+        JsonArray channelSettings = json.getObject().getAsJsonArray("channelSettings");
+        for (int i = 0; i < channelSettings.size(); i++) {
+            JsonObject object = channelSettings.get(i).getAsJsonObject();
+            String type = object.get("type").getAsString();
+            switch(type) {
+                case "CHANNEL_CC":
+                    object.addProperty("type", ChannelSetting.CC_INFO.name());
+                    break;
+                case "CHANNEL_CHARACTERS":
+                    object.addProperty("type", ChannelSetting.CHARACTER.name());
+                    break;
+                case "CREATE_CC":
+                    object.addProperty("type", ChannelSetting.MANAGE_CC.name());
+                    break;
+                case "CHANNEL_INFO":
+                    object.addProperty("type", ChannelSetting.INFO.name());
+                    break;
             }
         }
         finalizePatch(json);

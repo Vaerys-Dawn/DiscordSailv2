@@ -1,10 +1,10 @@
 package com.github.vaerys.objects;
 
+import java.time.DayOfWeek;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.TagObject;
-
-import java.time.DayOfWeek;
+import com.github.vaerys.templates.TagType;
 
 /**
  * Created by Vaerys on 19/07/2017.
@@ -38,7 +38,7 @@ public class DailyMessage {
 
     public String getContents(CommandObject command) {
         String newContent = content;
-        for (TagObject t : TagList.getType(TagList.DAILY)) {
+        for (TagObject t : TagList.getType(TagType.DAILY)) {
             newContent = t.handleTag(newContent, command, "");
         }
         char[] prefixCheck = new char[4];

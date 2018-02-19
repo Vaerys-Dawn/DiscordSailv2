@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.SetRateLimit;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
+import com.github.vaerys.templates.SAILType;
 
 /**
  * Created by Vaerys on 21/02/2017.
@@ -11,8 +12,8 @@ import com.github.vaerys.templates.GuildSetting;
 public class RateLimiting extends GuildSetting {
 
     @Override
-    public String name() {
-        return "RateLimiting";
+    public SAILType name() {
+        return SAILType.RATE_LIMITING;
     }
 
     @Override

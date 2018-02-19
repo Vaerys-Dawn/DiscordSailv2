@@ -3,10 +3,11 @@ package com.github.vaerys.tags.cctags;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 
 public class TagRemovePrep extends TagObject {
 
-    public TagRemovePrep(int priority, String... types) {
+    public TagRemovePrep(int priority, TagType... types) {
         super(priority, types);
     }
 

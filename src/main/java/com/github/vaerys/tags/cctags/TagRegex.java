@@ -1,17 +1,17 @@
 package com.github.vaerys.tags.cctags;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.objects.ReplaceObject;
 import com.github.vaerys.templates.TagObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.github.vaerys.templates.TagType;
 
 public class TagRegex extends TagObject {
 
     List<ReplaceObject> toReplace = new ArrayList<>();
 
-    public TagRegex(int priority, String... types) {
+    public TagRegex(int priority, TagType... types) {
         super(priority, types);
     }
 

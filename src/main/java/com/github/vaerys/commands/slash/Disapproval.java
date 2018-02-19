@@ -12,9 +12,10 @@ public class Disapproval extends SlashCommand {
         return "ಠ_ಠ";
     }
 
+    protected static final String[] NAMES = new String[]{"Disapprove"};
     @Override
-    public String[] names() {
-        return new String[]{"Disapprove"};
+    protected String[] names() {
+        return NAMES;
     }
 
     @Override

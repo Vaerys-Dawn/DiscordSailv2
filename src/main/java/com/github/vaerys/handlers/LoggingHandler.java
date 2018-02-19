@@ -2,6 +2,7 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +27,8 @@ public class LoggingHandler {
 
     private static void sendLog(CommandObject command, String message, boolean isAdmin, EmbedObject... object) {
         IChannel channel;
-        if (isAdmin) channel = command.guild.getChannelByType(Command.CHANNEL_ADMIN_LOG);
-        else channel = command.guild.getChannelByType(Command.CHANNEL_SERVER_LOG);
+        if (isAdmin) channel = command.guild.getChannelByType(ChannelSetting.ADMIN_LOG);
+        else channel = command.guild.getChannelByType(ChannelSetting.SERVER_LOG);
         if (channel == null) return;
         if (object.length == 0 || object[0] == null) RequestHandler.sendMessage(message, channel);
         else RequestHandler.sendEmbed(message, object[0], channel);
@@ -36,10 +37,10 @@ public class LoggingHandler {
     private static boolean shouldLog(CommandObject command) {
         if (command.guild == null) return false;
         if (!command.guild.config.moduleLogging) return false;
-        IChannel info = command.guild.getChannelByType(Command.CHANNEL_INFO);
-        IChannel serverLog = command.guild.getChannelByType(Command.CHANNEL_SERVER_LOG);
-        IChannel adminLog = command.guild.getChannelByType(Command.CHANNEL_ADMIN_LOG);
-        List<IChannel> dontLog = command.guild.getChannelsByType(Command.CHANNEL_DONT_LOG);
+        IChannel info = command.guild.getChannelByType(ChannelSetting.INFO);
+        IChannel serverLog = command.guild.getChannelByType(ChannelSetting.SERVER_LOG);
+        IChannel adminLog = command.guild.getChannelByType(ChannelSetting.ADMIN_LOG);
+        List<IChannel> dontLog = command.guild.getChannelsByType(ChannelSetting.DONT_LOG);
         if (dontLog.contains(command.channel.get())) return false;
         if (command.guild.config.dontLogBot && command.user.get().isBot()) return false;
         if (command.message.getContent().equals("`Working...`") && isSailMessage(command)) return false;

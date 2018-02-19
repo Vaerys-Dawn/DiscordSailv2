@@ -1,12 +1,11 @@
 package com.github.vaerys.templates;
 
+import java.util.Arrays;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.Arrays;
 
 /**
  * Created by Vaerys on 13/03/2017.
@@ -21,51 +20,40 @@ public abstract class SlashCommand extends Command {
         return null;
     }
 
-
-    public String type() {
-        return TYPE_SLASH;
+    protected static final SAILType COMMAND_TYPE = SAILType.SLASH;
+    @Override
+    protected SAILType type() {
+        return COMMAND_TYPE;
     }
 
-
-    public String channel() {
-        return null;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    @Override
+    protected ChannelSetting channel() {
+        return CHANNEL_SETTING;
     }
 
-
-    public Permissions[] perms() {
-        return new Permissions[0];
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    @Override
+    protected Permissions[] perms() {
+        return PERMISSIONS;
     }
 
-
-    public boolean requiresArgs() {
-        return false;
+    protected static final boolean REQUIRES_ARGS = false;
+    @Override
+    protected boolean requiresArgs() {
+        return REQUIRES_ARGS;
     }
-
-    public boolean doAdminLogging() {
-        return false;
+    
+    protected static final boolean DO_ADMIN_LOGGING = false;
+    @Override
+    protected boolean doAdminLogging() {
+        return DO_ADMIN_LOGGING;
     }
 
     @Override
     public void init() {
 
     }
-
-    public String dualDescription() {
-        return null;
-    }
-
-    public String dualUsage() {
-        return null;
-    }
-
-    public String dualType() {
-        return null;
-    }
-
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
-    }
-
     @Override
     public String getCommand(CommandObject command) {
         return "/" + names()[0];
@@ -73,11 +61,6 @@ public abstract class SlashCommand extends Command {
 
     @Override
     public String getUsage(CommandObject command) {
-        return getCommand(command);
-    }
-
-    @Override
-    public String getDualUsage(CommandObject command) {
         return getCommand(command);
     }
 

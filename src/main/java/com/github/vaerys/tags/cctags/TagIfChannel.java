@@ -1,15 +1,15 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.templates.TagObject;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.TagType;
 
 public class TagIfChannel extends TagObject {
 
-    public TagIfChannel(int priority, String... types) {
+    public TagIfChannel(int priority, TagType... types) {
         super(priority, types);
     }
 

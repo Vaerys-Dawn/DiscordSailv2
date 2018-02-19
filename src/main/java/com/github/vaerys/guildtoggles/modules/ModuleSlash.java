@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
+import com.github.vaerys.templates.SAILType;
 
 /**
  * Created by Vaerys on 13/03/2017.
@@ -11,8 +12,8 @@ import com.github.vaerys.templates.GuildModule;
 public class ModuleSlash extends GuildModule {
 
     @Override
-    public String name() {
-        return Command.TYPE_SLASH;
+    public SAILType name() {
+        return SAILType.SLASH;
     }
 
     @Override
