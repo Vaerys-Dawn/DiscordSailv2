@@ -14,7 +14,6 @@ public abstract class MentionCommand extends Command {
         return "@" + command.client.bot.name + " " + names[0];
     }
 
-    @Override
     public String getCommand(CommandObject command, int i) {
         return "@" + command.client.bot.name + " " + names[i];
     }

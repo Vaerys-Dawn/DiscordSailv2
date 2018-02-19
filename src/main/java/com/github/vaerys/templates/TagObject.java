@@ -53,10 +53,6 @@ public abstract class TagObject {
         return priority;
     }
 
-    public List<String> getTypes() {
-        return types;
-    }
-
     public boolean cont(String from) {
         if (requiredArgs != 0) {
             String tester = StringUtils.substringBetween(from, prefix, suffix);
