@@ -28,7 +28,7 @@ public abstract class GuildToggle {
     public void execute(GuildObject guild) {
         guild.removeCommandsByType(affectsType);
         for (Command c : commands) {
-            guild.removeCommand(c.names());
+            guild.removeCommand(c.names);
         }
         for (ChannelSetting c : channels) {
             guild.removeChannelSetting(c.toString());
@@ -55,7 +55,7 @@ public abstract class GuildToggle {
         builder.withDesc(fullDesc);
         List<String> commandNames = commands.stream().map(command1 -> command1.getCommand(command)).collect(Collectors.toList());
         commandNames.addAll(Globals.getAllCommands().stream()
-                .filter(command1 -> command1.type().equalsIgnoreCase(affectsType))
+                .filter(command1 -> command1.type.equalsIgnoreCase(affectsType))
                 .map(command1 -> command1.getCommand(command)).collect(Collectors.toList()));
         commandNames = commandNames.stream().distinct().collect(Collectors.toList());
         List<String> settingNames = settings.stream().map(guildSetting -> guildSetting.name()).collect(Collectors.toList());

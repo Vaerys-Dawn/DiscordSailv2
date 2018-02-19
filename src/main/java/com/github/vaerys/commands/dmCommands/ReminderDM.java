@@ -15,7 +15,7 @@ public class ReminderDM extends DMCommand{
 
     @Override
     public String[] names() {
-        return new RemindMe().names();
+        return new RemindMe().names;
     }
 
     @Override

@@ -22,7 +22,7 @@ public class InfoDM extends DMCommand {
 
         String error = "> Could not find information on any commands named **" + args + "**.";
         for (Command c : commands) {
-            for (String s : c.names()) {
+            for (String s : c.names) {
                 if (args.equalsIgnoreCase(s)) {
 //                    if (!Utility.testForPerms(c.perms(), command.user.get(), command.guild.get())) {
 //                        return error;
@@ -74,7 +74,7 @@ public class InfoDM extends DMCommand {
 
     @Override
     public String[] names() {
-        return new Info().names();
+        return new Info().names;
     }
 
     @Override

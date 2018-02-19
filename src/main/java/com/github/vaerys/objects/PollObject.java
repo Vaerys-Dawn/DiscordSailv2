@@ -45,7 +45,7 @@ public class PollObject {
             return "> Poll voting closed.";
         }else {
             return "> Poll voting Open, you can vote in this poll by running\n`" + config.getPrefixCommand() +
-                    new EnterVote().names()[0] + " " + pollName + " [Vote]";
+                    new EnterVote().names[0] + " " + pollName + " [Vote]";
         }
     }
 

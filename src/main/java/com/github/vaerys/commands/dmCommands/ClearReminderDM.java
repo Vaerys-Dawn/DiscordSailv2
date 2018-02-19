@@ -15,7 +15,7 @@ public class ClearReminderDM extends DMCommand{
 
     @Override
     public String[] names() {
-        return new ClearReminder().names();
+        return new ClearReminder().names;
     }
 
     @Override

@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by Vaerys on 17/08/2016.
@@ -105,18 +106,18 @@ public class Utility {
 
     //Command Utils
     public static String getCommandInfo(Command command, CommandObject commandObject) {
-        StringBuilder response = new StringBuilder(">> **" + commandObject.guild.config.getPrefixCommand() + command.names()[0]);
-        if (command.usage() != null) {
-            response.append(" " + command.usage());
+        StringBuilder response = new StringBuilder(">> **" + commandObject.guild.config.getPrefixCommand() + command.names[0]);
+        if (command.usage != null) {
+            response.append(" " + command.usage);
         }
         response.append("** <<");
         return response.toString();
     }
 
     public static String getCommandInfo(Command command) {
-        StringBuilder response = new StringBuilder(">> **" + Globals.defaultPrefixCommand + command.names()[0]);
-        if (command.usage() != null) {
-            response.append(" " + command.usage());
+        StringBuilder response = new StringBuilder(">> **" + Globals.defaultPrefixCommand + command.names[0]);
+        if (command.usage != null) {
+            response.append(" " + command.usage);
         }
         response.append("** <<");
         return response.toString();
@@ -306,7 +307,7 @@ public class Utility {
     }
 
     public static boolean canBypass(UserObject user, GuildObject guild) {
-        return canBypass(user.get(),guild.get());
+        return canBypass(user.get(), guild.get());
     }
 
     public static long getMentionUserID(String content) {
@@ -386,14 +387,14 @@ public class Utility {
         }
         if (singleLine) {
             for (String s : list) {
-                formattedList.append(s + ", ");
+                formattedList.append(s).append(", ");
             }
             formattedList.delete(formattedList.length() - 2, formattedList.length());
             formattedList.append(".");
             return formattedList.toString();
         } else {
             for (String s : list) {
-                formattedList.append(s + "\n");
+                formattedList.append(s).append("\n");
             }
             return formattedList.toString();
         }
@@ -409,7 +410,7 @@ public class Utility {
             StringHandler message = new StringHandler("***GLOBAL LOGGING***\n> **@")
                     .append(commandObject.user.username)
                     .append("** Has Used Command `")
-                    .append(command.names()[0]).append("`");
+                    .append(command.names[0]).append("`");
             List<IChannel> adminlog = c.getChannelsByType(Command.CHANNEL_ADMIN_LOG);
             List<IChannel> serverLog = c.getChannelsByType(Command.CHANNEL_SERVER_LOG);
             IChannel channel = null;
@@ -767,8 +768,8 @@ public class Utility {
     public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, String type, boolean testPerms) {
         List<Command> toReturn = new ArrayList<>();
         for (Command c : commands) {
-            String ctype = c.type();
-            if (c.channel() != null && c.channel().equalsIgnoreCase(Command.CHANNEL_DM)) {
+            String ctype = c.type;
+            if (c.channel != null && c.channel.equalsIgnoreCase(Command.CHANNEL_DM)) {
                 ctype = Command.TYPE_DM;
             }
             boolean isDualType = false;
@@ -777,11 +778,11 @@ public class Utility {
             }
             if (ctype.equalsIgnoreCase(type) || isDualType) {
                 if (testPerms) {
-                    if (c.type().equalsIgnoreCase(Command.TYPE_CREATOR) && commandObject.user.longID != commandObject.client.creator.longID) {
+                    if (c.type.equalsIgnoreCase(Command.TYPE_CREATOR) && commandObject.user.longID != commandObject.client.creator.longID) {
                         //do nothing
                     } else if (isDualType && testForPerms(commandObject, c.dualPerms())) {
                         toReturn.add(c);
-                    } else if (!isDualType && testForPerms(commandObject, c.perms())) {
+                    } else if (!isDualType && testForPerms(commandObject, c.perms)) {
                         toReturn.add(c);
                     }
                 } else {
@@ -789,7 +790,7 @@ public class Utility {
                 }
             }
         }
-        toReturn.sort(Comparator.comparing(o -> o.names()[0]));
+        toReturn.sort(Comparator.comparing(o -> o.names[0]));
         return toReturn;
     }
 

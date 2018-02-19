@@ -35,7 +35,7 @@ public class HelpDM extends DMCommand {
 
     @Override
     public String[] names() {
-        return new Help().names();
+        return new Help().names;
     }
 
     @Override

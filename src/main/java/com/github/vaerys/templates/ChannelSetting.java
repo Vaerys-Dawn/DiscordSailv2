@@ -224,8 +224,8 @@ public enum ChannelSetting {
             builder.appendField(title, Utility.listFormatter(channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()), true), false);
         }
         List<Command> commands = object.guild.commands.stream().filter(command -> {
-            if (command.channel() != null && Utility.testForPerms(object, command.perms())) {
-                return command.channel().equalsIgnoreCase(name);
+            if (command.channel != null && Utility.testForPerms(object, command.perms())) {
+                return command.channel.equalsIgnoreCase(name);
             }
             return false;
         }).collect(Collectors.toList());

@@ -32,7 +32,7 @@ public class UpdateChar extends Command {
             }
             selectedChar.update(command.user.displayName, cosmeticRoles);
             String response = "> Your character has been updated using your nickname" + cosmeticString + ".";
-            if (isSubtype(command, names()[0])) {
+            if (isSubtype(command, names[0])) {
                 response += "\nIf you were attempting to create a new character and not edit this character you need to specify a different character ID.";
             }
             return response;
@@ -52,7 +52,7 @@ public class UpdateChar extends Command {
                     "\n(" + remainingSlots + " Character slot";
             if (remainingSlots != 1) response += "s";
             response += "remaining)";
-            if (isSubtype(command, names()[0])) {
+            if (isSubtype(command, names[0])) {
                 response += "\nTo update the name";
                 if (command.guild.config.moduleRoles) response += " or roles";
                 response += " linked to this character just run this command again.";

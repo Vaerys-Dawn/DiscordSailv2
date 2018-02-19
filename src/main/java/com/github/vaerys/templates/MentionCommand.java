@@ -11,7 +11,12 @@ public abstract class MentionCommand extends Command {
 
     @Override
     public String getCommand(CommandObject command) {
-        return "@" + command.client.bot.name + " " + names()[0];
+        return "@" + command.client.bot.name + " " + names[0];
+    }
+
+    @Override
+    public String getCommand(CommandObject command, int i) {
+        return "@" + command.client.bot.name + " " + names[i];
     }
 
     @Override
@@ -24,7 +29,7 @@ public abstract class MentionCommand extends Command {
             return false;
         }
         SplitFirstObject call = new SplitFirstObject(mention.getRest());
-        for (String s : names()) {
+        for (String s : names) {
             String regex = "^(<@|<@!)" + command.client.bot.longID + "> " + s.toLowerCase();
             String toMatch = mention.getFirstWord() + " " + call.getFirstWord().toLowerCase();
             Matcher matcher = Pattern.compile(regex).matcher(toMatch);

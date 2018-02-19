@@ -139,7 +139,7 @@ public class GuildObject {
             ListIterator iterator = commands.listIterator();
             while (iterator.hasNext()) {
                 Command command = (Command) iterator.next();
-                if (command.names()[0] == new NewDailyMessage().names()[0]) {
+                if (command.names[0] == new NewDailyMessage().names[0]) {
                     logger.trace(longID + ": Removed newDailyMsg command.");
                     iterator.remove();
                 }
@@ -151,8 +151,8 @@ public class GuildObject {
         ListIterator iterator = commands.listIterator();
         while (iterator.hasNext()) {
             Command c = (Command) iterator.next();
-            if (c.type().equals(type)) {
-                logger.trace("Command: " + c.names()[0] + " removed.");
+            if (c.type.equals(type)) {
+                logger.trace("Command: " + c.names[0] + " removed.");
                 iterator.remove();
             }
         }
@@ -177,9 +177,9 @@ public class GuildObject {
         ListIterator iterator = commands.listIterator();
         while (iterator.hasNext()) {
             Command c = (Command) iterator.next();
-            if (c.names()[0].equals(names[0])) {
+            if (c.names[0].equals(names[0])) {
                 iterator.remove();
-                logger.trace("Command: " + c.names()[0] + " removed.");
+                logger.trace("Command: " + c.names[0] + " removed.");
             }
         }
     }

@@ -29,7 +29,7 @@ public class Help extends Command {
             commands.addAll(Globals.getCreatorCommands(false));
         }
         commands.forEach(command1 -> {
-            if (!types.contains(command1.type())) types.add(command1.type());
+            if (!types.contains(command1.type)) types.add(command1.type);
         });
         String error = "> There are no commands with the type: **" + args + "**.\n\n" + Utility.getCommandInfo(this, command);
         ListIterator iterator = types.listIterator();

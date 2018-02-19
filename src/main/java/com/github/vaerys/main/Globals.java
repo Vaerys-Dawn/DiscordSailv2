@@ -144,12 +144,12 @@ public class Globals {
         for (Command c : commands) {
             boolean typeFound = false;
             for (String s : commandTypes) {
-                if (c.type().equals(s)) {
+                if (c.type.equals(s)) {
                     typeFound = true;
                 }
             }
             if (!typeFound) {
-                commandTypes.add(c.type());
+                commandTypes.add(c.type);
             }
         }
         Collections.sort(commandTypes);
@@ -310,9 +310,9 @@ public class Globals {
         List<Command> getCommands = new ArrayList<>();
         for (Command c : commands) {
             if (isDm) {
-                if (c.channel() != null && c.channel().equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
+                if (c.channel != null && c.channel.equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
             } else {
-                if (c.channel() == null || !c.channel().equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
+                if (c.channel == null || !c.channel.equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
 
             }
         }
@@ -369,9 +369,9 @@ public class Globals {
         List<Command> getCommands = new ArrayList<>();
         for (Command c : creatorCommands) {
             if (isDm) {
-                if (c.channel() != null && c.channel().equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
+                if (c.channel != null && c.channel.equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
             } else {
-                if (c.channel() == null || !c.channel().equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
+                if (c.channel == null || !c.channel.equalsIgnoreCase(Command.CHANNEL_DM)) getCommands.add(c);
 
             }
         }

@@ -74,14 +74,14 @@ public class MessageHandler {
                 //log command
                 command.guild.sendDebugLog(command, "COMMAND", c.getCommand(command), c.getArgs(args, command));
                 //test if user has permissions
-                if (!Utility.testForPerms(command, c.perms())) {
+                if (!Utility.testForPerms(command, c.perms)) {
                     RequestHandler.sendMessage(command.user.notAllowed, currentChannel);
                     return true;
                 }
                 //check if it is a valid channel
                 if (!currentChannel.isPrivate()) {
-                    if (c.channel() != null && !Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
-                        List<IChannel> channels = command.guild.getChannelsByType(c.channel());
+                    if (c.channel != null && !Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+                        List<IChannel> channels = command.guild.getChannelsByType(c.channel);
                         if (channels.size() != 0 && !channels.contains(command.channel.get())) {
                             List<String> list = Utility.getChannelMentions(command.user.getVisibleChannels(channels));
                             RequestHandler.sendMessage(Utility.getChannelMessage(list), command.channel.get());
@@ -89,7 +89,7 @@ public class MessageHandler {
                         }
                     }
                 }
-                if (c.requiresArgs() && (commandArgs == null || commandArgs.isEmpty())) {
+                if (c.requiresArgs && (commandArgs == null || commandArgs.isEmpty())) {
 
                     RequestHandler.sendMessage(Utility.getCommandInfo(c, command), currentChannel);
                     return true;
@@ -110,7 +110,7 @@ public class MessageHandler {
     }
 
     protected static void handleLogging(CommandObject commandObject, Command command, String args) {
-        if (!command.doAdminLogging() && !commandObject.guild.config.adminLogging) {
+        if (!command.doAdminLogging && !commandObject.guild.config.adminLogging) {
             return;
         } else if (!commandObject.guild.config.generalLogging) {
             return;
@@ -120,6 +120,6 @@ public class MessageHandler {
             builder.append(" with args: `").append(args).append("`");
         }
         builder.append(" in channel ").append(commandObject.channel.get().mention()).append(".");
-        Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging());
+        Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
     }
 }

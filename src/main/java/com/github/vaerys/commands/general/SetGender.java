@@ -60,7 +60,7 @@ public class SetGender extends Command {
     public String description(CommandObject command) {
         String response = "Allows you to set your Gender. Limit 20 chars (or 40 if you are a patron).";
         if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
-            response += "\n\n**" + command.guild.config.getPrefixCommand() + names()[1] + " [@User] [Gender]**\n" +
+            response += "\n\n**" + command.guild.config.getPrefixCommand() + names[1] + " [@User] [Gender]**\n" +
                     "**Desc:** Edits a user's gender.\n" +
                     "**Permissions:** " + Permissions.MANAGE_MESSAGES + ".\n";
         }

@@ -63,6 +63,24 @@ public abstract class Command {
     public static final String codeBlock = "```";
     public static final String ownerOnly = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
 
+    public final String[] names;
+    public final String usage;
+    public final String type;
+    public final String channel;
+    public final Permissions[] perms;
+    public final boolean requiresArgs;
+    public final boolean doAdminLogging;
+
+
+    public Command() {
+        this.names = names();
+        this.usage = usage();
+        this.type = type();
+        this.channel = channel();
+        this.perms = perms();
+        this.requiresArgs = requiresArgs();
+        this.doAdminLogging = doAdminLogging();
+    }
 
 
     public List<SubCommandObject> subCommands = new LinkedList<>();
@@ -70,23 +88,23 @@ public abstract class Command {
     public abstract String execute(String args, CommandObject command);
 
     //descriptors
-    public abstract String[] names();
+    protected abstract String[] names();
 
     public abstract String description(CommandObject command);
 
-    public abstract String usage();
+    protected abstract String usage();
 
-    public abstract String type();
+    protected abstract String type();
 
-    public abstract String channel();
+    protected abstract String channel();
 
-    public abstract Permissions[] perms();
+    protected abstract Permissions[] perms();
 
-    public abstract boolean requiresArgs();
+    protected abstract boolean requiresArgs();
 
-    public abstract boolean doAdminLogging();
+    protected abstract boolean doAdminLogging();
 
-    public abstract void init();
+    protected abstract void init();
 
     public abstract String dualDescription();
 
@@ -97,7 +115,11 @@ public abstract class Command {
     public abstract Permissions[] dualPerms();
 
     public String getCommand(CommandObject command) {
-        return command.guild.config.getPrefixCommand() + names()[0];
+        return command.guild.config.getPrefixCommand() + names[0];
+    }
+
+    public String getCommand(CommandObject command, int i) {
+        return command.guild.config.getPrefixCommand() + names[i];
     }
 
     public String getUsage(CommandObject command) {
@@ -122,7 +144,7 @@ public abstract class Command {
 
     public boolean isCall(String args, CommandObject command) {
         SplitFirstObject call = new SplitFirstObject(args);
-        for (String s : names()) {
+        for (String s : names) {
             if ((command.guild.config.getPrefixCommand() + s).equalsIgnoreCase(call.getFirstWord())) {
                 return true;
             }
@@ -145,7 +167,7 @@ public abstract class Command {
         StringBuilder builder = new StringBuilder();
         builder.append("**" + getUsage(command) + "**\n");
         builder.append("**Desc: **" + description(command) + "\n");
-        builder.append("**Type: **" + type() + "\n");
+        builder.append("**Type: **" + type + "\n");
         if (perms().length != 0) {
             builder.append("**Perms: **");
             ArrayList<String> permList = new ArrayList<>();
@@ -170,10 +192,10 @@ public abstract class Command {
                 builder.append(Utility.listFormatter(permList, true));
             }
         }
-        infoEmbed.appendField("> Help - " + names()[0], builder.toString(), false);
+        infoEmbed.appendField("> Help - " + names[0], builder.toString(), false);
 
         //Handle channels
-        List<IChannel> channels = command.guild.getChannelsByType(channel());
+        List<IChannel> channels = command.guild.getChannelsByType(channel);
         List<String> channelMentions = Utility.getChannelMentions(channels);
 
         //channel
@@ -186,10 +208,10 @@ public abstract class Command {
         }
 
         //aliases
-        if (names().length > 1) {
+        if (names.length > 1) {
             StringBuilder aliasBuilder = new StringBuilder();
-            for (int i = 1; i < names().length; i++) {
-                aliasBuilder.append(command.guild.config.getPrefixCommand() + names()[i] + ", ");
+            for (int i = 1; i < names.length; i++) {
+                aliasBuilder.append(getCommand(command, i) + ", ");
             }
             aliasBuilder.delete(aliasBuilder.length() - 2, aliasBuilder.length());
             aliasBuilder.append(".\n");
@@ -198,11 +220,12 @@ public abstract class Command {
         return infoEmbed;
     }
 
+
     public String validate() {
         StringBuilder response = new StringBuilder();
         boolean isError = false;
         response.append(Utility.formatError(this));
-        if (names().length == 0 || names()[0].isEmpty()) {
+        if (names.length == 0 || names[0].isEmpty()) {
             response.append("   > Command name is empty.\n");
             isError = true;
         }
@@ -210,7 +233,7 @@ public abstract class Command {
             response.append("   > Command description is empty.\n");
             isError = true;
         }
-        if (type() == null || type().isEmpty()) {
+        if (type == null || type.isEmpty()) {
             response.append("   > Command type is empty.\n");
             isError = true;
         }
@@ -223,7 +246,7 @@ public abstract class Command {
                 response.append("   > Command dual type is empty.\n");
                 isError = true;
             }
-            if (dualType().equalsIgnoreCase(type())) {
+            if (dualType().equalsIgnoreCase(type)) {
                 response.append("   > Command dual type is equal to type.\n");
                 isError = true;
             }

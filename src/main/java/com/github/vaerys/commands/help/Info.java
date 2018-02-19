@@ -29,9 +29,9 @@ public class Info extends Command {
 
         String error = "> Could not find information on any commands named **" + args + "**.";
         for (Command c : commands) {
-            for (String s : c.names()) {
+            for (String s : c.names) {
                 if (args.equalsIgnoreCase(s) || args.equalsIgnoreCase(command.guild.config.getPrefixCommand() + s)) {
-                    if (!Utility.testForPerms(command, c.perms())) {
+                    if (!Utility.testForPerms(command, c.perms)) {
                         return error;
                     }
                     RequestHandler.sendEmbedMessage("", c.getCommandInfo(command), command.channel.get());

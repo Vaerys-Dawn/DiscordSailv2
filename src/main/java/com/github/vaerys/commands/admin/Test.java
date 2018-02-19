@@ -6,6 +6,8 @@ import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
 
+import java.util.EnumSet;
+
 /**
  * Created by Vaerys on 30/01/2017.
  */
@@ -31,7 +33,9 @@ public class Test extends Command {
 //        builder.send(command.channel);
 //        return nothing;
 //        return (long) ((90 - 7) * (Globals.avgMessagesPerDay * command.guild.config.xpRate * command.guild.config.xpModifier) / 8) + "";
-        throw new DiscordException("TestException");
+        EnumSet<Permissions> botPerms = command.client.bot.getPermissions(command.guild);
+        return botPerms.contains(Permissions.MANAGE_CHANNELS) ? "> I HAVE MANAGE_CHANNELS" : "> I DO NOT HAVE MANAGE_CHANNELS";
+//        throw new DiscordException("TestException");
     }
 
 
