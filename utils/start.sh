@@ -7,7 +7,7 @@ JAVAARGS=-Xmx1G
 while true; do
 	$JAVAPATH $JAVAARGS -jar $JARNAME
 
-	if [[ $? -eq 0 || $? -eq 2 ]]; then
+	if [ $? -eq 0 ] || [ $? -eq 2 ]; then
 		break
 	fi
 done
