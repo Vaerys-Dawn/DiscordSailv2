@@ -3,6 +3,8 @@ package com.github.vaerys.templates;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.github.vaerys.enums.TagType;
 import org.apache.commons.lang3.StringUtils;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;

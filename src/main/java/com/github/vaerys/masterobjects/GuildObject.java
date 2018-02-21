@@ -24,11 +24,11 @@ import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.pogos.GuildLog;
 import com.github.vaerys.pogos.GuildUsers;
 import com.github.vaerys.pogos.Servers;
-import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildFile;
 import com.github.vaerys.templates.GuildToggle;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IEmoji;
 import sx.blah.discord.handle.obj.IGuild;
@@ -102,7 +102,7 @@ public class GuildObject {
         this.commands = Globals.getCommands(false);
         this.toggles = Globals.getGuildToggles();
         this.channelSettings = Globals.getChannelSettings();
-        this.commandTypes = Arrays.asList(Globals.getCommandTypes());
+        this.commandTypes = new ArrayList<>(Arrays.asList(Globals.getCommandTypes()));
         checkToggles();
     }
 

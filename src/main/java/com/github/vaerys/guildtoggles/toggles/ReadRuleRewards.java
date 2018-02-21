@@ -5,7 +5,7 @@ import com.github.vaerys.commands.admin.SetRuleCode;
 import com.github.vaerys.commands.general.RulesCode;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 
 public class ReadRuleRewards extends GuildSetting {
 

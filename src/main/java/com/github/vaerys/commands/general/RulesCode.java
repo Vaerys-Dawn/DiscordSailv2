@@ -3,11 +3,11 @@ package com.github.vaerys.commands.general;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.UserSetting;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class RulesCode extends Command {

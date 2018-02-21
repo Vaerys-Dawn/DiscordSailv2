@@ -2,7 +2,7 @@ package com.github.vaerys.objects;
 
 
 
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class SubCommandObject {

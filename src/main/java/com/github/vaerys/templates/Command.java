@@ -1,10 +1,11 @@
 package com.github.vaerys.templates;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.commons.lang3.ArrayUtils;
+
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;

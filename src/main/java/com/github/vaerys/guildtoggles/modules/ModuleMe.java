@@ -8,7 +8,7 @@ import com.github.vaerys.commands.general.UserInfo;
 import com.github.vaerys.guildtoggles.toggles.UserInfoShowsDate;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 
 /**
  * Created by Vaerys on 02/03/2017.

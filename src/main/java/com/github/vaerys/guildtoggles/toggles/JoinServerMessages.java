@@ -4,7 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.SetJoinMessage;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 
 /**
  * Created by Vaerys on 07/07/2017.

@@ -2,7 +2,7 @@ package com.github.vaerys.tags.cctags;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.TagReplaceObject;
-import com.github.vaerys.templates.TagType;
+import com.github.vaerys.enums.TagType;
 
 public class TagReplaceError extends TagReplaceObject {
 

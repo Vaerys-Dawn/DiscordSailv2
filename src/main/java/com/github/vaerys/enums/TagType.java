@@ -1,4 +1,4 @@
-package com.github.vaerys.templates;
+package com.github.vaerys.enums;
 
 public enum TagType {
     

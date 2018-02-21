@@ -3,9 +3,9 @@ package com.github.vaerys.commands.characters;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 

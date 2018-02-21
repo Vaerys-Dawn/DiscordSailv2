@@ -1,4 +1,4 @@
-package com.github.vaerys.templates;
+package com.github.vaerys.enums;
 
 /**
  * used to differentiate the different command types
@@ -59,13 +59,7 @@ public enum SAILType {
     VOTING("Voting"),
     XP_DECAY("XpDecay"),
     XP_GAIN("XpGain");
-    
-    
-    
-    
-    
-    
-    
+
     private String name;
     
     SAILType(String name) {
@@ -76,7 +70,6 @@ public enum SAILType {
     public String toString() {
         return name;
     }
-
 
     public static SAILType get(String type) {
         for (SAILType c : values()) {

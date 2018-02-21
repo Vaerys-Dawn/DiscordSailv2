@@ -2,7 +2,7 @@ package com.github.vaerys.tags.infotags;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.templates.TagType;
+import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.IEmoji;
 
 public class TagEmoji extends TagObject {

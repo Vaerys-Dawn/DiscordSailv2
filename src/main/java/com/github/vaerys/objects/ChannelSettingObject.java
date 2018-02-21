@@ -1,7 +1,7 @@
 package com.github.vaerys.objects;
 
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.enums.ChannelSetting;
 
 import java.util.ArrayList;
 

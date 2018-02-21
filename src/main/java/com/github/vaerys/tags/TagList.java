@@ -45,7 +45,7 @@ import com.github.vaerys.tags.infotags.TagEmoji;
 import com.github.vaerys.tags.leveluptags.TagLevel;
 import com.github.vaerys.tags.leveluptags.TagUser;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.templates.TagType;
+import com.github.vaerys.enums.TagType;
 
 public class TagList {
 

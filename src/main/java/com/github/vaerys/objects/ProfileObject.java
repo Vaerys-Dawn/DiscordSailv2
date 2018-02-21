@@ -3,7 +3,7 @@ package com.github.vaerys.objects;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.UserSetting;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.vaerys.main.UserSetting.DONT_DECAY;
+import static com.github.vaerys.enums.UserSetting.DONT_DECAY;
 
 /**
  * Created by Vaerys on 27/08/2016.

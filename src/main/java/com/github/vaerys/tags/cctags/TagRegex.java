@@ -5,7 +5,7 @@ import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.objects.ReplaceObject;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.templates.TagType;
+import com.github.vaerys.enums.TagType;
 
 public class TagRegex extends TagObject {
 

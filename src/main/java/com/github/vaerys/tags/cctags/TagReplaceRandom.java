@@ -5,7 +5,7 @@ import java.util.Random;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.objects.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
-import com.github.vaerys.templates.TagType;
+import com.github.vaerys.enums.TagType;
 
 public class TagReplaceRandom extends TagReplaceObject {
 

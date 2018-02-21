@@ -1,4 +1,4 @@
-package com.github.vaerys.templates;
+package com.github.vaerys.enums;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.Report;
@@ -8,6 +8,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 
 import java.util.ArrayList;
@@ -231,7 +232,7 @@ public enum ChannelSetting {
             builder.appendField(title, Utility.listFormatter(channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()), true), false);
         }
         List<Command> commands = object.guild.commands.stream().filter(command -> {
-            if (command.channel() != null && Utility.testForPerms(object, command.perms())) {
+            if (command.channel != null && Utility.testForPerms(object, command.perms)) {
                 return command.channel == this;
             }
             return false;

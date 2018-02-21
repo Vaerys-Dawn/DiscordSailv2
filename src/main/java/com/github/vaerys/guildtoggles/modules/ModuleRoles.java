@@ -5,7 +5,7 @@ import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 
 /**

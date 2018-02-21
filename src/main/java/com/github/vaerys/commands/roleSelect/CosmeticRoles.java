@@ -1,19 +1,20 @@
 package com.github.vaerys.commands.roleSelect;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.templates.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -31,7 +32,7 @@ public class CosmeticRoles extends Command {
         Boolean isAdding = Utility.testModifier(modif.getFirstWord());
         if (isAdding != null) {
             //test the permissions of the user to make sure they can modify the role list.
-            if (Utility.testForPerms(command, SUB_1.getPermissions())) {
+            if (Utility.testForPerms(command, EDIT_ROLES.getPermissions())) {
                 IRole role = null;
                 try {
                     role = command.guild.getRoleByID(Utility.stringLong(modif.getRest()));
@@ -173,6 +174,7 @@ public class CosmeticRoles extends Command {
     }
 
     protected static final String[] NAMES = new String[]{"Role"};
+
     @Override
     protected String[] names() {
         return NAMES;
@@ -190,50 +192,57 @@ public class CosmeticRoles extends Command {
     }
 
     protected static final String USAGE = "(Role Name)/Remove";
+
     @Override
     protected String usage() {
         return USAGE;
     }
 
     protected static final SAILType COMMAND_TYPE = SAILType.ROLE_SELECT;
+
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
     }
 
     protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
+
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
     protected static final Permissions[] PERMISSIONS = new Permissions[0];
+
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
     protected static final boolean REQUIRES_ARGS = false;
+
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
     protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;
     }
 
-    protected static final SubCommandObject SUB_1 = new SubCommandObject(
-        NAMES,
-        "+/-/add/del [Role Name]",
-        "Used to manage the selectable cosmetic roles.",
-        SAILType.ADMIN,
-        new Permissions[]{Permissions.MANAGE_ROLES}
+    protected static final SubCommandObject EDIT_ROLES = new SubCommandObject(
+            NAMES,
+            "+/-/add/del [Role Name]",
+            "Used to manage the selectable cosmetic roles.",
+            SAILType.ADMIN,
+            Permissions.MANAGE_ROLES
     );
+
     @Override
     public void init() {
-        subCommands.add(SUB_1);
+        subCommands.add(EDIT_ROLES);
     }
 }

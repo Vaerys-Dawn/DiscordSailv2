@@ -10,7 +10,7 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.templates.TagType;
+import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.util.RequestBuffer;

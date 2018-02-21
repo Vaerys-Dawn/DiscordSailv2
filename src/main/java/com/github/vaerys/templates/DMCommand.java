@@ -1,5 +1,6 @@
 package com.github.vaerys.templates;
 
+import com.github.vaerys.enums.ChannelSetting;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**

@@ -5,7 +5,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.pogos.GlobalData;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.DMCommand;
 
 public class UnBlockUser extends DMCommand {

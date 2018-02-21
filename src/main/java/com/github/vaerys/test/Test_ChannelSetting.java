@@ -1,7 +1,7 @@
 package com.github.vaerys.test;
 
-import org.junit.Test;
-import com.github.vaerys.templates.ChannelSetting;
+//import org.junit.Test;
+import com.github.vaerys.enums.ChannelSetting;
 import junit.framework.TestCase;
 
 /**
@@ -16,7 +16,7 @@ public class Test_ChannelSetting extends TestCase {
     /**
      * Checks if the name field in the enum is properly set
      */
-    @Test
+//    @Test
     public void testNames() {
         for (ChannelSetting setting : ChannelSetting.values()) {
             // name/tostring related
@@ -32,7 +32,7 @@ public class Test_ChannelSetting extends TestCase {
     /**
      * Checks if the description field in the enum is properly set
      */
-    @Test
+//    @Test
     public void testDescription() {
         for (ChannelSetting setting : ChannelSetting.values()) {
             if (setting.getDesc() == null) {
@@ -50,7 +50,7 @@ public class Test_ChannelSetting extends TestCase {
      * returns the same thing as {@link ChannelSetting#getDesc()} method
      *
      */
-    @Test
+//    @Test
     public void testDescriptionWithNullParameter() {
         for (ChannelSetting setting : ChannelSetting.values()) {
             // other get desc

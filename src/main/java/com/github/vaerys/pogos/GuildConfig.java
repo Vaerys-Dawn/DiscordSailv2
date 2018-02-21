@@ -1,15 +1,13 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.UserSetting;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.OffenderObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.templates.GuildFile;
-import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;

@@ -9,9 +9,9 @@ import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.objects.UserLinkObject;
-import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -23,7 +23,7 @@ public class EditLinks extends Command {
         UserObject user = command.user;
         SplitFirstObject userCall = new SplitFirstObject(args);
         boolean adminEdit = false;
-        if (Utility.testForPerms(command, SUB_1.getPermissions()) || Utility.canBypass(command.user.get(), command.guild.get())) {
+        if (Utility.testForPerms(command, ADMIN_EDIT.getPermissions()) || Utility.canBypass(command.user.get(), command.guild.get())) {
             user = Utility.getUser(command, userCall.getFirstWord(), false);
             if (user != null && userCall.getRest() != null && user.getProfile(command.guild) != null) {
                 adminEdit = true;
@@ -135,15 +135,15 @@ public class EditLinks extends Command {
         return DO_ADMIN_LOGGING;
     }
 
-    protected static final SubCommandObject SUB_1 = new SubCommandObject(
+    protected static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
         NAMES,
         "[@User] [Link Name] (Link)",
         "Allows the modification of user links.",
         SAILType.ADMIN,
-        new Permissions[]{Permissions.MANAGE_MESSAGES}
+        Permissions.MANAGE_MESSAGES
     );
     @Override
     public void init() {
-        subCommands.add(SUB_1);
+        subCommands.add(ADMIN_EDIT);
     }
 }

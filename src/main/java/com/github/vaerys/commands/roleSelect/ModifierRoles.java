@@ -9,9 +9,9 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -30,7 +30,7 @@ public class ModifierRoles extends Command {
         Boolean isAdding = Utility.testModifier(modif.getFirstWord());
         if (isAdding != null) {
             //test the permissions of the user to make sure they can modify the role list.
-            if (Utility.testForPerms(command, SUB_1.getPermissions())) {
+            if (Utility.testForPerms(command, EDIT_ROLES.getPermissions())) {
                 IRole role = null;
                 try {
                     role = command.guild.getRoleByID(Utility.stringLong(modif.getRest()));
@@ -170,15 +170,15 @@ public class ModifierRoles extends Command {
         return DO_ADMIN_LOGGING;
     }
 
-    protected static final SubCommandObject SUB_1 = new SubCommandObject(
+    protected static final SubCommandObject EDIT_ROLES = new SubCommandObject(
         NAMES,
         "+/-/add/del [Role Name]",
         "Used to manage the selectable modifier roles.",
         SAILType.ADMIN,
-        new Permissions[]{Permissions.MANAGE_ROLES}
+        Permissions.MANAGE_ROLES
     );
     @Override
     public void init() {
-        subCommands.add(SUB_1);
+        subCommands.add(EDIT_ROLES);
     }
 }

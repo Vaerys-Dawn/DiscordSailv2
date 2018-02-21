@@ -1,8 +1,9 @@
 package com.github.vaerys.templates;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.objects.SplitFirstObject;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

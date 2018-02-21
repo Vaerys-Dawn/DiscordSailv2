@@ -2,6 +2,7 @@ package com.github.vaerys.main;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.StartUpGuide;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.objects.DailyMessage;
 

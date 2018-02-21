@@ -1,4 +1,4 @@
-package com.github.vaerys.main;
+package com.github.vaerys.enums;
 
 /**
  * Created by Vaerys on 14/06/2017.

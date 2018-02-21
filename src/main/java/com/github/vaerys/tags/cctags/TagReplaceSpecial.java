@@ -1,6 +1,6 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.templates.TagType;
+import com.github.vaerys.enums.TagType;
 
 public class TagReplaceSpecial extends TagReplace {
 

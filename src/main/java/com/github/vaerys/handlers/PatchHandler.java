@@ -5,7 +5,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.PatchObject;
 import com.github.vaerys.pogos.*;
-import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.enums.ChannelSetting;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 05/04/2017.

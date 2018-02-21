@@ -26,7 +26,7 @@ import com.github.vaerys.objects.ReminderObject;
 import com.github.vaerys.objects.TimedEvent;
 import com.github.vaerys.objects.UserCountDown;
 import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.templates.ChannelSetting;
+import com.github.vaerys.enums.ChannelSetting;
 import com.sun.management.OperatingSystemMXBean;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.obj.IChannel;

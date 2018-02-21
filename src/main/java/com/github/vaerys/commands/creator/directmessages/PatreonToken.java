@@ -5,7 +5,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.templates.SAILType;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.DMCommand;
 
 public class PatreonToken extends DMCommand {
