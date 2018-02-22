@@ -1,11 +1,7 @@
-package com.github.vaerys.test;
+package com.github.vaerys.validations;
 
 //import static org.junit.Assert.fail;
-import java.util.Arrays;
-import java.util.List;
 //import org.junit.jupiter.api.Test;
-import com.github.vaerys.commands.CommandInit;
-import com.github.vaerys.templates.Command;
 
 class Test_Commands {
 

@@ -1,12 +1,11 @@
-package com.github.vaerys.test;
+package com.github.vaerys.validations;
 
-//import org.junit.Test;
 import com.github.vaerys.enums.ChannelSetting;
 import junit.framework.TestCase;
 
 /**
  * used to test the channel setting enum
- * 
+ *
  * @author C0bra5
  *
  */
