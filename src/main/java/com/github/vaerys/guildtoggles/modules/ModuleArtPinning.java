@@ -27,7 +27,7 @@ public class ModuleArtPinning extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.artPinning;
     }
 
@@ -51,8 +51,15 @@ public class ModuleArtPinning extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject object) {
-        if (!Utility.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
-        return "**Total Pins:** " + object.guild.channelData.getPinnedMessages().size() + "/" + object.guild.config.pinLimit;
+    public String stats(CommandObject command) {
+        if (!Utility.testForPerms(command, Permissions.MANAGE_SERVER)) return null;
+        return "**Total Pins:** " + command.guild.channelData.getPinnedMessages().size() + "/" + command.guild.config.pinLimit;
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allows users to pin art with a \uD83D\uDCCC reaction.";
     }
 }
+
+// "**moduleName** - shortDesc"

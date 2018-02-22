@@ -48,12 +48,12 @@ import sx.blah.discord.util.EmbedBuilder;
 /**
  * Created by Vaerys on 17/08/2016.
  */
+@SuppressWarnings({"StringConcatenationInsideStringBufferAppend", "WeakerAccess"})
 public class Utility {
-
-    static FileHandler handler = new FileHandler();
 
     //Logger
     final static Logger logger = LoggerFactory.getLogger(Utility.class);
+    static FileHandler handler = new FileHandler();
 
     //Discord Utils
     public static IRole getRoleFromName(String roleName, IGuild guild, boolean startsWith) {
@@ -542,7 +542,19 @@ public class Utility {
         return from;
     }
 
-    public static String truncateString(String str, int maxLength, boolean truncateAtSpace) {
+    /**
+     * Shortens a string based on passed parameters. A string that is successfully truncated will have "..." appended to
+     * the end of the string.
+     *
+     * @param str             The string that will be shortened.
+     * @param maxLength       The longest length you want the string to be.
+     * @param truncateAtSpace Set to true to have the method attempt to find the first valid whitespace character
+     *                        to use as the position to truncate the text.
+     * @param search          The number of characters backwards to search. This value is ignored if truncateAtSpace is false.
+     * @return The string passed to str will be returned as-is if the truncation was not successful, otherwise it will
+     * be shortened and have "..." appended to the end.
+     */
+    public static String truncateString(String str, int maxLength, boolean truncateAtSpace, int search) {
         String result = str;
 
         if (str.length() >= maxLength) {
@@ -550,12 +562,8 @@ public class Utility {
             if (truncateAtSpace) {
                 // want to truncate the message at the last valid space
                 // see if we can't find it.
-                if (str.substring(0, maxLength).lastIndexOf(' ') != -1) {
-                    endI = str.substring(0, maxLength).lastIndexOf(' ');
-                } else {
-                    // was not able to find a space
-                    endI = maxLength;
-                }
+                endI = str.substring((maxLength - search), maxLength).lastIndexOf(' ');
+                if (endI == -1) endI = maxLength;
             }
             result = str.substring(0, endI) + "...";
         }
@@ -565,7 +573,9 @@ public class Utility {
 
 
     public static String truncateString(String str, int maxLength) {
-        return truncateString(str, maxLength, true);
+        int search = maxLength <= 10 ? maxLength : 10;
+
+        return truncateString(str, maxLength, true, search);
     }
 
     public static boolean isImageLink(String link) {

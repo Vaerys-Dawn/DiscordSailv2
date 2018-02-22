@@ -21,7 +21,7 @@ public class JoinServerMessages extends GuildSetting {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.joinsServerMessages;
     }
 

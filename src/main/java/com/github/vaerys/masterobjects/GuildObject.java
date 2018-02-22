@@ -129,7 +129,7 @@ public class GuildObject {
     private void checkToggles() {
         toRemove = new ArrayList<>();
         for (GuildToggle g : toggles) {
-            if (!g.get(config)) {
+            if (!g.enabled(config)) {
                 g.execute(this);
             }
         }

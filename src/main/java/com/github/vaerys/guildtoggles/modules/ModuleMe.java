@@ -26,7 +26,7 @@ public class ModuleMe extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleMe;
     }
 
@@ -50,7 +50,12 @@ public class ModuleMe extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject object) {
-        return "**Total Profiles:** " + object.guild.users.getProfiles().size();
+    public String stats(CommandObject command) {
+        return "**Total Profiles:** " + command.guild.users.getProfiles().size();
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Generates personal profiles that users can edit.";
     }
 }

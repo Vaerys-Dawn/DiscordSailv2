@@ -22,7 +22,7 @@ public class ModuleServers extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleServers;
     }
 
@@ -42,7 +42,12 @@ public class ModuleServers extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject object) {
-        return "**Total Server Listings:** " + object.guild.servers.getServers().size();
+    public String stats(CommandObject command) {
+        return "**Total Server Listings:** " + command.guild.servers.getServers().size();
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allows users to create custom game server listings.";
     }
 }

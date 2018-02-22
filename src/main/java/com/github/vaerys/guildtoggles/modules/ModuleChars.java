@@ -25,7 +25,7 @@ public class ModuleChars extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleChars;
     }
 
@@ -49,12 +49,17 @@ public class ModuleChars extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject object) {
+    public String stats(CommandObject command) {
         StringBuilder builder = new StringBuilder();
-        builder.append("**Total Characters:** " + object.guild.characters.getCharacters(object.guild.get()).size());
-        if (Utility.testForPerms(object, Permissions.MANAGE_SERVER)) {
-            builder.append("\n**Character Roles Prefix:** " + object.guild.characters.getRolePrefix());
+        builder.append("**Total Characters:** " + command.guild.characters.getCharacters(command.guild.get()).size());
+        if (Utility.testForPerms(command, Permissions.MANAGE_SERVER)) {
+            builder.append("\n**Character Roles Prefix:** " + command.guild.characters.getRolePrefix());
         }
         return builder.toString();
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allow users to create character profiles for role-playing.";
     }
 }

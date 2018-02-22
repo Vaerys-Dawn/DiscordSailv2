@@ -22,12 +22,13 @@ public enum SAILType {
     SLASH("Slash"),
     MENTION("Mention"),
     LOGGING("Logging"),
-    
+    SETUP("Setup"),
+
     //module types
     ART_PINNING("ArtPinning"),
     PROFILES("Profiles"),
     MOD_MUTE("ModMute"),
-    
+
     //Toggle types
     ADMIN_LOGGING("AdminLogging"),
     AUTO_ART_PINNING("AutoArtPinning"),
@@ -61,11 +62,11 @@ public enum SAILType {
     XP_GAIN("XpGain");
 
     private String name;
-    
+
     SAILType(String name) {
         this.name = name;
     }
-    
+
     @Override
     public String toString() {
         return name;

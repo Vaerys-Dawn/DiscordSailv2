@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandInit;
 import com.github.vaerys.guildtoggles.ToggleInit;
 import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.LogObject;
@@ -62,29 +63,29 @@ public class Globals {
     public static boolean savingFiles = false;
     private static List<GuildObject> guilds = new LinkedList<>();
     public static List<Command> commands = new LinkedList<>();
-    //private static List<String> commandTypes = new LinkedList<>();
+    private static List<SlashCommand> slashCommands = new LinkedList<>();
+    private static List<Command> creatorCommands = new LinkedList<>();
+    private static List<Command> setupCommands = new LinkedList<>();
     private static ChannelSetting[] channelSettings;
     private static List<GuildToggle> guildToggles = new LinkedList<>();
-    private static List<SlashCommand> slashCommands = new LinkedList<>();
     private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
     private static List<LogObject> allLogs = new LinkedList<>();
     private static List<TagObject> tags = new LinkedList<>();
+
     private static List<String> blacklistedURls;
 
-
     final static Logger logger = LoggerFactory.getLogger(Globals.class);
+
     private static GlobalData globalData;
     private static DailyMessages dailyMessages;
     public static int baseXPModifier;
     public static int xpForLevelOne;
     public static long lastDmUserID = -1;
-    private static ArrayList<Command> creatorCommands = new ArrayList<>();
     private static List<Long> patrons = new ArrayList<>();
     public static int maxReminderSlots = 5;
     private static Events events;
     private static String currentEvent = null;
     public static String errorStack = null;
-
 
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
         if (newGlobalData != null) {
@@ -129,7 +130,10 @@ public class Globals {
 
         creatorCommands = CommandInit.getCreatorCommands();
 
+        setupCommands = CommandInit.getSetupCommands();
+
         TagList.init();
+        SetupHandler.initStages();
 
         // validate commands
         if (errorStack != null) {
@@ -156,6 +160,7 @@ public class Globals {
 
         logger.info(commands.size() + " Commands Loaded.");
         logger.info(creatorCommands.size() + " Creator Commands Loaded.");
+        logger.info(setupCommands.size() + " Setup Commands Loaded.");
         //logger.info(commandTypes.size() + " Command Types Loaded.");
         logger.info(channelSettings.length + " Channel Types Loaded.");
         logger.info(guildToggles.size() + " Guild Toggles Loaded.");
@@ -327,6 +332,10 @@ public class Globals {
         return getCommands;
     }
 
+    public static List<Command> getSetupCommands() {
+        return setupCommands;
+    }
+
     public static List<Command> getAllCommands() {
         List<Command> allCommands = new ArrayList<>(commands);
         allCommands.addAll(creatorCommands);
@@ -343,6 +352,7 @@ public class Globals {
 
     // public static List<Command> getCommandsDM() {
     // return commandsDM;
+//    public static List<Command> getCommandsDM() {
     // }
 
     public static SAILType[] getCommandTypes() {

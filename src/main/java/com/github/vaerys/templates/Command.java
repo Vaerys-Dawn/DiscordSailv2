@@ -18,6 +18,7 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 29/01/2017.
  */
 public abstract class Command {
+    public static final String TYPE_SETUP = "Setup";
 
     public static final String spacer = "\u200B";
     public static final String indent = "    ";

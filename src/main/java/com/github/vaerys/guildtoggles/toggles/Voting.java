@@ -21,7 +21,7 @@ public class Voting extends GuildSetting {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.compVoting;
     }
 

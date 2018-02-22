@@ -118,10 +118,10 @@ public class GetGuildInfo extends Command {
             List<SAILType> disabledSettings = new LinkedList<>();
             for (GuildToggle t : command.guild.toggles) {
                 if (t.isModule()) {
-                    if (t.get(command.guild.config)) enabledModules.add(t.name());
+                    if (t.enabled(command.guild.config)) enabledModules.add(t.name());
                     else disabledModules.add(t.name());
                 } else {
-                    if (t.get(command.guild.config)) enabledSettings.add(t.name());
+                    if (t.enabled(command.guild.config)) enabledSettings.add(t.name());
                     else disabledSettings.add(t.name());
                 }
             }
@@ -171,7 +171,7 @@ public class GetGuildInfo extends Command {
         guildmodules.remove(index);
         guildmodules.add(0, roleModule);
         for (GuildToggle toggle : guildmodules) {
-            if (toggle.isModule() && toggle.get(command.guild.config)) {
+            if (toggle.isModule() && toggle.enabled(command.guild.config)) {
                 String stats = toggle.stats(command);
                 if (stats != null) {
                     //checks to make sure the field can be added.

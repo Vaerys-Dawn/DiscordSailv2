@@ -25,7 +25,7 @@ public class ModuleComp extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleComp;
     }
 
@@ -46,11 +46,16 @@ public class ModuleComp extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject object) {
-        if (!Utility.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
+    public String stats(CommandObject command) {
+        if (!Utility.testForPerms(command, Permissions.MANAGE_SERVER)) return null;
         StringBuilder builder = new StringBuilder();
-        builder.append("**Total Competition Entries:** " + object.guild.competition.getEntries().size());
-        builder.append("\n**Total Voters:** " + object.guild.competition.getVoters().size());
+        builder.append("**Total Competition Entries:** " + command.guild.competition.getEntries().size());
+        builder.append("\n**Total Voters:** " + command.guild.competition.getVoters().size());
         return builder.toString();
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
     }
 }

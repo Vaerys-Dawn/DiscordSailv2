@@ -22,7 +22,7 @@ public class ModuleGroups extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleGroups;
     }
 
@@ -42,7 +42,12 @@ public class ModuleGroups extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject object) {
+    public String stats(CommandObject command) {
         return null;
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Helps users find other people willing to group up.";
     }
 }

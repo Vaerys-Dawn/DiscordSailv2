@@ -38,7 +38,7 @@ public class GetGlobalStats extends Command {
                     if (t.name().toString().equalsIgnoreCase(s.getToggle())) {
                         if (t.isModule()) {
                             s.addOne();
-                        } else if (t.get(object.guild.config) != t.getDefault()) {
+                        } else if (t.enabled(object.guild.config) != t.getDefault()) {
                             s.addOne();
                         }
                     }

@@ -21,6 +21,7 @@ import java.util.List;
 
 
 @SuppressWarnings({"StringConcatenationInsideStringBufferAppend"})
+// gdi dawn <3
 public class MessageHandler {
 
     private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
@@ -43,6 +44,9 @@ public class MessageHandler {
                     CCHandler.handleCommand(args, command);
                 }
             }
+        } else {
+            // check if in setup mode otherwise do nothing.
+            if (SetupHandler.handleMessage(command, args)) return;
         }
         // do the command stuff
         if (handleCommand(command, args)) return;

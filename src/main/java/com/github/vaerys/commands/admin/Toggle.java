@@ -33,7 +33,7 @@ public class Toggle extends Command {
                         t.toggle(command.guild.config);
                         command.guild.loadCommandData();
 
-                        String mode = t.get(command.guild.config) ? "enabled" : "disabled";
+                        String mode = t.enabled(command.guild.config) ? "enabled" : "disabled";
                         String type = t.isModule() ? "module" : "setting";
                         String helpCommand = t.isModule() ? new HelpModules().getUsage(command) : new HelpSettings().getUsage(command);
                         return "> **" + t.name() + "** is now **" + mode + "**.\n\n" +
@@ -59,7 +59,7 @@ public class Toggle extends Command {
         List<SAILType> typesDeactivated = new LinkedList<>();
         for (GuildToggle t : command.guild.toggles) {
             if (t.isModule() == isModule) {
-                if (t.get(command.guild.config)) typesActive.add(t.name());
+                if (t.enabled(command.guild.config)) typesActive.add(t.name());
                 else typesDeactivated.add(t.name());
             }
         }

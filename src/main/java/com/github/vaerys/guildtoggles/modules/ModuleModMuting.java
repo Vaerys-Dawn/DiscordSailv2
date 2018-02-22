@@ -25,7 +25,7 @@ public class ModuleModMuting extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleModMute;
     }
 
@@ -45,12 +45,17 @@ public class ModuleModMuting extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject object) {
-        if (!Utility.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
-        IRole muteRole = object.guild.getRoleByID(object.guild.config.getMutedRoleID());
+    public String stats(CommandObject command) {
+        if (!Utility.testForPerms(command, Permissions.MANAGE_SERVER)) return null;
+        IRole muteRole = command.guild.getRoleByID(command.guild.config.getMutedRoleID());
         if (muteRole != null) {
             return "**Mute Role:** " + muteRole.getName();
         }
         return null;
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
     }
 }

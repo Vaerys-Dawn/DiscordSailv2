@@ -1,5 +1,7 @@
 package com.github.vaerys.pogos;
 
+import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Utility;
@@ -26,6 +28,9 @@ public class GuildConfig extends GuildFile {
     String prefixCC = Globals.defaultPrefixCC;
     String guildName = "";
     long guildID = -1;
+    //setup vars
+    public int setupStage = SetupHandler.SETUP_UNSET;
+    public long setupUser = -1;
     //toggles
     //--Auto Tasks
     public boolean dailyMessage = false;

@@ -29,7 +29,7 @@ public class ModuleLogging extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleLogging;
     }
 
@@ -64,4 +64,7 @@ public class ModuleLogging extends GuildModule {
     public String stats(CommandObject object) {
         return null;
     }
+
+    @Override
+    public String shortDesc(CommandObject command) { return "Handles various additional logging features."; }
 }

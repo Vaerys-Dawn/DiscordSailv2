@@ -1,5 +1,7 @@
 package com.github.vaerys.templates;
 
+import com.github.vaerys.commands.CommandObject;
+
 public abstract class GuildModule extends GuildToggle {
     public GuildModule() {
         affectsType = name();
@@ -16,5 +18,6 @@ public abstract class GuildModule extends GuildToggle {
     }
 
 
-
+    @Override
+    public abstract String shortDesc(CommandObject command);
 }
