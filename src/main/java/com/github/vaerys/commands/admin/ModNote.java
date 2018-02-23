@@ -1,10 +1,8 @@
 package com.github.vaerys.commands.admin;
 
-import java.text.SimpleDateFormat;
-import java.util.LinkedList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -12,24 +10,27 @@ import com.github.vaerys.objects.ModNoteObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 
 public class ModNote extends Command {
 
     private static final Logger logger = LoggerFactory.getLogger(ModNote.class);
 
     // using static as it will cause less memory to be used overall by orphaned data
-    protected static final String[] NAMES = new String[]{"ModNote", "Punish", "RecordIncident"};
+    protected static final String[] NAMES = new String[]{"ModNote", "Punish"};
     protected static final String USAGE = "[@User] (Mode)|[Note ...]";
     protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     protected static final ChannelSetting CHANNEL_SETTING = null;
     protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_MESSAGES};
     protected static final boolean REQUIRES_ARGS = true;
     protected static final boolean DO_ADMIN_LOGGING = true;
-    
+
     @Override
     public String execute(String args, CommandObject command) {
         // Start by breaking the arguments apart

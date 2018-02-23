@@ -3,24 +3,22 @@ package com.github.vaerys.commands.setup;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.SetupHandler;
 
-public class SetupQuit extends SetupCommand {
-
-    protected static final String[] NAMES = new String[]{"quit", "stop"};
-
+public class SetupRepeat extends SetupCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
-        SetupHandler.setSetupStage(command, (short) SetupHandler.SETUP_UNSET);
+        int currentStage = command.guild.config.setupStage;
+        SetupHandler.setSetupStage(command, currentStage);
         return null;
     }
 
     @Override
-    public String[] names() {
-        return NAMES;
+    protected String[] names() {
+        return new String[]{"repeat"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Stops setup and resets any progress on the setup.";
+        return null;
     }
 }

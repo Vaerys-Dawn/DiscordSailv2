@@ -1,18 +1,12 @@
 package com.github.vaerys.commands.setup;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
 
-public class SetupNext extends Command {
-    protected static final SAILType COMMAND_TYPE = SAILType.SETUP;
+public class SetupNext extends SetupCommand {
+
     protected static final String[] NAMES = new String[]{"next", "done"};
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -41,36 +35,4 @@ public class SetupNext extends Command {
         return "Move to the next setup step";
     }
 
-    @Override
-    public String usage() {
-        return null;
-    }
-
-    @Override
-    public SAILType type() { return COMMAND_TYPE; }
-
-    @Override
-    public ChannelSetting channel() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] perms() {
-        return new Permissions[0];
-    }
-
-    @Override
-    public boolean requiresArgs() {
-        return REQUIRES_ARGS;
-    }
-
-    @Override
-    public boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
-    }
-
-    @Override
-    public void init() {
-
-    }
 }
