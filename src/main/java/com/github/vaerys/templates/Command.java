@@ -1,18 +1,18 @@
 package com.github.vaerys.templates;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 29/01/2017.
@@ -33,7 +33,7 @@ public abstract class Command {
     public final Permissions[] perms;
     public final boolean requiresArgs;
     public final boolean doAdminLogging;
-   
+
 
     public Command() {
         this.type = type();
@@ -44,7 +44,7 @@ public abstract class Command {
         this.requiresArgs = requiresArgs();
         this.doAdminLogging = doAdminLogging();
     };
-    
+
 
     public List<SubCommandObject> subCommands = new LinkedList<>();
 
@@ -62,7 +62,7 @@ public abstract class Command {
      * @return the list of names associated with he command
      */
     protected abstract String[] names();
-    
+
     /**
      * The description of the command
      * @return the description of the command
@@ -86,7 +86,7 @@ public abstract class Command {
      * @return the type of channel it can be ran in
      */
     protected abstract ChannelSetting channel();
-    
+
     protected abstract Permissions[] perms();
 
     protected abstract boolean requiresArgs();
@@ -146,7 +146,7 @@ public abstract class Command {
         builder.append("**" + getUsage(command) + "**\n");
         builder.append("**Desc: **" + description(command) + "\n");
         builder.append("**Type: **" + type.toString() + "\n");
-        
+
         // display permissions
         if (perms != null && perms.length != 0) {
 

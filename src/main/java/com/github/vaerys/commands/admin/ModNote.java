@@ -53,64 +53,64 @@ public class ModNote extends Command {
         // gather necessary extra bits
         long timestamp = command.message.getTimestamp().toEpochSecond();
         SplitFirstObject mode = new SplitFirstObject(argsRest);
-        String modeString = mode.getFirstWord();
+        String modeString = mode.getFirstWord().toLowerCase();
 
-        // Handle Command execution
-        if (modeString.equalsIgnoreCase("list")) {
-            return createListEmbed(profile, command);
+        switch(modeString) {
+            // Modes that do not require an index value
+            case "list":
+                return createListEmbed(profile, command);
 
-        } else if (modeString.equalsIgnoreCase("info") ||
-                modeString.equalsIgnoreCase("edit") ||
-                modeString.equalsIgnoreCase("del") ||
-                modeString.equalsIgnoreCase("delete") ||
-                modeString.equalsIgnoreCase("strike")) {
+            // Modes that require an index value:
+            case "info":
+            case "edit":
+            case "del":
+            case "delete":
+            case "strike":
+                if (mode.getRest() == null) return missingArgs(command);
+                String modeArg = new SplitFirstObject(mode.getRest()).getFirstWord();
 
-            if (mode.getRest() == null) return missingArgs(command);
-            String modeArg = new SplitFirstObject(mode.getRest()).getFirstWord();
-
-            int index;
-            try {
-                index = Integer.parseInt(modeArg);
-                if (profile.modNotes == null || profile.modNotes.size() == 0) {
-                    return "> " + user.displayName + " doesn't have any notes yet.";
-                }
-                if (index <= 0 || index > profile.modNotes.size()) {
-                    return "> Index out of bounds.";
-                }
-            } catch (NumberFormatException e) {
-                return "> I wasn't able to understand what you asked me.";
-            }
-
-            switch (mode.getFirstWord()) {
-                case "info":
-                    createInfoEmbed(profile, command, index - 1);
-                    return null;
-
-                case "edit":
-                    String newNote = new SplitFirstObject(mode.getRest()).getRest();
-
-                    profile.modNotes.get(index - 1).editNote(newNote, command.user.longID, timestamp);
-                    return "> Note #" + index + " edited for user " + user.displayName + ".";
-                case "strike":
-                    boolean strike = profile.modNotes.get(index - 1).getStrike();
-                    if (strike) {
-                        profile.modNotes.get(index - 1).setStrike(false);
-                        return "> Strike cleared for note " + index + " for user " + user.displayName + ".";
-                    } else {
-                        profile.modNotes.get(index - 1).setStrike(true);
-                        return "> Strike set for note " + index + " for user " + user.displayName + ".";
+                int index;
+                try {
+                    index = Integer.parseInt(modeArg);
+                    if (profile.modNotes == null || profile.modNotes.size() == 0) {
+                        return "> " + user.displayName + " doesn't have any notes yet.";
                     }
-                case "delete":
-                case "del":
-                    profile.modNotes.remove(index - 1);
-                    return "> Note #" + index + " for " + user.displayName + " deleted.";
-            }
-        } else {
-            if (profile.modNotes == null) profile.modNotes = new LinkedList<>();
-            profile.modNotes.add(new ModNoteObject(argsRest, command.user.longID, timestamp));
-            return String.format("> Note added for %s at index %d.", user.displayName, profile.modNotes.size());
+                    if (index <= 0 || index > profile.modNotes.size()) {
+                        return "> Index out of bounds.";
+                    }
+                } catch (NumberFormatException e) {
+                    return "> I wasn't able to understand what you asked me.";
+                }
+
+                switch (mode.getFirstWord()) {
+                    case "info":
+                        createInfoEmbed(profile, command, index - 1);
+                        return null;
+
+                    case "edit":
+                        String newNote = new SplitFirstObject(mode.getRest()).getRest();
+
+                        profile.modNotes.get(index - 1).editNote(newNote, command.user.longID, timestamp);
+                        return "> Note #" + index + " edited for user " + user.displayName + ".";
+                    case "strike":
+                        boolean strike = profile.modNotes.get(index - 1).getStrike();
+                        if (strike) {
+                            profile.modNotes.get(index - 1).setStrike(false);
+                            return "> Strike cleared for note " + index + " for user " + user.displayName + ".";
+                        } else {
+                            profile.modNotes.get(index - 1).setStrike(true);
+                            return "> Strike set for note " + index + " for user " + user.displayName + ".";
+                        }
+                    case "delete":
+                    case "del":
+                        profile.modNotes.remove(index - 1);
+                        return "> Note #" + index + " for " + user.displayName + " deleted.";
+                }
+            default:
+                if (profile.modNotes == null) profile.modNotes = new LinkedList<>();
+                profile.modNotes.add(new ModNoteObject(argsRest, command.user.longID, timestamp));
+                return String.format("> Note added for %s at index %d.", user.displayName, profile.modNotes.size());
         }
-        return "> What?";
     }
 
     private String createListEmbed(ProfileObject user, CommandObject command) {
