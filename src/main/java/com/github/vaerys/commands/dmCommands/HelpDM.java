@@ -34,10 +34,9 @@ public class HelpDM extends DMCommand {
         return null;
     }
 
-    protected static final String[] NAMES = new Help().names;
     @Override
     protected String[] names() {
-        return NAMES;
+        return new Help().names;
     }
 
     @Override
@@ -45,29 +44,24 @@ public class HelpDM extends DMCommand {
         return "Lists DM Commands.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
     @Override

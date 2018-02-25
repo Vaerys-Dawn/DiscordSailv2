@@ -137,10 +137,9 @@ public class ProfileSettings extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"ProfileSettings", "PixelSettings"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"ProfileSettings", "PixelSettings"};
     }
 
     @Override
@@ -148,40 +147,34 @@ public class ProfileSettings extends Command {
         return "Allows you to set where your level up messages will be sent.\n" + getSettings(command);
     }
 
-    protected static final String USAGE = "(Setting...)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(Setting...)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.GENERAL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

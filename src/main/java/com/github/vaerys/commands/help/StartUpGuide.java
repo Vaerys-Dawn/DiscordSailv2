@@ -51,10 +51,9 @@ public class StartUpGuide extends Command {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"StartUpGuide"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"StartUpGuide"};
     }
 
     @Override
@@ -62,41 +61,34 @@ public class StartUpGuide extends Command {
         return "Posts a link to the Bot's Startup Guide on its wiki.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

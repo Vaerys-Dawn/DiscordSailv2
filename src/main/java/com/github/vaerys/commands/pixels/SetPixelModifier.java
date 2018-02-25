@@ -27,10 +27,9 @@ public class SetPixelModifier extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"SetPixelMultiplier","SetPixelModifier"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"SetPixelMultiplier","SetPixelModifier"};
     }
 
     @Override
@@ -38,41 +37,34 @@ public class SetPixelModifier extends Command {
         return "Allows you to set the modifier that pixels are calculated with.";
     }
 
-    protected static final String USAGE = "[Positive Float]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Positive Float]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.PIXEL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

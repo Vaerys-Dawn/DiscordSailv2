@@ -74,11 +74,9 @@ public class InfoDM extends DMCommand {
         // return "> Command with the name " + args + " not found.";
     }
 
-    protected static final String[] NAMES = new Info().names;
-
     @Override
     protected String[] names() {
-        return NAMES;
+        return new Info().names;
     }
 
     @Override
@@ -86,32 +84,24 @@ public class InfoDM extends DMCommand {
         return "Tells you information about DM commands.";
     }
 
-    protected static final String USAGE = "[Command Name]";
-
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Command Name]";
     }
-
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
-
-    protected static final boolean REQUIRES_ARGS = true;
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
     @Override

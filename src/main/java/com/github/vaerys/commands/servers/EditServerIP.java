@@ -25,10 +25,9 @@ public class EditServerIP extends Command {
         return command.guild.servers.editIP(command.user.longID, splitArgs.get(0), splitArgs.get(1), port, command.guild.get());
     }
 
-    protected static final String[] NAMES = new String[]{"EditServerIP"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"EditServerIP"};
     }
 
     @Override
@@ -36,40 +35,34 @@ public class EditServerIP extends Command {
         return "Allows you to edit your server IP and Port.";
     }
 
-    protected static final String USAGE = "[Server Name] [IP] (Port)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Server Name] [IP] (Port)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.SERVERS;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.SERVERS;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.SERVERS;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.SERVERS;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

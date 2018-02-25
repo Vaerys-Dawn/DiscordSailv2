@@ -18,16 +18,6 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 public class ChannelHere extends Command {
 
-    // using static as it will cause less memory to be used overall by orphaned data
-    protected static final String[] NAMES = new String[] {"Channel", "ChannelHere", "ChannelSetting", "Channels"};
-    protected static final String USAGE = "(Channel Type)";
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[] {Permissions.MANAGE_CHANNELS};
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = true;
-
-
     @Override
     public String execute(String args, CommandObject command) {
         String desc = "";
@@ -69,43 +59,43 @@ public class ChannelHere extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[] {"Channel", "ChannelHere", "ChannelSetting", "Channels"};
     }
 
 
     @Override
     protected String usage() {
-        return USAGE;
+        return "(Channel Type)";
     }
 
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
 
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return  new Permissions[] {Permissions.MANAGE_CHANNELS};
     }
 
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
 }

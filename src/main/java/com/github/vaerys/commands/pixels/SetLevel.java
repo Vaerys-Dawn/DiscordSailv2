@@ -44,10 +44,9 @@ public class SetLevel extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"SetLevel"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"SetLevel"};
     }
 
     @Override
@@ -55,41 +54,34 @@ public class SetLevel extends Command {
         return "Allows you to set the level of a user.";
     }
 
-    protected static final String USAGE = "[@User] [Level]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[@User] [Level]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.PIXEL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

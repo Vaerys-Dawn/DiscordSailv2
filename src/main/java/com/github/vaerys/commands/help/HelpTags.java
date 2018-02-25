@@ -24,10 +24,9 @@ public class HelpTags extends Command {
         return "> Could not find tag.";
     }
 
-    protected static final String[] NAMES = new String[]{"HelpTag", "HelpTags","TagHelp"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"HelpTag", "HelpTags","TagHelp"};
     }
 
     @Override
@@ -35,41 +34,34 @@ public class HelpTags extends Command {
         return "Gives you information about a specific tag";
     }
 
-    protected static final String USAGE = "[TagName]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[TagName]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

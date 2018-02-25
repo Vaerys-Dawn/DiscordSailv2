@@ -13,14 +13,8 @@ public class Shrug extends SlashCommand {
         return "¯\\_(ツ)_/¯";
     }
 
-    protected static final String[] NAMES = new String[]{"Shrug"};
     @Override
     protected String[] names() {
-        return NAMES;
-    }
-
-    @Override
-    public void init() {
-
+        return new String[]{"Shrug"};
     }
 }

@@ -18,10 +18,9 @@ public class SilentReport extends Report {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"SilentReport"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"SilentReport"};
     }
 
     @Override
@@ -30,10 +29,9 @@ public class SilentReport extends Report {
                 indent + " It will also remove the message used to call the command.";
     }
 
-    protected static final String USAGE = "[@User] [Report]";
     @Override
     protected String usage() {
-        return USAGE;
+        return new Report().usage;
     }
 
     @Override

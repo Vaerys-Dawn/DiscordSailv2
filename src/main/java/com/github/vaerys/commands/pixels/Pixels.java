@@ -89,10 +89,9 @@ public class Pixels extends Command {
 
     }
 
-    protected static final String[] NAMES = new String[]{"Pixels"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Pixels"};
     }
 
     @Override
@@ -100,40 +99,34 @@ public class Pixels extends Command {
         return "Shows you your current Pixel count and rank.";
     }
 
-    protected static final String USAGE = "(@User)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(@User)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return  SAILType.PIXEL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.PIXELS;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.PIXELS;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

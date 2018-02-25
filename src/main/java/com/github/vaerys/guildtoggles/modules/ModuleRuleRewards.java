@@ -35,8 +35,10 @@ public class ModuleRuleRewards extends GuildModule {
 
     @Override
     public String desc(CommandObject command) {
-        return "Enables the Rule Code commands which serve the purpose of giving admins a way to see if a user has read the rules, If pixel gain is on, users will also receive a "
-                + (long) (200 * command.guild.config.xpModifier) + " pixel boost.";
+        return "Allows users to guess a special code to receive special rewards.\n" +
+                "> A star on their profile.\n" +
+                "> "+ (long) (200 * command.guild.config.xpModifier) + " Pixels if Pixels are enabled.\n" +
+                "> A Special Role if set up with **" + new SetRuleCodeReward().getUsage(command) + "**.";
     }
 
     @Override

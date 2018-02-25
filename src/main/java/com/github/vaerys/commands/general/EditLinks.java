@@ -19,6 +19,15 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 17/06/2017.
  */
 public class EditLinks extends Command {
+
+    protected static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
+            new String[]{"EditLinks", "NewLink"},
+            "[@User] [Link Name] (Link)",
+            "Allows the modification of user links.",
+            SAILType.ADMIN,
+            Permissions.MANAGE_MESSAGES
+    );
+
     @Override
     public String execute(String args, CommandObject command) {
         UserObject user = command.user;
@@ -89,10 +98,9 @@ public class EditLinks extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"EditLinks", "NewLink"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"EditLinks", "NewLink"};
     }
 
     @Override
@@ -100,49 +108,36 @@ public class EditLinks extends Command {
         return "Allows uses to manage the links attached to their profile. Max 5 links per user (10 if user is a patron).";
     }
 
-    protected static final String USAGE = "[Link Name] (Link)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Link Name] (Link)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return  SAILType.GENERAL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.BOT_COMMANDS;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
-    protected static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
-        NAMES,
-        "[@User] [Link Name] (Link)",
-        "Allows the modification of user links.",
-        SAILType.ADMIN,
-        Permissions.MANAGE_MESSAGES
-    );
     @Override
     public void init() {
         subCommands.add(ADMIN_EDIT);

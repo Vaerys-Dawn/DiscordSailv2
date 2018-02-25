@@ -60,11 +60,9 @@ public class RulesCode extends Command {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"RulesCode", "RuleCode"};
-
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"RulesCode", "RuleCode"};
     }
 
     @Override
@@ -76,46 +74,34 @@ public class RulesCode extends Command {
         }
     }
 
-    protected static final String USAGE = "[Secret code]";
-
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Secret code]";
     }
-
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.GENERAL;
     }
-
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.BOT_COMMANDS;
     }
-
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return  new Permissions[0];
     }
-
-    protected static final boolean REQUIRES_ARGS = true;
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
-
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

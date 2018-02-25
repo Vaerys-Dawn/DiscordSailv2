@@ -65,10 +65,9 @@ public class GroupUp extends Command {
                 Utility.getCommandInfo(this, command);
     }
 
-    protected static final String[] NAMES = new String[]{"GroupUp", "GroupMe"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return  new String[]{"GroupUp", "GroupMe"};
     }
 
     @Override
@@ -76,40 +75,34 @@ public class GroupUp extends Command {
         return "Adds you to a list of people that will be mentioned when this command is run.\nRun this command again to leave the list.";
     }
 
-    protected static final String USAGE = "(Game)";
     @Override
     protected String usage() {
-        return USAGE;
+        return  "(Game)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GROUPS;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.GROUPS;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.GROUPS;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.GROUPS;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

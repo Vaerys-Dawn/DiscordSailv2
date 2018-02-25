@@ -16,10 +16,9 @@ public class ClearGroupUp extends Command {
         return "> GroupUp list cleared.";
     }
 
-    protected static final String[] NAMES = new String[]{"ClearGroupUp","PurgeGroupUp","EmptyGroupUp"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"ClearGroupUp","PurgeGroupUp","EmptyGroupUp"};
     }
 
     @Override
@@ -27,41 +26,34 @@ public class ClearGroupUp extends Command {
         return "Purges the GroupUp list.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GROUPS;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.GROUPS;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

@@ -49,10 +49,9 @@ public class RemindMe extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"RemindMe", "Reminder"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"RemindMe", "Reminder"};
     }
 
     @Override
@@ -66,41 +65,34 @@ public class RemindMe extends Command {
                 "> Defaults to minutes if no suffix is applied.";
     }
 
-    protected static final String USAGE = "[Time...] [Reminder Message]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Time...] [Reminder Message]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.GENERAL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

@@ -1,14 +1,15 @@
 package com.github.vaerys.commands.help;
 
-import java.util.List;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
 
 /**
  * Created by Vaerys on 29/01/2017.
@@ -44,10 +45,9 @@ public class Info extends Command {
         return error;
     }
 
-    protected static final String[] NAMES = new String[]{"Help"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Help"};
     }
 
     @Override
@@ -55,41 +55,34 @@ public class Info extends Command {
         return "Gives information about a command.";
     }
 
-    protected static final String USAGE = "[Command Name]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Command Name]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

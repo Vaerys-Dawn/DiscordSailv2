@@ -20,10 +20,9 @@ public class HelpChannel extends Command {
         return "> Could not find Channel Type.";
     }
 
-    protected static final String[] NAMES = new String[]{"HelpChannel", "ChannelHelp"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"HelpChannel", "ChannelHelp"};
     }
 
     @Override
@@ -31,41 +30,34 @@ public class HelpChannel extends Command {
         return "Gives information about a specific channel type or setting.";
     }
 
-    protected static final String USAGE = "[Channel Type/Setting]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Channel Type/Setting]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override
