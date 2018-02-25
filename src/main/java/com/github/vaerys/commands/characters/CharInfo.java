@@ -19,6 +19,7 @@ import java.util.ArrayList;
  * Created by Vaerys on 26/02/2017.
  */
 public class CharInfo extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         for (CharacterObject object : command.guild.characters.getCharacters(command.guild.get())) {
@@ -71,11 +72,9 @@ public class CharInfo extends Command {
         return "> Character with that name not found.";
     }
 
-    protected static final String[] NAMES = new String[]{"CharInfo", "InfoChar"};
-
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"CharInfo", "InfoChar"};
     }
 
     @Override
@@ -83,46 +82,34 @@ public class CharInfo extends Command {
         return "Gives Information about a certain character.";
     }
 
-    protected static final String USAGE = "[Character ID]";
-
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Character ID]";
     }
-
-    protected static final SAILType COMMAND_TYPE = SAILType.CHARACTER;
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CHARACTER;
     }
-
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.CHARACTER;
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.CHARACTER;
     }
-
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
-
-    protected static final boolean REQUIRES_ARGS = true;
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
-
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

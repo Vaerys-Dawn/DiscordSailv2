@@ -11,15 +11,14 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 29/01/2017.
  */
 public abstract class Command {
+    public static final String TYPE_SETUP = "Setup";
 
     public static final String spacer = "\u200B";
     public static final String indent = "    ";
@@ -34,6 +33,7 @@ public abstract class Command {
     public final Permissions[] perms;
     public final boolean requiresArgs;
     public final boolean doAdminLogging;
+    public List<SubCommandObject> subCommands = new LinkedList<>();
 
 
     public Command() {
@@ -47,14 +47,11 @@ public abstract class Command {
         init();
     }
 
-
-    public List<SubCommandObject> subCommands = new LinkedList<>();
-
     /**
      * The code to be executed when the command is ran
      *
      * @param args    - The args passed to the command
-     * @param command - The command object to getToggles data about where the command was sent from
+     * @param command - The command object to get data about where the command was sent from
      * @return The text or data to send back for the command
      */
     public abstract String execute(String args, CommandObject command);
@@ -159,7 +156,7 @@ public abstract class Command {
         // display permissions
         if (perms != null && perms.length != 0) {
 
-            builder.append("\n**Perms: **");
+            builder.append("**Perms: **");
             ArrayList<String> permList = new ArrayList<>(perms.length);
             for (Permissions p : perms) {
                 permList.add(p.toString());
@@ -167,21 +164,8 @@ public abstract class Command {
             builder.append(Utility.listFormatter(permList, true));
         }
 
-        if (names.length > 1) {
-            List<String> aliases = Arrays.asList(names).stream().map(s -> command.guild.config.getPrefixCommand() + s).collect(Collectors.toList());
-            aliases.remove(0);
-            builder.append("\n**Aliases:** " + Utility.listFormatter(aliases, true));
-        }
+        infoEmbed.appendField("> Help - " + names()[0], builder.toString(), false);
 
-        if (subCommands.size() != 0) builder.append("\n" + Command.spacer);
-
-        infoEmbed.withTitle("> Help - " + names()[0]);
-        infoEmbed.appendField("**" + getUsage(command) + "**", builder.toString(), true);
-
-
-        for (SubCommandObject s : subCommands) {
-            infoEmbed.appendField(s.getCommandUsage(command), s.getHelpDesc(command), true);
-        }
 
         //Handle channels
         List<IChannel> channels = command.guild.getChannelsByType(channel);
@@ -197,7 +181,15 @@ public abstract class Command {
         }
 
         //aliases
-
+        if (names.length > 1) {
+            StringBuilder aliasBuilder = new StringBuilder();
+            for (int i = 1; i < names.length; i++) {
+                aliasBuilder.append(getCommand(command, i) + ", ");
+            }
+            aliasBuilder.delete(aliasBuilder.length() - 2, aliasBuilder.length());
+            aliasBuilder.append(".\n");
+            infoEmbed.appendField("Aliases", aliasBuilder.toString(), false);
+        }
         return infoEmbed;
     }
 

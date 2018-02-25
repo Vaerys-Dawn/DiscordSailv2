@@ -10,6 +10,14 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class HelpSettings extends Command {
 
+    protected static final String[] NAMES = new String[]{"HelpSetting", "HelpSettings", "SettingHelp", "HelpToggle", "ToggleHelp"};
+    protected static final String USAGE = "[Setting Name]";
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new HelpModules().getInfo(false, args, command);
@@ -48,7 +56,7 @@ public class HelpSettings extends Command {
 
     @Override
     protected Permissions[] perms() {
-        return  new Permissions[]{Permissions.MANAGE_SERVER};
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

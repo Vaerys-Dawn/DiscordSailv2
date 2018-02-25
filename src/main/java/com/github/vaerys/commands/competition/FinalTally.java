@@ -1,16 +1,18 @@
 package com.github.vaerys.commands.competition;
 
-import java.util.ArrayList;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 01/02/2017.
  */
 public class FinalTally extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         StringBuilder builder = new StringBuilder();
@@ -41,10 +43,9 @@ public class FinalTally extends Command {
         return builder.toString();
     }
 
-    protected static final String[] NAMES = new String[]{"FinalTally"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"FinalTally"};
     }
 
     @Override
@@ -52,40 +53,34 @@ public class FinalTally extends Command {
         return "Posts the final scores.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.COMPETITION;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.COMPETITION;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_MESSAGES,Permissions.MANAGE_ROLES};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_MESSAGES, Permissions.MANAGE_ROLES};
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

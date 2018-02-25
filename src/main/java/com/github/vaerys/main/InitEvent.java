@@ -12,7 +12,7 @@ public class InitEvent {
     @EventSubscriber
     public void initBot(ReadyEvent event) {
         //makes sure that nothing in the config file will cause an error
-        if (!Globals.isCreatorValid()){
+        if (!Globals.isCreatorValid()) {
             System.exit(Constants.EXITCODE_CONF_ERROR);
         }
 

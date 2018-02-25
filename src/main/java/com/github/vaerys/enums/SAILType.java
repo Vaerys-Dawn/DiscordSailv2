@@ -2,8 +2,8 @@ package com.github.vaerys.enums;
 
 /**
  * used to differentiate the different command types
- * @author C0bra5
  *
+ * @author C0bra5
  */
 public enum SAILType {
     //command types
@@ -22,13 +22,14 @@ public enum SAILType {
     SLASH("Slash"),
     MENTION("Mention"),
     LOGGING("Logging"),
-    
+    SETUP("Setup"),
+
     //module types
     ART_PINNING("ArtPinning"),
     PROFILES("Profiles"),
     MOD_MUTE("ModMute"),
     READ_RULES_REWARDS("RuleCode"),
-    
+
     //Toggle types
     ADMIN_LOGGING("AdminLogging"),
     AUTO_ART_PINNING("AutoArtPinning"),
@@ -61,14 +62,9 @@ public enum SAILType {
     XP_GAIN("XpGain");
 
     private String name;
-    
+
     SAILType(String name) {
         this.name = name;
-    }
-    
-    @Override
-    public String toString() {
-        return name;
     }
 
     public static SAILType get(String type) {
@@ -78,5 +74,10 @@ public enum SAILType {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

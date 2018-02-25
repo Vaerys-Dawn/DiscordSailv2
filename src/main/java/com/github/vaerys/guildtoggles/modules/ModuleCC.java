@@ -2,10 +2,10 @@ package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.HelpTags;
-import com.github.vaerys.guildtoggles.toggles.ShitpostFiltering;
-import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.toggles.ShitpostFiltering;
+import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
 
 /**
@@ -24,7 +24,7 @@ public class ModuleCC extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleCC;
     }
 
@@ -52,8 +52,13 @@ public class ModuleCC extends GuildModule {
 
 
     @Override
-    public String stats(CommandObject object) {
-        return "**Total Custom Commands:** " + object.guild.customCommands.getCommandList().size();
+    public String stats(CommandObject command) {
+        return "**Total Custom Commands:** " + command.guild.customCommands.getCommandList().size();
 
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allows users to create their own custom commands.";
     }
 }

@@ -4,17 +4,25 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.ChannelHere;
 import com.github.vaerys.commands.admin.Module;
 import com.github.vaerys.commands.admin.Toggle;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 22/02/2017.
  */
 public class StartUpGuide extends Command {
+    protected static final String[] NAMES = new String[]{"StartUpGuide"};
+    protected static final String USAGE = null;
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);

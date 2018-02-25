@@ -2,12 +2,11 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class SetRuleCode extends Command {
-
     @Override
     public String execute(String args, CommandObject command) {
         command.message.delete();
@@ -20,10 +19,9 @@ public class SetRuleCode extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"SetRuleCode"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"SetRuleCode"};
     }
 
     @Override
@@ -35,40 +33,34 @@ public class SetRuleCode extends Command {
         }
     }
 
-    protected static final String USAGE = "[New Code]/Remove";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[New Code]/Remove";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

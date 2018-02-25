@@ -1,22 +1,31 @@
 package com.github.vaerys.commands.pixels;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
+
 public class Rank extends Command {
+
+    protected static final String[] NAMES = new String[]{"Rank"};
+    protected static final String USAGE = "(@User)";
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.PIXELS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

@@ -1,9 +1,8 @@
 package com.github.vaerys.commands.cc;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
@@ -12,11 +11,13 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -102,10 +103,9 @@ public class ListCCs extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"CClist", "ListCCs","ListCC"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"CClist", "ListCCs", "ListCC"};
     }
 
     @Override
@@ -113,40 +113,34 @@ public class ListCCs extends Command {
         return "Generates a list of custom commands based on parameters.";
     }
 
-    protected static final String USAGE = "(Page Number/@User)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(Page Number/@User)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CC;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.CC_INFO;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.CC_INFO;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

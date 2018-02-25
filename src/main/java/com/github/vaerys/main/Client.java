@@ -2,14 +2,12 @@ package com.github.vaerys.main;
 
 import com.github.kennedyoliveira.pastebin4j.AccountCredentials;
 import com.github.kennedyoliveira.pastebin4j.PasteBin;
-import com.github.vaerys.commands.CommandInit;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.objects.EventAvatar;
 import com.github.vaerys.objects.PatreonAPI;
 import com.github.vaerys.objects.TimedEvent;
-import com.github.vaerys.templates.Command;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;

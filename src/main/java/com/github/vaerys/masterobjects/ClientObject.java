@@ -6,9 +6,9 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.RequestBuffer;
 
 public class ClientObject {
-    private IDiscordClient object;
     public UserObject bot;
     public UserObject creator;
+    private IDiscordClient object;
 
     public ClientObject(IDiscordClient client, GuildObject guild) {
         this.object = client;

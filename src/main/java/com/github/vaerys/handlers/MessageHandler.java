@@ -19,6 +19,7 @@ import java.util.List;
 
 
 @SuppressWarnings({"StringConcatenationInsideStringBufferAppend"})
+// gdi dawn <3
 public class MessageHandler {
 
     private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
@@ -41,6 +42,9 @@ public class MessageHandler {
                     CCHandler.handleCommand(args, command);
                 }
             }
+        } else {
+            // check if in setup mode otherwise do nothing.
+            if (SetupHandler.handleMessage(command, args)) return;
         }
         // do the command stuff
         if (handleCommand(command, args)) return;
@@ -60,6 +64,24 @@ public class MessageHandler {
 //        }
 //        return false;
 //    }
+
+    protected static void handleLogging(CommandObject commandObject, Command command, String args) {
+        if (!command.doAdminLogging && !commandObject.guild.config.adminLogging) {
+            return;
+        } else if (!commandObject.guild.config.generalLogging) {
+            return;
+        }
+        StringHandler builder = new StringHandler("> **@").append(commandObject.user.username).append("** Has Used Command `").append(command.getCommand(commandObject)).append("`");
+        if (args != null && !args.isEmpty()) {
+            builder.append(" with args: `").append(args).append("`");
+        }
+        if (commandObject.channel.get().isPrivate()) {
+            builder.append(" in their DMs.");
+        } else {
+            builder.append(" in channel ").append(commandObject.channel.get().mention()).append(".");
+        }
+        Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
+    }
 
     //Command Handler
     private boolean handleCommand(CommandObject command, String args) {
@@ -105,19 +127,5 @@ public class MessageHandler {
             }
         }
         return false;
-    }
-
-    protected static void handleLogging(CommandObject commandObject, Command command, String args) {
-        if (!command.doAdminLogging && !commandObject.guild.config.adminLogging) {
-            return;
-        } else if (!commandObject.guild.config.generalLogging) {
-            return;
-        }
-        StringHandler builder = new StringHandler("> **@").append(commandObject.user.username).append("** Has Used Command `").append(command.getCommand(commandObject)).append("`");
-        if (args != null && !args.isEmpty()) {
-            builder.append(" with args: `").append(args).append("`");
-        }
-        builder.append(" in channel ").append(commandObject.channel.get().mention()).append(".");
-        Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
     }
 }

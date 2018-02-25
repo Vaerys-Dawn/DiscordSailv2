@@ -15,15 +15,13 @@ import sx.blah.discord.handle.obj.IUser;
  */
 public class CommandObject {
 
+    final static Logger logger = LoggerFactory.getLogger(CommandObject.class);
     //master objects
     public GuildObject guild;
     public UserObject user;
     public MessageObject message;
     public ChannelObject channel;
     public ClientObject client;
-
-
-    final static Logger logger = LoggerFactory.getLogger(CommandObject.class);
 
 
     public CommandObject(IMessage message) {

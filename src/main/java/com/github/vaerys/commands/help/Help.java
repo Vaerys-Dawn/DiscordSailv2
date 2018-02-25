@@ -1,18 +1,19 @@
 package com.github.vaerys.commands.help;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 29/01/2017.
@@ -20,6 +21,14 @@ import sx.blah.discord.handle.obj.Permissions;
 
 
 public class Help extends Command {
+
+    protected static final String[] NAMES = new String[]{"Commands"};
+    protected static final String USAGE = "(Command Type)";
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -46,7 +55,7 @@ public class Help extends Command {
 //        for (SAILType c : types) {
 //            typeNames.add(types.toString());
 //        }
-        
+
         if (args == null || args.isEmpty()) {
             StringBuilder builder = new StringBuilder();
             builder.append(codeBlock + "\n");
@@ -73,7 +82,7 @@ public class Help extends Command {
                     List<String> commandNames = new ArrayList<>();
                     for (Command c : Utility.getCommandsByType(commands, command, SAILType.get(s), true)) {
                         StringBuilder commandCall = new StringBuilder(c.getCommand(command));
-                          //commented out at dawn's request
+                        //commented out at dawn's request
 //                        if (c.dualType() != null && Utility.testForPerms(command, c.dualPerms())) {
 //                            commandCall.append(indent + "*");
 //                        }

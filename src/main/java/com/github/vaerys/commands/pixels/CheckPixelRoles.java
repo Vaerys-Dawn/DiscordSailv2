@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
@@ -14,7 +14,6 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 12/07/2017.
  */
 public class CheckPixelRoles extends Command {
-
     @Override
     public String execute(String args, CommandObject command) {
         IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();

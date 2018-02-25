@@ -1,9 +1,8 @@
 package com.github.vaerys.commands.pixels;
 
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.Random;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
@@ -12,17 +11,27 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Vaerys on 01/07/2017.
  */
 public class PixelHelp extends Command {
+
+    protected static final String[] NAMES = new String[]{"PixelHelp", "HelpPixels"};
+    protected static final String USAGE = ("(Mode) (args)");
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.PIXELS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

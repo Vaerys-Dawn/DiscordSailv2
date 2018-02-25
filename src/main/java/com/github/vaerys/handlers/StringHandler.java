@@ -127,6 +127,11 @@ public class StringHandler {
         return this;
     }
 
+    public StringHandler appendFormatted(String s, Object... values) {
+        string.append(String.format(s, values));
+        return this;
+    }
+
     public String[] split(String s) {
         return string.toString().split(s);
     }

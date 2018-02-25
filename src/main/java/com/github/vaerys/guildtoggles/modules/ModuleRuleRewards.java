@@ -24,7 +24,7 @@ public class ModuleRuleRewards extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.readRuleReward;
     }
 
@@ -37,8 +37,13 @@ public class ModuleRuleRewards extends GuildModule {
     public String desc(CommandObject command) {
         return "Allows users to guess a special code to receive special rewards.\n" +
                 "> A star on their profile.\n" +
-                "> "+ (long) (200 * command.guild.config.xpModifier) + " Pixels if Pixels are enabled.\n" +
+                "> " + (long) (200 * command.guild.config.xpModifier) + " Pixels if Pixels are enabled.\n" +
                 "> A Special Role if set up with **" + new SetRuleCodeReward().getUsage(command) + "**.";
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allows users to gain rewards for reading the rules.";
     }
 
     @Override

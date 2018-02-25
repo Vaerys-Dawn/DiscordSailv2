@@ -2,11 +2,19 @@ package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class Patreon extends Command {
+
+    protected static final String[] NAMES = new String[]{"Patreon"};
+    protected static final String USAGE = null;
+    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

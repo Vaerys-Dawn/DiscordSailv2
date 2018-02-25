@@ -1,11 +1,12 @@
 package com.github.vaerys.tags.cctags;
 
-import java.util.List;
-import java.util.Random;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.objects.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
-import com.github.vaerys.enums.TagType;
+
+import java.util.List;
+import java.util.Random;
 
 public class TagReplaceRandom extends TagReplaceObject {
 

@@ -1,21 +1,30 @@
 package com.github.vaerys.commands.general;
 
-import java.time.DayOfWeek;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.QueueHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.time.DayOfWeek;
+
 public class NewDailyMessage extends Command {
+
+    protected static final String[] NAMES = new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg", "NewDailyMsg", "NewDailyMessage"};
+    protected static final String USAGE = "[DayOfWeek] [Message]";
+    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -37,7 +46,7 @@ public class NewDailyMessage extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg","NewDailyMsg","NewDailyMessage"};
+        return new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg", "NewDailyMsg", "NewDailyMessage"};
     }
 
     @Override

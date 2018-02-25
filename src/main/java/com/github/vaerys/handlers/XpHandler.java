@@ -28,6 +28,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.vaerys.enums.UserSetting.*;
@@ -38,7 +39,6 @@ import static com.github.vaerys.enums.UserSetting.*;
 public class XpHandler {
 
     final static Logger logger = LoggerFactory.getLogger(XpHandler.class);
-
 
     public static void doDecay(GuildObject content, ProfileObject u) {
         long days = u.daysDecayed(content);
@@ -143,8 +143,49 @@ public class XpHandler {
 //        checkUsersRoles(u.getUserID(), content);
 //    }
 
+    public static void checkUsersRoles(long id, GuildObject content) {
+        //do code.
+        ProfileObject userObject = content.users.getUserByID(id);
+        if (userObject == null) {
+            return;
+        }
+        if (userObject.getSettings().contains(DENY_AUTO_ROLE)) return;
+
+        IUser user = Globals.getClient().getUserByID(userObject.getUserID());
+        if (user == null) {
+            return;
+        }
+        List<IRole> userRoles = user.getRolesForGuild(content.get());
+        //remove all rewardRoles to prep for checking.
+        ListIterator iterator = userRoles.listIterator();
+        while (iterator.hasNext()) {
+            IRole role = (IRole) iterator.next();
+            if (content.config.isRoleReward(role.getLongID())) {
+                iterator.remove();
+            }
+        }
+        //add all roles that the user should have.
+        ArrayList<RewardRoleObject> allRewards = content.config.getAllRewards(userObject.getCurrentLevel());
+        for (RewardRoleObject r : allRewards) {
+            userRoles.add(Globals.getClient().getRoleByID(r.getRoleID()));
+        }
+        //add the top ten role if they should have it.
+        IRole topTenRole = content.get().getRoleByID(content.config.topTenRoleID);
+        if (topTenRole != null) {
+            long rank = XpHandler.rank(content.users, content.get(), user.getLongID());
+            if (rank <= 10 && rank > 0) {
+                userRoles.add(topTenRole);
+            }
+        }
+        //only do a role update if the role count changes
+        List<IRole> currentRoles = user.getRolesForGuild(content.get());
+        if (!currentRoles.containsAll(userRoles) || currentRoles.size() != userRoles.size()) {
+            RequestHandler.roleManagement(user, content.get(), userRoles);
+        }
+    }
+
     public static void grantXP(CommandObject object) {
-        //bots don't getToggles XP
+        //bots don't get XP
         if (object.user.get().isBot()) return;
 
         //creates a profile for the user if they don't already have one.
@@ -255,6 +296,7 @@ public class XpHandler {
                 }
             }
 
+
             String loggingType = rankedup ? "RANKUP" : "LEVELUP";
             object.guild.sendDebugLog(object, "PIXELS", loggingType, user.getCurrentLevel() + "");
 
@@ -318,7 +360,7 @@ public class XpHandler {
             leveledUp = false;
         }
         if (leveledUp) {
-            GuildHandler.checkUsersRoles(user.getUserID(), object.guild);
+            checkUsersRoles(user.getUserID(), object.guild);
         }
         if (object.guild.config.selfDestructLevelUps && selfDestruct != null && !rankedup) {
             try {

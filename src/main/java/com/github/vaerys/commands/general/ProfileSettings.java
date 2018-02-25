@@ -1,23 +1,40 @@
 package com.github.vaerys.commands.general;
 
-import java.util.List;
-import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Constants;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 02/07/2017.
  */
 public class ProfileSettings extends Command {
 
+
+    protected static final String[] NAMES = new String[]{"ProfileSettings", "PixelSettings"};
+    protected static final String USAGE = "(Setting...)";
+    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
+    private static void removeLevelSettings(ProfileObject user) {
+        for (int i = 0; i < user.getSettings().size(); i++) {
+            if (Constants.levelUpStates.contains(user.getSettings().get(i))) {
+                user.getSettings().remove(i);
+            }
+        }
+    }
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -126,14 +143,6 @@ public class ProfileSettings extends Command {
         } else {
             user.getSettings().add(setting);
             return add;
-        }
-    }
-
-    private static void removeLevelSettings(ProfileObject user) {
-        for (int i = 0; i < user.getSettings().size(); i++) {
-            if (Constants.levelUpStates.contains(user.getSettings().get(i))) {
-                user.getSettings().remove(i);
-            }
         }
     }
 

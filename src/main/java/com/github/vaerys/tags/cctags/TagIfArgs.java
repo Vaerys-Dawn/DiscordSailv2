@@ -1,10 +1,11 @@
 package com.github.vaerys.tags.cctags;
 
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.templates.TagObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.templates.TagObject;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 public class TagIfArgs extends TagObject {
 

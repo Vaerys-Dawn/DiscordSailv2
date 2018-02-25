@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.creator;
 
-import java.time.DayOfWeek;
-import java.util.Formatter;
-import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -11,14 +11,16 @@ import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.time.DayOfWeek;
+import java.util.Formatter;
+import java.util.ListIterator;
+
 public class DailyMsg extends Command {
+
 
     String modes = "> Edit - `args = new Contents`\n" +
             "> Delete\n" +
@@ -112,51 +114,44 @@ public class DailyMsg extends Command {
         return embedBuilder;
     }
 
-    protected static final String[] NAMES = new String[]{"DailyMsg"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"DailyMsg"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "allows for editing of the daily message list.\n**Tags:** " + Utility.listFormatter(TagList.getNames(TagType.DAILY), true) +"\n" + modes;
+        return "allows for editing of the daily message list.\n**Tags:** " + Utility.listFormatter(TagList.getNames(TagType.DAILY), true) + "\n" + modes;
     }
 
-    protected static final String USAGE = "[ID] (Mode) (args)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[ID] (Mode) (args)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CREATOR;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

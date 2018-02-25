@@ -1,18 +1,19 @@
 package com.github.vaerys.commands.cc;
 
-import java.util.List;
-import java.util.Random;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.cctags.TagEmbedImage;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
+import java.util.Random;
 
 public class RandomCC extends Command {
 
@@ -51,49 +52,42 @@ public class RandomCC extends Command {
     }
 
     @Override
-    public void init() {
-
-    }
-
-    protected static final String[] ALIASES = new String[] {"RandomCC", "RandCC"};
-    @Override
     protected String[] names() {
-        return ALIASES;
+        return new String[]{"RandomCC", "RandCC"};
     }
 
-    protected static final String USAGE = "(args)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(args)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CC;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRE_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRE_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

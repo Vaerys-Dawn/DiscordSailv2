@@ -1,24 +1,26 @@
 package com.github.vaerys.commands.admin;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.HelpModules;
 import com.github.vaerys.commands.help.HelpSettings;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
 public class Toggle extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         return getContent(args, command, false, this);
@@ -33,7 +35,7 @@ public class Toggle extends Command {
                         t.toggle(command.guild.config);
                         command.guild.loadCommandData();
 
-                        String mode = t.get(command.guild.config) ? "enabled" : "disabled";
+                        String mode = t.enabled(command.guild.config) ? "enabled" : "disabled";
                         String type = t.isModule() ? "module" : "setting";
                         String helpCommand = t.isModule() ? new HelpModules().getUsage(command) : new HelpSettings().getUsage(command);
                         return "> **" + t.name() + "** is now **" + mode + "**.\n\n" +
@@ -59,7 +61,7 @@ public class Toggle extends Command {
         List<SAILType> typesDeactivated = new LinkedList<>();
         for (GuildToggle t : command.guild.toggles) {
             if (t.isModule() == isModule) {
-                if (t.get(command.guild.config)) typesActive.add(t.name());
+                if (t.enabled(command.guild.config)) typesActive.add(t.name());
                 else typesDeactivated.add(t.name());
             }
         }
@@ -73,10 +75,9 @@ public class Toggle extends Command {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"Setting", "Toggle", "Settings", "Toggles"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Setting", "Toggle", "Settings", "Toggles"};
     }
 
     @Override
@@ -84,40 +85,34 @@ public class Toggle extends Command {
         return "Toggles the specified setting of the Guild Config.";
     }
 
-    protected static final String USAGE = "(Setting)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(Setting)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

@@ -1,23 +1,31 @@
 package com.github.vaerys.commands.pixels;
 
-import java.util.List;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
 
 /**
  * Created by Vaerys on 04/07/2017.
  */
 public class ManagePixelRoles extends Command {
 
+    protected static final String[] NAMES = new String[]{"ManagePixelRoles", "PixelRoles"};
+    protected static final String USAGE = "[Number/Mode] [RoleName]";
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = true;
     private static String modes = "**Modes**\n" +
             "> Any positive number up to 256\n" +
             "> xpDenied\n" +
@@ -27,7 +35,7 @@ public class ManagePixelRoles extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        if (args.equalsIgnoreCase("list")){
+        if (args.equalsIgnoreCase("list")) {
             XEmbedBuilder builder = new XEmbedBuilder(command);
             builder.withTitle("Pixel Roles");
             IRole xpDenied = command.guild.getXPDeniedRole();

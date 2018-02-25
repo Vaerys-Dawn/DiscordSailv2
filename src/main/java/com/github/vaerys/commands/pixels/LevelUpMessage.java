@@ -1,18 +1,26 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.tags.TagList;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 02/07/2017.
  */
 public class LevelUpMessage extends Command {
+    protected static final String[] NAMES = new String[]{"SetLvlMessage", "SetLevelMessage", "SetLvlMsg", "SetLevelMsg"};
+    protected static final String USAGE = "[Message]";
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         if (args.length() > 100) {
@@ -28,7 +36,7 @@ public class LevelUpMessage extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"SetLvlMessage","SetLevelMessage","SetLvlMsg","SetLevelMsg"};
+        return new String[]{"SetLvlMessage", "SetLevelMessage", "SetLvlMsg", "SetLevelMsg"};
     }
 
     @Override

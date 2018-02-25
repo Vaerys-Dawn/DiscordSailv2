@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.servers;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.objects.ServerObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.objects.ServerObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -12,6 +12,14 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 31/01/2017.
  */
 public class Server extends Command {
+    protected static final String[] NAMES = new String[]{"Server"};
+    protected static final String USAGE = "[Server Name]";
+    protected static final SAILType COMMAND_TYPE = SAILType.SERVERS;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.SERVERS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         for (ServerObject s : command.guild.servers.getServers()) {
@@ -66,7 +74,7 @@ public class Server extends Command {
 
     @Override
     protected Permissions[] perms() {
-        return  new Permissions[0];
+        return new Permissions[0];
     }
 
     @Override

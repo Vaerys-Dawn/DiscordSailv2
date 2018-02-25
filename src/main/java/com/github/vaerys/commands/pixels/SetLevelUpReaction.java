@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import sx.blah.discord.handle.obj.IEmoji;
@@ -12,6 +12,14 @@ import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.MessageTokenizer;
 
 public class SetLevelUpReaction extends Command {
+
+    protected static final String[] NAMES = new String[]{"SetLevelUpReaction"};
+    protected static final String USAGE = "[Emoji]/Remove";
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_EMOJIS};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

@@ -1,13 +1,21 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class BotHelp extends Command {
+
+    protected static final String[] NAMES = new String[]{"BotHelp"};
+    protected static final String USAGE = "(Mode)";
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

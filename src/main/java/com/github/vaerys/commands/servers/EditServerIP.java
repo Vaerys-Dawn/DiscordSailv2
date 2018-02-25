@@ -1,17 +1,26 @@
 package com.github.vaerys.commands.servers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
 public class EditServerIP extends Command {
+    protected static final String[] NAMES = new String[]{"EditServerIP"};
+    protected static final String USAGE = "[Server Name] [IP] (Port)";
+    protected static final SAILType COMMAND_TYPE = SAILType.SERVERS;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.SERVERS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<String> splitArgs = new ArrayList<>(Arrays.asList(args.split(" ")));

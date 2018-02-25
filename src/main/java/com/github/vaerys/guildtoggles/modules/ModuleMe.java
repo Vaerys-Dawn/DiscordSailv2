@@ -5,10 +5,10 @@ import com.github.vaerys.commands.general.EditLinks;
 import com.github.vaerys.commands.general.SetGender;
 import com.github.vaerys.commands.general.SetQuote;
 import com.github.vaerys.commands.general.UserInfo;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.toggles.UserInfoShowsDate;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
-import com.github.vaerys.enums.SAILType;
 
 /**
  * Created by Vaerys on 02/03/2017.
@@ -26,7 +26,7 @@ public class ModuleMe extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleMe;
     }
 
@@ -50,7 +50,12 @@ public class ModuleMe extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject object) {
-        return "**Total Profiles:** " + object.guild.users.getProfiles().size();
+    public String stats(CommandObject command) {
+        return "**Total Profiles:** " + command.guild.users.getProfiles().size();
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Generates personal profiles that users can edit.";
     }
 }

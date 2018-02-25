@@ -16,6 +16,14 @@ import java.util.List;
  */
 public class Info extends Command {
 
+    protected static final String[] NAMES = new String[]{"Help"};
+    protected static final String USAGE = "[Command Name]";
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
 

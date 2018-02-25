@@ -2,10 +2,10 @@ package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.Mute;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -25,7 +25,7 @@ public class ModuleModMuting extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleModMute;
     }
 
@@ -52,5 +52,10 @@ public class ModuleModMuting extends GuildModule {
             return "**Mute Role:** " + muteRole.getName();
         }
         return null;
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
     }
 }

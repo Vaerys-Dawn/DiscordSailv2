@@ -13,6 +13,12 @@ import sx.blah.discord.util.DiscordException;
  */
 public class Test extends Command {
 
+    protected static final SubCommandObject object = new SubCommandObject(
+            new String[]{"Test"},
+            "[Lol this command has no usages XD]",
+            "nothing",
+            SAILType.ADMIN
+    );
     String nothing = "> You didn't see anything.";
 
     @Override
@@ -41,11 +47,9 @@ public class Test extends Command {
         throw new DiscordException("TestException");
     }
 
-    protected static final String[] NAMES = new String[]{"Test", "Testing"};
-
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Test", "Testing"};
     }
 
     @Override
@@ -53,54 +57,35 @@ public class Test extends Command {
         return "Tests Things.";
     }
 
-    protected static final String USAGE = "[Lol this command has no usages XD]";
-
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Lol this command has no usages XD]";
     }
-
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
-
-    protected static final ChannelSetting CHANNEL_SETTING = null;
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
-
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
-
-    protected static final boolean REQUIRES_ARGS = false;
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
-
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
-
-    protected static final SubCommandObject object = new SubCommandObject(
-            new String[]{"Test"},
-            USAGE,
-            "nothing",
-            SAILType.ADMIN
-    );
 
     @Override
     public void init() {

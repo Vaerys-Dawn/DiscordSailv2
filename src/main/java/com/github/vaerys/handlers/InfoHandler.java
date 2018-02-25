@@ -1,28 +1,29 @@
 package com.github.vaerys.handlers;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringUtils;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
+import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.util.RequestBuffer;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * This Class Is the Handler for the updateInfo Method it pulls the info.txt doc and then updates the channel based on the contents of the file.
  */
 public class InfoHandler {
-    private IGuild guild;
-    private IChannel channel;
     List<String> infoContents;
     CommandObject object;
+    private IGuild guild;
+    private IChannel channel;
 
     public InfoHandler(CommandObject object) {
         this.object = object;

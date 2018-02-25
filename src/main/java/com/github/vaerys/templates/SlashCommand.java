@@ -1,6 +1,5 @@
 package com.github.vaerys.templates;
 
-import java.util.Arrays;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
@@ -9,10 +8,18 @@ import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.Arrays;
+
 /**
  * Created by Vaerys on 13/03/2017.
  */
 public abstract class SlashCommand extends Command {
+
+    protected static final SAILType COMMAND_TYPE = SAILType.SLASH;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     public String description(CommandObject command) {
         return "Returns with " + execute(null, null) + ".";
@@ -22,31 +29,26 @@ public abstract class SlashCommand extends Command {
         return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.SLASH;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
-    
-    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;
@@ -56,6 +58,7 @@ public abstract class SlashCommand extends Command {
     public void init() {
 
     }
+
     @Override
     public String getCommand(CommandObject command) {
         return "/" + names[0];

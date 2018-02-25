@@ -2,8 +2,8 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class SetPinLimit extends Command {
@@ -22,10 +22,9 @@ public class SetPinLimit extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"SetPinLimit"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"SetPinLimit"};
     }
 
     @Override
@@ -33,40 +32,34 @@ public class SetPinLimit extends Command {
         return "Allows for editing the pin limit for the art pinning module.";
     }
 
-    protected static final String USAGE = "[Pin Limit]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Pin Limit]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

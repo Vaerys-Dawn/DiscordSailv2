@@ -2,13 +2,13 @@ package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.SetPinLimit;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.toggles.AutoArtPinning;
 import com.github.vaerys.guildtoggles.toggles.LikeArt;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.GuildModule;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -27,7 +27,7 @@ public class ModuleArtPinning extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.artPinning;
     }
 
@@ -55,4 +55,11 @@ public class ModuleArtPinning extends GuildModule {
         if (!GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
         return "**Total Pins:** " + object.guild.channelData.getPinnedMessages().size() + "/" + object.guild.config.pinLimit;
     }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allows users to pin art with a \uD83D\uDCCC reaction.";
+    }
 }
+
+// "**moduleName** - shortDesc"

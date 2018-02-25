@@ -8,6 +8,8 @@ import com.github.vaerys.templates.SlashCommand;
  */
 public class TableFlip extends SlashCommand {
 
+    protected static final String[] NAMES = new String[]{"TableFlip"};
+
     @Override
     public String execute(String args, CommandObject command) {
         return "(╯°□°）╯︵ ┻━┻";

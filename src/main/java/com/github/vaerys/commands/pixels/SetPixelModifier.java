@@ -2,34 +2,42 @@ package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 07/07/2017.
  */
 public class SetPixelModifier extends Command {
+    protected static final String[] NAMES = new String[]{"SetPixelMultiplier", "SetPixelModifier"};
+    protected static final String USAGE = "[Positive Float]";
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = true;
+
     @Override
     public String execute(String args, CommandObject command) {
         try {
             float multiplier = Float.parseFloat(args);
-            if (multiplier <= 0){
+            if (multiplier <= 0) {
                 return "> must be a positive number";
             }
-            if (multiplier > 5){
+            if (multiplier > 5) {
                 return "> Cannot set a multiplier over 5x";
             }
             command.guild.config.xpModifier = multiplier;
             return "> Pixel Multiplier is now set to **x" + multiplier + "**.";
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return "> Not a valid Number.";
         }
     }
 
     @Override
     protected String[] names() {
-        return new String[]{"SetPixelMultiplier","SetPixelModifier"};
+        return new String[]{"SetPixelMultiplier", "SetPixelModifier"};
     }
 
     @Override

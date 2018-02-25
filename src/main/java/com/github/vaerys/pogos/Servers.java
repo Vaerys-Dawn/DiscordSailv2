@@ -18,9 +18,9 @@ import java.util.Arrays;
  */
 public class Servers extends GuildFile {
     public static final String FILE_PATH = "Servers.json";
-    private double fileVersion = 1.0;
     ArrayList<BlackListObject> blackList = new ArrayList<>();
     ArrayList<ServerObject> servers = new ArrayList<>();
+    private double fileVersion = 1.0;
 
     public String addToBlacklist(String phrase, String reason) {
         for (BlackListObject b : blackList) {

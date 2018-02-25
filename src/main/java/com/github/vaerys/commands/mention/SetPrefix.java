@@ -8,6 +8,14 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class SetPrefix extends MentionCommand {
 
+    protected static final String[] NAMES = new String[]{"SetCommandPrefix", "SetPrefixCommand", "SetPrefix"};
+    protected static final String USAGE = "[Prefix]";
+    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = true;
+
     @Override
     public String execute(String args, CommandObject command) {
         boolean isAlphanumeric = args.matches("[A-Za-z0-9]+");
@@ -20,7 +28,7 @@ public class SetPrefix extends MentionCommand {
 
     @Override
     protected String[] names() {
-        return new String[]{"SetCommandPrefix","SetPrefixCommand","SetPrefix"};
+        return new String[]{"SetCommandPrefix", "SetPrefixCommand", "SetPrefix"};
     }
 
     @Override
@@ -39,7 +47,7 @@ public class SetPrefix extends MentionCommand {
 
     @Override
     protected SAILType type() {
-        return  SAILType.ADMIN;
+        return SAILType.ADMIN;
     }
 
     @Override

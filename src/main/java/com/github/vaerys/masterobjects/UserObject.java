@@ -1,11 +1,11 @@
 package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.objects.*;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;
@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 public class UserObject {
     public ClientObject client;
-    IUser object;
     public long longID;
     public String name;
     public String displayName;
@@ -33,6 +32,7 @@ public class UserObject {
     public List<DailyMessage> dailyMessages;
     public String notAllowed;
     public boolean isPatron;
+    IUser object;
 
 
     public UserObject(IUser object, GuildObject guild) {

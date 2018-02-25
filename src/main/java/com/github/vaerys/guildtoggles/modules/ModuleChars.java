@@ -1,12 +1,12 @@
 package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.toggles.RoleIsToggle;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.GuildModule;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -25,7 +25,7 @@ public class ModuleChars extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleChars;
     }
 
@@ -56,5 +56,10 @@ public class ModuleChars extends GuildModule {
             builder.append("\n**Character Roles Prefix:** " + object.guild.characters.getRolePrefix());
         }
         return builder.toString();
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allow users to create character profiles for role-playing.";
     }
 }

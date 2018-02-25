@@ -28,16 +28,16 @@ public class XEmbedBuilder extends EmbedBuilder {
         withColor(color);
     }
 
+    public XEmbedBuilder(CommandObject command) {
+        withColor(command.client.bot.color);
+    }
+
     public RequestBuffer.RequestFuture<IMessage> send(IChannel channel) {
         return RequestHandler.sendEmbedMessage("", this, channel);
     }
 
     public RequestBuffer.RequestFuture<IMessage> send(ChannelObject channel) {
         return RequestHandler.sendEmbedMessage("", this, channel.get());
-    }
-
-    public XEmbedBuilder(CommandObject command) {
-        withColor(command.client.bot.color);
     }
 
     @Override

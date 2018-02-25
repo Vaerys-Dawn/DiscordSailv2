@@ -1,8 +1,8 @@
 package com.github.vaerys.tags.cctags;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.templates.TagObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.templates.TagObject;
 
 public class TagUsername extends TagObject {
 
@@ -12,7 +12,7 @@ public class TagUsername extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        return replaceAllTag(from,command.user.name);
+        return replaceAllTag(from, command.user.name);
     }
 
     @Override

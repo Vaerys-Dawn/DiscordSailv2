@@ -1,22 +1,31 @@
 package com.github.vaerys.commands.servers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.stream.Collectors;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ServerObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
 public class ListServers extends Command {
+
+    protected static final String[] NAMES = new String[]{"ListServers", "Servers", "ServerList"};
+    protected static final String USAGE = null;
+    protected static final SAILType COMMAND_TYPE = SAILType.SERVERS;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.SERVERS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

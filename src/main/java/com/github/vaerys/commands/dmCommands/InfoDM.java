@@ -1,19 +1,26 @@
 package com.github.vaerys.commands.dmCommands;
 
-import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.Info;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.DMCommand;
+
+import java.util.List;
 
 /**
  * Created by Vaerys on 05/02/2017.
  */
 public class InfoDM extends DMCommand {
+    protected static final String[] NAMES = new Info().names;
+    protected static final String USAGE = "[Command Name]";
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final boolean REQUIRES_ARGS = true;
+
     @Override
     public String execute(String args, CommandObject command) {
         List<Command> commands = command.guild.getAllCommands(command);

@@ -18,7 +18,7 @@ public class ToggleInit {
 
     final static Logger logger = LoggerFactory.getLogger(ToggleInit.class);
 
-    public static List<GuildToggle> get() {
+    public static List<GuildToggle> getToggles() {
         ArrayList<GuildToggle> guildToggles = new ArrayList<>();
 
         //toggles
@@ -90,3 +90,4 @@ public class ToggleInit {
         return toggles;
     }
 }
+

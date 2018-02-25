@@ -19,17 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 
 public class ModNote extends Command {
-
     private static final Logger logger = LoggerFactory.getLogger(ModNote.class);
-
-    // using static as it will cause less memory to be used overall by orphaned data
-    protected static final String[] NAMES = new String[]{"ModNote", "Punish", "ModNotes"};
-    protected static final String USAGE = "[@User] (Mode)|[Note...]";
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_MESSAGES};
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = true;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -53,64 +43,64 @@ public class ModNote extends Command {
         // gather necessary extra bits
         long timestamp = command.message.getTimestamp().toEpochSecond();
         SplitFirstObject mode = new SplitFirstObject(argsRest);
-        String modeString = mode.getFirstWord();
+        String modeString = mode.getFirstWord().toLowerCase();
 
-        // Handle Command execution
-        if (modeString.equalsIgnoreCase("list")) {
-            return createListEmbed(profile, command);
+        switch (modeString) {
+            // Modes that do not require an index value
+            case "list":
+                return createListEmbed(profile, command);
 
-        } else if (modeString.equalsIgnoreCase("info") ||
-                modeString.equalsIgnoreCase("edit") ||
-                modeString.equalsIgnoreCase("del") ||
-                modeString.equalsIgnoreCase("delete") ||
-                modeString.equalsIgnoreCase("strike")) {
+            // Modes that require an index value:
+            case "info":
+            case "edit":
+            case "del":
+            case "delete":
+            case "strike":
+                if (mode.getRest() == null) return missingArgs(command);
+                String modeArg = new SplitFirstObject(mode.getRest()).getFirstWord();
 
-            if (mode.getRest() == null) return missingArgs(command);
-            String modeArg = new SplitFirstObject(mode.getRest()).getFirstWord();
-
-            int index;
-            try {
-                index = Integer.parseInt(modeArg);
-                if (profile.modNotes == null || profile.modNotes.size() == 0) {
-                    return "> " + user.displayName + " doesn't have any notes yet.";
-                }
-                if (index <= 0 || index > profile.modNotes.size()) {
-                    return "> Index out of bounds.";
-                }
-            } catch (NumberFormatException e) {
-                return "> I wasn't able to understand what you asked me.";
-            }
-
-            switch (mode.getFirstWord()) {
-                case "info":
-                    createInfoEmbed(profile, command, index - 1);
-                    return null;
-
-                case "edit":
-                    String newNote = new SplitFirstObject(mode.getRest()).getRest();
-
-                    profile.modNotes.get(index - 1).editNote(newNote, command.user.longID, timestamp);
-                    return "> Note #" + index + " edited for user " + user.displayName + ".";
-                case "strike":
-                    boolean strike = profile.modNotes.get(index - 1).getStrike();
-                    if (strike) {
-                        profile.modNotes.get(index - 1).setStrike(false);
-                        return "> Strike cleared for note " + index + " for user " + user.displayName + ".";
-                    } else {
-                        profile.modNotes.get(index - 1).setStrike(true);
-                        return "> Strike set for note " + index + " for user " + user.displayName + ".";
+                int index;
+                try {
+                    index = Integer.parseInt(modeArg);
+                    if (profile.modNotes == null || profile.modNotes.size() == 0) {
+                        return "> " + user.displayName + " doesn't have any notes yet.";
                     }
-                case "delete":
-                case "del":
-                    profile.modNotes.remove(index - 1);
-                    return "> Note #" + index + " for " + user.displayName + " deleted.";
-            }
-        } else {
-            if (profile.modNotes == null) profile.modNotes = new LinkedList<>();
-            profile.modNotes.add(new ModNoteObject(argsRest, command.user.longID, timestamp));
-            return String.format("> Note added for %s at index %d.", user.displayName, profile.modNotes.size());
+                    if (index <= 0 || index > profile.modNotes.size()) {
+                        return "> Index out of bounds.";
+                    }
+                } catch (NumberFormatException e) {
+                    return "> I wasn't able to understand what you asked me.";
+                }
+
+                switch (mode.getFirstWord()) {
+                    case "info":
+                        createInfoEmbed(profile, command, index - 1);
+                        return null;
+
+                    case "edit":
+                        String newNote = new SplitFirstObject(mode.getRest()).getRest();
+
+                        profile.modNotes.get(index - 1).editNote(newNote, command.user.longID, timestamp);
+                        return "> Note #" + index + " edited for user " + user.displayName + ".";
+                    case "strike":
+                        boolean strike = profile.modNotes.get(index - 1).getStrike();
+                        if (strike) {
+                            profile.modNotes.get(index - 1).setStrike(false);
+                            return "> Strike cleared for note " + index + " for user " + user.displayName + ".";
+                        } else {
+                            profile.modNotes.get(index - 1).setStrike(true);
+                            return "> Strike set for note " + index + " for user " + user.displayName + ".";
+                        }
+                    case "delete":
+                    case "del":
+                        profile.modNotes.remove(index - 1);
+                        return "> Note #" + index + " for " + user.displayName + " deleted.";
+                }
+            default:
+                if (profile.modNotes == null) profile.modNotes = new LinkedList<>();
+                profile.modNotes.add(new ModNoteObject(argsRest, command.user.longID, timestamp));
+                return String.format("> Note added for %s at index %d.", user.displayName, profile.modNotes.size());
         }
-        return "> What?";
     }
 
     private String createListEmbed(ProfileObject user, CommandObject command) {
@@ -125,7 +115,7 @@ public class ModNote extends Command {
         builder.withTitle("Notes for " + userObject.displayName);
         builder.withThumbnail(userObject.get().getAvatarURL());
 
-        // getToggles all notes and put together the bits and bobs
+        // get all notes and put together the bits and bobs
         int counter = 0;
         String noteLine = "**Note #%d:**\n%s\n";
         StringHandler content = new StringHandler();
@@ -168,7 +158,7 @@ public class ModNote extends Command {
         builder.withTimestamp(noteObject.getTimestamp() * 1000);
 
         if (noteObject.getEditorId() != -1) {
-            // getToggles editor's info and display it?
+            // get editor's info and display it?
             UserObject editor = new UserObject(command.guild.getUserByID(noteObject.getEditorId()), command.guild);
             String editFieldText = "\n\n*Last edited by %s %s*";
             long diff = command.message.getTimestamp().toEpochSecond() - noteObject.getLastEditedTimestamp();
@@ -201,37 +191,37 @@ public class ModNote extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"ModNote", "Punish", "ModNotes"};
     }
 
     @Override
     protected String usage() {
-        return USAGE;
+        return "[@User] (Mode)|[Note...]";
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_MESSAGES};
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
 }

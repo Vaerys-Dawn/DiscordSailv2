@@ -1,59 +1,28 @@
 package com.github.vaerys.tags;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.tags.cctags.TagAllCaps;
-import com.github.vaerys.tags.cctags.TagArgs;
-import com.github.vaerys.tags.cctags.TagAuthor;
-import com.github.vaerys.tags.cctags.TagChannelMention;
-import com.github.vaerys.tags.cctags.TagCheckLength;
-import com.github.vaerys.tags.cctags.TagDelCall;
-import com.github.vaerys.tags.cctags.TagEmbedImage;
-import com.github.vaerys.tags.cctags.TagEmpty;
-import com.github.vaerys.tags.cctags.TagIfArgs;
-import com.github.vaerys.tags.cctags.TagIfArgsEmpty;
-import com.github.vaerys.tags.cctags.TagIfArgsEmptyReplace;
-import com.github.vaerys.tags.cctags.TagIfChannel;
-import com.github.vaerys.tags.cctags.TagIfName;
-import com.github.vaerys.tags.cctags.TagIfRole;
-import com.github.vaerys.tags.cctags.TagNoBreak;
-import com.github.vaerys.tags.cctags.TagRandEmote;
-import com.github.vaerys.tags.cctags.TagRandNum;
-import com.github.vaerys.tags.cctags.TagRandom;
-import com.github.vaerys.tags.cctags.TagRegex;
-import com.github.vaerys.tags.cctags.TagRemoveMentions;
-import com.github.vaerys.tags.cctags.TagRemovePrep;
-import com.github.vaerys.tags.cctags.TagRemoveSanitizeTag;
-import com.github.vaerys.tags.cctags.TagReplace;
-import com.github.vaerys.tags.cctags.TagReplaceError;
-import com.github.vaerys.tags.cctags.TagReplaceRandom;
-import com.github.vaerys.tags.cctags.TagReplaceSpecial;
-import com.github.vaerys.tags.cctags.TagSearchTags;
-import com.github.vaerys.tags.cctags.TagServer;
-import com.github.vaerys.tags.cctags.TagSingleArgs;
-import com.github.vaerys.tags.cctags.TagSpacer;
-import com.github.vaerys.tags.cctags.TagUsername;
+import com.github.vaerys.tags.cctags.*;
 import com.github.vaerys.tags.infotags.TagChannel;
 import com.github.vaerys.tags.infotags.TagDisplayName;
 import com.github.vaerys.tags.infotags.TagEmoji;
 import com.github.vaerys.tags.leveluptags.TagLevel;
 import com.github.vaerys.tags.leveluptags.TagUser;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TagList {
 
     final static Logger logger = LoggerFactory.getLogger(TagList.class);
 
     private static List<TagObject> tags = new ArrayList<>();
-
-    
 
 
     public static void init() {
@@ -136,7 +105,7 @@ public class TagList {
     public static List<String> getNames(String type) {
         return getNames(TagType.get(type));
     }
-    
+
     public static List<String> getNames(TagType type) {
         return getType(type).stream().map(tagObject -> tagObject.name).collect(Collectors.toList());
     }

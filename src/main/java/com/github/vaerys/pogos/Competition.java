@@ -14,11 +14,11 @@ import java.util.List;
  */
 public class Competition extends GuildFile {
     public static final String FILE_PATH = "Competition.json";
-    private double fileVersion = 1.0;
     ArrayList<CompObject> entries = new ArrayList<>();
     ArrayList<String> voting = new ArrayList<>();
     int voteLimit = 1;
     ArrayList<PollObject> polls = new ArrayList<>();
+    private double fileVersion = 1.0;
 
     public void newEntry(CompObject entry) {
         entries.add(entry);

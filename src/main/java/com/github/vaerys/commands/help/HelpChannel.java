@@ -1,13 +1,21 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class HelpChannel extends Command {
+
+    protected static final String[] NAMES = new String[]{"HelpChannel", "ChannelHelp"};
+    protected static final String USAGE = "[Channel Type/Setting]";
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

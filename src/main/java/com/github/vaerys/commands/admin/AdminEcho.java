@@ -1,20 +1,20 @@
 package com.github.vaerys.commands.admin;
 
-import java.util.List;
-import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.cctags.TagRemoveMentions;
 import com.github.vaerys.tags.cctags.TagRemoveSanitizeTag;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class AdminEcho extends Command {
+import java.util.List;
+import java.util.ListIterator;
 
+public class AdminEcho extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         List<TagObject> tags = TagList.getType(TagType.CC);
@@ -45,7 +45,7 @@ public class AdminEcho extends Command {
 
     @Override
     protected String[] names() {
-        return new String[] {"AdminEcho"};
+        return new String[]{"AdminEcho"};
     }
 
     @Override
@@ -65,7 +65,7 @@ public class AdminEcho extends Command {
 
     @Override
     protected Permissions[] perms() {
-        return new Permissions[] {Permissions.MANAGE_MESSAGES, Permissions.MENTION_EVERYONE};
+        return new Permissions[]{Permissions.MANAGE_MESSAGES, Permissions.MENTION_EVERYONE};
     }
 
     @Override

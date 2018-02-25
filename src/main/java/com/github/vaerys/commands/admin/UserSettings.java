@@ -1,26 +1,45 @@
 package com.github.vaerys.commands.admin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 06/07/2017.
  */
 public class UserSettings extends Command {
-
+    private static String settings(CommandObject command) {
+        String settings = "**Settings**";
+        if (command.guild.config.modulePixels) {
+            settings += "\n> " + UserSetting.DENIED_XP +
+                    "\n> " + UserSetting.DONT_SHOW_LEADERBOARD +
+                    "\n> " + UserSetting.DENY_AUTO_ROLE +
+                    "\n> " + UserSetting.DONT_DECAY;
+        }
+        if (command.guild.config.moduleCC) {
+            settings += "\n> " + UserSetting.DENY_MAKE_CC +
+                    "\n> " + UserSetting.DENY_USE_CCS +
+                    "\n> " + UserSetting.AUTO_SHITPOST;
+        }
+        if (command.guild.config.artPinning) {
+            settings += "\n> " + UserSetting.DENY_ART_PINNING;
+        }
+        settings += "\n> List - `Shows the user's settings.`";
+        return settings;
+    }
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -95,26 +114,6 @@ public class UserSettings extends Command {
         }
     }
 
-    private static String settings(CommandObject command) {
-        String settings = "**Settings**";
-        if (command.guild.config.modulePixels) {
-            settings += "\n> " + UserSetting.DENIED_XP +
-                    "\n> " + UserSetting.DONT_SHOW_LEADERBOARD +
-                    "\n> " + UserSetting.DENY_AUTO_ROLE +
-                    "\n> " + UserSetting.DONT_DECAY;
-        }
-        if (command.guild.config.moduleCC) {
-            settings += "\n> " + UserSetting.DENY_MAKE_CC +
-                    "\n> " + UserSetting.DENY_USE_CCS +
-                    "\n> " + UserSetting.AUTO_SHITPOST;
-        }
-        if (command.guild.config.artPinning) {
-            settings += "\n> " + UserSetting.DENY_ART_PINNING;
-        }
-        settings += "\n> List - `Shows the user's settings.`";
-        return settings;
-    }
-
     private String sendList(String prefix, ProfileObject profile, CommandObject command, UserObject user, boolean showCommand) {
         List<String> userSettings = new ArrayList<>();
         for (UserSetting s : profile.getSettings()) {
@@ -151,10 +150,9 @@ public class UserSettings extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"UserSettings"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"UserSettings"};
     }
 
     @Override
@@ -162,40 +160,34 @@ public class UserSettings extends Command {
         return "allows setting of certain user settings.\n" + settings(command);
     }
 
-    protected static final String USAGE = "[@User] [Setting]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[@User] [Setting]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

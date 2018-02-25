@@ -1,14 +1,9 @@
 package com.github.vaerys.masterobjects;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.NewDailyMessage;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -16,30 +11,19 @@ import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.GuildLogObject;
 import com.github.vaerys.objects.LogObject;
 import com.github.vaerys.objects.UserRateObject;
-import com.github.vaerys.pogos.ChannelData;
-import com.github.vaerys.pogos.Characters;
-import com.github.vaerys.pogos.Competition;
-import com.github.vaerys.pogos.CustomCommands;
-import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.pogos.GuildLog;
-import com.github.vaerys.pogos.GuildUsers;
-import com.github.vaerys.pogos.Servers;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildFile;
 import com.github.vaerys.templates.GuildToggle;
-import com.github.vaerys.enums.SAILType;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IEmoji;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.IVoiceChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.obj.*;
+
+import java.util.*;
 
 public class GuildObject {
+    private final static Logger logger = LoggerFactory.getLogger(GuildObject.class);
     public ClientObject client;
-    private IGuild object;
     public long longID;
     public GuildConfig config;
     public CustomCommands customCommands;
@@ -54,11 +38,10 @@ public class GuildObject {
     public List<GuildToggle> toggles;
     public ChannelSetting[] channelSettings;
     public List<SAILType> commandTypes;
+    private IGuild object;
     private List<UserRateObject> rateLimiting = new ArrayList<>();
     private List<Long> spokenUsers = new ArrayList<>();
     private List<GuildToggle> toRemove = new ArrayList<>();
-
-    private final static Logger logger = LoggerFactory.getLogger(GuildObject.class);
 
     public GuildObject(IGuild object) {
         this.object = object;
@@ -86,26 +69,6 @@ public class GuildObject {
         loadCommandData();
     }
 
-    public void sendDebugLog(CommandObject command, String type, String name, String contents) {
-        GuildLogObject object = new GuildLogObject(command, type, name, contents);
-        String output = object.getOutput(command);
-        if (command.guild.get() != null) {
-            guildLog.addLog(object, command.guild.longID);
-        } else {
-            Globals.addToLog(new LogObject(object, -1));
-        }
-        logger.trace(output);
-    }
-
-
-    public void loadCommandData() {
-        this.commands = Globals.getCommands(false);
-        this.toggles = Globals.getGuildToggles();
-        this.channelSettings = Globals.getChannelSettings();
-        this.commandTypes = new ArrayList<>(Arrays.asList(Globals.getCommandTypes()));
-        checkToggles();
-    }
-
     public GuildObject() {
         this.client = new ClientObject(Globals.getClient(), this);
         this.object = null;
@@ -122,6 +85,25 @@ public class GuildObject {
         this.commands = new ArrayList<>(Globals.getCommands(true));
     }
 
+    public void sendDebugLog(CommandObject command, String type, String name, String contents) {
+        GuildLogObject object = new GuildLogObject(command, type, name, contents);
+        String output = object.getOutput(command);
+        if (command.guild.get() != null) {
+            guildLog.addLog(object, command.guild.longID);
+        } else {
+            Globals.addToLog(new LogObject(object, -1));
+        }
+        logger.trace(output);
+    }
+
+    public void loadCommandData() {
+        this.commands = Globals.getCommands(false);
+        this.toggles = Globals.getGuildToggles();
+        this.channelSettings = Globals.getChannelSettings();
+        this.commandTypes = new ArrayList<>(Arrays.asList(Globals.getCommandTypes()));
+        checkToggles();
+    }
+
     public IGuild get() {
         return object;
     }
@@ -129,7 +111,7 @@ public class GuildObject {
     private void checkToggles() {
         toRemove = new ArrayList<>();
         for (GuildToggle g : toggles) {
-            if (!g.get(config)) {
+            if (!g.enabled(config)) {
                 g.execute(this);
             }
         }
@@ -138,7 +120,7 @@ public class GuildObject {
             ListIterator iterator = toggles.listIterator();
             while (iterator.hasNext()) {
                 GuildToggle toggle = (GuildToggle) iterator.next();
-                if (toggle.name() ==g.name()) {
+                if (toggle.name() == g.name()) {
                     if (g.isModule()) {
                         logger.trace("Module: " + g.name() + " removed.");
                     } else {
@@ -181,6 +163,7 @@ public class GuildObject {
 
     /**
      * Removes a channel setting from the specified channel
+     *
      * @param channel
      */
     public void removeChannelSetting(String channel) {
@@ -192,7 +175,6 @@ public class GuildObject {
     }
 
     /**
-     * 
      * @param names
      */
     public void removeCommand(String[] names) {

@@ -1,14 +1,14 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 
@@ -16,6 +16,15 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by AndrielChaoti 22-Aug-17
  */
 public class EditXp extends Command {
+
+    // Define Command parameters.
+    protected static final String[] NAMES = new String[]{"EditXp", "EditPixels"};
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
+    protected static final String USAGE = "[@User] [modifier] [Pixels]";
+    protected static final boolean DO_ADMIN_LOGGING = true;
+    protected static final boolean REQUIRES_ARGS = true;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -91,7 +100,6 @@ public class EditXp extends Command {
         return out;
     }
 
-    // Define Command parameters.
     @Override
     protected String[] names() {
         return new String[]{"EditXp", "EditPixels"};

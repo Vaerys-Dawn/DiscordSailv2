@@ -1,13 +1,13 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Constants;
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.TrackLikes;
-import com.github.vaerys.enums.ChannelSetting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;

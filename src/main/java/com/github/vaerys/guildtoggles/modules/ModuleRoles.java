@@ -2,10 +2,10 @@ package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.GetGuildInfo;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 
 /**
@@ -24,7 +24,7 @@ public class ModuleRoles extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleRoles;
     }
 
@@ -45,21 +45,21 @@ public class ModuleRoles extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject object) {
-        if (object.guild.config.getCosmeticRoleIDs().size() == 0 && object.guild.config.getModifierRoleIDs().size() == 0) {
+    public String stats(CommandObject command) {
+        if (command.guild.config.getCosmeticRoleIDs().size() == 0 && command.guild.config.getModifierRoleIDs().size() == 0) {
             return null;
         }
         StringBuilder builder = new StringBuilder();
         long totalUsers = 0;
         builder.append("**[COSMETIC ROLES]**" + Command.spacer);
-        for (long id : object.guild.config.getCosmeticRoleIDs()) {
-            totalUsers += appendRole(builder, id, object);
+        for (long id : command.guild.config.getCosmeticRoleIDs()) {
+            totalUsers += appendRole(builder, id, command);
         }
         builder.append("**\nTotal:** " + totalUsers);
         totalUsers = 0;
         builder.append("\n<split>**[MODIFIER ROLES]**" + Command.spacer);
-        for (long id : object.guild.config.getModifierRoleIDs()) {
-            totalUsers += appendRole(builder, id, object);
+        for (long id : command.guild.config.getModifierRoleIDs()) {
+            totalUsers += appendRole(builder, id, command);
         }
         builder.append("**\nTotal:** " + totalUsers);
         return builder.toString();
@@ -68,6 +68,11 @@ public class ModuleRoles extends GuildModule {
     @Override
     public boolean statsOnInfo() {
         return false;
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allows users to pick their own roles.";
     }
 
     private long appendRole(StringBuilder builder, long id, CommandObject object) {

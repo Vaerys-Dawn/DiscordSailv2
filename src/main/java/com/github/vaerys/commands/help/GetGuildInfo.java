@@ -1,20 +1,15 @@
 package com.github.vaerys.commands.help;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.modules.ModuleRoles;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRegion;
@@ -22,11 +17,21 @@ import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
+import java.util.*;
+
 /**
  * Created by Vaerys on 30/01/2017.
  */
 public class GetGuildInfo extends Command {
 
+
+    protected static final String[] NAMES = new String[]{"GuildInfo", "GuildStats", "ServerInfo", "GetGuildInfo"};
+    protected static final String USAGE = null;
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     private XEmbedBuilder resetEmbed(XEmbedBuilder builder, IChannel channel, CommandObject command, int extraLength) {
         if ((builder.getTotalVisibleCharacters() + extraLength) > 2000 ||
@@ -119,16 +124,16 @@ public class GetGuildInfo extends Command {
             List<SAILType> disabledSettings = new LinkedList<>();
             for (GuildToggle t : command.guild.toggles) {
                 if (t.isModule()) {
-                    if (t.get(command.guild.config)) enabledModules.add(t.name());
+                    if (t.enabled(command.guild.config)) enabledModules.add(t.name());
                     else disabledModules.add(t.name());
                 } else {
-                    if (t.get(command.guild.config)) enabledSettings.add(t.name());
+                    if (t.enabled(command.guild.config)) enabledSettings.add(t.name());
                     else disabledSettings.add(t.name());
                 }
             }
 
             toggles.appendField("MODULES", "**Enabled**```\n" + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
-                    "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.spacer , true);
+                    "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.spacer, true);
             toggles.appendField("SETTINGS", "**Enabled**```\n" + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
                     "**Disabled**```" + Utility.listEnumFormatter(disabledSettings, true) + "```", true);
             RequestHandler.sendEmbedMessage("", toggles, channel).get();
@@ -172,7 +177,7 @@ public class GetGuildInfo extends Command {
         guildmodules.remove(index);
         guildmodules.add(0, roleModule);
         for (GuildToggle toggle : guildmodules) {
-            if (toggle.isModule() && toggle.get(command.guild.config)) {
+            if (toggle.isModule() && toggle.enabled(command.guild.config)) {
                 String stats = toggle.stats(command);
                 if (stats != null) {
                     //checks to make sure the field can be added.

@@ -1,24 +1,33 @@
 package com.github.vaerys.commands.pixels;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.RewardRoleObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 /**
  * Created by Vaerys on 06/07/2017.
  */
 public class TransferLevels extends Command {
+    protected static final String[] NAMES = new String[]{"TransferLevels"};
+    protected static final String USAGE = null;
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = true;
+
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.config.xpGain) {

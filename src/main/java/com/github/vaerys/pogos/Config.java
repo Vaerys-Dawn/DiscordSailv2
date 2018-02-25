@@ -12,7 +12,6 @@ import java.util.ArrayList;
  */
 public class Config extends GlobalFile {
     public static final String FILE_PATH = "Config.json";
-    private double fileVersion = 1.1;
     public boolean resetToDefault = false;
     public String botName = "S.A.I.L";
     public long creatorID = 153159020528533505L;
@@ -46,6 +45,7 @@ public class Config extends GlobalFile {
         add(new RandomStatusObject("Wanderlust Adventure", 1));
         add(new RandomStatusObject("Wanderlust Rebirth", 1));
     }};
+    private double fileVersion = 1.1;
 
     public static Config check(Config config) {
         if (config.resetToDefault) {

@@ -1,17 +1,19 @@
 package com.github.vaerys.commands.competition;
 
-import java.util.HashMap;
-import java.util.Map;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class WeightedFinalTally extends Command {
+
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -53,10 +55,9 @@ public class WeightedFinalTally extends Command {
         return builder.toString();
     }
 
-    protected static final String[] NAMES = new String[]{"WeightedFinalTally", "WFinalTally"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"WeightedFinalTally", "WFinalTally"};
     }
 
     @Override
@@ -64,40 +65,34 @@ public class WeightedFinalTally extends Command {
         return "Returns a tally based on the reward roles of the users.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.COMPETITION;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.COMPETITION;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

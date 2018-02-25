@@ -1,19 +1,18 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 26/02/2017.
  */
 public class EditChar extends Command {
-
     String modes = "**Modes:**\n" +
             "> Age - `Max Chars: 20`\n" +
             "> Gender - `Max Chars: 20`\n" +
@@ -58,10 +57,9 @@ public class EditChar extends Command {
         return "> Char with that name not found.";
     }
 
-    protected static final String[] NAMES = new String[]{"EditChar"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"EditChar"};
     }
 
     @Override
@@ -69,40 +67,34 @@ public class EditChar extends Command {
         return "Allows the User to edit their Character.\n" + modes;
     }
 
-    protected static final String USAGE = "[Character ID] [Mode] [Args]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Character ID] [Mode] [Args]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CHARACTER;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CHARACTER;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.CHARACTER;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.CHARACTER;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

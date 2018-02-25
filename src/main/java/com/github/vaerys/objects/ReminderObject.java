@@ -36,11 +36,11 @@ public class ReminderObject {
         return executeTime;
     }
 
-    public void setSent(boolean sent) {
-        this.sent = sent;
-    }
-
     public boolean isSent() {
         return sent;
+    }
+
+    public void setSent(boolean sent) {
+        this.sent = sent;
     }
 }

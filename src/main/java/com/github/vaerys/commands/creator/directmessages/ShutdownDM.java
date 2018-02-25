@@ -10,15 +10,16 @@ import com.github.vaerys.templates.DMCommand;
  * Created by Vaerys on 23/04/2017.
  */
 public class ShutdownDM extends DMCommand {
+
+
     @Override
     public String execute(String args, CommandObject command) {
-        return new Shutdown().execute(args,command);
+        return new Shutdown().execute(args, command);
     }
 
-    protected static final String[] NAMES = new String[]{"Shutdown"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Shutdown"};
     }
 
     @Override
@@ -26,22 +27,19 @@ public class ShutdownDM extends DMCommand {
         return "Shuts the bot down.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CREATOR;
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
     @Override

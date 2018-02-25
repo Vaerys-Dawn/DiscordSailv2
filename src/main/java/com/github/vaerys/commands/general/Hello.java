@@ -1,17 +1,25 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.TimedEvent;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 30/01/2017.
  */
 public class Hello extends Command {
+
+    protected static final String[] NAMES = new String[]{"Hello", "Hi", "Greetings"};
+    protected static final String USAGE = null;
+    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

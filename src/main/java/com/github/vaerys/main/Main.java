@@ -88,8 +88,6 @@ public class Main {
             }
 
 
-
-
             //stuff that i cant getToggles to work because reasons, ignore completely
 
 //            try{

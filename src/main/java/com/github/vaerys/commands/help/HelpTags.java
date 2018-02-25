@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.TagObject;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -13,6 +13,14 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 01/02/2017.
  */
 public class HelpTags extends Command {
+    protected static final String[] NAMES = new String[]{"HelpTag", "HelpTags", "TagHelp"};
+    protected static final String USAGE = "[TagName]";
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         for (TagObject t : TagList.get()) {
@@ -26,7 +34,7 @@ public class HelpTags extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"HelpTag", "HelpTags","TagHelp"};
+        return new String[]{"HelpTag", "HelpTags", "TagHelp"};
     }
 
     @Override

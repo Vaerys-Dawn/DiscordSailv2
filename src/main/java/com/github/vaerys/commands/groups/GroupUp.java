@@ -1,21 +1,30 @@
 package com.github.vaerys.commands.groups;
 
-import java.util.ArrayList;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.GroupUpObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IPresence;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.handle.obj.StatusType;
 
+import java.util.ArrayList;
+
 /**
  * Created by Vaerys on 31/05/2017.
  */
 public class GroupUp extends Command {
+    protected static final String[] NAMES = new String[]{"GroupUp", "GroupMe"};
+    protected static final String USAGE = "(Game)";
+    protected static final SAILType COMMAND_TYPE = SAILType.GROUPS;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.GROUPS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         String presence = null;
@@ -33,7 +42,6 @@ public class GroupUp extends Command {
         //person added to list :D
 
         ArrayList<String> completeList = new ArrayList<>();
-
 
 
         for (GroupUpObject g : list) {
@@ -67,7 +75,7 @@ public class GroupUp extends Command {
 
     @Override
     protected String[] names() {
-        return  new String[]{"GroupUp", "GroupMe"};
+        return new String[]{"GroupUp", "GroupMe"};
     }
 
     @Override
@@ -77,7 +85,7 @@ public class GroupUp extends Command {
 
     @Override
     protected String usage() {
-        return  "(Game)";
+        return "(Game)";
     }
 
     @Override
