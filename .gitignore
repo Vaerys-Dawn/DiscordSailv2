@@ -152,7 +152,7 @@ fabric.properties
 .idea/sonarlint
 
 ### Maven ###
-target/
+target/**
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -192,6 +192,9 @@ $RECYCLE.BIN/
 ### Bot-Created Files ###
 Config.json
 Global_Data.json
+*.txt
+*.ttf
+CC templates/
 Storage/
 
 ### Build Artifacts ###
