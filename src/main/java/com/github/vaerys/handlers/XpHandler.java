@@ -1,24 +1,12 @@
 package com.github.vaerys.handlers;
 
-import static com.github.vaerys.enums.UserSetting.DENY_AUTO_ROLE;
-import static com.github.vaerys.enums.UserSetting.DONT_SEND_LVLUP;
-import static com.github.vaerys.enums.UserSetting.HIT_LEVEL_FLOOR;
-import static com.github.vaerys.enums.UserSetting.NO_XP_GAIN;
-import static com.github.vaerys.enums.UserSetting.SEND_LVLUP_DMS;
-import static com.github.vaerys.enums.UserSetting.SEND_LVLUP_RANK_CHANNEL;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.ProfileSettings;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.TagType;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
@@ -26,18 +14,12 @@ import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.pogos.GuildUsers;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IEmoji;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RequestBuffer;
@@ -46,6 +28,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.vaerys.enums.UserSetting.*;
@@ -57,59 +40,54 @@ public class XpHandler {
 
     final static Logger logger = LoggerFactory.getLogger(XpHandler.class);
 
-    public static void doDecay(GuildObject content) {
-        if (!content.config.modulePixels || !content.config.xpDecay) return;
-        for (ProfileObject u : content.users.getProfiles()) {
-            long days = u.daysDecayed(content);
-            if (7 > days) {
-                long decay;
-                u.setCurrentLevel(XpHandler.xpToLevel(u.getXP()));
-                //modifiable min and max decay days needs to be implemented.
-                if (days > 15) {
-                    //plateaued xp decay
-                    decay = (long) ((15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
-                } else if (days > 90) {
-                    // kill the xp after 90 days of absences
-                    decay = (long) ((90 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
-                } else {
-                    //normal xp decay formula
-                    decay = (long) ((days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
-                }
-                //half decay if you turn you xp gain off but only if it is voluntary
-                if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) decay = decay / 2;
-                //half decay for patreon supporters
-                if (u.getUser(content).isPatron) decay = decay / 2;
-                //reward handlers
-                if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
-                    long pseudoLevel = xpToLevel(u.getXP() + 120);
-                    RewardRoleObject rewardRole = content.config.getCurrentReward(pseudoLevel);
-                    if (rewardRole != null) {
+    public static void doDecay(GuildObject content, ProfileObject u) {
+        long days = u.daysDecayed(content);
+        if (7 > days) {
+            long decay;
+            u.setCurrentLevel(XpHandler.xpToLevel(u.getXP()));
+            //modifiable min and max decay days needs to be implemented.
+            if (days > 15) {
+                //plateaued xp decay
+                decay = (long) ((15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
+            } else if (days > 90) {
+                // kill the xp after 90 days of absences
+                decay = (long) ((90 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
+            } else {
+                //normal xp decay formula
+                decay = (long) ((days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
+            }
+            //half decay if you turn you xp gain off but only if it is voluntary
+            if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) decay = decay / 2;
+            //half decay for patreon supporters
+            if (u.getUser(content).isPatron) decay = decay / 2;
+            //reward handlers
+            if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
+                long pseudoLevel = xpToLevel(u.getXP() + 120);
+                RewardRoleObject rewardRole = content.config.getCurrentReward(pseudoLevel);
+                if (rewardRole != null) {
 
-                        long rewardFloor = rewardRole.getXp() - 100;
-                        if (u.getXP() > rewardFloor) {
-                            u.setXp(u.getXP() - decay);
-                            // your total xp should never reach below 0;
-                            if (u.getXP() < 0) {
-                                u.setXp(0);
-                            }
-                            //decay should never lower your total xp below the reward floor.
-                            if (u.getXP() < rewardFloor) {
-                                u.setXp(rewardFloor);
-                            }
-                            //if user is at level floor add setting.
-                            if (u.getXP() == rewardFloor && !u.getSettings().contains(HIT_LEVEL_FLOOR)) {
-                                u.getSettings().add(HIT_LEVEL_FLOOR);
-                            }
+                    long rewardFloor = rewardRole.getXp() - 100;
+                    if (u.getXP() > rewardFloor) {
+                        u.setXp(u.getXP() - decay);
+                        // your total xp should never reach below 0;
+                        if (u.getXP() < 0) {
+                            u.setXp(0);
                         }
-                        //if your days away is a multiple of 30 you should be checked if you are at the
-                        //reward floor, if you are reward decay occurs
-                        if (days % 30 == 0 && u.getXP() == rewardFloor) {
-                            u.setXp(u.getXP() - 100);
+                        //decay should never lower your total xp below the reward floor.
+                        if (u.getXP() < rewardFloor) {
+                            u.setXp(rewardFloor);
+                        }
+                        //if user is at level floor add setting.
+                        if (u.getXP() == rewardFloor && !u.getSettings().contains(HIT_LEVEL_FLOOR)) {
+                            u.getSettings().add(HIT_LEVEL_FLOOR);
                         }
                     }
+                    //if your days away is a multiple of 30 you should be checked if you are at the
+                    //reward floor, if you are reward decay occurs
+                    if (days % 30 == 0 && u.getXP() == rewardFloor) {
+                        u.setXp(u.getXP() - 100);
+                    }
                 }
-                //check user's roles and make sure that they have the right roles.
-                checkUsersRoles(u.getUserID(), content);
             }
         }
     }

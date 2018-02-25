@@ -1,11 +1,11 @@
 package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.objects.*;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;

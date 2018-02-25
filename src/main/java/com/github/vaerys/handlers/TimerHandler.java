@@ -1,38 +1,30 @@
 package com.github.vaerys.handlers;
 
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.main.Client;
+import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.*;
+import com.github.vaerys.pogos.GuildConfig;
+import com.sun.management.OperatingSystemMXBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.impl.events.ReadyEvent;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.DiscordException;
+
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Client;
-import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.DailyMessage;
-import com.github.vaerys.objects.RandomStatusObject;
-import com.github.vaerys.objects.ReminderObject;
-import com.github.vaerys.objects.TimedEvent;
-import com.github.vaerys.objects.UserCountDown;
-import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.enums.ChannelSetting;
-import com.sun.management.OperatingSystemMXBean;
-import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.DiscordException;
+import java.util.*;
 
 /**
  * Created by Vaerys on 14/08/2016.

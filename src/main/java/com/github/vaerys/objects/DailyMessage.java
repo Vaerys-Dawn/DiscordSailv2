@@ -1,10 +1,11 @@
 package com.github.vaerys.objects;
 
-import java.time.DayOfWeek;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
+
+import java.time.DayOfWeek;
 
 /**
  * Created by Vaerys on 19/07/2017.

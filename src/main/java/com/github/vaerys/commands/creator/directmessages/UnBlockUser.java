@@ -1,12 +1,13 @@
 package com.github.vaerys.commands.creator.directmessages;
 
-import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.pogos.GlobalData;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.DMCommand;
+
+import java.util.ListIterator;
 
 public class UnBlockUser extends DMCommand {
     @Override

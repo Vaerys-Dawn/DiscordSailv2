@@ -1,17 +1,18 @@
 package com.github.vaerys.commands.admin;
 
-import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.ServerObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ListIterator;
 
 public class PurgeBannedData extends Command {
     long purgedProfiles = 0;

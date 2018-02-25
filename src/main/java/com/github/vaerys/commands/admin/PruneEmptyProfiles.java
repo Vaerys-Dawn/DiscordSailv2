@@ -1,14 +1,15 @@
 package com.github.vaerys.commands.admin;
 
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.templates.Command;
+import sx.blah.discord.handle.obj.Permissions;
+
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.ListIterator;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import sx.blah.discord.handle.obj.Permissions;
 
 public class PruneEmptyProfiles extends Command {
 

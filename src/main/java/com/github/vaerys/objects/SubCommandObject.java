@@ -6,7 +6,6 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;

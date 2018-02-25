@@ -1,10 +1,8 @@
 package com.github.vaerys.commands.admin;
 
-import java.text.SimpleDateFormat;
-import java.util.LinkedList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -12,10 +10,13 @@ import com.github.vaerys.objects.ModNoteObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 
 public class ModNote extends Command {
 

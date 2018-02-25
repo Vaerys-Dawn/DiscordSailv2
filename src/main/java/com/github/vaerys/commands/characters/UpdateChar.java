@@ -1,14 +1,15 @@
 package com.github.vaerys.commands.characters;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.objects.CharacterObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.

@@ -50,7 +50,6 @@ public enum SAILType {
     MUTE_REPEAT_OFFENDER("MuteRepeatOffender"),
     RATE_LIMITING("RateLimiting"),
     REACT_TO_LEVEL_UP("ReactToLevelUp"),
-    READ_RULES_REWARDS("ReadRulesRewards"),
     ROLE_IS_TOGGLE("RoleIsToggle"),
     SELF_DESTRUCT_LEVEL_UPS("SelfDestructLevelUps"),
     SHITPOST_FILTERING("ShitpostFiltering"),

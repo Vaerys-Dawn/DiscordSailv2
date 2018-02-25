@@ -1,20 +1,16 @@
 package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.admin.DenyXpPrefix;
+import com.github.vaerys.commands.pixels.DenyXpPrefix;
 import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.commands.pixels.PixelHelp;
-import com.github.vaerys.guildtoggles.toggles.LikeArt;
-import com.github.vaerys.guildtoggles.toggles.ReactToLevelUp;
-import com.github.vaerys.guildtoggles.toggles.SelfDestructLevelUps;
-import com.github.vaerys.guildtoggles.toggles.XpDecay;
-import com.github.vaerys.guildtoggles.toggles.XpGain;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.toggles.*;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.GuildModule;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 

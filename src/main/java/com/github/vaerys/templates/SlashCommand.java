@@ -1,6 +1,5 @@
 package com.github.vaerys.templates;
 
-import java.util.Arrays;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
@@ -8,6 +7,8 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.Arrays;
 
 /**
  * Created by Vaerys on 13/03/2017.
@@ -45,7 +46,7 @@ public abstract class SlashCommand extends Command {
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
-    
+
     protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {

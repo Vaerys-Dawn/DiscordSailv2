@@ -1,26 +1,27 @@
 package com.github.vaerys.commands.general;
 
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.handle.obj.StatusType;
+
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.main.Constants;
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.handle.obj.StatusType;
 
 /**
  * Created by Vaerys on 27/02/2017.

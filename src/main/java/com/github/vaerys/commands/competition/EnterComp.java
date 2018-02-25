@@ -1,18 +1,19 @@
 package com.github.vaerys.commands.competition;
 
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.objects.CompObject;
+import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.objects.CompObject;
-import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 01/02/2017.

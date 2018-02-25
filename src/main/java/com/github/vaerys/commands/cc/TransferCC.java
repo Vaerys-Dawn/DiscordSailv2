@@ -1,20 +1,21 @@
 package com.github.vaerys.commands.cc;
 
-import java.nio.file.Paths;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.pogos.CustomCommands;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.nio.file.Paths;
 
 /**
  * Created by Vaerys on 01/02/2017.

@@ -1,17 +1,18 @@
 package com.github.vaerys.commands.admin;
 
-import java.util.List;
-import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.cctags.TagRemoveMentions;
 import com.github.vaerys.tags.cctags.TagRemoveSanitizeTag;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
+import java.util.ListIterator;
 
 public class AdminEcho extends Command {
 

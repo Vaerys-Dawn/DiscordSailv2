@@ -1,14 +1,14 @@
 package com.github.vaerys.templates;
 
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.TagType;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.objects.XEmbedBuilder;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.github.vaerys.enums.TagType;
-import org.apache.commons.lang3.StringUtils;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XEmbedBuilder;
 
 public abstract class TagObject {
 
@@ -219,7 +219,7 @@ public abstract class TagObject {
             return null;
         }
     }
-  
+
     public List<TagType> getTypes() {
         return types;
     }

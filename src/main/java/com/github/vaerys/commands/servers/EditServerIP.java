@@ -1,12 +1,13 @@
 package com.github.vaerys.commands.servers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Vaerys on 31/01/2017.

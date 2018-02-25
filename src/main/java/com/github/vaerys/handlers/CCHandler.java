@@ -1,20 +1,21 @@
 package com.github.vaerys.handlers;
 
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
 
 /**
  * Created by Vaerys on 27/08/2016.

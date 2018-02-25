@@ -3,10 +3,9 @@ package com.github.vaerys.commands.pixels;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -40,7 +39,7 @@ public class TopUserForRole extends Command {
             // remove index from string, try to get role again.
             args = new SplitFirstObject(args).getRest();
 
-            role = Utility.getRoleFromName(args, command.guild.get());
+            role = GuildHandler.getRoleFromName(args, command.guild.get());
             if (role == null) return "> Invalid Role.";
         }
 

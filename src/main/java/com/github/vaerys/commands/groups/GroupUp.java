@@ -1,16 +1,17 @@
 package com.github.vaerys.commands.groups;
 
-import java.util.ArrayList;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.GroupUpObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IPresence;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.handle.obj.StatusType;
+
+import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 31/05/2017.

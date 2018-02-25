@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.creator;
 
-import java.time.DayOfWeek;
-import java.util.Formatter;
-import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -11,12 +11,13 @@ import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.time.DayOfWeek;
+import java.util.Formatter;
+import java.util.ListIterator;
 
 public class DailyMsg extends Command {
 

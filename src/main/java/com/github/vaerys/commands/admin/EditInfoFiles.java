@@ -1,14 +1,14 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -25,7 +25,7 @@ public class EditInfoFiles extends Command {
     protected static final boolean REQUIRES_ARGS = true;
     protected static final boolean DO_ADMIN_LOGGING = true;
 
-    String modes = 
+    String modes =
         "**Modes:**\n" +
         "> uploadImage - `Requires image file.`\n" +
         "> removeImage - `Requires file name.`\n" +
@@ -65,7 +65,7 @@ public class EditInfoFiles extends Command {
 
     }
 
-    
+
     @Override
     protected String[] names() {
         return NAMES;

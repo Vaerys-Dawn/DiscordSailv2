@@ -1,24 +1,25 @@
 package com.github.vaerys.commands.admin;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 01/07/2017.
  */
 public class ChannelStats extends Command {
-    
+
     // using static as it will cause less memory to be used overall by orphaned data
     protected static final String[] NAMES = new String[]{"ChannelStats"};
     protected static final String USAGE = "(Channel setting/type)";
@@ -27,7 +28,7 @@ public class ChannelStats extends Command {
     protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_CHANNELS};
     protected static final boolean REQUIRES_ARGS = false;
     protected static final boolean DO_ADMIN_LOGGING = false;
-    
+
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);

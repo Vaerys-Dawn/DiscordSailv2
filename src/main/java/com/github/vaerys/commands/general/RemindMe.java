@@ -1,16 +1,17 @@
 package com.github.vaerys.commands.general;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.handlers.TimerHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 /**
  * Created by Vaerys on 30/01/2017.

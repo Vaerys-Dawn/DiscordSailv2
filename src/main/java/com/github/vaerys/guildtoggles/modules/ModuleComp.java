@@ -1,12 +1,12 @@
 package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.toggles.CompEntries;
 import com.github.vaerys.guildtoggles.toggles.Voting;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**

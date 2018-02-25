@@ -1,8 +1,8 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.DailyMessage;
@@ -108,7 +108,7 @@ public class GuildConfig extends GuildFile {
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     ArrayList<OffenderObject> offenders = new ArrayList<>();
     private String ruleCode = null;
-
+    public long ruleCodeRewardID = -1;
 
 
     public void setLastDailyMessage(DailyMessage lastDailyMessage) {

@@ -1,9 +1,9 @@
 package com.github.vaerys.tags.cctags;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
 
 public class TagArgs extends TagObject {
 

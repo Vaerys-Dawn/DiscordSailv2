@@ -1,11 +1,11 @@
 package com.github.vaerys.handlers;
 
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.PatchObject;
 import com.github.vaerys.pogos.*;
-import com.github.vaerys.enums.ChannelSetting;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -99,7 +99,7 @@ public class PatchHandler {
         }
         finalizePatch(json);
     }
-    
+
     private static void UpdateChannelTypesForCodeConventions(IGuild guild) {
         PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
                 1.3, "");

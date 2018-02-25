@@ -1,18 +1,19 @@
 package com.github.vaerys.commands.cc;
 
-import java.util.List;
-import java.util.Random;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.cctags.TagEmbedImage;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
+import java.util.Random;
 
 public class RandomCC extends Command {
 

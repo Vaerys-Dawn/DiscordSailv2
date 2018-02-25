@@ -1,12 +1,8 @@
 package com.github.vaerys.templates;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
@@ -15,10 +11,8 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 29/01/2017.

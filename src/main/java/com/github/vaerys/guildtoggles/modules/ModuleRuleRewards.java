@@ -40,6 +40,11 @@ public class ModuleRuleRewards extends GuildModule {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Allows users to gain rewards for reading the rules.";
+    }
+
+    @Override
     public void setup() {
         commands.add(new RulesCode());
         commands.add(new SetRuleCode());

@@ -1,20 +1,11 @@
 package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.guildtoggles.toggles.AdminLogging;
-import com.github.vaerys.guildtoggles.toggles.ChannelLogging;
-import com.github.vaerys.guildtoggles.toggles.DeleteLogging;
-import com.github.vaerys.guildtoggles.toggles.DontLogBot;
-import com.github.vaerys.guildtoggles.toggles.EditLogging;
-import com.github.vaerys.guildtoggles.toggles.ExtendEditLog;
-import com.github.vaerys.guildtoggles.toggles.GeneralLogging;
-import com.github.vaerys.guildtoggles.toggles.JoinLeaveLogging;
-import com.github.vaerys.guildtoggles.toggles.UseTimeStamps;
-import com.github.vaerys.guildtoggles.toggles.UserRoleLogging;
-import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.GuildModule;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.toggles.*;
+import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildModule;
 
 public class ModuleLogging extends GuildModule {
 
