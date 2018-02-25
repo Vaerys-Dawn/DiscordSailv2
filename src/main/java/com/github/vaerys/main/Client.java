@@ -82,7 +82,7 @@ public class Client {
     }
 
 //    public static ImgurAPI initImgur(List<String> imgurToken) throws IndexOutOfBoundsException {
-//        imgurAPI = new ImgurAPI(imgurToken.get(0), imgurToken.get(1));
+//        imgurAPI = new ImgurAPI(imgurToken.getToggles(0), imgurToken.getToggles(1));
 //        logger.info("Imgur Account Linked.");
 //        return imgurAPI;
 //    }
@@ -131,7 +131,7 @@ public class Client {
         } catch (IOException e) {
             if (token.size() == 4) {
                 logger.info("Token Invalid attempting to collect new token.");
-                refreshPatreonToken(token.get(1), token.get(2), token.get(3), token);
+                refreshPatreonToken(token.get(1), token.get(2), token.get(3));
             }
         }
         try {
@@ -173,7 +173,7 @@ public class Client {
     }
 
 
-    public static void refreshPatreonToken(String clientID, String clientSecret, String refreshToken, List<String> contents) {
+    public static void refreshPatreonToken(String clientID, String clientSecret, String refreshToken) {
         try {
             patreonOAuth = new PatreonOAuth(clientID, clientSecret, "");
             PatreonOAuth.TokensResponse refresh = patreonOAuth.refreshTokens(refreshToken);
