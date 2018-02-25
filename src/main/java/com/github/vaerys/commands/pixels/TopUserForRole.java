@@ -2,9 +2,9 @@ package com.github.vaerys.commands.pixels;
 
 import java.text.NumberFormat;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
@@ -18,7 +18,7 @@ public class TopUserForRole extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        IRole role = Utility.getRoleFromName(args, command.guild.get());
+        IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) {
             return "> Invalid Role.";
         }

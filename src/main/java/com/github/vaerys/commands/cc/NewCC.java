@@ -3,6 +3,7 @@ package com.github.vaerys.commands.cc;
 import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -62,7 +63,7 @@ public class NewCC extends Command {
             argsCC.replace("<shitpost>", "");
             isShitpost = true;
         }
-        if (argsCC.contains("<lock>") && Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+        if (argsCC.contains("<lock>") && GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
             argsCC.replace("<lock>", "");
             isLocked = true;
         }

@@ -2,6 +2,7 @@ package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.RemindMe;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
@@ -22,7 +23,7 @@ public class ReminderDM extends Command {
         String quote = args;
         boolean adminEdit = false;
         if (isSubtype(command, "SetUserQuote")) {
-            if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+            if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
                 SplitFirstObject userCall = new SplitFirstObject(quote);
                 user = Utility.getUser(command, userCall.getFirstWord(), false, true);
                 if (user == null) return "> Could not find user.";
@@ -68,7 +69,7 @@ public class ReminderDM extends Command {
     @Override
     public String description(CommandObject command) {
         String response = "Allows you to set your quote. Limit 140 chars (or 280 if you are a patron)";
-        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
             response += "\n\n**" + command.guild.config.getPrefixCommand() + names()[1] + " [@User] [Quote...]**\n" +
                     "**Desc:** Edits a user's quote.\n" +
                     "**Permissions:** " + Permissions.MANAGE_MESSAGES + ".\n";

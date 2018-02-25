@@ -52,7 +52,7 @@ public class ToggleInit {
         guildToggles.add(new LikeArt());
         guildToggles.add(new DebugMode());
         guildToggles.add(new StopSpamWalls());
-        guildToggles.add(new ReadRuleRewards());
+        guildToggles.add(new ModuleRuleRewards());
 
         //modules
         guildToggles.add(new ModuleGroups());
@@ -80,15 +80,13 @@ public class ToggleInit {
         }
     }
 
-    public static List<GuildToggle> get(boolean isModule) {
+    public static List<GuildToggle> getToggles(boolean isModule) {
         List<GuildToggle> toggles = new LinkedList<>();
-        for (GuildToggle g : get()) {
+        for (GuildToggle g : Globals.getGuildToggles()) {
             if (g.isModule() == isModule) {
                 toggles.add(g);
             }
         }
         return toggles;
     }
-
-
 }

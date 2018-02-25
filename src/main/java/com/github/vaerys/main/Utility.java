@@ -1,49 +1,37 @@
 package com.github.vaerys.main;
 
-import java.awt.Color;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.handlers.StringHandler;
+import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.*;
+import com.github.vaerys.templates.Command;
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiManager;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sx.blah.discord.api.internal.json.objects.EmbedObject;
+import sx.blah.discord.handle.impl.obj.ReactionEmoji;
+import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.EmbedBuilder;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
+import java.util.*;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.FileHandler;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.StringHandler;
-import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.BlackListObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.RewardRoleObject;
-import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import com.vdurmont.emoji.Emoji;
-import com.vdurmont.emoji.EmojiManager;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.impl.obj.ReactionEmoji;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
 
 /**
  * Created by Vaerys on 17/08/2016.
@@ -54,70 +42,6 @@ public class Utility {
 
     //Logger
     final static Logger logger = LoggerFactory.getLogger(Utility.class);
-
-    //Discord Utils
-    public static IRole getRoleFromName(String roleName, IGuild guild, boolean startsWith) {
-        IRole role = null;
-        for (IRole r : guild.getRoles()) {
-            if (startsWith) {
-                if (r.getName().toLowerCase().startsWith(roleName.toLowerCase())) {
-                    role = r;
-                }
-            } else {
-                if (r.getName().equalsIgnoreCase(roleName)) {
-                    role = r;
-                }
-            }
-        }
-        return role;
-    }
-
-    public static IRole getRoleFromName(String roleName, IGuild guild) {
-        return getRoleFromName(roleName, guild, false);
-    }
-
-    public static boolean testForPerms(IUser user, IGuild guild, Permissions... perms) {
-        if (perms.length == 0) return true;
-        if (guild == null) return true;
-        if (canBypass(user, guild)) return true;
-        EnumSet<Permissions> toMatch = EnumSet.noneOf(Permissions.class);
-        toMatch.addAll(Arrays.asList(perms));
-//        Debug code.
-        List<String> toMatchList = new ArrayList<String>() {{
-            addAll(toMatch.stream().map(Enum::toString).collect(Collectors.toList()));
-        }};
-        List<String> userList = new ArrayList<String>() {{
-            addAll(user.getPermissionsForGuild(guild).stream().map(Enum::toString).collect(Collectors.toList()));
-        }};
-        if (true) {
-            logger.trace("To Match : " + Utility.listFormatter(toMatchList, true));
-            logger.trace("User Perms : " + Utility.listFormatter(userList, true));
-            logger.trace("Result : " + user.getPermissionsForGuild(guild).containsAll(toMatch));
-        }
-//        end Debug
-        return user.getPermissionsForGuild(guild).containsAll(toMatch);
-    }
-
-    public static boolean testForPerms(CommandObject object, Permissions... perms) {
-        return testForPerms(object.user.get(), object.guild.get(), perms);
-    }
-
-    public static boolean testForPerms(UserObject user, GuildObject guild, Permissions... perms) {
-        return testForPerms(user.get(), guild.get(), perms);
-    }
-
-    public static boolean testForPerms(CommandObject command, IChannel channel, Permissions... perms) {
-        boolean hasPerms = true;
-        if (canBypass(command.user.get(), command.guild.get())) {
-            return true;
-        }
-        for (Permissions p : perms) {
-            if (!channel.getModifiedPermissions(command.user.get()).contains(p)) {
-                hasPerms = false;
-            }
-        }
-        return hasPerms;
-    }
 
     //Command Utils
     public static String getCommandInfo(Command command, CommandObject commandObject) {
@@ -175,48 +99,6 @@ public class Utility {
         return from.replaceAll("(?i)@everyone", "").replaceAll("(?i)@here", "");
     }
 
-
-    public static Color getUsersColour(IUser user, IGuild guild) {
-        //before
-        List<IRole> userRoles = guild.getRolesForUser(user);
-        IRole topColour = null;
-        String defaultColour = "0,0,0";
-        for (IRole role : userRoles) {
-            if (!(role.getColor().getRed() + "," + role.getColor().getGreen() + "," + role.getColor().getBlue()).equals(defaultColour)) {
-                if (topColour != null) {
-                    if (role.getPosition() > topColour.getPosition()) {
-                        topColour = role;
-                    }
-                } else {
-                    topColour = role;
-                }
-            }
-        }
-        if (topColour != null) {
-            return topColour.getColor();
-        }
-        return null;
-    }
-
-    public static Color getUsersColour(List<IRole> userRoles, IGuild guild) {
-        IRole topColour = null;
-        String defaultColour = "0,0,0";
-        for (IRole role : userRoles) {
-            if (!(role.getColor().getRed() + "," + role.getColor().getGreen() + "," + role.getColor().getBlue()).equals(defaultColour)) {
-                if (topColour != null) {
-                    if (role.getPosition() > topColour.getPosition()) {
-                        topColour = role;
-                    }
-                } else {
-                    topColour = role;
-                }
-            }
-        }
-        if (topColour != null) {
-            return topColour.getColor();
-        }
-        return Color.black;
-    }
 
     //Time Utils
     public static String formatTime(long timeSeconds, boolean readable) {
@@ -292,37 +174,6 @@ public class Utility {
             default:
                 return null;
         }
-    }
-
-    public static boolean canBypass(IUser author, IGuild guild, boolean logging) {
-        GuildConfig config = Globals.getGuildContent(guild.getLongID()).config;
-        if (author.getLongID() == Globals.creatorID && config.debugMode) {
-            if (logging) {
-                logger.trace("User is Creator, BYPASSING.");
-            }
-            return true;
-        }
-        if (guild == null) {
-            return false;
-        }
-        if (author.getLongID() == guild.getOwnerLongID()) {
-            if (logging) {
-                logger.trace("User is Guild Owner, GUILD : \"" + guild.getLongID() + "\", BYPASSING.");
-            }
-            return true;
-        }
-        if (author.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean canBypass(IUser author, IGuild guild) {
-        return canBypass(author, guild, true);
-    }
-
-    public static boolean canBypass(UserObject user, GuildObject guild) {
-        return canBypass(user.get(), guild.get());
     }
 
     public static long getMentionUserID(String content) {
@@ -414,21 +265,16 @@ public class Utility {
             return formattedList.toString();
         }
     }
-    
+
     public static String listEnumFormatter(List<? extends Enum<?>> list, boolean singleLine) {
         return listFormatter(EnumListToStringList(list), singleLine);
     }
-    
+
     public static List<String> EnumListToStringList(List<? extends Enum<?>> list) {
         Stream<? extends Enum<?>> EnumStream = list.stream();
         List<String> lst = EnumStream.map(Enum::toString).collect(Collectors.toList());
         EnumStream.close();
         return lst;
-    }
-
-    public static List<IRole> getRolesByName(IGuild guild, String name) {
-        List<IRole> roles = guild.getRoles().stream().filter(r -> r.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
-        return roles;
     }
 
     public static void sendGlobalAdminLogging(Command command, String args, CommandObject commandObject) {
@@ -496,48 +342,25 @@ public class Utility {
 
     public static String removeFun(String from) {
         String last;
-        boolean exit;
+        boolean[] exit = new boolean[]{false};
         do {
+            exit[0] = false;
             last = from;
-            exit = false;
-            if (from.contains("***")) {
-                from = replaceFun(from, "***");
-                exit = true;
-            }
-            if (from.contains("**") && !exit) {
-                from = replaceFun(from, "**");
-                exit = true;
-            }
-            if (from.contains("*") && !exit) {
-                from = replaceFun(from, "*");
-            }
-            exit = false;
-            if (from.contains("```")) {
-                from = replaceFun(from, "```");
-                exit = true;
-            }
-            if (from.contains("`") && !exit) {
-                from = replaceFun(from, "`");
-            }
-            exit = false;
-            if (from.contains("~~")) {
-                from = replaceFun(from, "~~");
-            }
-            if (from.contains("__")) {
-                from = replaceFun(from, "__");
-                exit = true;
-            }
-            if (from.contains("_") && !exit) {
-                from = replaceFun(from, "_");
-            }
+            from = replaceFun(from, "```", exit);
+            if (!exit[0]) from = replaceFun(from, "`", exit);
+            if (!exit[0]) from = replaceFun(from, "~~", exit);
+            if (!exit[0]) from = replaceFun(from, "__", exit);
+            if (!exit[0]) from = replaceFun(from, "_", exit);
+            from = from.replace("*", "");
         } while (last != from);
         return from;
     }
 
-    public static String replaceFun(String from, String fun) {
+    public static String replaceFun(String from, String fun, boolean[] exit) {
         String noFun = StringUtils.substringBetween(from, fun, fun);
         if (noFun != null) {
-            from = from.replace(fun + noFun + fun, noFun);
+            from = from.replace(escapeRegex(fun + noFun + fun), noFun);
+            exit[0] = true;
         }
         return from;
     }
@@ -568,8 +391,13 @@ public class Utility {
         return truncateString(str, maxLength, true);
     }
 
-    public static boolean isImageLink(String link) {
+    public static boolean isImageLink(String link, boolean isSendURL) {
         if (!checkURL(link)) {
+            return false;
+        }
+        try {
+            if (isSendURL) new URL(link);
+        } catch (MalformedURLException e) {
             return false;
         }
         List<String> suffixes = new ArrayList<String>() {{
@@ -588,6 +416,10 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    public static boolean isImageLink(String link) {
+        return isImageLink(link, false);
     }
 
     public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, IGuild guild) {
@@ -615,7 +447,7 @@ public class Utility {
     }
 
     public static boolean testUserHierarchy(UserObject higherUser, UserObject lowerUser, GuildObject guild) {
-        if (canBypass(lowerUser.get(), guild.get())) return false;
+        if (GuildHandler.canBypass(lowerUser.get(), guild.get())) return false;
         return testUserHierarchy(higherUser.get(), lowerUser.get(), guild.get());
     }
 
@@ -803,7 +635,7 @@ public class Utility {
                 if (testPerms) {
                     if (c.type == SAILType.CREATOR && commandObject.user.longID != commandObject.client.creator.longID) {
                         //do nothing
-                    } else if (testForPerms(commandObject, c.perms)) {
+                    } else if (GuildHandler.testForPerms(commandObject, c.perms)) {
 
                         toReturn.add(c);
                     }
@@ -935,7 +767,7 @@ public class Utility {
 
 
     public static boolean canBypass(CommandObject command) {
-        return canBypass(command.user.get(), command.guild.get());
+        return GuildHandler.canBypass(command.user.get(), command.guild.get());
     }
 
     public static String prepArgs(String args) {
@@ -1021,9 +853,9 @@ public class Utility {
         }
     }
 
-    public static boolean isImgurAlbum(String fileURL) {
-        return Pattern.compile("https?://imgur\\.com/a/.*").matcher(fileURL).matches();
-    }
+//    public static boolean isImgurAlbum(String fileURL) {
+//        return Pattern.compile("https?://imgur\\.com/a/.*").matcher(fileURL).matches();
+//    }
 
     public static String getUnicodeEmoji(String emojiName) {
         Emoji emoji = EmojiManager.getForAlias(emojiName);
@@ -1066,8 +898,6 @@ public class Utility {
             return -1;
         }
     }
-
-
 }
 
 //    public static List<String> getAlbumIUrls(String fileURL) {

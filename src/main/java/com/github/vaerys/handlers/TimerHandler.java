@@ -188,12 +188,12 @@ public class TimerHandler {
                     for (GuildObject task : Globals.getGuilds()) {
                         GuildConfig guildconfig = task.config;
                         //do decay
-                        XpHandler.doDecay(task);
+                        GuildHandler.dailyTask(task);
 
                         //reset offenders
                         task.resetOffenders();
 
-                        //get general channel
+                        //getToggles general channel
                         IChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
 
                         //do daily messages

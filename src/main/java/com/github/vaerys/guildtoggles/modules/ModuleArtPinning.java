@@ -4,7 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.SetPinLimit;
 import com.github.vaerys.guildtoggles.toggles.AutoArtPinning;
 import com.github.vaerys.guildtoggles.toggles.LikeArt;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.GuildModule;
@@ -52,7 +52,7 @@ public class ModuleArtPinning extends GuildModule {
 
     @Override
     public String stats(CommandObject object) {
-        if (!Utility.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
+        if (!GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
         return "**Total Pins:** " + object.guild.channelData.getPinnedMessages().size() + "/" + object.guild.config.pinLimit;
     }
 }

@@ -3,6 +3,7 @@ package com.github.vaerys.commands.general;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
@@ -21,7 +22,7 @@ public class SetGender extends Command {
         String quote = args;
         boolean adminEdit = false;
         if (isSubtype(command, "SetUserGender")) {
-            if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+            if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
                 SplitFirstObject userCall = new SplitFirstObject(quote);
                 user = Utility.getUser(command, userCall.getFirstWord(), false, true);
                 if (user == null) return "> Could not find user.";
@@ -64,7 +65,7 @@ public class SetGender extends Command {
     @Override
     public String description(CommandObject command) {
         String response = "Allows you to set your Gender. Limit 20 chars (or 40 if you are a patron).";
-        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
             response += "\n\n**" + command.guild.config.getPrefixCommand() + names[1] + " [@User] [Gender]**\n" +
                     "**Desc:** Edits a user's gender.\n" +
                     "**Permissions:** " + Permissions.MANAGE_MESSAGES + ".\n";

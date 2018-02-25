@@ -3,8 +3,8 @@ package com.github.vaerys.commands.pixels;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.RewardRoleObject;
@@ -46,7 +46,7 @@ public class TransferLevels extends Command {
                         uObject.setCurrentLevel(r.getLevel());
                     }
                 }
-                XpHandler.checkUsersRoles(uObject.getUserID(), command.guild);
+                GuildHandler.checkUsersRoles(uObject.getUserID(), command.guild);
             }
         }
         RequestHandler.deleteMessage(message);

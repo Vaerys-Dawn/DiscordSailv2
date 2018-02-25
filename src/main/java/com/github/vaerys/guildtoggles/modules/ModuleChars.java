@@ -2,7 +2,7 @@ package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.guildtoggles.toggles.RoleIsToggle;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.GuildModule;
@@ -52,7 +52,7 @@ public class ModuleChars extends GuildModule {
     public String stats(CommandObject object) {
         StringBuilder builder = new StringBuilder();
         builder.append("**Total Characters:** " + object.guild.characters.getCharacters(object.guild.get()).size());
-        if (Utility.testForPerms(object, Permissions.MANAGE_SERVER)) {
+        if (GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) {
             builder.append("\n**Character Roles Prefix:** " + object.guild.characters.getRolePrefix());
         }
         return builder.toString();

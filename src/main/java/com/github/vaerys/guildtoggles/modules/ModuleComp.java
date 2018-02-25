@@ -3,7 +3,7 @@ package com.github.vaerys.guildtoggles.modules;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.guildtoggles.toggles.CompEntries;
 import com.github.vaerys.guildtoggles.toggles.Voting;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
 import com.github.vaerys.enums.SAILType;
@@ -47,7 +47,7 @@ public class ModuleComp extends GuildModule {
 
     @Override
     public String stats(CommandObject object) {
-        if (!Utility.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
+        if (!GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
         StringBuilder builder = new StringBuilder();
         builder.append("**Total Competition Entries:** " + object.guild.competition.getEntries().size());
         builder.append("\n**Total Voters:** " + object.guild.competition.getVoters().size());

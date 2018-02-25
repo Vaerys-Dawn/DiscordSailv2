@@ -2,6 +2,7 @@ package com.github.vaerys.commands.pixels;
 
 import java.util.List;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -54,7 +55,7 @@ public class ManagePixelRoles extends Command {
             return null;
         }
         SplitFirstObject mode = new SplitFirstObject(args);
-        IRole role = Utility.getRoleFromName(mode.getRest(), command.guild.get());
+        IRole role = GuildHandler.getRoleFromName(mode.getRest(), command.guild.get());
         if (role == null) {
             return "> **" + mode.getRest() + "** is not a valid Role name.";
         }

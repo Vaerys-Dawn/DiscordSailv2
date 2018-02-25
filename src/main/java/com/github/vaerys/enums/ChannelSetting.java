@@ -3,6 +3,7 @@ package com.github.vaerys.enums;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.Report;
 import com.github.vaerys.commands.help.SilentReport;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
@@ -232,7 +233,7 @@ public enum ChannelSetting {
             builder.appendField(title, Utility.listFormatter(channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()), true), false);
         }
         List<Command> commands = object.guild.commands.stream().filter(command -> {
-            if (command.channel != null && Utility.testForPerms(object, command.perms)) {
+            if (command.channel != null && GuildHandler.testForPerms(object, command.perms)) {
                 return command.channel == this;
             }
             return false;

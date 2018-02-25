@@ -1,7 +1,7 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.DailyMessage;
@@ -85,6 +85,7 @@ public class GuildConfig extends GuildFile {
     public long topTenRoleID = -1;
     long roleToMentionID = -1;
     long mutedRoleID = -1;
+    public long ruleCodeRewardID = -1;
     public int pinLimit = 25;
 
     public UserSetting defaultLevelMode = UserSetting.SEND_LVLUP_RANK_CHANNEL;
@@ -104,7 +105,6 @@ public class GuildConfig extends GuildFile {
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     ArrayList<OffenderObject> offenders = new ArrayList<>();
     private String ruleCode = null;
-
 
 
     public void setLastDailyMessage(DailyMessage lastDailyMessage) {
@@ -142,7 +142,6 @@ public class GuildConfig extends GuildFile {
     public void setGuildName(String guildName) {
         this.guildName = guildName;
     }
-
 
 
     public void updateVariables(IGuild guild) {
@@ -198,6 +197,19 @@ public class GuildConfig extends GuildFile {
         if (roleToMention == null) {
             roleToMentionID = -1;
         }
+        IRole ruleCodeReward = guild.getRoleByID(ruleCodeRewardID);
+        if (ruleCodeReward == null) {
+            ruleCodeRewardID = -1;
+        }
+        IRole xpDeniedRole = guild.getRoleByID(xpDeniedRoleID);
+        if (xpDeniedRole == null) {
+            xpDeniedRoleID = -1;
+        }
+        IRole topTenRole = guild.getRoleByID(topTenRoleID);
+        if (topTenRole == null) {
+            topTenRoleID = -1;
+        }
+
         iterator = rewardRoles.listIterator();
         while (iterator.hasNext()) {
             RewardRoleObject reward = (RewardRoleObject) iterator.next();
@@ -453,4 +465,5 @@ public class GuildConfig extends GuildFile {
     public void setRuleCode(String ruleCode) {
         this.ruleCode = ruleCode;
     }
+
 }

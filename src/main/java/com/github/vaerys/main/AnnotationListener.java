@@ -1,33 +1,21 @@
 package com.github.vaerys.main;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.ArtHandler;
-import com.github.vaerys.handlers.LoggingHandler;
-import com.github.vaerys.handlers.MessageHandler;
-import com.github.vaerys.handlers.QueueHandler;
-import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.handlers.*;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.LogObject;
 import com.github.vaerys.objects.UserCountDown;
-import com.github.vaerys.enums.ChannelSetting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageSendEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.*;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.impl.events.guild.member.GuildMemberEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
@@ -36,12 +24,13 @@ import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
 import sx.blah.discord.handle.impl.obj.ReactionEmoji;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.handle.obj.*;
+
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 03/08/2016.
@@ -82,6 +71,7 @@ public class AnnotationListener {
             if (event.getAuthor().isBot()) return;
 
             CommandObject command = new CommandObject(event.getMessage());
+
             //Set Console Response Channel.
             if (command.user.get().equals(command.client.creator)) {
                 Globals.consoleMessageCID = command.channel.longID;
@@ -108,8 +98,9 @@ public class AnnotationListener {
             }
             builder.append("```");
             RequestHandler.sendMessage(builder.toString(), event.getChannel());
+            Globals.addToLog(new LogObject("ERROR", "MESSAGE_HANDLER", event.getMessage().getContent(),
+                    event.getChannel().getLongID(), event.getAuthor().getLongID(), event.getMessageID(), event.getGuild().getLongID()));
             Utility.sendStack(e);
-            return;
         }
     }
 
@@ -215,7 +206,7 @@ public class AnnotationListener {
         if (!event.getChannel().isPrivate() && emoji.isUnicode()) {
             //if is x and can bypass
             if (emoji.equals(remove)) ArtHandler.unPin(object);
-            if (emoji.equals(x) && Utility.testForPerms(object, Permissions.MANAGE_MESSAGES)
+            if (emoji.equals(x) && GuildHandler.testForPerms(object, Permissions.MANAGE_MESSAGES)
                     && object.client.bot.longID == object.user.longID)
                 RequestHandler.deleteMessage(object.message);
             //if is pushpin
@@ -284,7 +275,7 @@ public class AnnotationListener {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
         if (!content.config.moduleLogging) return;
         UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getLongID()));
-        if (content.config.joinsServerMessages && !user.get().isBot()){
+        if (content.config.joinsServerMessages && !user.get().isBot()) {
             String message = content.config.getJoinMessage();
             message = message.replace("<server>", event.getGuild().getName());
             message = message.replace("<user>", event.getUser().getName());

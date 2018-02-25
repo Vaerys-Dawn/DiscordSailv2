@@ -12,7 +12,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class ToggleTypingStatus extends Command {
     @Override
     public String execute(String args, CommandObject command) {
-//        command.channel.get().toggleTypingStatus();
+//        command.channel.getToggles().toggleTypingStatus();
         return null;
     }
 

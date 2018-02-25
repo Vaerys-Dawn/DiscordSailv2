@@ -2,7 +2,7 @@ package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.Mute;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
 import com.github.vaerys.enums.SAILType;
@@ -46,7 +46,7 @@ public class ModuleModMuting extends GuildModule {
 
     @Override
     public String stats(CommandObject object) {
-        if (!Utility.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
+        if (!GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
         IRole muteRole = object.guild.getRoleByID(object.guild.config.getMutedRoleID());
         if (muteRole != null) {
             return "**Mute Role:** " + muteRole.getName();

@@ -2,8 +2,9 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
 
@@ -35,11 +36,13 @@ public class Test extends Command {
 
 //        EnumSet<Permissions> botPerms = command.client.bot.getPermissions(command.guild);
 //        return botPerms.contains(Permissions.MANAGE_CHANNELS) ? "> I HAVE MANAGE_CHANNELS" : "> I DO NOT HAVE MANAGE_CHANNELS";
+
+//        return object.isSubCommand(command) + " " + object.getArgs(command) + " " + object.getCommandUsage(command);
         throw new DiscordException("TestException");
     }
 
-
     protected static final String[] NAMES = new String[]{"Test", "Testing"};
+
     @Override
     protected String[] names() {
         return NAMES;
@@ -51,43 +54,56 @@ public class Test extends Command {
     }
 
     protected static final String USAGE = "[Lol this command has no usages XD]";
+
     @Override
     protected String usage() {
         return USAGE;
     }
 
     protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
+
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
     }
 
     protected static final ChannelSetting CHANNEL_SETTING = null;
+
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
     protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
+
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
     protected static final boolean REQUIRES_ARGS = false;
+
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
     protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;
     }
 
+    protected static final SubCommandObject object = new SubCommandObject(
+            new String[]{"Test"},
+            USAGE,
+            "nothing",
+            SAILType.ADMIN
+    );
+
     @Override
     public void init() {
-
+        subCommands.add(object.appendRegex(" (\\+|-)"));
     }
 }

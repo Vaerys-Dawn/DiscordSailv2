@@ -1,13 +1,15 @@
-package com.github.vaerys.guildtoggles.toggles;
+package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.SetRuleCode;
+import com.github.vaerys.commands.admin.SetRuleCodeReward;
 import com.github.vaerys.commands.general.RulesCode;
-import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.templates.GuildSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildModule;
+import sx.blah.discord.handle.obj.IRole;
 
-public class ReadRuleRewards extends GuildSetting {
+public class ModuleRuleRewards extends GuildModule {
 
     // TODO: 25/01/2018 add role giving for getting teh code right
 
@@ -41,5 +43,21 @@ public class ReadRuleRewards extends GuildSetting {
     public void setup() {
         commands.add(new RulesCode());
         commands.add(new SetRuleCode());
+        commands.add(new SetRuleCodeReward());
+    }
+
+    @Override
+    public String stats(CommandObject object) {
+        String response = "";
+        if (object.guild.config.getRuleCode() != null) {
+            response += "**Rule Code:** " + object.guild.config.getRuleCode();
+        }
+        IRole reward = object.guild.getRoleByID(object.guild.config.ruleCodeRewardID);
+        if (reward != null) {
+            if (!response.isEmpty()) response += "\n";
+            response += "**Reward Role:** " + reward.getName();
+        }
+        if (response.isEmpty()) return null;
+        return response;
     }
 }

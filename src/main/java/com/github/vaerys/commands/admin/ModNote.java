@@ -1,10 +1,8 @@
 package com.github.vaerys.commands.admin;
 
-import java.text.SimpleDateFormat;
-import java.util.LinkedList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -12,24 +10,27 @@ import com.github.vaerys.objects.ModNoteObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 
 public class ModNote extends Command {
 
     private static final Logger logger = LoggerFactory.getLogger(ModNote.class);
 
     // using static as it will cause less memory to be used overall by orphaned data
-    protected static final String[] NAMES = new String[]{"ModNote", "Punish", "RecordIncident"};
-    protected static final String USAGE = "[@User] (Mode)|[Note ...]";
+    protected static final String[] NAMES = new String[]{"ModNote", "Punish", "ModNotes"};
+    protected static final String USAGE = "[@User] (Mode)|[Note...]";
     protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     protected static final ChannelSetting CHANNEL_SETTING = null;
     protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_MESSAGES};
     protected static final boolean REQUIRES_ARGS = true;
     protected static final boolean DO_ADMIN_LOGGING = true;
-    
+
     @Override
     public String execute(String args, CommandObject command) {
         // Start by breaking the arguments apart
@@ -124,7 +125,7 @@ public class ModNote extends Command {
         builder.withTitle("Notes for " + userObject.displayName);
         builder.withThumbnail(userObject.get().getAvatarURL());
 
-        // get all notes and put together the bits and bobs
+        // getToggles all notes and put together the bits and bobs
         int counter = 0;
         String noteLine = "**Note #%d:**\n%s\n";
         StringHandler content = new StringHandler();
@@ -167,11 +168,11 @@ public class ModNote extends Command {
         builder.withTimestamp(noteObject.getTimestamp() * 1000);
 
         if (noteObject.getEditorId() != -1) {
-            // get editor's info and display it?
+            // getToggles editor's info and display it?
             UserObject editor = new UserObject(command.guild.getUserByID(noteObject.getEditorId()), command.guild);
             String editFieldText = "\n\n*Last edited by %s %s*";
             long diff = command.message.getTimestamp().toEpochSecond() - noteObject.getLastEditedTimestamp();
-            if (diff >= 86400*7) { // 7d
+            if (diff >= 86400 * 7) { // 7d
                 String editDate = new SimpleDateFormat("dd/MMM/yyyy").format(noteObject.getLastEditedTimestamp() * 1000);
                 builder.appendDesc(String.format(editFieldText, editor.displayName, "on " + editDate));
             } else {

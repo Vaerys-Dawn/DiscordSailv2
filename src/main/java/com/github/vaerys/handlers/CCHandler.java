@@ -52,7 +52,7 @@ public class CCHandler {
 
         String contents = commandObject.getContents(true);
         //shitpost handling
-        if (commandObject.isShitPost() && command.guild.config.shitPostFiltering && !Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+        if (commandObject.isShitPost() && command.guild.config.shitPostFiltering && !GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
             List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
             if (channels.size() != 0 && !channels.contains(command.channel.get())) {
                 channels = command.user.getVisibleChannels(channels);

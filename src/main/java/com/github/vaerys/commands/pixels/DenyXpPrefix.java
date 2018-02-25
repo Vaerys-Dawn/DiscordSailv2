@@ -1,4 +1,4 @@
-package com.github.vaerys.commands.admin;
+package com.github.vaerys.commands.pixels;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -14,7 +14,7 @@ public class DenyXpPrefix extends Command {
     // using static as it will cause less memory to be used overall by orphaned data
     protected static final String[] NAMES = new String[] {"DenyXpPrefix"};
     protected static final String USAGE = "[Prefix]/List";
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     protected static final ChannelSetting CHANNEL_SETTING = null;
     protected static final Permissions[] PERMISSIONS = new Permissions[] {Permissions.MANAGE_SERVER};
     protected static final boolean REQUIRES_ARGS = true;

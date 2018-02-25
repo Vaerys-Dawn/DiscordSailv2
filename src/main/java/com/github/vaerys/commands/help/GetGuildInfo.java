@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.guildtoggles.modules.ModuleRoles;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -45,7 +46,7 @@ public class GetGuildInfo extends Command {
         boolean isGuildStats = isSubtype(command, "GuildStats");
 
         IChannel channel = command.user.get().getOrCreatePMChannel();
-        boolean hasManageServer = Utility.testForPerms(command, Permissions.MANAGE_SERVER);
+        boolean hasManageServer = GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER);
 
 
         //todo change this to the proper impl when api allows it.
@@ -134,7 +135,7 @@ public class GetGuildInfo extends Command {
         }
 
 
-        if (Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+        if (GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
 
             List<ChannelSetting> channelSettings = Arrays.asList(command.guild.channelSettings);
             channelSettings.sort(Comparator.comparing(ChannelSetting::toString));

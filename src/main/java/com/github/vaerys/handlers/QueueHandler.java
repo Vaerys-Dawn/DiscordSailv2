@@ -110,14 +110,14 @@ public class QueueHandler {
 
         for (QueueObject q : queuedMessages) {
             if (q.getMessageId() == message.getLongID()) {
-                //get the embed
+                //getToggles the embed
                 IEmbed embed = message.getEmbeds().get(0);
                 RequestBuffer.request(() -> message.removeAllReactions()).get();
                 switch (q.getType()) {
                     //do if daily request
                     case Constants.QUEUE_DAILY:
                         try {
-                            //get the data
+                            //getToggles the data
                             long userID = Long.parseLong(embed.getFooter().getText());
                             long uID = -1;
                             DayOfWeek day = null;

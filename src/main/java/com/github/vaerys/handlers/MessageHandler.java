@@ -1,9 +1,7 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +53,7 @@ public class MessageHandler {
 //        if (!isPrivate) return false;
 //        for (GuildObject g : Globals.getGuilds()) {
 //            if (g.config.getSatrtupState().equals(BEGIN_SETUP) && command.user.longID == g.getSetupUser()) {
-//                command.setGuild(g.get());
+//                command.setGuild(g.getToggles());
 //                cont(command);
 //                return true;
 //            }
@@ -74,13 +72,13 @@ public class MessageHandler {
                 //log command
                 command.guild.sendDebugLog(command, "COMMAND", c.getCommand(command), c.getArgs(args, command));
                 //test if user has permissions
-                if (!Utility.testForPerms(command, c.perms)) {
+                if (!GuildHandler.testForPerms(command, c.perms)) {
                     RequestHandler.sendMessage(command.user.notAllowed, currentChannel);
                     return true;
                 }
                 //check if it is a valid channel
                 if (!currentChannel.isPrivate()) {
-                    if (c.channel != null && !Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+                    if (c.channel != null && !GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
                         List<IChannel> channels = command.guild.getChannelsByType(c.channel);
                         if (channels.size() != 0 && !channels.contains(command.channel.get())) {
                             List<String> list = Utility.getChannelMentions(command.user.getVisibleChannels(channels));
@@ -97,8 +95,8 @@ public class MessageHandler {
                 //command logging
                 handleLogging(command, c, commandArgs);
                 RequestBuffer.request(() -> command.channel.get().setTypingStatus(true)).get();
-//                if (!command.channel.get().getTypingStatus()) {
-//                    command.channel.get().toggleTypingStatus();
+//                if (!command.channel.getToggles().getTypingStatus()) {
+//                    command.channel.getToggles().toggleTypingStatus();
 //                }
                 String response = c.execute(commandArgs, command);
                 RequestHandler.sendMessage(response, currentChannel);

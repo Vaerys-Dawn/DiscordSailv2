@@ -29,7 +29,7 @@ public class Rank extends Command {
                 return "> Could not find user.";
             }
         }
-        String error = "> Cannot get rank stats for " + user.displayName + ".";
+        String error = "> Cannot getToggles rank stats for " + user.displayName + ".";
         if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
             return "> " + user.displayName + " has set their profile to private.";
         } else if (user.isPrivateProfile(command.guild) && user.longID == command.user.longID) {

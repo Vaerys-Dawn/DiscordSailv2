@@ -1,6 +1,6 @@
 package com.github.vaerys.objects;
 
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.GuildObject;
 import sx.blah.discord.handle.obj.IIDLinkedObject;
 import sx.blah.discord.handle.obj.IRole;
@@ -109,6 +109,6 @@ public class CharacterObject {
     }
 
     public Color getColor(GuildObject guild) {
-        return Utility.getUsersColour(roleIDs.stream().map(aLong -> guild.getRoleByID(aLong)).filter(iRole -> iRole != null).collect(Collectors.toList()), guild.get());
+        return GuildHandler.getUsersColour(roleIDs.stream().map(aLong -> guild.getRoleByID(aLong)).filter(iRole -> iRole != null).collect(Collectors.toList()));
     }
 }

@@ -25,7 +25,7 @@ public class InfoDM extends DMCommand {
         for (Command c : commands) {
             for (String s : c.names) {
                 if (args.equalsIgnoreCase(s)) {
-                    // if (!Utility.testForPerms(c.perms(), command.user.get(), command.guild.get())) {
+                    // if (!Utility.testForPerms(c.perms(), command.user.getToggles(), command.guild.getToggles())) {
                     // return error;
                     // }
                     RequestHandler.sendEmbedMessage("", c.getCommandInfo(command), command.channel.get());
@@ -66,7 +66,7 @@ public class InfoDM extends DMCommand {
         // aliasBuilder.append(".\n");
         // infoEmbed.appendField("Aliases:", aliasBuilder.toString(), false);
         // }
-        // Utility.sendEmbedMessage("", infoEmbed, command.channel.get());
+        // Utility.sendEmbedMessage("", infoEmbed, command.channel.getToggles());
         // return "";
         // }
         // }

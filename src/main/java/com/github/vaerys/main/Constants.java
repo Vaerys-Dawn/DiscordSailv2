@@ -43,6 +43,8 @@ public class Constants {
     public static final short EXITCODE_UPDATE = 3;
     public static final short EXITCODE_OTHER_ERROR = 4;
     public static final short EXITCODE_UNKNOWN = 255;
+    public static final String MOZILLA_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) " +
+            "AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31";
 
 
     public static String getWelcomeMessage(CommandObject object) {

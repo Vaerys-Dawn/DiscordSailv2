@@ -60,6 +60,8 @@ public class CommandInit {
         commands.add(new SetPinLimit());
         commands.add(new SetRuleCode());
         commands.add(new AdminEcho());
+        commands.add(new AddProfile());
+        commands.add(new SetRuleCodeReward());
         //General commands
         commands.add(new GetAvatar());
         commands.add(new Hello());

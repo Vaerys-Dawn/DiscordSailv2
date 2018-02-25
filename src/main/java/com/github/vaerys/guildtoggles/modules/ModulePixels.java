@@ -1,7 +1,7 @@
 package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.admin.DenyXpPrefix;
+import com.github.vaerys.commands.pixels.DenyXpPrefix;
 import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.commands.pixels.PixelHelp;
 import com.github.vaerys.guildtoggles.toggles.LikeArt;
@@ -9,7 +9,7 @@ import com.github.vaerys.guildtoggles.toggles.ReactToLevelUp;
 import com.github.vaerys.guildtoggles.toggles.SelfDestructLevelUps;
 import com.github.vaerys.guildtoggles.toggles.XpDecay;
 import com.github.vaerys.guildtoggles.toggles.XpGain;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.enums.ChannelSetting;
@@ -46,7 +46,7 @@ public class ModulePixels extends GuildModule {
     @Override
     public String desc(CommandObject command) {
         if (command.guild.get() == null) {
-            return "Error, you should not get this message. if you do please report this to the bot developer.";
+            return "Error, you should not getToggles this message. if you do please report this to the bot developer.";
         }
         return "This module enables **" + command.client.bot.displayName + "'s** XP system known as pixels.\n" +
                 "> Pixels are a xp system that allows the **granting of roles** at certain levels.\n" +
@@ -78,7 +78,7 @@ public class ModulePixels extends GuildModule {
 
     @Override
     public String stats(CommandObject object) {
-        boolean hasManageServer = Utility.testForPerms(object, Permissions.MANAGE_SERVER);
+        boolean hasManageServer = GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER);
         StringBuilder builder = new StringBuilder();
         builder.append("**Pixels Per Message: ** " + object.guild.config.xpRate);
         builder.append("\n**Pixel Modifier:** " + object.guild.config.xpModifier);

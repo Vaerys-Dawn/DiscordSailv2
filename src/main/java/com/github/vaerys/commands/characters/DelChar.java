@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
@@ -14,7 +14,7 @@ public class DelChar extends Command{
     @Override
     public String execute(String args, CommandObject command) {
         boolean bypass = false;
-        if (Utility.testForPerms(command,Permissions.MANAGE_MESSAGES)) {
+        if (GuildHandler.testForPerms(command,Permissions.MANAGE_MESSAGES)) {
             bypass = true;
         }
         return command.guild.characters.delChar(args.split(" ")[0], command.user.get(), command.guild.get(), bypass);

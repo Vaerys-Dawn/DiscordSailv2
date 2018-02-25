@@ -1,11 +1,23 @@
 package com.github.vaerys.objects;
 
+import com.github.vaerys.commands.CommandObject;
+
 public class LogObject extends GuildLogObject {
 
     long guildID;
 
     public LogObject(GuildLogObject logObject, long guildID) {
         super(logObject);
+        this.guildID = guildID;
+    }
+
+    public LogObject(CommandObject command, String type, String name, String contents, long guildID) {
+        super(command, type, name, contents);
+        this.guildID = guildID;
+    }
+
+    public LogObject(String type, String name, String contents, long channelID, long userID, long messageID, long guildID) {
+        super(type, name, contents, channelID, userID, messageID);
         this.guildID = guildID;
     }
 

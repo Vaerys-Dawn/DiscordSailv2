@@ -59,7 +59,7 @@ public class PixelHelp extends Command {
                 if (command.guild.config.xpModifier != 1) {
                     embed.appendField("\n**Current Xp Modifier:**\n", "> **x" + command.guild.config.xpModifier + "**.\n", true);
                 }
-                int random = new Random().nextInt(50);
+                int random = new Random().nextInt(25);
                 if (random == 1) {
                     embed.withThumbnail(Constants.RANK_UP_IMAGE_URL);
                 } else {

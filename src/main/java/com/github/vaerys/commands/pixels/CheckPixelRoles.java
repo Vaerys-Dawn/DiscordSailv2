@@ -1,8 +1,8 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
@@ -18,7 +18,7 @@ public class CheckPixelRoles extends Command {
     public String execute(String args, CommandObject command) {
         IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
         for (IUser user : command.guild.getUsers()) {
-            XpHandler.checkUsersRoles(user.getLongID(), command.guild);
+            GuildHandler.checkUsersRoles(user.getLongID(), command.guild);
         }
         RequestHandler.deleteMessage(working);
         return "> Done.";

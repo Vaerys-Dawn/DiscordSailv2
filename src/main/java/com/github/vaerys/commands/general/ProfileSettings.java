@@ -66,8 +66,8 @@ public class ProfileSettings extends Command {
                         "> Your rank is now hidden."));
             } else if (pixels && toTest == UserSetting.NO_LEVEL_UP_REACTIONS) {
                 builder.append(toggleSetting(userObject, UserSetting.NO_LEVEL_UP_REACTIONS,
-                        "> You will now get reactions added to the message that leveled you up.",
-                        "> You will no longer get reactions added to the message that leveled you up."));
+                        "> You will now getToggles reactions added to the message that leveled you up.",
+                        "> You will no longer getToggles reactions added to the message that leveled you up."));
             } else if (toTest == UserSetting.PRIVATE_PROFILE) {
                 builder.append(toggleSetting(userObject, UserSetting.PRIVATE_PROFILE,
                         "> Your profile is now public.",

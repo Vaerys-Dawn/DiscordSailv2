@@ -16,7 +16,7 @@ public class TestDM extends DMCommand {
 //            }
 //        }
 //        return "channel could not be found";
-//        return command.guild.get().getLongID() + "";
+//        return command.guild.getToggles().getLongID() + "";
         return "> You've done your testing";
     }
 

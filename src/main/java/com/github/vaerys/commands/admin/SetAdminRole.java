@@ -1,8 +1,8 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
@@ -19,7 +19,7 @@ public class SetAdminRole extends Command {
             command.guild.config.setRoleToMentionID(-1);
             return "> Admin Role Removed.";
         }
-        IRole role = Utility.getRoleFromName(args, command.guild.get());
+        IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) {
             return Constants.ERROR_ROLE_NOT_FOUND;
         } else {
