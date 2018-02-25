@@ -194,6 +194,7 @@ Config.json
 Global_Data.json
 *.txt
 *.ttf
+CC templates/
 Storage/
 
 ### Build Artifacts ###
