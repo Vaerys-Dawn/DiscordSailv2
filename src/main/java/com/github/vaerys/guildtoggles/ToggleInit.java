@@ -52,7 +52,7 @@ public class ToggleInit {
         guildToggles.add(new LikeArt());
         guildToggles.add(new DebugMode());
         guildToggles.add(new StopSpamWalls());
-        guildToggles.add(new ReadRuleRewards());
+        guildToggles.add(new ModuleRuleRewards());
 
         //modules
         guildToggles.add(new ModuleGroups());

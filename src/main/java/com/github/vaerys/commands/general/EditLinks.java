@@ -3,6 +3,7 @@ package com.github.vaerys.commands.general;
 import java.net.MalformedURLException;
 import java.net.URL;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
@@ -23,7 +24,7 @@ public class EditLinks extends Command {
         UserObject user = command.user;
         SplitFirstObject userCall = new SplitFirstObject(args);
         boolean adminEdit = false;
-        if (Utility.testForPerms(command, ADMIN_EDIT.getPermissions()) || Utility.canBypass(command.user.get(), command.guild.get())) {
+        if (GuildHandler.testForPerms(command, ADMIN_EDIT.getPermissions()) || GuildHandler.canBypass(command.user.get(), command.guild.get())) {
             user = Utility.getUser(command, userCall.getFirstWord(), false);
             if (user != null && userCall.getRest() != null && user.getProfile(command.guild) != null) {
                 adminEdit = true;

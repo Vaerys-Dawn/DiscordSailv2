@@ -66,7 +66,15 @@ public class CommandInit {
         commands.add(new UpdateInfo());
         commands.add(new UpdateRolePerms());
         commands.add(new UserSettings());
-
+        commands.add(new SetJoinMessage());
+        commands.add(new PruneEmptyProfiles());
+        commands.add(new DenyXpPrefix());
+        commands.add(new PurgeBannedData());
+        commands.add(new SetPinLimit());
+        commands.add(new SetRuleCode());
+        commands.add(new AdminEcho());
+        commands.add(new AddProfile());
+        commands.add(new SetRuleCodeReward());
         //General commands
         commands.add(new ClearReminder());
         commands.add(new EditLinks());

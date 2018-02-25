@@ -2,9 +2,9 @@ package com.github.vaerys.commands.help;
 
 import java.util.List;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
@@ -32,7 +32,7 @@ public class Info extends Command {
         for (Command c : commands) {
             for (String s : c.names) {
                 if (args.equalsIgnoreCase(s) || args.equalsIgnoreCase(command.guild.config.getPrefixCommand() + s)) {
-                    if (!Utility.testForPerms(command, c.perms)) {
+                    if (!GuildHandler.testForPerms(command, c.perms)) {
                         return error;
                     }
                     RequestHandler.sendEmbedMessage("", c.getCommandInfo(command), command.channel.get());

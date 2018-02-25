@@ -28,6 +28,7 @@ public enum SAILType {
     ART_PINNING("ArtPinning"),
     PROFILES("Profiles"),
     MOD_MUTE("ModMute"),
+    READ_RULES_REWARDS("RuleCode"),
 
     //Toggle types
     ADMIN_LOGGING("AdminLogging"),

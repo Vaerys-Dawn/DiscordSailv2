@@ -63,12 +63,12 @@ public class ModulePixels extends GuildModule {
     @Override
     public void setup() {
         commands.add(new DenyXpPrefix());
-        
+
         channels.add(ChannelSetting.LEVEL_UP);
         channels.add(ChannelSetting.PIXELS);
         channels.add(ChannelSetting.LEVEL_UP_DENIED);
         channels.add(ChannelSetting.XP_DENIED);
-        
+
         settings.add(new XpDecay());
         settings.add(new XpGain());
         settings.add(new SelfDestructLevelUps());
@@ -78,7 +78,7 @@ public class ModulePixels extends GuildModule {
 
     @Override
     public String stats(CommandObject command) {
-        boolean hasManageServer = Utility.testForPerms(command, Permissions.MANAGE_SERVER);
+        boolean hasManageServer = GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER);
         StringBuilder builder = new StringBuilder();
         builder.append("**Pixels Per Message: ** " + command.guild.config.xpRate);
         builder.append("\n**Pixel Modifier:** " + command.guild.config.xpModifier);

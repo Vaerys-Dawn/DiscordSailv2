@@ -87,15 +87,10 @@ public class Main {
                 logger.info("No Pastebin Token found.");
             }
 
-            try {
-                List<String> patreonToken = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN);
-                Client.initPatreon(patreonToken);
-            } catch (IndexOutOfBoundsException e) {
-                logger.info("No Patreon Token found.");
-            }
 
 
-            //stuff that i cant get to work because reasons, ignore completely
+
+            //stuff that i cant getToggles to work because reasons, ignore completely
 
 //            try{
 //                List<String> richPresesnce = FileHandler.readFromFile(Constants.FILE_RPC_TOKEN);
@@ -116,6 +111,15 @@ public class Main {
 
             //load config phase 2
             Globals.initConfig(client, config, globalData);
+
+            if (Globals.creatorID == 153159020528533505L) {
+                try {
+                    List<String> patreonToken = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN);
+                    Client.initPatreon(patreonToken);
+                } catch (IndexOutOfBoundsException e) {
+                    logger.info("No Patreon Token found.");
+                }
+            }
 
             Globals.validateConfig();
             if (Globals.errorStack != null) {

@@ -30,6 +30,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+
+@SuppressWarnings("CaughtExceptionImmediatelyRethrown")
 public class RequestHandler {
 
 
@@ -64,11 +66,13 @@ public class RequestHandler {
             if (StringUtils.isBlank(message)) return null;
             try {
                 return channel.sendMessage(message);
+            } catch (RateLimitException e) {
+                throw e;
             } catch (MissingPermissionsException e) {
                 missingPermissions(message, channel);
                 return null;
             } catch (DiscordException e) {
-                String stackContents = Arrays.toString(Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString()).toArray());
+                String stackContents = Arrays.toString(Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toArray());
                 if (stackContents.contains("sx.blah.discord.handle.impl.obj.PrivateChannel.sendMessage(PrivateChannel.java") &&
                         e.getMessage().contains("Message was unable to be sent")) {
                     sendError("Message was unable to be sent, User Dms might be off.", message, channel);
@@ -168,75 +172,106 @@ public class RequestHandler {
         return sendFile(message, file, command.channel.get());
     }
 
-    public static IMessage sendFileURL(String message, String imageURL, IChannel channel, boolean loadMessage) {
-        IMessage toDelete = null;
-        if (loadMessage) {
-            toDelete = sendMessage("`Loading...`", channel).get();
+    public static RequestBuffer.RequestFuture<IMessage> sendFileURL(String preMessage, String imageURL, IChannel channel, boolean loadMessage) {
+        // if url is empty send as regular Image
+        if (imageURL == null || imageURL.isEmpty()) {
+            return sendMessage(preMessage, channel);
         }
-        IMessage sentMessage = null;
-        HttpURLConnection connection = null;
-        try {
-            connection = (HttpURLConnection) new URL(imageURL).openConnection();
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) " + "AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
-            //setup for the stream
 
-            InputStream stream = connection.getInputStream();
-            sentMessage = RequestBuffer.request(() -> {
-                try {
-                    //set up the file name
-                    URL url = new URL(imageURL);
-                    String filename = FilenameUtils.getName(url.getPath());
-                    if (filename.equalsIgnoreCase("giphy.gif")) {
-                        return sendMessage(message + " " + imageURL, channel).get();
-                    }
-                    //checks if url is valid
-                    if (!Utility.isImageLink(filename)) {
-                        return sendMessage(message + " " + imageURL, channel).get();
-                    }
-                    //sends message/files
-                    if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("") && imageURL != null) {
-                        return channel.sendFile("", stream, filename);
-                    } else if (message != null && !message.isEmpty() && imageURL != null) {
-                        return channel.sendFile(Utility.removeMentions(message), false, stream, filename);
-                    } else {
-                        logger.debug("Error sending File to channel with id: " + channel.getLongID() + " on guild with id: " + channel.getGuild().getLongID() +
-                                ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
-                        return null;
-                    }
-                } catch (MalformedURLException e) {
-                    return sendMessage(message + " " + imageURL, channel).get();
-                } catch (MissingPermissionsException e) {
-                    missingPermissions("URL_FILE", channel);
-                    return sendMessage(message + " <" + imageURL + ">", channel).get();
-                }
-            }).get();
-            stream.close();
-        } catch (MalformedURLException e) {
-            Utility.sendStack(e);
-        } catch (SSLHandshakeException e) {
-            sendMessage(message + " " + imageURL + " `FAILED TO EMBED - Failed SSL Handshake`", channel).get();
-        } catch (IOException e) {
+        //make sure that the message contents is valid
+        if (StringUtils.containsOnly(preMessage, "\n") || preMessage == null || preMessage.isEmpty()) {
+            preMessage = "";
+        }
+
+        // if url isn't considered a image URL send as message.
+        if (!Utility.isImageLink(imageURL, true) || imageURL.contains("giphy.gif")) {
+            return sendMessage(preMessage + "\n" + imageURL, channel);
+        }
+        //convert into final value
+        final String message = preMessage;
+
+        //send loading message
+        IMessage loading = null;
+        if (loadMessage) {
+            loading = sendMessage("`Loading...`", channel).get();
+        }
+
+        //request for image to be sent.
+        RequestBuffer.RequestFuture<IMessage> sent = RequestBuffer.request(() -> {
+            IMessage sentMessage = null;
+            InputStream stream = null;
+            int responseCode = -1;
             try {
-                if (connection != null) {
-                    int responseCode = connection.getResponseCode();
-                    sendMessage(message + " " + imageURL + " `FAILED TO EMBED - ERROR:" + responseCode + "`", channel).get();
+                //connect to the Image URL
+                HttpURLConnection connection = (HttpURLConnection) new URL(imageURL).openConnection();
+                connection.setRequestProperty("User-Agent", Constants.MOZILLA_USER_AGENT);
+
+                //getToggles responseCode in case of IOException;
+                responseCode = connection.getResponseCode();
+
+                //turn the image connection into an inputStream
+                stream = connection.getInputStream();
+
+                //image's file name
+                String filename = FilenameUtils.getName(new URL(imageURL).getPath());
+
+                //send file
+                sentMessage = channel.sendFile(Utility.removeMentions(message), false, stream, filename);
+
+            } catch (MissingPermissionsException e) {
+                //send message and url with url closed
+                missingPermissions("URL_FILE", channel);
+                sentMessage = sendMessage(message + " <" + imageURL + ">", channel).get();
+            } catch (RateLimitException e) {
+                //send exception back out, needed for request handling.
+                throw e;
+            } catch (MalformedURLException e) {
+                //this should never show up. seriously
+                Utility.sendStack(e);
+            } catch (SSLHandshakeException e) {
+                //something to do with the ssl handshake failed. unsure what causes this.
+                sendMessage(message + " " + imageURL + " `FAILED TO EMBED - FAILED SSL HANDSHAKE.`", channel).get();
+            } catch (IOException e) {
+                //the file failed to be grabbed.
+                String response = " `ERROR:" + responseCode + ", IMAGE FAILED TO EMBED";
+                if (responseCode == 403) {
+                    sentMessage = sendMessage(message + "\n" + imageURL + response + ", IMAGE LINK NEEDS UPDATING.`", channel).get();
+                } else if (responseCode != -1) {
+                    sentMessage = sendMessage(message + "\n" + imageURL + response + "`", channel).get();
                 } else {
-                    Utility.sendStack(e);
+                    sentMessage = sendMessage(message + "\n" + imageURL, channel).get();
                 }
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                //the host failed, unsure as to the cause. inspect.
+                if (e.getMessage().contains("http host = null")) {
+                    sendMessage(message + "\n" + imageURL + " `HTTP HOST ERROR, CHECK URL FOR ERRORS.`", channel);
+                }
             }
-        } catch (IllegalArgumentException e) {
-            if (e.getMessage().contains("http host = null")) {
-                sendMessage("> `HTTP HOST ERROR, CHECK URL FOR ERRORS.`", channel);
+            try {
+                //close off the stream
+                if (stream != null) stream.close();
+            } catch (IOException e) {
+                //how the hell did this even happen
+                Utility.sendStack(e);
             }
+            //return the completed message
+            return sentMessage;
+        });
+        if (loading != null) {
+            sent.get();
+            deleteMessage(loading);
         }
-        if (loadMessage && toDelete != null) {
-            deleteMessage(toDelete);
-        }
-        return sentMessage;
+        return sent;
     }
 
+
+    public static RequestBuffer.RequestFuture<IMessage> sendFileURL(String message, String imageURL, ChannelObject channel, boolean loadMessage) {
+        return sendFileURL(message, imageURL, channel.get(), loadMessage);
+    }
+
+    public static RequestBuffer.RequestFuture<IMessage> sendFileURL(String message, String imageURL, CommandObject command, boolean loadMessage) {
+        return sendFileURL(message, imageURL, command.channel.get(), loadMessage);
+    }
 
     public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, long newRoleID, boolean isAdding) {
         return RequestBuffer.request(() -> {
@@ -254,6 +289,8 @@ public class RequestHandler {
                         return true;
                     }
                 }
+            } catch (RateLimitException e) {
+                throw e;
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("Edited roles hierarchy is too high.")) {
                     logger.debug("Error Editing roles of user with id: " + author.getLongID() + " on guild with id: " + guild.getLongID() +
@@ -264,12 +301,8 @@ public class RequestHandler {
                     return true;
                 }
             } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    roleManagement(author, guild, newRoleID, isAdding);
-                } else {
-                    Utility.sendStack(e);
-                    return true;
-                }
+                Utility.sendStack(e);
+                return true;
             }
             return false;
         });
@@ -289,6 +322,8 @@ public class RequestHandler {
                 }
                 guild.editUserRoles(author, roles);
                 return true;
+            } catch (RateLimitException e) {
+                throw e;
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("hierarchy")) {
                     logger.debug("Error Editing roles of user with id: " + author.getLongID() + " on guild with id: " + guild.getLongID() +
@@ -299,46 +334,34 @@ public class RequestHandler {
                     return false;
                 }
             } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    return roleManagement(author, guild, userRoles).get();
-                } else {
-                    Utility.sendStack(e);
-                    return false;
-                }
+                Utility.sendStack(e);
+                return false;
             }
         });
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> updateAvatar(Image avatar) {
-        return RequestBuffer.request(() -> {
+    public static void updateAvatar(Image avatar) {
+        RequestBuffer.request(() -> {
             try {
                 Globals.getClient().changeAvatar(avatar);
+            } catch (RateLimitException e) {
+                throw e;
             } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    updateAvatar(avatar);
-                } else {
-                    Utility.sendStack(e);
-                    return true;
-                }
+                Utility.sendStack(e);
             }
-            return false;
         });
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> updateUsername(String botName) {
-        return RequestBuffer.request(() -> {
+    public static void updateUsername(String botName) {
+        RequestBuffer.request(() -> {
             try {
-                if (Client.getClient().getOurUser().getName().equals(botName)) return false;
+                if (Client.getClient().getOurUser().getName().equals(botName)) return;
                 Globals.getClient().changeUsername(botName);
+            } catch (RateLimitException e) {
+                throw e;
             } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    updateUsername(botName);
-                } else {
-                    Utility.sendStack(e);
-                    return true;
-                }
+                Utility.sendStack(e);
             }
-            return false;
         });
     }
 
@@ -348,16 +371,14 @@ public class RequestHandler {
                 if (Globals.isReady) {
                     message.delete();
                 } else return false;
+            } catch (RateLimitException e) {
+                throw e;
             } catch (MissingPermissionsException e) {
                 Utility.sendStack(e);
                 return true;
             } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    deleteMessage(message);
-                } else {
-                    Utility.sendStack(e);
-                    return true;
-                }
+                Utility.sendStack(e);
+                return true;
             }
             return false;
         });
@@ -365,26 +386,6 @@ public class RequestHandler {
 
     public static RequestBuffer.RequestFuture<Boolean> deleteMessage(MessageObject message) {
         return deleteMessage(message.get());
-    }
-
-
-    public static RequestBuffer.RequestFuture<Boolean> deleteMessage(MessageHistory messages) {
-        return RequestBuffer.request(() -> {
-            try {
-                messages.bulkDelete();
-            } catch (MissingPermissionsException e) {
-                Utility.sendStack(e);
-                return true;
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    deleteMessage(messages);
-                } else {
-                    Utility.sendStack(e);
-                    return true;
-                }
-            }
-            return false;
-        });
     }
 
     public static RequestBuffer.RequestFuture<Boolean> updateUserNickName(IUser author, IGuild guild, String nickname) {
@@ -398,13 +399,11 @@ public class RequestHandler {
                     Utility.sendStack(e);
                 }
                 return true;
+            } catch (RateLimitException e) {
+                throw e;
             } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    updateUserNickName(author, guild, nickname);
-                } else {
-                    Utility.sendStack(e);
-                    return true;
-                }
+                Utility.sendStack(e);
+                return true;
             }
             return false;
         });
@@ -458,6 +457,27 @@ public class RequestHandler {
     }
 
 
+    // TODO: 25/02/2018 remove below
+
+//    public static RequestBuffer.RequestFuture<Boolean> deleteMessage(MessageHistory messages) {
+//        return RequestBuffer.request(() -> {
+//            try {
+//                messages.bulkDelete();
+//            } catch (MissingPermissionsException e) {
+//                Utility.sendStack(e);
+//                return true;
+//            } catch (DiscordException e) {
+//                if (e.getMessage().contains("CloudFlare")) {
+//                    deleteMessage(messages);
+//                } else {
+//                    Utility.sendStack(e);
+//                    return true;
+//                }
+//            }
+//            return false;
+//        });
+//    }
+
     //    public static RequestBuffer.RequestFuture<IMessage> sendMessage(String message, IChannel channel) {
 //        if (!Globals.client.isReady()) {
 //            return null;
@@ -491,7 +511,7 @@ public class RequestHandler {
 //                    return error;
 //                } catch (DiscordException e) {
 //                    if (e.getMessage().contains("CloudFlare")) {
-//                        return sendMessage(message, channel).get();
+//                        return sendMessage(message, channel).getToggles();
 //                    } else if (e.getMessage().contains("Message was unable to be sent (Discord didn't return a response).")) {
 //                        logger.debug("Could not Send DM, Perhaps the user has Dms from server members turned off.\nMessage: " + message);
 //                    } else {
@@ -530,7 +550,7 @@ public class RequestHandler {
 //            } catch (MissingPermissionsException e) {
 //                logger.debug("Error sending File to channel with id: " + channel.getLongID() + " on guild with id: " + channel.getGuild().getLongID() +
 //                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
-//                return sendMessage(Utility.embedToString(embed), channel).get();
+//                return sendMessage(Utility.embedToString(embed), channel).getToggles();
 //            }
 //            return null;
 //        });
@@ -539,7 +559,7 @@ public class RequestHandler {
 //    public static IMessage sendDMEmbed(String message, XEmbedBuilder embed, long userID) {
 //        IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
 //        if (channel != null) {
-//            return sendEmbedMessage(message, embed, channel).get();
+//            return sendEmbedMessage(message, embed, channel).getToggles();
 //        } else {
 //            return null;
 //        }
@@ -552,10 +572,10 @@ public class RequestHandler {
 //                if (message == null || message.isEmpty()) {
 //                    return null;
 //                }
-//                return sendMessage(message, channel).get();
+//                return sendMessage(message, channel).getToggles();
 //            } catch (DiscordException e) {
 //                if (e.getMessage().contains("CloudFlare")) {
-//                    return sendDM(message, userID).get();
+//                    return sendDM(message, userID).getToggles();
 //                } else {
 //                    Utility.sendStack(e);
 //                    return null;
@@ -569,7 +589,7 @@ public class RequestHandler {
 //
 //    public static IMessage sendDM(String message, String userID) {
 //        try {
-//            return sendDM(message, Long.parseLong(userID)).get();
+//            return sendDM(message, Long.parseLong(userID)).getToggles();
 //        } catch (NumberFormatException e) {
 //            return null;
 //        }
@@ -634,4 +654,74 @@ public class RequestHandler {
 //            return false;
 //        });
 //    }
+
+    //    public static IMessage sendFileURL(String message, String imageURL, IChannel channel, boolean loadMessage) {
+//        IMessage toDelete = null;
+//        if (loadMessage) {
+//            toDelete = sendMessage("`Loading...`", channel).getToggles();
+//        }
+//        IMessage sentMessage = null;
+//        HttpURLConnection connection = null;
+//        try {
+//            connection = (HttpURLConnection) new URL(imageURL).openConnection();
+//            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) " + "AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
+//            //setup for the stream
+//
+//            InputStream stream = connection.getInputStream();
+//            sentMessage = RequestBuffer.request(() -> {
+//                try {
+//                    //set up the file name
+//                    URL url = new URL(imageURL);
+//                    String filename = FilenameUtils.getName(url.getPath());
+//                    if (filename.equalsIgnoreCase("giphy.gif")) {
+//                        return sendMessage(message + " " + imageURL, channel).getToggles();
+//                    }
+//                    //checks if url is valid
+//                    if (!Utility.isImageLink(filename)) {
+//                        return sendMessage(message + " " + imageURL, channel).getToggles();
+//                    }
+//                    //sends message/files
+//                    if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("") && imageURL != null) {
+//                        return channel.sendFile("", stream, filename);
+//                    } else if (message != null && !message.isEmpty() && imageURL != null) {
+//                        return channel.sendFile(Utility.removeMentions(message), false, stream, filename);
+//                    } else {
+//                        logger.debug("Error sending File to channel with id: " + channel.getLongID() + " on guild with id: " + channel.getGuild().getLongID() +
+//                                ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
+//                        return null;
+//                    }
+//                } catch (MalformedURLException e) {
+//                    return sendMessage(message + " " + imageURL, channel).getToggles();
+//                } catch (MissingPermissionsException e) {
+//                    missingPermissions("URL_FILE", channel);
+//                    return sendMessage(message + " <" + imageURL + ">", channel).getToggles();
+//                }
+//            }).getToggles();
+//            stream.close();
+//        } catch (MalformedURLException e) {
+//            Utility.sendStack(e);
+//        } catch (SSLHandshakeException e) {
+//            sendMessage(message + " " + imageURL + " `FAILED TO EMBED - Failed SSL Handshake`", channel).getToggles();
+//        } catch (IOException e) {
+//            try {
+//                if (connection != null) {
+//                    int responseCode = connection.getResponseCode();
+//                    sendMessage(message + " " + imageURL + " `FAILED TO EMBED - ERROR:" + responseCode + "`", channel).getToggles();
+//                } else {
+//                    Utility.sendStack(e);
+//                }
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            }
+//        } catch (IllegalArgumentException e) {
+//            if (e.getMessage().contains("http host = null")) {
+//                sendMessage("> `HTTP HOST ERROR, CHECK URL FOR ERRORS.`", channel);
+//            }
+//        }
+//        if (loadMessage && toDelete != null) {
+//            deleteMessage(toDelete);
+//        }
+//        return sentMessage;
+//    }
+
 }

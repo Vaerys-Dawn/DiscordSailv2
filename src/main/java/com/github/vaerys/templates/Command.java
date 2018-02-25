@@ -1,8 +1,12 @@
 package com.github.vaerys.templates;
 
-import com.github.vaerys.commands.CommandObject;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
@@ -11,8 +15,10 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 29/01/2017.
@@ -43,7 +49,8 @@ public abstract class Command {
         this.perms = perms();
         this.requiresArgs = requiresArgs();
         this.doAdminLogging = doAdminLogging();
-    };
+        init();
+    }
 
 
     public List<SubCommandObject> subCommands = new LinkedList<>();
@@ -143,9 +150,9 @@ public abstract class Command {
 
         //command info
         StringBuilder builder = new StringBuilder();
-        builder.append("**" + getUsage(command) + "**\n");
-        builder.append("**Desc: **" + description(command) + "\n");
-        builder.append("**Type: **" + type.toString() + "\n");
+        builder.append(description(command) + "\n");
+        builder.append("**Type: **" + type.toString() + ".");
+
 
         // display permissions
         if (perms != null && perms.length != 0) {

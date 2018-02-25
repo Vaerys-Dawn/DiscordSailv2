@@ -67,7 +67,7 @@ public class SpamHandler {
         List<IRole> oldRoles = command.user.roles;
         IGuild guild = command.guild.get();
 
-        if (Utility.testForPerms(command, Permissions.MENTION_EVERYONE)) return false;
+        if (GuildHandler.testForPerms(command, Permissions.MENTION_EVERYONE)) return false;
 
         if (message.toString().contains("@everyone") || message.toString().contains("@here")) {
             return false;
@@ -111,7 +111,7 @@ public class SpamHandler {
 
     public static boolean rateLimiting(CommandObject command) {
         //make sure that the rate limiting should actually happen
-        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
+        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
         if (!command.guild.config.rateLimiting) return false;
         if (!command.guild.rateLimit(command.user.longID)) return false;
 
@@ -170,7 +170,7 @@ public class SpamHandler {
             add("discord.gg");
             add("discordapp.com/Invite/");
         }};
-        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
+        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
 
         boolean inviteFound = false;
         if (guildconfig.denyInvites) {

@@ -47,7 +47,7 @@ public class ModuleComp extends GuildModule {
 
     @Override
     public String stats(CommandObject command) {
-        if (!Utility.testForPerms(command, Permissions.MANAGE_SERVER)) return null;
+        if (!GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER)) return null;
         StringBuilder builder = new StringBuilder();
         builder.append("**Total Competition Entries:** " + command.guild.competition.getEntries().size());
         builder.append("\n**Total Voters:** " + command.guild.competition.getVoters().size());

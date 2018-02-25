@@ -2,6 +2,7 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.ProfileObject;
@@ -55,7 +56,7 @@ public class EditCC extends Command {
         if (customCommand == null) {
             return "> Command Not found.";
         }
-        boolean canBypass = Utility.testForPerms(command, Permissions.MANAGE_MESSAGES);
+        boolean canBypass = GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES);
         boolean isAuthor = command.user.longID == customCommand.getUserID();
         //test if can edit
         if ((customCommand.isLocked() && !canBypass) || (!canBypass && !isAuthor)) {

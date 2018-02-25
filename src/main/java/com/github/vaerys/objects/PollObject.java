@@ -25,7 +25,7 @@ public class PollObject {
 
     public String addOption(String option){
         if (open){
-            return "> cannot add option as poll is open.";
+            return "> Cannot add option as poll is open.";
         }
         for (String s: options){
             if (option.equalsIgnoreCase(s)){

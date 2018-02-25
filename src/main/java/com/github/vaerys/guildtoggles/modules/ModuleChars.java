@@ -49,11 +49,11 @@ public class ModuleChars extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject command) {
+    public String stats(CommandObject object) {
         StringBuilder builder = new StringBuilder();
-        builder.append("**Total Characters:** " + command.guild.characters.getCharacters(command.guild.get()).size());
-        if (Utility.testForPerms(command, Permissions.MANAGE_SERVER)) {
-            builder.append("\n**Character Roles Prefix:** " + command.guild.characters.getRolePrefix());
+        builder.append("**Total Characters:** " + object.guild.characters.getCharacters(object.guild.get()).size());
+        if (GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) {
+            builder.append("\n**Character Roles Prefix:** " + object.guild.characters.getRolePrefix());
         }
         return builder.toString();
     }

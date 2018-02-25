@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
@@ -36,7 +37,7 @@ public class SetLevel extends Command {
             }
             userObject.setXp(xp);
             userObject.removeLevelFloor();
-            XpHandler.checkUsersRoles(user.longID, command.guild);
+            GuildHandler.checkUsersRoles(user.longID, command.guild);
             return "> " + user.displayName + "'s Level is now set to: **" + level + "**";
         } catch (NumberFormatException e) {
             return "> Invalid number";

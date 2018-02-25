@@ -45,9 +45,9 @@ public class ModuleModMuting extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject command) {
-        if (!Utility.testForPerms(command, Permissions.MANAGE_SERVER)) return null;
-        IRole muteRole = command.guild.getRoleByID(command.guild.config.getMutedRoleID());
+    public String stats(CommandObject object) {
+        if (!GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
+        IRole muteRole = object.guild.getRoleByID(object.guild.config.getMutedRoleID());
         if (muteRole != null) {
             return "**Mute Role:** " + muteRole.getName();
         }

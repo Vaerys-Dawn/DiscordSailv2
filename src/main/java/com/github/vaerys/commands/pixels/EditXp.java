@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -86,7 +86,7 @@ public class EditXp extends Command {
 
         if (xpChanged) {
             profile.removeLevelFloor();
-            XpHandler.checkUsersRoles(user.longID, command.guild);
+            GuildHandler.checkUsersRoles(user.longID, command.guild);
         }
         return out;
     }

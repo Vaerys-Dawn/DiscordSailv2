@@ -102,7 +102,7 @@ public class ListCCs extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"CClist", "ListCCs"};
+    protected static final String[] NAMES = new String[]{"CClist", "ListCCs","ListCC"};
     @Override
     protected String[] names() {
         return NAMES;

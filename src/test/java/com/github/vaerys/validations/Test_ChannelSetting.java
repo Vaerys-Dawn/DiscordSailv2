@@ -52,7 +52,7 @@ public class Test_ChannelSetting extends TestCase {
 //    @Test
     public void testDescriptionWithNullParameter() {
         for (ChannelSetting setting : ChannelSetting.values()) {
-            // other get desc
+            // other getToggles desc
             if (setting.getDesc(null) == null) {
                 fail(String.format("The \"%s\" channel setting's description cannot be unset.", setting.name()));
             }

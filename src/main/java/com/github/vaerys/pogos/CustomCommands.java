@@ -2,6 +2,7 @@ package com.github.vaerys.pogos;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
@@ -42,8 +43,8 @@ public class CustomCommands extends GuildFile {
 
     public int maxCCs(UserObject user, GuildObject guild) {
         int total = 10;
-        boolean hasManagePerms = Utility.testForPerms(user, guild, Permissions.MANAGE_MESSAGES);
-        boolean hasAdminPerms = Utility.testForPerms(user, guild, Permissions.ADMINISTRATOR);
+        boolean hasManagePerms = GuildHandler.testForPerms(user, guild, Permissions.MANAGE_MESSAGES);
+        boolean hasAdminPerms = GuildHandler.testForPerms(user, guild, Permissions.ADMINISTRATOR);
         if (hasManagePerms) {
             total += 50;
         }
@@ -165,7 +166,7 @@ public class CustomCommands extends GuildFile {
         int i = 0;
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(args)) {
-                boolean canBypass = Utility.testForPerms(author, guild, Permissions.MANAGE_MESSAGES);
+                boolean canBypass = GuildHandler.testForPerms(author, guild, Permissions.MANAGE_MESSAGES);
                 if (author.getLongID() == guild.getOwnerLongID()
                         || author.getLongID() == Globals.creatorID
                         || author.getLongID() == Globals.client.getOurUser().getLongID()) {

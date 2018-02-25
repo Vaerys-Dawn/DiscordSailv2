@@ -1,17 +1,19 @@
 package com.github.vaerys.commands.characters;
 
-import java.util.ArrayList;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 26/02/2017.
@@ -36,7 +38,9 @@ public class CharInfo extends Command {
                     }
                 }
                 if (roles.size() != 0) {
-                    builder.withColor(Utility.getUsersColour(roles, command.guild.get()));
+                    builder.withColor(GuildHandler.getUsersColour(roles));
+                } else {
+                    builder.withColor(GuildHandler.getUsersColour(user, command.guild.get()));
                 }
 
                 StringBuilder description = new StringBuilder();
@@ -68,6 +72,7 @@ public class CharInfo extends Command {
     }
 
     protected static final String[] NAMES = new String[]{"CharInfo", "InfoChar"};
+
     @Override
     protected String[] names() {
         return NAMES;
@@ -79,36 +84,42 @@ public class CharInfo extends Command {
     }
 
     protected static final String USAGE = "[Character ID]";
+
     @Override
     protected String usage() {
         return USAGE;
     }
 
     protected static final SAILType COMMAND_TYPE = SAILType.CHARACTER;
+
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
     }
 
     protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.CHARACTER;
+
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
     protected static final Permissions[] PERMISSIONS = new Permissions[0];
+
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
     protected static final boolean REQUIRES_ARGS = true;
+
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
     protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

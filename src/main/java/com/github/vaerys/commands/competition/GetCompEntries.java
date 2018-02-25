@@ -2,6 +2,7 @@ package com.github.vaerys.commands.competition;
 
 import java.util.List;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CompObject;
 import com.github.vaerys.objects.XEmbedBuilder;
@@ -27,7 +28,7 @@ public class GetCompEntries extends Command {
             IUser user = command.guild.getUserByID(compObjects.get(i).getUserID());
             if (user != null) {
                 builder.withDesc(user.mention());
-                builder.withColor(Utility.getUsersColour(user, command.guild.get()));
+                builder.withColor(GuildHandler.getUsersColour(user, command.guild.get()));
             }
             if (Utility.isImageLink(compObjects.get(i).getFileUrl())) {
                 builder.withThumbnail(compObjects.get(i).getFileUrl());

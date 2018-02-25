@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.enums.ChannelSetting;
@@ -20,7 +21,7 @@ import sx.blah.discord.util.RequestBuffer;
 public class UpdateRolePerms extends Command {
     @Override
     public String execute(String args, CommandObject command) {
-        List<IRole> parentRole = Utility.getRolesByName(command.guild.get(), args);
+        List<IRole> parentRole = GuildHandler.getRolesByName(command.guild.get(), args);
         EnumSet parentPerms = command.guild.get().getEveryoneRole().getPermissions();
         ArrayList<String> permList = new ArrayList<>();
         IMessage workingMsg = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();

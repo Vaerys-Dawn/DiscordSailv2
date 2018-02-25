@@ -3,8 +3,8 @@ package com.github.vaerys.tags.cctags;
 import java.net.MalformedURLException;
 import java.net.URL;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.TagObject;
 import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.Permissions;
@@ -20,7 +20,7 @@ public class TagEmbedImage extends TagObject {
         String imageURL = contents(from);
         try {
             URL url = new URL(imageURL);
-            if (Utility.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS)) {
+            if (GuildHandler.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS)) {
                 from = removeAllTag(from);
                 RequestHandler.sendFileURL(from, imageURL, command.channel.get(), true);
             } else {

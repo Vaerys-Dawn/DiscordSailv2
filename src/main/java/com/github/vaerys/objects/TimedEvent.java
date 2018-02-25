@@ -130,7 +130,7 @@ public class TimedEvent {
 
     public boolean isEventActive() {
         if (!isValid()) return false;
-        //get instance
+        //getToggles instance
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         now.plusMinutes(30);
         ZonedDateTime start = now.withMonth(startMonth).withDayOfMonth(startDay);

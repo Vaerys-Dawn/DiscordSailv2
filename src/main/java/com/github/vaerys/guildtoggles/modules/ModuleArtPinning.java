@@ -38,8 +38,8 @@ public class ModuleArtPinning extends GuildModule {
 
     @Override
     public String desc(CommandObject command) {
-        return "This module allows users to pin their art to the specified art channel using the \uD83D\uDCCC reaction.\n" + // \uD838\uDCCC pushpin
-                "Users can unpin their artworks with a â�Œ reaction.";
+        return "This module allows users to pin their art to the specified art channel using the \uD83D\uDCCC reaction.\n" +
+                "Users can unpin their artworks with a \u274C reaction.";
     }
 
     @Override
@@ -51,9 +51,9 @@ public class ModuleArtPinning extends GuildModule {
     }
 
     @Override
-    public String stats(CommandObject command) {
-        if (!Utility.testForPerms(command, Permissions.MANAGE_SERVER)) return null;
-        return "**Total Pins:** " + command.guild.channelData.getPinnedMessages().size() + "/" + command.guild.config.pinLimit;
+    public String stats(CommandObject object) {
+        if (!GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
+        return "**Total Pins:** " + object.guild.channelData.getPinnedMessages().size() + "/" + object.guild.config.pinLimit;
     }
 
     @Override

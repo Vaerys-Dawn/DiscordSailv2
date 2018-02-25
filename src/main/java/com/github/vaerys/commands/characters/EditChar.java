@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.enums.ChannelSetting;
@@ -30,7 +30,7 @@ public class EditChar extends Command {
         SplitFirstObject mode = new SplitFirstObject(charName.getRest());
         for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
             if (c.getName().equalsIgnoreCase(charName.getFirstWord())) {
-                if (c.getUserID() == command.user.longID || Utility.canBypass(command.user.get(), command.guild.get())) {
+                if (c.getUserID() == command.user.longID || GuildHandler.canBypass(command.user.get(), command.guild.get())) {
                     String rest = mode.getRest();
                     if (rest == null) {
                         rest = "";

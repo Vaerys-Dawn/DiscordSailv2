@@ -41,12 +41,12 @@ public class UserInfo extends Command {
         ProfileObject profile = user.getProfile(command.guild);
         if (profile == null && user.get().isBot()) {
             if (user.get().getPresence().getStatus().equals(StatusType.OFFLINE) || user.get().getPresence().getStatus().equals(StatusType.UNKNOWN)) {
-                return "> Could not get a profile for " + user.displayName + ".";
+                return "> Could not getToggles a profile for " + user.displayName + ".";
             }
             profile = new ProfileObject(user.longID);
             command.guild.users.addUser(profile);
         } else if (profile == null) {
-            return "> Could not get a profile for " + user.displayName + ".";
+            return "> Could not getToggles a profile for " + user.displayName + ".";
         }
         if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
             return "> " + user.displayName + " has set their profile to private.";

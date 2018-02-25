@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
@@ -35,7 +35,7 @@ public class SetXp extends Command {
             if (userObject != null) {
                 userObject.setXp(xp);
                 userObject.removeLevelFloor();
-                XpHandler.checkUsersRoles(user.longID, command.guild);
+                GuildHandler.checkUsersRoles(user.longID, command.guild);
                 return "> " + user.displayName + "'s Pixels is now set to: **" + xp + "**";
             } else {
                 return "> User does not have a profile.";

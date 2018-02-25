@@ -2,6 +2,7 @@ package com.github.vaerys.commands.admin;
 
 import java.util.ListIterator;
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -19,7 +20,7 @@ public class SetTrustedRoles extends Command {
     public String execute(String args, CommandObject command) {
         SplitFirstObject split = new SplitFirstObject(args);
 
-        IRole role = Utility.getRoleFromName(split.getRest(), command.guild.get());
+        IRole role = GuildHandler.getRoleFromName(split.getRest(), command.guild.get());
         if (role == null) {
             return Constants.ERROR_ROLE_NOT_FOUND;
         }
