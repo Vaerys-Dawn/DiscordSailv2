@@ -44,6 +44,7 @@ public class CommandInit {
 
         //Admin commands
         commands.add(new AdminEcho());
+        commands.add(new AddProfile());
         commands.add(new ChannelHere());
         commands.add(new ChannelStats());
         commands.add(new DenyXpPrefix());
@@ -60,21 +61,14 @@ public class CommandInit {
         commands.add(new SetPinLimit());
         commands.add(new SetRateLimit());
         commands.add(new SetRuleCode());
+        commands.add(new SetRuleCodeReward());
         commands.add(new SetTrustedRoles());
         commands.add(new SetupWizard());
         commands.add(new Toggle());
         commands.add(new UpdateInfo());
         commands.add(new UpdateRolePerms());
         commands.add(new UserSettings());
-        commands.add(new SetJoinMessage());
-        commands.add(new PruneEmptyProfiles());
-        commands.add(new DenyXpPrefix());
-        commands.add(new PurgeBannedData());
-        commands.add(new SetPinLimit());
-        commands.add(new SetRuleCode());
-        commands.add(new AdminEcho());
-        commands.add(new AddProfile());
-        commands.add(new SetRuleCodeReward());
+
         //General commands
         commands.add(new ClearReminder());
         commands.add(new EditLinks());
