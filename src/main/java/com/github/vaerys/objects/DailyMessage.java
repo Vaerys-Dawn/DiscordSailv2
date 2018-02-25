@@ -37,6 +37,10 @@ public class DailyMessage {
         return day;
     }
 
+    public void setDay(DayOfWeek newDay) {
+        day = newDay;
+    }
+
     public String getContents(CommandObject command) {
         String newContent = content;
         for (TagObject t : TagList.getType(TagType.DAILY)) {
@@ -64,10 +68,6 @@ public class DailyMessage {
 
     public long getUserID() {
         return userID;
-    }
-
-    public void setDay(DayOfWeek newDay) {
-        day = newDay;
     }
 
     public String getSpecialID() {

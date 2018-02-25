@@ -12,9 +12,9 @@ import java.util.ArrayList;
  */
 public class GuildUsers extends GuildFile {
     public static final String FILE_PATH = "Guild_Users.json";
-    private double fileVersion = 1.2;
     public ArrayList<ProfileObject> profiles = new ArrayList<>();
     public ArrayList<UserCountDown> mutedUsers = new ArrayList<>();
+    private double fileVersion = 1.2;
 
     public ArrayList<ProfileObject> getProfiles() {
         return profiles;

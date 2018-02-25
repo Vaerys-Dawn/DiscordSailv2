@@ -33,6 +33,7 @@ public abstract class Command {
     public final Permissions[] perms;
     public final boolean requiresArgs;
     public final boolean doAdminLogging;
+    public List<SubCommandObject> subCommands = new LinkedList<>();
 
 
     public Command() {
@@ -46,12 +47,10 @@ public abstract class Command {
         init();
     }
 
-
-    public List<SubCommandObject> subCommands = new LinkedList<>();
-
     /**
      * The code to be executed when the command is ran
-     * @param args - The args passed to the command
+     *
+     * @param args    - The args passed to the command
      * @param command - The command object to get data about where the command was sent from
      * @return The text or data to send back for the command
      */
@@ -60,30 +59,35 @@ public abstract class Command {
 
     /**
      * Gets the list of names that are associated with the command
+     *
      * @return the list of names associated with he command
      */
     protected abstract String[] names();
 
     /**
      * The description of the command
+     *
      * @return the description of the command
      */
     public abstract String description(CommandObject command);
 
     /**
      * Gets the usage of the command
+     *
      * @return the usage of the command
      */
     protected abstract String usage();
 
     /**
      * Gets the command type
+     *
      * @return the command type
      */
     protected abstract SAILType type();
 
     /**
      * The channel type the command can be ran in
+     *
      * @return the type of channel it can be ran in
      */
     protected abstract ChannelSetting channel();
@@ -136,6 +140,7 @@ public abstract class Command {
 
     /**
      * Creates a message used to fetch the command's documentations
+     *
      * @param command
      * @return
      */

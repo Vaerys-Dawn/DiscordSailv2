@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Set;
 
 public class PatreonAPI {
+    private static final Logger LOG = LoggerFactory.getLogger(PatreonAPI.class);
     private final String accessToken;
     private ResourceConverter converter;
-    private static final Logger LOG = LoggerFactory.getLogger(PatreonAPI.class);
 
     /**
      * Create a new instance of the Patreon API. You only need <b>one</b> of these objects unless you are using the API with multiple tokens
@@ -65,7 +65,7 @@ public class PatreonAPI {
      * Get a list of campaigns the current creator is running - also contains other related data like Goals
      * Note: The first campaign data object is located at index 0 in the data list
      *
-     * @return JSONAPIDocument<List<Campaign>> containing the above-mentioned data
+     * @return JSONAPIDocument<List < Campaign>> containing the above-mentioned data
      * @throws IOException Thrown when the GET request failed
      */
     public JSONAPIDocument<List<Campaign>> fetchCampaigns() throws IOException {
@@ -85,7 +85,7 @@ public class PatreonAPI {
      * @param campaignId id for campaign to retrieve
      * @param pageSize   how many pledges to return
      * @param pageCursor ignore, put null.
-     * @return JSONAPIDocument<List<Pledge>> containing pledges & associated data
+     * @return JSONAPIDocument<List < Pledge>> containing pledges & associated data
      * @throws IOException Thrown when the GET request failed
      */
     public JSONAPIDocument<List<Pledge>> fetchPageOfPledges(String campaignId, int pageSize, String pageCursor) throws IOException {
@@ -144,7 +144,7 @@ public class PatreonAPI {
         try {
             String prefix = "https://api.patreon.com/oauth2/api/";
             URL url = new URL(prefix.concat(suffix));
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Authorization", "Bearer ".concat(this.accessToken));
             return connection.getInputStream();
         } catch (IOException e) {

@@ -37,7 +37,7 @@ public class SetPixelModifier extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"SetPixelMultiplier","SetPixelModifier"};
+        return new String[]{"SetPixelMultiplier", "SetPixelModifier"};
     }
 
     @Override

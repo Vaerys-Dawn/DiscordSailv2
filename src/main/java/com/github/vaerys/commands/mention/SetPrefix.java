@@ -28,7 +28,7 @@ public class SetPrefix extends MentionCommand {
 
     @Override
     protected String[] names() {
-        return new String[]{"SetCommandPrefix","SetPrefixCommand","SetPrefix"};
+        return new String[]{"SetCommandPrefix", "SetPrefixCommand", "SetPrefix"};
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SetPrefix extends MentionCommand {
 
     @Override
     protected SAILType type() {
-        return  SAILType.ADMIN;
+        return SAILType.ADMIN;
     }
 
     @Override

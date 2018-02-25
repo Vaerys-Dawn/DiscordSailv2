@@ -35,7 +35,7 @@ public class EditServerDesc extends Command {
 
     @Override
     protected String[] names() {
-        return  new String[]{"EditServerDesc"};
+        return new String[]{"EditServerDesc"};
     }
 
     @Override

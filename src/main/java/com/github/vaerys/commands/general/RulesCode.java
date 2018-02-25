@@ -99,7 +99,7 @@ public class RulesCode extends Command {
 
     @Override
     protected Permissions[] perms() {
-        return  new Permissions[0];
+        return new Permissions[0];
     }
 
     @Override

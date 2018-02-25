@@ -7,7 +7,6 @@ import junit.framework.TestCase;
  * used to test the channel setting enum
  *
  * @author C0bra5
- *
  */
 public class Test_ChannelSetting extends TestCase {
 
@@ -47,7 +46,6 @@ public class Test_ChannelSetting extends TestCase {
     /**
      * Checks if the {@link ChannelSetting#getDesc(com.github.vaerys.commands.CommandObject)} method
      * returns the same thing as {@link ChannelSetting#getDesc()} method
-     *
      */
 //    @Test
     public void testDescriptionWithNullParameter() {

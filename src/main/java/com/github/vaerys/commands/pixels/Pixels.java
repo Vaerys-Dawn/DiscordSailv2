@@ -115,7 +115,7 @@ public class Pixels extends Command {
 
     @Override
     protected SAILType type() {
-        return  SAILType.PIXEL;
+        return SAILType.PIXEL;
     }
 
     @Override

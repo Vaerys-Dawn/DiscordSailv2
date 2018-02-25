@@ -59,7 +59,7 @@ public class TopTen extends Command {
 
     @Override
     protected String[] names() {
-        return  new String[]{"TopTen", "Top10"};
+        return new String[]{"TopTen", "Top10"};
     }
 
     @Override

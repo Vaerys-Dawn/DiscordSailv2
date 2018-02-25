@@ -36,7 +36,7 @@ public class LevelUpMessage extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"SetLvlMessage","SetLevelMessage","SetLvlMsg","SetLevelMsg"};
+        return new String[]{"SetLvlMessage", "SetLevelMessage", "SetLvlMsg", "SetLevelMsg"};
     }
 
     @Override

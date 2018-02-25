@@ -58,7 +58,7 @@ public class EditInfoFiles extends Command {
 
     @Override
     protected String[] names() {
-        return  new String[]{"EditInfoFiles", "UpdateInfoFiles"};
+        return new String[]{"EditInfoFiles", "UpdateInfoFiles"};
     }
 
     @Override

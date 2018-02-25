@@ -1,13 +1,14 @@
 package com.github.vaerys.commands.pixels;
 
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.templates.Command;
+import sx.blah.discord.handle.obj.Permissions;
+
 import java.util.ArrayList;
 import java.util.ListIterator;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import sx.blah.discord.handle.obj.Permissions;
 
 public class DenyXpPrefix extends Command {
 
@@ -55,7 +56,7 @@ public class DenyXpPrefix extends Command {
 
     @Override
     protected String[] names() {
-        return new String[] {"DenyXpPrefix"};
+        return new String[]{"DenyXpPrefix"};
     }
 
     @Override
@@ -75,7 +76,7 @@ public class DenyXpPrefix extends Command {
 
     @Override
     protected Permissions[] perms() {
-        return new Permissions[] {Permissions.MANAGE_SERVER};
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

@@ -75,7 +75,7 @@ public class SelectChar extends Command {
 
     @Override
     protected Permissions[] perms() {
-        return  new Permissions[0];
+        return new Permissions[0];
     }
 
     @Override

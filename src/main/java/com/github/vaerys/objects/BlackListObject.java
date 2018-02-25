@@ -21,12 +21,12 @@ public class BlackListObject {
         return reason;
     }
 
-    public String getPhrase() {
-        return phrase;
-    }
-
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getPhrase() {
+        return phrase;
     }
 
     public String getName() {

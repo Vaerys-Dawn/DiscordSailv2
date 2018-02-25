@@ -33,7 +33,7 @@ public class EnterVote extends Command {
 
     @Override
     protected String usage() {
-        return  "[Vote...]";
+        return "[Vote...]";
     }
 
     @Override

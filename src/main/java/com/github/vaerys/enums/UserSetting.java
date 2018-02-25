@@ -38,17 +38,17 @@ public enum UserSetting {
         this.text = text;
     }
 
-    @Override
-    public String toString() {
-        return text;
-    }
-
     public static UserSetting get(String setting) {
         for (UserSetting s : UserSetting.values()) {
             if (s.text.equalsIgnoreCase(setting))
                 return s;
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return text;
     }
 }
 

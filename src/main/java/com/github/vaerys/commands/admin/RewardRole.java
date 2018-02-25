@@ -20,7 +20,7 @@ public class RewardRole extends Command {
 
     @Override
     protected String[] names() {
-        return  new String[]{"RewardRole"};
+        return new String[]{"RewardRole"};
     }
 
     @Override

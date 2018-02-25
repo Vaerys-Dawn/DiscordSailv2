@@ -57,5 +57,7 @@ public class ModuleLogging extends GuildModule {
     }
 
     @Override
-    public String shortDesc(CommandObject command) { return "Handles various additional logging features."; }
+    public String shortDesc(CommandObject command) {
+        return "Handles various additional logging features.";
+    }
 }

@@ -7,13 +7,13 @@ public class OffenderObject {
     int count;
     long id;
 
-    public long getID() {
-        return id;
-    }
-
     public OffenderObject(long id) {
         this.id = id;
         count = 1;
+    }
+
+    public long getID() {
+        return id;
     }
 
     public void addOffence() {

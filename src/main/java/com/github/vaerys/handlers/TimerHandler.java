@@ -32,12 +32,24 @@ import java.util.*;
 public class TimerHandler {
 
     final static Logger logger = LoggerFactory.getLogger(TimerHandler.class);
-
+    public static List<Double> cpuUsage = new LinkedList<>();
     private static long keepAliveTenSec;
     private static long keepAliveMin;
     private static long keepAliveFiveMin;
     private static long keepAliveDaily;
-    public static List<Double> cpuUsage = new LinkedList<>();
+
+    public TimerHandler() {
+        ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
+//        doEventSec();
+        keepAliveFiveMin = System.currentTimeMillis();
+        keepAliveMin = System.currentTimeMillis();
+        keepAliveTenSec = System.currentTimeMillis();
+        keepAliveDaily = System.currentTimeMillis();
+        doEventTenSec();
+        doEventMin();
+        doEventFiveMin(nowUTC);
+        doEventDaily(nowUTC);
+    }
 
     public static void checkKeepAlive() {
         long now = System.currentTimeMillis();
@@ -59,20 +71,6 @@ public class TimerHandler {
         }
     }
 
-
-    public TimerHandler() {
-        ZonedDateTime nowUTC = ZonedDateTime.now(ZoneOffset.UTC);
-//        doEventSec();
-        keepAliveFiveMin = System.currentTimeMillis();
-        keepAliveMin = System.currentTimeMillis();
-        keepAliveTenSec = System.currentTimeMillis();
-        keepAliveDaily = System.currentTimeMillis();
-        doEventTenSec();
-        doEventMin();
-        doEventFiveMin(nowUTC);
-        doEventDaily(nowUTC);
-    }
-
     private static void doEventMin() {
         int initialDelay = 4000;
         Timer timer = new Timer();
@@ -83,7 +81,7 @@ public class TimerHandler {
                 checkKeepAlive();
                 logger.trace("Reset speakers.");
 
-                OperatingSystemMXBean operatingSystemMXBean = (OperatingSystemMXBean)ManagementFactory.getOperatingSystemMXBean();
+                OperatingSystemMXBean operatingSystemMXBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
                 cpuUsage.add(operatingSystemMXBean.getProcessCpuLoad());
 
                 if (cpuUsage.size() > 5) {
@@ -323,7 +321,7 @@ public class TimerHandler {
                     memString.append(nf.format(totalMemory / 1024)).append("KB total\t");
                     memString.append(nf.format(usedMemory / 1024)).append("KB used\t");
                     memString.append(nf.format(freeMemory / 1024)).append("KB free");
-                    double avgCpu=0;
+                    double avgCpu = 0;
                     for (Double i : cpuUsage) {
                         avgCpu += i;
                     }

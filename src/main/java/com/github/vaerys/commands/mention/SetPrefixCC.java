@@ -28,7 +28,7 @@ public class SetPrefixCC extends MentionCommand {
 
     @Override
     protected String[] names() {
-        return new String[]{"SetCCPrefix","SetPrefixCC"};
+        return new String[]{"SetCCPrefix", "SetPrefixCC"};
     }
 
     @Override

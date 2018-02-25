@@ -12,7 +12,7 @@ public class TagUsername extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        return replaceAllTag(from,command.user.name);
+        return replaceAllTag(from, command.user.name);
     }
 
     @Override

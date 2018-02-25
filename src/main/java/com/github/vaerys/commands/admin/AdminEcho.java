@@ -13,6 +13,7 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
 import java.util.ListIterator;
+
 public class AdminEcho extends Command {
     @Override
     public String execute(String args, CommandObject command) {

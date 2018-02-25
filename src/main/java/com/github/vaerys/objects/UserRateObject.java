@@ -6,8 +6,8 @@ import com.github.vaerys.main.Utility;
  * Created by Vaerys on 21/02/2017.
  */
 public class UserRateObject {
-    private String userID;
     public int counter;
+    private String userID;
 
     public UserRateObject(long userID) {
         this.userID = Long.toUnsignedString(userID);

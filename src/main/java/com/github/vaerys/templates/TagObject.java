@@ -12,7 +12,6 @@ import java.util.List;
 
 public abstract class TagObject {
 
-    private final int priority;
     public final String name;
     public final String prefix;
     public final String suffix;
@@ -21,6 +20,7 @@ public abstract class TagObject {
     public final String usage;
     public final String error;
     public final int requiredArgs;
+    private final int priority;
     List<TagType> types = new ArrayList<>();
 
 

@@ -25,7 +25,8 @@ import static com.github.vaerys.enums.UserSetting.DONT_DECAY;
 public class ProfileObject {
     private static final String defaultQuote = "This person doesn't seem to have much to say for themselves.";
     private static final String defaultGender = "Unknown";
-
+    public List<ModNoteObject> modNotes;
+    public long lastTalked = -1;
     long userID;
     long xp = 0;
     long currentLevel = -1;
@@ -33,8 +34,12 @@ public class ProfileObject {
     String quote = defaultQuote;
     ArrayList<UserSetting> settings = new ArrayList<>();
     ArrayList<UserLinkObject> links = new ArrayList<>();
-    public List<ModNoteObject> modNotes;
-    public long lastTalked = -1;
+
+    public ProfileObject(long userID) {
+        this.userID = userID;
+        if (links == null) links = new ArrayList<>();
+        if (settings == null) settings = new ArrayList<>();
+    }
 
     public String getQuote() {
         if (quote == null) {
@@ -56,12 +61,6 @@ public class ProfileObject {
 
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    public ProfileObject(long userID) {
-        this.userID = userID;
-        if (links == null) links = new ArrayList<>();
-        if (settings == null) settings = new ArrayList<>();
     }
 
     public long getUserID() {
@@ -100,6 +99,10 @@ public class ProfileObject {
         return settings;
     }
 
+    public void setSettings(ArrayList<UserSetting> settings) {
+        this.settings = settings;
+    }
+
     public ArrayList<UserLinkObject> getLinks() {
         return links;
     }
@@ -112,6 +115,10 @@ public class ProfileObject {
 
     public long getLastTalked() {
         return lastTalked;
+    }
+
+    public void setLastTalked(long lastTalked) {
+        this.lastTalked = lastTalked;
     }
 
     public long getCurrentLevel() {
@@ -129,10 +136,6 @@ public class ProfileObject {
             }
         }
         return null;
-    }
-
-    public void setLastTalked(long lastTalked) {
-        this.lastTalked = lastTalked;
     }
 
     public void removeLevelFloor() {
@@ -183,9 +186,5 @@ public class ProfileObject {
 
     public void addSailModNote(String contents, CommandObject command) {
         addSailModNote(contents, command, false);
-    }
-
-    public void setSettings(ArrayList<UserSetting> settings) {
-        this.settings = settings;
     }
 }

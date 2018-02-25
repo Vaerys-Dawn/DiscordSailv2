@@ -18,9 +18,9 @@ public class TagIfArgsEmptyReplace extends TagReplaceObject {
         List<String> splitString = getSplit(from);
         from = removeFirstTag(from);
         if (args == null || args.isEmpty()) {
-            toReplace.add(new ReplaceObject(splitString.get(0),splitString.get(1)));
+            toReplace.add(new ReplaceObject(splitString.get(0), splitString.get(1)));
         } else {
-            toReplace.add(new ReplaceObject(splitString.get(0),splitString.get(2)));
+            toReplace.add(new ReplaceObject(splitString.get(0), splitString.get(2)));
         }
         return from;
     }

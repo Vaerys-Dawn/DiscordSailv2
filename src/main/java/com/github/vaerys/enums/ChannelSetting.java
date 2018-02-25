@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 
 /**
  * This enum contains all the states in which a server can be set to.
- * 
+ * <p>
  * <p>
  * Created by Vaerys on 09/04/2017.</br>
  * Edited by C0bra5 on 2018-feb-18
  * </p>
- * 
+ *
  * @author C0bra5
  */
 public enum ChannelSetting {
@@ -142,12 +142,38 @@ public enum ChannelSetting {
     protected String desc;
 
     /**
+     * Creates a channel setting class
+     *
+     * @param name
+     * @param isSetting
+     * @param desc
+     */
+    private ChannelSetting(String name, boolean isSetting, String desc) {
+        this.name = name;
+        this.isSetting = isSetting;
+        this.desc = desc;
+    }
+
+    public static ChannelSetting get(String type) {
+        for (ChannelSetting c : values()) {
+            if (c.toString().equalsIgnoreCase(type)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    ;
+
+    /**
      * the human readable value of the enum
      */
     @Override
     public String toString() {
         return name;
     }
+
+    ;
 
     /**
      * checks if the setting is actually a channel setting
@@ -173,8 +199,6 @@ public enum ChannelSetting {
 
     }
 
-    ;
-
     /**
      * Returns the setting description
      *
@@ -183,22 +207,6 @@ public enum ChannelSetting {
     public String getDesc() {
         return desc;
     }
-
-    ;
-
-    /**
-     * Creates a channel setting class
-     *
-     * @param name
-     * @param isSetting
-     * @param desc
-     */
-    private ChannelSetting(String name, boolean isSetting, String desc) {
-        this.name = name;
-        this.isSetting = isSetting;
-        this.desc = desc;
-    }
-
 
     public ArrayList<Long> getIDs(GuildObject guild) {
         for (ChannelSettingObject o : guild.channelData.getChannelSettings()) {
@@ -286,15 +294,6 @@ public enum ChannelSetting {
             }
         }
         return "> Error toggling channel setting.";
-    }
-
-    public static ChannelSetting get(String type) {
-        for (ChannelSetting c : values()) {
-            if (c.toString().equalsIgnoreCase(type)) {
-                return c;
-            }
-        }
-        return null;
     }
 }
 

@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 public class UserObject {
     public ClientObject client;
-    IUser object;
     public long longID;
     public String name;
     public String displayName;
@@ -33,6 +32,7 @@ public class UserObject {
     public List<DailyMessage> dailyMessages;
     public String notAllowed;
     public boolean isPatron;
+    IUser object;
 
 
     public UserObject(IUser object, GuildObject guild) {

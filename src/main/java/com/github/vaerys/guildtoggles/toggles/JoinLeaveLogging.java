@@ -9,7 +9,7 @@ import com.github.vaerys.templates.GuildSetting;
 /**
  * Created by Vaerys on 21/02/2017.
  */
-public class JoinLeaveLogging extends GuildSetting{
+public class JoinLeaveLogging extends GuildSetting {
 
     @Override
     public SAILType name() {

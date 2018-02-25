@@ -8,7 +8,7 @@ import com.github.vaerys.templates.GuildSetting;
 /**
  * Created by Vaerys on 09/04/2017.
  */
-public class DontLogBot extends GuildSetting{
+public class DontLogBot extends GuildSetting {
 
     @Override
     public SAILType name() {

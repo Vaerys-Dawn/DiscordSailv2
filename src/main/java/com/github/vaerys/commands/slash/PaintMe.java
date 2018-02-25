@@ -12,6 +12,6 @@ public class PaintMe extends SlashCommand {
 
     @Override
     protected String[] names() {
-        return new String[]{"PaintMe","PaintMeLike","FrenchGirl"};
+        return new String[]{"PaintMe", "PaintMeLike", "FrenchGirl"};
     }
 }

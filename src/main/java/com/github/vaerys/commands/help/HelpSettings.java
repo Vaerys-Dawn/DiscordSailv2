@@ -56,7 +56,7 @@ public class HelpSettings extends Command {
 
     @Override
     protected Permissions[] perms() {
-        return  new Permissions[]{Permissions.MANAGE_SERVER};
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

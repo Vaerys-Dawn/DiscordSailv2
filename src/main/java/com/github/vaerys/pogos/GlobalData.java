@@ -11,9 +11,9 @@ import java.util.ArrayList;
  */
 public class GlobalData extends GlobalFile {
     public static final String FILE_PATH = "Global_Data.json";
-    private double fileVersion = 1.0;
     ArrayList<Long> blockedFromDMS = new ArrayList<>();
     ArrayList<ReminderObject> reminders = new ArrayList<>();
+    private double fileVersion = 1.0;
 
     public ArrayList<Long> getBlockedFromDMS() {
         return blockedFromDMS;
@@ -43,7 +43,7 @@ public class GlobalData extends GlobalFile {
 
     public void removeReminder(ReminderObject object) {
         for (int i = 0; i < reminders.size(); i++) {
-            if (reminders.get(i).getUserID() == object.getUserID()  && reminders.get(i).getExecuteTime() == object.getExecuteTime()) {
+            if (reminders.get(i).getUserID() == object.getUserID() && reminders.get(i).getExecuteTime() == object.getExecuteTime()) {
                 reminders.remove(i);
                 return;
             }

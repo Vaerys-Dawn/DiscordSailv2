@@ -46,7 +46,7 @@ public class NewDailyMessage extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg","NewDailyMsg","NewDailyMessage"};
+        return new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg", "NewDailyMsg", "NewDailyMessage"};
     }
 
     @Override

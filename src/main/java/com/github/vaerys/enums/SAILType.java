@@ -2,8 +2,8 @@ package com.github.vaerys.enums;
 
 /**
  * used to differentiate the different command types
- * @author C0bra5
  *
+ * @author C0bra5
  */
 public enum SAILType {
     //command types
@@ -67,11 +67,6 @@ public enum SAILType {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
     public static SAILType get(String type) {
         for (SAILType c : values()) {
             if (c.toString().equalsIgnoreCase(type)) {
@@ -79,5 +74,10 @@ public enum SAILType {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

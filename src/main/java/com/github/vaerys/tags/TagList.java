@@ -25,8 +25,6 @@ public class TagList {
     private static List<TagObject> tags = new ArrayList<>();
 
 
-
-
     public static void init() {
         //args
         tags.add(new TagSearchTags(0, TagType.CC));

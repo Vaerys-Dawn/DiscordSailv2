@@ -10,12 +10,12 @@ import java.util.List;
 
 public class ChannelObject {
     public ClientObject client;
-    private IChannel object;
     public long longID;
     public String name;
     public long position;
     public String mention = "#DM";
     public List<ChannelSetting> settings = new LinkedList<>();
+    private IChannel object;
 
     public ChannelObject(IChannel channel, GuildObject guild) {
         if (channel == null) return;

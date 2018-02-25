@@ -41,6 +41,13 @@ public class AnnotationListener {
 
     final static Logger logger = LoggerFactory.getLogger(AnnotationListener.class);
 
+    public static void updateVariables(IGuild guild) {
+        long guildID = guild.getLongID();
+        GuildObject guildObject = Globals.getGuildContent(guildID);
+        guildObject.config.updateVariables(guild);
+        guildObject.characters.updateVars(guild);
+    }
+
     /**
      * Sets up the relevant files for each guild.
      */
@@ -173,13 +180,6 @@ public class AnnotationListener {
             String log = "> Channel " + event.getChannel().mention() + " was created.";
             Utility.sendLog(log, content, false);
         }
-    }
-
-    public static void updateVariables(IGuild guild) {
-        long guildID = guild.getLongID();
-        GuildObject guildObject = Globals.getGuildContent(guildID);
-        guildObject.config.updateVariables(guild);
-        guildObject.characters.updateVars(guild);
     }
 
     @EventSubscriber

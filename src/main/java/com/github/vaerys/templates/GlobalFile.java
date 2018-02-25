@@ -15,10 +15,9 @@ import java.nio.file.StandardCopyOption;
 public class GlobalFile {
     public static final String storageDir = Constants.DIRECTORY_STORAGE;
     public static final String backupDir = Constants.DIRECTORY_BACKUPS;
+    final static Logger logger = LoggerFactory.getLogger(GlobalFile.class);
     public transient String path;
     public transient String backupPath;
-
-    final static Logger logger = LoggerFactory.getLogger(GlobalFile.class);
 
     public static Object create(String newPath, GlobalFile object) {
         String path = storageDir + newPath;

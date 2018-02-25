@@ -45,7 +45,7 @@ public class BotInfo extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"Info","BotInfo"};
+        return new String[]{"Info", "BotInfo"};
     }
 
     @Override

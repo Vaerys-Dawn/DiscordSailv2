@@ -75,7 +75,7 @@ public class GroupUp extends Command {
 
     @Override
     protected String[] names() {
-        return  new String[]{"GroupUp", "GroupMe"};
+        return new String[]{"GroupUp", "GroupMe"};
     }
 
     @Override
@@ -85,7 +85,7 @@ public class GroupUp extends Command {
 
     @Override
     protected String usage() {
-        return  "(Game)";
+        return "(Game)";
     }
 
     @Override

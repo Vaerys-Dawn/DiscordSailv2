@@ -27,16 +27,16 @@ public class TimedEvent {
     List<DailyMessage> messages = new ArrayList<>();
     List<EventAvatar> avatars = new ArrayList<>();
 
+    public TimedEvent(String eventName) {
+        this.eventName = eventName;
+    }
+
     public String getHelloMessage() {
         return helloMessage;
     }
 
     public void setHelloMessage(String helloMessage) {
         this.helloMessage = helloMessage;
-    }
-
-    public TimedEvent(String eventName) {
-        this.eventName = eventName;
     }
 
     public void setDoAvatars(boolean doAvatars) {

@@ -20,10 +20,10 @@ import java.util.regex.Pattern;
  * This Class Is the Handler for the updateInfo Method it pulls the info.txt doc and then updates the channel based on the contents of the file.
  */
 public class InfoHandler {
-    private IGuild guild;
-    private IChannel channel;
     List<String> infoContents;
     CommandObject object;
+    private IGuild guild;
+    private IChannel channel;
 
     public InfoHandler(CommandObject object) {
         this.object = object;

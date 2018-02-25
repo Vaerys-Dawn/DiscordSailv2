@@ -15,10 +15,10 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class DailyMessages extends GlobalFile {
-    private double fileVersion = 1.1;
+    public static final String FILE_PATH = "DailyMessages.json";
     ArrayList<DailyMessage> dailyMessages = new ArrayList<>();
     ArrayList<QueueObject> queuedRequests = new ArrayList<>();
-    public static final String FILE_PATH = "DailyMessages.json";
+    private double fileVersion = 1.1;
 
     public long newDailyMsgUID() {
         long result;
@@ -28,7 +28,7 @@ public class DailyMessages extends GlobalFile {
                 dailyMessage.getUID()).collect(Collectors.toList());
         uIDs.addAll(queuedRequests.stream().map(queueObject ->
                 queueObject.getuID()).collect(Collectors.toList()));
-        if (uIDs.size() >= 8999){
+        if (uIDs.size() >= 8999) {
             return -1;
         }
 //        for (DailyMessage d : dailyMessages) {
@@ -48,6 +48,10 @@ public class DailyMessages extends GlobalFile {
 
     public ArrayList<DailyMessage> getMessages() {
         return dailyMessages;
+    }
+
+    public void setMessages(ArrayList<DailyMessage> messages) {
+        this.dailyMessages = messages;
     }
 
     public ArrayList<QueueObject> getQueue() {
@@ -79,9 +83,5 @@ public class DailyMessages extends GlobalFile {
             }
         }
         return object;
-    }
-
-    public void setMessages(ArrayList<DailyMessage> messages) {
-        this.dailyMessages = messages;
     }
 }

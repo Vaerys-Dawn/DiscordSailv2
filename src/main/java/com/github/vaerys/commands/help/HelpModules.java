@@ -41,7 +41,7 @@ public class HelpModules extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"HelpModule","HelpModules","ModuleHelp"};
+        return new String[]{"HelpModule", "HelpModules", "ModuleHelp"};
     }
 
     @Override

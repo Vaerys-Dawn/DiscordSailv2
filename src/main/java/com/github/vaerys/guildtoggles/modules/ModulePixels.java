@@ -1,8 +1,8 @@
 package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.pixels.DenyXpPrefix;
 import com.github.vaerys.commands.help.GetGuildInfo;
+import com.github.vaerys.commands.pixels.DenyXpPrefix;
 import com.github.vaerys.commands.pixels.PixelHelp;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;

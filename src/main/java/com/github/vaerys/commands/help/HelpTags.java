@@ -34,7 +34,7 @@ public class HelpTags extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"HelpTag", "HelpTags","TagHelp"};
+        return new String[]{"HelpTag", "HelpTags", "TagHelp"};
     }
 
     @Override

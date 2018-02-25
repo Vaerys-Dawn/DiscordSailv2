@@ -109,7 +109,7 @@ public class PatchHandler {
         for (int i = 0; i < channelSettings.size(); i++) {
             JsonObject object = channelSettings.get(i).getAsJsonObject();
             String type = object.get("type").getAsString();
-            switch(type) {
+            switch (type) {
                 case "CHANNEL_CC":
                     object.addProperty("type", ChannelSetting.CC_INFO.name());
                     break;

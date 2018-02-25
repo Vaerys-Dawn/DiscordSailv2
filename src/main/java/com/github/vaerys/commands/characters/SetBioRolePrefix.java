@@ -37,7 +37,7 @@ public class SetBioRolePrefix extends Command {
 
     @Override
     protected String usage() {
-        return  "(Prefix)";
+        return "(Prefix)";
     }
 
     @Override

@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 
 
 /* Notes:
-    * Character names will now have to be unique and cannot contain spaces.
-    * The base commands that are with v1 are the first ones being created
-    * the rest will come later. (not top priority sadly :c)
+ * Character names will now have to be unique and cannot contain spaces.
+ * The base commands that are with v1 are the first ones being created
+ * the rest will come later. (not top priority sadly :c)
  */
 
 public class CharacterObject {
@@ -39,12 +39,12 @@ public class CharacterObject {
         this.roleIDs = (ArrayList<Long>) roleIDs;
     }
 
-    public void setLongBioURL(String longBioURL) {
-        this.longBioURL = longBioURL;
-    }
-
     public String getLongBioURL() {
         return longBioURL;
+    }
+
+    public void setLongBioURL(String longBioURL) {
+        this.longBioURL = longBioURL;
     }
 
     public String getAvatarURL() {
@@ -63,22 +63,6 @@ public class CharacterObject {
         return nickname;
     }
 
-    public void setShortBio(String shortBio) {
-        this.shortBio = shortBio;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public void setRoleIDs(ArrayList<Long> roleIDs) {
-        this.roleIDs = roleIDs;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
     public long getUserID() {
         return userID;
     }
@@ -91,16 +75,32 @@ public class CharacterObject {
         return roleIDs;
     }
 
+    public void setRoleIDs(ArrayList<Long> roleIDs) {
+        this.roleIDs = roleIDs;
+    }
+
     public String getGender() {
         return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getAge() {
         return age;
     }
 
+    public void setAge(String age) {
+        this.age = age;
+    }
+
     public String getShortBio() {
         return shortBio;
+    }
+
+    public void setShortBio(String shortBio) {
+        this.shortBio = shortBio;
     }
 
     public void update(String name, List<IRole> roles) {

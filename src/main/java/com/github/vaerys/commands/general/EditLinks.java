@@ -116,7 +116,7 @@ public class EditLinks extends Command {
 
     @Override
     protected SAILType type() {
-        return  SAILType.GENERAL;
+        return SAILType.GENERAL;
     }
 
     @Override

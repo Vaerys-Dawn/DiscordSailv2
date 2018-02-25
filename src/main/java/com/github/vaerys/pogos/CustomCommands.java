@@ -32,7 +32,6 @@ import java.util.ArrayList;
  */
 public class CustomCommands extends GuildFile {
     public static final String FILE_PATH = "Custom_Commands.json";
-    private double fileVersion = 1.5;
     ArrayList<BlackListObject> blackList = new ArrayList<BlackListObject>() {{
         add(new BlackListObject("discord.gg", "Please do not put **invites** in Custom Commands."));
         add(new BlackListObject("discordapp.com/Invite/", "Please do not put **invites** in Custom Commands."));
@@ -40,6 +39,7 @@ public class CustomCommands extends GuildFile {
         add(new BlackListObject("@here", "Please go not put **mentions** in Custom Commands."));
     }};
     ArrayList<CCommandObject> commands = new ArrayList<>();
+    private double fileVersion = 1.5;
 
     public int maxCCs(UserObject user, GuildObject guild) {
         int total = 10;

@@ -33,6 +33,7 @@ import java.util.*;
  */
 public class Globals {
 
+    final static Logger logger = LoggerFactory.getLogger(Globals.class);
     public static String botName = null;
     public static long creatorID = -1;
     public static String defaultPrefixCommand = null;
@@ -54,8 +55,13 @@ public class Globals {
     public static boolean showSaveWarning = false;
     public static boolean shuttingDown = false;
     public static boolean savingFiles = false;
-    private static List<GuildObject> guilds = new LinkedList<>();
     public static List<Command> commands = new LinkedList<>();
+    public static int baseXPModifier;
+    public static int xpForLevelOne;
+    public static long lastDmUserID = -1;
+    public static int maxReminderSlots = 5;
+    public static String errorStack = null;
+    private static List<GuildObject> guilds = new LinkedList<>();
     private static List<SlashCommand> slashCommands = new LinkedList<>();
     private static List<Command> creatorCommands = new LinkedList<>();
     private static List<Command> setupCommands = new LinkedList<>();
@@ -64,21 +70,12 @@ public class Globals {
     private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
     private static List<LogObject> allLogs = new LinkedList<>();
     private static List<TagObject> tags = new LinkedList<>();
-
     private static List<String> blacklistedURls;
-
-    final static Logger logger = LoggerFactory.getLogger(Globals.class);
-
     private static GlobalData globalData;
     private static DailyMessages dailyMessages;
-    public static int baseXPModifier;
-    public static int xpForLevelOne;
-    public static long lastDmUserID = -1;
     private static List<Long> patrons = new ArrayList<>();
-    public static int maxReminderSlots = 5;
     private static Events events;
     private static String currentEvent = null;
-    public static String errorStack = null;
 
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
         if (newGlobalData != null) {
@@ -133,7 +130,6 @@ public class Globals {
             logger.error("\n>> Begin Error Report <<\n" + errorStack + ">> End Error Report <<");
             System.exit(Constants.EXITCODE_CONF_ERROR);
         }
-
 
 
         // Init Command Types.
@@ -398,12 +394,12 @@ public class Globals {
         return tags;
     }
 
-    public static void setPatrons(List<Long> patrons) {
-        Globals.patrons = patrons;
-    }
-
     public static List<Long> getPatrons() {
         return patrons;
+    }
+
+    public static void setPatrons(List<Long> patrons) {
+        Globals.patrons = patrons;
     }
 
     public static List<TimedEvent> getEvents() {

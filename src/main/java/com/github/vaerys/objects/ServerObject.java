@@ -23,6 +23,10 @@ public class ServerObject {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public long getCreatorID() {
         return creatorID;
     }
@@ -31,8 +35,16 @@ public class ServerObject {
         return serverIP;
     }
 
+    public void setServerIP(String serverIP) {
+        this.serverIP = serverIP;
+    }
+
     public String getServerPort() {
         return serverPort;
+    }
+
+    public void setServerPort(String serverPort) {
+        this.serverPort = serverPort;
     }
 
     public String getServerDesc() {
@@ -41,18 +53,6 @@ public class ServerObject {
             builder.append(s + "\n");
         }
         return builder.toString();
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setServerIP(String serverIP) {
-        this.serverIP = serverIP;
-    }
-
-    public void setServerPort(String serverPort) {
-        this.serverPort = serverPort;
     }
 
     public void setServerDesc(ArrayList<String> serverDesc) {

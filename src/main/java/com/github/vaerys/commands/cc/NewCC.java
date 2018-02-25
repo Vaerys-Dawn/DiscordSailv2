@@ -89,7 +89,7 @@ public class NewCC extends Command {
 
     @Override
     protected SAILType type() {
-        return  SAILType.CC;
+        return SAILType.CC;
     }
 
     @Override

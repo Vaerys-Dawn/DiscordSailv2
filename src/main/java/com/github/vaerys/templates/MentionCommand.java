@@ -10,6 +10,9 @@ import java.util.regex.Pattern;
 
 public abstract class MentionCommand extends Command {
 
+    protected static final SAILType COMMAND_TYPE = SAILType.MENTION;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+
     @Override
     public String getCommand(CommandObject command) {
         return "@" + command.client.bot.name + " " + names[0];
@@ -50,14 +53,12 @@ public abstract class MentionCommand extends Command {
         return call.getRest();
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.MENTION;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
 
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
         return null;

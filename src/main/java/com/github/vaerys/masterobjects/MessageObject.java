@@ -12,9 +12,9 @@ import java.util.List;
 public class MessageObject {
 
     public ClientObject client;
-    private IMessage object;
     public long longID;
     public UserObject author;
+    private IMessage object;
 
     public MessageObject(IMessage message, GuildObject guild) {
         if (message == null) return;
@@ -52,7 +52,7 @@ public class MessageObject {
         return object.getReactions();
     }
 
-    public IReaction getReationByName(String s){
+    public IReaction getReationByName(String s) {
         return object.getReactionByEmoji(Utility.getReaction(s));
     }
 

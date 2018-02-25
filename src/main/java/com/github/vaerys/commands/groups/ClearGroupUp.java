@@ -26,7 +26,7 @@ public class ClearGroupUp extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"ClearGroupUp","PurgeGroupUp","EmptyGroupUp"};
+        return new String[]{"ClearGroupUp", "PurgeGroupUp", "EmptyGroupUp"};
     }
 
     @Override

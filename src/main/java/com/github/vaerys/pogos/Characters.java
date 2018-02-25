@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 
 public class Characters extends GuildFile {
     public static final String FILE_PATH = "Characters.json";
-    private double fileVersion = 1.0;
     ArrayList<CharacterObject> characters = new ArrayList<>();
+    private double fileVersion = 1.0;
     private String rolePrefix = "";
 
     public ArrayList<CharacterObject> getCharacters(IGuild guild) {
@@ -48,12 +48,12 @@ public class Characters extends GuildFile {
         return Constants.ERROR_CHAR_NOT_FOUND;
     }
 
-    public void setRolePrefix(String rolePrefix) {
-        this.rolePrefix = rolePrefix;
-    }
-
     public String getRolePrefix() {
         return rolePrefix;
+    }
+
+    public void setRolePrefix(String rolePrefix) {
+        this.rolePrefix = rolePrefix;
     }
 
     public void validateRoles(IGuild guild) {

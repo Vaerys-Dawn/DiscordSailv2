@@ -65,6 +65,24 @@ public class MessageHandler {
 //        return false;
 //    }
 
+    protected static void handleLogging(CommandObject commandObject, Command command, String args) {
+        if (!command.doAdminLogging && !commandObject.guild.config.adminLogging) {
+            return;
+        } else if (!commandObject.guild.config.generalLogging) {
+            return;
+        }
+        StringHandler builder = new StringHandler("> **@").append(commandObject.user.username).append("** Has Used Command `").append(command.getCommand(commandObject)).append("`");
+        if (args != null && !args.isEmpty()) {
+            builder.append(" with args: `").append(args).append("`");
+        }
+        if (commandObject.channel.get().isPrivate()) {
+            builder.append(" in their DMs.");
+        } else {
+            builder.append(" in channel ").append(commandObject.channel.get().mention()).append(".");
+        }
+        Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
+    }
+
     //Command Handler
     private boolean handleCommand(CommandObject command, String args) {
         List<Command> commands = new ArrayList<>(command.guild.commands);
@@ -109,23 +127,5 @@ public class MessageHandler {
             }
         }
         return false;
-    }
-
-    protected static void handleLogging(CommandObject commandObject, Command command, String args) {
-        if (!command.doAdminLogging && !commandObject.guild.config.adminLogging) {
-            return;
-        } else if (!commandObject.guild.config.generalLogging) {
-            return;
-        }
-        StringHandler builder = new StringHandler("> **@").append(commandObject.user.username).append("** Has Used Command `").append(command.getCommand(commandObject)).append("`");
-        if (args != null && !args.isEmpty()) {
-            builder.append(" with args: `").append(args).append("`");
-        }
-        if(commandObject.channel.get().isPrivate()) {
-            builder.append(" in their DMs.");
-        } else {
-            builder.append(" in channel ").append(commandObject.channel.get().mention()).append(".");
-        }
-        Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
     }
 }
