@@ -8,12 +8,13 @@ import com.github.vaerys.templates.SlashCommand;
  */
 public class UnFlip extends SlashCommand {
 
+    protected static final String[] NAMES = new String[]{"UnFlip"};
+
     @Override
     public String execute(String args, CommandObject command) {
         return "┬─┬ ノ( ゜-゜ノ)";
     }
 
-    protected static final String[] NAMES = new String[]{"UnFlip"};
     @Override
     protected String[] names() {
         return NAMES;

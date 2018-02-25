@@ -2,7 +2,6 @@ package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.Help;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
@@ -19,6 +18,11 @@ import java.util.List;
  * Created by Vaerys on 05/02/2017.
  */
 public class HelpDM extends DMCommand {
+    protected static final String[] NAMES = new Help().names;
+    protected static final String USAGE = null;
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final boolean REQUIRES_ARGS = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
@@ -35,7 +39,6 @@ public class HelpDM extends DMCommand {
         return null;
     }
 
-    protected static final String[] NAMES = new Help().names;
     @Override
     protected String[] names() {
         return NAMES;
@@ -46,26 +49,16 @@ public class HelpDM extends DMCommand {
         return "Lists DM Commands.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
-
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    @Override
-    protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
-    }
-
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;

@@ -30,7 +30,7 @@ public class ModulesStage extends SetupHandler {
         output.append("**Here's a list of modules I have for you to choose from:**\n");
 
         String moduleItemFormat = "\t> **%s** - %s\n";
-        modules.sort(Comparator.comparing(GuildToggle::name));
+        modules.sort(Comparator.comparing(GuildToggle::toString));
         for (GuildToggle module : modules) {
             output.appendFormatted(moduleItemFormat, module.name(), module.shortDesc(command));
         }

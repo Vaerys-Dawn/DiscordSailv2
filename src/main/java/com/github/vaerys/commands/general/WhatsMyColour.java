@@ -35,10 +35,9 @@ public class WhatsMyColour extends Command {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"WhatsMyColour", "MyColour", "WhatsMyColor", "MyColor"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"WhatsMyColour", "MyColour", "WhatsMyColor", "MyColor"};
     }
 
     @Override
@@ -48,41 +47,34 @@ public class WhatsMyColour extends Command {
                 "Sail grabs 3 random numbers using your user ID for the seed and then converts it into a colour.\n";
     }
 
-    protected static final String USAGE = "(@User)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(@User)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.GENERAL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

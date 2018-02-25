@@ -2,20 +2,26 @@ package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.RemindMe;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.DMCommand;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 27/02/2017.
  */
-public class ReminderDM extends Command {
+public class ReminderDM extends DMCommand {
+
+    protected static final String[] NAMES = new RemindMe().names;
+    protected static final String USAGE = "[Quote...]";
+    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -60,7 +66,6 @@ public class ReminderDM extends Command {
         }
     }
 
-    protected static final String[] NAMES = new RemindMe().names;
     @Override
     protected String[] names() {
         return NAMES;
@@ -78,37 +83,26 @@ public class ReminderDM extends Command {
 
     }
 
-    protected static final String USAGE = "[Quote...]";
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
-    @Override
-    protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
-    }
-
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

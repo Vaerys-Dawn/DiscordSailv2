@@ -8,6 +8,14 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class SetPrefixCC extends MentionCommand {
 
+    protected static final String[] NAMES = new String[]{"SetCCPrefix", "SetPrefixCC"};
+    protected static final String USAGE = "[Prefix]";
+    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = true;
+
     @Override
     public String execute(String args, CommandObject command) {
         boolean isAlphanumeric = args.matches("[A-Za-z0-9]+");
@@ -18,7 +26,6 @@ public class SetPrefixCC extends MentionCommand {
         return "> Custom Command Prefix set to: " + args;
     }
 
-    protected static final String[] NAMES = new String[]{"SetCCPrefix","SetPrefixCC"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -33,38 +40,32 @@ public class SetPrefixCC extends MentionCommand {
                 "> Be longer than 5 characters.";
     }
 
-    protected static final String USAGE = "[Prefix]";
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
 
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

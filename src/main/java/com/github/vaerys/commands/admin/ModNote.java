@@ -19,17 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 
 public class ModNote extends Command {
-
     private static final Logger logger = LoggerFactory.getLogger(ModNote.class);
-
-    // using static as it will cause less memory to be used overall by orphaned data
-    protected static final String[] NAMES = new String[]{"ModNote", "Punish", "ModNotes"};
-    protected static final String USAGE = "[@User] (Mode)|[Note...]";
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_MESSAGES};
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = true;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -55,7 +45,7 @@ public class ModNote extends Command {
         SplitFirstObject mode = new SplitFirstObject(argsRest);
         String modeString = mode.getFirstWord().toLowerCase();
 
-        switch(modeString) {
+        switch (modeString) {
             // Modes that do not require an index value
             case "list":
                 return createListEmbed(profile, command);
@@ -172,7 +162,7 @@ public class ModNote extends Command {
             UserObject editor = new UserObject(command.guild.getUserByID(noteObject.getEditorId()), command.guild);
             String editFieldText = "\n\n*Last edited by %s %s*";
             long diff = command.message.getTimestamp().toEpochSecond() - noteObject.getLastEditedTimestamp();
-            if (diff >= 86400*7) { // 7d
+            if (diff >= 86400 * 7) { // 7d
                 String editDate = new SimpleDateFormat("dd/MMM/yyyy").format(noteObject.getLastEditedTimestamp() * 1000);
                 builder.appendDesc(String.format(editFieldText, editor.displayName, "on " + editDate));
             } else {
@@ -201,37 +191,37 @@ public class ModNote extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"ModNote", "Punish", "ModNotes"};
     }
 
     @Override
     protected String usage() {
-        return USAGE;
+        return "[@User] (Mode)|[Note...]";
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_MESSAGES};
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
 }

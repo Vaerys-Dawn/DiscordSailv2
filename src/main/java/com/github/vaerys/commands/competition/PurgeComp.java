@@ -9,7 +9,7 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 29/03/2017.
  */
-public class PurgeComp extends Command{
+public class PurgeComp extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -18,10 +18,9 @@ public class PurgeComp extends Command{
         return "> Purge Complete.";
     }
 
-    protected static final String[] NAMES = new String[]{"PurgeComp"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"PurgeComp"};
     }
 
     @Override
@@ -29,40 +28,34 @@ public class PurgeComp extends Command{
         return "Purges the Current Comp to make way for a new one.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.COMPETITION;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.COMPETITION;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.ADMINISTRATOR};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.ADMINISTRATOR};
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

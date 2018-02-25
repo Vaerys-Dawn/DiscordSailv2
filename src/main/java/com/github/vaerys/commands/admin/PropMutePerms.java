@@ -28,7 +28,8 @@ public class PropMutePerms extends Command {
         IRole mutedRole = command.guild.getMutedRole();
         if (mutedRole == null) return "> No muted role set.";
         LongMap<PermissionOverride> roleOverrides = command.channel.get().getRoleOverrides();
-        if (!roleOverrides.containsKey(mutedRole.getLongID())) return "> No modified permissions for " + mutedRole.getName() + " in this channel.";
+        if (!roleOverrides.containsKey(mutedRole.getLongID()))
+            return "> No modified permissions for " + mutedRole.getName() + " in this channel.";
 
         IMessage workingMsg = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
 

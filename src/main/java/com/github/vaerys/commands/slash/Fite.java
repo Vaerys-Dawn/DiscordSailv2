@@ -8,12 +8,13 @@ import com.github.vaerys.templates.SlashCommand;
  */
 public class Fite extends SlashCommand {
 
+    protected static final String[] NAMES = new String[]{"Fite"};
+
     @Override
     public String execute(String args, CommandObject command) {
         return "(ง'̀-'́)ง";
     }
 
-    protected static final String[] NAMES = new String[]{"Fite"};
     @Override
     protected String[] names() {
         return NAMES;

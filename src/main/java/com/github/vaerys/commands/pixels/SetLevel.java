@@ -17,6 +17,14 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 06/07/2017.
  */
 public class SetLevel extends Command {
+    protected static final String[] NAMES = new String[]{"SetLevel"};
+    protected static final String USAGE = "[@User] [Level]";
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = true;
+
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject xpArgs = new SplitFirstObject(args);
@@ -26,7 +34,8 @@ public class SetLevel extends Command {
         }
         try {
             long level = Long.parseLong(xpArgs.getRest());
-            if (level > Constants.LEVEL_CAP) return "> No... " + level + " Is way too many levels. Im not setting your level that high.";
+            if (level > Constants.LEVEL_CAP)
+                return "> No... " + level + " Is way too many levels. Im not setting your level that high.";
             long xp = XpHandler.totalXPForLevel(level);
             ProfileObject userObject = user.getProfile(command.guild);
             if (userObject == null) {
@@ -44,7 +53,6 @@ public class SetLevel extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"SetLevel"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -55,38 +63,32 @@ public class SetLevel extends Command {
         return "Allows you to set the level of a user.";
     }
 
-    protected static final String USAGE = "[@User] [Level]";
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
 
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

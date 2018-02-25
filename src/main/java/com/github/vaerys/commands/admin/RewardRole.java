@@ -10,17 +10,17 @@ import sx.blah.discord.handle.obj.Permissions;
 /**
  * Created by Vaerys on 11/05/2017.
  */
-public class RewardRole extends Command{
+public class RewardRole extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject split = new SplitFirstObject(args);
         return "in Development.";
     }
 
-    protected static final String[] NAMES = new String[]{"RewardRole"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return  new String[]{"RewardRole"};
     }
 
     @Override
@@ -28,40 +28,34 @@ public class RewardRole extends Command{
         return "Adds or removes a reward role.";
     }
 
-    protected static final String USAGE = "[Level] [RoleName] **or** [RoleName] **to remove.**" + spacer;
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Level] [RoleName] **or** [RoleName] **to remove.**" + spacer;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

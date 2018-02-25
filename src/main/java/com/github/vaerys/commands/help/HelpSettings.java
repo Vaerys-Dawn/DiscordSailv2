@@ -10,9 +10,17 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class HelpSettings extends Command {
 
+    protected static final String[] NAMES = new String[]{"HelpSetting", "HelpSettings", "SettingHelp", "HelpToggle", "ToggleHelp"};
+    protected static final String USAGE = "[Setting Name]";
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder builder = new HelpModules().getInfo(false, args,command);
+        XEmbedBuilder builder = new HelpModules().getInfo(false, args, command);
         if (builder == null) {
             return "> Could not find any settings named **" + args + "**.";
         } else {
@@ -21,7 +29,6 @@ public class HelpSettings extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"HelpSetting","HelpSettings","SettingHelp","HelpToggle","ToggleHelp"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -32,38 +39,32 @@ public class HelpSettings extends Command {
         return "Gives information about a setting.";
     }
 
-    protected static final String USAGE = "[Setting Name]";
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
 
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

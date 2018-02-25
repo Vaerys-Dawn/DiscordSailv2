@@ -209,6 +209,7 @@ public class CommandInit {
         validate(commands);
         return commands;
     }
+
     public static ArrayList<Command> getCreatorCommands() {
         //Creator Commands
         ArrayList<Command> commands = new ArrayList<>();

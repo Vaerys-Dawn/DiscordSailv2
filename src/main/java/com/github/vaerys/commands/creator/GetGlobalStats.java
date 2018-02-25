@@ -18,6 +18,7 @@ import java.util.ArrayList;
  * Created by Vaerys on 25/02/2017.
  */
 public class GetGlobalStats extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<ToggleStatsObject> toggleStats = new ArrayList<>();
@@ -139,10 +140,9 @@ public class GetGlobalStats extends Command {
 //        return null;
     }
 
-    protected static final String[] NAMES = new String[]{"GetGlobalStats"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"GetGlobalStats"};
     }
 
     @Override
@@ -150,40 +150,34 @@ public class GetGlobalStats extends Command {
         return "Sends the owner captured message counters.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CREATOR;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

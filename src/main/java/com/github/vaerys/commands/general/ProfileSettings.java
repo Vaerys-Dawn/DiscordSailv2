@@ -20,6 +20,22 @@ import java.util.ListIterator;
 public class ProfileSettings extends Command {
 
 
+    protected static final String[] NAMES = new String[]{"ProfileSettings", "PixelSettings"};
+    protected static final String USAGE = "(Setting...)";
+    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
+    private static void removeLevelSettings(ProfileObject user) {
+        for (int i = 0; i < user.getSettings().size(); i++) {
+            if (Constants.levelUpStates.contains(user.getSettings().get(i))) {
+                user.getSettings().remove(i);
+            }
+        }
+    }
+
     @Override
     public String execute(String args, CommandObject command) {
         String message = "> Your Level messages will now be sent to ";
@@ -130,15 +146,6 @@ public class ProfileSettings extends Command {
         }
     }
 
-    private static void removeLevelSettings(ProfileObject user) {
-        for (int i = 0; i < user.getSettings().size(); i++) {
-            if (Constants.levelUpStates.contains(user.getSettings().get(i))) {
-                user.getSettings().remove(i);
-            }
-        }
-    }
-
-    protected static final String[] NAMES = new String[]{"ProfileSettings", "PixelSettings"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -149,37 +156,31 @@ public class ProfileSettings extends Command {
         return "Allows you to set where your level up messages will be sent.\n" + getSettings(command);
     }
 
-    protected static final String USAGE = "(Setting...)";
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

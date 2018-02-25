@@ -17,6 +17,14 @@ import java.util.ArrayList;
  */
 public class ListRoles extends Command {
 
+    protected static final String[] NAMES = new String[]{"ListRoles", "Roles", "RoleList"};
+    protected static final String USAGE = null;
+    protected static final SAILType COMMAND_TYPE = SAILType.ROLE_SELECT;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     public static XEmbedBuilder getList(CommandObject command) {
         String title = "> Here are the **Cosmetic** roles you can choose from:\n";
         ArrayList<String> list = new ArrayList<>();
@@ -32,12 +40,12 @@ public class ListRoles extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        if (command.guild.config.getCosmeticRoleIDs().size() == 0) return "> No Cosmetic roles are set up right now. Come back later.";
+        if (command.guild.config.getCosmeticRoleIDs().size() == 0)
+            return "> No Cosmetic roles are set up right now. Come back later.";
         RequestHandler.sendEmbedMessage("", getList(command), command.channel.get());
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"ListRoles", "Roles", "RoleList"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -48,37 +56,31 @@ public class ListRoles extends Command {
         return "Shows the list of cosmetic roles you can choose from.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.ROLE_SELECT;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

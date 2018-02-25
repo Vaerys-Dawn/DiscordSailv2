@@ -17,15 +17,16 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 01/02/2017.
  */
 public class EditCC extends Command {
-
-    private static String modes = "**Modes: **\n" +
-            "> Replace\n" +
-            "> ToEmbed\n" +
-            "> DelCall\n" +
-            "> AddSearch\n";
     private static String adminModes = "**Admin Modes:**\n" +
             "> Shitpost\n" +
             "> Lock\n";
+    private static final SubCommandObject SUB_1 = new SubCommandObject(
+            new String[]{"EditCC"},
+            "[Command Name] (Mode)",
+            "allows editing of other user's commands or editing toggles.\n" + adminModes,
+            SAILType.ADMIN,
+            new Permissions[]{Permissions.MANAGE_MESSAGES}
+    );
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -93,62 +94,52 @@ public class EditCC extends Command {
         }
     }
 
-
-    protected static final String[] NAMES = new String[]{"EditCC"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"EditCC"};
     }
 
     @Override
     public String description(CommandObject command) {
+        String modes = "**Modes: **\n" +
+                "> Replace\n" +
+                "> ToEmbed\n" +
+                "> DelCall\n" +
+                "> AddSearch\n";
         return "Allows you to edit a custom command.\n" + modes +
                 "**[Custom Command Guide](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide)**";
     }
 
-    protected static final String USAGE = "[Command Name] (Mode) [New Contents/Image]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Command Name] (Mode) [New Contents/Image]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CC;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.MANAGE_CC;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.MANAGE_CC;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
-    protected static final SubCommandObject SUB_1 = new SubCommandObject(
-        NAMES,
-        "[Command Name] (Mode)",
-        "allows editing of other user's commands or editing toggles.\n" + adminModes,
-        SAILType.ADMIN,
-        new Permissions[]{Permissions.MANAGE_MESSAGES}
-    );
     @Override
     public void init() {
         subCommands.add(SUB_1);

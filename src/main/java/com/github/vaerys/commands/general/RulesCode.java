@@ -14,6 +14,14 @@ import java.util.regex.Pattern;
 
 public class RulesCode extends Command {
 
+    protected static final String[] NAMES = new String[]{"RulesCode", "RuleCode"};
+    protected static final String USAGE = "[Secret code]";
+    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.config.getRuleCode() == null) {
@@ -32,7 +40,7 @@ public class RulesCode extends Command {
                 response += (200 * command.guild.config.xpModifier) + "and " + (200 * command.guild.config.xpModifier) + " Pixels have been added to your profile.";
                 profile.addXP(200, command.guild.config);
             }
-            GuildHandler.checkUsersRoles(command.guild.longID,command.guild);
+            GuildHandler.checkUsersRoles(command.guild.longID, command.guild);
 //            if (command.guild.config.xpGain) {
 //                command.user.sendDm("> Congratulations you have been granted some pixels and a star has been added to your profile for reading the rules.\n" +
 //                        "Never tell this code to anyone.");
@@ -60,8 +68,6 @@ public class RulesCode extends Command {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"RulesCode", "RuleCode"};
-
     @Override
     protected String[] names() {
         return NAMES;
@@ -76,42 +82,30 @@ public class RulesCode extends Command {
         }
     }
 
-    protected static final String USAGE = "[Secret code]";
-
     @Override
     protected String usage() {
         return USAGE;
     }
-
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
 
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
-
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
-
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
 
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
-
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
-
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     protected boolean doAdminLogging() {

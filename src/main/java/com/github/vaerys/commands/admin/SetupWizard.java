@@ -14,11 +14,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class SetupWizard extends Command {
 
-    protected static final String[] NAMES = new String[] {"SetupWizard", "StartupWizard"};
-    protected static final SAILType COMMAND_TYPE = SAILType.SETUP;
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = true;
-    protected static final Permissions[] PERMISSIONS = {Permissions.ADMINISTRATOR};
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -84,17 +79,17 @@ public class SetupWizard extends Command {
 
     @Override
     public Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.ADMINISTRATOR};
     }
 
     @Override
     public boolean requiresArgs() {
-    return REQUIRES_ARGS;
+        return false;
     }
 
     @Override
     public boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

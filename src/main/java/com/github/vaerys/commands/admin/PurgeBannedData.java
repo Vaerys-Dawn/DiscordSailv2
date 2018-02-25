@@ -15,11 +15,12 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.util.ListIterator;
 
 public class PurgeBannedData extends Command {
-    long purgedProfiles = 0;
-    long purgedCCs = 0;
-    long purgedCharacters = 0;
-    long purgedServers = 0;
-    long purgedDailyMessages = 0;
+
+    private long purgedProfiles = 0;
+    private long purgedCCs = 0;
+    private long purgedCharacters = 0;
+    private long purgedServers = 0;
+    private long purgedDailyMessages = 0;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -71,7 +72,7 @@ public class PurgeBannedData extends Command {
         ListIterator iterator = command.guild.users.profiles.listIterator();
         while (iterator.hasNext()) {
             ProfileObject object = (ProfileObject) iterator.next();
-            if (userID == object.getUserID()){
+            if (userID == object.getUserID()) {
                 iterator.remove();
                 purgedProfiles++;
             }
@@ -110,10 +111,9 @@ public class PurgeBannedData extends Command {
 //        }
     }
 
-    protected static final String[] NAMES = new String[]{"PurgeBannedData"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"PurgeBannedData"};
     }
 
     @Override
@@ -122,41 +122,34 @@ public class PurgeBannedData extends Command {
                 "***!!! WARNING: IF YOU USE A USER_ID YOU WILL PURGE ALL DATA FOR THAT USER REGARDLESS OF STATUS SO BE CAREFUL !!!***\n";
     }
 
-    protected static final String USAGE = "(UserID)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(UserID)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.ADMINISTRATOR, Permissions.BAN};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.ADMINISTRATOR, Permissions.BAN};
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

@@ -8,12 +8,13 @@ import com.github.vaerys.templates.SlashCommand;
  */
 public class Shrug extends SlashCommand {
 
+    protected static final String[] NAMES = new String[]{"Shrug"};
+
     @Override
     public String execute(String args, CommandObject command) {
         return "¯\\_(ツ)_/¯";
     }
 
-    protected static final String[] NAMES = new String[]{"Shrug"};
     @Override
     protected String[] names() {
         return NAMES;

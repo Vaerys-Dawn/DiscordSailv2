@@ -11,20 +11,21 @@ import sx.blah.discord.handle.obj.IUser;
  */
 public class QuickRespond extends DMCommand {
 
+
+
     @Override
     public String execute(String args, CommandObject command) {
         IUser recipient = command.client.get().getUserByID(Globals.lastDmUserID);
-        if (recipient != null){
-            return Respond.sendDM(args,command,recipient,command.user.username + ": ");
-        }else {
+        if (recipient != null) {
+            return Respond.sendDM(args, command, recipient, command.user.username + ": ");
+        } else {
             return "> no user to respond to.";
         }
     }
 
-    protected static final String[] NAMES = new String[]{"QuickRespond","QR","R"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"QuickRespond", "QR", "R"};
     }
 
     @Override
@@ -32,22 +33,19 @@ public class QuickRespond extends DMCommand {
         return "Responds to the last person to message the bot.";
     }
 
-    protected static final String USAGE = "[Message]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Message]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CREATOR;
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
     @Override

@@ -17,6 +17,14 @@ import java.util.ArrayList;
  * Created by Vaerys on 31/05/2017.
  */
 public class GroupUp extends Command {
+    protected static final String[] NAMES = new String[]{"GroupUp", "GroupMe"};
+    protected static final String USAGE = "(Game)";
+    protected static final SAILType COMMAND_TYPE = SAILType.GROUPS;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.GROUPS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         String presence = null;
@@ -34,7 +42,6 @@ public class GroupUp extends Command {
         //person added to list :D
 
         ArrayList<String> completeList = new ArrayList<>();
-
 
 
         for (GroupUpObject g : list) {
@@ -66,7 +73,6 @@ public class GroupUp extends Command {
                 Utility.getCommandInfo(this, command);
     }
 
-    protected static final String[] NAMES = new String[]{"GroupUp", "GroupMe"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -77,37 +83,31 @@ public class GroupUp extends Command {
         return "Adds you to a list of people that will be mentioned when this command is run.\nRun this command again to leave the list.";
     }
 
-    protected static final String USAGE = "(Game)";
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GROUPS;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.GROUPS;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

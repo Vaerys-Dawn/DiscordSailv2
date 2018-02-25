@@ -19,7 +19,16 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.stream.Collectors;
+
 public class TopUserForRole extends Command {
+
+    protected static final String[] NAMES = new String[]{"TopUserForRole", "TopUser"};
+    protected static final String USAGE = "[Role Name]";
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = true;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -98,7 +107,7 @@ public class TopUserForRole extends Command {
             userProfile = command.guild.users.getUserByID(userIDs.get(i));
             userObject = userProfile.getUser(command.guild);
 
-            embed.appendField(String.format(titlef, i+1, userObject.displayName),
+            embed.appendField(String.format(titlef, i + 1, userObject.displayName),
                     String.format(contentf, nf.format(userProfile.getXP()), userProfile.getCurrentLevel(), userObject.longID),
                     false);
         }
@@ -106,7 +115,6 @@ public class TopUserForRole extends Command {
         embed.send(command.channel);
     }
 
-    protected static final String[] NAMES = new String[]{"TopUserForRole", "TopUser"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -117,39 +125,32 @@ public class TopUserForRole extends Command {
         return "Gets the top user (Pixel wise) for a specific role.";
     }
 
-    protected static final String USAGE = "[Role Name]";
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
 
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES};
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

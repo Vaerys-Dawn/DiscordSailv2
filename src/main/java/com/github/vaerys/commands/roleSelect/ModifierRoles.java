@@ -20,6 +20,21 @@ import java.util.ListIterator;
  * Created by Vaerys on 31/01/2017.
  */
 public class ModifierRoles extends Command {
+    protected static final String[] NAMES = new String[]{"Modifier", "Modif"};
+    protected static final String USAGE = "(Role Name)";
+    protected static final SAILType COMMAND_TYPE = SAILType.ROLE_SELECT;
+    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+    protected static final SubCommandObject EDIT_ROLES = new SubCommandObject(
+            NAMES,
+            "+/-/add/del [Role Name]",
+            "Used to manage the selectable modifier roles.",
+            SAILType.ADMIN,
+            Permissions.MANAGE_ROLES
+    );
+
     @Override
     public String execute(String args, CommandObject command) {
         if (args == null || args.isEmpty()) {
@@ -125,8 +140,6 @@ public class ModifierRoles extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"Modifier", "Modif"};
-
     @Override
     protected String[] names() {
         return NAMES;
@@ -137,55 +150,35 @@ public class ModifierRoles extends Command {
         return "Allows you to toggle a modifier role. You can have as many modifier roles as you like.";
     }
 
-    protected static final String USAGE = "(Role Name)";
-
     @Override
     protected String usage() {
         return USAGE;
     }
-
-    protected static final SAILType COMMAND_TYPE = SAILType.ROLE_SELECT;
 
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
-
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
-
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
 
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
-
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;
     }
-
-    protected static final SubCommandObject EDIT_ROLES = new SubCommandObject(
-            NAMES,
-            "+/-/add/del [Role Name]",
-            "Used to manage the selectable modifier roles.",
-            SAILType.ADMIN,
-            Permissions.MANAGE_ROLES
-    );
 
     @Override
     public void init() {

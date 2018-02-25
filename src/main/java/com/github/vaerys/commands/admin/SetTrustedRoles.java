@@ -17,6 +17,7 @@ import java.util.ListIterator;
  * Created by Vaerys on 31/01/2017.
  */
 public class SetTrustedRoles extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject split = new SplitFirstObject(args);
@@ -44,10 +45,9 @@ public class SetTrustedRoles extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"TrustedRole"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"TrustedRole"};
     }
 
     @Override
@@ -55,40 +55,34 @@ public class SetTrustedRoles extends Command {
         return "add or remove a Trusted role.";
     }
 
-    protected static final String USAGE = "[Role name]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Role name]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.ADMIN;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ADMIN;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_ROLES};
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

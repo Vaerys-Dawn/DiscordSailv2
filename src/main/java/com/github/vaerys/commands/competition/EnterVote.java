@@ -10,6 +10,8 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 01/02/2017.
  */
 public class EnterVote extends Command {
+
+
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.config.compVoting) {
@@ -19,10 +21,9 @@ public class EnterVote extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"Vote"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Vote"};
     }
 
     @Override
@@ -30,40 +31,34 @@ public class EnterVote extends Command {
         return "Saves your vote.";
     }
 
-    protected static final String USAGE = "[Vote...]";
     @Override
     protected String usage() {
-        return USAGE;
+        return  "[Vote...]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.COMPETITION;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.COMPETITION;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.BOT_COMMANDS;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

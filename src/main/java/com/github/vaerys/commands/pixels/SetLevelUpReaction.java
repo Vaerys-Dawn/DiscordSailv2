@@ -13,6 +13,14 @@ import sx.blah.discord.util.MessageTokenizer;
 
 public class SetLevelUpReaction extends Command {
 
+    protected static final String[] NAMES = new String[]{"SetLevelUpReaction"};
+    protected static final String USAGE = "[Emoji]/Remove";
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_EMOJIS};
+    protected static final boolean REQUIRES_ARGS = true;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         MessageTokenizer messageTokenizer = new MessageTokenizer(command.message.get());
@@ -36,7 +44,6 @@ public class SetLevelUpReaction extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"SetLevelUpReaction"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -47,38 +54,32 @@ public class SetLevelUpReaction extends Command {
         return "Sets the Reaction that the bot will post to the message a user sent to level up.";
     }
 
-    protected static final String USAGE = "[Emoji]/Remove";
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
 
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_EMOJIS};
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

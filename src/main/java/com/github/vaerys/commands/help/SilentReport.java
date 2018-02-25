@@ -8,6 +8,9 @@ import com.github.vaerys.handlers.RequestHandler;
  */
 public class SilentReport extends Report {
 
+    protected static final String[] NAMES = new String[]{"SilentReport"};
+    protected static final String USAGE = "[@User] [Report]";
+
     @Override
     public String execute(String args, CommandObject command) {
         if (command.channel.get().getTypingStatus()) {
@@ -18,7 +21,6 @@ public class SilentReport extends Report {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"SilentReport"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -30,7 +32,6 @@ public class SilentReport extends Report {
                 indent + " It will also remove the message used to call the command.";
     }
 
-    protected static final String USAGE = "[@User] [Report]";
     @Override
     protected String usage() {
         return USAGE;

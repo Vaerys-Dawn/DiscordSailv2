@@ -18,6 +18,7 @@ import java.util.ArrayList;
  * Created by Vaerys on 31/01/2017.
  */
 public class ListChars extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
@@ -52,10 +53,9 @@ public class ListChars extends Command {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"ListChars", "Chars", "CharList"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"ListChars", "Chars", "CharList"};
     }
 
     @Override
@@ -63,40 +63,34 @@ public class ListChars extends Command {
         return "Shows you all of your characters.";
     }
 
-    protected static final String USAGE = "(@User)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(@User)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CHARACTER;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CHARACTER;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.CHARACTER;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.CHARACTER;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

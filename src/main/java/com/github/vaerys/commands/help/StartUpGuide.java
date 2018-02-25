@@ -15,6 +15,14 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 22/02/2017.
  */
 public class StartUpGuide extends Command {
+    protected static final String[] NAMES = new String[]{"StartUpGuide"};
+    protected static final String USAGE = null;
+    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[0];
+    protected static final boolean REQUIRES_ARGS = false;
+    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
@@ -51,7 +59,6 @@ public class StartUpGuide extends Command {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"StartUpGuide"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -62,38 +69,32 @@ public class StartUpGuide extends Command {
         return "Posts a link to the Bot's Startup Guide on its wiki.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
 
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;

@@ -18,6 +18,7 @@ import java.util.List;
  * Created by Vaerys on 01/02/2017.
  */
 public class NewCC extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
@@ -71,10 +72,9 @@ public class NewCC extends Command {
         return command.guild.customCommands.addCommand(isLocked, nameCC, argsCC, isShitpost, command);
     }
 
-    protected static final String[] NAMES = new String[]{"NewCC", "CCNew"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"NewCC", "CCNew"};
     }
 
     @Override
@@ -82,40 +82,34 @@ public class NewCC extends Command {
         return "Creates a Custom Command.";
     }
 
-    protected static final String USAGE = "[Command Name] [Contents/Image]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Command Name] [Contents/Image]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return  SAILType.CC;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.MANAGE_CC;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.MANAGE_CC;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

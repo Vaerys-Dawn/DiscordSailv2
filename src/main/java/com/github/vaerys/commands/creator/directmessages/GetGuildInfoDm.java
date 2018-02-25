@@ -22,10 +22,9 @@ public class GetGuildInfoDm extends DMCommand {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"GetGuildInfo"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"GetGuildInfo"};
     }
 
     @Override
@@ -33,22 +32,19 @@ public class GetGuildInfoDm extends DMCommand {
         return "Returns with all of the information about a specific Guild.";
     }
 
-    protected static final String USAGE = "[GuildID]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[GuildID]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CREATOR;
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
     @Override

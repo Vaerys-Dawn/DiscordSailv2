@@ -15,6 +15,8 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 01/02/2017.
  */
 public class InfoCC extends Command {
+
+
     @Override
     public String execute(String args, CommandObject command) {
         CCommandObject customCommand = command.guild.customCommands.getCommand(args);
@@ -37,10 +39,9 @@ public class InfoCC extends Command {
 
     }
 
-    protected static final String[] NAMES = new String[]{"CCInfo", "InfoCC"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"CCInfo", "InfoCC"};
     }
 
     @Override
@@ -48,40 +49,34 @@ public class InfoCC extends Command {
         return "Gives you a bit of information about a custom command.";
     }
 
-    protected static final String USAGE = "[Command Name]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Command Name]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CC;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.CC_INFO;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.CC_INFO;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

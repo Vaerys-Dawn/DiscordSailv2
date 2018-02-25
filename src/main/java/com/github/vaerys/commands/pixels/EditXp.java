@@ -17,6 +17,15 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 public class EditXp extends Command {
 
+    // Define Command parameters.
+    protected static final String[] NAMES = new String[]{"EditXp", "EditPixels"};
+    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
+    protected static final ChannelSetting CHANNEL_SETTING = null;
+    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
+    protected static final String USAGE = "[@User] [modifier] [Pixels]";
+    protected static final boolean DO_ADMIN_LOGGING = true;
+    protected static final boolean REQUIRES_ARGS = true;
+
     @Override
     public String execute(String args, CommandObject command) {
         // Split args into String[]
@@ -91,8 +100,6 @@ public class EditXp extends Command {
         return out;
     }
 
-    // Define Command parameters.
-    protected static final String[] NAMES = new String[]{"EditXp", "EditPixels"};
     @Override
     protected String[] names() {
         return NAMES;
@@ -107,32 +114,27 @@ public class EditXp extends Command {
         return "Allows you to add or remove pixels from a user." + modifiers;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
         return COMMAND_TYPE;
 
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
         return CHANNEL_SETTING;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
     @Override
     protected Permissions[] perms() {
         return PERMISSIONS;
     }
 
-    protected static final String USAGE = "[@User] [modifier] [Pixels]";
     @Override
     protected String usage() {
         return USAGE;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
         return DO_ADMIN_LOGGING;
@@ -143,7 +145,6 @@ public class EditXp extends Command {
 
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
         return REQUIRES_ARGS;
