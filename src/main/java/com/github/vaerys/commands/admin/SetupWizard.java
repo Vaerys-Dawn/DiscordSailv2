@@ -18,11 +18,17 @@ public class SetupWizard extends Command {
     protected static final SAILType COMMAND_TYPE = SAILType.SETUP;
     protected static final boolean REQUIRES_ARGS = false;
     protected static final boolean DO_ADMIN_LOGGING = true;
-    protected static final Permissions[] PERMISSIONS = {Permissions.MANAGE_SERVER};
+    protected static final Permissions[] PERMISSIONS = {Permissions.ADMINISTRATOR};
 
     @Override
     public String execute(String args, CommandObject command) {
         // Lots of sanity checking.
+
+        // Debugging: Clear setup mode until we can get it working.
+        //command.guild.config.setupStage = -1;
+        //command.guild.config.setupUser = -1;
+        // END DEBUG
+
         if (SetupHandler.isRunningSetup(command.guild)) {
             return "> Setup is already running for this guild. I can't run it twice!";
         }

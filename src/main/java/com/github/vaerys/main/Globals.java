@@ -1,17 +1,8 @@
 package com.github.vaerys.main;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Properties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandInit;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleInit;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.SetupHandler;
@@ -25,15 +16,17 @@ import com.github.vaerys.pogos.DailyMessages;
 import com.github.vaerys.pogos.Events;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.GuildFile;
-import com.github.vaerys.templates.GuildToggle;
-import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.templates.SlashCommand;
-import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IUser;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.DayOfWeek;
+import java.util.*;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -124,7 +117,7 @@ public class Globals {
 
 
         // Load Guild Toggles
-        guildToggles = ToggleInit.get();
+        guildToggles = ToggleInit.getToggles();
 
         channelSettings = ChannelSetting.values();
 

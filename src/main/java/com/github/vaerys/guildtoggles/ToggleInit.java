@@ -18,7 +18,7 @@ public class ToggleInit {
 
     final static Logger logger = LoggerFactory.getLogger(ToggleInit.class);
 
-    public static List<GuildToggle> get() {
+    public static List<GuildToggle> getToggles() {
         ArrayList<GuildToggle> guildToggles = new ArrayList<>();
 
         //toggles
@@ -80,16 +80,14 @@ public class ToggleInit {
         }
     }
 
-    public static List<GuildToggle> get(boolean isModule) {
+    public static List<GuildToggle> getToggles(boolean isModule) {
         List<GuildToggle> toggles = new LinkedList<>();
-        for (GuildToggle g : get()) {
+        for (GuildToggle g : Globals.getGuildToggles()) {
             if (g.isModule() == isModule) {
                 toggles.add(g);
             }
         }
         return toggles;
     }
-
-
 }
 

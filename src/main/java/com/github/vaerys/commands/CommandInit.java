@@ -23,6 +23,7 @@ import com.github.vaerys.commands.servers.*;
 import com.github.vaerys.commands.setup.SetupBack;
 import com.github.vaerys.commands.setup.SetupNext;
 import com.github.vaerys.commands.setup.SetupQuit;
+import com.github.vaerys.commands.setup.SetupRepeat;
 import com.github.vaerys.commands.slash.*;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.templates.Command;
@@ -201,6 +202,7 @@ public class CommandInit {
         commands.add(new SetupBack());
         commands.add(new SetupNext());
         commands.add(new SetupQuit());
+        commands.add(new SetupRepeat());
 
         validate(commands);
         return commands;

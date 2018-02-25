@@ -11,7 +11,7 @@ public class SetupQuit extends SetupCommand {
     @Override
     public String execute(String args, CommandObject command) {
         SetupHandler.setSetupStage(command, (short) SetupHandler.SETUP_UNSET);
-        return null;
+        return "> Setup Cancelled.";
     }
 
     @Override

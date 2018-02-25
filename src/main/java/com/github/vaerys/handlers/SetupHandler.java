@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.RequestBuffer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -70,7 +69,7 @@ public abstract class SetupHandler {
      * @return false if command isn't run, otherwise true.
      */
     private static boolean handleCommand(CommandObject command, String args) {
-        List<Command> commands = new ArrayList<>(command.guild.commands);
+        List<Command> commands = Globals.getSetupCommands();
         IChannel currentChannel = command.channel.get();
         String commandArgs;
         for (Command c : commands) {
@@ -78,7 +77,6 @@ public abstract class SetupHandler {
                 commandArgs = c.getArgs(args, command);
                 //log command
                 MessageHandler.handleLogging(command, c, commandArgs);
-                //FIXME
                 if (c.requiresArgs && (commandArgs == null || commandArgs.isEmpty())) {
 
                     RequestHandler.sendMessage(Utility.getCommandInfo(c, command), currentChannel);
@@ -99,6 +97,16 @@ public abstract class SetupHandler {
 
         config.setupStage = stage;
         config.setupUser = stage == SETUP_UNSET ? -1 : command.user.longID;
+
+        // send the title and step text to channel
+        if (stage != SETUP_UNSET && stage != SETUP_COMPLETE) {
+            //command.setChannel(command.user.getDmChannel());
+            // get stage:
+            SetupHandler currentStage = configStages.get(config.setupStage);
+            String titleText = "**__Step " + (stage + 1) + ": " + currentStage.title() + "__**";
+            RequestHandler.sendMessage(titleText, command.user.getDmChannel());
+            RequestHandler.sendMessage(currentStage.stepText(command), command.user.getDmChannel());
+        }
     }
 
     /**
@@ -142,7 +150,8 @@ public abstract class SetupHandler {
     public abstract String stepText(CommandObject command);
 
     /**
-     * The code that is run to handle any part of the setup stage.
+     * This method is called on a setup stage whenever the user responds in a DM. If you need to reply to the user,
+     * use {@link RequestHandler#sendMessage(String, com.github.vaerys.masterobjects.ChannelObject)}.
      *
      * @param command A {@link CommandObject} passed to each setup instance.
      * @return Whether or not the response should also allow commands to run.

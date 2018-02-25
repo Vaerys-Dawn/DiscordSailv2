@@ -1,14 +1,9 @@
 package com.github.vaerys.masterobjects;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.NewDailyMessage;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -16,26 +11,15 @@ import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.GuildLogObject;
 import com.github.vaerys.objects.LogObject;
 import com.github.vaerys.objects.UserRateObject;
-import com.github.vaerys.pogos.ChannelData;
-import com.github.vaerys.pogos.Characters;
-import com.github.vaerys.pogos.Competition;
-import com.github.vaerys.pogos.CustomCommands;
-import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.pogos.GuildLog;
-import com.github.vaerys.pogos.GuildUsers;
-import com.github.vaerys.pogos.Servers;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildFile;
 import com.github.vaerys.templates.GuildToggle;
-import com.github.vaerys.enums.SAILType;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IEmoji;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.IVoiceChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.obj.*;
+
+import java.util.*;
 
 public class GuildObject {
     public ClientObject client;
@@ -192,7 +176,7 @@ public class GuildObject {
     }
 
     /**
-     * 
+     *
      * @param names
      */
     public void removeCommand(String[] names) {

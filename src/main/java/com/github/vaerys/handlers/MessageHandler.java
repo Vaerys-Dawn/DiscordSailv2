@@ -1,9 +1,7 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,7 +121,11 @@ public class MessageHandler {
         if (args != null && !args.isEmpty()) {
             builder.append(" with args: `").append(args).append("`");
         }
-        builder.append(" in channel ").append(commandObject.channel.get().mention()).append(".");
+        if(commandObject.channel.get().isPrivate()) {
+            builder.append(" in their DMs.");
+        } else {
+            builder.append(" in channel ").append(commandObject.channel.get().mention()).append(".");
+        }
         Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
     }
 }

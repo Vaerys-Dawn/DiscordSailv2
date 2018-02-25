@@ -19,6 +19,6 @@ public class SetupRepeat extends SetupCommand {
 
     @Override
     public String description(CommandObject command) {
-        return null;
+        return "Repeat the current setup step.";
     }
 }

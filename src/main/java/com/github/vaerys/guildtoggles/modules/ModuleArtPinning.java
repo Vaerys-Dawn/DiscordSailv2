@@ -38,7 +38,7 @@ public class ModuleArtPinning extends GuildModule {
 
     @Override
     public String desc(CommandObject command) {
-        return "This module allows users to pin their art to the specified art channel using the \uD83D\uDCCC reaction.\n" +
+        return "This module allows users to pin their art to the specified art channel using the \uD83D\uDCCC reaction.\n" + // \uD838\uDCCC pushpin
                 "Users can unpin their artworks with a â�Œ reaction.";
     }
 
