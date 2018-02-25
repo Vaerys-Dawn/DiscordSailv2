@@ -17,11 +17,6 @@ public class Lenny extends SlashCommand {
 
     @Override
     protected String[] names() {
-        return NAMES;
-    }
-
-    @Override
-    public void init() {
-
+        return new String[]{"Lenny"};
     }
 }

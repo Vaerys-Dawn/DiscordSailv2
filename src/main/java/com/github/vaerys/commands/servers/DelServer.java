@@ -2,21 +2,14 @@ package com.github.vaerys.commands.servers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
 public class DelServer extends Command {
-    protected static final String[] NAMES = new String[]{"DelServer"};
-    protected static final String USAGE = "[Server Name]";
-    protected static final SAILType COMMAND_TYPE = SAILType.SERVERS;
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.SERVERS;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -25,7 +18,7 @@ public class DelServer extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"DelServer"};
     }
 
     @Override
@@ -35,32 +28,32 @@ public class DelServer extends Command {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Server Name]";
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.SERVERS;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.SERVERS;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

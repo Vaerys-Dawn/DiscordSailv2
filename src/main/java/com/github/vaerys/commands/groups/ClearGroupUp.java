@@ -26,7 +26,7 @@ public class ClearGroupUp extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"ClearGroupUp","PurgeGroupUp","EmptyGroupUp"};
     }
 
     @Override
@@ -36,33 +36,32 @@ public class ClearGroupUp extends Command {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.GROUPS;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

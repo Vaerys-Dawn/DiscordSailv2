@@ -46,7 +46,7 @@ public class SetLevelUpReaction extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"SetLevelUpReaction"};
     }
 
     @Override
@@ -56,33 +56,32 @@ public class SetLevelUpReaction extends Command {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Emoji]/Remove";
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.PIXEL;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_EMOJIS};
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

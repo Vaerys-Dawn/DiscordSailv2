@@ -41,7 +41,7 @@ public class HelpDM extends DMCommand {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new Help().names;
     }
 
     @Override
@@ -51,17 +51,17 @@ public class HelpDM extends DMCommand {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.HELP;
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
     @Override

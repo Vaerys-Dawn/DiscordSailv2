@@ -20,15 +20,9 @@ import java.net.URL;
  * Created by Vaerys on 17/06/2017.
  */
 public class EditLinks extends Command {
-    protected static final String[] NAMES = new String[]{"EditLinks", "NewLink"};
-    protected static final String USAGE = "[Link Name] (Link)";
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = false;
+
     protected static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
-            NAMES,
+            new String[]{"EditLinks", "NewLink"},
             "[@User] [Link Name] (Link)",
             "Allows the modification of user links.",
             SAILType.ADMIN,
@@ -107,7 +101,7 @@ public class EditLinks extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"EditLinks", "NewLink"};
     }
 
     @Override
@@ -117,32 +111,32 @@ public class EditLinks extends Command {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Link Name] (Link)";
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return  SAILType.GENERAL;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.BOT_COMMANDS;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

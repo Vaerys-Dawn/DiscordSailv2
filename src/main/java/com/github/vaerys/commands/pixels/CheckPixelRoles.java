@@ -14,14 +14,6 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 12/07/2017.
  */
 public class CheckPixelRoles extends Command {
-    protected static final String[] NAMES = new String[]{"CheckPixelRoles"};
-    protected static final String USAGE = null;
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
     @Override
     public String execute(String args, CommandObject command) {
         IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
@@ -34,7 +26,7 @@ public class CheckPixelRoles extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"CheckPixelRoles"};
     }
 
     @Override
@@ -44,33 +36,32 @@ public class CheckPixelRoles extends Command {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.PIXEL;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

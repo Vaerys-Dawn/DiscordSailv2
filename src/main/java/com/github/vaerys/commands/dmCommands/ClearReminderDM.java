@@ -21,7 +21,7 @@ public class ClearReminderDM extends DMCommand {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new ClearReminder().names;
     }
 
     @Override
@@ -31,17 +31,17 @@ public class ClearReminderDM extends DMCommand {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return new ClearReminder().usage;
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.GENERAL;
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
     @Override

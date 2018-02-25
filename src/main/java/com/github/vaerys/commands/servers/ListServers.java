@@ -41,7 +41,7 @@ public class ListServers extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"ListServers", "Servers", "ServerList"};
     }
 
     @Override
@@ -51,32 +51,32 @@ public class ListServers extends Command {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.SERVERS;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.SERVERS;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

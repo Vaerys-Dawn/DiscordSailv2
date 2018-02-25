@@ -102,7 +102,7 @@ public class EditXp extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"EditXp", "EditPixels"};
     }
 
     @Override
@@ -116,37 +116,36 @@ public class EditXp extends Command {
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.PIXEL;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
     }
 
     @Override
     protected String usage() {
-        return USAGE;
+        return "[@User] [modifier] [Pixels]";
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
+    }
+
+    @Override
+    protected boolean requiresArgs() {
+        return true;
     }
 
     @Override
     public void init() {
 
-    }
-
-    @Override
-    protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
     }
 }

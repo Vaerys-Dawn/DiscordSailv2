@@ -20,15 +20,9 @@ import java.util.ListIterator;
  * Created by Vaerys on 31/01/2017.
  */
 public class CosmeticRoles extends Command {
-    protected static final String[] NAMES = new String[]{"Role"};
-    protected static final String USAGE = "(Role Name)/Remove";
-    protected static final SAILType COMMAND_TYPE = SAILType.ROLE_SELECT;
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
+
     protected static final SubCommandObject EDIT_ROLES = new SubCommandObject(
-            NAMES,
+            new String[]{"Role"},
             "[Role Name]",
             "Used to manage the selectable cosmetic roles.",
             SAILType.ADMIN,
@@ -189,7 +183,7 @@ public class CosmeticRoles extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Role"};
     }
 
     @Override
@@ -205,32 +199,32 @@ public class CosmeticRoles extends Command {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return "(Role Name)/Remove";
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.ROLE_SELECT;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.BOT_COMMANDS;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

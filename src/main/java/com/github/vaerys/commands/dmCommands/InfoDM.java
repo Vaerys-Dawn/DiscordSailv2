@@ -83,7 +83,7 @@ public class InfoDM extends DMCommand {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new Info().names;
     }
 
     @Override
@@ -93,22 +93,22 @@ public class InfoDM extends DMCommand {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Command Name]";
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.HELP;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
     @Override

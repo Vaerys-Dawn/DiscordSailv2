@@ -23,7 +23,7 @@ public class SilentReport extends Report {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"SilentReport"};
     }
 
     @Override
@@ -34,7 +34,7 @@ public class SilentReport extends Report {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return new Report().usage;
     }
 
     @Override

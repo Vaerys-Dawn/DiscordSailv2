@@ -103,7 +103,7 @@ public class Help extends Command {
 
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Commands"};
     }
 
     @Override
@@ -113,33 +113,32 @@ public class Help extends Command {
 
     @Override
     protected String usage() {
-        return USAGE;
+        return "(Command Type)";
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

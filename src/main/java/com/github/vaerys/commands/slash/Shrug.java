@@ -17,11 +17,6 @@ public class Shrug extends SlashCommand {
 
     @Override
     protected String[] names() {
-        return NAMES;
-    }
-
-    @Override
-    public void init() {
-
+        return new String[]{"Shrug"};
     }
 }
