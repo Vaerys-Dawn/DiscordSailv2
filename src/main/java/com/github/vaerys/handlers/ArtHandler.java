@@ -130,7 +130,7 @@ public class ArtHandler {
                 response = "> I have pinned **" + command.message.author.displayName + "'s** art.";
             }
             if (command.guild.config.likeArt && command.guild.config.modulePixels) {
-                response += "\n You can now react with a ❤ emoji to give the user some pixels.";
+                response += "\n You can now react with a \u2764 emoji to give the user some pixels.";
             }
             IMessage pinResponse = RequestHandler.sendMessage(response, command.channel).get();
             Thread thread = new Thread(() -> {
