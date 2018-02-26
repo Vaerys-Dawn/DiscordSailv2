@@ -24,7 +24,7 @@ public class SetMutedRole extends Command {
             return Constants.ERROR_ROLE_NOT_FOUND;
         } else {
             command.guild.config.setMutedRoleID(role.getLongID());
-            return "> The role **" + role.getName() + "** Is now set as the mute role.";
+            return "> The role **" + role.getName() + "** is now set as the mute role.";
         }
     }
 
