@@ -13,6 +13,7 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 31/01/2017.
  */
 public class SetMutedRole extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         if (args.equalsIgnoreCase("Remove")) {

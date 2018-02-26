@@ -17,13 +17,6 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 06/07/2017.
  */
 public class SetLevel extends Command {
-    protected static final String[] NAMES = new String[]{"SetLevel"};
-    protected static final String USAGE = "[@User] [Level]";
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = true;
 
     @Override
     public String execute(String args, CommandObject command) {

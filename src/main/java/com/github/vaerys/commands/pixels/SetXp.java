@@ -21,13 +21,6 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 @Deprecated
 public class SetXp extends Command {
-    protected static final String[] NAMES = new String[]{"SetPixels", "SetXP"};
-    protected static final String USAGE = "[@User] [Pixels]";
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = true;
 
     @Override
     public String execute(String args, CommandObject command) {

@@ -17,14 +17,6 @@ import java.util.ArrayList;
  */
 public class ListRoles extends Command {
 
-    protected static final String[] NAMES = new String[]{"ListRoles", "Roles", "RoleList"};
-    protected static final String USAGE = null;
-    protected static final SAILType COMMAND_TYPE = SAILType.ROLE_SELECT;
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
     public static XEmbedBuilder getList(CommandObject command) {
         String title = "> Here are the **Cosmetic** roles you can choose from:\n";
         ArrayList<String> list = new ArrayList<>();

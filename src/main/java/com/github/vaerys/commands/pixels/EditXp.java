@@ -17,15 +17,6 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 public class EditXp extends Command {
 
-    // Define Command parameters.
-    protected static final String[] NAMES = new String[]{"EditXp", "EditPixels"};
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
-    protected static final String USAGE = "[@User] [modifier] [Pixels]";
-    protected static final boolean DO_ADMIN_LOGGING = true;
-    protected static final boolean REQUIRES_ARGS = true;
-
     @Override
     public String execute(String args, CommandObject command) {
         // Split args into String[]

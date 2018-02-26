@@ -20,13 +20,6 @@ import java.time.ZonedDateTime;
  * Created by Vaerys on 06/07/2017.
  */
 public class TransferLevels extends Command {
-    protected static final String[] NAMES = new String[]{"TransferLevels"};
-    protected static final String USAGE = null;
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = true;
 
     @Override
     public String execute(String args, CommandObject command) {

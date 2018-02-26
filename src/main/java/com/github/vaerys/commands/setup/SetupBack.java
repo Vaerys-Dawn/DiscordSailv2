@@ -4,10 +4,9 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.SetupCommand;
 
 public class SetupBack extends SetupCommand {
-
-    protected static final String[] NAMES = new String[]{"back", "prev"};
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -29,7 +28,7 @@ public class SetupBack extends SetupCommand {
 
     @Override
     public String[] names() {
-        return NAMES;
+        return new String[]{"back", "prev"};
     }
 
     @Override

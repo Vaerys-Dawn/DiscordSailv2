@@ -19,15 +19,6 @@ import java.util.ListIterator;
  */
 public class ProfileSettings extends Command {
 
-
-    protected static final String[] NAMES = new String[]{"ProfileSettings", "PixelSettings"};
-    protected static final String USAGE = "(Setting...)";
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
     private static void removeLevelSettings(ProfileObject user) {
         for (int i = 0; i < user.getSettings().size(); i++) {
             if (Constants.levelUpStates.contains(user.getSettings().get(i))) {

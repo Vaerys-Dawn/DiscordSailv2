@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.help.Help;
+import com.github.vaerys.commands.help.Commands;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
@@ -18,10 +18,6 @@ import java.util.List;
  * Created by Vaerys on 05/02/2017.
  */
 public class HelpDM extends DMCommand {
-    protected static final String[] NAMES = new Help().names;
-    protected static final String USAGE = null;
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
-    protected static final boolean REQUIRES_ARGS = false;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -41,7 +37,7 @@ public class HelpDM extends DMCommand {
 
     @Override
     protected String[] names() {
-        return new Help().names;
+        return new Commands().names;
     }
 
     @Override

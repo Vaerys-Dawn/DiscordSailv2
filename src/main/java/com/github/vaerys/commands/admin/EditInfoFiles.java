@@ -15,6 +15,7 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 26/06/2017.
  */
 public class EditInfoFiles extends Command {
+
     String modes =
             "**Modes:**\n" +
                     "> uploadImage - `Requires image file.`\n" +

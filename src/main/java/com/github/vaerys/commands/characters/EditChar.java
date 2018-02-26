@@ -13,6 +13,7 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 26/02/2017.
  */
 public class EditChar extends Command {
+
     String modes = "**Modes:**\n" +
             "> Age - `Max Chars: 20`\n" +
             "> Gender - `Max Chars: 20`\n" +

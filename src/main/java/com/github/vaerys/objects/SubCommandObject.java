@@ -6,6 +6,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
+import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -33,9 +34,14 @@ public class SubCommandObject {
 
     public boolean isSubCommand(CommandObject command) {
         if (!GuildHandler.testForPerms(command, permissions)) return false;
+
+        String toTest = command.message.getContent();
+        if (toTest.length() > 200) {
+            toTest = StringUtils.truncate(toTest, 200);
+        }
         for (String s : name) {
-            String regexString = "(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + regex + "(.|\n)*";
-            if (Pattern.compile(regexString).matcher(command.message.getContent()).matches()) {
+            String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + regex + "(.|\n)*";
+            if (Pattern.compile(regexString).matcher(toTest).matches()) {
                 return true;
             }
         }
@@ -43,9 +49,13 @@ public class SubCommandObject {
     }
 
     public String getArgs(CommandObject command) {
+        String toTest = command.message.getContent();
+        if (toTest.length() > 200) {
+            toTest = StringUtils.truncate(toTest, 200);
+        }
         for (String s : name) {
-            String regexString = "(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + regex + "(.|\n)*";
-            if (Pattern.compile(regexString).matcher(command.message.getContent()).matches()) {
+            String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + regex + "(.|\n)*";
+            if (Pattern.compile(regexString).matcher(toTest).matches()) {
                 String regexRemove = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + regex + " ";
                 return command.message.getContent().replaceAll(regexRemove, "");
             }
@@ -103,7 +113,7 @@ public class SubCommandObject {
             builder.append("\n**Perms: **");
             ArrayList<String> permList = new ArrayList<>(permissions.length);
             for (Permissions p : permissions) {
-                permList.add(p.toString());
+                permList.add(Utility.enumToString(p));
             }
             builder.append(Utility.listFormatter(permList, true));
         }
@@ -114,5 +124,9 @@ public class SubCommandObject {
             builder.append("\n**Aliases:** " + Utility.listFormatter(aliases, true));
         }
         return builder.toString();
+    }
+
+    public String getRegex() {
+        return regex;
     }
 }

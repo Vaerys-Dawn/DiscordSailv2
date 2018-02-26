@@ -9,7 +9,6 @@ import com.github.vaerys.templates.DMCommand;
  */
 public class TestDM extends DMCommand {
 
-
     @Override
     public String execute(String args, CommandObject command) {
 //        for (IChannel c : command.client.getGuildByID(176434793674833920L).getChannels()) {

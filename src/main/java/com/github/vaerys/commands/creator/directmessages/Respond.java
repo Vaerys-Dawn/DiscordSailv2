@@ -15,7 +15,6 @@ import sx.blah.discord.handle.obj.IUser;
  */
 public class Respond extends DMCommand {
 
-
     public static String sendDM(String args, CommandObject command, IUser recipient, String prefix) {
         if (recipient == null) {
             return "> Could Not Send Response, UserID is invalid.";

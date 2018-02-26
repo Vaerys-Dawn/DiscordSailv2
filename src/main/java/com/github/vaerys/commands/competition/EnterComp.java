@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class EnterComp extends Command {
 
-
     @Override
     public String execute(String args, CommandObject command) {
         GuildConfig guildconfig = command.guild.config;

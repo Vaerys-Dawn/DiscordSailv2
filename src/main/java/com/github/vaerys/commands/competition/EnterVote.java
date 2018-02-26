@@ -11,7 +11,6 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 public class EnterVote extends Command {
 
-
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.config.compVoting) {

@@ -20,14 +20,6 @@ import java.util.List;
  */
 public class Report extends Command {
 
-    protected static final String[] NAMES = new String[]{"Report"};
-    protected static final String USAGE = "[@User] [Reason]";
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = true;
-
     public static String report(String args, CommandObject command, boolean isSilent) {
         List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.ADMIN);
         if (channels.size() != 0) {

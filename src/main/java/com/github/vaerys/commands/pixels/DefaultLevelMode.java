@@ -17,7 +17,6 @@ public class DefaultLevelMode extends Command {
             "- CurrentChannel\n" +
             "- DMs\n" +
             "- NoMessage";
-    ;
 
     @Override
     public String execute(String args, CommandObject command) {

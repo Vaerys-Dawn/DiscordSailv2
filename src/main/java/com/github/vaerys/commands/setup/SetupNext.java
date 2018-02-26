@@ -3,10 +3,9 @@ package com.github.vaerys.commands.setup;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.SetupCommand;
 
 public class SetupNext extends SetupCommand {
-
-    protected static final String[] NAMES = new String[]{"next", "done"};
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -27,7 +26,7 @@ public class SetupNext extends SetupCommand {
 
     @Override
     public String[] names() {
-        return NAMES;
+        return new String[]{"next", "done"};
     }
 
     @Override

@@ -11,7 +11,6 @@ import com.github.vaerys.templates.DMCommand;
  */
 public class ShutdownDM extends DMCommand {
 
-
     @Override
     public String execute(String args, CommandObject command) {
         return new Shutdown().execute(args, command);

@@ -14,8 +14,8 @@ import sx.blah.discord.util.DiscordException;
 public class Test extends Command {
 
     protected static final SubCommandObject object = new SubCommandObject(
-            new String[]{"Test"},
-            "[Lol this command has no usages XD]",
+            new String[]{"Boop","Snugg"},
+            "[Test Data]",
             "nothing",
             SAILType.ADMIN
     );
@@ -43,8 +43,8 @@ public class Test extends Command {
 //        EnumSet<Permissions> botPerms = command.client.bot.getPermissions(command.guild);
 //        return botPerms.contains(Permissions.MANAGE_CHANNELS) ? "> I HAVE MANAGE_CHANNELS" : "> I DO NOT HAVE MANAGE_CHANNELS";
 
-//        return object.isSubCommand(command) + " " + object.getArgs(command) + " " + object.getCommandUsage(command);
-        throw new DiscordException("TestException");
+        return object.isSubCommand(command) + " " + object.getArgs(command) + " " + object.getCommandUsage(command);
+//        throw new DiscordException("TestException");
     }
 
     @Override
