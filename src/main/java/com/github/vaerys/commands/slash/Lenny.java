@@ -8,8 +8,6 @@ import com.github.vaerys.templates.SlashCommand;
  */
 public class Lenny extends SlashCommand {
 
-    protected static final String[] NAMES = new String[]{"Lenny"};
-
     @Override
     public String execute(String args, CommandObject command) {
         return "( ͡° ͜ʖ ͡°)";

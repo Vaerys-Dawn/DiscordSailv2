@@ -7,6 +7,7 @@ import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class SetRuleCode extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         command.message.delete();

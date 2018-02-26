@@ -13,14 +13,6 @@ import sx.blah.discord.util.MessageTokenizer;
 
 public class SetLevelUpReaction extends Command {
 
-    protected static final String[] NAMES = new String[]{"SetLevelUpReaction"};
-    protected static final String USAGE = "[Emoji]/Remove";
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_EMOJIS};
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
     @Override
     public String execute(String args, CommandObject command) {
         MessageTokenizer messageTokenizer = new MessageTokenizer(command.message.get());

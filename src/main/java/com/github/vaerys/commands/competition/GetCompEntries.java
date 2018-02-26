@@ -18,7 +18,6 @@ import java.util.List;
  */
 public class GetCompEntries extends Command {
 
-
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.competition.getEntries().size() == 0) {

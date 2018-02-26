@@ -14,7 +14,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class SetupWizard extends Command {
 
-
     @Override
     public String execute(String args, CommandObject command) {
         // Lots of sanity checking.

@@ -14,6 +14,7 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 12/07/2017.
  */
 public class CheckPixelRoles extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();

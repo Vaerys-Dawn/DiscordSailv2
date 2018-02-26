@@ -11,6 +11,7 @@ import sx.blah.discord.handle.obj.IGuild;
  * Created by Vaerys on 17/02/2017.
  */
 public class GetGuildInfoDm extends DMCommand {
+
     @Override
     public String execute(String args, CommandObject command) {
         IGuild guild = command.client.get().getGuildByID(Utility.stringLong(args));

@@ -13,14 +13,6 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 public class Hello extends Command {
 
-    protected static final String[] NAMES = new String[]{"Hello", "Hi", "Greetings"};
-    protected static final String USAGE = null;
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
     @Override
     public String execute(String args, CommandObject command) {
         String message = "> Hello <user>.";

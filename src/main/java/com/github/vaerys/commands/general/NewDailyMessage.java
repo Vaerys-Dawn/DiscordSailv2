@@ -18,14 +18,6 @@ import java.time.DayOfWeek;
 
 public class NewDailyMessage extends Command {
 
-    protected static final String[] NAMES = new String[]{"RequestDailyMessage", "RequestDailyMsg", "ReqDailyMsg", "NewDailyMsg", "NewDailyMessage"};
-    protected static final String USAGE = "[DayOfWeek] [Message]";
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
     @Override
     public String execute(String args, CommandObject command) {
         try {

@@ -17,6 +17,7 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 01/02/2017.
  */
 public class EditCC extends Command {
+
     private static String adminModes = "**Admin Modes:**\n" +
             "> Shitpost\n" +
             "> Lock\n";

@@ -16,6 +16,7 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 27/02/2017.
  */
 public class SetGender extends Command {
+
     public static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
             new String[]{"SetUserGender"},
             "[@User] [Gender]",

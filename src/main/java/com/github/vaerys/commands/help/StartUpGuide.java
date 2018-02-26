@@ -15,22 +15,15 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 22/02/2017.
  */
 public class StartUpGuide extends Command {
-    protected static final String[] NAMES = new String[]{"StartUpGuide"};
-    protected static final String USAGE = null;
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withAuthorName("Start Up Guide.");
         builder.withTitle("Helpful Commands.");
-        String desc = "**" + new Help().getUsage(command) + "**\n" +
+        String desc = "**" + new Commands().getUsage(command) + "**\n" +
                 "Lists all commands.\n**" +
-                new Info().getUsage(command) + "**\n" +
+                new Help().getUsage(command) + "**\n" +
                 "Gives you information about a command.\n**" +
                 new Module().getUsage(command) + "**\n" +
                 "Lists all available modules and allows you to toggle them.\n**" +

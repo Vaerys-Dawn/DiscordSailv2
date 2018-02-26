@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
  * Created by Vaerys on 02/03/2017.
  */
 public class Mute extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject userCall = new SplitFirstObject(args);

@@ -21,6 +21,7 @@ import java.util.ListIterator;
  * Created by Vaerys on 06/07/2017.
  */
 public class UserSettings extends Command {
+
     private static String settings(CommandObject command) {
         String settings = "**Settings**";
         if (command.guild.config.modulePixels) {

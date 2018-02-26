@@ -15,6 +15,7 @@ import sx.blah.discord.util.DiscordException;
  * Created by Vaerys on 31/01/2017.
  */
 public class Shutdown extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         RequestHandler.sendMessage("> Shutting Down.", command.channel.get());

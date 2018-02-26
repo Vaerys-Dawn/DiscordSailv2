@@ -40,7 +40,6 @@ public class Utility {
 
     //Logger
     final static Logger logger = LoggerFactory.getLogger(Utility.class);
-    static FileHandler handler = new FileHandler();
 
     //Command Utils
     public static String getCommandInfo(Command command, CommandObject commandObject) {
@@ -645,11 +644,20 @@ public class Utility {
                     if (c.type == SAILType.CREATOR && commandObject.user.longID != commandObject.client.creator.longID) {
                         //do nothing
                     } else if (GuildHandler.testForPerms(commandObject, c.perms)) {
-
                         toReturn.add(c);
                     }
                 } else {
                     toReturn.add(c);
+                }
+            } else {
+                boolean added = false;
+                for (SubCommandObject sub : c.subCommands) {
+                    if (c.type != sub.getType() && sub.getType() == type && !added) {
+                        if (GuildHandler.testForPerms(commandObject, sub.getPermissions())) {
+                            toReturn.add(c);
+                            added = true;
+                        }
+                    }
                 }
             }
         }
@@ -906,6 +914,21 @@ public class Utility {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    public static String enumToString(Enum<?> e) {
+        String enumValue = e.toString();
+        enumValue = enumValue.toLowerCase();
+        enumValue = enumValue.replace("_", " ");
+        String[] words = enumValue.split(" ");
+        StringHandler fixedEnum = new StringHandler();
+        for (String s : words) {
+            if (fixedEnum.toString().length() != 0) {
+                fixedEnum.append(" ");
+            }
+            fixedEnum.append(StringUtils.capitalize(s));
+        }
+        return fixedEnum.toString();
     }
 }
 

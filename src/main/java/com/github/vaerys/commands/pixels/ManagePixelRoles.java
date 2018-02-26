@@ -19,13 +19,6 @@ import java.util.List;
  */
 public class ManagePixelRoles extends Command {
 
-    protected static final String[] NAMES = new String[]{"ManagePixelRoles", "PixelRoles"};
-    protected static final String USAGE = "[Number/Mode] [RoleName]";
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES};
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = true;
     private static String modes = "**Modes**\n" +
             "> Any positive number up to 256\n" +
             "> xpDenied\n" +

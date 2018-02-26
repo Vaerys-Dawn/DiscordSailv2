@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.help.Info;
+import com.github.vaerys.commands.help.Help;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
@@ -15,11 +15,6 @@ import java.util.List;
  * Created by Vaerys on 05/02/2017.
  */
 public class InfoDM extends DMCommand {
-    protected static final String[] NAMES = new Info().names;
-    protected static final String USAGE = "[Command Name]";
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final boolean REQUIRES_ARGS = true;
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -83,7 +78,7 @@ public class InfoDM extends DMCommand {
 
     @Override
     protected String[] names() {
-        return new Info().names;
+        return new Help().names;
     }
 
     @Override

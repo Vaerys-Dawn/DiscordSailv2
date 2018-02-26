@@ -90,12 +90,12 @@ public class CommandInit {
         commands.add(new BotHelp());
         commands.add(new BotInfo());
         commands.add(new GetGuildInfo());
-        commands.add(new Help());
+        commands.add(new Commands());
         commands.add(new HelpChannel());
         commands.add(new HelpModules());
         commands.add(new HelpSettings());
         commands.add(new HelpTags());
-        commands.add(new Info());
+        commands.add(new Help());
         commands.add(new ListTags());
         commands.add(new Report());
         commands.add(new SilentReport());

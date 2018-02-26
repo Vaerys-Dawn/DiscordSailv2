@@ -24,15 +24,6 @@ import java.util.*;
  */
 public class GetGuildInfo extends Command {
 
-
-    protected static final String[] NAMES = new String[]{"GuildInfo", "GuildStats", "ServerInfo", "GetGuildInfo"};
-    protected static final String USAGE = null;
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
     private XEmbedBuilder resetEmbed(XEmbedBuilder builder, IChannel channel, CommandObject command, int extraLength) {
         if ((builder.getTotalVisibleCharacters() + extraLength) > 2000 ||
                 builder.getFieldCount() + 1 > EmbedBuilder.FIELD_COUNT_LIMIT) {

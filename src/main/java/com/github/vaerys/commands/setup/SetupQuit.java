@@ -2,11 +2,9 @@ package com.github.vaerys.commands.setup;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.SetupHandler;
+import com.github.vaerys.templates.SetupCommand;
 
 public class SetupQuit extends SetupCommand {
-
-    protected static final String[] NAMES = new String[]{"quit", "stop"};
-
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -16,7 +14,7 @@ public class SetupQuit extends SetupCommand {
 
     @Override
     public String[] names() {
-        return NAMES;
+        return new String[]{"quit", "stop"};
     }
 
     @Override

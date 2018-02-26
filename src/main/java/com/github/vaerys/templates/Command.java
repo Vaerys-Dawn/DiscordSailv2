@@ -1,30 +1,37 @@
 package com.github.vaerys.templates;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.admin.PropMutePerms;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 29/01/2017.
  */
 public abstract class Command {
-    public static final String TYPE_SETUP = "Setup";
 
     public static final String spacer = "\u200B";
     public static final String indent = "    ";
     public static final String codeBlock = "```";
     public static final String ownerOnly = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
 
+    private final static Logger logger = LoggerFactory.getLogger(Command.class);
 
     public final ChannelSetting channel;
     public final SAILType type;
@@ -121,9 +128,19 @@ public abstract class Command {
     }
 
     public boolean isCall(String args, CommandObject command) {
-        SplitFirstObject call = new SplitFirstObject(args);
-        for (String s : names) {
-            if ((command.guild.config.getPrefixCommand() + s).equalsIgnoreCase(call.getFirstWord())) {
+        List<String> validStates = new ArrayList(Arrays.asList(names));
+        subCommands.forEach(subCommandObject -> {
+            for (String s: subCommandObject.getName()){
+                validStates.add(s + subCommandObject.getRegex());
+            }
+        });
+        String toTest = command.message.getContent();
+        if (toTest.length() > 200){
+            toTest = StringUtils.truncate(toTest,200);
+        }
+        for (String s : validStates) {
+            String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + "(.|\n)*";
+            if(Pattern.compile(regexString).matcher(toTest).matches()){
                 return true;
             }
         }
@@ -156,16 +173,29 @@ public abstract class Command {
         // display permissions
         if (perms != null && perms.length != 0) {
 
-            builder.append("**Perms: **");
+            builder.append("\n**Perms: **");
             ArrayList<String> permList = new ArrayList<>(perms.length);
             for (Permissions p : perms) {
-                permList.add(p.toString());
+                permList.add(Utility.enumToString(p));
             }
             builder.append(Utility.listFormatter(permList, true));
         }
 
-        infoEmbed.appendField("> Help - " + names()[0], builder.toString(), false);
+        if (names.length > 1) {
+            List<String> aliases = Arrays.asList(names).stream().map(s -> command.guild.config.getPrefixCommand() + s).collect(Collectors.toList());
+            aliases.remove(0);
+            builder.append("\n**Aliases:** " + Utility.listFormatter(aliases, true));
+        }
 
+        if (subCommands.size() != 0) builder.append("\n" + Command.spacer);
+
+        infoEmbed.withTitle("> Help - " + names()[0]);
+        infoEmbed.appendField("**" + getUsage(command) + "**    " + Command.spacer, builder.toString(), true);
+
+
+        for (SubCommandObject s : subCommands) {
+            infoEmbed.appendField(s.getCommandUsage(command) + "    " + Command.spacer, s.getHelpDesc(command), true);
+        }
 
         //Handle channels
         List<IChannel> channels = command.guild.getChannelsByType(channel);
@@ -181,15 +211,7 @@ public abstract class Command {
         }
 
         //aliases
-        if (names.length > 1) {
-            StringBuilder aliasBuilder = new StringBuilder();
-            for (int i = 1; i < names.length; i++) {
-                aliasBuilder.append(getCommand(command, i) + ", ");
-            }
-            aliasBuilder.delete(aliasBuilder.length() - 2, aliasBuilder.length());
-            aliasBuilder.append(".\n");
-            infoEmbed.appendField("Aliases", aliasBuilder.toString(), false);
-        }
+
         return infoEmbed;
     }
 

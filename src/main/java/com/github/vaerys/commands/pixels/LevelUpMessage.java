@@ -13,13 +13,6 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 02/07/2017.
  */
 public class LevelUpMessage extends Command {
-    protected static final String[] NAMES = new String[]{"SetLvlMessage", "SetLevelMessage", "SetLvlMsg", "SetLevelMsg"};
-    protected static final String USAGE = "[Message]";
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

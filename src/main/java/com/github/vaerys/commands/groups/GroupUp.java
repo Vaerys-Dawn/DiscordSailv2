@@ -17,13 +17,6 @@ import java.util.ArrayList;
  * Created by Vaerys on 31/05/2017.
  */
 public class GroupUp extends Command {
-    protected static final String[] NAMES = new String[]{"GroupUp", "GroupMe"};
-    protected static final String USAGE = "(Game)";
-    protected static final SAILType COMMAND_TYPE = SAILType.GROUPS;
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.GROUPS;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

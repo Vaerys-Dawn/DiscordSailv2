@@ -20,13 +20,6 @@ import java.text.NumberFormat;
  * Created by Vaerys on 01/07/2017.
  */
 public class Pixels extends Command {
-    protected static final String[] NAMES = new String[]{"Pixels"};
-    protected static final String USAGE = "(@User)";
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.PIXELS;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

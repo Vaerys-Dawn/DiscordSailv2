@@ -14,7 +14,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class PropMutePerms extends Command {
-    private final static Logger logger = LoggerFactory.getLogger(PropMutePerms.class);
 
     @Override
     public String execute(String args, CommandObject command) {

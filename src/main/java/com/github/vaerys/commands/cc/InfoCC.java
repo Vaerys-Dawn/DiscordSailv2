@@ -16,7 +16,6 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 public class InfoCC extends Command {
 
-
     @Override
     public String execute(String args, CommandObject command) {
         CCommandObject customCommand = command.guild.customCommands.getCommand(args);

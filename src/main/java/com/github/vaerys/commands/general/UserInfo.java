@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
  */
 public class UserInfo extends Command {
 
-
     @Override
     public String execute(String args, CommandObject command) {
         UserObject user;

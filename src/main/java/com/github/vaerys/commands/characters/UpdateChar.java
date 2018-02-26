@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  */
 public class UpdateChar extends Command {
 
-
     @Override
     public String execute(String args, CommandObject command) {
         List<CharacterObject> userChars = command.user.characters;

@@ -8,8 +8,6 @@ import com.github.vaerys.templates.SlashCommand;
  */
 public class DealWithIt extends SlashCommand {
 
-    protected static final String[] NAMES = new String[]{"DealWithIt"};
-
     @Override
     public String execute(String args, CommandObject command) {
         return "(•\\_•)\n( •\\_•)>⌐■-■\n(⌐■_■)";

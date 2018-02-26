@@ -11,14 +11,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class HelpModules extends Command {
 
-    protected static final String[] NAMES = new String[]{"HelpModule", "HelpModules", "ModuleHelp"};
-    protected static final String USAGE = "[Module Name]";
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
-    protected static final boolean REQUIRES_ARGS = true;
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = getInfo(true, args, command);

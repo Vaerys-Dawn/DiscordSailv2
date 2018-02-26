@@ -12,13 +12,6 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 05/04/2017.
  */
 public class ClearReminder extends Command {
-    protected static final String[] NAMES = new String[]{"ClearReminder"};
-    protected static final String USAGE = null;
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     public String execute(String args, CommandObject command) {

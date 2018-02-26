@@ -25,14 +25,6 @@ import java.util.Random;
  */
 public class PixelHelp extends Command {
 
-    protected static final String[] NAMES = new String[]{"PixelHelp", "HelpPixels"};
-    protected static final String USAGE = ("(Mode) (args)");
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.PIXELS;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
     @Override
     public String execute(String args, CommandObject command) {
         if (args.equalsIgnoreCase("Decay") && command.guild.config.xpDecay) return decay(command);

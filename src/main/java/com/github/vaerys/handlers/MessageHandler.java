@@ -3,6 +3,7 @@ package com.github.vaerys.handlers;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.Command;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
@@ -73,6 +74,12 @@ public class MessageHandler {
         }
         StringHandler builder = new StringHandler("> **@").append(commandObject.user.username).append("** Has Used Command `").append(command.getCommand(commandObject)).append("`");
         if (args != null && !args.isEmpty()) {
+
+            if (args.length() > 1800) {
+                args = StringUtils.truncate(args, 1800);
+                args += "...";
+            }
+
             builder.append(" with args: `").append(args).append("`");
         }
         if (commandObject.channel.get().isPrivate()) {

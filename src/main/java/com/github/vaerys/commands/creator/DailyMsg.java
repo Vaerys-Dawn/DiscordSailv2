@@ -21,7 +21,6 @@ import java.util.ListIterator;
 
 public class DailyMsg extends Command {
 
-
     String modes = "> Edit - `args = new Contents`\n" +
             "> Delete\n" +
             "> MoveDay\n" +

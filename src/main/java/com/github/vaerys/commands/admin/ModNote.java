@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 
 public class ModNote extends Command {
-    private static final Logger logger = LoggerFactory.getLogger(ModNote.class);
 
     @Override
     public String execute(String args, CommandObject command) {
