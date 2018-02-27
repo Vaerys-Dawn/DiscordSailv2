@@ -36,7 +36,7 @@ public class ModulesStage extends SetupHandler {
         }
         String toggleReminder = "\nYou can toggle a module on and off with the `%s` command.\nIf you want more detailed information about the module, you can use `%s`";
         output.appendFormatted(toggleReminder, new Module().getUsage(command), new HelpModules().getUsage(command));
-        RequestHandler.sendMessage(output.toString(), command.user.getDmChannel());
+        //RequestHandler.sendMessage(output.toString(), command.user.getDmChannel());
 
         XEmbedBuilder embed = new XEmbedBuilder(command);
         StringHandler enabled = new StringHandler();
@@ -52,7 +52,8 @@ public class ModulesStage extends SetupHandler {
         embed.withTitle("Here's the current list of enabled and disabled modules");
         embed.appendField("Enabled Modules", enabled.toString(), true);
         embed.appendField("Disabled Modules", disabled.toString(), true);
-        embed.send(command.user.getDmChannel());
+        //embed.send(command.user.getDmChannel());
+        RequestHandler.sendEmbedMessage(output.toString(), embed, command.channel);
     }
 
     @Override
