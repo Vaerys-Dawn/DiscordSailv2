@@ -2,6 +2,7 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.setupStages.ModulesStage;
+import com.github.vaerys.handlers.setupStages.SettingsStage;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
@@ -105,7 +106,8 @@ public abstract class SetupHandler {
             SetupHandler currentStage = configStages.get(config.setupStage);
             String titleText = "**__Step " + (stage + 1) + ": " + currentStage.title() + "__**";
             RequestHandler.sendMessage(titleText, command.user.getDmChannel());
-            RequestHandler.sendMessage(currentStage.stepText(command), command.user.getDmChannel());
+            // it is expected that you send the message yourself;
+            currentStage.stepText(command);
         }
     }
 
@@ -132,6 +134,7 @@ public abstract class SetupHandler {
 
     public static void initStages() {
         addStage(new ModulesStage());
+        addStage(new SettingsStage());
     }
 
     /**
@@ -142,12 +145,15 @@ public abstract class SetupHandler {
     public abstract String title();
 
     /**
-     * The initial text to be displayed for the step currently running.
+     * The initial text to be displayed for the step currently running.<br />
+     * Send a message to the user with {@link RequestHandler#sendMessage(String, IChannel)}
      *
      * @param command A {@link CommandObject} passed to each setup instance.
      * @return A string value representing the text output.
+     * @see RequestHandler#sendMessage(String, IChannel)
+     * @see com.github.vaerys.objects.XEmbedBuilder
      */
-    public abstract String stepText(CommandObject command);
+    public abstract void stepText(CommandObject command);
 
     /**
      * This method is called on a setup stage whenever the user responds in a DM. If you need to reply to the user,

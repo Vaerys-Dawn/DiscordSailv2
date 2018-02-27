@@ -21,7 +21,7 @@ public class ModulesStage extends SetupHandler {
     }
 
     @Override
-    public String stepText(CommandObject command) {
+    public void stepText(CommandObject command) {
         StringHandler output = new StringHandler();
         List<GuildToggle> modules = ToggleInit.getToggles(true);
 
@@ -53,8 +53,6 @@ public class ModulesStage extends SetupHandler {
         embed.appendField("Enabled Modules", enabled.toString(), true);
         embed.appendField("Disabled Modules", disabled.toString(), true);
         embed.send(command.user.getDmChannel());
-
-        return null;
     }
 
     @Override
