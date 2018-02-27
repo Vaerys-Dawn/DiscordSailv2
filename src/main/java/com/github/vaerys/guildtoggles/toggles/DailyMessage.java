@@ -2,6 +2,7 @@ package com.github.vaerys.guildtoggles.toggles;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.LastDailyMessage;
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
@@ -38,7 +39,7 @@ public class DailyMessage extends GuildSetting {
 
     @Override
     public String desc(CommandObject command) {
-        return "Enables Daily Messages.";
+        return "Enables special messages that are sent once a day to your server's " + ChannelSetting.GENERAL.toString() + " channel.";
     }
 
     @Override

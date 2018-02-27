@@ -11,8 +11,8 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.GuildToggle;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SettingsStage extends SetupHandler {
     @Override
@@ -45,15 +45,20 @@ public class SettingsStage extends SetupHandler {
             }
         }
 
-        String format = "\t> **%s** - %s";
+        String format = "\t> **%s** - %s\n";
         for (GuildToggle t : globalToggles) {
-            output.appendFormatted(format, t.toString(), t.shortDesc(command));
+            output.appendFormatted(format, t.name().toString(), t.shortDesc(command));
         }
         RequestHandler.sendMessage(output.toString(), command.channel);
 
 
-        List<String> enabled = globalToggles.stream().filter(t -> t.enabled(command.guild.config)).map(GuildToggle::toString).collect(Collectors.toList());
-        List<String> disabled = globalToggles.stream().filter(t -> !t.enabled(command.guild.config)).map(GuildToggle::toString).collect(Collectors.toList());
+        List<String> enabled  = new ArrayList<>();
+        List<String> disabled = new ArrayList<>();
+
+        for (GuildToggle g : globalToggles) {
+            if (g.enabled(command.guild.config)) enabled.add(g.name().toString());
+            else disabled.add(g.name().toString());
+        }
 
         XEmbedBuilder embed = new XEmbedBuilder(command);
         embed.withTitle("Global Settings");
