@@ -132,9 +132,11 @@ public abstract class SetupHandler {
         configStages.put(setupHandler.setupStage(), setupHandler);
     }
 
-    public static void initStages() {
+    public static HashMap<Integer, SetupHandler> getStages() {
         addStage(new ModulesStage());
         addStage(new SettingsStage());
+
+        return configStages;
     }
 
     /**
