@@ -31,6 +31,11 @@ public class DenyInvites extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enables deletion of instant invites for non-approved members.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the deletion of instant invites that are sent in chat, will not affect users with the Manage Messages permissions. " +
                 "If any trusted roles are set up this feature will not affect users with those roles.";

@@ -32,6 +32,11 @@ public class RateLimiting extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the ability to set a custom rate limit for the server.";
     }

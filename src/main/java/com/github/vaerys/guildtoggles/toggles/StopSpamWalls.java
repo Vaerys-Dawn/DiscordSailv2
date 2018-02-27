@@ -28,6 +28,11 @@ public class StopSpamWalls extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Removes walls of spam.";
     }

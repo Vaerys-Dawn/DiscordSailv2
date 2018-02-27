@@ -32,6 +32,11 @@ public class DeleteLogging extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enables deleted message logging.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the logging of deleted messages. Requires the " + ChannelSetting.SERVER_LOG.toString() + " Channel to be set up.";
     }

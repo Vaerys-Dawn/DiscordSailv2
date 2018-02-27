@@ -28,6 +28,11 @@ public class SelfDestructLevelUps extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enable automatic deletion of \"Ding!\" messages.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the automatic deletion of level up messages (in every channel except for the " + ChannelSetting.LEVEL_UP.toString() + " channel and Direct messages) after 1 minute.";
     }

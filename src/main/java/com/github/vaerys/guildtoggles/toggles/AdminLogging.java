@@ -32,6 +32,11 @@ public class AdminLogging extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enables Admin command logging.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the logging of admin commands. Requires the " + ChannelSetting.ADMIN_LOG.toString() + " Channel to be set up.";
     }

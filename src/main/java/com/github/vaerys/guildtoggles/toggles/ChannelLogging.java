@@ -32,6 +32,11 @@ public class ChannelLogging extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enables logging of channel setting changes.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the logging of channel updates. Requires the " + ChannelSetting.SERVER_LOG.toString() + " Channel to be set up.";
     }

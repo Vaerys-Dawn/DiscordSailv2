@@ -32,6 +32,11 @@ public class DailyMessage extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables Daily Messages.";
     }

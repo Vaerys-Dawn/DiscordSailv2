@@ -28,6 +28,11 @@ public class ReactToLevelUp extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enables level up reactions on messages";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the ability to have a reaction automatically added to the messages that caused a user to level up.";
     }
