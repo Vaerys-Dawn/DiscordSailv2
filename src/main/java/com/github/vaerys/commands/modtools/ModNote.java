@@ -14,98 +14,101 @@ import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 public class ModNote extends Command {
+
+    private static final List<String> specialModes = new ArrayList<>(Arrays.asList(
+            "edit",
+            "info",
+            "delete", "del", "remove", "rem",
+            "strike"));
 
     @Override
     public String execute(String args, CommandObject command) {
 
-        // TODO: REFACTOR.
-
         // Start by breaking the arguments apart
+        SplitFirstObject argsSplitter = new SplitFirstObject(args);
 
-        String userCall = new SplitFirstObject(args).getFirstWord();
-        String argsRest = new SplitFirstObject(args).getRest();
+        String userCall = argsSplitter.getFirstWord();
+        String opts = argsSplitter.getRest();
+        // empty user arg is not allowed;
+        if (userCall.isEmpty()) return missingArgs(command);
+        if (opts.isEmpty()) opts = "list";
 
-        // Make sure both argument fields are not empty
-        if (userCall == null) {
-            return missingArgs(command);
-        }
-        if (argsRest == null) {
-            argsRest = "list";
-        }
-        argsRest = argsRest.trim(); // trim excess spaces off so it doesn't be a derp.
-
-        // make sure there is a valid user:
         UserObject user = Utility.getUser(command, userCall, false);
-        if (user == null) return "> Could not find user.";
-
-        // with a valid profile:
         ProfileObject profile = user.getProfile(command.guild);
-        if (profile == null) return "> No profile found for " + user.displayName;
 
-        // gather necessary extra bits
+        //if (user == null) return "Could not find user.";
+        if (profile == null) return "> No profile found for " + user.displayName + ".";
+
         long timestamp = command.message.getTimestamp().toEpochSecond();
-        SplitFirstObject mode = new SplitFirstObject(argsRest);
-        String modeString = mode.getFirstWord().toLowerCase();
+        String mode = new SplitFirstObject(opts).getFirstWord().toLowerCase();
 
-        switch (modeString) {
-            // Modes that do not require an index value
-            case "list":
-                return createListEmbed(profile, command);
+        if (mode.equals("list")) {
+            return createListEmbed(profile, command);
+        } else if (specialModes.contains(mode)) {
+            // these modes require special handling:
+            String modeOpts = new SplitFirstObject(opts).getRest();
+            if (modeOpts.isEmpty()) return missingArgs(command);
 
-            // Modes that require an index value:
-            case "info":
-            case "edit":
-            case "del":
-            case "delete":
-            case "strike":
-                if (mode.getRest() == null) return missingArgs(command);
-                String modeArg = new SplitFirstObject(mode.getRest()).getFirstWord();
-
-                int index;
-                try {
-                    index = Integer.parseInt(modeArg);
-                    if (profile.modNotes == null || profile.modNotes.size() == 0) {
-                        return "> " + user.displayName + " doesn't have any notes yet.";
-                    }
-                    if (index <= 0 || index > profile.modNotes.size()) {
-                        return "> Index out of bounds.";
-                    }
-                } catch (NumberFormatException e) {
-                    return "> I wasn't able to understand what you asked me.";
+            // try to parse an index:
+            int index;
+            try {
+                index = Integer.parseInt(modeOpts);
+                if (profile.modNotes == null || profile.modNotes.size() == 0) {
+                    return "> " + user.displayName + " doesn't have any notes yet.";
                 }
-
-                switch (mode.getFirstWord()) {
-                    case "info":
-                        createInfoEmbed(profile, command, index - 1);
-                        return null;
-
-                    case "edit":
-                        String newNote = new SplitFirstObject(mode.getRest()).getRest();
-
-                        profile.modNotes.get(index - 1).editNote(newNote, command.user.longID, timestamp);
-                        return "> Note #" + index + " edited for user " + user.displayName + ".";
-                    case "strike":
-                        boolean strike = profile.modNotes.get(index - 1).getStrike();
-                        if (strike) {
-                            profile.modNotes.get(index - 1).setStrike(false);
-                            return "> Strike cleared for note " + index + " for user " + user.displayName + ".";
-                        } else {
-                            profile.modNotes.get(index - 1).setStrike(true);
-                            return "> Strike set for note " + index + " for user " + user.displayName + ".";
-                        }
-                    case "delete":
-                    case "del":
-                        profile.modNotes.remove(index - 1);
-                        return "> Note #" + index + " for " + user.displayName + " deleted.";
+                if (index <= 0 || index > profile.modNotes.size()) {
+                    return "> Index out of bounds.";
                 }
-            default:
-                if (profile.modNotes == null) profile.modNotes = new LinkedList<>();
-                profile.modNotes.add(new ModNoteObject(argsRest, command.user.longID, timestamp));
-                return String.format("> Note added for %s at index %d.", user.displayName, profile.modNotes.size());
+            } catch (NumberFormatException e) {
+                return "> I wasn't able to understand what you asked me.";
+            }
+
+            // cache modNotes list
+            List<ModNoteObject> modNotes = profile.modNotes;
+            switch (mode) {
+                // "edit" mode
+                case "edit":
+                    String newNote = new SplitFirstObject(modeOpts).getRest();
+
+                    modNotes.get(index - 1).editNote(newNote, command.user.longID, timestamp);
+                    return "> Note #" + index + " edited for user " + user.displayName + ".";
+
+                // "info" mode
+                case "info":
+                    createInfoEmbed(profile, command, index - 1);
+                    return null;
+
+                // strike
+                case "strike":
+                    boolean strike = modNotes.get(index - 1).getStrike();
+                    if (strike) {
+                        modNotes.get(index - 1).setStrike(false);
+                        return "> Strike cleared for note " + index + " for user " + user.displayName + ".";
+                    } else {
+                        modNotes.get(index - 1).setStrike(true);
+                        return "> Strike set for note " + index + " for user " + user.displayName + ".";
+                    }
+
+                // "delete" command
+                case "delete":
+                case "del":
+                case "remove":
+                case "rem":
+                    modNotes.remove(index - 1);
+                    return "> Note #" + index + " for " + user.displayName + " deleted.";
+            }
+        } else {
+            if (profile.modNotes == null) profile.modNotes = new LinkedList<>();
+            profile.modNotes.add(new ModNoteObject(opts, command.user.longID, timestamp));
+            return String.format("> Note added for %s at index %d.", user.displayName, profile.modNotes.size());
         }
+        return "> This code should be unreachable.";
     }
 
     private String createListEmbed(ProfileObject user, CommandObject command) {
@@ -137,8 +140,7 @@ public class ModNote extends Command {
         // finalize and send message:
         builder.withFooterText("Total Notes: " + user.modNotes.size());
         builder.send(command.channel);
-
-        return null; // no need to send a message, we're sending an embed instead.
+        return null;
     }
 
     private void createInfoEmbed(ProfileObject user, CommandObject command, int index) {
