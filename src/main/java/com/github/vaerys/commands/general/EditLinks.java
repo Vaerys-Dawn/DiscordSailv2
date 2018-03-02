@@ -25,7 +25,7 @@ public class EditLinks extends Command {
             new String[]{"EditLinks", "NewLink"},
             "[@User] [Link Name] (Link)",
             "Allows the modification of user links.",
-            SAILType.ADMIN,
+            SAILType.MOD_TOOLS,
             Permissions.MANAGE_MESSAGES
     );
 

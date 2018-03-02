@@ -672,7 +672,7 @@ public class RequestHandler {
 //                try {
 //                    //set up the file name
 //                    URL url = new URL(imageURL);
-//                    String filename = FilenameUtils.getName(url.getPath());
+//                    String filename = FilenameUtils.getNames(url.getPath());
 //                    if (filename.equalsIgnoreCase("giphy.gif")) {
 //                        return sendMessage(message + " " + imageURL, channel).getToggles();
 //                    }

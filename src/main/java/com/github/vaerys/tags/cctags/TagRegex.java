@@ -46,10 +46,13 @@ public class TagRegex extends TagObject {
 
     @Override
     public String handleTag(String from, CommandObject command, String args) {
+        String old = from;
         from = super.handleTag(from, command, args);
+        if (from.equals(old)) return from;
         for (ReplaceObject t : toReplace) {
             from = from.replaceAll(t.getFrom(), t.getTo());
         }
+        toReplace.clear();
         return from;
     }
 }

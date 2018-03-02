@@ -31,6 +31,8 @@ public class CharacterObject {
     String shortBio = ""; //limit to 140 chars.
     String avatarURL = "";
     String longBioURL = ""; //URL link linking to Character Bios
+    private String weight = null;
+    private String height = null;
 
     public CharacterObject(String name, long userID, String nickname, List<Long> roleIDs) {
         this.name = name;
@@ -110,5 +112,21 @@ public class CharacterObject {
 
     public Color getColor(GuildObject guild) {
         return GuildHandler.getUsersColour(roleIDs.stream().map(aLong -> guild.getRoleByID(aLong)).filter(iRole -> iRole != null).collect(Collectors.toList()));
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public String getHeight() {
+        return height;
     }
 }

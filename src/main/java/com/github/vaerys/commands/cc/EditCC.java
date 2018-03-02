@@ -25,7 +25,7 @@ public class EditCC extends Command {
             new String[]{"EditCC"},
             "[Command Name] (Mode)",
             "allows editing of other user's commands or editing toggles.\n" + adminModes,
-            SAILType.ADMIN,
+            SAILType.MOD_TOOLS,
             new Permissions[]{Permissions.MANAGE_MESSAGES}
     );
 
@@ -85,7 +85,9 @@ public class EditCC extends Command {
             case "lock":
                 return CCEditModes.lock(customCommand, command, command.user.get(), command.guild.get());
             case "addsearch":
-                return CCEditModes.addReplaceTag(customCommand, content);
+                return CCEditModes.addSearchTag(customCommand, content);
+            case "removesearch":
+                return CCEditModes.removeSearchTag(customCommand, content);
             default:
                 if (content == null || content.isEmpty()) {
                     return CCEditModes.replace(customCommand, mode, command);
@@ -106,7 +108,8 @@ public class EditCC extends Command {
                 "> Replace\n" +
                 "> ToEmbed\n" +
                 "> DelCall\n" +
-                "> AddSearch\n";
+                "> AddSearch\n" +
+                "> RemoveSearch\n";
         return "Allows you to edit a custom command.\n" + modes +
                 "**[Custom Command Guide](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide)**";
     }

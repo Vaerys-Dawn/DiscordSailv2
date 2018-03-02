@@ -208,4 +208,8 @@ public class UserObject {
     public EnumSet<Permissions> getPermissions(GuildObject guild) {
         return object.getPermissionsForGuild(guild.get());
     }
+
+    public boolean checkIsCreator() {
+        return longID == client.creator.longID;
+    }
 }

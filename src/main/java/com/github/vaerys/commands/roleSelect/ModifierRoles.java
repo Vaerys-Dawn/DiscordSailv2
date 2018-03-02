@@ -141,7 +141,8 @@ public class ModifierRoles extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows you to toggle a modifier role. You can have as many modifier roles as you like.";
+        return "Allows you to toggle a modifier role. You can have as many modifier roles as you like.\n\n" +
+                "**TIP** You only need the first 4 letters of a role to be able to select it.";
     }
 
     @Override

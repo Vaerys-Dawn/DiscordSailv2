@@ -15,43 +15,39 @@ import java.util.Arrays;
  */
 public abstract class SlashCommand extends Command {
 
-    protected static final SAILType COMMAND_TYPE = SAILType.SLASH;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
-    protected static final boolean REQUIRES_ARGS = false;
-    protected static final boolean DO_ADMIN_LOGGING = false;
-
+    @Override
     public String description(CommandObject command) {
         return "Returns with " + execute(null, null) + ".";
     }
 
+    @Override
     public String usage() {
         return null;
     }
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.SLASH;
     }
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override
@@ -116,5 +112,15 @@ public abstract class SlashCommand extends Command {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean isName(String args, CommandObject command) {
+        for (String s : names) {
+            if (s.equalsIgnoreCase(args) || args.equalsIgnoreCase("/" + s)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

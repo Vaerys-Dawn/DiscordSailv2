@@ -1,9 +1,9 @@
 package com.github.vaerys.templates;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.admin.PropMutePerms;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
@@ -130,17 +130,17 @@ public abstract class Command {
     public boolean isCall(String args, CommandObject command) {
         List<String> validStates = new ArrayList(Arrays.asList(names));
         subCommands.forEach(subCommandObject -> {
-            for (String s: subCommandObject.getName()){
+            for (String s : subCommandObject.getNames()) {
                 validStates.add(s + subCommandObject.getRegex());
             }
         });
         String toTest = command.message.getContent();
-        if (toTest.length() > 200){
-            toTest = StringUtils.truncate(toTest,200);
+        if (toTest.length() > 200) {
+            toTest = StringUtils.truncate(toTest, 200);
         }
         for (String s : validStates) {
             String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + "(.|\n)*";
-            if(Pattern.compile(regexString).matcher(toTest).matches()){
+            if (Pattern.compile(regexString).matcher(toTest).matches()) {
                 return true;
             }
         }
@@ -187,13 +187,17 @@ public abstract class Command {
             builder.append("\n**Aliases:** " + Utility.listFormatter(aliases, true));
         }
 
-        if (subCommands.size() != 0) builder.append("\n" + Command.spacer);
+        List<SubCommandObject> objectList = subCommands.stream()
+                .filter(subCommandObject -> GuildHandler.testForPerms(command, subCommandObject.getPermissions()))
+                .collect(Collectors.toList());
+
+        if (objectList.size() != 0) builder.append("\n" + Command.spacer);
 
         infoEmbed.withTitle("> Help - " + names()[0]);
         infoEmbed.appendField("**" + getUsage(command) + "**    " + Command.spacer, builder.toString(), true);
 
 
-        for (SubCommandObject s : subCommands) {
+        for (SubCommandObject s : objectList) {
             infoEmbed.appendField(s.getCommandUsage(command) + "    " + Command.spacer, s.getHelpDesc(command), true);
         }
 
@@ -243,7 +247,51 @@ public abstract class Command {
         }
     }
 
-    public boolean isSubtype(CommandObject command, String subType) {
+    public boolean isAlias(CommandObject command, String subType) {
         return command.message.get().getContent().toLowerCase().startsWith(command.guild.config.getPrefixCommand() + subType.toLowerCase());
+    }
+
+    public boolean hasSubCommands(SAILType type) {
+        boolean subFound = false;
+        for (SubCommandObject sb : subCommands) {
+            if (sb.getType() == type) {
+                subFound = true;
+                break;
+            }
+        }
+        return subFound;
+    }
+
+    public boolean isVisibleInType(CommandObject commandObject, SAILType type) {
+        if (this.type == type) {
+            return GuildHandler.testForPerms(commandObject, perms);
+        } else {
+            boolean hasPerms = false;
+            for (SubCommandObject s : subCommands) {
+                List<Permissions> allPerms = new ArrayList<>(Arrays.asList(perms));
+                allPerms.addAll(Arrays.asList(s.getPermissions()));
+                if (GuildHandler.testForPerms(commandObject, allPerms)) {
+                    hasPerms = true;
+                }
+            }
+            return hasPerms;
+        }
+    }
+
+    public boolean isName(String args, CommandObject command) {
+        String prefix = command.guild.config.getPrefixCommand();
+        List<String> allNames = new ArrayList<>(Arrays.asList(names));
+        for (SubCommandObject s : subCommands) {
+            if (GuildHandler.testForPerms(command,s.getPermissions())) {
+                allNames.addAll(Arrays.asList(s.getNames()));
+            }
+        }
+        allNames = allNames.stream().distinct().collect(Collectors.toList());
+        for (String s : allNames) {
+            if (s.equalsIgnoreCase(args) || args.equalsIgnoreCase(prefix + s)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

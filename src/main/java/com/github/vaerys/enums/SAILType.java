@@ -9,6 +9,7 @@ public enum SAILType {
     //command types
     GENERAL("General"),
     ADMIN("Admin"),
+    MOD_TOOLS("ModTools"),
     ROLE_SELECT("Role"),
     CHARACTER("Chars"),
     SERVERS("Servers"),

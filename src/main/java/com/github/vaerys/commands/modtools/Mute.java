@@ -1,4 +1,4 @@
-package com.github.vaerys.commands.admin;
+package com.github.vaerys.commands.modtools;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
@@ -8,6 +8,7 @@ import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRole;
@@ -20,6 +21,14 @@ import java.util.regex.Pattern;
  */
 public class Mute extends Command {
 
+    private final static SubCommandObject UN_MUTE = new SubCommandObject(
+            new String[]{"UnMute"},
+            "[@User]",
+            "Allows you to UnMute a user.",
+            SAILType.MOD_TOOLS
+    );
+
+
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject userCall = new SplitFirstObject(args);
@@ -29,7 +38,7 @@ public class Mute extends Command {
         if (mutedRole == null) return "> Muted role is not configured.";
 
         // Un mute subtype
-        if (isSubtype(command, "UnMute")) {
+        if (UN_MUTE.isSubCommand(command)) {
             if (!muted.roles.contains(mutedRole)) return "> " + muted.displayName + " is not muted.";
             command.guild.users.unMuteUser(muted.longID, command.guild.longID);
             return "> " + muted.displayName + " was UnMuted.";
@@ -86,11 +95,6 @@ public class Mute extends Command {
     }
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
     protected String[] names() {
         return new String[]{"Mute", "UnMute"};
     }
@@ -102,7 +106,7 @@ public class Mute extends Command {
 
     @Override
     protected SAILType type() {
-        return SAILType.ADMIN;
+        return SAILType.MOD_TOOLS;
     }
 
     @Override
@@ -123,6 +127,11 @@ public class Mute extends Command {
     @Override
     protected boolean doAdminLogging() {
         return true;
+    }
+
+    @Override
+    public void init() {
+        subCommands.add(UN_MUTE);
     }
 
 }

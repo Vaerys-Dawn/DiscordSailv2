@@ -46,6 +46,34 @@ public class CharEditModes {
         }
     }
 
+    public static String height(String args, CharacterObject character, CommandObject command) {
+        long maxChars = 20;
+        if (command.user.isPatron) maxChars += maxChars;
+        if (args.length() > maxChars) {
+            long overDraw = args.length() - maxChars;
+            return "> Character height Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+        } else if (args.contains("\n")) {
+            return "> Character height cannot contain newlines.";
+        } else {
+            character.setHeight(args);
+            return "> Height Updated";
+        }
+    }
+
+    public static String weight(String args, CharacterObject character, CommandObject command) {
+        long maxChars = 20;
+        if (command.user.isPatron) maxChars += maxChars;
+        if (args.length() > maxChars) {
+            long overDraw = args.length() - maxChars;
+            return "> Character weight Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+        } else if (args.contains("\n")) {
+            return "> Character weight cannot contain newlines.";
+        } else {
+            character.setWeight(args);
+            return "> Weight Updated";
+        }
+    }
+
     public static String avatar(String args, CharacterObject character, CommandObject command) {
         if (args.contains(" ") || args.contains("\n")) {
             return "> Image URL specified is invalid.";
@@ -65,13 +93,17 @@ public class CharEditModes {
 
     public static String desc(String args, CharacterObject character, CommandObject command) {
         long maxChars = 300;
-        if (command.user.isPatron) maxChars += maxChars;
+        long maxNewlines = 5;
+        if (command.user.isPatron) {
+            maxChars += maxChars;
+            maxNewlines += maxNewlines;
+        }
         long newlineCount = StringUtils.countMatches(args, "\n");
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
             return "> Character Description must be under " + maxChars + " characters. " + getOverDraw(overDraw);
-        } else if (newlineCount > 5) {
-            long overdraw = newlineCount - 5;
+        } else if (newlineCount > maxNewlines) {
+            long overdraw = newlineCount - maxNewlines;
             return "> Character Description has too many Newline characters (over by " + overdraw + " newlines)";
         } else {
             character.setShortBio(args);

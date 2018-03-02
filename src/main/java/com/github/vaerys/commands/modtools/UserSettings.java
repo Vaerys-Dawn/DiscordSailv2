@@ -1,4 +1,4 @@
-package com.github.vaerys.commands.admin;
+package com.github.vaerys.commands.modtools;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
@@ -38,6 +38,7 @@ public class UserSettings extends Command {
         if (command.guild.config.artPinning) {
             settings += "\n> " + UserSetting.DENY_ART_PINNING;
         }
+        settings += "\n> " + UserSetting.DENY_INVITES;
         settings += "\n> List - `Shows the user's settings.`";
         return settings;
     }
@@ -102,6 +103,10 @@ public class UserSettings extends Command {
                 }
             }
             switch (toTest) {
+                case DENY_INVITES:
+                    return toggleSetting(profile,UserSetting.DENY_INVITES,
+                            "> **" + user.displayName + "** can now post instant invites.",
+                            "> **" + user.displayName + "** can no longer post instant invites.");
                 default:
                     String response = (split.getRest() == null || split.getRest().isEmpty()) ? "" : "> Not a valid User Setting.\n\n";
                     if (profile.getSettings().size() == 0) {
@@ -168,7 +173,7 @@ public class UserSettings extends Command {
 
     @Override
     protected SAILType type() {
-        return SAILType.ADMIN;
+        return SAILType.MOD_TOOLS;
     }
 
     @Override

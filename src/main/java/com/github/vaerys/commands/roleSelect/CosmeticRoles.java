@@ -21,7 +21,7 @@ import java.util.ListIterator;
  */
 public class CosmeticRoles extends Command {
 
-    protected static final SubCommandObject EDIT_ROLES = new SubCommandObject(
+    private static final SubCommandObject EDIT_ROLES = new SubCommandObject(
             new String[]{"Role"},
             "[Role Name]",
             "Used to manage the selectable cosmetic roles.",
@@ -190,7 +190,8 @@ public class CosmeticRoles extends Command {
     public String description(CommandObject command) {
         if (!command.guild.config.roleIsToggle) {
             return "Allows you to choose a role from a list of cosmetic roles.\n" +
-                    "You can only have one cosmetic role at a time, when choosing a new role it will remove your old one.";
+                    "You can only have one cosmetic role at a time, when choosing a new role it will remove your old one.\n\n" +
+                    "**TIP** You only need the first 4 letters of a role to be able to select it.";
         } else {
             return "Allows you to toggle a cosmetic role. You can have as many cosmetic roles as you like.";
         }

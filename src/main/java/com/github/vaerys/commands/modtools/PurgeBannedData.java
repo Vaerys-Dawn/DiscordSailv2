@@ -1,4 +1,4 @@
-package com.github.vaerys.commands.admin;
+package com.github.vaerys.commands.modtools;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
@@ -129,7 +129,7 @@ public class PurgeBannedData extends Command {
 
     @Override
     protected SAILType type() {
-        return SAILType.ADMIN;
+        return SAILType.MOD_TOOLS;
     }
 
     @Override

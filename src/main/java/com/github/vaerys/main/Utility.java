@@ -3,7 +3,6 @@ package com.github.vaerys.main;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
@@ -634,36 +633,45 @@ public class Utility {
 
     public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, SAILType type, boolean testPerms) {
         List<Command> toReturn = new ArrayList<>();
-        for (Command c : commands) {
-            SAILType ctype = c.type;
-            if (c.channel != null && c.channel == ChannelSetting.FROM_DM) {
-                ctype = SAILType.DM;
-            }
-            if (ctype == type) {
-                if (testPerms) {
-                    if (c.type == SAILType.CREATOR && commandObject.user.longID != commandObject.client.creator.longID) {
-                        //do nothing
-                    } else if (GuildHandler.testForPerms(commandObject, c.perms)) {
-                        toReturn.add(c);
-                    }
-                } else {
-                    toReturn.add(c);
-                }
-            } else {
-                boolean added = false;
-                for (SubCommandObject sub : c.subCommands) {
-                    if (c.type != sub.getType() && sub.getType() == type && !added) {
-                        if (GuildHandler.testForPerms(commandObject, sub.getPermissions())) {
-                            toReturn.add(c);
-                            added = true;
-                        }
-                    }
-                }
-            }
+
+        //return empty if not creator.
+        if (type == SAILType.CREATOR && !commandObject.user.checkIsCreator()) return toReturn;
+
+        //get command list
+        switch (type) {
+            case DM:
+                toReturn.addAll(commands.stream()
+                        .filter(c -> c.channel == ChannelSetting.FROM_DM)
+                        .filter(c -> {
+                            //only show creator commands if the user the creator.
+                            if (c.type == SAILType.CREATOR && commandObject.user.checkIsCreator())
+                                return true;
+                            if (c.type != SAILType.CREATOR) {
+                                return true;
+                            }
+                            return false;
+                        })
+                        .collect(Collectors.toList()));
+                return toReturn;
+            default:
+                toReturn.addAll(commands.stream()
+                        .filter(c -> c.type == type).collect(Collectors.toList()));
+                break;
+        }
+
+        toReturn.addAll(commands.stream().filter(c -> c.subCommands.size() != 0)
+                .filter(c -> c.hasSubCommands(type))
+                .collect(Collectors.toList()));
+
+        if (testPerms) {
+            toReturn = toReturn.stream()
+                    .filter(c -> c.isVisibleInType(commandObject, type))
+                    .collect(Collectors.toList());
         }
         toReturn.sort(Comparator.comparing(o -> o.names[0]));
         return toReturn;
     }
+
 
     public static List<String> getChannelMentions(List<IChannel> channels) {
         List<String> mentions = new ArrayList<>();

@@ -21,7 +21,7 @@ public class SetQuote extends Command {
             new String[]{"SetUserQuote", "SetUserDesc"},
             "[@User] [Quote]",
             "Edits a user's quote.",
-            SAILType.ADMIN,
+            SAILType.MOD_TOOLS,
             Permissions.MANAGE_MESSAGES
     );
 
@@ -30,7 +30,7 @@ public class SetQuote extends Command {
         UserObject user = command.user;
         String quote = args;
         boolean adminEdit = false;
-        if (isSubtype(command, "SetUserQuote")) {
+        if (ADMIN_EDIT.isSubCommand(command)) {
             if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
                 SplitFirstObject userCall = new SplitFirstObject(quote);
                 user = Utility.getUser(command, userCall.getFirstWord(), false, true);
@@ -70,17 +70,12 @@ public class SetQuote extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"SetQuote", "SetUserQuote", "SetDesc", "SetDescription"};
+        return new String[]{"SetQuote", "SetDesc", "SetDescription"};
     }
 
     @Override
     public String description(CommandObject command) {
         String response = "Allows you to set your quote. Limit 140 chars (or 280 if you are a patron)";
-        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
-            response += "\n\n**" + command.guild.config.getPrefixCommand() + names[1] + " [@User] [Quote...]**\n" +
-                    "**Desc:** Edits a user's quote.\n" +
-                    "**Permissions:** " + Permissions.MANAGE_MESSAGES + ".\n";
-        }
         return response;
 
     }
