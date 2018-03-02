@@ -1,7 +1,7 @@
 package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.admin.Mute;
+import com.github.vaerys.commands.modtools.Mute;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;

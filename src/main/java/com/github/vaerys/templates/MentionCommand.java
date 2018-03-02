@@ -4,20 +4,24 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.SubCommandObject;
+import sx.blah.discord.handle.obj.IUser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public abstract class MentionCommand extends Command {
-
-    protected static final SAILType COMMAND_TYPE = SAILType.MENTION;
-    protected static final ChannelSetting CHANNEL_SETTING = null;
 
     @Override
     public String getCommand(CommandObject command) {
         return "@" + command.client.bot.name + " " + names[0];
     }
 
+    @Override
     public String getCommand(CommandObject command, int i) {
         return "@" + command.client.bot.name + " " + names[i];
     }
@@ -28,7 +32,8 @@ public abstract class MentionCommand extends Command {
         if (mention.getRest() == null) {
             return false;
         }
-        if (!command.message.get().getMentions().contains(command.client.bot.get())) {
+        List<IUser> users = command.message.getMentions();
+        if (!users.contains(command.client.bot.get())) {
             return false;
         }
         SplitFirstObject call = new SplitFirstObject(mention.getRest());
@@ -53,19 +58,20 @@ public abstract class MentionCommand extends Command {
         return call.getRest();
     }
 
-    @Override
-    protected SAILType type() {
-        return COMMAND_TYPE;
 
+    @Override
+    public boolean isName(String args, CommandObject command) {
+        String prefix = command.guild.config.getPrefixCommand();
+        for (String s : names) {
+            if (s.equalsIgnoreCase(args) || args.equalsIgnoreCase(prefix + s)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    protected ChannelSetting channel() {
-        return null;
-    }
-
-    @Override
-    public void init() {
+    protected void init() {
 
     }
 }

@@ -77,10 +77,10 @@ public abstract class TagObject {
         }
     }
 
-    public List<String> getSpliContents(String from) {
+    public List<String> getSplitContents(String from) {
         String contents = contents(from);
         if (contents != null) {
-            return Arrays.asList(contents.split(splitter));
+            return new ArrayList<>(Arrays.asList(contents.split(splitter)));
         } else {
             return new ArrayList<>();
         }
@@ -92,7 +92,7 @@ public abstract class TagObject {
         if (isSplit.length == 0) {
             return new ArrayList<>();
         }
-        return Arrays.asList(toSplit.split(splitter));
+        return new ArrayList<>(Arrays.asList(toSplit.split(splitter)));
     }
 
     public String removeFirst(String from, String args) {

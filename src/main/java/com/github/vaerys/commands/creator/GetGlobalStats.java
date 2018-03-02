@@ -49,7 +49,7 @@ public class GetGlobalStats extends Command {
             //re enable to find channel stats
 //            for (ChannelStatsObject s : channelStats) {
 //                for (IChannel c : command.guild.getChannels()) {
-//                    ArrayList<String> channelIDs = command.guildConfig.getChannelIDsByType(s.getName());
+//                    ArrayList<String> channelIDs = command.guildConfig.getChannelIDsByType(s.getNames());
 //                    if (channelIDs != null) {
 //                        s.addCounts(channelIDs.size());
 //                    }
@@ -114,13 +114,13 @@ public class GetGlobalStats extends Command {
 //                totalGlobalUsers++;
 //                totalUsers++;
 //            }
-//            builder.append("**Guild: " + guild.getName() + "**");
+//            builder.append("**Guild: " + guild.getNames() + "**");
 //            IUser topIUser = command.client.getUserByID(topUser);
 //            IUser bottomIUser = command.client.getUserByID(bottomUser);
 //            if (topIUser != null && bottomIUser != null) {
-//                builder.append("\nTop User = @" + command.client.getUserByID(topUser).getName() + "#" + command.client.getUserByID(topUser).getDiscriminator());
+//                builder.append("\nTop User = @" + command.client.getUserByID(topUser).getNames() + "#" + command.client.getUserByID(topUser).getDiscriminator());
 //                builder.append(" With Total Messages " + topGuild);
-//                builder.append("\nBottom User = @" + command.client.getUserByID(bottomUser).getName() + "#" + command.client.getUserByID(bottomUser).getDiscriminator());
+//                builder.append("\nBottom User = @" + command.client.getUserByID(bottomUser).getNames() + "#" + command.client.getUserByID(bottomUser).getDiscriminator());
 //                builder.append(" With Total Messages " + bottomGuild);
 //                builder.append("\nGuild Avg = " + totalMessageAvg / totalUsers);
 //                builder.append("\nTotal Guild Messages = " + totalMessage);

@@ -4,6 +4,7 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IReaction;
+import sx.blah.discord.handle.obj.IUser;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -57,4 +58,7 @@ public class MessageObject {
     }
 
 
+    public List<IUser> getMentions() {
+        return object.getMentions();
+    }
 }

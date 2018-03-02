@@ -8,6 +8,7 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
@@ -24,6 +25,13 @@ import java.util.*;
  */
 public class GetGuildInfo extends Command {
 
+    private final static SubCommandObject GUILD_STATS = new SubCommandObject(
+            new String[]{"GuildStats"},
+            null,
+            "Shows a the basic stats for the server.",
+            SAILType.HELP
+    );
+
     private XEmbedBuilder resetEmbed(XEmbedBuilder builder, IChannel channel, CommandObject command, int extraLength) {
         if ((builder.getTotalVisibleCharacters() + extraLength) > 2000 ||
                 builder.getFieldCount() + 1 > EmbedBuilder.FIELD_COUNT_LIMIT) {
@@ -39,7 +47,7 @@ public class GetGuildInfo extends Command {
         XEmbedBuilder toggles = new XEmbedBuilder(command);
         XEmbedBuilder channels = new XEmbedBuilder(command);
 
-        boolean isGuildStats = isSubtype(command, "GuildStats");
+        boolean isGuildStats = GUILD_STATS.isSubCommand(command);
 
         IChannel channel = command.user.get().getOrCreatePMChannel();
         boolean hasManageServer = GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER);
@@ -220,7 +228,7 @@ public class GetGuildInfo extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"GuildInfo", "GuildStats", "ServerInfo", "GetGuildInfo"};
+        return new String[]{"GuildInfo", "ServerInfo", "GetGuildInfo"};
     }
 
     @Override
@@ -262,6 +270,6 @@ public class GetGuildInfo extends Command {
 
     @Override
     public void init() {
-
+        subCommands.add(GUILD_STATS);
     }
 }

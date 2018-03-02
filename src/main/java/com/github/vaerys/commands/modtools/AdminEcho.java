@@ -1,4 +1,4 @@
-package com.github.vaerys.commands.admin;
+package com.github.vaerys.commands.modtools;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
@@ -21,7 +21,7 @@ public class AdminEcho extends Command {
         List<TagObject> tags = TagList.getType(TagType.CC);
         ListIterator<TagObject> iterator = tags.listIterator();
         while (iterator.hasNext()) {
-            TagObject object = (TagObject) iterator.next();
+            TagObject object = iterator.next();
             if (object.name.equals(new TagRemoveMentions(0).name)) {
                 iterator.remove();
             }
@@ -56,7 +56,7 @@ public class AdminEcho extends Command {
 
     @Override
     protected SAILType type() {
-        return SAILType.ADMIN;
+        return SAILType.MOD_TOOLS;
     }
 
     @Override

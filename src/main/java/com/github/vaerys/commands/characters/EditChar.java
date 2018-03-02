@@ -17,6 +17,8 @@ public class EditChar extends Command {
     String modes = "**Modes:**\n" +
             "> Age - `Max Chars: 20`\n" +
             "> Gender - `Max Chars: 20`\n" +
+            "> Height - `Max Chars: 20`\n" +
+            "> Weight - `Max Chars: 20`\n" +
             "> Avatar - `Needs Valid Image URL or Image`\n" +
             "> Bio - `Max Chars: 300`\n" +
             "> LongDesc - `Needs Valid URL`";
@@ -47,6 +49,10 @@ public class EditChar extends Command {
                             return CharEditModes.desc(rest, c, command);
                         case "longdesc":
                             return CharEditModes.longDesc(rest, c);
+                        case "weight":
+                            return CharEditModes.weight(rest,c,command);
+                        case "height":
+                            return CharEditModes.height(rest,c,command);
                         default:
                             return "> Mode not Valid.";
                     }

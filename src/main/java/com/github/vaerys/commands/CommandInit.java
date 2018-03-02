@@ -14,6 +14,7 @@ import com.github.vaerys.commands.groups.GroupUp;
 import com.github.vaerys.commands.help.*;
 import com.github.vaerys.commands.mention.SetPrefix;
 import com.github.vaerys.commands.mention.SetPrefixCC;
+import com.github.vaerys.commands.modtools.*;
 import com.github.vaerys.commands.pixels.*;
 import com.github.vaerys.commands.roleSelect.CosmeticRoles;
 import com.github.vaerys.commands.roleSelect.ListModifs;

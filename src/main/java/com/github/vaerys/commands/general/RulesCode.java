@@ -62,7 +62,7 @@ public class RulesCode extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"RulesCode", "RuleCode"};
+        return new String[]{"RuleCode", "RulesCode"};
     }
 
     @Override

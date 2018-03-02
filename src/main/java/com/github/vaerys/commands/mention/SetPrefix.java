@@ -61,9 +61,4 @@ public class SetPrefix extends MentionCommand {
     protected boolean doAdminLogging() {
         return true;
     }
-
-    @Override
-    public void init() {
-
-    }
 }

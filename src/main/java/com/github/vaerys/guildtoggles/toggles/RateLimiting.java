@@ -1,7 +1,7 @@
 package com.github.vaerys.guildtoggles.toggles;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.admin.SetRateLimit;
+import com.github.vaerys.commands.modtools.SetRateLimit;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;

@@ -16,7 +16,7 @@ public class TagIfChannel extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        List<String> splitContents = getSpliContents(from);
+        List<String> splitContents = getSplitContents(from);
         if (!Pattern.compile("<#[0-9]*>").matcher(splitContents.get(0)).matches()) {
             return replaceFirstTag(from, error);
         } else {

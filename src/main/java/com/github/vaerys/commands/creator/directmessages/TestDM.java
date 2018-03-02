@@ -12,8 +12,8 @@ public class TestDM extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
 //        for (IChannel c : command.client.getGuildByID(176434793674833920L).getChannels()) {
-//            if (("#" + c.getName()).equalsIgnoreCase(args)) {
-//                return c.getName();
+//            if (("#" + c.getNames()).equalsIgnoreCase(args)) {
+//                return c.getNames();
 //            }
 //        }
 //        return "channel could not be found";

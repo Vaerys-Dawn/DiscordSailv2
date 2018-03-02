@@ -27,6 +27,18 @@ public class CCHandler {
     public static void handleCommand(String args, CommandObject command) {
         //cc lockout handling
 
+
+
+        SplitFirstObject commandName = new SplitFirstObject(args);
+        CCommandObject commandObject = command.guild.customCommands.getCommand(commandName.getFirstWord(), command);
+
+        String ccArgs = commandName.getRest();
+        if (ccArgs == null) {
+            ccArgs = "";
+        }
+
+        if (commandObject == null) return;
+
         List<IChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
         if (ccDenied.contains(command.channel.get())) {
             RequestHandler.sendMessage("> Custom Command usage has been disabled for this channel.", command.channel);
@@ -38,16 +50,6 @@ public class CCHandler {
             RequestHandler.sendMessage("> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
             return;
         }
-
-        SplitFirstObject commandName = new SplitFirstObject(args);
-        CCommandObject commandObject = command.guild.customCommands.getCommand(commandName.getFirstWord(), command);
-
-        String ccArgs = commandName.getRest();
-        if (ccArgs == null) {
-            ccArgs = "";
-        }
-
-        if (commandObject == null) return;
 
         command.guild.sendDebugLog(command, "CUSTOM_COMMAND", commandObject.getName(command), ccArgs);
 

@@ -77,7 +77,7 @@ public class SubCommandObject {
         return usage.toString();
     }
 
-    public String[] getName() {
+    public String[] getNames() {
         return name;
     }
 

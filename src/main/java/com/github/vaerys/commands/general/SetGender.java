@@ -21,7 +21,7 @@ public class SetGender extends Command {
             new String[]{"SetUserGender"},
             "[@User] [Gender]",
             "Edits a user's gender.",
-            SAILType.ADMIN,
+            SAILType.MOD_TOOLS,
             Permissions.MANAGE_MESSAGES
     );
 
@@ -30,16 +30,12 @@ public class SetGender extends Command {
         UserObject user = command.user;
         String quote = args;
         boolean adminEdit = false;
-        if (isSubtype(command, "SetUserGender")) {
-            if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
-                SplitFirstObject userCall = new SplitFirstObject(quote);
-                user = Utility.getUser(command, userCall.getFirstWord(), false, true);
-                if (user == null) return "> Could not find user.";
-                quote = userCall.getRest();
-                adminEdit = true;
-            } else {
-                return command.user.notAllowed;
-            }
+        if (ADMIN_EDIT.isSubCommand(command)) {
+            SplitFirstObject userCall = new SplitFirstObject(quote);
+            user = Utility.getUser(command, userCall.getFirstWord(), false, true);
+            if (user == null) return "> Could not find user.";
+            quote = userCall.getRest();
+            adminEdit = true;
         }
         int maxLength = 20;
         if (user.isPatron) {
@@ -66,17 +62,12 @@ public class SetGender extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"SetGender", "SetUserGender"};
+        return new String[]{"SetGender"};
     }
 
     @Override
     public String description(CommandObject command) {
         String response = "Allows you to set your Gender. Limit 20 chars (or 40 if you are a patron).";
-        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
-            response += "\n\n**" + command.guild.config.getPrefixCommand() + names[1] + " [@User] [Gender]**\n" +
-                    "**Desc:** Edits a user's gender.\n" +
-                    "**Permissions:** " + Permissions.MANAGE_MESSAGES + ".\n";
-        }
         return response;
     }
 

@@ -73,12 +73,13 @@ public class ProfileObject {
 
     public void addXP(long xp, GuildConfig config) {
         this.xp += config.xpModifier * xp;
+        if (xp > Constants.PIXELS_CAP){
+            this.xp = Constants.PIXELS_CAP;
+        }
     }
 
     public void setXp(long xp, boolean levelUp) {
-        if (xp > Constants.PIXELS_CAP) throw new IllegalArgumentException("argument out of valid range");
         this.xp = xp;
-
         if (levelUp) {
             this.currentLevel = XpHandler.xpToLevel(xp);
         }

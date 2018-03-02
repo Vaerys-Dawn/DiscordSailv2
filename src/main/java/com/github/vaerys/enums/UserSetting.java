@@ -25,6 +25,7 @@ public enum UserSetting {
     DENY_AUTO_ROLE("DenyAutoRole"), //stops the auto role system for sail
     DONT_DECAY("DontDecay"), //stops the automatic role allocation
     DENY_ART_PINNING("DenyArtPinning"), //stop users from pinning art.
+    DENY_INVITES("DenyInvites"), //stops users from posting instant invites.
 
     //bot assigned
     HIT_LEVEL_FLOOR("HitLevelFloor"),//added when the user reaches the xp floor of a reward, used to welcome

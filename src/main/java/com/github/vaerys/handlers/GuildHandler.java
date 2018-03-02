@@ -223,7 +223,19 @@ public class GuildHandler {
         return testForPerms(object.user.get(), object.guild.get(), perms);
     }
 
+    public static boolean testForPerms(CommandObject object, List<Permissions> perms) {
+        return testForPerms(object.user.get(), object.guild.get(), perms);
+    }
+
     public static boolean testForPerms(UserObject user, GuildObject guild, Permissions... perms) {
         return testForPerms(user.get(), guild.get(), perms);
+    }
+
+    public static boolean testForPerms(UserObject user, GuildObject guild, List<Permissions> perms) {
+        return testForPerms(user.get(), guild.get(), perms);
+    }
+
+    public static boolean testForPerms(IUser user, IGuild guild, List<Permissions> perms) {
+        return testForPerms(user,guild, perms.toArray(new Permissions[perms.size()]));
     }
 }

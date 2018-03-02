@@ -21,7 +21,7 @@ public abstract class TagReplaceObject extends TagObject {
         for (ReplaceObject r : toReplace) {
             from = from.replace(r.getFrom(), r.getTo());
         }
-        toReplace = new ArrayList<>();
+        toReplace.clear();
         return from;
     }
 }

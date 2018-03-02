@@ -29,20 +29,20 @@ public class Help extends Command {
             commands.addAll(Globals.getCreatorCommands(false));
         }
 
-        String error = "> Could not find information on any commands named **" + args + "**.";
+        Command foundCommand = null;
         for (Command c : commands) {
-            for (String s : c.names) {
-                if (args.equalsIgnoreCase(s) || args.equalsIgnoreCase(command.guild.config.getPrefixCommand() + s)) {
-                    if (!GuildHandler.testForPerms(command, c.perms)) {
-                        return error;
-                    }
-                    RequestHandler.sendEmbedMessage("", c.getCommandInfo(command), command.channel.get());
-                    return "";
-                }
+            if (c.isName(args, command)) {
+                foundCommand = c;
             }
-
         }
-        return error;
+
+        if (foundCommand == null) return "> Could not find information on any commands named **" + args + "**.";
+
+        if (!GuildHandler.testForPerms(command, foundCommand.perms))
+            return "> I'm sorry but you do not have permission to view the information for the **" + foundCommand.getCommand(command) + "** command.";
+
+        RequestHandler.sendEmbedMessage("", foundCommand.getCommandInfo(command), command.channel.get());
+        return "";
     }
 
     @Override

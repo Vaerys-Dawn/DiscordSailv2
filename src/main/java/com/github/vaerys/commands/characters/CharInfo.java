@@ -47,6 +47,15 @@ public class CharInfo extends Command {
                 StringBuilder description = new StringBuilder();
                 description.append("**Age:** " + object.getAge());
                 description.append("\n**Gender:** " + object.getGender());
+                if (object.getHeight() != null || object.getWeight() != null) {
+                    description.append("\n");
+                    if (object.getHeight() != null) {
+                        description.append("**Height:** " + object.getHeight() + indent);
+                    }
+                    if (object.getWeight() != null) {
+                        description.append("**Weight:** " + object.getWeight());
+                    }
+                }
                 if (roleNames.size() != 0) {
                     if (command.guild.characters.getRolePrefix() != null && !command.guild.characters.getRolePrefix().isEmpty()) {
                         description.append("\n" + command.guild.characters.getRolePrefix() + " " + Utility.listFormatter(roleNames, true));

@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.cc.EditCC;
 import com.github.vaerys.commands.cc.NewCC;
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.OffenderObject;
@@ -32,6 +33,9 @@ public class SpamHandler {
         List<String> chunks = Arrays.asList(message.split("(?<=\\G............)"));
         int maxCount = message.length() / 100;
         for (String chunk : chunks) {
+            if (chunk.length() != 10) {
+                break;
+            }
             int count = StringUtils.countMatches(message, chunk);
             if (count > maxCount) {
                 command.message.delete();
@@ -163,6 +167,9 @@ public class SpamHandler {
 
     public static boolean checkForInvites(CommandObject command) {
         GuildConfig guildconfig = command.guild.config;
+        if (!guildconfig.denyInvites) {
+            return false;
+        }
         IMessage message = command.message.get();
         IGuild guild = command.guild.get();
         IUser author = command.user.get();
@@ -173,22 +180,32 @@ public class SpamHandler {
         if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
 
         boolean inviteFound = false;
-        if (guildconfig.denyInvites) {
-            for (String s : inviteformats) {
-                if (message.toString().toLowerCase().contains(s.toLowerCase())) {
-                    if (guildconfig.testIsTrusted(author, guild)) {
-                        return false;
-                    }
-                    inviteFound = true;
-                }
+        boolean shouldDelete = false;
+        boolean userSettingDenied = command.user.getProfile(command.guild).getSettings().contains(UserSetting.DENY_INVITES);
+
+        for (String s : inviteformats) {
+            if (message.toString().toLowerCase().contains(s.toLowerCase())) {
+                inviteFound = true;
             }
         }
-        if (inviteFound) {
-            String response = "> Please do not post Instant Invites.";
+
+        if (userSettingDenied ||
+                !guildconfig.testIsTrusted(author, guild)) {
+            shouldDelete = true;
+        }
+
+        if (inviteFound && shouldDelete) {
+            String response;
+            if (userSettingDenied) {
+                response = "> You do not have permission to post Instant Invites.";
+            } else {
+                response = "> Please do not post Instant Invites.";
+            }
             RequestHandler.deleteMessage(message);
             command.guild.sendDebugLog(command, "INVITE_REMOVAL", "REMOVED", message.getContent());
             RequestHandler.sendMessage(response, command.channel.get());
+            return true;
         }
-        return inviteFound;
+        return false;
     }
 }

@@ -81,11 +81,22 @@ public class CCEditModes {
         return "> Content appended to end of command.";
     }
 
-    public static String addReplaceTag(CCommandObject customCommand, String content) {
+    public static String addSearchTag(CCommandObject customCommand, String content) {
         if (content == null || content.isEmpty()) {
             return "> Missing Any new search tags to be added.";
         }
         new TagSearchTags(0).addTag(customCommand, content);
         return "> Search Tag added.";
+    }
+
+    public static String removeSearchTag(CCommandObject customCommand, String content) {
+        if (content == null || content.isEmpty()) {
+            return "> Missing Any new search tags to be added.";
+        }
+        boolean removed = new TagSearchTags(0).removeTag(customCommand, content);
+        if (removed) {
+            return "> Search Tag removed.";
+        }
+        return "> Tag could not be removed, tag could not be found.";
     }
 }
