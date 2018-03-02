@@ -11,8 +11,6 @@ import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.text.SimpleDateFormat;
@@ -22,14 +20,22 @@ public class ModNote extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+
+        // TODO: REFACTOR.
+
         // Start by breaking the arguments apart
+
         String userCall = new SplitFirstObject(args).getFirstWord();
         String argsRest = new SplitFirstObject(args).getRest();
 
         // Make sure both argument fields are not empty
-        if (argsRest == null || userCall == null) {
+        if (userCall == null) {
             return missingArgs(command);
         }
+        if (argsRest == null) {
+            argsRest = "list";
+        }
+        argsRest = argsRest.trim(); // trim excess spaces off so it doesn't be a derp.
 
         // make sure there is a valid user:
         UserObject user = Utility.getUser(command, userCall, false);
