@@ -76,6 +76,7 @@ public class Globals {
     private static List<Long> patrons = new ArrayList<>();
     private static Events events;
     private static String currentEvent = null;
+    public static long lastRateLimitReset = System.currentTimeMillis();
 
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
         if (newGlobalData != null) {
