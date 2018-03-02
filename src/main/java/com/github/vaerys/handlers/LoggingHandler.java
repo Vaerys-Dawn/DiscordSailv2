@@ -2,18 +2,25 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
+import sx.blah.discord.handle.impl.events.guild.member.GuildMemberEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
+import sx.blah.discord.handle.obj.*;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LoggingHandler {
 
@@ -118,28 +125,133 @@ public class LoggingHandler {
         sendLog(command, content.toString(), false, embed);
     }
 
-    public static void logEdit(CommandObject command, IMessage editedMessage, IMessage oldMessage) {
-
+    public static void doChannelUpdateLog(ChannelUpdateEvent event) {
+        GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        if (!content.config.moduleLogging) return;
+        if (content.config.channelLogging) {
+            if (!event.getOldChannel().getName().equalsIgnoreCase(event.getNewChannel().getName())) {
+                String log = "> Channel " + event.getNewChannel().mention() + "'s name was changed.\nOld name : #" + event.getOldChannel().getName() + ".";
+                Utility.sendLog(log, content, false);
+            } else if ((event.getOldChannel().getTopic() == null || event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() == null || event.getNewChannel().getTopic().isEmpty())) {
+                //do nothing
+            } else if ((event.getOldChannel().getTopic() == null || event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() != null || !event.getNewChannel().getTopic().isEmpty())) {
+                StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was added.\n");
+                log.append("**New Topic**: " + event.getNewChannel().getTopic());
+                Utility.sendLog(log.toString(), content, false);
+            } else if ((event.getOldChannel().getTopic() != null || !event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() == null || event.getNewChannel().getTopic().isEmpty())) {
+                StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was removed.\n");
+                log.append("**Old Topic**: " + event.getOldChannel().getTopic());
+                Utility.sendLog(log.toString(), content, false);
+            } else if (!event.getOldChannel().getTopic().equalsIgnoreCase(event.getNewChannel().getTopic())) {
+                StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was changed.");
+                log.append("\n**Old Topic**: " + event.getOldChannel().getTopic());
+                log.append("\n**New Topic**: " + event.getNewChannel().getTopic());
+                Utility.sendLog(log.toString(), content, false);
+            }
+        }
     }
 
-    public static void logJoinLeave(CommandObject command, IUser user) {
-
+    public static void doChannelDeleteLog(ChannelDeleteEvent event) {
+        GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        if (!content.config.moduleLogging) return;
+        if (content.config.channelLogging) {
+            String log = "> Channel #" + event.getChannel().getName() + " was deleted.";
+            Utility.sendLog(log, content, false);
+        }
     }
 
-    public static void logChannelCreate(CommandObject command, IChannel createdChannel) {
-
+    public static void doChannelCreateLog(ChannelCreateEvent event) {
+        GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        if (!content.config.moduleLogging) return;
+        if (content.config.channelLogging) {
+            String log = "> Channel " + event.getChannel().mention() + " was created.";
+            Utility.sendLog(log, content, false);
+        }
     }
 
-    public static void logChannelDelete(CommandObject command, IChannel deletedChannel) {
-
+    public static void doJoinLeaveLog(GuildMemberEvent event, boolean joining) {
+        IGuild guild = event.getGuild();
+        GuildObject content = Globals.getGuildContent(guild.getLongID());
+        if (!content.config.moduleLogging) return;
+        String builder = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **%s** the server.\n**Current Users:** " + event.getGuild().getUsers().size() + ".";
+        if (content.config.joinLeaveLogging) {
+            if (joining) {
+                Utility.sendLog(String.format(builder, "Joined"), content, false);
+            } else {
+                Utility.sendLog(String.format(builder, "Left"), content, false);
+            }
+        }
     }
 
-    public static void logChannelEdit(CommandObject command, IChannel editedChannel) {
+    public static void doMessageEditLog(MessageUpdateEvent event) {
 
+        CommandObject command = new CommandObject(event.getMessage());
+        IUser ourUser = command.client.bot.get();
+
+        if (!shouldLog(command)) return;
+
+        if (command.guild.config.editLogging) {
+            //formats how long ago this was.
+            String formatted;
+            String oldContent;
+            String newContent;
+            StringBuilder response = new StringBuilder();
+            ZonedDateTime oldMessageTime = event.getOldMessage().getTimestamp().atZone(ZoneOffset.UTC);
+            ZonedDateTime newMessageTime = event.getNewMessage().getEditedTimestamp().get().atZone(ZoneOffset.UTC);
+            int charLimit;
+            long difference = newMessageTime.toEpochSecond() - oldMessageTime.toEpochSecond();
+            if (command.guild.config.useTimeStamps) {
+                formatted = "at `" + Utility.formatTimestamp(oldMessageTime) + " - UTC`";
+            } else {
+                formatted = "from " + Utility.formatTimeDifference(difference);
+            }
+            response.append("> **@" + command.user.username + "'s** Message " + formatted + " was **Edited** in channel: " + command.channel.get().mention() + ". ");
+            //remove excess text that would cause a max char limit error.
+            if (command.message.get().getContent().isEmpty()) {
+                return;
+            }
+            if (command.guild.config.extendEditLog) {
+                charLimit = 900;
+            } else {
+                charLimit = 1800;
+            }
+            if (event.getOldMessage().getContent().length() > charLimit) {
+                oldContent = Utility.unFormatMentions(event.getOldMessage()).substring(0, charLimit) + "...";
+            } else {
+                oldContent = Utility.unFormatMentions(event.getOldMessage());
+            }
+            if (event.getNewMessage().getContent().length() > charLimit) {
+                newContent = Utility.unFormatMentions(event.getNewMessage()).substring(0, charLimit) + "...";
+            } else {
+                newContent = Utility.unFormatMentions(event.getNewMessage());
+            }
+            response.append("**\nMessage's Old Contents:**\n" + oldContent);
+            if (command.guild.config.extendEditLog) {
+                response.append("\n**Message's New Contents:**\n" + newContent);
+            }
+            Utility.sendLog(response.toString(), command.guild, false);
+        }
     }
 
-    public static void logUserRolesUpdate(CommandObject command, IUser user) {
-
+    public static void doRoleUpdateLog(UserRoleUpdateEvent event) {
+        IGuild guild = event.getGuild();
+        GuildObject content = Globals.getGuildContent(guild.getLongID());
+        if (!content.config.moduleLogging) return;
+        if (content.config.userRoleLogging) {
+            ArrayList<String> oldRoles = new ArrayList<>();
+            ArrayList<String> newRoles = new ArrayList<>();
+            oldRoles.addAll(event.getOldRoles().stream().filter(r -> !r.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
+            newRoles.addAll(event.getNewRoles().stream().filter(r -> !r.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
+            StringBuilder oldRoleList = new StringBuilder();
+            StringBuilder newRoleList = new StringBuilder();
+            for (String r : oldRoles) {
+                oldRoleList.append(r + ", ");
+            }
+            for (String r : newRoles) {
+                newRoleList.append(r + ", ");
+            }
+            String prefix = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "'s** Role have been Updated.";
+            Utility.sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content, false);
+        }
     }
-
 }

@@ -1,3 +1,4 @@
+
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
