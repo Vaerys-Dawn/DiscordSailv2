@@ -31,6 +31,11 @@ public class ExtendEditLog extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Extends the logging output of the " + new EditLogging().name() + " setting to also include new message.";
     }

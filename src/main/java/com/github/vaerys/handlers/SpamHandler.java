@@ -24,6 +24,8 @@ public class SpamHandler {
 
     final static Logger logger = LoggerFactory.getLogger(SpamHandler.class);
 
+    /*TODO: MAJOR RATELIMIT REFACTOR (AndrielChaoti 2/3/2018)*/
+
     public static boolean catchWalls(CommandObject command) {
         if (!command.guild.config.stopSpamWalls) return false;
         if (command.message.length() < 800) return false;
@@ -49,6 +51,8 @@ public class SpamHandler {
                         command.guild.sendDebugLog(command, "CATCH_SPAM_WALLS", "MUTE", offenceCount + " Offences");
                         IChannel admin = command.guild.getChannelByType(ChannelSetting.ADMIN);
                         String report = command.user.mention() + " was muted for spamming";
+                        // add an automated note to the user.
+                        command.user.getProfile(command.guild).addSailModNote(report, command, false);
                         if (admin != null) {
                             RequestHandler.sendMessage(report + " in " + command.channel.get().mention() + ".", admin);
                         } else {
@@ -88,10 +92,14 @@ public class SpamHandler {
                         offenderFound = true;
                         i++;
                         if (o.getCount() >= Globals.maxWarnings) {
+                            String report = "> %s has been muted for repeat offences of spamming mentions.";
                             RequestHandler.roleManagement(author, guild, guildconfig.getMutedRoleID(), true);
                             command.guild.sendDebugLog(command, "STOP_MASS_MENTIONS", "MUTE", o.getCount() + " Offences");
                             command.client.get().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, author, oldRoles, command.user.get().getRolesForGuild(guild)));
-                            RequestHandler.sendMessage("> " + author.mention() + " Has been Muted for repeat offences of spamming Mentions.", command.channel.get());
+                            // add strike in modnote
+                            command.user.getProfile(command.guild).addSailModNote(String.format(report, author.mention()), command, false);
+                            // send admin notification
+                            RequestHandler.sendMessage(String.format(report, author.mention()), command.channel.get());
                         }
                     }
                 }

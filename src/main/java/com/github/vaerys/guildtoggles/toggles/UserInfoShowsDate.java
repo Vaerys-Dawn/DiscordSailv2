@@ -27,6 +27,11 @@ public class UserInfoShowsDate extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Show full date on user profile instead of time since created.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Changes the creation date display on profiles from time since to the date the account was created.";
     }

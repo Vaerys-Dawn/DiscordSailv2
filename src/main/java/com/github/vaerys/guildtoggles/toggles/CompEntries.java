@@ -31,6 +31,11 @@ public class CompEntries extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enables competition entry submission";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the ability to allow users to submit entries to the currently active competition.";
     }

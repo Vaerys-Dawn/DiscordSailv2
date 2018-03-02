@@ -31,6 +31,11 @@ public class Voting extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the ability for users to vote in the currently active competition.";
     }

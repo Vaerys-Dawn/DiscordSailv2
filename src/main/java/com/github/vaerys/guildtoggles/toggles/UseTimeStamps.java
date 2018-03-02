@@ -31,6 +31,11 @@ public class UseTimeStamps extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Logging messages use fixed timestamp in place of time since.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Changes all logging messages to use timestamps based at UTC-00 instead of time since.";
     }

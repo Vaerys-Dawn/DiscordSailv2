@@ -31,6 +31,11 @@ public class JoinServerMessages extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the sending of a welcome message to user's dms when they join the server.";
     }

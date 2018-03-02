@@ -32,6 +32,11 @@ public class GeneralLogging extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enables basic command logging";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the logging of general commands. Requires the " + ChannelSetting.SERVER_LOG.toString() + " Channel to be set up.";
     }

@@ -70,20 +70,24 @@ public class Mute extends Command {
             isStrike = true;
         }
 
-        //builds prefix
-        String content = "> **" + muted.displayName + "** was Muted" + timeValue;
+        // setup muted messages
+        String msgFormat = "> **%s** was muted %s"; // name was muted for timevalue;
+        String adminMsg = " by %s in %s with reason `%s`"; // > name was muted for timevalue by mod in channel with `reason`;
+        String modnote = "%s muted with reason `%s` %s in %s"; //name muted with reason `reason` for timevalue in channel;
         IChannel adminChannel = command.guild.getChannelByType(ChannelSetting.ADMIN);
-        //builds reason
+
+
         if (reason.toString().isEmpty()) reason.setContent("No reason given");
-        //builds final response
-        String response = content + " by **" + command.user.displayName + "** in channel " + command.channel.mention + " with reason `" + reason + "`.";
-        //sends response to admin channel
+        // final responses:
+        String response = String.format(msgFormat, muted.displayName, timeValue);
+
         if (adminChannel != null) {
-            RequestHandler.sendMessage(response, adminChannel);
+            RequestHandler.sendMessage(response + String.format(adminMsg, command.user.displayName,
+                    command.channel.mention, reason), adminChannel);
         }
-        //adds note to modnotes
-        muted.getProfile(command.guild).addSailModNote(response, command, isStrike);
-        return content + ".";
+
+        muted.getProfile(command.guild).addSailModNote(String.format(modnote, command.user.displayName, reason, timeValue, command.channel.mention), command, isStrike);
+        return response + ".";
     }
 
     @Override

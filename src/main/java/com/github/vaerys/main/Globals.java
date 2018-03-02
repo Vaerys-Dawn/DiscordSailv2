@@ -123,7 +123,7 @@ public class Globals {
         setupCommands = CommandInit.getSetupCommands();
 
         TagList.init();
-        SetupHandler.initStages();
+        SetupHandler.getStages();
 
         // validate commands
         if (errorStack != null) {

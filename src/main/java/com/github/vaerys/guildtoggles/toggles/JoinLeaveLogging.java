@@ -32,6 +32,11 @@ public class JoinLeaveLogging extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enables logging of user joins/leaves.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the logging of users joining and leaving. Requires the " + ChannelSetting.SERVER_LOG.toString() + " Channel to be set up.";
     }

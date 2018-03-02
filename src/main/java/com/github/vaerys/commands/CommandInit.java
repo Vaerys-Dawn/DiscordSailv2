@@ -201,6 +201,10 @@ public class CommandInit {
         commands.add(new Module());
         commands.add(new HelpModules());
 
+        //step 2
+        commands.add(new Toggle());
+        commands.add(new HelpSettings());
+
         // Setup Traversal Commands
         commands.add(new SetupBack());
         commands.add(new SetupNext());

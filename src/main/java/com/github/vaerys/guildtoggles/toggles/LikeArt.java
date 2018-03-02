@@ -27,6 +27,11 @@ public class LikeArt extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enables art 'liking' feature.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the art liking feature, When this feature is enabled if a ❤ " +
                 "reaction is added to an image pinned by the art pinning feature will grant a small amount of pixels to the author.";

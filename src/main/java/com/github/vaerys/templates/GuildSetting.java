@@ -19,8 +19,4 @@ public abstract class GuildSetting extends GuildToggle {
         return false;
     }
 
-    @Override
-    public String shortDesc(CommandObject command) {
-        return null;
-    }
 }

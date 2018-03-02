@@ -31,6 +31,11 @@ public class DontLogBot extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Disables the logging of bot actions for the logging system.";
     }

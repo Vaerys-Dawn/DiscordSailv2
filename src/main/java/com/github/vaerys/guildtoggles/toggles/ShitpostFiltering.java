@@ -32,6 +32,11 @@ public class ShitpostFiltering extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enable \"shitpost\" lock on CCs created in \""+ ChannelSetting.SHITPOST.toString() +"\" channels.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables the locking the usage of Custom commands tagged with shitpost to " + ChannelSetting.SHITPOST.toString() + " channels.";
     }

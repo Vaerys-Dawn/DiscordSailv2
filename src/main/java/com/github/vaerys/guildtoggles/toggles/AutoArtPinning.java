@@ -31,6 +31,11 @@ public class AutoArtPinning extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return "Enables automatic art pinning.";
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Enables automatic pinning of images within the " + ChannelSetting.ART.toString() + "Channel.";
     }

@@ -18,7 +18,7 @@ public class ToggleInit {
 
     final static Logger logger = LoggerFactory.getLogger(ToggleInit.class);
 
-    public static List<GuildToggle> getToggles() {
+    public static List<GuildToggle> getAllToggles(boolean validate) {
         ArrayList<GuildToggle> guildToggles = new ArrayList<>();
 
         //toggles
@@ -66,8 +66,7 @@ public class ToggleInit {
         guildToggles.add(new ModuleArtPinning());
         guildToggles.add(new ModulePixels());
         guildToggles.add(new ModuleLogging());
-
-        validate(guildToggles);
+        if (validate) validate(guildToggles);
 
         return guildToggles;
     }
@@ -78,6 +77,10 @@ public class ToggleInit {
             String errorReport = t.validate();
             Globals.addToErrorStack(errorReport);
         }
+    }
+
+    public static List<GuildToggle> getToggles() {
+        return getAllToggles(true);
     }
 
     public static List<GuildToggle> getToggles(boolean isModule) {

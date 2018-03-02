@@ -31,6 +31,11 @@ public class RoleIsToggle extends GuildSetting {
     }
 
     @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
+    }
+
+    @Override
     public String desc(CommandObject command) {
         return "Changes the " + new CosmeticRoles().getCommand(command) + " command to make it toggle roles.";
     }
