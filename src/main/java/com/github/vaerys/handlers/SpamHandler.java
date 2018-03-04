@@ -126,7 +126,11 @@ public class SpamHandler {
         if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
         if (!command.guild.config.rateLimiting) return false;
         if (!command.guild.rateLimit(command.user.longID)) return false;
-
+        if (Globals.lastRateLimitReset + 20 * 1000 < System.currentTimeMillis()) {
+            command.guild.resetRateLimit();
+            RequestHandler.sendMessage("> Forced Rate Limit Reset. **Guild ID:** " + command.guild.longID +
+                    ", **Guild Name:** " + command.guild.get().getName(), command.client.creator.getDmChannel());
+        }
         //send a dm to let the user know that they are being rate limited
         IChannel userDMs = command.user.get().getOrCreatePMChannel();
         if (userDMs != null) {

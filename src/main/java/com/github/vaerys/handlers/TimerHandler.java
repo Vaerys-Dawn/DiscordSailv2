@@ -250,6 +250,7 @@ public class TimerHandler {
                 keepAliveTenSec = System.currentTimeMillis();
                 for (GuildObject task : Globals.getGuilds()) {
                     task.resetRateLimit();
+                    Globals.lastRateLimitReset = System.currentTimeMillis();
                     if (task.getRateLimiting().size() != 0) {
                         logger.error("Failed to clear list, forcing it to clear.");
                         task.forceClearRate();

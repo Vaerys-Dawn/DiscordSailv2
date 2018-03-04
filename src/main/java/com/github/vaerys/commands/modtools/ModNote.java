@@ -63,7 +63,6 @@ public class ModNote extends Command {
             // these modes require special handling:
             String modeOpts = new SplitFirstObject(opts).getRest();
             if (modeOpts.isEmpty()) return missingArgs(command);
-
             // try to parse an index:
             int index;
             try {
