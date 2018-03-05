@@ -85,7 +85,7 @@ public class SettingsStage extends SetupHandler {
     }
 
     @Override
-    public int setupStage() {
-        return 1;
+    public SetupStage setupStage() {
+        return SetupStage.SETUP_SETTINGS;
     }
 }

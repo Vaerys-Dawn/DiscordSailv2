@@ -57,8 +57,8 @@ public class ModulesStage extends SetupHandler {
     }
 
     @Override
-    public int setupStage() {
-        return 0;
+    public SetupStage setupStage() {
+        return SetupStage.SETUP_MODULES;
     }
 
     @Override

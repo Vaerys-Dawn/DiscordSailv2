@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class GuildConfig extends GuildFile {
     public static final String FILE_PATH = "Guild_Config.json";
     //setup vars
-    public int setupStage = SetupHandler.SETUP_UNSET;
+    public SetupHandler.SetupStage setupStage = SetupHandler.SetupStage.SETUP_UNSET;
     public long setupUser = -1;
     //toggles
     //--Auto Tasks

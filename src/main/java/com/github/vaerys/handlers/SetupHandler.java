@@ -1,6 +1,7 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.setupStages.LoggingSetupStage;
 import com.github.vaerys.handlers.setupStages.ModulesStage;
 import com.github.vaerys.handlers.setupStages.SettingsStage;
 import com.github.vaerys.main.Globals;
@@ -21,11 +22,8 @@ import java.util.List;
  */
 public abstract class SetupHandler {
 
-    public static final int SETUP_UNSET = -1;
-    public static final int SETUP_COMPLETE = Short.MAX_VALUE;
-
     public static final Logger logger = LoggerFactory.getLogger(SetupHandler.class);
-    private static final HashMap<Integer, SetupHandler> configStages = new HashMap<>();
+    private static final HashMap<SetupStage, SetupHandler> configStages = new HashMap<>();
 
     /**
      * Nicely checks whether or not setup is currently being run.
@@ -34,8 +32,8 @@ public abstract class SetupHandler {
      * @return True if the setup is currently active, false otherwise.
      */
     public static boolean isRunningSetup(GuildObject guild) {
-        return guild.config.setupStage != SETUP_UNSET &&
-                guild.config.setupStage != configStages.size();
+        return guild.config.setupStage != SetupStage.SETUP_UNSET &&
+                guild.config.setupStage != SetupStage.SETUP_COMPLETE;
     }
 
     /**
@@ -93,20 +91,22 @@ public abstract class SetupHandler {
         return false;
     }
 
-    public static void setSetupStage(CommandObject command, int stage) {
+    public static void setSetupStage(CommandObject command, SetupStage stage) {
         GuildConfig config = command.guild.config;
 
+        logger.debug("Setting Stage to " + stage.toString());
+
         config.setupStage = stage;
-        config.setupUser = stage == SETUP_UNSET ? -1 : command.user.longID;
+        config.setupUser = (stage == SetupStage.SETUP_UNSET) ? -1 : command.user.longID;
 
         // send the title and step text to channel
-        if (stage != SETUP_UNSET && stage != SETUP_COMPLETE) {
+        if (stage != SetupStage.SETUP_UNSET && stage != SetupStage.SETUP_COMPLETE) {
             //command.setChannel(command.user.getDmChannel());
             // get stage:
             SetupHandler currentStage = configStages.get(config.setupStage);
-            String titleText = "**__Step " + (stage + 1) + ": " + currentStage.title() + "__**";
+            String titleText = "**__Step " + (stage.ordinal()) + ": " + currentStage.title() + "__**";
             RequestHandler.sendMessage(titleText, command.user.getDmChannel());
-            // it is expected that you send the message yourself;
+            // it is expected that you send the message yourself
             currentStage.stepText(command);
         }
     }
@@ -132,11 +132,14 @@ public abstract class SetupHandler {
         configStages.put(setupHandler.setupStage(), setupHandler);
     }
 
-    public static HashMap<Integer, SetupHandler> getStages() {
+    public static void getStages() {
+
+        // basic
         addStage(new ModulesStage());
         addStage(new SettingsStage());
 
-        return configStages;
+        // modules configs
+        addStage(new LoggingSetupStage());
     }
 
     /**
@@ -171,5 +174,52 @@ public abstract class SetupHandler {
      *
      * @return A unique number representing the ordering of the step.
      */
-    public abstract int setupStage();
+    public abstract SetupStage setupStage();
+
+    public enum SetupStage {
+        SETUP_UNSET,
+        // setup steps.
+        SETUP_MODULES,
+        SETUP_SETTINGS,
+        SETUP_LOGGING,
+        SETUP_ROLES,
+        SETUP_PIXELS,
+        SETUP_ME,
+        SETUP_CC,
+        SETUP_MODMUTE,
+        SETUP_CHARS,
+
+        // end of setup;
+        SETUP_COMPLETE;
+
+        /**
+         * Get the next valid {@link SetupStage} value
+         *
+         * @param stage The current Stage value you are querying against.
+         * @return The next Stage, if it exists.
+         * @throws ArrayIndexOutOfBoundsException When attempting to get the next stage after setup is complete.
+         */
+        public static SetupStage getNextStage(SetupStage stage) throws ArrayIndexOutOfBoundsException {
+            // move to next stage
+            return SetupStage.values()[stage.ordinal() + 1];
+        }
+
+        /**
+         * Get the previous valid {@link SetupStage} value.<br />
+         * Will not go past the "first" stage, {@linkplain SetupStage#SETUP_MODULES}.
+         *
+         * @param stage The current Stage value you are querying against.
+         * @return The next stage, if it exists.
+         * @throws ArrayIndexOutOfBoundsException When attempting to get previous stage when setup is not running.
+         */
+        public static SetupStage getPrevStage(SetupStage stage) throws ArrayIndexOutOfBoundsException {
+            // Get previous ordinal value
+            SetupStage next = SetupStage.values()[stage.ordinal() - 1];
+            if (next == SETUP_UNSET) {
+                // Don't let setup flag be set to "unset".
+                next = SETUP_MODULES;
+            }
+            return next;
+        }
+    }
 }

@@ -2,13 +2,14 @@ package com.github.vaerys.commands.setup;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.SetupHandler;
+import com.github.vaerys.handlers.SetupHandler.SetupStage;
 import com.github.vaerys.templates.SetupCommand;
 
 public class SetupQuit extends SetupCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
-        SetupHandler.setSetupStage(command, (short) SetupHandler.SETUP_UNSET);
+        SetupHandler.setSetupStage(command, SetupStage.SETUP_UNSET);
         return "> Setup Cancelled.";
     }
 
