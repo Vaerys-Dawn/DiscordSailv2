@@ -9,6 +9,7 @@ import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RateLimitException;
 
@@ -71,7 +72,6 @@ public class Main {
 
             config = Config.check(config);
 
-
             //getting bot token
             try {
                 token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
@@ -133,6 +133,16 @@ public class Main {
 
             //login + register listener.
             client.login();
+
+            // initialize creatorID if it is completely unset:
+            if (config.creatorID == 0) {
+                IUser botOwner = client.getApplicationOwner();
+                config.creatorID = botOwner.getLongID();
+                logger.info("Default creatorID set to user " + botOwner.getName() + "#" + botOwner.getDiscriminator());
+                // save it back out to file.
+                config.flushFile();
+            }
+
             ExecutorService guildService = new ThreadPoolExecutor(2, 50, 1,
                     TimeUnit.MINUTES, new ArrayBlockingQueue<>(1000),
                     r -> new Thread(group, r, group.getName() + "-Thread-" + ++count[0]));
@@ -150,8 +160,6 @@ public class Main {
             dispatcher.registerTemporaryListener(new InitEvent());
 
             //validate config file
-
-
             Globals.setVersion();
 
             //Init Patch system.
