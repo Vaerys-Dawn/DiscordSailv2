@@ -1,9 +1,11 @@
 package com.github.vaerys.pogos;
 
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.RandomStatusObject;
 import com.github.vaerys.templates.GlobalFile;
+import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
 
@@ -14,7 +16,7 @@ public class Config extends GlobalFile {
     public static final String FILE_PATH = "Config.json";
     public boolean resetToDefault = false;
     public String botName = "S.A.I.L";
-    public long creatorID = 153159020528533505L;
+    public long creatorID = 0;
     public String defaultPrefixCommand = "$";
     public String defaultPrefixCC = "$$";
     public String defaultAvatarFile = "Avatar.png";
@@ -50,6 +52,10 @@ public class Config extends GlobalFile {
     public static Config check(Config config) {
         if (config.resetToDefault) {
             config = new Config();
+        }
+        if (config.creatorID == 0) {
+            IUser owner = Client.getClient().getApplicationOwner();
+            config.creatorID = owner.getLongID();
         }
         if (config.dailyMessages.size() != 7) {
             config.dailyMessages = Constants.defaultDailyMessages(config.creatorID);
