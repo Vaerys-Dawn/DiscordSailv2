@@ -36,7 +36,7 @@ public class ModNote extends Command {
         String userCall = argsSplitter.getFirstWord();
         String opts = argsSplitter.getRest();
         // empty user arg is not allowed;
-        if (userCall.isEmpty()) return missingArgs(command);
+        if (userCall == null || userCall.isEmpty()) return missingArgs(command);
         if (opts == null || opts.isEmpty()) opts = "list";
 
         UserObject user = Utility.getUser(command, userCall, false);
@@ -46,7 +46,16 @@ public class ModNote extends Command {
         if (profile == null) return "> No profile found for " + user.displayName + ".";
 
         long timestamp = command.message.getTimestamp().toEpochSecond();
-        String mode = new SplitFirstObject(opts).getFirstWord().toLowerCase();
+        String mode = new SplitFirstObject(opts.trim()).getFirstWord().toLowerCase();
+
+        // shortcut to "info [index]"
+        try {
+            int index = Integer.parseInt(mode);
+            mode = "info";
+            opts = "info " + index;
+        } catch (NumberFormatException e) {
+            // nop
+        }
 
         if (mode.equals("list")) {
             return createListEmbed(profile, command);
@@ -54,7 +63,6 @@ public class ModNote extends Command {
             // these modes require special handling:
             String modeOpts = new SplitFirstObject(opts).getRest();
             if (modeOpts.isEmpty()) return missingArgs(command);
-
             // try to parse an index:
             int index;
             try {
