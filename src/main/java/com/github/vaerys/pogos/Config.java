@@ -50,6 +50,7 @@ public class Config extends GlobalFile {
     public static Config check(Config config) {
         if (config.resetToDefault) {
             config = new Config();
+            config.setPath(FILE_PATH);
         }
         if (config.dailyMessages.size() != 7) {
             config.dailyMessages = Constants.defaultDailyMessages(config.creatorID);
