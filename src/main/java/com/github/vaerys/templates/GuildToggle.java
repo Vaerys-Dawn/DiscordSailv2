@@ -3,7 +3,6 @@ package com.github.vaerys.templates;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
@@ -23,11 +22,11 @@ public abstract class GuildToggle {
     public List<Command> commands = new ArrayList<>();
     public List<GuildSetting> settings = new ArrayList<>();
     public List<ChannelSetting> channels = new ArrayList<>();
-    public SetupHandler setupPage = null;
 
     public GuildToggle() {
         setup();
     }
+
 
     public void execute(GuildObject guild) {
         guild.removeCommandsByType(affectsType);

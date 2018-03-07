@@ -14,7 +14,7 @@ public class Config extends GlobalFile {
     public static final String FILE_PATH = "Config.json";
     public boolean resetToDefault = false;
     public String botName = "S.A.I.L";
-    public long creatorID = 153159020528533505L;
+    public long creatorID = 0;
     public String defaultPrefixCommand = "$";
     public String defaultPrefixCC = "$$";
     public String defaultAvatarFile = "Avatar.png";

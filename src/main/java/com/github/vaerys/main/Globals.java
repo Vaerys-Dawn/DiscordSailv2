@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -210,6 +211,19 @@ public class Globals {
         if (creator == null) {
             logger.error("\nError:" + "   > creatorID is invalid.");
             return false;
+        }
+        // check if the creator is a thinger in guilds?
+        if (Client.getClient().getGuilds().size() == 0) {
+            logger.warn("No guilds to connect to. Will idle for connections.");
+        } else {
+            IUser user = RequestBuffer.request(() -> {
+                return Client.getClient().getUserByID(creatorID);
+            }).get();
+            if (user == null) {
+                // hecc
+                logger.error("Could not find creator in any connected guilds. Make sure you are using the right user ID in " + Constants.FILE_CONFIG);
+                return false;
+            }
         }
         return true;
     }

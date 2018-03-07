@@ -2,14 +2,15 @@ package com.github.vaerys.commands.setup;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.SetupHandler;
+import com.github.vaerys.handlers.SetupHandler.SetupStage;
 import com.github.vaerys.templates.SetupCommand;
 
 public class SetupRepeat extends SetupCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
-        int currentStage = command.guild.config.setupStage;
-        SetupHandler.setSetupStage(command, currentStage);
+        SetupStage stage = command.guild.config.setupStage;
+        SetupHandler.setSetupStage(command, stage);
         return null;
     }
 

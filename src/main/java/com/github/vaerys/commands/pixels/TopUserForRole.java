@@ -89,6 +89,7 @@ public class TopUserForRole extends Command {
         int showing = (userIDs.size() > 5 ? 5 : userIDs.size());
 
         embed.withTitle("Top " + (userIDs.size() == 1 ? " user" : showing + " users") + " for role " + role.getName());
+        embed.withFooterText("Total users with this role: " + userIDs.size());
         ProfileObject userProfile;
         UserObject userObject;
         NumberFormat nf = NumberFormat.getInstance();

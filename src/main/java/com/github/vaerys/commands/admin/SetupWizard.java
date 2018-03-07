@@ -7,6 +7,7 @@ import com.github.vaerys.commands.setup.SetupNext;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.SetupHandler;
+import com.github.vaerys.handlers.SetupHandler.SetupStage;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
@@ -47,7 +48,7 @@ public class SetupWizard extends Command {
         }
 
         // send first setup stage response
-        SetupHandler.setSetupStage(command, 0);
+        SetupHandler.setSetupStage(command, SetupStage.SETUP_MODULES);
 
         return "> Check your DMs for more instructions.";
     }
