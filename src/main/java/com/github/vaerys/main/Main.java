@@ -138,7 +138,10 @@ public class Main {
             if (config.creatorID == 0) {
                 IUser botOwner = client.getApplicationOwner();
                 config.creatorID = botOwner.getLongID();
+                Globals.creatorID = config.creatorID;
+
                 logger.info("Default creatorID set to user " + botOwner.getName() + "#" + botOwner.getDiscriminator());
+
                 // save it back out to file.
                 config.flushFile();
             }
