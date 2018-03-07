@@ -6,7 +6,6 @@ import com.github.vaerys.commands.cc.NewCC;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.OffenderObject;
 import com.github.vaerys.pogos.GuildConfig;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +28,10 @@ public class SpamHandler {
     public static boolean catchWalls(CommandObject command) {
         if (!command.guild.config.stopSpamWalls) return false;
         if (command.message.length() < 800) return false;
+
+        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
+        if (channels.contains(command.channel.get())) return false;
+
         String message = command.message.getContent();
         if (StringUtils.startsWithIgnoreCase(message, new NewCC().getCommand(command))) return false;
         if (StringUtils.startsWithIgnoreCase(message, new EditCC().getCommand(command))) return false;
@@ -75,6 +78,9 @@ public class SpamHandler {
         List<IRole> oldRoles = command.user.roles;
         IGuild guild = command.guild.get();
 
+        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
+        if (channels.contains(command.channel.get())) return false;
+
         if (GuildHandler.testForPerms(command, Permissions.MENTION_EVERYONE)) return false;
 
         if (message.toString().contains("@everyone") || message.toString().contains("@here")) {
@@ -106,12 +112,12 @@ public class SpamHandler {
                 if (!offenderFound) {
                     guildconfig.addOffender(new OffenderObject(author.getLongID()));
                 }
-                String response = "> #mentionAdmin# " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message.";
+                String response = "> <mentionAdmin> " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message in " + command.channel.mention + ".";
                 IRole roleToMention = command.guild.getRoleByID(guildconfig.getRoleToMentionID());
                 if (roleToMention != null) {
-                    response = response.replaceAll("#mentionAdmin#", roleToMention.mention());
+                    response = response.replaceAll("<mentionAdmin>", roleToMention.mention());
                 } else {
-                    response = response.replaceAll("#mentionAdmin#", "Admin");
+                    response = response.replaceAll("<mentionAdmin>", "Admin");
                 }
                 RequestHandler.sendMessage(response, command.channel.get());
                 return true;
@@ -125,7 +131,12 @@ public class SpamHandler {
         //make sure that the rate limiting should actually happen
         if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
         if (!command.guild.config.rateLimiting) return false;
-        if (!command.guild.rateLimit(command.user.longID)) return false;
+
+        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
+        if (channels.contains(command.channel.get())) return false;
+
+        if (!command.guild.rateLimit(command.user.longID, command.channel.get(), command.message.getTimestamp().toEpochSecond()))
+            return false;
         if (Globals.lastRateLimitReset + 20 * 1000 < System.currentTimeMillis()) {
             command.guild.resetRateLimit();
             RequestHandler.sendMessage("> Forced Rate Limit Reset. **Guild ID:** " + command.guild.longID +
@@ -147,9 +158,6 @@ public class SpamHandler {
 
         //user is now being rate limited
         RequestHandler.deleteMessage(command.message.get());
-        if (command.guild.config.deleteLogging) {
-            Utility.sendLog("> **@" + command.user.username + "** is being rate limited", command.guild, false);
-        }
 
         //if mute continue
         if (!command.guild.config.muteRepeatOffenders) return true;
@@ -163,17 +171,12 @@ public class SpamHandler {
         command.guild.sendDebugLog(command, "RATE_LIMITING", "MUTE", rate - 3 + " Over Rate");
 
         //this mutes them
-        RequestBuffer.request(() -> command.user.get().addRole(muteRole));
-
-        //setup of the admin channel
-        IChannel adminChannel = null;
-        List<IChannel> adminChannels = command.guild.getChannelsByType(ChannelSetting.ADMIN);
-        if (adminChannels.size() != 0) adminChannel = adminChannels.get(0);
-        if (adminChannel == null) adminChannel = command.channel.get();
+        if (!command.user.roles.contains(muteRole)) {
+            RequestBuffer.request(() -> command.user.get().addRole(muteRole));
+        }
 
         //sends the response if they got muted
         command.user.sendDm("You have been muted for abusing the Guild rate limit.");
-        RequestHandler.sendMessage("> " + command.user.get().mention() + " has been muted for repetitively abusing Guild rateLimit.", adminChannel);
         return true;
     }
 
@@ -201,17 +204,18 @@ public class SpamHandler {
             }
         }
 
-        if (userSettingDenied ||
-                !guildconfig.testIsTrusted(author, guild)) {
+        boolean isTrusted = guildconfig.testIsTrusted(author,guild);
+
+        if (userSettingDenied || !isTrusted) {
             shouldDelete = true;
         }
 
         if (inviteFound && shouldDelete) {
             String response;
             if (userSettingDenied) {
-                response = "> You do not have permission to post Instant Invites.";
+                response = "> " + command.user.mention() + ", you do not have permission to post Instant Invites.";
             } else {
-                response = "> Please do not post Instant Invites.";
+                response = "> " + command.user.mention() + ", please do not post Instant Invites.";
             }
             RequestHandler.deleteMessage(message);
             command.guild.sendDebugLog(command, "INVITE_REMOVAL", "REMOVED", message.getContent());

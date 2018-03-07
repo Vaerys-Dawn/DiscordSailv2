@@ -11,6 +11,8 @@ import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -19,14 +21,10 @@ public class ListRoles extends Command {
 
     public static XEmbedBuilder getList(CommandObject command) {
         String title = "> Here are the **Cosmetic** roles you can choose from:\n";
-        ArrayList<String> list = new ArrayList<>();
+        List<String> list = command.guild.getCosmeticRoles().stream().map(iRole -> iRole.getName()).collect(Collectors.toList());
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        for (long l : command.guild.config.getCosmeticRoleIDs()) {
-            IRole role = command.guild.getRoleByID(l);
-            list.add(role.getName());
-        }
-        Utility.listFormatterEmbed(title, builder, list, true);
-        builder.appendField(spacer, Utility.getCommandInfo(new CosmeticRoles(), command), false);
+        builder.withTitle(title);
+        builder.withDesc("```\n" + Utility.listFormatter(list,true)+ "```\n" + new CosmeticRoles().missingArgs(command));
         return builder;
     }
 

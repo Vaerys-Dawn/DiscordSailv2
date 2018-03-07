@@ -14,7 +14,7 @@ public class TagIfArgsEmptyReplace extends TagReplaceObject {
     }
 
     @Override
-    public String execute(String from, CommandObject command, String args) {
+    public String execute(String from, CommandObject command, String args, List<ReplaceObject> toReplace) {
         List<String> splitString = getSplit(from);
         from = removeFirstTag(from);
         if (args == null || args.isEmpty()) {

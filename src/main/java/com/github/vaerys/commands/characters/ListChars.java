@@ -7,12 +7,12 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -24,6 +24,7 @@ public class ListChars extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         UserObject user = command.user;
         String title = "> Here are all of your characters.";
+        //get user
         if (args != null && !args.isEmpty()) {
             user = Utility.getUser(command, args, true);
             if (user == null) {
@@ -33,22 +34,26 @@ public class ListChars extends Command {
                 title = "> Here are all of **@" + user.displayName + "'s** Characters.";
             }
         }
+        //check private
         if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
             return "> User has set their profile to private.";
         }
-        ArrayList<String> list = new ArrayList<>();
-        for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
-            if (c.getUserID() == user.longID) {
-                list.add(c.getName());
-            }
+        //generate list
+        List<String> list = command.user.characters.stream().map(c -> c.getName()).collect(Collectors.toList());
+        //give message if empty
+        if (list.size() == 0) {
+            return "> You do not have any characters yet. Create one with **" + new UpdateChar().getUsage(command) + "**.";
         }
-        Utility.listFormatterEmbed(title, builder, list, true);
-        builder.appendField(spacer, Utility.getCommandInfo(new CharInfo(), command), false);
+        //build embed data
+        builder.withTitle(title);
+        builder.withDesc("```\n" + Utility.listFormatter(list, true) + "```\n" + new CharInfo().missingArgs(command));
         builder.withFooterText(command.user.characters.size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
+        //send private char list
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
             return "> Char list sent to your Direct messages.";
         }
+        //send regular
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }

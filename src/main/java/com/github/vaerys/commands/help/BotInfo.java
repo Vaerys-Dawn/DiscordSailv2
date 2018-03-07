@@ -30,7 +30,7 @@ public class BotInfo extends Command {
         response.append("**@").append(c0bra.getName()).append("#").append(c0bra.getDiscriminator()).append("**.");
         builder.withDesc(response.toString());
         builder.withThumbnail(command.client.bot.getAvatarURL());
-        builder.withFooterText("Bot Version: " + Globals.version);
+        builder.withFooterText("Bot Version: " + Globals.version+ " | D4J Version: " + Globals.d4jVersion);
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }

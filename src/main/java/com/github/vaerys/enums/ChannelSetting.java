@@ -4,7 +4,6 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.Report;
 import com.github.vaerys.commands.help.SilentReport;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.ChannelSettingObject;
@@ -132,7 +131,10 @@ public enum ChannelSetting {
     /**
      * Where all the general type logging will be sent.
      */
-    FROM_DM("DirectMessages", false, "The command can only be ran in DMs.");
+    FROM_DM("DirectMessages", false, "The command can only be ran in DMs."),
+
+
+    IGNORE_SPAM("IgnoreSpam", true, "When Enabled Spam Type messages will be ignored.");
 
 
     protected String name;
@@ -256,44 +258,54 @@ public enum ChannelSetting {
     public String toggleSetting(GuildObject guild, long channelID) {
         List<ChannelSettingObject> objects = guild.channelData.getChannelSettings();
         boolean isFound = false;
+
+        String modifier = isSetting ? "Setting" : "Type";
+
+        ChannelSettingObject channel = null;
+
+
         for (ChannelSettingObject s : objects) {
-            if (s.getType().equals(name)) {
+            if (s.getType() == this) {
                 isFound = true;
+                channel = s;
             }
         }
         if (!isFound) {
-            objects.add(new ChannelSettingObject(name));
+            channel = new ChannelSettingObject(name);
+            objects.add(channel);
         }
-        for (ChannelSettingObject object : objects) {
-            if (object.getType().equals(name)) {
-                if (!isSetting()) {
-                    if (object.getChannelIDs().isEmpty() || !object.getChannelIDs().get(0).equals(channelID)) {
-                        if (object.getChannelIDs().isEmpty()) {
-                            object.getChannelIDs().add(channelID);
-                        } else {
-                            object.getChannelIDs().set(0, channelID);
-                        }
-                        return "> " + Globals.client.getChannelByID(channelID).mention() + " is now the Server's **" + name + "** channel.";
-                    } else {
-                        object.getChannelIDs().remove(0);
-                        return "> " + Globals.client.getChannelByID(channelID).mention() + " is no longer the Server's **" + name + "** channel.";
-                    }
-                } else {
-                    if (object.getChannelIDs().isEmpty() || !object.getChannelIDs().contains(channelID)) {
-                        object.getChannelIDs().add(channelID);
-                        return "> " + Globals.client.getChannelByID(channelID).mention() + ". Channel setting: **" + name + "** added.";
-                    } else {
-                        for (int i = 0; i < object.getChannelIDs().size(); i++) {
-                            if (channelID == object.getChannelIDs().get(i)) {
-                                object.getChannelIDs().remove(i);
-                                return "> " + Globals.client.getChannelByID(channelID).mention() + ". Channel setting: **" + name + "** removed.";
-                            }
-                        }
+
+        String error = "> An error occurred Trying to toggle the Channel " + modifier + ".";
+
+        //this should never run.
+        if (channel == null) return error;
+
+        if (isSetting) {
+            if (channel.getChannelIDs().isEmpty() || !channel.getChannelIDs().contains(channelID)) {
+                channel.getChannelIDs().add(channelID);
+                return "> " + guild.getChannelByID(channelID).mention() + ". Channel setting: **" + name + "** added.";
+            } else {
+                for (int i = 0; i < channel.getChannelIDs().size(); i++) {
+                    if (channelID == channel.getChannelIDs().get(i)) {
+                        channel.getChannelIDs().remove(i);
+                        return "> " + guild.getChannelByID(channelID).mention() + ". Channel setting: **" + name + "** removed.";
                     }
                 }
             }
+        } else {
+            if (channel.getChannelIDs().isEmpty() || !channel.getChannelIDs().get(0).equals(channelID)) {
+                if (channel.getChannelIDs().isEmpty()) {
+                    channel.getChannelIDs().add(channelID);
+                } else {
+                    channel.getChannelIDs().set(0, channelID);
+                }
+                return "> " + guild.getChannelByID(channelID).mention() + " is now the Server's **" + name + "** channel.";
+            } else {
+                channel.getChannelIDs().remove(0);
+                return "> " + guild.getChannelByID(channelID).mention() + " is no longer the Server's **" + name + "** channel.";
+            }
         }
-        return "> Error toggling channel setting.";
+        return error;
     }
 }
 

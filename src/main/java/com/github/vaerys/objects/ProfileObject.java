@@ -3,11 +3,13 @@ package com.github.vaerys.objects;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.pogos.GuildConfig;
+import sx.blah.discord.api.IDiscordClient;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -73,7 +75,7 @@ public class ProfileObject {
 
     public void addXP(long xp, GuildConfig config) {
         this.xp += config.xpModifier * xp;
-        if (xp > Constants.PIXELS_CAP){
+        if (xp > Constants.PIXELS_CAP) {
             this.xp = Constants.PIXELS_CAP;
         }
     }
@@ -183,6 +185,12 @@ public class ProfileObject {
     public void addSailModNote(String contents, CommandObject command, boolean isStrike) {
         if (modNotes == null) modNotes = new LinkedList<>();
         modNotes.add(new ModNoteObject(contents, command.client.bot.longID, command.message.getTimestamp().toEpochSecond(), isStrike));
+    }
+
+    public void addSailModNote(String contents, long timeStamp, boolean isStrike) {
+        if (modNotes == null) modNotes = new LinkedList<>();
+        IDiscordClient client = Client.getClient();
+        modNotes.add(new ModNoteObject(contents, client.getOurUser().getLongID(), timeStamp, isStrike));
     }
 
     public void addSailModNote(String contents, CommandObject command) {

@@ -1,5 +1,6 @@
 package com.github.vaerys.guildtoggles;
 
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.modules.*;
 import com.github.vaerys.guildtoggles.toggles.*;
 import com.github.vaerys.main.Globals;
@@ -91,6 +92,15 @@ public class ToggleInit {
             }
         }
         return toggles;
+    }
+
+    public static GuildToggle getGuildToggle(String args, boolean isModule) {
+        for (GuildToggle t: getToggles(isModule)){
+            if (SAILType.get(args) == t.name()){
+                return t;
+            }
+        }
+        return null;
     }
 }
 

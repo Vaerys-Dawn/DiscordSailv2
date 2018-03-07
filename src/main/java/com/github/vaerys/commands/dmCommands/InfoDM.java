@@ -97,11 +97,6 @@ public class InfoDM extends DMCommand {
     }
 
     @Override
-    protected ChannelSetting channel() {
-        return null;
-    }
-
-    @Override
     protected boolean requiresArgs() {
         return true;
     }

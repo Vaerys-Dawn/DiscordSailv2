@@ -52,6 +52,7 @@ public class SearchCCs extends Command {
         if (contents.length() > 2040) {
             List<String> blah = new ArrayList<>();
             StringBuilder complete = new StringBuilder();
+            complete.append("> Search for \"" + args + "\", Results found: " + searched.size() + "\n");
             for (CCommandObject c : searched) {
                 if (blah.size() == 8) {
                     complete.append(Utility.listFormatter(blah, true));
@@ -84,6 +85,7 @@ public class SearchCCs extends Command {
             embedBuilder.withTitle(title);
             embedBuilder.withDesc("```\n" + contents + spacer + "```");
             RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
+            embedBuilder.withFooterText("Results Found: " + searched.size());
             return null;
         }
     }

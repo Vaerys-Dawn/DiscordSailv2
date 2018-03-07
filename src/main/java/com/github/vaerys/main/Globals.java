@@ -49,6 +49,7 @@ public class Globals {
     public static int avgMessagesPerDay = 20;
     public static boolean isReady = false;
     public static String version;
+    public static String d4jVersion;
     public static long consoleMessageCID = -1;
     public static ArrayList<DailyMessage> configDailyMessages = new ArrayList<>();
     public static IDiscordClient client;
@@ -65,7 +66,6 @@ public class Globals {
     private static List<SlashCommand> slashCommands = new LinkedList<>();
     private static List<Command> creatorCommands = new LinkedList<>();
     private static List<Command> setupCommands = new LinkedList<>();
-    private static ChannelSetting[] channelSettings;
     private static List<GuildToggle> guildToggles = new LinkedList<>();
     private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
     private static List<LogObject> allLogs = new LinkedList<>();
@@ -117,7 +117,7 @@ public class Globals {
         // Load Guild Toggles
         guildToggles = ToggleInit.getToggles();
 
-        channelSettings = ChannelSetting.values();
+//        channelSettings = Arrays.asList(ChannelSetting.values());
 
         creatorCommands = CommandInit.getCreatorCommands();
 
@@ -151,8 +151,8 @@ public class Globals {
         logger.info(commands.size() + " Commands Loaded.");
         logger.info(creatorCommands.size() + " Creator Commands Loaded.");
         logger.info(setupCommands.size() + " Setup Commands Loaded.");
-        //logger.info(commandTypes.size() + " Command Types Loaded.");
-        logger.info(channelSettings.length + " Channel Types Loaded.");
+        logger.info(SAILType.values().length + " SAIL Types Loaded.");
+        logger.info(ChannelSetting.values().length + " Channel Types Loaded.");
         logger.info(guildToggles.size() + " Guild Toggles Loaded.");
         logger.info(TagList.get().size() + " Tags Loaded.");
     }
@@ -229,6 +229,7 @@ public class Globals {
             final Properties properties = new Properties();
             properties.load(Main.class.getClassLoader().getResourceAsStream("project.properties"));
             version = properties.getProperty("version");
+            d4jVersion = properties.getProperty("discord4jVersion");
             logger.info("Bot version : " + version);
         } catch (IOException e) {
             Utility.sendStack(e);
@@ -340,17 +341,12 @@ public class Globals {
         }
     }
 
-    // public static List<Command> getCommandsDM() {
-    // return commandsDM;
-//    public static List<Command> getCommandsDM() {
-    // }
-
-    public static SAILType[] getCommandTypes() {
-        return SAILType.values();
+    public static List<SAILType> getCommandTypes() {
+        return Arrays.asList(SAILType.values());
     }
 
-    public static ChannelSetting[] getChannelSettings() {
-        return channelSettings;
+    public static List<ChannelSetting> getChannelSettings() {
+        return Arrays.asList(ChannelSetting.values());
     }
 
     public static List<GuildToggle> getGuildToggles() {
@@ -377,10 +373,10 @@ public class Globals {
         List<Command> getCommands = new ArrayList<>();
         for (Command c : creatorCommands) {
             if (isDm) {
-                if (c.channel != null && c.channel != ChannelSetting.FROM_DM)
+                if (c.channel == ChannelSetting.FROM_DM)
                     getCommands.add(c);
             } else {
-                if (c.channel == null || c.channel != ChannelSetting.FROM_DM)
+                if (c.channel != ChannelSetting.FROM_DM)
                     getCommands.add(c);
             }
         }

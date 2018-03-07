@@ -53,7 +53,9 @@ public class TagSearchTags extends TagObject {
             }
         }
         String newContents = String.join(";;", splitContents);
-        if (removed) {
+        if (removed && splitContents.size() == 0) {
+            object.setContents(removeAllTag(from));
+        } else if (removed) {
             object.setContents(replaceAllTag(from, prefix + newContents + suffix));
         }
         return removed;
