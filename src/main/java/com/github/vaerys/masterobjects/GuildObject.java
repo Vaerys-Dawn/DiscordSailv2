@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.NewDailyMessage;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GuildObject {
     private final static Logger logger = LoggerFactory.getLogger(GuildObject.class);
@@ -36,7 +38,7 @@ public class GuildObject {
     public List<GuildFile> guildFiles;
     public List<Command> commands;
     public List<GuildToggle> toggles;
-    public ChannelSetting[] channelSettings;
+    public List<ChannelSetting> channelSettings;
     public List<SAILType> commandTypes;
     private IGuild object;
     private List<UserRateObject> rateLimiting = new ArrayList<>();
@@ -81,7 +83,6 @@ public class GuildObject {
         this.users = new GuildUsers();
         this.channelData = new ChannelData();
         this.guildFiles = new ArrayList<>();
-        this.commands = new ArrayList<>();
         this.commands = new ArrayList<>(Globals.getCommands(true));
     }
 
@@ -97,10 +98,10 @@ public class GuildObject {
     }
 
     public void loadCommandData() {
-        this.commands = Globals.getCommands(false);
-        this.toggles = Globals.getGuildToggles();
-        this.channelSettings = Globals.getChannelSettings();
-        this.commandTypes = new ArrayList<>(Arrays.asList(Globals.getCommandTypes()));
+        this.commands = new ArrayList<>(Globals.getCommands(false));
+        this.toggles = new ArrayList<>(Globals.getGuildToggles());
+        this.channelSettings = new ArrayList<>(Globals.getChannelSettings());
+        this.commandTypes = new ArrayList<>(Globals.getCommandTypes());
         checkToggles();
     }
 
@@ -208,7 +209,7 @@ public class GuildObject {
         rateLimiting = new ArrayList<>();
     }
 
-    public boolean rateLimit(long userID) {
+    public boolean rateLimit(long userID, IChannel channel, long timeStamp) {
         int max = config.messageLimit;
         if (max == -1) {
             return false;
@@ -216,7 +217,7 @@ public class GuildObject {
         boolean isfound = false;
         for (UserRateObject r : rateLimiting) {
             if (r.getID() == userID) {
-                r.counterUp();
+                r.counterUp(channel, timeStamp);
                 isfound = true;
                 if (r.counter > max) {
                     return true;
@@ -224,7 +225,7 @@ public class GuildObject {
             }
         }
         if (!isfound) {
-            rateLimiting.add(new UserRateObject(userID));
+            rateLimiting.add(new UserRateObject(userID, channel, timeStamp));
         }
         return false;
     }
@@ -306,6 +307,7 @@ public class GuildObject {
         if (general != null && command.channel.longID != general.getLongID()) {
             return;
         }
+        if (!GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER)) return;
         IMessage message = RequestHandler.sendMessage(Constants.getWelcomeMessage(command), command.channel.get()).get();
         if (message != null) {
             command.guild.config.welcomeMessage = true;
@@ -365,5 +367,13 @@ public class GuildObject {
 
     public IRole getTopTenRole() {
         return object.getRoleByID(config.topTenRoleID);
+    }
+
+    public List<IRole> getCosmeticRoles() {
+        return config.getCosmeticRoleIDs().stream().map(id -> object.getRoleByID(id)).collect(Collectors.toList());
+    }
+
+    public List<IRole> getModifierRoles() {
+        return config.getModifierRoleIDs().stream().map(id -> object.getRoleByID(id)).collect(Collectors.toList());
     }
 }

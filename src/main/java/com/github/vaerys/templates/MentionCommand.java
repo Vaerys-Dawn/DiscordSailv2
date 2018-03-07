@@ -1,18 +1,12 @@
 package com.github.vaerys.templates;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.SubCommandObject;
 import sx.blah.discord.handle.obj.IUser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public abstract class MentionCommand extends Command {
 
@@ -33,7 +27,8 @@ public abstract class MentionCommand extends Command {
             return false;
         }
         List<IUser> users = command.message.getMentions();
-        if (!users.contains(command.client.bot.get())) {
+        IUser bot = command.client.bot.get();
+        if (bot == null || !users.contains(bot)) {
             return false;
         }
         SplitFirstObject call = new SplitFirstObject(mention.getRest());

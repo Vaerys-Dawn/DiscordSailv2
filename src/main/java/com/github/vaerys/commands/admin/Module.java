@@ -13,7 +13,7 @@ public class Module extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return new Toggle().getContent(args, command, true, this);
+        return new Toggle().getContent(args, command, true);
     }
 
     @Override

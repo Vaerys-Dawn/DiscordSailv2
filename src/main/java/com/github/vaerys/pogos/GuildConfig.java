@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  */
 public class GuildConfig extends GuildFile {
     public static final String FILE_PATH = "Guild_Config.json";
+    private double fileVersion = 1.3;
     //setup vars
     public SetupHandler.SetupStage setupStage = SetupHandler.SetupStage.SETUP_UNSET;
     public long setupUser = -1;
@@ -91,14 +92,14 @@ public class GuildConfig extends GuildFile {
     long guildID = -1;
     long roleToMentionID = -1;
     long mutedRoleID = -1;
+    long inviteAllowedID = -1;
     ArrayList<Long> cosmeticRoleIDs = new ArrayList<>();
     ArrayList<Long> modifierRoleIDs = new ArrayList<>();
-    ArrayList<Long> trustedRoleIDs = new ArrayList<>();
+//    ArrayList<Long> trustedRoleIDs = new ArrayList<>();
 
     // TODO: 04/10/2016 let the mention limit be customisable.
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     ArrayList<OffenderObject> offenders = new ArrayList<>();
-    private double fileVersion = 1.2;
     private String joinMessage = "> Welcome to the <server> server <user>.";
     private DailyMessage lastDailyMessage = null;
     private ArrayList<String> xpDeniedPrefixes = new ArrayList<>();
@@ -179,12 +180,9 @@ public class GuildConfig extends GuildFile {
                 iterator.remove();
             }
         }
-        iterator = trustedRoleIDs.listIterator();
-        while (iterator.hasNext()) {
-            IRole role = guild.getRoleByID((Long) iterator.next());
-            if (role == null) {
-                iterator.remove();
-            }
+        IRole inviteAllowedRole = guild.getRoleByID(inviteAllowedID);
+        if (inviteAllowedRole == null) {
+            inviteAllowedID = -1;
         }
         IRole mutedRole = guild.getRoleByID(mutedRoleID);
         if (mutedRole == null) {
@@ -216,15 +214,11 @@ public class GuildConfig extends GuildFile {
 
     public boolean testIsTrusted(IUser author, IGuild guild) {
         validateRoles();
-        if (trustedRoleIDs.size() == 0) {
+        IRole inviteAllowed = guild.getRoleByID(inviteAllowedID);
+        if (inviteAllowed == null) {
             return true;
         } else {
-            for (IRole r : author.getRolesForGuild(guild)) {
-                if (isRoleTrusted(r.getLongID())) {
-                    return true;
-                }
-            }
-            return false;
+            return author.getRolesForGuild(guild).contains(inviteAllowed);
         }
     }
 
@@ -256,9 +250,9 @@ public class GuildConfig extends GuildFile {
         this.mutedRoleID = mutedRole;
     }
 
-    public ArrayList<Long> getTrustedRoleIDs() {
+    public long getInviteAllowedID() {
         validateRoles();
-        return trustedRoleIDs;
+        return inviteAllowedID;
     }
 
     public boolean isRoleCosmetic(long id) {
@@ -271,9 +265,9 @@ public class GuildConfig extends GuildFile {
         return modifierRoleIDs.contains(id);
     }
 
-    public boolean isRoleTrusted(long id) {
+    public boolean isRoleInviteAllowed(long id) {
         validateRoles();
-        return trustedRoleIDs.contains(id);
+        return inviteAllowedID == id;
     }
 
     public boolean isRoleReward(long id) {
@@ -448,5 +442,9 @@ public class GuildConfig extends GuildFile {
 
     public void setRuleCode(String ruleCode) {
         this.ruleCode = ruleCode;
+    }
+
+    public void setInviteAllowed(long inviteAllowed) {
+        this.inviteAllowedID = inviteAllowed;
     }
 }

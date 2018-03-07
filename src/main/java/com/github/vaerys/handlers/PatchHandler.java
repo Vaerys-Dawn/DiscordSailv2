@@ -46,7 +46,8 @@ public class PatchHandler {
 
         //1.3 fixes
         sanitizer(guild);
-        UpdateChannelTypesForCodeConventions(guild);
+        updateChannelTypesForCodeConventions(guild);
+        refactorTrustedToInviteAllowed(guild);
 
         //1.4 fixes
         removeNullPrefix(guild);
@@ -79,6 +80,20 @@ public class PatchHandler {
         FileHandler.writeToJson(patch.getPath(), patch.getObject());
     }
 
+    private static void refactorTrustedToInviteAllowed(IGuild guild) {
+        PatchObject patch = getJsonConfig(guild, GuildConfig.FILE_PATH,
+                1.3, "Refactor_Trusted_To_Invite_Allowed");
+        if (patch == null) return;
+
+        JsonArray array = patch.getObject().get("trustedRoleIDs").getAsJsonArray();
+        patch.getObject().remove("trustedRoleIDs");
+        if (array.size() != 0) {
+            patch.getObject().addProperty("inviteAllowedID", array.get(0).getAsLong());
+        }
+
+        finalizePatch(patch);
+    }
+
     private static void changeChannelSettingsToEnum(IGuild guild) {
         PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
                 1.2, "Change_ChannelSettings_To_Enum");
@@ -100,7 +115,7 @@ public class PatchHandler {
         finalizePatch(json);
     }
 
-    private static void UpdateChannelTypesForCodeConventions(IGuild guild) {
+    private static void updateChannelTypesForCodeConventions(IGuild guild) {
         PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
                 1.3, "");
         if (json == null) return;

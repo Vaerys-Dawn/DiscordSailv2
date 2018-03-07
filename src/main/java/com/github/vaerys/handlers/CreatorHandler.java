@@ -30,7 +30,6 @@ public class CreatorHandler {
             if (c.isCall(message, command)) {
                 String args = c.getArgs(message, command);
                 RequestHandler.sendMessage(c.execute(args, command), command.channel.get());
-
                 MessageHandler.handleLogging(command, c, args);
                 return;
             }

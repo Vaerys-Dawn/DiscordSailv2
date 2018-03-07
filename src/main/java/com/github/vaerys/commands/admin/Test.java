@@ -14,6 +14,7 @@ import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.DiscordException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,54 +35,54 @@ public class Test extends Command {
     @Override
     public String execute(String args, CommandObject command) {
 
-        StringHandler output = new StringHandler();
-        output.append("Next step is to pick which settings you want to use.\n")
-                .append("There's a lot of settings in modules, and those will be set there.\n")
-                .append("Here's a list of the settings that aren't tied to any specific module.\n\n");
-
-        List<GuildToggle> globalToggles = ToggleInit.getToggles(false);
-        List<GuildToggle> modules = ToggleInit.getToggles(true);
-        List<String> enabled = new LinkedList<>();
-        List<String> disabled = new LinkedList<>();
-
-
-        globalToggles.sort(Comparator.comparing(GuildToggle::name));
-
-        List<SAILType> types = new LinkedList<>();
-
-        modules.forEach(t -> types.addAll(t.settings.stream().map(s -> s.name()).collect(Collectors.toList())));
-
-        if (!new DebugMode().getDefault()) {
-            globalToggles.removeIf(t -> t.name() == SAILType.DEBUG_MODE);
-        }
-
-        ListIterator iterator = globalToggles.listIterator();
-        while (iterator.hasNext()) {
-            GuildToggle toggle = (GuildToggle) iterator.next();
-            if (types.contains(toggle.name())) {
-                iterator.remove();
-            } else {
-                if (toggle.enabled(command.guild.config)) enabled.add(toggle.name().toString());
-                else disabled.add(toggle.name().toString());
-            }
-        }
-
-        String format = "\t> **%s** - %s\n";
-        for (GuildToggle t : globalToggles) {
-            output.appendFormatted(format, t.name().toString(), t.shortDesc(command));
-        }
-        output.append("\n");
-
-        output.append("You can switch settings on and off with **" +
-                new Toggle().getCommand(command) + "** and get more info on each setting with **" +
-                new HelpSettings().getCommand(command) + "**.");
-
-        XEmbedBuilder embed = new XEmbedBuilder(command);
-        embed.withTitle("Global Settings");
-        embed.appendField("Enabled", "```" + Utility.listFormatter(enabled, true) + "```", false);
-        embed.appendField("Disabled", "```" + Utility.listFormatter(disabled, true) + "```", false);
-        RequestHandler.sendEmbedMessage(output.toString(),embed, command.channel);
-        return null;
+//        StringHandler output = new StringHandler();
+//        output.append("Next step is to pick which settings you want to use.\n")
+//                .append("There's a lot of settings in modules, and those will be set there.\n")
+//                .append("Here's a list of the settings that aren't tied to any specific module.\n\n");
+//
+//        List<GuildToggle> globalToggles = ToggleInit.getToggles(false);
+//        List<GuildToggle> modules = ToggleInit.getToggles(true);
+//        List<String> enabled = new LinkedList<>();
+//        List<String> disabled = new LinkedList<>();
+//
+//
+//        globalToggles.sort(Comparator.comparing(GuildToggle::name));
+//
+//        List<SAILType> types = new LinkedList<>();
+//
+//        modules.forEach(t -> types.addAll(t.settings.stream().map(s -> s.name()).collect(Collectors.toList())));
+//
+//        if (!new DebugMode().getDefault()) {
+//            globalToggles.removeIf(t -> t.name() == SAILType.DEBUG_MODE);
+//        }
+//
+//        ListIterator iterator = globalToggles.listIterator();
+//        while (iterator.hasNext()) {
+//            GuildToggle toggle = (GuildToggle) iterator.next();
+//            if (types.contains(toggle.name())) {
+//                iterator.remove();
+//            } else {
+//                if (toggle.enabled(command.guild.config)) enabled.add(toggle.name().toString());
+//                else disabled.add(toggle.name().toString());
+//            }
+//        }
+//
+//        String format = "\t> **%s** - %s\n";
+//        for (GuildToggle t : globalToggles) {
+//            output.appendFormatted(format, t.name().toString(), t.shortDesc(command));
+//        }
+//        output.append("\n");
+//
+//        output.append("You can switch settings on and off with **" +
+//                new Toggle().getCommand(command) + "** and get more info on each setting with **" +
+//                new HelpSettings().getCommand(command) + "**.");
+//
+//        XEmbedBuilder embed = new XEmbedBuilder(command);
+//        embed.withTitle("Global Settings");
+//        embed.appendField("Enabled", "```" + Utility.listFormatter(enabled, true) + "```", false);
+//        embed.appendField("Disabled", "```" + Utility.listFormatter(disabled, true) + "```", false);
+//        RequestHandler.sendEmbedMessage(output.toString(),embed, command.channel);
+//        return null;
 
 
 //
@@ -105,7 +106,7 @@ public class Test extends Command {
 //        return botPerms.contains(Permissions.MANAGE_CHANNELS) ? "> I HAVE MANAGE_CHANNELS" : "> I DO NOT HAVE MANAGE_CHANNELS";
 
 //        return object.isSubCommand(command) + " " + object.getArgs(command) + " " + object.getCommandUsage(command);
-//        throw new DiscordException("TestException");
+        throw new DiscordException("TestException");
     }
 
     @Override

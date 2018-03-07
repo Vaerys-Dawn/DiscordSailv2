@@ -14,8 +14,7 @@ public class ClientObject {
         this.object = client;
         if (!client.isReady()) return;
         bot = new UserObject(client.getOurUser(), guild, this);
-        creator = new UserObject(client.fetchUser(Globals.creatorID), guild, this);
-
+        creator = new UserObject(fetchUser(Globals.creatorID), guild, this);
     }
 
     public IDiscordClient get() {
@@ -27,8 +26,6 @@ public class ClientObject {
     }
 
     public IUser fetchUser(long l) {
-        return RequestBuffer.request(() -> {
-            return object.fetchUser(l);
-        }).get();
+        return RequestBuffer.request(() -> object.fetchUser(l)).get();
     }
 }

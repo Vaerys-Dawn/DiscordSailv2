@@ -52,12 +52,11 @@ public class CustomCommands extends GuildFile {
             total += 100;
         }
         total += (XpHandler.getRewardCount(guild, user.longID) * 10);
-
-        if (user.isPatron) {
-            total += 20;
-        }
         if (guild.getOwnerID() == user.longID) {
             total = 200;
+        }
+        if (user.isPatron) {
+            total += 50;
         }
         return total;
     }

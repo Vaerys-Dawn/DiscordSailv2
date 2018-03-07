@@ -15,7 +15,7 @@ public class TagReplaceRandom extends TagReplaceObject {
     }
 
     @Override
-    public String execute(String from, CommandObject command, String args) {
+    public String execute(String from, CommandObject command, String args, List<ReplaceObject> toReplace) {
         List<String> splitArgs = getSplit(from);
         Random random = new Random();
         int randomNum = random.nextInt(splitArgs.size() - 1);

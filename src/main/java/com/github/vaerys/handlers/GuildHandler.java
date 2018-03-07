@@ -43,7 +43,7 @@ public class GuildHandler {
         }
         if (profile.getSettings().contains(DENY_AUTO_ROLE)) return;
 
-        IUser user = Globals.getClient().getUserByID(profile.getUserID());
+        IUser user = content.getUserByID(profile.getUserID());
         if (user == null) {
             return;
         }

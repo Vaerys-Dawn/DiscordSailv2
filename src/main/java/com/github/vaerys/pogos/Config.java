@@ -32,7 +32,7 @@ public class Config extends GlobalFile {
     public ArrayList<DailyMessage> dailyMessages = new ArrayList<>();
     public ArrayList<RandomStatusObject> randomStatuses = new ArrayList<RandomStatusObject>() {{
         add(new RandomStatusObject("Starbound", 10));
-        add(new RandomStatusObject("WarGroove", 5));
+        add(new RandomStatusObject("Wargroove", 5));
         add(new RandomStatusObject("Stardew Valley", 1));
         add(new RandomStatusObject("Pocket Rumble", 1));
         add(new RandomStatusObject("The Siege and the SandFox", 1));
@@ -46,6 +46,7 @@ public class Config extends GlobalFile {
         add(new RandomStatusObject("Wanderlust Rebirth", 1));
     }};
     private double fileVersion = 1.1;
+
 
     public static Config check(Config config) {
         if (config.resetToDefault) {

@@ -668,6 +668,9 @@ public class Utility {
                     .filter(c -> c.isVisibleInType(commandObject, type))
                     .collect(Collectors.toList());
         }
+        if (type != SAILType.DM) {
+            toReturn = toReturn.stream().filter(c -> c.channel != ChannelSetting.FROM_DM).collect(Collectors.toList());
+        }
         toReturn.sort(Comparator.comparing(o -> o.names[0]));
         return toReturn;
     }

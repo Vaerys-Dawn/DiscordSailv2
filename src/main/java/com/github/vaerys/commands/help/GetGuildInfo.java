@@ -18,7 +18,10 @@ import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -92,15 +95,11 @@ public class GetGuildInfo extends Command {
             if (command.guild.config.muteRepeatOffenders && command.guild.config.getMutedRoleID() != -1)
                 adminBuilder.append("\n**Messages Until AutoMute:** " + (command.guild.config.messageLimit - 3));
             if (command.guild.config.denyInvites) {
-                adminBuilder.append("\n**Trusted Roles:** ");
-                List<String> trustedRoles = new ArrayList<>();
-                for (Long id : command.guild.config.getTrustedRoleIDs()) {
-                    IRole role = command.guild.getRoleByID(id);
-                    if (role != null) {
-                        trustedRoles.add(role.getName());
-                    }
+                IRole role = command.guild.getRoleByID(command.guild.config.getInviteAllowedID());
+                if (role != null) {
+                    adminBuilder.append("\n**Invite Allowed Role:** ");
+                    adminBuilder.append(role.getName());
                 }
-                adminBuilder.append(Utility.listFormatter(trustedRoles, true));
             }
             if (adminBuilder.length() != 0) {
                 serverStats.append("\n\n**[ADMIN STATS]**" + adminBuilder.toString());
@@ -131,9 +130,9 @@ public class GetGuildInfo extends Command {
                 }
             }
 
-            toggles.appendField("MODULES", "**Enabled**```\n" + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
+            toggles.appendField("MODULES", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
                     "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.spacer, true);
-            toggles.appendField("SETTINGS", "**Enabled**```\n" + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
+            toggles.appendField("SETTINGS", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
                     "**Disabled**```" + Utility.listEnumFormatter(disabledSettings, true) + "```", true);
             RequestHandler.sendEmbedMessage("", toggles, channel).get();
         }
@@ -141,7 +140,7 @@ public class GetGuildInfo extends Command {
 
         if (GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
 
-            List<ChannelSetting> channelSettings = Arrays.asList(command.guild.channelSettings);
+            List<ChannelSetting> channelSettings = command.guild.channelSettings;
             channelSettings.sort(Comparator.comparing(ChannelSetting::toString));
             channelSettings.sort((o1, o2) -> Boolean.compare(o1.isSetting(), o2.isSetting()));
 
