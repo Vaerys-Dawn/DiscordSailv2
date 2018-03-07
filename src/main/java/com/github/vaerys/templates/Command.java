@@ -134,7 +134,7 @@ public abstract class Command {
                 validStates.add(s + subCommandObject.getRegex());
             }
         });
-        String toTest = command.message.getContent();
+        String toTest = args;
         if (toTest.length() > 200) {
             toTest = StringUtils.truncate(toTest, 200);
         }

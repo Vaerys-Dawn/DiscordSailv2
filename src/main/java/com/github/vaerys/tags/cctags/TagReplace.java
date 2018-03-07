@@ -14,7 +14,7 @@ public class TagReplace extends TagReplaceObject {
     }
 
     @Override
-    public String execute(String from, CommandObject command, String args) {
+    public String execute(String from, CommandObject command, String args, List<ReplaceObject> toReplace) {
         List<String> splitArgs = getSplit(from);
         from = removeFirstTag(from);
         toReplace.add(new ReplaceObject(splitArgs.get(0), splitArgs.get(1)));

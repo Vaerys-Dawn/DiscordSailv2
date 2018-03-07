@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 
@@ -25,6 +26,7 @@ import java.time.DayOfWeek;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 14/08/2016.
@@ -52,6 +54,7 @@ public class TimerHandler {
     }
 
     public static void checkKeepAlive() {
+
         long now = System.currentTimeMillis();
         if (keepAliveTenSec - now > 10 * 4 * 1000) {
             logger.error("Ten Second Timer Failed to respond to keep alive. resetting.");
@@ -77,61 +80,60 @@ public class TimerHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                keepAliveMin = System.currentTimeMillis();
-                checkKeepAlive();
-                logger.trace("Reset speakers.");
+                try {
+                    keepAliveMin = System.currentTimeMillis();
+                    checkKeepAlive();
 
-                OperatingSystemMXBean operatingSystemMXBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-                cpuUsage.add(operatingSystemMXBean.getProcessCpuLoad());
+                    cpuUpdate();
 
-                if (cpuUsage.size() > 5) {
-                    cpuUsage.remove(0);
-                }
+                    clearSpeakers();
 
-                for (GuildObject g : Globals.getGuilds()) {
-                    g.getSpokenUsers().clear();
-                }
-                if (FileHandler.exists("screenlog.0") && FileHandler.exists("screenlog.closed")) {
-                    File file = new File("screenlog.0");
-                    if (file.length() > 1048576 * 10) {
-                        file.delete();
-                    }
-                } else if (FileHandler.exists("screenlog.0")) {
-                    File file = new File("screenlog.0");
-                    if (file.length() > 1048576 * 10) {
-                        IUser creator = Client.getClient().getUserByID(Globals.creatorID);
-                        if (creator == null) return;
-                        UserObject creatorUser = new UserObject(creator, null);
-                        creatorUser.sendDm("> screenlog.0 got too big, potential log spam, archived log to prevent loss of usage.");
-                        file.renameTo(new File("screenlog.closed"));
-                    }
+                    screenlogHandler();
+                } catch (Exception e) {
+                    Utility.sendStack(e);
                 }
             }
         }, initialDelay, 60 * 1000);
     }
 
-    //Reminder new setup.
-    public static void sendReminder(ReminderObject object) {
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        long initialDelay = object.getExecuteTime() - now.toEpochSecond();
-//        System.out.println(initialDelay + "");
-        if (initialDelay < 0) {
-            initialDelay = 5;
-        }
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                IMessage message = RequestHandler.sendMessage(object.getMessage(), Globals.getClient().getChannelByID(object.getChannelID())).get();
-                if (message == null) {
-                    logger.error("REMINDER FAILED FOR USER WITH ID \"" + object.getUserID() + "\" TO SEND. WILL ATTEMPT TO SEND AGAIN IN 5 MINS.");
-                    object.setSent(false);
-                } else {
-                    Globals.getGlobalData().removeReminder(object);
-                }
+    //Methods for Events that occur every min
+
+    private static void screenlogHandler() {
+        if (FileHandler.exists("screenlog.0") && FileHandler.exists("screenlog.closed")) {
+            File file = new File("screenlog.0");
+            if (file.length() > 1048576 * 10) {
+                file.delete();
             }
-        }, initialDelay * 1000);
+        } else if (FileHandler.exists("screenlog.0")) {
+            File file = new File("screenlog.0");
+            if (file.length() > 1048576 * 10) {
+                IUser creator = Client.getClient().getUserByID(Globals.creatorID);
+                if (creator == null) return;
+                UserObject creatorUser = new UserObject(creator, null);
+                creatorUser.sendDm("> screenlog.0 got too big, potential log spam, archived log to prevent loss of usage.");
+                file.renameTo(new File("screenlog.closed"));
+            }
+        }
     }
+
+    private static void cpuUpdate() {
+        OperatingSystemMXBean operatingSystemMXBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        cpuUsage.add(operatingSystemMXBean.getProcessCpuLoad());
+
+        if (cpuUsage.size() > 5) {
+            cpuUsage.remove(0);
+        }
+    }
+
+    private static void clearSpeakers() {
+        logger.trace("Reset speakers.");
+        for (GuildObject g : Globals.getGuilds()) {
+            g.getSpokenUsers().clear();
+        }
+    }
+
+    //----------------------------------------------------------------
+
 
     private static void doEventDaily(ZonedDateTime nowUTC) {
         ZonedDateTime midnightUTC = ZonedDateTime.now(ZoneOffset.UTC);
@@ -153,12 +155,8 @@ public class TimerHandler {
                 try {
                     keepAliveDaily = System.currentTimeMillis();
                     //init vars
-                    ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
-                    DayOfWeek day = timeNow.getDayOfWeek();
 
-                    Random random = new Random();
 
-//                day = DayOfWeek.values()[random.nextInt(DayOfWeek.values().length)];
                     //do checks
                     Client.checkPatrons();
                     checkKeepAlive();
@@ -173,41 +171,55 @@ public class TimerHandler {
                     //backups
                     Globals.backupAll();
 
-                    logger.info("Running Daily tasks for " + day);
+                    dailyMessageHandler(event);
 
-                    for (GuildObject task : Globals.getGuilds()) {
-                        GuildConfig guildconfig = task.config;
-                        //do decay
-                        GuildHandler.dailyTask(task);
 
-                        //reset offenders
-                        task.resetOffenders();
-
-                        //getToggles general channel
-                        IChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
-
-                        //do daily messages
-                        if (generalChannel != null && guildconfig.dailyMessage) {
-                            DailyMessage finalMessage;
-                            List<DailyMessage> messages;
-                            if (event != null && event.doSpecialMessages() && event.getMessagesDay(day).size() != 0) {
-                                messages = event.getMessagesDay(day);
-                            } else {
-                                messages = new ArrayList<>(Globals.getDailyMessages().getDailyMessages(day));
-                                messages.add(Globals.getDailyMessage(day));
-                            }
-                            int randomMessage = random.nextInt(messages.size());
-                            finalMessage = messages.get(randomMessage);
-                            task.config.setLastDailyMessage(finalMessage);
-                            CommandObject command = new CommandObject(task, generalChannel);
-                            RequestHandler.sendMessage(finalMessage.getContents(command), generalChannel);
-                        }
-                    }
                 } catch (Exception e) {
                     Utility.sendStack(e);
                 }
             }
         }, initialDelay * 1000, period);
+    }
+
+    private static void dailyMessageHandler(TimedEvent event) {
+        ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
+        DayOfWeek day = timeNow.getDayOfWeek();
+
+        logger.info("Running Daily tasks for " + day);
+
+        Random random = new Random();
+
+        //uncomment for a random day of the week.
+//          day = DayOfWeek.values()[random.nextInt(DayOfWeek.values().length)];
+
+        for (GuildObject task : Globals.getGuilds()) {
+            GuildConfig guildconfig = task.config;
+            //do decay
+            GuildHandler.dailyTask(task);
+
+            //reset offenders
+            task.resetOffenders();
+
+            //getToggles general channel
+            IChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
+
+            //do daily messages
+            if (generalChannel != null && guildconfig.dailyMessage) {
+                DailyMessage finalMessage;
+                List<DailyMessage> messages;
+                if (event != null && event.doSpecialMessages() && event.getMessagesDay(day).size() != 0) {
+                    messages = event.getMessagesDay(day);
+                } else {
+                    messages = new ArrayList<>(Globals.getDailyMessages().getDailyMessages(day));
+                    messages.add(Globals.getDailyMessage(day));
+                }
+                int randomMessage = random.nextInt(messages.size());
+                finalMessage = messages.get(randomMessage);
+                task.config.setLastDailyMessage(finalMessage);
+                CommandObject command = new CommandObject(task, generalChannel);
+                RequestHandler.sendMessage(finalMessage.getContents(command), generalChannel);
+            }
+        }
     }
 
     public static String addReminder(long userID, long channelID, long timeSecs, String message) {
@@ -242,33 +254,123 @@ public class TimerHandler {
         return "OK";
     }
 
+    //Reminder new setup.
+    public static void sendReminder(ReminderObject object) {
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        long initialDelay = object.getExecuteTime() - now.toEpochSecond();
+//        System.out.println(initialDelay + "");
+        if (initialDelay < 0) {
+            initialDelay = 5;
+        }
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                IMessage message = RequestHandler.sendMessage(object.getMessage(), Globals.getClient().getChannelByID(object.getChannelID())).get();
+                if (message == null) {
+                    logger.error("REMINDER FAILED FOR USER WITH ID \"" + object.getUserID() + "\" TO SEND. WILL ATTEMPT TO SEND AGAIN IN 5 MINS.");
+                    object.setSent(false);
+                } else {
+                    Globals.getGlobalData().removeReminder(object);
+                }
+            }
+        }, initialDelay * 1000);
+    }
+
     private static void doEventTenSec() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                keepAliveTenSec = System.currentTimeMillis();
-                for (GuildObject task : Globals.getGuilds()) {
-                    task.resetRateLimit();
-                    Globals.lastRateLimitReset = System.currentTimeMillis();
-                    if (task.getRateLimiting().size() != 0) {
-                        logger.error("Failed to clear list, forcing it to clear.");
-                        task.forceClearRate();
+                try {
+                    keepAliveTenSec = System.currentTimeMillis();
+                    for (GuildObject task : Globals.getGuilds()) {
+
+                        reportHandling(task);
+
+                        tenSecGuildTask(task);
                     }
-                    //Mutes.
-                    ArrayList<UserCountDown> mutedUsers = task.users.getMutedUsers();
-                    for (int i = 0; i < mutedUsers.size(); i++) {
-                        if (mutedUsers.get(i).getRemainderSecs() != -1) {
-                            mutedUsers.get(i).tickDown(10);
-                            if (mutedUsers.get(i).getRemainderSecs() == 0) {
-                                task.users.unMuteUser(mutedUsers.get(i).getID(), task.longID);
-                            }
-                        }
-                    }
+                } catch (Exception e) {
+                    Utility.sendStack(e);
                 }
             }
         }, 1000 * 10, 10 * 1000);
     }
+
+    private static void reportHandling(GuildObject task) {
+        List<UserRateObject> offenders = task.getRateLimiting();
+
+        IRole muteRole = task.getRoleByID(task.config.getMutedRoleID());
+        if (muteRole == null) return;
+
+        IChannel admin = task.getChannelByType(ChannelSetting.ADMIN);
+
+        for (UserRateObject u : offenders) {
+            if (u.counter - 3 > task.config.messageLimit) {
+                List<IChannel> channels = u.getChannels(task);
+                if (admin == null && !channels.isEmpty()) {
+                    admin = channels.get(channels.size() - 1);
+                }
+                StringHandler output = new StringHandler();
+                StringHandler modNote = new StringHandler();
+                IUser offender = u.getUser(task);
+
+                long rate = u.counter - task.config.messageLimit;
+
+                String formattedChannels = String.join(", ", channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()));
+
+                //Admin Message output
+                output.append("> ").append(offender.mention());
+                output.append(" Has Been muted for breaking the guild rate limit (");
+                output.append(rate);
+                output.append(" Over Rate)");
+                if (channels.size() == 1) {
+                    output.append(" in ").append(channels.get(0).mention());
+                } else if (channels.size() > 1) {
+                    output.append(" in channels: ");
+                    output.append(formattedChannels);
+                }
+                output.append(".");
+
+                //modNote Output
+                modNote.append("> Muted by Rate Limiter, ");
+                modNote.append(rate).append(" Over Rate, ");
+                modNote.append("Channel");
+                if (channels.size() > 1) modNote.append("s");
+                modNote.append(": ").append(formattedChannels);
+
+                //logging
+                if (task.config.deleteLogging) {
+                    Utility.sendLog("> **@" + offender.getName() + "#" + offender.getDiscriminator() + "** was muted for breaking rate limit.", task, true);
+                }
+
+                ProfileObject profile = task.users.getUserByID(u.getID());
+                profile.addSailModNote(modNote.toString(), u.timeStamp, false);
+                RequestHandler.sendMessage(output.toString(), admin);
+            }
+        }
+    }
+
+
+    private static void tenSecGuildTask(GuildObject task) {
+        task.resetRateLimit();
+        Globals.lastRateLimitReset = System.currentTimeMillis();
+        if (task.getRateLimiting().size() != 0) {
+            logger.error("Failed to clear list, forcing it to clear.");
+            task.forceClearRate();
+        }
+        //Mutes.
+        ArrayList<UserCountDown> mutedUsers = task.users.getMutedUsers();
+        for (int i = 0; i < mutedUsers.size(); i++) {
+            if (mutedUsers.get(i).getRemainderSecs() != -1) {
+                mutedUsers.get(i).tickDown(10);
+                if (mutedUsers.get(i).getRemainderSecs() == 0) {
+                    task.users.unMuteUser(mutedUsers.get(i).getID(), task.longID);
+                }
+            }
+        }
+    }
+
 
     private static void doEventFiveMin(ZonedDateTime nowUTC) {
         try {
@@ -298,79 +400,99 @@ public class TimerHandler {
                 try {
                     ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
                     keepAliveFiveMin = System.currentTimeMillis();
+
                     checkKeepAlive();
-                    for (ReminderObject object : Globals.getGlobalData().getReminders()) {
-                        if (object.getExecuteTime() - now.toEpochSecond() < 350) {
-                            if (!object.isSent()) {
-                                sendReminder(object);
-                                object.setSent(true);
-                            } else {
-                                if (object.getExecuteTime() - now.toEpochSecond() < 0) {
-                                    sendReminder(object);
-                                }
-                            }
-                        }
-                    }
-                    // grab current memory usage
-                    long freeMemory = Runtime.getRuntime().freeMemory();
-                    long totalMemory = Runtime.getRuntime().totalMemory();
-                    long usedMemory = totalMemory - freeMemory;
-                    // and make it look pretty
-                    StringBuilder memString = new StringBuilder();
-                    NumberFormat nf = NumberFormat.getInstance();
-                    memString.append("Memory Usage: ");
-                    memString.append(nf.format(totalMemory / 1024)).append("KB total\t");
-                    memString.append(nf.format(usedMemory / 1024)).append("KB used\t");
-                    memString.append(nf.format(freeMemory / 1024)).append("KB free");
-                    double avgCpu = 0;
-                    for (Double i : cpuUsage) {
-                        avgCpu += i;
-                    }
-                    avgCpu /= cpuUsage.size();
-                    //Sending isAlive Check.
-                    if (Globals.showSaveWarning) {
-                        logger.info("Total active threads: " + Thread.activeCount() + "\tCPU Usage: " + nf.format(avgCpu * 100) + "%");
-                        logger.info(memString.toString());
-                        logger.info("Backup in 5 seconds do not restart.");
-                    } else {
-                        logger.debug("Total active threads: " + Thread.activeCount() + "\tCPU Usage: " + nf.format(avgCpu * 100) + "%");
-                        logger.debug(memString.toString());
-                        logger.debug("Backup in 5 seconds do not restart.");
-                    }
-                    Thread.sleep(5000);
-                    Globals.getClient().checkLoggedIn("Check Online status");
-                    randomPlayingStatus();
-                    Globals.saveFiles(false);
-                    if (Globals.showSaveWarning) {
-                        logger.info("Files Saved.");
-                    } else {
-                        logger.debug("Files Saved.");
-                    }
-                } catch (DiscordException e) {
-                    logger.error(e.getErrorMessage());
-                    logger.info("Logging back in.");
-                    try {
-//                        Globals.client.logout();
-                        Thread.sleep(4000);
-                        Globals.getClient().login();
-                        RequestHandler.changePresence("Recovered From Crash.");
-                        return;
-                    } catch (DiscordException e2) {
-                        if (!e2.getMessage().contains("login")) {
-                            Utility.sendStack(e2);
-                        }
-                    } catch (IllegalStateException ex) {
-                        //ignore exception
-                    } catch (InterruptedException e1) {
-                        Utility.sendStack(e1);
-                    }
-                } catch (InterruptedException e) {
-                    Utility.sendStack(e);
+
+                    reminderHandler(now);
+
+                    botStatsHandler();
+
+                    saveHandler();
+
                 } catch (Exception e) {
                     Utility.sendStack(e);
                 }
             }
         }, initialDelay * 1000, 5 * 60 * 1000);
+    }
+
+    private static void saveHandler() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            Utility.sendStack(e);
+        }
+        try {
+            Globals.getClient().checkLoggedIn("Check Online status");
+            randomPlayingStatus();
+            Globals.saveFiles(false);
+            if (Globals.showSaveWarning) {
+                logger.info("Files Saved.");
+            } else {
+                logger.debug("Files Saved.");
+            }
+        } catch (DiscordException e) {
+            logger.error(e.getErrorMessage());
+            logger.info("Logging back in.");
+            try {
+                Thread.sleep(4000);
+                Globals.getClient().login();
+                RequestHandler.changePresence("Recovered From Crash.");
+                return;
+            } catch (DiscordException e2) {
+                if (!e2.getMessage().contains("login")) {
+                    Utility.sendStack(e2);
+                }
+            } catch (IllegalStateException ex) {
+                //ignore exception
+            } catch (InterruptedException e1) {
+                Utility.sendStack(e1);
+            }
+        }
+    }
+
+    private static void botStatsHandler() {
+        // grab current memory usage
+        long freeMemory = Runtime.getRuntime().freeMemory();
+        long totalMemory = Runtime.getRuntime().totalMemory();
+        long usedMemory = totalMemory - freeMemory;
+        // and make it look pretty
+        StringBuilder memString = new StringBuilder();
+        NumberFormat nf = NumberFormat.getInstance();
+        memString.append("Memory Usage: ");
+        memString.append(nf.format(totalMemory / 1024)).append("KB total\t");
+        memString.append(nf.format(usedMemory / 1024)).append("KB used\t");
+        memString.append(nf.format(freeMemory / 1024)).append("KB free");
+        double avgCpu = 0;
+        for (Double i : cpuUsage) {
+            avgCpu += i;
+        }
+        avgCpu /= cpuUsage.size();
+        //Sending isAlive Check.
+        if (Globals.showSaveWarning) {
+            logger.info("Total active threads: " + Thread.activeCount() + "\tCPU Usage: " + nf.format(avgCpu * 100) + "%");
+            logger.info(memString.toString());
+            logger.info("Backup in 5 seconds do not restart.");
+        } else {
+            logger.debug("Total active threads: " + Thread.activeCount() + "\tCPU Usage: " + nf.format(avgCpu * 100) + "%");
+            logger.debug(memString.toString());
+            logger.debug("Backup in 5 seconds do not restart.");
+        }
+    }
+
+    private static void reminderHandler(ZonedDateTime now) {
+        for (ReminderObject object : Globals.getGlobalData().getReminders()) {
+            if (object.getExecuteTime() - now.toEpochSecond() < 350) {
+                if (!object.isSent()) {
+                    sendReminder(object);
+                    object.setSent(true);
+                } else {
+                    if (object.getExecuteTime() - now.toEpochSecond() < 0) {
+                        sendReminder(object);
+                    }
+                }
+            }
+        }
     }
 
     private static void randomPlayingStatus() {

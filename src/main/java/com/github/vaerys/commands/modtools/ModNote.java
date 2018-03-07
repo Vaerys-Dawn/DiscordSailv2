@@ -36,8 +36,8 @@ public class ModNote extends Command {
         String userCall = argsSplitter.getFirstWord();
         String opts = argsSplitter.getRest();
         // empty user arg is not allowed;
-        if (userCall == null) return missingArgs(command);
-        if (opts == null) opts = "list";
+        if (userCall == null || userCall.isEmpty()) return missingArgs(command);
+        if (opts == null || opts.isEmpty()) opts = "list";
 
         UserObject user = Utility.getUser(command, userCall, false);
         ProfileObject profile = user.getProfile(command.guild);
@@ -103,7 +103,7 @@ public class ModNote extends Command {
                         return "> Strike set for note " + index + " for user " + user.displayName + ".";
                     }
 
-                // "delete" command
+                    // "delete" command
                 case "delete":
                 case "del":
                 case "remove":

@@ -5,7 +5,9 @@ import com.github.vaerys.commands.help.HelpModules;
 import com.github.vaerys.commands.help.HelpSettings;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleInit;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
@@ -23,40 +25,39 @@ public class Toggle extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return getContent(args, command, false, this);
+        return getContent(args, command, false);
     }
 
-    public String getContent(String args, CommandObject command, boolean isModule, Command classObject) {
+    public String getContent(String args, CommandObject command, boolean isModule) {
         StringBuilder builder = new StringBuilder();
         if (!args.isEmpty()) {
-            for (GuildToggle t : command.guild.toggles) {
-                if (t.isModule() == isModule) {
-                    if (args.equalsIgnoreCase(t.name().toString())) {
-                        t.toggle(command.guild.config);
-                        command.guild.loadCommandData();
 
-                        String mode = t.enabled(command.guild.config) ? "enabled" : "disabled";
-                        String type = t.isModule() ? "module" : "setting";
-                        String helpCommand = t.isModule() ? new HelpModules().getUsage(command) : new HelpSettings().getUsage(command);
-                        return "> **" + t.name() + "** is now **" + mode + "**.\n\n" +
-                                "To see more info about what this " + type + " " + mode + " you can run **" + helpCommand + "**.";
-                    }
+            GuildToggle toggle = ToggleInit.getGuildToggle(args, isModule);
+
+            if (toggle == null) {
+                if (isModule) {
+                    builder.append("> Could not find Module \"" + args + "\".\n");
+                } else {
+                    builder.append("> Could not find Setting \"" + args + "\".\n");
                 }
-            }
-            if (isModule) {
-                builder.append("> Could not find Module \"" + args + "\".\n");
             } else {
-                builder.append("> Could not find Setting \"" + args + "\".\n");
+
+                toggle.toggle(command.guild.config);
+                command.guild.loadCommandData();
+
+                String mode = toggle.enabled(command.guild.config) ? "enabled" : "disabled";
+                String type = toggle.isModule() ? "module" : "setting";
+                String helpCommand = toggle.isModule() ? new HelpModules().getUsage(command) : new HelpSettings().getUsage(command);
+                return "> **" + toggle.name() + "** is now **" + mode + "**.\n\n" +
+                        "To see more info about what this " + type + " " + mode + " you can run **" + helpCommand + "**.";
             }
 
         }
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
+        String modifier = isModule ? "Module" : "Setting";
         String title;
-        if (isModule) {
-            title = "> Here are all of the available Modules:\n";
-        } else {
-            title = "> Here are all of the available Settings:\n";
-        }
+        title = "> Here are all of the available " + modifier + "s:\n";
+
         List<SAILType> typesActive = new LinkedList<>();
         List<SAILType> typesDeactivated = new LinkedList<>();
         for (GuildToggle t : command.guild.toggles) {
@@ -68,9 +69,21 @@ public class Toggle extends Command {
         Collections.sort(typesActive);
         Collections.sort(typesDeactivated);
         embedBuilder.withTitle(title);
-        embedBuilder.withDescription("**Activated**\n```\n" + Utility.listEnumFormatter(typesActive, true) + "```\n" +
-                "**Deactivated**\n```\n" + Utility.listEnumFormatter(typesDeactivated, true) + "```\n" +
-                missingArgs(command));
+
+        StringHandler desc = new StringHandler();
+
+
+        desc.append("**Activated**\n```\n" + spacer + Utility.listEnumFormatter(typesActive, true) + "```\n" +
+                "**Deactivated**\n```\n" + spacer + Utility.listEnumFormatter(typesDeactivated, true) + "```\n");
+        desc.append("The Command **");
+        if (isModule) {
+            desc.append(new HelpModules().getUsage(command));
+        } else {
+            desc.append(new HelpSettings().getUsage(command));
+        }
+        desc.append("** Can give you extra information about each of the above.\n\n");
+        desc.append(missingArgs(command));
+        embedBuilder.withDescription(desc.toString());
         RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
         return null;
     }

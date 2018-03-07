@@ -29,6 +29,8 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Vaerys on 03/08/2016.
@@ -196,6 +198,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMessageDeleteEvent(MessageDeleteEvent event) {
+        if (event.getChannel().isPrivate()) return;
         if (!Globals.isReady) return;
         if (event.getMessage() == null) return;
         if (event.getGuild().getUserByID(event.getAuthor().getLongID()) == null) return;

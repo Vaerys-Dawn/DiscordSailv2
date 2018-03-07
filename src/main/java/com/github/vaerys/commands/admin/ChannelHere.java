@@ -1,6 +1,7 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.help.HelpChannel;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
@@ -34,12 +35,13 @@ public class ChannelHere extends Command {
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String title = "> Here are all of the channel Types and Settings:";
 
-        List<ChannelSetting> channelSettings = Arrays.asList(command.guild.channelSettings);
+        List<ChannelSetting> channelSettings = command.guild.channelSettings;
         List<String> types = channelSettings.stream().filter(channelSetting -> !channelSetting.isSetting()).map(ChannelSetting::toString).collect(Collectors.toList());
         List<String> settings = channelSettings.stream().filter(channelSetting -> channelSetting.isSetting()).map(ChannelSetting::toString).collect(Collectors.toList());
         Collections.sort(types);
-        desc += "**Types**\n```\n" + Utility.listFormatter(types, true) + "```\n" + "**Settings**\n```\n" + Utility.listFormatter(settings, true) + "```\n" + missingArgs(command);
-
+        desc += "**Types**\n```\n" + spacer + Utility.listFormatter(types, true) + "```\n" + spacer + "**Settings**\n```\n" + Utility.listFormatter(settings, true) + "```\n";
+        desc += "The Command **" + new HelpChannel().getUsage(command) + "** Can give you extra information about each of the above.\n\n";
+        desc += missingArgs(command);
         embedBuilder.withDesc(desc);
         embedBuilder.withTitle(title);
         RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
