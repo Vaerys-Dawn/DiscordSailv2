@@ -36,7 +36,7 @@ public class ModNote extends Command {
         String userCall = argsSplitter.getFirstWord();
         String opts = argsSplitter.getRest();
         // empty user arg is not allowed;
-        if (userCall == null) return missingArgs(command);
+        if (userCall == null || userCall.isEmpty()) return missingArgs(command);
         if (opts == null || opts.isEmpty()) opts = "list";
 
         UserObject user = Utility.getUser(command, userCall, false);
