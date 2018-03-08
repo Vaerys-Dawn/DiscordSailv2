@@ -64,7 +64,7 @@ public class CommandInit {
         commands.add(new SetRuleCode());
         commands.add(new SetRuleCodeReward());
         commands.add(new SetTrustedRoles());
-        commands.add(new SetupWizard());
+//        commands.add(new SetupWizard());
         commands.add(new Toggle());
         commands.add(new UpdateInfo());
         commands.add(new UpdateRolePerms());
