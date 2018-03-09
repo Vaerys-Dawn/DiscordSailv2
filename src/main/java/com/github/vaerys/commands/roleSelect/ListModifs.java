@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class ListModifs extends Command {
 
     public static XEmbedBuilder getList(CommandObject command) {
-        String title = "> Here are the **Modifier** roles you can choose from:\n";
+        String title = "> Here are the Modifier roles you can choose from:";
         List<String> list = command.guild.getModifierRoles().stream().map(iRole -> iRole.getName()).collect(Collectors.toList());
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(title);
