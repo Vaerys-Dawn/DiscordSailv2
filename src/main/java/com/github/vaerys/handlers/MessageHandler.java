@@ -33,11 +33,11 @@ public class MessageHandler {
             if (SpamHandler.rateLimiting(command)) return;
             if (SpamHandler.catchWalls(command)) return;
             XpHandler.grantXP(command);
-            if (command.guild.config.artPinning) {
-                if (command.guild.config.autoArtPinning) {
-                    ArtHandler.pinMessage(command);
-                }
-            }
+//            if (command.guild.config.artPinning) {
+//                if (command.guild.config.autoArtPinning) {
+//                    ArtHandler.pinMessage(command);
+//                }
+//            }
             if (command.guild.config.moduleCC) {
                 if (args.toLowerCase().startsWith(command.guild.config.getPrefixCC().toLowerCase())) {
                     CCHandler.handleCommand(args, command);

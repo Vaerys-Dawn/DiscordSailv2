@@ -112,6 +112,7 @@ public class ArtHandler {
             //add pin response
             RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_ADD_PIN)));
             //if like art
+
             if (command.guild.config.likeArt && command.guild.config.modulePixels) {
                 //add heart
                 RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_LIKE_PIN)));
