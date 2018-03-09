@@ -63,7 +63,7 @@ public class Mute extends Command {
         String timeValue = "";
 
         if (timeSecs > 0) {
-            timeValue = " for " + Utility.formatTime(timeSecs, true);
+            timeValue = Utility.formatTime(timeSecs, true);
         }
 
         if (Pattern.compile("(^⚠ | ⚠|⚠)").matcher(reason.toString()).find()) {
@@ -80,7 +80,7 @@ public class Mute extends Command {
 
         if (reason.toString().isEmpty()) reason.setContent("No reason given");
         // final responses:
-        String response = String.format(msgFormat, muted.displayName, timeValue);
+        String response = String.format(msgFormat, muted.displayName, " for " + timeValue);
 
         if (adminChannel != null) {
             RequestHandler.sendMessage(response + String.format(adminMsg, command.user.displayName,
@@ -106,7 +106,7 @@ public class Mute extends Command {
 
     @Override
     protected String usage() {
-        return "[@User] [+/-/add/del] (Time) (Reason)";
+        return "[@User] (Time) (Reason)";
     }
 
     @Override
