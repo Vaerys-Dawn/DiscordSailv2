@@ -134,13 +134,14 @@ public abstract class Command {
                 validStates.add(s + subCommandObject.getRegex());
             }
         });
-        String toTest = args;
+        String toTest = command.message.getContent();
         if (toTest.length() > 200) {
             toTest = StringUtils.truncate(toTest, 200);
         }
         for (String s : validStates) {
-            String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + "(.|\n)*";
-            if (Pattern.compile(regexString).matcher(toTest).matches()) {
+            String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + " (.|\n)*";
+            String regexStringEnd = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + "$";
+            if (Pattern.compile(regexString).matcher(toTest).matches() || Pattern.compile(regexStringEnd).matcher(toTest).matches()) {
                 return true;
             }
         }
@@ -282,7 +283,7 @@ public abstract class Command {
         String prefix = command.guild.config.getPrefixCommand();
         List<String> allNames = new ArrayList<>(Arrays.asList(names));
         for (SubCommandObject s : subCommands) {
-            if (GuildHandler.testForPerms(command,s.getPermissions())) {
+            if (GuildHandler.testForPerms(command, s.getPermissions())) {
                 allNames.addAll(Arrays.asList(s.getNames()));
             }
         }

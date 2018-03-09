@@ -376,4 +376,8 @@ public class GuildObject {
     public List<IRole> getModifierRoles() {
         return config.getModifierRoleIDs().stream().map(id -> object.getRoleByID(id)).collect(Collectors.toList());
     }
+
+    public IRole getRuleCodeRole() {
+        return object.getRoleByID(config.ruleCodeRewardID);
+    }
 }

@@ -54,6 +54,7 @@ public class CommandInit {
         commands.add(new Module());
         commands.add(new Mute());
         commands.add(new PropMutePerms());
+        commands.add(new ResetRuleCode());
         commands.add(new PruneEmptyProfiles());
         commands.add(new PurgeBannedData());
         commands.add(new SetAdminRole());

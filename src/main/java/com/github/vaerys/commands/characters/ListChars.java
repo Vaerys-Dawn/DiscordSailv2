@@ -31,7 +31,7 @@ public class ListChars extends Command {
                 return "> Could not find user.";
             }
             if (user.longID != command.user.longID) {
-                title = "> Here are all of **@" + user.displayName + "'s** Characters.";
+                title = "> Here are all of @" + user.displayName + "'s Characters.";
             }
         }
         //check private
@@ -39,7 +39,7 @@ public class ListChars extends Command {
             return "> User has set their profile to private.";
         }
         //generate list
-        List<String> list = command.user.characters.stream().map(c -> c.getName()).collect(Collectors.toList());
+        List<String> list = user.characters.stream().map(c -> c.getName()).collect(Collectors.toList());
         //give message if empty
         if (list.size() == 0) {
             return "> You do not have any characters yet. Create one with **" + new UpdateChar().getUsage(command) + "**.";
@@ -47,7 +47,7 @@ public class ListChars extends Command {
         //build embed data
         builder.withTitle(title);
         builder.withDesc("```\n" + Utility.listFormatter(list, true) + "```\n" + new CharInfo().missingArgs(command));
-        builder.withFooterText(command.user.characters.size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
+        builder.withFooterText(user.characters.size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
         //send private char list
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());

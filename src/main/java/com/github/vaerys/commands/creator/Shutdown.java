@@ -23,7 +23,7 @@ public class Shutdown extends Command {
         try {
             Thread.sleep(4000);
             Globals.getClient().logout();
-            System.exit(Constants.EXITCODE_NORMAL);
+            System.exit(Constants.EXITCODE_STOP);
         } catch (DiscordException e) {
             Utility.sendStack(e);
         } catch (InterruptedException e) {

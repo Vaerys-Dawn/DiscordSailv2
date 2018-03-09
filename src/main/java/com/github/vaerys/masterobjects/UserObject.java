@@ -52,6 +52,11 @@ public class UserObject {
         init(object, guild, false);
     }
 
+    public UserObject(long id, GuildObject content) {
+        this.client = content.client;
+        init(content.getUserByID(id), content, true);
+    }
+
     private void init(IUser object, GuildObject guild, boolean light) {
         if (object == null) return;
         this.object = object;

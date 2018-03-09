@@ -35,6 +35,7 @@ public class Mute extends Command {
         IRole mutedRole = command.guild.getMutedRole();
         UserObject muted = Utility.getUser(command, userCall.getFirstWord(), false, false);
         if (muted == null) return "> Could not find user";
+        if (muted.getProfile(command.guild) == null) muted.addProfile(command.guild);
         if (mutedRole == null) return "> Muted role is not configured.";
 
         // Un mute subtype
@@ -71,9 +72,9 @@ public class Mute extends Command {
         }
 
         // setup muted messages
-        String msgFormat = "> **%s** was muted %s"; // name was muted for timevalue;
-        String adminMsg = " by %s in %s with reason `%s`"; // > name was muted for timevalue by mod in channel with `reason`;
-        String modnote = "%s muted with reason `%s` %s in %s"; //name muted with reason `reason` for timevalue in channel;
+        String msgFormat = "> **%s** was muted%s"; // name was muted for timevalue;
+        String adminMsg = " by %s in %s with reason `%s`."; // > name was muted for timevalue by mod in channel with `reason`;
+        String modnote = "Muted by %s. Reason: `%s`. Time: %s. Channel: %s."; //name muted with reason `reason` for timevalue in channel;
         IChannel adminChannel = command.guild.getChannelByType(ChannelSetting.ADMIN);
 
 
