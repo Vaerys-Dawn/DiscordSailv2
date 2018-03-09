@@ -29,8 +29,6 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by Vaerys on 03/08/2016.
@@ -243,7 +241,7 @@ public class AnnotationListener {
     public void onUserJoinEvent(UserJoinEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
         if (!content.config.moduleLogging) return;
-        UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getLongID()));
+        UserObject user = new UserObject(event.getUser().getLongID(), content);
         if (content.config.joinsServerMessages && !user.get().isBot()) {
             String message = content.config.getJoinMessage();
             message = message.replace("<server>", event.getGuild().getName());
@@ -252,6 +250,10 @@ public class AnnotationListener {
         }
         for (UserCountDown u : content.users.mutedUsers) {
             if (u.getID() == event.getUser().getLongID()) {
+                IChannel admin = content.getChannelByType(ChannelSetting.ADMIN);
+                if (admin != null) {
+                    RequestHandler.sendMessage("> Looks like " + user.mention() + " has returned, I have muted them again for you.", admin);
+                }
                 RequestHandler.roleManagement(user, content, content.config.getMutedRoleID(), true);
             }
         }

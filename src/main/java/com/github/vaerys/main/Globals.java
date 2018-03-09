@@ -130,7 +130,7 @@ public class Globals {
         // validate commands
         if (errorStack != null) {
             logger.error("\n>> Begin Error Report <<\n" + errorStack + ">> End Error Report <<");
-            System.exit(Constants.EXITCODE_CONF_ERROR);
+            System.exit(Constants.EXITCODE_STOP);
         }
 
 

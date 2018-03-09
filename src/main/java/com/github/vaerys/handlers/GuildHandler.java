@@ -1,6 +1,8 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
@@ -36,6 +38,9 @@ public class GuildHandler {
 
     public static void checkUsersRoles(long id, GuildObject content) {
 
+        //don't try to edit your own roles ya butt.
+        if (id == Client.getClient().getOurUser().getLongID()) return;
+
         //do code.
         ProfileObject profile = content.users.getUserByID(id);
         if (profile == null) {
@@ -51,7 +56,13 @@ public class GuildHandler {
 
         if (content.config.readRuleReward) {
             IRole ruleReward = content.getRoleByID(content.config.ruleCodeRewardID);
-            if (ruleReward != null) userRoles.add(ruleReward);
+            if (ruleReward != null) {
+                if (profile.getSettings().contains(UserSetting.READ_RULES)) {
+                    userRoles.add(ruleReward);
+                } else {
+                    userRoles.remove(ruleReward);
+                }
+            }
         }
 
         if (content.config.modulePixels && content.config.xpGain) {
@@ -236,6 +247,6 @@ public class GuildHandler {
     }
 
     public static boolean testForPerms(IUser user, IGuild guild, List<Permissions> perms) {
-        return testForPerms(user,guild, perms.toArray(new Permissions[perms.size()]));
+        return testForPerms(user, guild, perms.toArray(new Permissions[perms.size()]));
     }
 }

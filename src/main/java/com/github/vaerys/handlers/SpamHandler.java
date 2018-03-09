@@ -7,6 +7,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.OffenderObject;
+import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.pogos.GuildConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -196,7 +197,11 @@ public class SpamHandler {
 
         boolean inviteFound = false;
         boolean shouldDelete = false;
-        boolean userSettingDenied = command.user.getProfile(command.guild).getSettings().contains(UserSetting.DENY_INVITES);
+        ProfileObject object = command.user.getProfile(command.guild);
+        boolean userSettingDenied = false;
+        if (object != null) {
+            userSettingDenied = object.getSettings().contains(UserSetting.DENY_INVITES);
+        }
 
         for (String s : inviteformats) {
             if (message.toString().toLowerCase().contains(s.toLowerCase())) {
@@ -204,7 +209,7 @@ public class SpamHandler {
             }
         }
 
-        boolean isTrusted = guildconfig.testIsTrusted(author,guild);
+        boolean isTrusted = guildconfig.testIsTrusted(author, guild);
 
         if (userSettingDenied || !isTrusted) {
             shouldDelete = true;

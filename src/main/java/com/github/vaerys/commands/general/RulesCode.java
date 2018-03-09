@@ -8,6 +8,7 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.regex.Pattern;
@@ -29,19 +30,17 @@ public class RulesCode extends Command {
             profile.getSettings().add(UserSetting.READ_RULES);
             String response = "> Congratulations you have guessed the Rule Code correctly, A Star";
             if (command.guild.config.xpGain) {
-                response += (200 * command.guild.config.xpModifier) + "and " + (200 * command.guild.config.xpModifier) + " Pixels have been added to your profile.";
+                response += " and " + (int) (200 * command.guild.config.xpModifier) + " Pixels have been added to your profile.";
                 profile.addXP(200, command.guild.config);
+            } else {
+                response += " has been added to your profile.";
             }
-            GuildHandler.checkUsersRoles(command.guild.longID, command.guild);
-//            if (command.guild.config.xpGain) {
-//                command.user.sendDm("> Congratulations you have been granted some pixels and a star has been added to your profile for reading the rules.\n" +
-//                        "Never tell this code to anyone.");
-
-//            } else {
-//                command.user.sendDm("> Congratulations a star has been added to your profile for reading the rules.\n" +
-//                        "Never tell this code to anyone.");
-//            }
-
+            IRole ruleReward = command.guild.getRuleCodeRole();
+            if (ruleReward != null) {
+                response += "\nYou have also been granted the **" + ruleReward.getName() + "** Role.";
+            }
+            GuildHandler.checkUsersRoles(command.user.longID, command.guild);
+            command.user.sendDm(response);
             return null;
         }
         int diff = (command.guild.config.getRuleCode().length() / 4);

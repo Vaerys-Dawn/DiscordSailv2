@@ -15,7 +15,7 @@ public class InitEvent {
     public void initBot(ReadyEvent event) {
         //makes sure that nothing in the config file will cause an error
         if (!Globals.isCreatorValid()) {
-            System.exit(Constants.EXITCODE_CONF_ERROR);
+            System.exit(Constants.EXITCODE_STOP);
         }
 //        if (args.length > 0 && args[0].equals("-w")) {
 //            WikiBuilder.handleCommandLists();

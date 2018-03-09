@@ -40,6 +40,7 @@ public class ModNote extends Command {
         if (opts == null || opts.isEmpty()) opts = "list";
 
         UserObject user = Utility.getUser(command, userCall, false);
+        if (user == null) return "> Could not find user.";
         ProfileObject profile = user.getProfile(command.guild);
 
         //if (user == null) return "Could not find user.";
@@ -62,7 +63,7 @@ public class ModNote extends Command {
         } else if (specialModes.contains(mode)) {
             // these modes require special handling:
             String modeOpts = new SplitFirstObject(opts).getRest();
-            if (modeOpts.isEmpty()) return missingArgs(command);
+            if (modeOpts == null || modeOpts.isEmpty()) return missingArgs(command);
             // try to parse an index:
             int index;
             try {
