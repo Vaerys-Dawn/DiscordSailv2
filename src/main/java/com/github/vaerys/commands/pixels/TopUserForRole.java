@@ -58,7 +58,7 @@ public class TopUserForRole extends Command {
         userIDs.sort((o1, o2) -> {
             long rank1 = XpHandler.rank(command.guild.users, command.guild.get(), o1);
             long rank2 = XpHandler.rank(command.guild.users, command.guild.get(), o2);
-            return Long.compare(rank2, rank1);
+            return Long.compare(rank1, rank2);
         });
 
         if (index > userIDs.size()) {
@@ -110,7 +110,7 @@ public class TopUserForRole extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"TopUserForRole"};
+        return new String[]{"TopUserForRole", "TopUser"};
     }
 
     @Override
