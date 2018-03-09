@@ -377,13 +377,16 @@ public class Utility {
     public static String truncateString(String str, int maxLength, boolean truncateAtSpace, int search) {
         String result = str;
 
-        if (str.length() >= maxLength) {
+        if (str.length() > maxLength) {
             int endI = maxLength;
             if (truncateAtSpace) {
-                // want to truncate the message at the last valid space
-                // see if we can't find it.
-                endI = str.substring((maxLength - search), maxLength).lastIndexOf(' ');
-                if (endI == -1) endI = maxLength;
+                String subStr = str.substring((maxLength - search), maxLength);
+                endI = subStr.lastIndexOf(' ');
+                if (endI == -1) {
+                    endI = maxLength;
+                } else {
+                    endI += (maxLength - search);
+                }
             }
             result = str.substring(0, endI) + "...";
         }

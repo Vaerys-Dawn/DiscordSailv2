@@ -39,10 +39,10 @@ public class ModNote extends Command {
         if (userCall == null || userCall.isEmpty()) return missingArgs(command);
         if (opts == null || opts.isEmpty()) opts = "list";
 
-        UserObject user = Utility.getUser(command, userCall, false);
-        ProfileObject profile = user.getProfile(command.guild);
+        UserObject user = Utility.getUser(command, userCall, false, false);
+        if (user == null) return "> Could not find user.";
 
-        //if (user == null) return "Could not find user.";
+        ProfileObject profile = user.getProfile(command.guild);
         if (profile == null) return "> No profile found for " + user.displayName + ".";
 
         long timestamp = command.message.getTimestamp().toEpochSecond();
@@ -137,7 +137,7 @@ public class ModNote extends Command {
         StringHandler content = new StringHandler();
 
         for (ModNoteObject noteObject : user.modNotes) {
-            String shortNote = Utility.truncateString(Utility.removeFun(noteObject.getNote()), 55);
+            String shortNote = Utility.truncateString(Utility.removeFun(noteObject.getNote()), 65);
             if (noteObject.getStrike()) {
                 content.append("⚠ ");
             }
