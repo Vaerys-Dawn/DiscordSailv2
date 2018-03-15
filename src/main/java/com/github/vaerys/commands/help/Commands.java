@@ -102,7 +102,7 @@ public class Commands extends Command {
                     .filter(s -> GuildHandler.testForPerms(command, s.getPermissions()))
                     .collect(Collectors.toList());
             //add command if command type == type specified.
-            if (c.type == type) {
+            if (c.type == type || (c.type != type && c.channel == ChannelSetting.FROM_DM)) {
                 commandNames.put(c.getCommand(command), subCommands.size() != 0);
             }
             //add any valid subCommands.
