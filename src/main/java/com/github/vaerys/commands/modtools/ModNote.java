@@ -6,10 +6,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.ModNoteObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.objects.*;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -21,11 +18,37 @@ import java.util.List;
 
 public class ModNote extends Command {
 
-    private static final List<String> specialModes = new ArrayList<>(Arrays.asList(
+    private static final List<String> SPECIAL_MODES = new ArrayList<>(Arrays.asList(
             "edit",
             "info",
             "delete", "del", "remove", "rem",
             "strike"));
+
+    // sub commands.
+    private static final SubCommandObject EDIT_MOD_NOTE = new SubCommandObject(
+            new String[]{"EditModNote"},
+            "[@user] [index] message",
+            "Edit an existing mod note",
+            SAILType.MOD_TOOLS
+    );
+    private static final SubCommandObject DELETE_MOD_NOTE = new SubCommandObject(
+            new String[]{"DeleteModNote", "DelModNote"},
+            "[@user] [index]",
+            "Delete an existing mod note.",
+            SAILType.MOD_TOOLS
+    );
+    private static final SubCommandObject STRIKE_MOD_NOTE = new SubCommandObject(
+            new String[]{"AddStrike", "StrikeModNote"},
+            "[@user] [index]",
+            "Switches the strike status on a mod note.",
+            SAILType.MOD_TOOLS
+    );
+    private static final SubCommandObject GET_MOD_NOTE = new SubCommandObject(
+            new String[]{"GetModNote"},
+            "[@user] [index]",
+            "Get a detailed version of an existing mod note.",
+            SAILType.MOD_TOOLS
+    );
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -35,6 +58,18 @@ public class ModNote extends Command {
 
         String userCall = argsSplitter.getFirstWord();
         String opts = argsSplitter.getRest();
+
+        // check sub commands:
+        if (EDIT_MOD_NOTE.isSubCommand(command)) {
+            opts = "edit " + opts;
+        } else if (DELETE_MOD_NOTE.isSubCommand(command)) {
+            opts = "delete " + opts;
+        } else if (STRIKE_MOD_NOTE.isSubCommand(command)) {
+            opts = "strike " + opts;
+        } else if (GET_MOD_NOTE.isSubCommand(command)) {
+            opts = "info " + opts;
+        }
+
         // empty user arg is not allowed;
         if (userCall == null || userCall.isEmpty()) return missingArgs(command);
         if (opts == null || opts.isEmpty()) opts = "list";
@@ -59,14 +94,15 @@ public class ModNote extends Command {
 
         if (mode.equals("list")) {
             return createListEmbed(profile, command);
-        } else if (specialModes.contains(mode)) {
+        } else if (SPECIAL_MODES.contains(mode)) {
             // these modes require special handling:
             String modeOpts = new SplitFirstObject(opts).getRest();
             if (modeOpts == null || modeOpts.isEmpty()) return missingArgs(command);
             // try to parse an index:
             int index;
             try {
-                index = Integer.parseInt(modeOpts);
+                String modeIdx = new SplitFirstObject(modeOpts).getFirstWord();
+                index = Integer.parseInt(modeIdx);
                 if (profile.modNotes == null || profile.modNotes.size() == 0) {
                     return "> " + user.displayName + " doesn't have any notes yet.";
                 }
@@ -201,7 +237,10 @@ public class ModNote extends Command {
 
     @Override
     public void init() {
-
+        subCommands.add(EDIT_MOD_NOTE);
+        subCommands.add(DELETE_MOD_NOTE);
+        subCommands.add(STRIKE_MOD_NOTE);
+        subCommands.add(GET_MOD_NOTE);
     }
 
     @Override
