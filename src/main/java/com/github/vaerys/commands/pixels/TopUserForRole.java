@@ -50,7 +50,7 @@ public class TopUserForRole extends Command {
         List<Long> userIDs = command.guild.get().getUsersByRole(role).stream().map(IUser::getLongID).collect(Collectors.toList());
         if (userIDs.isEmpty()) {
             RequestHandler.deleteMessage(working);
-            return "> Couldn't find any users with that role!";
+            return "> Could not find any users with that role!";
         }
 
         userIDs.removeIf(f -> XpHandler.rank(command.guild.users, command.guild.get(), f) == -1);
@@ -60,6 +60,7 @@ public class TopUserForRole extends Command {
             long rank2 = XpHandler.rank(command.guild.users, command.guild.get(), o2);
             return Long.compare(rank1, rank2);
         });
+        if (userIDs.size() == 0) return "> Could not find any ranked users with that role.";
 
         if (index > userIDs.size()) {
             RequestHandler.deleteMessage(working);
@@ -89,7 +90,7 @@ public class TopUserForRole extends Command {
         int showing = (userIDs.size() > 5 ? 5 : userIDs.size());
 
         embed.withTitle("Top " + (userIDs.size() == 1 ? " user" : showing + " users") + " for role " + role.getName());
-        embed.withFooterText("Total users with this role: " + userIDs.size());
+        embed.withFooterText("Total ranked users with this role: " + userIDs.size());
         ProfileObject userProfile;
         UserObject userObject;
         NumberFormat nf = NumberFormat.getInstance();

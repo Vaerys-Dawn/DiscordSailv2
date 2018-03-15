@@ -6,7 +6,8 @@ public enum TagType {
     INFO("Info"),
     DAILY("Daily"),
     LEVEL("LevelUp"),
-    PIXEL("Pixels");
+    PIXEL("Pixels"),
+    JOIN_MESSAGES("Join");
 
     private String name;
 

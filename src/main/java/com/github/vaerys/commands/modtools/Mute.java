@@ -80,7 +80,8 @@ public class Mute extends Command {
 
         if (reason.toString().isEmpty()) reason.setContent("No reason given");
         // final responses:
-        String response = String.format(msgFormat, muted.displayName, " for " + timeValue);
+        String responseTime = !timeValue.isEmpty() ? " for " + timeValue : "";
+        String response = String.format(msgFormat, muted.mention(), responseTime);
 
         if (adminChannel != null) {
             RequestHandler.sendMessage(response + String.format(adminMsg, command.user.displayName,
@@ -93,10 +94,7 @@ public class Mute extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Mutes a user and adds a modnote to the user. if a ⚠ emoji is added to the mute reason the note will be a strike.\n" +
-                "\n" +
-                "**Sub Command - " + command.guild.config.getPrefixCommand() + "UnMute [@User]**\n" +
-                "**Desc:** Allows for Users with ManageMessages to remove a mute from a user.\n";
+        return "Mutes a user and adds a modnote to the user. if a ⚠ emoji is added to the mute reason the note will be a strike.";
     }
 
     @Override
@@ -137,6 +135,7 @@ public class Mute extends Command {
     @Override
     public void init() {
         subCommands.add(UN_MUTE);
+        showIndividualSubs = true;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.github.vaerys.masterobjects;
 
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IUser;
@@ -10,10 +11,10 @@ public class ClientObject {
     public UserObject creator;
     private IDiscordClient object;
 
-    public ClientObject(IDiscordClient client, GuildObject guild) {
-        this.object = client;
-        if (!client.isReady()) return;
-        bot = new UserObject(client.getOurUser(), guild, this);
+    public ClientObject(GuildObject guild) {
+        this.object = Client.getClient();
+        if (!object.isReady()) return;
+        bot = new UserObject(object.getOurUser(), guild, this);
         creator = new UserObject(fetchUser(Globals.creatorID), guild, this);
     }
 

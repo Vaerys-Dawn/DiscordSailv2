@@ -61,6 +61,7 @@ public class GuildConfig extends GuildFile {
     public boolean userInfoShowsDate = false;
     public boolean debugMode = true;
     public boolean readRuleReward = false;
+    public boolean checkNewUsers = false;
     //--Competition
     public boolean compEntries = false;
     public boolean compVoting = false;
@@ -75,6 +76,7 @@ public class GuildConfig extends GuildFile {
     public boolean moduleGroups = false;
     public boolean modulePixels = false;
     public boolean moduleLogging = false;
+    public boolean moduleJoinMessages = false;
     public int maxMentionLimit = 8;
     public int messageLimit = 10;
     public int xpRate = 20;
@@ -104,6 +106,8 @@ public class GuildConfig extends GuildFile {
     private DailyMessage lastDailyMessage = null;
     private ArrayList<String> xpDeniedPrefixes = new ArrayList<>();
     private String ruleCode = null;
+
+
 
     public DailyMessage getLastDailyMessage() {
         return lastDailyMessage;

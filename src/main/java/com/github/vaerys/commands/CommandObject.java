@@ -36,7 +36,7 @@ public class CommandObject {
         this.message = new MessageObject(message, guild);
         this.channel = new ChannelObject(message.getChannel(), guild);
         this.user = new UserObject(message.getAuthor(), guild);
-        this.client = new ClientObject(message.getClient(), guild);
+        this.client = new ClientObject(guild);
     }
 
     public CommandObject() {
@@ -44,7 +44,7 @@ public class CommandObject {
         user = new UserObject(null, null);
         message = new MessageObject(null, null);
         channel = new ChannelObject(null, null);
-        client = new ClientObject(Globals.getClient(), null);
+        client = new ClientObject(null);
     }
 
     public CommandObject(IMessage message, IGuild guild, IChannel channel, IUser author) {
@@ -56,7 +56,7 @@ public class CommandObject {
         this.message = new MessageObject(message, this.guild);
         this.channel = new ChannelObject(channel, this.guild);
         this.user = new UserObject(author, this.guild);
-        this.client = new ClientObject(message.getClient(), this.guild);
+        this.client = new ClientObject(this.guild);
     }
 
     public CommandObject(GuildObject task, IChannel channel) {
@@ -65,6 +65,14 @@ public class CommandObject {
         this.channel = new ChannelObject(channel, task);
         this.message = null;
         this.user = null;
+    }
+
+    public CommandObject(GuildObject content, IChannel channel, IUser user) {
+        this.guild = content;
+        this.message = null;
+        this.channel = new ChannelObject(channel, guild);
+        this.user = new UserObject(user, guild);
+        this.client = new ClientObject(guild);
     }
 
     public CommandObject setAuthor(IUser author) {
@@ -80,7 +88,7 @@ public class CommandObject {
     public CommandObject setGuild(IGuild guild) {
         this.guild = Globals.getGuildContent(guild.getLongID());
         this.user = new UserObject(user.get(), this.guild);
-        this.client = new ClientObject(client.get(), this.guild);
+        this.client = new ClientObject(this.guild);
         return this;
     }
 

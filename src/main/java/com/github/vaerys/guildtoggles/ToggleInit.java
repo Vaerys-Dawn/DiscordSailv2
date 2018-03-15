@@ -26,6 +26,7 @@ public class ToggleInit {
         guildToggles.add(new AdminLogging());
         guildToggles.add(new AutoArtPinning());
         guildToggles.add(new ChannelLogging());
+        guildToggles.add(new CheckNewUsers());
         guildToggles.add(new CompEntries());
         guildToggles.add(new DailyMessage());
         guildToggles.add(new DeleteLogging());
@@ -67,6 +68,7 @@ public class ToggleInit {
         guildToggles.add(new ModuleArtPinning());
         guildToggles.add(new ModulePixels());
         guildToggles.add(new ModuleLogging());
+        guildToggles.add(new ModuleJoinMessages());
         if (validate) validate(guildToggles);
 
         return guildToggles;
@@ -95,8 +97,8 @@ public class ToggleInit {
     }
 
     public static GuildToggle getGuildToggle(String args, boolean isModule) {
-        for (GuildToggle t: getToggles(isModule)){
-            if (SAILType.get(args) == t.name()){
+        for (GuildToggle t : getToggles(isModule)) {
+            if (SAILType.get(args) == t.name()) {
                 return t;
             }
         }

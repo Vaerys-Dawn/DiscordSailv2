@@ -23,7 +23,7 @@ public class BlockUser extends DMCommand {
         if (userId == Globals.creatorID) {
             return "> What are you doing. Don't try to block yourself.";
         }
-        if (Client.getClient().fetchUser(userId) != null) {
+        if (command.client.get().fetchUser(userId) != null) {
             globalData.blockUserFromDMS(userId);
             return "> User was blocked";
         }

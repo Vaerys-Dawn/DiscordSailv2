@@ -69,7 +69,7 @@ public class RulesCode extends Command {
         if (command.guild.config.xpGain) {
             return "Enter the rule code found in the rules to receive a rewards.";
         } else {
-            return "Enter the rule code found in the rules to getToggles a star on your profile.";
+            return "Enter the rule code found in the rules to get a star on your profile.";
         }
     }
 

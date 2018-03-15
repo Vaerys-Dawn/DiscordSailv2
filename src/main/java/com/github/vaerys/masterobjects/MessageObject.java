@@ -19,7 +19,7 @@ public class MessageObject {
 
     public MessageObject(IMessage message, GuildObject guild) {
         if (message == null) return;
-        client = new ClientObject(message.getClient(), guild);
+        client = new ClientObject(guild);
         this.object = message;
         this.longID = message.getLongID();
         this.author = new UserObject(message.getAuthor(), guild);

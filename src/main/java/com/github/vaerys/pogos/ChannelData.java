@@ -2,12 +2,14 @@ package com.github.vaerys.pogos;
 
 import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.GroupUpObject;
+import com.github.vaerys.objects.JoinMessage;
 import com.github.vaerys.objects.TrackLikes;
 import com.github.vaerys.templates.GuildFile;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -21,6 +23,7 @@ public class ChannelData extends GuildFile {
     ArrayList<GroupUpObject> groupUpObjects = new ArrayList<>();
     List<TrackLikes> likes = new ArrayList<>();
     private double fileVersion = 1.3;
+    private List<JoinMessage> joinMessages = new LinkedList<>();
 
     public ArrayList<GroupUpObject> getGroupUpObjects() {
         return groupUpObjects;
@@ -59,5 +62,9 @@ public class ChannelData extends GuildFile {
                 }
             }
         }
+    }
+
+    public List<JoinMessage> getJoinMessages() {
+        return joinMessages;
     }
 }

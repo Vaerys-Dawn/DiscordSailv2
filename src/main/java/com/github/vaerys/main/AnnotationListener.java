@@ -150,6 +150,16 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onReactionAddEvent(ReactionAddEvent event) {
+
+//        IUser owner1 = event.getMessage().getAuthor();
+//        IUser author = event.getAuthor();
+//        IUser reactor = event.getUser();
+//
+//        System.out.println("Owner: " + owner1.getName() + "#" + owner1.getDiscriminator() + "(" + owner1.getLongID() + ")" + " - " + owner1.getDisplayName(event.getGuild()));
+//        System.out.println("Author: " + author.getName() + "#" + author.getDiscriminator() + "(" + author.getLongID() + ")" + " - " + author.getDisplayName(event.getGuild()));
+//        System.out.println("Reactor: " + reactor.getName() + "#" + reactor.getDiscriminator() + "(" + reactor.getLongID() + ")" + " - " + reactor.getDisplayName(event.getGuild()));
+
+
         if (event.getUser().isBot()) {
             return;
         }
@@ -167,6 +177,9 @@ public class AnnotationListener {
         if (message == null) message = event.getChannel().getMessageByID(event.getMessageID());
 
         CommandObject object = new CommandObject(message);
+        UserObject pinner = new UserObject(event.getUser(), object.guild);
+        UserObject owner = new UserObject(event.getAuthor(), object.guild);
+
 
         //do only on server channels
         if (!event.getChannel().isPrivate() && emoji.isUnicode()) {
@@ -176,15 +189,14 @@ public class AnnotationListener {
                     && object.client.bot.longID == object.user.longID)
                 RequestHandler.deleteMessage(object.message);
             //if is pushpin
-            if (emoji.equals(pin)) ArtHandler.pinMessage(object.setAuthor(event.getUser()));
-
+            if (emoji.equals(pin)) ArtHandler.pinMessage(object, pinner, owner);
 
             //if is thumbsup or thumbs down and is creator.
             if (emoji.equals(thumbsUp) || emoji.equals(thumbsDown))
                 QueueHandler.reactionAdded(object, event.getReaction());
             //if is hear and is pinned then give xp
             if (emoji.equals(heart))
-                ArtHandler.pinLiked(object.setAuthor(event.getUser()));
+                ArtHandler.pinLiked(object, pinner, owner);
             //do only within Direct messages
         } else if (event.getChannel().isPrivate() && emoji.isUnicode()) {
             //if anyone uses x
@@ -247,6 +259,22 @@ public class AnnotationListener {
             message = message.replace("<server>", event.getGuild().getName());
             message = message.replace("<user>", event.getUser().getName());
             user.sendDm(message);
+        }
+        //check to see if the user's account is brand new or not and send a message if true. (new = account is younger than 5 hours)
+        if (content.config.checkNewUsers) {
+            long difference = event.getUser().getCreationDate().toEpochMilli() - event.getJoinTime().toEpochMilli();
+            if ((5 * 60 * 60 * 1000) > difference) {
+                IChannel admin = content.getChannelByType(ChannelSetting.ADMIN_LOG);
+                if (admin == null) {
+                    admin = event.getGuild().getDefaultChannel();
+                }
+                if (admin != null) {
+                    RequestHandler.sendMessage("> New user " + user.mention() + " has a creation time less than 5 hours ago.", admin);
+                }
+            }
+        }
+        if (content.config.moduleJoinMessages) {
+            JoinHandler.customJoinMessages(content, event.getUser());
         }
         for (UserCountDown u : content.users.mutedUsers) {
             if (u.getID() == event.getUser().getLongID()) {

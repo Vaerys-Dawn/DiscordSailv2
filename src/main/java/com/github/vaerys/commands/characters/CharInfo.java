@@ -28,6 +28,9 @@ public class CharInfo extends Command {
                 builder.withTitle(object.getNickname());
 
                 IUser user = command.guild.getUserByID(object.getUserID());
+                if (user == null) {
+                    builder.withFooterText("Author: No longer on this server | Character ID: " + object.getName());
+                }
                 builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
 
                 ArrayList<IRole> roles = new ArrayList<>();

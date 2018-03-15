@@ -232,9 +232,7 @@ public class GetGuildInfo extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Sends Information about the server to your Direct Messages.\n" +
-                "**SubCommands:**\n" +
-                "> " + command.guild.config.getPrefixCommand() + "GuildStats - `Posts a Short description of the server to the current channel.`";
+        return "Sends Information about the server to your Direct Messages.";
     }
 
     @Override
@@ -270,5 +268,6 @@ public class GetGuildInfo extends Command {
     @Override
     public void init() {
         subCommands.add(GUILD_STATS);
+        showIndividualSubs = true;
     }
 }
