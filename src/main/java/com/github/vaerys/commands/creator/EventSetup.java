@@ -280,7 +280,7 @@ public class EventSetup extends Command {
 
     private String deleteEvent(TimedEvent event) {
         if (Globals.getEvents().remove(event)) return "> Event Deleted.";
-        else return "> You should not getToggles this message.";
+        else return "> You should not get this message.";
     }
 
     public String getModes() {

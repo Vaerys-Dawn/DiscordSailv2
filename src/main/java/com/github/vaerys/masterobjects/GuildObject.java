@@ -67,12 +67,12 @@ public class GuildObject {
             add(guildLog);
         }};
         customCommands.initCustomCommands(get());
-        this.client = new ClientObject(object.getClient(), this);
+        this.client = new ClientObject( this);
         loadCommandData();
     }
 
     public GuildObject() {
-        this.client = new ClientObject(Globals.getClient(), this);
+        this.client = new ClientObject( this);
         this.object = null;
         this.longID = -1;
         this.config = new GuildConfig();

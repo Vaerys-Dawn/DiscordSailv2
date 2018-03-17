@@ -13,10 +13,7 @@ import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -85,6 +82,7 @@ public class Commands extends Command {
         String suffix = Utility.getCommandInfo(new Help(), command);
         helpEmbed.withTitle("> Here are all of the " + type.toString() + " Commands I have available.");
 
+        //special footers
         switch (type) {
             case DM:
                 suffix = "**These commands can only be performed in DMs.**\n" +
@@ -96,31 +94,46 @@ public class Commands extends Command {
         }
 
         //build command list
-        List<Command> typeCommands = Utility.getCommandsByType(commands, command, type, true);
-        typeCommands.sort(Comparator.comparing(o -> o.getCommand(command)));
-        final boolean[] subCommandFound = {false};
-        List<String> commandNames = typeCommands.stream().map(c -> {
-            StringHandler commandName = new StringHandler("  " + c.getCommand(command));
-            for (SubCommandObject sub : c.subCommands) {
-                if (GuildHandler.testForPerms(command, sub.getPermissions())) {
-                    commandName.replace(0, 1, "*");
-                    subCommandFound[0] = true;
-                    break;
+        TreeMap<String, Boolean> commandNames = new TreeMap<>();
+        for (Command c : commands) {
+            //filter out subCommands that aren't allowed to be seen due to missing perms or inactive module.
+            List<SubCommandObject> subCommands = c.subCommands.stream()
+                    .filter(s -> types.contains(s.getType()))
+                    .filter(s -> GuildHandler.testForPerms(command, s.getPermissions()))
+                    .collect(Collectors.toList());
+            //add command if command type == type specified.
+            if (c.type == type || (c.type != type && c.channel == ChannelSetting.FROM_DM)) {
+                commandNames.put(c.getCommand(command), subCommands.size() != 0);
+            }
+            //add any valid subCommands.
+            for (SubCommandObject s : subCommands) {
+                if (s.getType() == type) {
+                    if (c.type == type && !c.showIndividualSubs) break;
+                    String subName = s.getCommand(command);
+                    if (!commandNames.containsKey(subName)) {
+                        commandNames.put(s.getCommand(command), true);
+                    }
+                    if (!showIndividualSubs) break;
                 }
             }
-            return commandName.toString();
-        }).collect(Collectors.toList());
-
-        //remove indent if no subCommands are found
-        if (!subCommandFound[0]) {
-            commandNames = commandNames.stream()
-                    .map(s1 -> new StringHandler(s1).replace(0, 2, "")
-                            .toString()).collect(Collectors.toList());
         }
-
+        //formats list
+        List<String> list = new LinkedList<>();
+        if (commandNames.containsValue(true)) {
+            List<String> finalList = list;
+            commandNames.forEach((s, hasSub) -> {
+                if (hasSub) {
+                    finalList.add("* " + s);
+                } else {
+                    finalList.add("  " + s);
+                }
+            });
+        } else {
+            list = commandNames.keySet().stream().collect(Collectors.toList());
+        }
         //build embed.
         builder.append(codeBlock + "\n");
-        builder.append(Utility.listFormatter(commandNames, false));
+        builder.append(Utility.listFormatter(list, false));
         builder.append(codeBlock + "\n");
         builder.append(suffix);
         helpEmbed.withDescription(builder.toString());

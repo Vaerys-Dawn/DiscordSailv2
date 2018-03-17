@@ -19,7 +19,7 @@ public class ChannelObject {
 
     public ChannelObject(IChannel channel, GuildObject guild) {
         if (channel == null) return;
-        this.client = new ClientObject(channel.getClient(), guild);
+        this.client = new ClientObject( guild);
         this.object = channel;
         this.longID = channel.getLongID();
         this.name = channel.getName();

@@ -94,9 +94,9 @@ public enum ChannelSetting {
     // "Types"
 
     /**
-     * Where messages created by the $1%s and $2%s commands are sent.
+     * Where messages related to moderation will be sent.
      */
-    ADMIN("Admin", false, "Where messages created by the $1%s and $2%s commands are sent."),
+    ADMIN("Admin", false, "Where messages related to moderation will be sent."),
 
     /**
      * Where all of the admin type logging will be sent.
@@ -133,8 +133,15 @@ public enum ChannelSetting {
      */
     FROM_DM("DirectMessages", false, "The command can only be ran in DMs."),
 
+    /**
+     * When Enabled Spam Type messages will be ignored.
+     */
+    IGNORE_SPAM("IgnoreSpam", true, "When Enabled Spam Type messages will be ignored."),
 
-    IGNORE_SPAM("IgnoreSpam", true, "When Enabled Spam Type messages will be ignored.");
+    /**
+     * Where Custom join messages will be sent.
+     */
+    JOIN_CHANNEL("JoinChannel", true, "Where Custom join messages will be sent.");
 
 
     protected String name;

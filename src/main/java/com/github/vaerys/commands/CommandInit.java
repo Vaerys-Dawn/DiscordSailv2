@@ -12,6 +12,7 @@ import com.github.vaerys.commands.general.*;
 import com.github.vaerys.commands.groups.ClearGroupUp;
 import com.github.vaerys.commands.groups.GroupUp;
 import com.github.vaerys.commands.help.*;
+import com.github.vaerys.commands.joinmessages.*;
 import com.github.vaerys.commands.mention.SetPrefix;
 import com.github.vaerys.commands.mention.SetPrefixCC;
 import com.github.vaerys.commands.modtools.*;
@@ -189,6 +190,14 @@ public class CommandInit {
         //mention Commands
         commands.add(new SetPrefix());
         commands.add(new SetPrefixCC());
+
+
+        //joinMessage Commands
+        commands.add(new DeleteJoinMessage());
+        commands.add(new EditJoinMessage());
+        commands.add(new JoinMessageInfo());
+        commands.add(new ListJoinMessages());
+        commands.add(new NewJoinMessage());
 
         validate(commands);
 

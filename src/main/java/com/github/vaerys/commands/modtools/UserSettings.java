@@ -183,7 +183,7 @@ public class UserSettings extends Command {
 
     @Override
     protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+        return new Permissions[]{Permissions.MANAGE_MESSAGES, Permissions.MANAGE_ROLES};
     }
 
     @Override

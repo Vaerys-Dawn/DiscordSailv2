@@ -37,13 +37,13 @@ public class UserObject {
 
     public UserObject(IUser object, GuildObject guild) {
         if (object == null) return;
-        this.client = new ClientObject(object.getClient(), guild);
+        this.client = new ClientObject(guild);
         init(object, guild, false);
     }
 
     public UserObject(IUser object, GuildObject guild, boolean light) {
         if (object == null) return;
-        this.client = new ClientObject(object.getClient(), guild);
+        this.client = new ClientObject(guild);
         init(object, guild, light);
     }
 

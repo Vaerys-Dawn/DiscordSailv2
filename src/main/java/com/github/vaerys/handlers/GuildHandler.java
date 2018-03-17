@@ -39,7 +39,7 @@ public class GuildHandler {
     public static void checkUsersRoles(long id, GuildObject content) {
 
         //don't try to edit your own roles ya butt.
-        if (id == Client.getClient().getOurUser().getLongID()) return;
+        if (id == content.client.bot.longID) return;
 
         //do code.
         ProfileObject profile = content.users.getUserByID(id);

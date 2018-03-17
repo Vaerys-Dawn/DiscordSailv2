@@ -24,6 +24,8 @@ public enum SAILType {
     MENTION("Mention"),
     LOGGING("Logging"),
     SETUP("Setup"),
+    CUSTOM_JOIN_MESSAGES("JoinMessages"),
+
 
     //module types
     ART_PINNING("ArtPinning"),
@@ -60,7 +62,8 @@ public enum SAILType {
     USE_TIME_STAMPS("UseTimeStamps"),
     VOTING("Voting"),
     XP_DECAY("XpDecay"),
-    XP_GAIN("XpGain");
+    XP_GAIN("XpGain"),
+    CHECK_NEW_USERS("CheckNewUsers");
 
     private String name;
 

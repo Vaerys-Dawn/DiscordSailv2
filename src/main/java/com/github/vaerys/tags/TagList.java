@@ -32,22 +32,22 @@ public class TagList {
         tags.add(new TagIfArgsEmptyReplace(2, TagType.CC));
         tags.add(new TagArgs(3, TagType.CC));
         //simple string replaces
-        tags.add(new TagNoBreak(10, TagType.CC, TagType.INFO, TagType.DAILY));
-        tags.add(new TagSpacer(10, TagType.CC, TagType.INFO, TagType.DAILY));
+        tags.add(new TagNoBreak(10, TagType.CC, TagType.INFO, TagType.DAILY, TagType.JOIN_MESSAGES));
+        tags.add(new TagSpacer(10, TagType.CC, TagType.INFO, TagType.DAILY, TagType.JOIN_MESSAGES));
         tags.add(new TagAuthor(10, TagType.CC));
         tags.add(new TagUsername(10, TagType.CC));
         tags.add(new TagEmoji(10, TagType.INFO));
         tags.add(new TagLevel(10, TagType.LEVEL, TagType.PIXEL));
-        tags.add(new TagUser(10, TagType.LEVEL));
+        tags.add(new TagUser(10, TagType.LEVEL, TagType.JOIN_MESSAGES));
         tags.add(new TagChannel(10, TagType.INFO));
         tags.add(new TagDisplayName(10, TagType.INFO));
-        tags.add(new TagServer(10, TagType.CC));
+        tags.add(new TagServer(10, TagType.CC, TagType.JOIN_MESSAGES));
         tags.add(new TagChannelMention(10, TagType.CC));
         //single args
         tags.add(new TagSingleArgs(20, TagType.CC));
         //random tags (part 1)
-        tags.add(new TagRandom(30, TagType.CC, TagType.DAILY));
-        tags.add(new TagReplaceRandom(31, TagType.CC));
+        tags.add(new TagRandom(30, TagType.CC, TagType.DAILY, TagType.JOIN_MESSAGES));
+        tags.add(new TagReplaceRandom(31, TagType.CC, TagType.JOIN_MESSAGES));
         //if tags
         tags.add(new TagIfRole(40, TagType.CC));
         tags.add(new TagIfName(41, TagType.CC));
@@ -58,11 +58,11 @@ public class TagList {
         tags.add(new TagReplaceSpecial(51, TagType.CC));
         tags.add(new TagRegex(52, TagType.CC));
         //random tags (part 2)
-        tags.add(new TagRandNum(60, TagType.CC, TagType.DAILY));
-        tags.add(new TagRandEmote(61, TagType.CC, TagType.DAILY, TagType.LEVEL));
+        tags.add(new TagRandNum(60, TagType.CC, TagType.DAILY, TagType.JOIN_MESSAGES));
+        tags.add(new TagRandEmote(61, TagType.CC, TagType.DAILY, TagType.LEVEL, TagType.JOIN_MESSAGES));
         tags.add(new TagReplaceError(62, TagType.CC));
         //empty tag
-        tags.add(new TagEmpty(70, TagType.CC, TagType.DAILY));
+        tags.add(new TagEmpty(70, TagType.CC, TagType.DAILY, TagType.JOIN_MESSAGES));
         //no string additions should be allowed past this point;
         tags.add(new TagAllCaps(80, TagType.CC));
         tags.add(new TagRemoveSanitizeTag(81, TagType.CC));
@@ -102,9 +102,9 @@ public class TagList {
         sort(tags);
     }
 
-    public static List<String> getNames(String type) {
-        return getNames(TagType.get(type));
-    }
+//    public static List<String> getNames(String type) {
+//        return getNames(TagType.get(type));
+//    }
 
     public static List<String> getNames(TagType type) {
         return getType(type).stream().map(tagObject -> tagObject.name).collect(Collectors.toList());

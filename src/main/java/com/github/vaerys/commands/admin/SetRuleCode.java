@@ -28,9 +28,9 @@ public class SetRuleCode extends Command {
     @Override
     public String description(CommandObject command) {
         if (command.guild.config.xpGain) {
-            return "Adds a Rule code to the bot for users to use to getToggles some pixels and a star on their profile.";
+            return "Adds a Rule code to the bot for users to use to get some pixels and a star on their profile.";
         } else {
-            return "Adds a Rule code to the bot for users to use to getToggles a star on their profile.";
+            return "Adds a Rule code to the bot for users to use to get a star on their profile.";
         }
     }
 

@@ -147,4 +147,8 @@ public class StringHandler {
     public void addViaJoin(List<LogObject> allLogs, String s) {
         append(String.join(s, allLogs.stream().map(logObject -> logObject.getOutput()).collect(Collectors.toList())));
     }
+
+    public boolean isEmpty() {
+        return string.toString().isEmpty();
+    }
 }

@@ -41,6 +41,7 @@ public abstract class Command {
     public final boolean requiresArgs;
     public final boolean doAdminLogging;
     public List<SubCommandObject> subCommands = new LinkedList<>();
+    public boolean showIndividualSubs = false;
 
 
     public Command() {

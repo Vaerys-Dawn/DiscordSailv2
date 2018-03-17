@@ -63,7 +63,7 @@ public class UpdateChar extends Command {
             String response = "> New Character Created using your nickname " + cosmeticString + " to fill in data." +
                     "\n(" + remainingSlots + " Character slot";
             if (remainingSlots != 1) response += "s";
-            response += "remaining)";
+            response += " remaining)";
             if (!UPDATE_CHAR.isSubCommand(command)) {
                 response += "\nTo update the name";
                 if (command.guild.config.moduleRoles) response += " or roles";

@@ -204,7 +204,7 @@ public class XpHandler {
 
 
         //user setting no xp gain
-        if (user.getSettings().contains(NO_XP_GAIN)) return;
+        if (user.getSettings().contains(NO_XP_GAIN) || user.getSettings().contains(DENIED_XP)) return;
 
         //deny xp if they have the xp denied role.
         for (IRole r : object.user.roles) {

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class SubCommandObject {
 
-    private final String name[];
+    private final String names[];
     private final String usage;
     private final String description;
     private final SAILType type;
@@ -25,7 +25,7 @@ public class SubCommandObject {
     private String regex = "";
 
     public SubCommandObject(String[] name, String usage, String description, SAILType type, Permissions... permissions) {
-        this.name = name;
+        this.names = name;
         this.usage = usage;
         this.description = description;
         this.type = type;
@@ -39,7 +39,7 @@ public class SubCommandObject {
         if (toTest.length() > 200) {
             toTest = StringUtils.truncate(toTest, 200);
         }
-        for (String s : name) {
+        for (String s : names) {
             String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + regex + "(.|\n)*";
             if (Pattern.compile(regexString).matcher(toTest).matches()) {
                 return true;
@@ -53,7 +53,7 @@ public class SubCommandObject {
         if (toTest.length() > 200) {
             toTest = StringUtils.truncate(toTest, 200);
         }
-        for (String s : name) {
+        for (String s : names) {
             String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + regex + "(.|\n)*";
             if (Pattern.compile(regexString).matcher(toTest).matches()) {
                 String regexRemove = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + regex + " ";
@@ -67,18 +67,20 @@ public class SubCommandObject {
         StringHandler usage = new StringHandler();
         StringHandler regexHandler = new StringHandler(regex);
         usage.append(command.guild.config.getPrefixCommand());
-        usage.append(name[0]);
+        usage.append(names[0]);
         regexHandler.replace("(", "[");
         regexHandler.replace(")", "]");
         regexHandler.replace("|", "/");
         usage.append(regexHandler);
         usage.append(" ");
-        usage.append(this.usage);
+        if (this.usage != null && !this.usage.isEmpty()) {
+            usage.append(this.usage);
+        }
         return usage.toString();
     }
 
     public String[] getNames() {
-        return name;
+        return names;
     }
 
     public String getUsage() {
@@ -118,8 +120,8 @@ public class SubCommandObject {
             builder.append(Utility.listFormatter(permList, true));
         }
 
-        if (name.length > 1) {
-            List<String> aliases = Arrays.asList(name).stream().map(s -> command.guild.config.getPrefixCommand() + s).collect(Collectors.toList());
+        if (names.length > 1) {
+            List<String> aliases = Arrays.asList(names).stream().map(s -> command.guild.config.getPrefixCommand() + s).collect(Collectors.toList());
             aliases.remove(0);
             builder.append("\n**Aliases:** " + Utility.listFormatter(aliases, true));
         }
@@ -128,5 +130,9 @@ public class SubCommandObject {
 
     public String getRegex() {
         return regex;
+    }
+
+    public String getCommand(CommandObject command) {
+        return command.guild.config.getPrefixCommand() + names[0];
     }
 }
