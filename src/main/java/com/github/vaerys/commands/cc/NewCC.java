@@ -70,7 +70,7 @@ public class NewCC extends Command {
 
             // do check
             if (names.contains(nameCC.toLowerCase())) {
-                return "> Custom Commands cannot have the same name as existing commands.";
+                return "> Custom Commands cannot have the same name as built-in commands.";
             }
         }
 
