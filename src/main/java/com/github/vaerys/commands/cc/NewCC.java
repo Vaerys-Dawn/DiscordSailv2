@@ -8,11 +8,15 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -43,6 +47,33 @@ public class NewCC extends Command {
         }
         String nameCC = splitFirst.getFirstWord();
         String argsCC = splitFirst.getRest();
+
+        // ccs cannot have names that match existing commands:
+        for (Command c : command.guild.commands) {
+
+            // get all commands names.
+            List<String> names = new ArrayList<>(Arrays.asList(c.names));
+            for (SubCommandObject sc : c.subCommands) {
+                names.addAll(Arrays.asList(sc.getNames()));
+            }
+
+            // convert them to lowercase.
+            ListIterator<String> li = names.listIterator();
+            while (li.hasNext()) {
+                li.set(li.next().toLowerCase());
+            }
+
+            // special exceptions:
+            names.remove("hello");
+            names.remove("hi");
+            names.remove("greetings");
+
+            // do check
+            if (names.contains(nameCC.toLowerCase())) {
+                return "> Custom Commands cannot have the same name as existing commands.";
+            }
+        }
+
         if ((argsCC == null || argsCC.isEmpty()) && command.message.get().getAttachments().size() == 0) {
             return "> Custom command contents cannot be blank.";
         }
