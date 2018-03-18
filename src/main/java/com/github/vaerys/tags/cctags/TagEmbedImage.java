@@ -20,16 +20,19 @@ public class TagEmbedImage extends TagObject {
     public String execute(String from, CommandObject command, String args) {
         String imageURL = contents(from);
         try {
-            URL url = new URL(imageURL);
-            if (GuildHandler.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS)) {
-                from = removeAllTag(from);
+            new URL(imageURL);
+            boolean hasPerm = GuildHandler.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS);
+            String replaceWith = hasPerm ? "" : "<" + imageURL + ">";
+            from = replaceAllTag(from, replaceWith);
+            from = new TagRemoveMentions(0).handleTag(from, command, args);
+            if (hasPerm) {
                 RequestHandler.sendFileURL(from, imageURL, command.channel.get(), true);
             } else {
-                from = replaceAllTag(from, "<" + imageURL + ">");
                 RequestHandler.sendMessage(from, command.channel.get());
             }
         } catch (MalformedURLException e) {
-            return replaceFirstTag(from, imageURL);
+            from = replaceFirstTag(from, imageURL);
+            return new TagRemoveMentions(0).handleTag(from, command, args);
         }
         return "";
     }

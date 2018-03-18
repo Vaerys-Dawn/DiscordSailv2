@@ -51,6 +51,7 @@ public class PatchHandler {
 
         //1.4 fixes
         removeNullPrefix(guild);
+        renameToggles(guild);
     }
 
 
@@ -78,6 +79,20 @@ public class PatchHandler {
     private static void finalizePatch(PatchObject patch) {
         newPatchID(patch.getPatchID(), patch.getObject());
         FileHandler.writeToJson(patch.getPath(), patch.getObject());
+    }
+
+    private static void renameToggles(IGuild guild) {
+        PatchObject patch = getJsonConfig(guild, GuildConfig.FILE_PATH, 1.4, "RenameToggles");
+        if (patch == null) return;
+        boolean welcome = patch.getObject().get("joinsServerMessages").getAsBoolean();
+        boolean initial = patch.getObject().get("welcomeMessage").getAsBoolean();
+
+        patch.getObject().remove("joinsServerMessages");
+        patch.getObject().remove("welcomeMessage");
+
+        patch.getObject().addProperty("welcomeMessages", welcome);
+        patch.getObject().addProperty("initialMessage", initial);
+        finalizePatch(patch);
     }
 
     private static void refactorTrustedToInviteAllowed(IGuild guild) {

@@ -90,6 +90,15 @@ public enum ChannelSetting {
      */
     XP_DENIED("XpDenied", true, "When this setting is on a channel no pixels will be gained in the  channel."),
 
+    /**
+     * Where all the general type logging will be sent.
+     */
+    FROM_DM("DirectMessages", false, "The command can only be ran in DMs."),
+
+    /**
+     * Channel For Profile related Commands.
+     */
+    PROFILES("Profiles", false, "Channel For Profile related Commands."),
 
     // "Types"
 
@@ -128,10 +137,6 @@ public enum ChannelSetting {
      */
     SERVER_LOG("ServerLog", false, "Where all the general type logging will be sent."),
 
-    /**
-     * Where all the general type logging will be sent.
-     */
-    FROM_DM("DirectMessages", false, "The command can only be ran in DMs."),
 
     /**
      * When Enabled Spam Type messages will be ignored.

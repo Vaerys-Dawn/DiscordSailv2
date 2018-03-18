@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
@@ -49,7 +50,8 @@ public class UserInfo extends Command {
         } else if (profile == null) {
             return "> Could not get a profile for " + user.displayName + ".";
         }
-        if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
+        if (!GuildHandler.testForPerms(command, Permissions.ADMINISTRATOR) &&
+                (user.isPrivateProfile(command.guild) && user.longID != command.user.longID)) {
             return "> " + user.displayName + " has set their profile to private.";
         }
 
@@ -162,7 +164,7 @@ public class UserInfo extends Command {
 
     @Override
     protected ChannelSetting channel() {
-        return null;
+        return ChannelSetting.PROFILES;
     }
 
     @Override

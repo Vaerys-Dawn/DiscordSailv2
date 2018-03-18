@@ -11,20 +11,22 @@ public class AddProfile extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        IUser user = null;
         try {
             long userID = Long.parseUnsignedLong(args);
-            IUser user = command.guild.getUserByID(userID);
-            if (user == null) return "> Invalid UserID";
-            command.guild.users.addUser(userID);
-            return "> Profile for **" + user.getDisplayName(command.guild.get()) + "** Created.";
+            user = command.guild.getUserByID(userID);
+
         } catch (NumberFormatException e) {
             if (command.message.get().getMentions().size() != 0) {
-                IUser user = command.message.get().getMentions().get(0);
-                command.guild.users.addUser(user.getLongID());
-                return "> Profile for **" + user.getDisplayName(command.guild.get()) + "** Created.";
+                user = command.message.get().getMentions().get(0);
             }
-            return "> Invalid UserID";
         }
+        if (command.guild.users.getUserByID(user.getLongID()) != null) {
+            return "> " + user.getDisplayName(command.guild.get()) + " already has a profile.";
+        }
+        if (user == null) return "> Invalid UserID";
+        command.guild.users.addUser(user.getLongID());
+        return "> Profile for **" + user.getDisplayName(command.guild.get()) + "** Created.";
     }
 
     @Override

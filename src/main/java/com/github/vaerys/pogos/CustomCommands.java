@@ -161,6 +161,7 @@ public class CustomCommands extends GuildFile {
         return null;
     }
 
+
     public String delCommand(String args, IUser author, IGuild guild) {
         int i = 0;
         for (CCommandObject c : commands) {

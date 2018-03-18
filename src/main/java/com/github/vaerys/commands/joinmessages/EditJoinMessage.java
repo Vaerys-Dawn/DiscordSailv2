@@ -71,7 +71,7 @@ public class EditJoinMessage extends Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[0];
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

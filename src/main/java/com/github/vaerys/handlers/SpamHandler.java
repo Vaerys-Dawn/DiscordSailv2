@@ -12,6 +12,7 @@ import com.github.vaerys.pogos.GuildConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.api.internal.DiscordUtils;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;
@@ -113,7 +114,7 @@ public class SpamHandler {
                 if (!offenderFound) {
                     guildconfig.addOffender(new OffenderObject(author.getLongID()));
                 }
-                String response = "> <mentionAdmin> " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message in " + command.channel.mention + ".";
+                String response = "> <mentionAdmin>, " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message in " + command.channel.mention + ".";
                 IRole roleToMention = command.guild.getRoleByID(guildconfig.getRoleToMentionID());
                 if (roleToMention != null) {
                     response = response.replaceAll("<mentionAdmin>", roleToMention.mention());

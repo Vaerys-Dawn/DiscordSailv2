@@ -40,6 +40,22 @@ public class XEmbedBuilder extends EmbedBuilder {
         return RequestHandler.sendEmbedMessage("", this, channel.get());
     }
 
+    public RequestBuffer.RequestFuture<IMessage> send(CommandObject command) {
+        return RequestHandler.sendEmbedMessage("", this, command.channel.get());
+    }
+
+    public RequestBuffer.RequestFuture<IMessage> send(String s, IChannel channel) {
+        return RequestHandler.sendEmbedMessage(s, this, channel);
+    }
+
+    public RequestBuffer.RequestFuture<IMessage> send(String s, ChannelObject channel) {
+        return RequestHandler.sendEmbedMessage(s, this, channel.get());
+    }
+
+    public RequestBuffer.RequestFuture<IMessage> send(String s, CommandObject command) {
+        return RequestHandler.sendEmbedMessage(s, this, command.channel.get());
+    }
+
     @Override
     public EmbedBuilder withTitle(String title) {
         return super.withTitle(Utility.removeMentions(title));
@@ -69,4 +85,5 @@ public class XEmbedBuilder extends EmbedBuilder {
     public EmbedBuilder withAuthorName(String authorName) {
         return super.withAuthorName(Utility.removeMentions(authorName));
     }
+
 }

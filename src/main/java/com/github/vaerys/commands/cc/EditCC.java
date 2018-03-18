@@ -33,7 +33,7 @@ public class EditCC extends Command {
     public String execute(String args, CommandObject command) {
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
-            return "> You have been denied the modification of custom commands.";
+            return "> " + command.user.mention() + ", You have been denied the modification of custom commands.";
         }
         SplitFirstObject getName = new SplitFirstObject(args);
         String rest = getName.getRest();

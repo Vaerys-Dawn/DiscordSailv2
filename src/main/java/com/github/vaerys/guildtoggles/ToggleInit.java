@@ -40,6 +40,7 @@ public class ToggleInit {
         guildToggles.add(new MuteRepeatOffender());
         guildToggles.add(new RateLimiting());
         guildToggles.add(new RoleIsToggle());
+        guildToggles.add(new SendJoinMessages());
         guildToggles.add(new ShitpostFiltering());
         guildToggles.add(new ModuleSlash());
         guildToggles.add(new UserRoleLogging());
@@ -47,7 +48,7 @@ public class ToggleInit {
         guildToggles.add(new Voting());
         guildToggles.add(new XpDecay());
         guildToggles.add(new XpGain());
-        guildToggles.add(new JoinServerMessages());
+        guildToggles.add(new WelcomeMessages());
         guildToggles.add(new UserInfoShowsDate());
         guildToggles.add(new SelfDestructLevelUps());
         guildToggles.add(new ReactToLevelUp());

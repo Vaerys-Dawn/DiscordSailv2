@@ -22,10 +22,12 @@ import java.util.stream.Collectors;
  */
 public class GuildConfig extends GuildFile {
     public static final String FILE_PATH = "Guild_Config.json";
-    private double fileVersion = 1.3;
+    private double fileVersion = 1.4;
     //setup vars
     public SetupHandler.SetupStage setupStage = SetupHandler.SetupStage.SETUP_UNSET;
     public long setupUser = -1;
+    //initial welcome message
+    public boolean initialMessage = false;
     //toggles
     //--Auto Tasks
     public boolean dailyMessage = false;
@@ -33,11 +35,11 @@ public class GuildConfig extends GuildFile {
     public boolean autoArtPinning = false;
     public boolean xpDecay = false;
     public boolean xpGain = false;
-    public boolean joinsServerMessages = false;
+    public boolean welcomeMessages = false;
     public boolean selfDestructLevelUps = true;
     public boolean reactToLevelUp = false;
     public boolean likeArt = false;
-    public boolean welcomeMessage = false;
+    public boolean sendJoinMessages = true;
     //--Logging
     public boolean generalLogging = true;
     public boolean adminLogging = true;

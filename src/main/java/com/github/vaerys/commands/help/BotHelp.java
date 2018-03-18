@@ -56,7 +56,7 @@ public class BotHelp extends Command {
     private String arguments(CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle("Arguments.");
-        builder.withDesc("> `[]` and `()` in the command usage are not needed and in some cases can cause the command to fail.\n" +
+        builder.withDesc("> `[]` and `()` in the command usage are not needed and in most cases can cause the command to fail.\n" +
                 "> `[]` brackets means that this argument is required.\n" +
                 "> `()` brackets means that this argument is optional.\n" +
                 "> When an argument ends in `...` it means you can input as many of this argument as you like.\n" +

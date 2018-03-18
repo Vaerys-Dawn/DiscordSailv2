@@ -8,6 +8,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.JoinMessage;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
+import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -23,13 +24,16 @@ public class NewJoinMessage extends Command {
                 return "> New Join Message Contents matches another Custom Join Message's contents, cannot have duplicate messages.";
             }
         }
+        if (StringUtils.containsIgnoreCase(args, "@everyone") || StringUtils.containsIgnoreCase(args, "@here")) {
+            return "> You cannot put everyone or here mentions in join messages.";
+        }
         messages.add(new JoinMessage(command.user.longID, args));
-        return "> New Custom join message added.";
+        return "> New Custom Join Message added at index" + command.guild.channelData.getJoinMessages().size() + ".";
     }
 
     @Override
     public String[] names() {
-        return new String[]{"NewJoinMessage","AddJoinMessage","CreateJoinMessage"};
+        return new String[]{"NewJoinMessage", "AddJoinMessage", "CreateJoinMessage"};
     }
 
     @Override

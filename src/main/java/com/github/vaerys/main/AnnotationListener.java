@@ -252,9 +252,8 @@ public class AnnotationListener {
     @EventSubscriber
     public void onUserJoinEvent(UserJoinEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
-        if (!content.config.moduleLogging) return;
         UserObject user = new UserObject(event.getUser().getLongID(), content);
-        if (content.config.joinsServerMessages && !user.get().isBot()) {
+        if (content.config.welcomeMessages && !user.get().isBot()) {
             String message = content.config.getJoinMessage();
             message = message.replace("<server>", event.getGuild().getName());
             message = message.replace("<user>", event.getUser().getName());
@@ -262,7 +261,7 @@ public class AnnotationListener {
         }
         //check to see if the user's account is brand new or not and send a message if true. (new = account is younger than 5 hours)
         if (content.config.checkNewUsers) {
-            long difference = event.getUser().getCreationDate().toEpochMilli() - event.getJoinTime().toEpochMilli();
+            long difference = event.getJoinTime().toEpochMilli() - event.getUser().getCreationDate().toEpochMilli();
             if ((5 * 60 * 60 * 1000) > difference) {
                 IChannel admin = content.getChannelByType(ChannelSetting.ADMIN_LOG);
                 if (admin == null) {
@@ -273,7 +272,7 @@ public class AnnotationListener {
                 }
             }
         }
-        if (content.config.moduleJoinMessages) {
+        if (content.config.moduleJoinMessages && content.config.sendJoinMessages) {
             JoinHandler.customJoinMessages(content, event.getUser());
         }
         for (UserCountDown u : content.users.mutedUsers) {
@@ -285,6 +284,7 @@ public class AnnotationListener {
                 RequestHandler.roleManagement(user, content, content.config.getMutedRoleID(), true);
             }
         }
+        if (!content.config.moduleLogging) return;
         LoggingHandler.doJoinLeaveLog(event, true);
     }
 

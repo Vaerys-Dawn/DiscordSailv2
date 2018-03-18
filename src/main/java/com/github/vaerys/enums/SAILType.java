@@ -7,24 +7,26 @@ package com.github.vaerys.enums;
  */
 public enum SAILType {
     //command types
-    GENERAL("General"),
+
     ADMIN("Admin"),
-    MOD_TOOLS("ModTools"),
-    ROLE_SELECT("Role"),
-    CHARACTER("Chars"),
-    SERVERS("Servers"),
     CC("CC"),
-    HELP("Help"),
     COMPETITION("Comp"),
-    DM("DM"),
+    CHARACTER("Chars"),
     CREATOR("Creator"),
-    PIXEL("Pixels"),
+    DM("DM"),
+    GENERAL("General"),
     GROUPS("Groups"),
-    SLASH("Slash"),
-    MENTION("Mention"),
-    LOGGING("Logging"),
-    SETUP("Setup"),
+    HELP("Help"),
     CUSTOM_JOIN_MESSAGES("JoinMessages"),
+//    MENTION("Mention"),
+    MOD_TOOLS("ModTools"),
+    PIXEL("Pixels"),
+    ROLE_SELECT("Role"),
+    SERVERS("Servers"),
+    SLASH("Slash"),
+    SETUP("Setup"),
+    LOGGING("Logging"),
+
 
 
     //module types
@@ -47,8 +49,8 @@ public enum SAILType {
     EXTEND_EDIT_LOG("ExtendEditLog"),
     GENERAL_LOGGING("GeneralLogging"),
     JOIN_LEAVE_LOGGING("JoinLeaveLogging"),
-    JOIN_SERVER_MESSAGES("JoinServerMessages"),
-    LIKE_ART("Like_Art"),
+    JOIN_SERVER_MESSAGES("WelcomeMessages"),
+    LIKE_ART("LikeArt"),
     MENTION_SPAM("MentionSpam"),
     MUTE_REPEAT_OFFENDER("MuteRepeatOffender"),
     RATE_LIMITING("RateLimiting"),
@@ -63,7 +65,8 @@ public enum SAILType {
     VOTING("Voting"),
     XP_DECAY("XpDecay"),
     XP_GAIN("XpGain"),
-    CHECK_NEW_USERS("CheckNewUsers");
+    CHECK_NEW_USERS("CheckNewUsers"),
+    SEND_JOIN_MESSAGES("SendJoinMessages");
 
     private String name;
 

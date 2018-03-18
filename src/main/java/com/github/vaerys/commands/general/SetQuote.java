@@ -92,7 +92,7 @@ public class SetQuote extends Command {
 
     @Override
     protected ChannelSetting channel() {
-        return ChannelSetting.BOT_COMMANDS;
+        return ChannelSetting.PROFILES;
     }
 
     @Override

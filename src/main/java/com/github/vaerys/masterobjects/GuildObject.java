@@ -167,10 +167,13 @@ public class GuildObject {
      *
      * @param channel
      */
-    public void removeChannelSetting(String channel) {
+    public void removeChannelSetting(ChannelSetting channel) {
+        channelSettings.remove(ChannelSetting.FROM_DM);
         for (ChannelSetting s : channelSettings) {
-            if (s.toString().equals(channel)) {
+            if (s == channel) {
+                channelSettings.remove(s);
                 logger.trace("Channel Setting: " + s.toString() + " removed.");
+                break;
             }
         }
     }
@@ -297,7 +300,7 @@ public class GuildObject {
     }
 
     public void handleWelcome(CommandObject command) {
-        if (config.welcomeMessage) {
+        if (config.initialMessage) {
             return;
         }
         if (command.guild.get() == null || command.channel == null) {
@@ -310,7 +313,7 @@ public class GuildObject {
         if (!GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER)) return;
         IMessage message = RequestHandler.sendMessage(Constants.getWelcomeMessage(command), command.channel.get()).get();
         if (message != null) {
-            command.guild.config.welcomeMessage = true;
+            command.guild.config.initialMessage = true;
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(5 * 60 * 1000);

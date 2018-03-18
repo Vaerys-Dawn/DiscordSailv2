@@ -123,15 +123,16 @@ public class ArtHandler {
             String response;
             if (!command.guild.config.autoArtPinning) {
                 if (owner.longID == reacted.longID) {
-                    response = "> **" + reacted.displayName + "** Has pinned their art by reacting with the \uD83D\uDCCC emoji.";
+                    response = "> **" + reacted.displayName + "** Has pinned their";
                 } else {
-                    response = "> **" + reacted.displayName + "** Has pinned **" + owner.displayName + "'s** art by reacting with the \uD83D\uDCCC emoji.";
+                    response = "> **" + reacted.displayName + "** Has pinned **" + owner.displayName + "'s**";
                 }
+                response += " art by reacting with the \uD83D\uDCCC emoji.";
             } else {
                 response = "> I have pinned **" + owner + "'s** art.";
             }
             if (command.guild.config.likeArt && command.guild.config.modulePixels) {
-                response += "\n You can now react with a \u2764 emoji to give the user some pixels.";
+                response += "\nYou can now react with a \u2764 emoji to give the user some pixels.";
             }
             IMessage pinResponse = RequestHandler.sendMessage(response, command.channel).get();
             Thread thread = new Thread(() -> {

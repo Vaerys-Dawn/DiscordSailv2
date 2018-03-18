@@ -8,10 +8,13 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,7 +26,7 @@ public class NewCC extends Command {
     public String execute(String args, CommandObject command) {
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
-            return "> You have been denied the creation of custom commands.";
+            return "> " + command.user.mention() + ", You have been denied the creation of custom commands.";
         }
         if (command.guild.getChannelsByType(ChannelSetting.CC_DENIED).contains(command.channel.get()))
             return "> This Channel has CCs Denied, You cannot create ccs here.";
@@ -41,6 +44,7 @@ public class NewCC extends Command {
         if (object.getSettings().contains(UserSetting.AUTO_SHITPOST)) {
             isShitpost = true;
         }
+
         String nameCC = splitFirst.getFirstWord();
         String argsCC = splitFirst.getRest();
         if ((argsCC == null || argsCC.isEmpty()) && command.message.get().getAttachments().size() == 0) {

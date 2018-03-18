@@ -121,7 +121,7 @@ public class EditLinks extends Command {
 
     @Override
     protected ChannelSetting channel() {
-        return ChannelSetting.BOT_COMMANDS;
+        return ChannelSetting.PROFILES;
     }
 
     @Override
