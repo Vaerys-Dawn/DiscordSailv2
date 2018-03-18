@@ -129,7 +129,7 @@ public class ArtHandler {
                 }
                 response += " art by reacting with the \uD83D\uDCCC emoji.";
             } else {
-                response = "> I have pinned **" + owner + "'s** art.";
+                response = "> I have pinned **" + owner.displayName + "'s** art.";
             }
             if (command.guild.config.likeArt && command.guild.config.modulePixels) {
                 response += "\nYou can now react with a \u2764 emoji to give the user some pixels.";
