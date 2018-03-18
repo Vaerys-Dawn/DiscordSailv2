@@ -35,9 +35,9 @@ public class MessageHandler {
             // check for role mentions:
             if (!GuildHandler.testForPerms(command, command.channel.get(), Permissions.MENTION_EVERYONE)) {
                 // sanitize @everyone mentions.
-                args = args.replaceAll(command.guild.get().getEveryoneRole().mention(), "**[REDACTED]**");
+                args = args.replaceAll(command.guild.get().getEveryoneRole().mention(), "REDACTED");
                 // sanitize @here mentions.
-                args = args.replaceAll("@here", "**[REDACTED]**");
+                args = args.replaceAll("@here", "REDACTED");
             }
             XpHandler.grantXP(command);
 //            if (command.guild.config.artPinning) {
