@@ -1,40 +1,15 @@
 package com.github.vaerys.commands.dmCommands;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.RemindMe;
-import com.github.vaerys.interfaces.DMCommand;
+import com.github.vaerys.enums.ChannelSetting;
 
 /**
- * Created by Vaerys on 19/04/2017.
+ * Created by Vaerys on 27/02/2017.
  */
-public class ReminderDM implements DMCommand{
-    @Override
-    public String execute(String args, CommandObject command) {
-        return new RemindMe().execute(args,command);
-    }
+public class ReminderDM extends RemindMe {
 
     @Override
-    public String[] names() {
-        return new RemindMe().names();
-    }
-
-    @Override
-    public String description() {
-        return new RemindMe().description();
-    }
-
-    @Override
-    public String usage() {
-        return new RemindMe().usage();
-    }
-
-    @Override
-    public String type() {
-        return TYPE_GENERAL;
-    }
-
-    @Override
-    public boolean requiresArgs() {
-        return true;
+    protected ChannelSetting channel() {
+        return ChannelSetting.FROM_DM;
     }
 }

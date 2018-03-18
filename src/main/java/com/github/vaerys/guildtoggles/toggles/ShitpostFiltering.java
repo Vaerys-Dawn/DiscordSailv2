@@ -1,17 +1,19 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class ShitpostFiltering implements GuildToggle {
+public class ShitpostFiltering extends GuildSetting {
 
     @Override
-    public String name() {
-        return "ShitpostFiltering";
+    public SAILType name() {
+        return SAILType.SHITPOST_FILTERING;
     }
 
     @Override
@@ -20,7 +22,7 @@ public class ShitpostFiltering implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.shitPostFiltering;
     }
 
@@ -30,12 +32,17 @@ public class ShitpostFiltering implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-
+    public String shortDesc(CommandObject command) {
+        return "Enable \"shitpost\" lock on CCs created in \""+ ChannelSetting.SHITPOST.toString() +"\" channels.";
     }
 
     @Override
-    public boolean isModule() {
-        return false;
+    public String desc(CommandObject command) {
+        return "Enables the locking the usage of Custom commands tagged with shitpost to " + ChannelSetting.SHITPOST.toString() + " channels.";
+    }
+
+    @Override
+    public void setup() {
+
     }
 }

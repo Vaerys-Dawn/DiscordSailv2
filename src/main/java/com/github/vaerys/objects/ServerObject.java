@@ -7,12 +7,12 @@ import java.util.ArrayList;
  */
 public class ServerObject {
     String name;
-    String creatorID;
+    long creatorID;
     String serverIP;
     String serverPort;
     ArrayList<String> serverDesc = new ArrayList<>();
 
-    public ServerObject(String name, String creatorID, String serverIP, String serverPort) {
+    public ServerObject(String name, long creatorID, String serverIP, String serverPort) {
         this.name = name;
         this.creatorID = creatorID;
         this.serverIP = serverIP;
@@ -23,7 +23,11 @@ public class ServerObject {
         return name;
     }
 
-    public String getCreatorID() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getCreatorID() {
         return creatorID;
     }
 
@@ -31,28 +35,24 @@ public class ServerObject {
         return serverIP;
     }
 
-    public String getServerPort() {
-        return serverPort;
-    }
-
-    public String getServerDesc() {
-        StringBuilder builder = new StringBuilder();
-        for (String s: serverDesc){
-            builder.append(s + "\n");
-        }
-        return builder.toString();
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setServerIP(String serverIP) {
         this.serverIP = serverIP;
     }
 
+    public String getServerPort() {
+        return serverPort;
+    }
+
     public void setServerPort(String serverPort) {
         this.serverPort = serverPort;
+    }
+
+    public String getServerDesc() {
+        StringBuilder builder = new StringBuilder();
+        for (String s : serverDesc) {
+            builder.append(s + "\n");
+        }
+        return builder.toString();
     }
 
     public void setServerDesc(ArrayList<String> serverDesc) {

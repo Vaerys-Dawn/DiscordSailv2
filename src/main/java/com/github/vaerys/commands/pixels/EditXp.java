@@ -1,152 +1,209 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 
 /**
- *  Created by AndrielChaoti 22-Aug-17
+ * Created by AndrielChaoti 22-Aug-17
  */
-public class EditXp implements Command {
+public class EditXp extends Command {
+
+    private static final SubCommandObject SET_XP = new SubCommandObject(
+            new String[]{"SetPixels"},
+            "[@User] [Amount]",
+            "Set's the user's pixels to the amount specified.",
+            SAILType.PIXEL
+    );
+    private static final SubCommandObject DEL_XP = new SubCommandObject(
+            new String[]{"RemovePixels", "SubPixels"},
+            "[@User] [Amount]",
+            "Removes the specified amount of pixels from the user's profile.",
+            SAILType.PIXEL
+    );
+    private static final SubCommandObject ADD_XP = new SubCommandObject(
+            new String[]{"AddPixels"},
+            "[@User] [Amount]",
+            "Adds the specified amount of pixels to the user's profile.",
+            SAILType.PIXEL
+    );
+
 
     @Override
     public String execute(String args, CommandObject command) {
-        // Split args into String[]
+
         String[] splitArgs = args.split(" ");
 
-        // Check if user passed enough args
-        if (splitArgs.length != 3) return missingArgs(command);
-
-        // Get user specified in command
-        UserObject user = Utility.getUser(command, splitArgs[0], false);
-        if (user == null) return "> Could not find user.";
-
-        // Parse passed XP into a number
-        long xp;
-        try {
-            xp = Long.parseLong(splitArgs[2]);
-
-            if (xp < 0) return "> I don't know what negative pixels are. What are you trying to do?";
-
-        } catch (NumberFormatException e) {
-            return "> **" + splitArgs[2] + "** is not a number.";
-        }
-
-        // Get userObject from passed user.
-        ProfileObject userObject = user.getProfile(command.guild);
-        if (userObject == null) return "> " + user.displayName + " does not have a profile.";
-
-        // Parse and execute modifiers
-        String out;
         boolean xpChanged = false;
 
-        switch (splitArgs[1]) {
-            // Add Pixels:
-            case "+":
-            case "add":
-                userObject.setXp(userObject.getXP() + xp);
-                xpChanged = true;
+        UserObject user = Utility.getUser(command, splitArgs[0], false);
+        if (user == null) return "> Could not find user.";
+        if (Utility.testUserHierarchy(user, command.user, command.guild)) {
+            return "> You do not have permission to edit " + user.displayName + "'s pixels.";
+        }
 
-                out = "> Added **" + xp + "** pixels to **" + user.displayName + "**.";
-                break;
+        long pixelAmount;
+        try {
+            if (isSubType(command)) {
+                if (splitArgs.length < 2) return getMissingArgsSubCommand(command);
+                pixelAmount = Long.parseLong(splitArgs[1]);
+            } else {
+                if (splitArgs.length < 3) return missingArgs(command);
+                pixelAmount = Long.parseLong(splitArgs[2]);
+            }
+        } catch (NumberFormatException e) {
+            String value = isSubType(command) ? splitArgs[1] : splitArgs[2];
+            return "> **" + value + "** Not a valid Number.";
+        }
+        if (pixelAmount < 0) return "> I don't know what negative pixels are. What are you trying to do?";
+        if (pixelAmount > Constants.PIXELS_CAP)
+            return "> That's too many pixels for me to be working with. (Max: " + Constants.PIXELS_CAP + ")";
 
-            // Remove Pixels
-            case "-":
-            case "rem":
-            case "sub":
-                userObject.setXp(userObject.getXP() - xp);
-                xpChanged = true;
+        ProfileObject profile = user.getProfile(command.guild);
+        if (profile == null) return "> " + user.displayName + " doesn't have a profile yet.";
 
-                out = "> Removed **" + xp + "** pixels from **" + user.displayName + "**.";
-
-                // Special handling if XP is set below 0
-                if (userObject.getXP() < 0) {
-                    userObject.setXp(0);
-                    out = "> **" + user.displayName + "** did not have enough pixels. I just set them to **0**";
-                }
-
-                break;
-
-            // Set Pixels
-            case "=":
-            case "set":
-                userObject.setXp(xp);
-                xpChanged = true;
-
-                out = "> Set Pixels to **" + xp + "** for user **" + user.displayName + "**.";
-                break;
-
-            // Failure case
-            default:
-                out = "> Invalid modifier. Valid modifiers are **[+/-/=]** or **add/sub/set**";
-                break;
+        String out;
+        if (SET_XP.isSubCommand(command)) {
+            out = setXp(profile, pixelAmount, user);
+            xpChanged = true;
+        } else if (ADD_XP.isSubCommand(command)) {
+            out = addXp(profile, pixelAmount, user);
+            xpChanged = true;
+        } else if (DEL_XP.isSubCommand(command)) {
+            out = delXp(profile, pixelAmount, user);
+            xpChanged = true;
+        } else {
+            String modif = splitArgs[1].toLowerCase();
+            switch (modif) {
+                case "+":
+                case "add":
+                    out = addXp(profile, pixelAmount, user);
+                    xpChanged = true;
+                    break;
+                case "-":
+                case "rem":
+                case "sub":
+                    out = delXp(profile, pixelAmount, user);
+                    xpChanged = true;
+                    break;
+                case "=":
+                case "set":
+                    out = setXp(profile, pixelAmount, user);
+                    xpChanged = true;
+                    break;
+                default:
+                    out = "> Invalid modifier. Valid modifiers are **[+/-/=]** or **add/sub/set**";
+                    break;
+            }
         }
 
         if (xpChanged) {
-            userObject.removeLevelFloor();
-            XpHandler.checkUsersRoles(user.stringID, command.guild);
+            profile.removeLevelFloor();
+            GuildHandler.checkUsersRoles(user.longID, command.guild);
         }
         return out;
     }
 
-    // Define Command parameters.
-    @Override
-    public String[] names(){return new String[]{"EditXp", "EditPixels"};}
+    private String addXp(ProfileObject profile, long pixelAmount, UserObject user) {
+        long diff = Constants.PIXELS_CAP - (profile.getXP());
+        profile.setXp(profile.getXP() + pixelAmount);
+        //pixels should never go over the pixel cap.
+        if (profile.getXP() > Constants.PIXELS_CAP) {
+            profile.setXp(Constants.PIXELS_CAP);
+            return "> Added **" + diff + "** pixels to **" + user.displayName + "**. They are now at the Pixel cap.";
+        }
+        return "> Added **" + pixelAmount + "** pixels to **" + user.displayName + "**.";
+    }
+
+    private String setXp(ProfileObject profile, long pixelAmount, UserObject user) {
+        profile.setXp(pixelAmount);
+        return "> Set Pixels to **" + pixelAmount + "** for user **" + user.displayName + "**.";
+    }
+
+    private String delXp(ProfileObject profile, long pixelAmount, UserObject user) {
+        profile.setXp(profile.getXP() - pixelAmount);
+        // Special handling if XP is set below 0
+        if (profile.getXP() < 0) {
+            long diff = pixelAmount + profile.getXP();
+            profile.setXp(0);
+            return "> Removed **" + diff + "** Pixels from **" + user.displayName + "**. They no longer have any pixels.";
+        }
+        return "> Removed **" + pixelAmount + "** pixels from **" + user.displayName + "**.";
+    }
+
+    private String getMissingArgsSubCommand(CommandObject command) {
+        for (SubCommandObject s : subCommands) {
+            if (s.isSubCommand(command)) {
+                return ">> **" + s.getUsage() + "** <<";
+            }
+        }
+        return missingArgs(command);
+    }
+
+    private boolean isSubType(CommandObject command) {
+        for (SubCommandObject s : subCommands) {
+            if (s.isSubCommand(command)) return true;
+        }
+        return false;
+    }
 
     @Override
-    public String description(){
+    protected String[] names() {
+        return new String[]{"EditXp", "EditPixels"};
+    }
+
+    @Override
+    public String description(CommandObject command) {
         String modifiers = "\n**Modifiers**:\n" +
                 "> +/add - `Add [Pixels] pixels.`\n" +
                 "> -/sub - `Remove [Pixels] pixels.`\n" +
                 "> =/set - `Set pixels to [Pixels].`\n";
-        return "Allows you to add or remove pixels from a user." + modifiers;}
+        return "Allows you to add or remove pixels from a user." + modifiers;
+    }
 
     @Override
-    public String type(){return TYPE_PIXEL;}
+    protected SAILType type() {
+        return SAILType.PIXEL;
+    }
 
     @Override
-    public Permissions[] perms(){return new Permissions[]{Permissions.MANAGE_SERVER};}
+    protected ChannelSetting channel() {
+        return null;
+    }
 
     @Override
-    public String usage() {return "[@User] [modifier] [Pixels]";}
+    protected Permissions[] perms() {
+        return new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
+    }
 
     @Override
-    public boolean doAdminLogging() {
+    protected String usage() {
+        return "[@User] [modifier] [Pixels]";
+    }
+
+    @Override
+    protected boolean doAdminLogging() {
         return true;
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
-    }
-
-    @Override
-    public String channel() {
-        return null;
+    public void init() {
+        subCommands.add(SET_XP);
+        subCommands.add(ADD_XP);
+        subCommands.add(DEL_XP);
     }
 }

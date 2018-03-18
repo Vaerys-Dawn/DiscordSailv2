@@ -1,18 +1,19 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildModule;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class ModuleServers implements GuildToggle {
+public class ModuleServers extends GuildModule {
 
     @Override
-    public String name() {
-        return "Servers";
+    public SAILType name() {
+        return SAILType.SERVERS;
     }
 
     @Override
@@ -21,7 +22,7 @@ public class ModuleServers implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleServers;
     }
 
@@ -31,13 +32,22 @@ public class ModuleServers implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommandsByType(Command.TYPE_SERVERS);
-        guild.removeChannel(Command.CHANNEL_SERVERS);
+    public String desc(CommandObject command) {
+        return "This module allows the creation of server listings allowing users to advertise their servers.";
     }
 
     @Override
-    public boolean isModule() {
-        return true;
+    public void setup() {
+        channels.add(ChannelSetting.SERVERS);
+    }
+
+    @Override
+    public String stats(CommandObject command) {
+        return "**Total Server Listings:** " + command.guild.servers.getServers().size();
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allows users to create custom game server listings.";
     }
 }

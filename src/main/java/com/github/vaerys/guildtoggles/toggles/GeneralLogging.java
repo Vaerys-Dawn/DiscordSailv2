@@ -1,17 +1,19 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class GeneralLogging implements GuildToggle {
+public class GeneralLogging extends GuildSetting {
 
     @Override
-    public String name() {
-        return "GeneralLogging";
+    public SAILType name() {
+        return SAILType.GENERAL_LOGGING;
     }
 
     @Override
@@ -20,7 +22,7 @@ public class GeneralLogging implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.generalLogging;
     }
 
@@ -30,12 +32,17 @@ public class GeneralLogging implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-
+    public String shortDesc(CommandObject command) {
+        return "Enables basic command logging";
     }
 
     @Override
-    public boolean isModule() {
-        return false;
+    public String desc(CommandObject command) {
+        return "Enables the logging of general commands. Requires the " + ChannelSetting.SERVER_LOG.toString() + " Channel to be set up.";
+    }
+
+    @Override
+    public void setup() {
+
     }
 }

@@ -1,25 +1,39 @@
 package com.github.vaerys.commands.servers;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.objects.ServerObject;
+import com.github.vaerys.templates.Command;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class Server implements Command {
+public class Server extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         for (ServerObject s : command.guild.servers.getServers()) {
             if (s.getName().equalsIgnoreCase(args)) {
+                IUser user = command.guild.getUserByID(s.getCreatorID());
+                boolean isGuildUser = true;
+                if (user == null) {
+                    user = command.client.get().fetchUser(s.getCreatorID());
+                    isGuildUser = false;
+                }
+
                 StringBuilder builder = new StringBuilder();
                 builder.append("**" + s.getName() + "**\n");
                 builder.append("**IP:** " + s.getServerIP() + " **Port:** " + s.getServerPort() + "\n");
-                builder.append("**Listing Creator:** " + command.guild.get().getUserByID(s.getCreatorID()).getDisplayName(command.guild.get()) + "\n");
+                if (isGuildUser) {
+                    builder.append("**Listing Creator:** " + user.getDisplayName(command.guild.get()) + "\n");
+                } else {
+                    builder.append("**Listing Creator:** " + user.getName() + "#" + user.getDiscriminator() + "\n");
+                }
                 builder.append(s.getServerDesc());
-                Utility.sendDM(builder.toString(), command.user.longID);
+                command.user.sendDm(builder.toString());
                 return "> Server info has been sent to your DMs";
             }
         }
@@ -27,62 +41,47 @@ public class Server implements Command {
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"Server"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Lists the information about a specific server.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Server Name]";
     }
 
     @Override
-    public String type() {
-        return TYPE_SERVERS;
+    protected SAILType type() {
+        return SAILType.SERVERS;
     }
 
     @Override
-    public String channel() {
-        return CHANNEL_SERVERS;
+    protected ChannelSetting channel() {
+        return ChannelSetting.SERVERS;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

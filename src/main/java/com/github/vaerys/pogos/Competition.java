@@ -1,31 +1,24 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.interfaces.GuildFile;
-import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CompObject;
 import com.github.vaerys.objects.PollObject;
+import com.github.vaerys.templates.GuildFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Vaerys on 29/08/2016.
  */
 public class Competition extends GuildFile {
     public static final String FILE_PATH = "Competition.json";
-    boolean properlyInit = false;
     ArrayList<CompObject> entries = new ArrayList<>();
     ArrayList<String> voting = new ArrayList<>();
     int voteLimit = 1;
     ArrayList<PollObject> polls = new ArrayList<>();
-
-    public boolean isProperlyInit() {
-        return properlyInit;
-    }
-
-    public void setProperlyInit(boolean properlyInit) {
-        this.properlyInit = properlyInit;
-    }
+    private double fileVersion = 1.0;
 
     public void newEntry(CompObject entry) {
         entries.add(entry);
@@ -39,15 +32,16 @@ public class Competition extends GuildFile {
         return voting;
     }
 
-    public String addVote(String voterID, String vote) {
-        StringBuilder builder = new StringBuilder();
+    public String addVote(long voterID, String vote) {
+        if (voterID == 137281607638843392L && vote.startsWith("-")) {
+            return "> Ha ha very funny dark, not this time.";
+        }
         boolean userFound = false;
         int position = -1;
         ArrayList<String> userVotes;
-        ArrayList<String> newVotes = new ArrayList<>(Arrays.asList(vote.split(" ")));
         for (int i = 0; i < voting.size(); i++) {
             String[] testVotes = voting.get(i).split(",");
-            if (voterID.equals(testVotes[0])) {
+            if (voterID == Utility.stringLong(testVotes[0])) {
                 position = i;
                 userFound = true;
             }
@@ -56,35 +50,20 @@ public class Competition extends GuildFile {
             userVotes = new ArrayList<>(Arrays.asList(voting.get(position).split(",")));
         } else {
             userVotes = new ArrayList<>();
-            userVotes.add(voterID);
+            userVotes.add(Long.toUnsignedString(voterID));
         }
         if (userVotes.size() == voteLimit + 1) {
             return "> You have already used up all of your votes.";
         }
-        int x = 0;
-        builder.append("> Your votes for entries: \n");
-        for (int i = 0; newVotes.size() > i; i++) {
-            if (x < voteLimit && userVotes.size() < voteLimit + 1) {
-                try {
-                    int entry = Integer.parseInt(newVotes.get(i));
-                    if (entry > entries.size()) {
-                        //builder.append("    **Vote Not Counted. Reason: Number too high**\n");
-                    } else if (entry <= 0) {
-                        //builder.append("    **Vote Not Counted. Reason: Number = 0\n");
-                    } else {
-                        userVotes.add("" + entry);
-                        builder.append(Constants.PREFIX_INDENT + "Entry: **" + entry + "**\n");
-                        x++;
-                    }
-                } catch (NumberFormatException e) {
-                    //builder.append("    **Vote Not Counted. Reason: Not a number**\n");
-                }
+        try {
+            int voteNumber = Integer.parseInt(vote);
+            if (voteNumber > entries.size() || voteNumber < 1) {
+                return "> Your vote was not counted because it was not a valid entry number.";
             }
+            userVotes.add(vote);
+        } catch (NumberFormatException e) {
+            return "> Your vote was not counted because it wasn't a number.";
         }
-        if (newVotes.size() > voteLimit) {
-            //builder.append("    **Rest of Votes Not Counted: Reason Max votes = " + Globals.voteLimit + "**\n");
-        }
-        builder.append(Constants.PREFIX_INDENT + "Have been saved. you now have: **" + (voteLimit - userVotes.size() + 1) + "** Vote token(s) left.");
 
         StringBuilder finalVotes = new StringBuilder();
         for (String s : userVotes) {
@@ -96,7 +75,7 @@ public class Competition extends GuildFile {
         } else {
             voting.add(finalVotes.toString());
         }
-        return builder.toString();
+        return "> Thank you for voting.";
     }
 
     public void purgeVotes() {
@@ -105,5 +84,9 @@ public class Competition extends GuildFile {
 
     public void purgeEntries() {
         entries = new ArrayList<>();
+    }
+
+    public List<String> getVoters() {
+        return voting;
     }
 }

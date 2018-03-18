@@ -6,7 +6,12 @@
 
     <groupId>com.github.vaerys</groupId>
     <artifactId>DiscordSAIL</artifactId>
-    <version>2.8.3.1</version>
+    <version>2.10.3</version>
+
+    <properties>
+        <discord4j.version>89849cc</discord4j.version>
+        <patreonAPI.version>0.3.0</patreonAPI.version>
+    </properties>
 
     <build>
         <resources>
@@ -88,7 +93,7 @@
         <dependency>
             <groupId>com.github.austinv11</groupId>
             <artifactId>Discord4j</artifactId>
-            <version>2.8.4</version>
+            <version>${discord4j.version}</version>
             <classifier>shaded</classifier>
         </dependency>
         <dependency>
@@ -105,6 +110,22 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.patreon</groupId>
+            <artifactId>patreon</artifactId>
+            <version>${patreonAPI.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.kennedyoliveira</groupId>
+            <artifactId>pastebin4j</artifactId>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
 </project>

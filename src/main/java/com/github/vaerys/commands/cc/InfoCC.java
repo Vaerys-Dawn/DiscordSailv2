@@ -1,97 +1,85 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class InfoCC implements Command {
+public class InfoCC extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
-        for (CCommandObject c : command.guild.customCommands.getCommandList()) {
-            if (c.getName().equalsIgnoreCase(args)) {
-                StringBuilder builder = new StringBuilder();
-                IUser author = Globals.getClient().getUserByID(c.getUserID());
-                XEmbedBuilder embedBuilder = new XEmbedBuilder();
-                embedBuilder.withColor(command.client.color);
-                String title = "> Here is the information for command: **" + c.getName() + "**\n";
-                builder.append("Creator: **@" + author.getName() + "#" + author.getDiscriminator() + "**\n");
-                builder.append("Time Run: **" + c.getTimesRun() + "**\n");
-                builder.append("Is Locked: **" + c.isLocked() + "**\n");
-                builder.append("Is ShitPost: **" + c.isShitPost() + "**");
-                embedBuilder.appendField(title,builder.toString(),false);
-                Utility.sendEmbedMessage("",embedBuilder,command.channel.get());
-                return null;
-            }
+        CCommandObject customCommand = command.guild.customCommands.getCommand(args);
+        if (customCommand == null) {
+            return Constants.ERROR_CC_NOT_FOUND;
         }
-        return Constants.ERROR_CC_NOT_FOUND;
+        StringBuilder builder = new StringBuilder();
+        XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
+        String title = "> Here is the information for command: **" + customCommand.getName() + "**\n";
+        IUser createdBy = command.guild.getUserByID(customCommand.getUserID());
+        if (createdBy == null) createdBy = command.client.get().fetchUser(customCommand.getUserID());
+        if (createdBy == null) builder.append("Creator: **Null**\n");
+        else builder.append("Creator: **@" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "**\n");
+        builder.append("Time Run: **" + customCommand.getTimesRun() + "**\n");
+        builder.append("Is Locked: **" + customCommand.isLocked() + "**\n");
+        builder.append("Is ShitPost: **" + customCommand.isShitPost() + "**");
+        embedBuilder.appendField(title, builder.toString(), false);
+        RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
+        return null;
+
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"CCInfo", "InfoCC"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives you a bit of information about a custom command.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Command Name]";
     }
 
     @Override
-    public String type() {
-        return TYPE_CC;
+    protected SAILType type() {
+        return SAILType.CC;
     }
 
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return ChannelSetting.CC_INFO;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

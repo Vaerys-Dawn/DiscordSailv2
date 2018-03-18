@@ -1,103 +1,76 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class SetTrustedRoles implements Command {
+public class SetTrustedRoles extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
-        SplitFirstObject split = new SplitFirstObject(args);
-
-        IRole role = Utility.getRoleFromName(split.getRest(), command.guild.get());
+        if (args.equalsIgnoreCase("Remove")) {
+            command.guild.config.setRoleToMentionID(-1);
+            return "> Invite Allowed Role Removed.";
+        }
+        IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) {
             return Constants.ERROR_ROLE_NOT_FOUND;
-        }
-        if (Utility.testUserHierarchy(command.user.get(), role, command.guild.get())) {
-            if (command.guild.config.isRoleTrusted(role.getLongID())) {
-                ListIterator iterator = command.guild.config.getTrustedRoleIDs().listIterator();
-                while (iterator.hasNext()) {
-                    IRole trustedRole = command.guild.get().getRoleByID((long) iterator.next());
-                    if (role.getLongID() == trustedRole.getLongID()) {
-                        iterator.remove();
-                    }
-                }
-                return "> The **" + role.getName() + "** is no longer trusted.";
-            } else {
-                command.guild.config.getTrustedRoleIDs().add(role.getLongID());
-                return "> The **" + role.getName() + "** is now trusted.";
-            }
         } else {
-            return "> You do not have permission to modify this role.";
+            command.guild.config.setInviteAllowed(role.getLongID());
+            return "> The role **" + role.getName() + "** Is now set as the invite allowed role.";
         }
     }
 
     @Override
-    public String[] names() {
-        return new String[]{"TrustedRole"};
+    protected String[] names() {
+        return new String[]{"SetInviteAllowed"};
     }
 
     @Override
-    public String description() {
-        return "add or remove a Trusted role.";
+    public String description(CommandObject command) {
+        return "Sets the Invite allowed role that will allow users to bypass the invite approved check when the setting is enabled.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Role name]";
     }
 
     @Override
-    public String type() {
-        return TYPE_ADMIN;
+    protected SAILType type() {
+        return SAILType.ADMIN;
     }
 
     @Override
-    public String channel() {
+    protected ChannelSetting channel() {
         return null;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[]{Permissions.MANAGE_ROLES};
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return true;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

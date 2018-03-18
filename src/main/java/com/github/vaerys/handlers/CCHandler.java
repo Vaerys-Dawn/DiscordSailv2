@@ -1,145 +1,75 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.ChannelSetting;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.pogos.CustomCommands;
-import com.github.vaerys.pogos.GuildConfig;
-import org.apache.commons.lang3.StringUtils;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.TagObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.regex.Pattern;
+import java.util.List;
 
 /**
  * Created by Vaerys on 27/08/2016.
  */
 public class CCHandler {
 
-    private String command;
-    private String args;
-    private IMessage message;
-    private IGuild guild;
-    private IUser author;
-    private IChannel channel;
-    private CommandObject commandObject;
-    CustomCommands customCommands;
-    GuildConfig guildconfig;
-
     private final static Logger logger = LoggerFactory.getLogger(CCHandler.class);
 
-    public CCHandler(String args, CommandObject commandObject) {
-        SplitFirstObject commandName = new SplitFirstObject(args);
-        this.message = commandObject.message.get();
-        this.command = commandName.getFirstWord();
-        this.args = commandName.getRest();
-        if (this.args == null) this.args = "";
-        this.commandObject = commandObject;
-        this.guild = commandObject.guild.get();
-        this.author = commandObject.user.get();
-        this.channel = commandObject.channel.get();
-        guildconfig = commandObject.guild.config;
-        customCommands = commandObject.guild.customCommands;
-        handleCommand();
-    }
+    public static void handleCommand(String args, CommandObject command) {
+        //cc lockout handling
 
-    private void handleCommand() {
-        ProfileObject object = commandObject.guild.users.getUserByID(author.getStringID());
-        if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
-            Utility.sendMessage("> Nothing interesting happens. `(ERROR: 401)`", channel);
+
+
+        SplitFirstObject commandName = new SplitFirstObject(args);
+        CCommandObject commandObject = command.guild.customCommands.getCommand(commandName.getFirstWord(), command);
+
+        String ccArgs = commandName.getRest();
+        if (ccArgs == null) {
+            ccArgs = "";
+        }
+
+        if (commandObject == null) return;
+
+        List<IChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
+        if (ccDenied.contains(command.channel.get())) {
+            RequestHandler.sendMessage("> Custom Command usage has been disabled for this channel.", command.channel);
             return;
         }
-        String response;
-        String prefixEmbedImage = "<embedImage>{";
-        String tagDeleteMessage = "<delCall>";
-        for (CCommandObject cc : customCommands.getCommandList()) {
-            if (command.equalsIgnoreCase(guildconfig.getPrefixCC() + cc.getName())) {
 
-                //command logging
-                logger.debug(Utility.loggingFormatter(commandObject, "CUSTOM_COMMAND"));
+        ProfileObject object = command.guild.users.getUserByID(command.user.longID);
+        if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
+            RequestHandler.sendMessage("> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
+            return;
+        }
 
-                if (Utility.canBypass(author, guild)) ;
-                else if (cc.isShitPost() && guildconfig.shitPostFiltering) {
-                    ArrayList<String> channelMentions = new ArrayList<>();
-                    boolean isShitpost = false;
-                    if (guildconfig.getChannelIDsByType(Command.CHANNEL_SHITPOST) != null) {
-                        for (ChannelSetting c : commandObject.guild.channelSettings) {
-                            if (c.type().equals(Command.CHANNEL_SHITPOST)) {
-                                for (String id : c.getIDs(commandObject.guild.config)) {
-                                    if (commandObject.channel.stringID.equals(id)) {
-                                        isShitpost = true;
-                                    }
-                                    for (IChannel channel : commandObject.guild.get().getChannels()) {
-                                        if (id.equals(channel.getStringID())) {
-                                            EnumSet<Permissions> userPerms = channel.getModifiedPermissions(commandObject.user.get());
-                                            if (userPerms.contains(Permissions.SEND_MESSAGES) && userPerms.contains(Permissions.READ_MESSAGES)) {
-                                                channelMentions.add(channel.mention());
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (!isShitpost) {
-                            if (channelMentions.size() == 0) {
-                                Utility.sendMessage("> You do not have access to any channels that you are able to run this command in.", channel);
-                                return;
-                            } else if (channelMentions.size() > 1) {
-                                Utility.sendMessage("> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true), channel);
-                                return;
-                            } else if (channelMentions.size() == 1) {
-                                Utility.sendMessage("> Command must be performed in: " + channelMentions.get(0), channel);
-                                return;
-                            }
-                        }
-                    }
+        command.guild.sendDebugLog(command, "CUSTOM_COMMAND", commandObject.getName(command), ccArgs);
 
-                }
-                response = cc.getContents(true);
-                int argsCount = StringUtils.countMatches(response, "<args>");
-                if (argsCount != 0) {
-                    if (args.length() * argsCount > Globals.argsMax) {
-                        Utility.sendMessage("> Args to large for this command. Max args size : " + Globals.argsMax, channel);
-                        return;
-                    }
-                }
-                response = TagHandler.tagSystem(response, commandObject, args);
-                response = TagHandler.tagMentionRemover(response);
-                response = response.replace("<DELCALL>", "<delCall>");
-                response = response.replace("<EMBEDIMAGE>", "<embedImage>");
-                if (customCommands.checkblackList(response) != null) {
-                    Utility.sendMessage(customCommands.checkblackList(response), channel);
-                    return;
-                }
-                if (response.contains(tagDeleteMessage)) {
-                    response = response.replace(tagDeleteMessage, "");
-                    Utility.deleteMessage(message);
-                }
-                if (response.contains("<embedImage>{")) {
-                    String imageURL = TagHandler.tagEmbedImage(response, prefixEmbedImage);
-                    if (imageURL != null || !imageURL.isEmpty()) {
-                        if (commandObject.channel.get().getModifiedPermissions(author).contains(Permissions.EMBED_LINKS)) {
-                            response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "");
-                            response = TagHandler.tagToCaps(response);
-                            Utility.sendFileURL(response, imageURL, channel, true);
-                        } else {
-                            response = response.replaceFirst(Pattern.quote(prefixEmbedImage + imageURL + "}"), "<" + imageURL + ">");
-                            Utility.sendMessage(response, channel);
-                        }
-                        return;
-                    }
-                }
-                Utility.sendMessage(response, channel);
+        String contents = commandObject.getContents(true);
+        //shitpost handling
+        if (commandObject.isShitPost() && command.guild.config.shitPostFiltering && !GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+            List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
+            if (channels.size() != 0 && !channels.contains(command.channel.get())) {
+                channels = command.user.getVisibleChannels(channels);
+                List<String> channelMentions = Utility.getChannelMentions(channels);
+                RequestHandler.sendMessage(Utility.getChannelMessage(channelMentions), command.channel.get());
+                return;
             }
         }
+
+        //tag handling
+        for (TagObject t : TagList.getType(TagType.CC)) {
+            contents = t.handleTag(contents, command, ccArgs);
+            if (contents == null) return;
+        }
+        RequestHandler.sendMessage(contents, command.channel.get());
     }
 }

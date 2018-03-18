@@ -1,18 +1,20 @@
 package com.github.vaerys.guildtoggles.toggles;
 
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.LastDailyMessage;
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class DailyMessage implements GuildToggle {
+public class DailyMessage extends GuildSetting {
 
     @Override
-    public String name() {
-        return "DailyMessage";
+    public SAILType name() {
+        return SAILType.DAILY_MESSAGE;
     }
 
     @Override
@@ -21,7 +23,7 @@ public class DailyMessage implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.dailyMessage;
     }
 
@@ -31,12 +33,18 @@ public class DailyMessage implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommand(new LastDailyMessage().names());
+    public String shortDesc(CommandObject command) {
+        return desc(command);
     }
 
     @Override
-    public boolean isModule() {
-        return false;
+    public String desc(CommandObject command) {
+        return "Enables special messages that are sent once a day to your server's " + ChannelSetting.GENERAL.toString() + " channel.";
     }
+
+    @Override
+    public void setup() {
+        commands.add(new LastDailyMessage());
+    }
+
 }

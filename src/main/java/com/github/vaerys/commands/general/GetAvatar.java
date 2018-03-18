@@ -1,27 +1,28 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
-import sx.blah.discord.handle.obj.IUser;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.List;
 
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class GetAvatar implements Command {
+public class GetAvatar extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
-        UserObject user = Utility.getUser(command, args, true);
+        UserObject user = Utility.getUser(command, args, true, false);
         if (user != null) {
             String message = user.displayName + ":\n" + user.get().getAvatarURL();
             if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
                 return "> User has set their profile to private.";
             } else if (user.isPrivateProfile(command.guild) && user.longID == command.user.longID) {
-                Utility.sendMessage(message, user.get().getOrCreatePMChannel());
+                RequestHandler.sendMessage(message, user.get().getOrCreatePMChannel());
                 return "> Avatar sent to your direct messages.";
             }
             return message;
@@ -31,62 +32,47 @@ public class GetAvatar implements Command {
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"GetAvatar"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gets the Mentionee's Profile Image.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[@User]";
     }
 
     @Override
-    public String type() {
-        return TYPE_GENERAL;
+    protected SAILType type() {
+        return SAILType.GENERAL;
     }
 
     @Override
-    public String channel() {
+    protected ChannelSetting channel() {
         return null;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

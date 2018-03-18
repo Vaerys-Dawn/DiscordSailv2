@@ -1,7 +1,9 @@
 package com.github.vaerys.commands.competition;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -9,7 +11,8 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class FinalTally implements Command {
+public class FinalTally extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         StringBuilder builder = new StringBuilder();
@@ -30,7 +33,7 @@ public class FinalTally implements Command {
                 totalVotes++;
             }
         }
-        builder.append("total of profiles that voted: " + userVoteClusters + "\n");
+        builder.append("total of users that voted: " + userVoteClusters + "\n");
         builder.append("total number of votes: " + totalVotes + "\n");
         int entry = 0;
         for (int i : tally) {
@@ -41,62 +44,47 @@ public class FinalTally implements Command {
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"FinalTally"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Posts the final scores.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return null;
     }
 
     @Override
-    public String type() {
-        return TYPE_COMPETITION;
+    protected SAILType type() {
+        return SAILType.COMPETITION;
     }
 
     @Override
-    public String channel() {
+    protected ChannelSetting channel() {
         return null;
     }
 
     @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES,Permissions.MANAGE_ROLES};
+    protected Permissions[] perms() {
+        return new Permissions[]{Permissions.MANAGE_MESSAGES, Permissions.MANAGE_ROLES};
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return false;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

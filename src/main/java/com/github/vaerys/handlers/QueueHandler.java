@@ -4,16 +4,13 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.DailyUserMessageObject;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.QueueObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.objects.XRequestBuffer;
-import com.vdurmont.emoji.Emoji;
-import com.vdurmont.emoji.EmojiManager;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IEmbed;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IReaction;
+import sx.blah.discord.handle.impl.obj.ReactionEmoji;
+import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -28,25 +25,28 @@ public class QueueHandler {
     private static String uIDString = "UID";
 
     public static void addToQueue(CommandObject object, String content, DayOfWeek dayOfWeek, String type) {
-        Emoji thumbsUp = EmojiManager.getForAlias("thumbsup");
-        Emoji thumbsDown = EmojiManager.getForAlias("thumbsdown");
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
         IChannel channel = object.client.get().getChannelByID(Globals.queueChannelID);
 
         if (channel != null) {
             switch (type) {
                 case Constants.QUEUE_DAILY:
-                    long uID = Utility.newDailyMsgUID(Globals.getDailyMessages());
-                    XEmbedBuilder embedBuilder = new XEmbedBuilder();
+                    long uID = Globals.getDailyMessages().newDailyMsgUID();
+                    if (uID == -1) {
+                        object.client.creator.sendDm("> Max limit of Daily messages hit.");
+                        break;
+                    }
+                    XEmbedBuilder embedBuilder = new XEmbedBuilder(object);
                     embedBuilder.withAuthorName("New Daily Message - " + object.guild.get().getName());
-                    embedBuilder.withFooterText(object.user.stringID);
+                    embedBuilder.withFooterText(object.user.longID + "");
                     embedBuilder.withTitle(object.user.username);
                     embedBuilder.withDesc(content);
                     embedBuilder.appendField(dowString, dayOfWeek + "", true);
                     embedBuilder.appendField(uIDString, uID + "", true);
-                    embedBuilder.withColor(Utility.getUsersColour(object.client.bot, object.guild.get()));
-                    IMessage message = Utility.sendEmbedMessage("", embedBuilder, channel).get();
-                    XRequestBuffer.request(() -> message.addReaction(thumbsUp)).get();
-                    XRequestBuffer.request(() -> message.addReaction(thumbsDown)).get();
+                    IMessage message = RequestHandler.sendEmbedMessage("", embedBuilder, channel).get();
+                    RequestBuffer.request(() -> message.addReaction(thumbsUp)).get();
+                    RequestBuffer.request(() -> message.addReaction(thumbsDown)).get();
                     Globals.getDailyMessages().getQueue().add(new QueueObject(message.getLongID(), uID, type));
                     checkQueue();
                     return;
@@ -57,94 +57,103 @@ public class QueueHandler {
     }
 
     public static void checkQueue() {
+        IChannel queueChannel = Globals.client.getChannelByID(Globals.queueChannelID);
+        if (queueChannel == null) return;
         ArrayList<QueueObject> queuedMessages = Globals.getDailyMessages().getQueue();
         ListIterator iterator = queuedMessages.listIterator();
         while (iterator.hasNext()) {
             QueueObject object = (QueueObject) iterator.next();
-            if (Globals.client.getMessageByID(object.getMessageId()) == null) {
-                iterator.remove();
+            IMessage item = queueChannel.getMessageByID(object.getMessageId());
+            if (item == null) {
+                item = RequestBuffer.request(() -> {
+                    return queueChannel.fetchMessage(object.getMessageId());
+                }).get();
             }
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (item == null) {
+                iterator.remove();
+            } else if (object.isMarkedForRemoval()) {
+                iterator.remove();
             }
         }
     }
 
 
-    public static void addedReaction(IMessage message, IReaction reaction) {
-        Emoji thumbsUp = EmojiManager.getForAlias("thumbsup");
-        Emoji thumbsDown = EmojiManager.getForAlias("thumbsdown");
-        Emoji ok = EmojiManager.getForAlias("white_check_mark");
-        Emoji no = EmojiManager.getForAlias("no_entry_sign");
+    public static void reactionAdded(CommandObject object, IReaction reaction) {
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
+        ReactionEmoji ok = Utility.getReaction("white_check_mark");
+        ReactionEmoji no = Utility.getReaction(Constants.EMOJI_REMOVE_PIN);
         ArrayList<QueueObject> queuedMessages = Globals.getDailyMessages().getQueue();
+        IMessage message = object.message.get();
+        IUser owner = object.client.creator.get();
+        //exit if not the queue channel
+        if (object.channel.longID != Globals.queueChannelID) {
+            return;
+        }
+        //exit if not the owner.
+        if (reaction.getCount() == 0) {
+            return;
+        }
+        if (!reaction.getUserReacted(owner)) {
+            return;
+        }
+        //exit if no embeds
+        if (message.getEmbeds().size() == 0) {
+            return;
+        }
+        //exit if not enough reactions
+        if (message.getReactions().size() <= 1) {
+            return;
+        }
 
-        long messageId = message.getLongID();
-        ListIterator iterator = queuedMessages.listIterator();
-        while (iterator.hasNext()) {
-            QueueObject object = (QueueObject) iterator.next();
-            //check if has same messageID
-            if (messageId == object.getMessageId()) {
-                //check if has embed
-                if (message.getEmbeds().size() > 0) {
-                    IEmbed embed = message.getEmbeds().get(0);
-                    //check what type of object it is.
-                    switch (object.getType()) {
-                        case Constants.QUEUE_DAILY:
-                            //if approved
-                            if (reaction.getUnicodeEmoji().equals(thumbsUp)) {
-                                XRequestBuffer.request(() -> message.removeAllReactions()).get();
-                                try {
-                                    long userID = Long.parseLong(embed.getFooter().getText());
-                                    long uID = -1;
-                                    DayOfWeek day = null;
-                                    for (IEmbed.IEmbedField f : embed.getEmbedFields()) {
-                                        if (f.getName().equalsIgnoreCase(dowString)) {
-                                            day = DayOfWeek.valueOf(f.getValue());
-                                        } else if (f.getName().equalsIgnoreCase(uIDString)) {
-                                            uID = Long.parseLong(f.getValue());
-                                        }
-                                    }
-                                    Utility.sendDM("> A daily message you sent was approved. **[" + uID + "]**", userID);
-                                    Globals.getDailyMessages().getMessages().add(new DailyUserMessageObject(embed.getDescription(), day, userID, uID));
-                                    XRequestBuffer.request(() -> message.addReaction(ok)).get();
-                                    iterator.remove();
-                                } catch (NumberFormatException e) {
-                                    iterator.remove();
-                                } catch (IllegalArgumentException e) {
-                                    iterator.remove();
+        checkQueue();
+
+        for (QueueObject q : queuedMessages) {
+            if (q.getMessageId() == message.getLongID()) {
+                //getToggles the embed
+                IEmbed embed = message.getEmbeds().get(0);
+                RequestBuffer.request(() -> message.removeAllReactions()).get();
+                switch (q.getType()) {
+                    //do if daily request
+                    case Constants.QUEUE_DAILY:
+                        try {
+                            //getToggles the data
+                            long userID = Long.parseLong(embed.getFooter().getText());
+                            long uID = -1;
+                            DayOfWeek day = null;
+                            for (IEmbed.IEmbedField f : embed.getEmbedFields()) {
+                                if (f.getName().equalsIgnoreCase(dowString)) {
+                                    day = DayOfWeek.valueOf(f.getValue());
+                                } else if (f.getName().equalsIgnoreCase(uIDString)) {
+                                    uID = Long.parseLong(f.getValue());
                                 }
-                                //if denied
-                            } else if (reaction.getUnicodeEmoji().equals(thumbsDown)) {
-                                try {
-                                    long userID = Long.parseLong(embed.getFooter().getText());
-                                    long uID = -1;
-                                    for (IEmbed.IEmbedField f : embed.getEmbedFields()) {
-                                        if (f.getName().equalsIgnoreCase(uIDString)) {
-                                            uID = Long.parseLong(f.getValue());
-                                        }
-                                    }
-                                    Utility.sendDM("> A daily message you sent was denied. **[" + uID + "]**", userID);
-                                } catch (NumberFormatException e) {
-                                    //do nothing
-                                }
-                                XRequestBuffer.request(() -> message.removeAllReactions()).get();
-                                XRequestBuffer.request(() -> message.addReaction(no)).get();
-                                iterator.remove();
                             }
-                            break;
-                        default:
-                            //ignore everything for now
-                            break;
-                    }
+                            UserObject user = new UserObject(object.client.getUserByID(userID), null);
+                            //do if accepted
+                            if (reaction.getEmoji().equals(thumbsUp)) {
+
+                                user.sendDm("> A daily message you sent was approved. **[" + uID + "]**");
+                                Globals.getDailyMessages().getMessages().add(new DailyMessage(embed.getDescription(), day, userID, uID));
+                                RequestBuffer.request(() -> message.addReaction(ok)).get();
+                                q.toggleMarkedForRemoval();
+                                return;
+                                //do if denied
+                            } else if (reaction.getEmoji().equals(thumbsDown)) {
+                                user.sendDm("> A daily message you sent was denied. **[" + uID + "]**");
+                                q.toggleMarkedForRemoval();
+                                RequestBuffer.request(() -> message.addReaction(no)).get();
+                                return;
+                            } else {
+                                return;
+                            }
+                        } catch (NumberFormatException e) {
+                            q.toggleMarkedForRemoval();
+                        } catch (IllegalArgumentException e) {
+                            q.toggleMarkedForRemoval();
+                        }
+                    default:
+                        return;
                 }
-            }
-            checkQueue();
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }

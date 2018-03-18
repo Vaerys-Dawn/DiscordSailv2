@@ -4,15 +4,15 @@ package com.github.vaerys.objects;
  * Created by Vaerys on 27/08/2016.
  */
 public class UserCountDown {
-    String userID;
+    long userID;
     long remainderSecs;
 
-    public UserCountDown(String userID, long remainderSecs) {
+    public UserCountDown(long userID, long remainderSecs) {
         this.userID = userID;
         this.remainderSecs = remainderSecs;
     }
 
-    public String getID() {
+    public long getID() {
         return userID;
     }
 

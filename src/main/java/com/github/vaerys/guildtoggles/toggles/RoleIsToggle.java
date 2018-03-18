@@ -1,16 +1,18 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.roleSelect.CosmeticRoles;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 18/03/2017.
  */
-public class RoleIsToggle implements GuildToggle {
+public class RoleIsToggle extends GuildSetting {
     @Override
-    public String name() {
-        return "RoleIsToggle";
+    public SAILType name() {
+        return SAILType.ROLE_IS_TOGGLE;
     }
 
     @Override
@@ -19,7 +21,7 @@ public class RoleIsToggle implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.roleIsToggle;
     }
 
@@ -29,12 +31,17 @@ public class RoleIsToggle implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-
+    public String shortDesc(CommandObject command) {
+        return desc(command);
     }
 
     @Override
-    public boolean isModule() {
-        return false;
+    public String desc(CommandObject command) {
+        return "Changes the " + new CosmeticRoles().getCommand(command) + " command to make it toggle roles.";
+    }
+
+    @Override
+    public void setup() {
+
     }
 }

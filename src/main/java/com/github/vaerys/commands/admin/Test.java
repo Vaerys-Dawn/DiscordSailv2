@@ -1,136 +1,156 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.main.Globals;
+import com.github.vaerys.commands.help.HelpSettings;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleInit;
+import com.github.vaerys.guildtoggles.toggles.DebugMode;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class Test implements Command {
+public class Test extends Command {
 
-    /**
-     * Important ass code do not delete plserino
-     * //        if (obe.getFirstWord().equalsIgnoreCase("Mention")) {
-     * //            if (obe.getRest() != null) {
-     * //                IUser user = null;
-     * //                SplitFirstObject mentionee = new SplitFirstObject(obe.getRest());
-     * //                String toTest = Matcher.quoteReplacement(mentionee.getFirstWord()).replace("_", "[_| ]");
-     * //                for (IUser u : command.guild.getProfiles()) {
-     * //                    try {
-     * //                        if ((u.getName() + "#" + u.getDiscriminator()).matches(toTest)) {
-     * //                            user = u;
-     * //                        }
-     * //                    } catch (PatternSyntaxException e) {
-     * //                        //do nothing.
-     * //                    }
-     * //                }
-     * //                try {
-     * //                    long uID = Long.parseLong(mentionee.getFirstWord());
-     * //                    user = command.client.getUserByID(uID);
-     * //                } catch (NumberFormatException e) {
-     * //                    if (command.message.getMentions().size() > 0) {
-     * //                        user = command.message.getMentions().get(0);
-     * //                    }
-     * //                }
-     * //                if (user != null) {
-     * //                    return "> User was found.";
-     * //                } else {
-     * //                    return "> user could not be found.";
-     * //                }
-     * //            }
-     * //        }
-     */
-
-    String nothing = "> Nothing to see here move along.";
+    protected static final SubCommandObject object = new SubCommandObject(
+            new String[]{"Boop", "Snugg"},
+            "[Test Data]",
+            "nothing",
+            SAILType.MOD_TOOLS
+    );
+    String nothing = "> You didn't see anything.";
 
     @Override
     public String execute(String args, CommandObject command) {
-//        ProfileObject profile = command.guildUsers.getUserByID(command.authorSID);
-//        long userXp = profile.getXP();
-//        profile.setXp(20000);
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("> Start test.");
-//        for (int i = 1; i < 41; i++) {
-//            XpHandler.doDeacyUser(profile, command.guildObject, i);
-//            String stats = "\nXp: **" + profile.getXP() + "**, Level: **" + profile.getCurrentLevel() + "**, Day: **" + i + "**, Role Count: **" + command.author.getRolesForGuild(command.guild).size() + "**.";
-//            if (builder.length() + stats.length() > 1800) {
-//                Utility.sendMessage(builder.toString(), command.channel);
-//                builder.delete(0, builder.length());
-//            }
-//            builder.append(stats);
+
+//        StringHandler output = new StringHandler();
+//        output.append("Next step is to pick which settings you want to use.\n")
+//                .append("There's a lot of settings in modules, and those will be set there.\n")
+//                .append("Here's a list of the settings that aren't tied to any specific module.\n\n");
+//
+//        List<GuildToggle> globalToggles = ToggleInit.getToggles(false);
+//        List<GuildToggle> modules = ToggleInit.getToggles(true);
+//        List<String> enabled = new LinkedList<>();
+//        List<String> disabled = new LinkedList<>();
+//
+//
+//        globalToggles.sort(Comparator.comparing(GuildToggle::name));
+//
+//        List<SAILType> types = new LinkedList<>();
+//
+//        modules.forEach(t -> types.addAll(t.settings.stream().map(s -> s.name()).collect(Collectors.toList())));
+//
+//        if (!new DebugMode().getDefault()) {
+//            globalToggles.removeIf(t -> t.name() == SAILType.DEBUG_MODE);
 //        }
-//        builder.append("\n> Test Complete.");
-//        profile.setXp(userXp);
-//        profile.removeLevelFloor();
-//        XpHandler.checkUsersRoles(profile.getID(), command.guildObject);
-//        return builder.toString();
-//        return Utility.getCommandsByType(Globals.getAllCommands(), command, TYPE_DM, true).size() + "";
-        throw new DiscordException("Test Exception");
+//
+//        ListIterator iterator = globalToggles.listIterator();
+//        while (iterator.hasNext()) {
+//            GuildToggle toggle = (GuildToggle) iterator.next();
+//            if (types.contains(toggle.name())) {
+//                iterator.remove();
+//            } else {
+//                if (toggle.enabled(command.guild.config)) enabled.add(toggle.name().toString());
+//                else disabled.add(toggle.name().toString());
+//            }
+//        }
+//
+//        String format = "\t> **%s** - %s\n";
+//        for (GuildToggle t : globalToggles) {
+//            output.appendFormatted(format, t.name().toString(), t.shortDesc(command));
+//        }
+//        output.append("\n");
+//
+//        output.append("You can switch settings on and off with **" +
+//                new Toggle().getCommand(command) + "** and get more info on each setting with **" +
+//                new HelpSettings().getCommand(command) + "**.");
+//
+//        XEmbedBuilder embed = new XEmbedBuilder(command);
+//        embed.withTitle("Global Settings");
+//        embed.appendField("Enabled", "```" + Utility.listFormatter(enabled, true) + "```", false);
+//        embed.appendField("Disabled", "```" + Utility.listFormatter(disabled, true) + "```", false);
+//        RequestHandler.sendEmbedMessage(output.toString(),embed, command.channel);
+//        return null;
+
+
+//
+//        IEmoji emoji = command.guild.getEmojiByName(args);
+//        if (emoji == null) return "> Not a valid emoji name.";
+//        return emoji.toString();
+
+//        XEmbedBuilder builder = new XEmbedBuilder(command);
+//        builder.withAuthorName("Note 1 - " +command.user.displayName);
+//        builder.withAuthorIcon(command.user.getAvatarURL());
+//        builder.withDescription("blah blah this is a note.\n\n" +
+//                "`Last edited: " + Utility.formatTime(10, true) + " ago.`");
+//        builder.withTimestamp(command.message.getTimestamp());
+//        builder.withFooterText("Created by " + command.client.bot.displayName);
+//        builder.withFooterIcon(command.client.bot.getAvatarURL());
+//        builder.send(command.channel);
 //        return nothing;
+//        return (long) ((90 - 7) * (Globals.avgMessagesPerDay * command.guild.config.xpRate * command.guild.config.xpModifier) / 8) + "";
+
+//        EnumSet<Permissions> botPerms = command.client.bot.getPermissions(command.guild);
+//        return botPerms.contains(Permissions.MANAGE_CHANNELS) ? "> I HAVE MANAGE_CHANNELS" : "> I DO NOT HAVE MANAGE_CHANNELS";
+
+//        return object.isSubCommand(command) + " " + object.getArgs(command) + " " + object.getCommandUsage(command);
+        throw new DiscordException("TestException");
     }
 
-
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"Test", "Testing"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Tests Things.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Lol this command has no usages XD]";
     }
 
     @Override
-    public String type() {
-        return TYPE_ADMIN;
+    protected SAILType type() {
+        return SAILType.ADMIN;
     }
 
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return null;
     }
 
     @Override
-    public Permissions[] perms() {
-        return new Permissions[]{Permissions.ADMINISTRATOR};
+    protected Permissions[] perms() {
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return false;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
+    public void init() {
+        subCommands.add(object.appendRegex(" (\\+|-)"));
     }
 }

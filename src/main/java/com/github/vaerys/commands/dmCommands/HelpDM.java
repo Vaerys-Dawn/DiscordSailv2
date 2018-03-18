@@ -1,11 +1,14 @@
 package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.DMCommand;
+import com.github.vaerys.commands.help.Commands;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.DMCommand;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,12 +17,12 @@ import java.util.List;
 /**
  * Created by Vaerys on 05/02/2017.
  */
-public class HelpDM implements DMCommand {
+public class HelpDM extends DMCommand {
+
     @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder();
-        builder.withColor(command.client.color);
-        List<Command> commands = Utility.getCommandsByType(Globals.getAllCommands(), command, TYPE_DM, true);
+        XEmbedBuilder builder = new XEmbedBuilder(command);
+        List<Command> commands = Utility.getCommandsByType(Globals.getAllCommands(), command, SAILType.DM, true);
         List<String> list = new ArrayList<>();
         for (Command c : commands) {
             list.add(c.getCommand(command));
@@ -28,32 +31,37 @@ public class HelpDM implements DMCommand {
         StringBuilder desc = new StringBuilder("**> Direct Message Commands.**```" + Utility.listFormatter(list, false) + "```\n");
         desc.append(Utility.getCommandInfo(new InfoDM()));
         builder.withDescription(desc.toString());
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 
     @Override
-    public String[] names() {
-        return new String[]{"Help"};
+    protected String[] names() {
+        return new Commands().names;
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Lists DM Commands.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return null;
     }
 
     @Override
-    public String type() {
-        return TYPE_HELP;
+    protected SAILType type() {
+        return SAILType.HELP;
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return false;
+    }
+
+    @Override
+    public void init() {
+
     }
 }

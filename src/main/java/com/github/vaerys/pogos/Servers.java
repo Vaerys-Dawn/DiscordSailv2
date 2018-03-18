@@ -1,10 +1,11 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.interfaces.GuildFile;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.BlackListObject;
 import com.github.vaerys.objects.ServerObject;
+import com.github.vaerys.templates.GuildFile;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.Permissions;
@@ -17,17 +18,9 @@ import java.util.Arrays;
  */
 public class Servers extends GuildFile {
     public static final String FILE_PATH = "Servers.json";
-    boolean properlyInit = false;
     ArrayList<BlackListObject> blackList = new ArrayList<>();
     ArrayList<ServerObject> servers = new ArrayList<>();
-
-    public boolean isProperlyInit() {
-        return properlyInit;
-    }
-
-    public void setProperlyInit(boolean properlyInit) {
-        this.properlyInit = properlyInit;
-    }
+    private double fileVersion = 1.0;
 
     public String addToBlacklist(String phrase, String reason) {
         for (BlackListObject b : blackList) {
@@ -51,7 +44,7 @@ public class Servers extends GuildFile {
         return "> Phrase could not be found.";
     }
 
-    public String addServer(String userID, String serverName, String serverIP, String serverPort) {
+    public String addServer(long userID, String serverName, String serverIP, String serverPort) {
         if (servers.size() > 0) {
             for (ServerObject s : servers) {
                 if (s.getName().equalsIgnoreCase(serverName)) {
@@ -72,11 +65,11 @@ public class Servers extends GuildFile {
         return servers;
     }
 
-    public String editServerDesc(String userID, String serverName, String desc, IGuild guild) {
+    public String editServerDesc(long userID, String serverName, String desc, IGuild guild) {
         for (ServerObject s : servers) {
             if (s.getName().equalsIgnoreCase(serverName)) {
-                boolean bypass = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, Globals.getClient().getUserByID(userID), guild);
-                if (s.getCreatorID().equals(userID) || bypass) {
+                boolean bypass = GuildHandler.testForPerms(Globals.getClient().getUserByID(userID), guild, Permissions.MANAGE_MESSAGES);
+                if (s.getCreatorID() == userID || bypass) {
                     String check = Utility.checkBlacklist(desc, blackList);
                     if (check != null) {
                         return check;
@@ -96,11 +89,11 @@ public class Servers extends GuildFile {
         return "> Server with that name not found.";
     }
 
-    public String editIP(String userID, String serverName, String IP, String port, IGuild guild) {
+    public String editIP(long userID, String serverName, String IP, String port, IGuild guild) {
         for (ServerObject s : servers) {
             if (s.getName().equalsIgnoreCase(serverName)) {
-                boolean bypass = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, Globals.getClient().getUserByID(userID), guild);
-                if (s.getCreatorID().equals(userID) || bypass) {
+                boolean bypass = GuildHandler.testForPerms(Globals.getClient().getUserByID(userID), guild, Permissions.MANAGE_MESSAGES);
+                if (s.getCreatorID() == userID || bypass) {
                     String check = Utility.checkBlacklist(IP + port, blackList);
                     if (check != null) {
                         return check;
@@ -114,11 +107,11 @@ public class Servers extends GuildFile {
         return "> Server with that name not found.";
     }
 
-    public String editServerName(String userID, String oldServerName, String newServerName, IGuild guild) {
+    public String editServerName(long userID, String oldServerName, String newServerName, IGuild guild) {
         for (ServerObject s : servers) {
             if (s.getName().equalsIgnoreCase(oldServerName)) {
-                boolean bypass = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, Globals.getClient().getUserByID(userID), guild);
-                if (s.getCreatorID().equals(userID) || bypass) {
+                boolean bypass = GuildHandler.testForPerms(Globals.getClient().getUserByID(userID), guild, Permissions.MANAGE_MESSAGES);
+                if (s.getCreatorID() == userID || bypass) {
                     for (ServerObject so : servers) {
                         if (so.getName().equalsIgnoreCase(newServerName)) {
                             return "> Cannot change Server name. That server name is already in use.";
@@ -136,12 +129,12 @@ public class Servers extends GuildFile {
         return "> Server with that name not found.";
     }
 
-    public String deleteServer(String userID, String serverName, IGuild guild) {
+    public String deleteServer(long userID, String serverName, IGuild guild) {
         int position = 0;
         for (ServerObject s : servers) {
             if (s.getName().equalsIgnoreCase(serverName)) {
-                boolean bypass = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_MESSAGES}, Globals.getClient().getUserByID(userID), guild);
-                if (s.getCreatorID().equals(userID) || bypass) {
+                boolean bypass = GuildHandler.testForPerms(Globals.getClient().getUserByID(userID), guild, Permissions.MANAGE_MESSAGES);
+                if (s.getCreatorID() == userID || bypass) {
                     servers.remove(position);
                     return "> Server Deleted.";
                 } else return "> You do not have permission to delete this server.";

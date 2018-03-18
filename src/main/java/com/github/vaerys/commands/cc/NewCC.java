@@ -1,33 +1,43 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.handlers.TagHandler;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.templates.Command;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class NewCC implements Command {
+public class NewCC extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
-        ProfileObject object = command.guild.users.getUserByID(command.user.stringID);
+        ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
-            return "> You have been denied the creation of custom commands.";
+            return "> " + command.user.mention() + ", You have been denied the creation of custom commands.";
         }
+        if (command.guild.getChannelsByType(ChannelSetting.CC_DENIED).contains(command.channel.get()))
+            return "> This Channel has CCs Denied, You cannot create ccs here.";
         boolean isShitpost = false;
         boolean isLocked = false;
-        SplitFirstObject splitfirst = new SplitFirstObject(args);
-        String newContent;
-        List<String> shitpostChannels = command.guild.config.getChannelIDsByType(Command.CHANNEL_SHITPOST);
+        SplitFirstObject splitFirst = new SplitFirstObject(args);
+        List<IChannel> shitpostChannels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
         if (shitpostChannels != null) {
-            for (String id : shitpostChannels) {
-                if (command.channel.stringID.equals(id)) {
+            for (IChannel channel : shitpostChannels) {
+                if (command.channel.longID == channel.getLongID()) {
                     isShitpost = true;
                 }
             }
@@ -35,84 +45,107 @@ public class NewCC implements Command {
         if (object.getSettings().contains(UserSetting.AUTO_SHITPOST)) {
             isShitpost = true;
         }
-        String nameCC = splitfirst.getFirstWord();
-        if (splitfirst.getRest() == null || splitfirst.getRest().isEmpty()) {
+
+        String nameCC = splitFirst.getFirstWord();
+        String argsCC = splitFirst.getRest();
+
+        // ccs cannot have names that match existing commands:
+        for (Command c : command.guild.commands) {
+
+            // get all commands names.
+            List<String> names = new ArrayList<>(Arrays.asList(c.names));
+            for (SubCommandObject sc : c.subCommands) {
+                names.addAll(Arrays.asList(sc.getNames()));
+            }
+
+            // convert them to lowercase.
+            ListIterator<String> li = names.listIterator();
+            while (li.hasNext()) {
+                li.set(li.next().toLowerCase());
+            }
+
+            // special exceptions:
+            names.remove("hello");
+            names.remove("hi");
+            names.remove("greetings");
+
+            // do check
+            if (names.contains(nameCC.toLowerCase())) {
+                return "> Custom Commands cannot have the same name as built-in commands.";
+            }
+        }
+
+        if ((argsCC == null || argsCC.isEmpty()) && command.message.get().getAttachments().size() == 0) {
             return "> Custom command contents cannot be blank.";
+        }
+        if (command.message.get().getAttachments().size() != 0) {
+            String testLink = command.message.get().getAttachments().get(0).getUrl();
+            if (Utility.isImageLink(testLink)) {
+                if (argsCC == null || argsCC.isEmpty()) {
+                    argsCC = "<embedImage>{" + testLink + "}";
+                } else {
+                    argsCC += "<embedImage>{" + testLink + "}";
+                }
+            } else {
+                return "> Custom command attachment must be a valid Image.";
+            }
         }
         if (nameCC.contains("\n")) {
             return "> Command name cannot contain Newlines.";
         }
-        String content = splitfirst.getRest();
-        newContent = TagHandler.testForShit(content);
-        if (!newContent.equals(content)) {
+        if (argsCC.contains("<shitpost>")) {
+            argsCC.replace("<shitpost>", "");
             isShitpost = true;
         }
-        content = newContent;
-        newContent = TagHandler.testForLock(content, command.user.get(), command.guild.get());
-        if (!newContent.equals(content)) {
+        if (argsCC.contains("<lock>") && GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+            argsCC.replace("<lock>", "");
             isLocked = true;
         }
-        content = newContent;
-        return command.guild.customCommands.addCommand(isLocked, nameCC, content, isShitpost, command);
+        return command.guild.customCommands.addCommand(isLocked, nameCC, argsCC, isShitpost, command);
     }
 
     @Override
-    public String[] names() {
-        return new String[]{"NewCC"};
+    protected String[] names() {
+        return new String[]{"NewCC", "CCNew"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Creates a Custom Command.";
     }
 
     @Override
-    public String usage() {
-        return "[Command Name] [Contents]";
+    protected String usage() {
+        return "[Command Name] [Contents/Image]";
     }
 
     @Override
-    public String type() {
-        return TYPE_CC;
+    protected SAILType type() {
+        return SAILType.CC;
     }
 
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return ChannelSetting.MANAGE_CC;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

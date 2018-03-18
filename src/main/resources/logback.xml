@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is not essential but helps to get you used to logback -->
+<!-- This file is not essential but helps to getToggles you used to logback -->
 <!-- Put this file under src/com.github.vaerys.main/resources folder -->
 
 <configuration scan="true">
@@ -16,27 +16,34 @@
     <!-- Configure bot logger level -->
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{[HH:mm:ss.SSS]} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
-        <file>Storage/bot.log</file>
+        <file>Storage/logs/bot.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>bot.%i.log</fileNamePattern>
+            <fileNamePattern>Storage/logs/bot-%i.log</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>4</maxIndex>
         </rollingPolicy>
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>
-        </triggeringPolicy>
+        <triggeringPolicy class="com.github.vaerys.objects.TriggerOncePolicy"/>
     </appender>
 
-    <root level="INFO">
+    <root level="TRACE">
         <appender-ref ref="CONSOLE"/>
         <!-- Uncomment the next line to also log to a file -->
         <appender-ref ref="FILE"/>
     </root>
 </configuration>
+

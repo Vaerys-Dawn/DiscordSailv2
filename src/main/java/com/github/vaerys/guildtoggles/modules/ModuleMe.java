@@ -1,22 +1,23 @@
 package com.github.vaerys.guildtoggles.modules;
 
+import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.EditLinks;
 import com.github.vaerys.commands.general.SetGender;
 import com.github.vaerys.commands.general.SetQuote;
 import com.github.vaerys.commands.general.UserInfo;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.toggles.UserInfoShowsDate;
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildModule;
 
 /**
  * Created by Vaerys on 02/03/2017.
  */
-public class ModuleMe implements GuildToggle {
+public class ModuleMe extends GuildModule {
 
     @Override
-    public String name() {
-        return "UserInfo";
+    public SAILType name() {
+        return SAILType.PROFILES;
     }
 
     @Override
@@ -25,7 +26,7 @@ public class ModuleMe implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleMe;
     }
 
@@ -35,16 +36,26 @@ public class ModuleMe implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommand(new UserInfo().names());
-        guild.removeCommand(new SetGender().names());
-        guild.removeCommand(new SetQuote().names());
-        guild.removeCommand(new EditLinks().names());
-        guild.removeToggle(new UserInfoShowsDate().name());
+    public String desc(CommandObject command) {
+        return "This module automatically generates a profile for each user that they can then customise.";
     }
 
     @Override
-    public boolean isModule() {
-        return true;
+    public void setup() {
+        commands.add(new UserInfo());
+        commands.add(new SetGender());
+        commands.add(new SetQuote());
+        commands.add(new EditLinks());
+        settings.add(new UserInfoShowsDate());
+    }
+
+    @Override
+    public String stats(CommandObject command) {
+        return "**Total Profiles:** " + command.guild.users.getProfiles().size();
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Generates personal profiles that users can edit.";
     }
 }

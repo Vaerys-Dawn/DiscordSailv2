@@ -1,13 +1,16 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.objects.UserLinkObject;
-import sx.blah.discord.handle.obj.IUser;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.net.MalformedURLException;
@@ -16,13 +19,22 @@ import java.net.URL;
 /**
  * Created by Vaerys on 17/06/2017.
  */
-public class EditLinks implements Command {
+public class EditLinks extends Command {
+
+    protected static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
+            new String[]{"EditLinks", "NewLink"},
+            "[@User] [Link Name] (Link)",
+            "Allows the modification of user links.",
+            SAILType.MOD_TOOLS,
+            Permissions.MANAGE_MESSAGES
+    );
+
     @Override
     public String execute(String args, CommandObject command) {
         UserObject user = command.user;
         SplitFirstObject userCall = new SplitFirstObject(args);
         boolean adminEdit = false;
-        if (Utility.testForPerms(dualPerms(), command.user.get(), command.guild.get()) || Utility.canBypass(command.user.get(), command.guild.get())) {
+        if (GuildHandler.testForPerms(command, ADMIN_EDIT.getPermissions()) || GuildHandler.canBypass(command.user.get(), command.guild.get())) {
             user = Utility.getUser(command, userCall.getFirstWord(), false);
             if (user != null && userCall.getRest() != null && user.getProfile(command.guild) != null) {
                 adminEdit = true;
@@ -52,14 +64,18 @@ public class EditLinks implements Command {
                 }
             }
         }
+        int maxLinks = 5;
+        if (user.isPatron) {
+            maxLinks += 5;
+        }
         if (linkName.getRest() == null) {
             return "> Cannot add link, Must specify a URL.";
         } else {
-            if (userObject.getLinks().size() > 4) {
+            if (userObject.getLinks().size() >= maxLinks) {
                 if (adminEdit) {
-                    return "> " + user.displayName + " already has 5 links, a link must be removed to add a new one.";
+                    return "> " + user.displayName + " already has " + maxLinks + " links, a link must be removed to add a new one.";
                 } else {
-                    return "> You already have 5 links, you must remove one to add a new one.";
+                    return "> You already have " + maxLinks + " links, you must remove one to add a new one.";
                 }
             }
             if (linkName.getFirstWord().length() > 15) {
@@ -84,62 +100,47 @@ public class EditLinks implements Command {
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"EditLinks", "NewLink"};
     }
 
     @Override
-    public String description() {
-        return "Allows uses to manage the links attached to their profile (Max 5 links per user).";
+    public String description(CommandObject command) {
+        return "Allows uses to manage the links attached to their profile. Max 5 links per user (10 if user is a patron).";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Link Name] (Link)";
     }
 
     @Override
-    public String type() {
-        return TYPE_GENERAL;
+    protected SAILType type() {
+        return SAILType.GENERAL;
     }
 
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return ChannelSetting.PROFILES;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return "Allows the modification of user links.";
-    }
-
-    @Override
-    public String dualUsage() {
-        return "[@User] [Link Name] (Link)";
-    }
-
-    @Override
-    public String dualType() {
-        return TYPE_ADMIN;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES};
+    public void init() {
+        subCommands.add(ADMIN_EDIT);
     }
 }

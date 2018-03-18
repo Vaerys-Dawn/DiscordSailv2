@@ -1,17 +1,18 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class MentionSpam implements GuildToggle {
+public class MentionSpam extends GuildSetting {
 
     @Override
-    public String name() {
-        return "MentionSpam";
+    public SAILType name() {
+        return SAILType.MENTION_SPAM;
     }
 
     @Override
@@ -20,7 +21,7 @@ public class MentionSpam implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.maxMentions;
     }
 
@@ -30,12 +31,17 @@ public class MentionSpam implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-
+    public String shortDesc(CommandObject command) {
+        return "Enables mention-spam prevention";
     }
 
     @Override
-    public boolean isModule() {
-        return false;
+    public String desc(CommandObject command) {
+        return "Enables the mention spam prevention feature, any message with 8 or more mentions will be automatically deleted.";
+    }
+
+    @Override
+    public void setup() {
+
     }
 }

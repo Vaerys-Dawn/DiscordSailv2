@@ -4,6 +4,7 @@ public class QueueObject {
     long messageId;
     long uID;
     String type;
+    boolean markedForRemoval = false;
 
     public QueueObject(long messageId, long uID, String type) {
         this.messageId = messageId;
@@ -21,5 +22,13 @@ public class QueueObject {
 
     public String getType() {
         return type;
+    }
+
+    public boolean isMarkedForRemoval() {
+        return markedForRemoval;
+    }
+
+    public void toggleMarkedForRemoval() {
+        markedForRemoval = !markedForRemoval;
     }
 }

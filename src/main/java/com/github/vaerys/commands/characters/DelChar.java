@@ -1,80 +1,68 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class DelChar implements Command{
+public class DelChar extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         boolean bypass = false;
-        if (Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, command.user.get(), command.guild.get())) {
+        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
             bypass = true;
         }
         return command.guild.characters.delChar(args.split(" ")[0], command.user.get(), command.guild.get(), bypass);
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"DelChar"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Deletes a Character.";
     }
 
     @Override
-    public String usage() {
-        return "[Character Name]";
+    protected String usage() {
+        return "[Character ID]";
     }
 
     @Override
-    public String type() {
-        return TYPE_CHARACTER;
+    protected SAILType type() {
+        return SAILType.CHARACTER;
     }
 
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return ChannelSetting.CHARACTER;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

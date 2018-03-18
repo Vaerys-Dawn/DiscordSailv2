@@ -1,17 +1,18 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 20/02/2017.
  */
-public class MuteRepeatOffender implements GuildToggle {
+public class MuteRepeatOffender extends GuildSetting {
 
     @Override
-    public String name() {
-        return "MuteRepeatOffender";
+    public SAILType name() {
+        return SAILType.MUTE_REPEAT_OFFENDER;
     }
 
     @Override
@@ -20,7 +21,7 @@ public class MuteRepeatOffender implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.muteRepeatOffenders;
     }
 
@@ -30,12 +31,17 @@ public class MuteRepeatOffender implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-
+    public String shortDesc(CommandObject command) {
+        return "Enables muting of users when " + new MentionSpam().name() + " is also enabled";
     }
 
     @Override
-    public boolean isModule() {
-        return false;
+    public String desc(CommandObject command) {
+        return "If the " + new MentionSpam().name() + " setting is enabled, after 3 times of triggering the feature it will automatically mute the user.";
+    }
+
+    @Override
+    public void setup() {
+
     }
 }

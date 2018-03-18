@@ -2,16 +2,19 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.ProfileSettings;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.Command;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.RewardRoleObject;
-import com.github.vaerys.objects.XRequestBuffer;
 import com.github.vaerys.pogos.GuildUsers;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.TagObject;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import org.slf4j.Logger;
@@ -19,8 +22,8 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RequestBuffer;
 
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -37,84 +40,32 @@ public class XpHandler {
 
     final static Logger logger = LoggerFactory.getLogger(XpHandler.class);
 
-    public static void doDecay(GuildObject content, ZonedDateTime nowUTC) {
-        for (ProfileObject u : content.users.getProfiles()) {
-            if (u.getLastTalked() != -1) {
-                long diff = nowUTC.toEpochSecond() - u.getLastTalked();
-                long days = TimeUnit.DAYS.convert(diff, TimeUnit.SECONDS);
-                float temp = 0;
-                long decay;
-                u.setCurrentLevel(XpHandler.xpToLevel(u.getXP()));
-                //modifiable min and max decay days needs to be implemented.
-                if (days > 7 && days < 30) {
-                    //normal xp decay formula
-                    temp = (days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
-                } else if (days > 15) {
-                    //plateaued xp decay
-                    temp = (15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
-                }
-                decay = (long) temp;
-                //half decay if you turn you xp gain off but only if it is voluntary
-                if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) {
-                    decay = decay / 2;
-                }
-                if (XpHandler.getRewardCount(content, u.getID()) != 0) {
-                    long pseudoLevel = xpToLevel(u.getXP() + 120);
-                    RewardRoleObject rewardRole = content.config.getCurrentReward(pseudoLevel);
-                    if (rewardRole != null) {
-
-                        long rewardFloor = rewardRole.getXp() - 100;
-                        if (u.getXP() > rewardFloor) {
-                            u.setXp(u.getXP() - decay);
-                            // your total xp should never reach below 0;
-                            if (u.getXP() < 0) {
-                                u.setXp(0);
-                            }
-                            //decay should never lower your total xp below the reward floor.
-                            if (u.getXP() < rewardFloor) {
-                                u.setXp(rewardFloor);
-                            }
-                            //if user is at level floor add setting.
-                            if (u.getXP() == rewardFloor && !u.getSettings().contains(HIT_LEVEL_FLOOR)) {
-                                u.getSettings().add(HIT_LEVEL_FLOOR);
-                            }
-                        }
-                        //if your days away is a multiple of 30 you should be checked if you are at the
-                        //reward floor, if you are reward decay occurs
-                        if (days % 30 == 0 && u.getXP() == rewardFloor) {
-                            u.setXp(u.getXP() - 100);
-                        }
-                    }
-                }
-                //check user's roles and make sure that they have the right roles.
-                checkUsersRoles(u.getID(), content);
-            }
-        }
-    }
-
-    //for testing purposes only
-    public static void doDeacyUser(ProfileObject u, GuildObject content, long days) {
-        if (u.getLastTalked() != -1) {
-            float temp = 0;
+    public static void doDecay(GuildObject content, ProfileObject u) {
+        long days = u.daysDecayed(content);
+        if (7 > days) {
             long decay;
             u.setCurrentLevel(XpHandler.xpToLevel(u.getXP()));
             //modifiable min and max decay days needs to be implemented.
-            if (days > 7 && days < 30) {
-                //normal xp decay formula
-                temp = (days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
-            } else if (days > 15) {
+            if (days > 15) {
                 //plateaued xp decay
-                temp = (15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
+                decay = (long) ((15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
+            } else if (days > 90) {
+                // kill the xp after 90 days of absences
+                decay = (long) ((90 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
+            } else {
+                //normal xp decay formula
+                decay = (long) ((days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
             }
-            decay = (long) temp;
             //half decay if you turn you xp gain off but only if it is voluntary
-            if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) {
-                decay = decay / 2;
-            }
-            if (XpHandler.getRewardCount(content, u.getID()) != 0) {
+            if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) decay = decay / 2;
+            //half decay for patreon supporters
+            if (u.getUser(content).isPatron) decay = decay / 2;
+            //reward handlers
+            if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
                 long pseudoLevel = xpToLevel(u.getXP() + 120);
                 RewardRoleObject rewardRole = content.config.getCurrentReward(pseudoLevel);
                 if (rewardRole != null) {
+
                     long rewardFloor = rewardRole.getXp() - 100;
                     if (u.getXP() > rewardFloor) {
                         u.setXp(u.getXP() - decay);
@@ -138,12 +89,61 @@ public class XpHandler {
                     }
                 }
             }
-            //check user's roles and make sure that they have the right roles.
         }
-        checkUsersRoles(u.getID(), content);
     }
 
-    public static void checkUsersRoles(String id, GuildObject content) {
+//    //for testing purposes only
+//    public static void doDeacyUser(ProfileObject u, GuildObject content, long days) {
+//        if (u.getLastTalked() != -1) {
+//            float temp = 0;
+//            long decay;
+//            u.setCurrentLevel(XpHandler.xpToLevel(u.getXP()));
+//            //modifiable min and max decay days needs to be implemented.
+//            if (days > 7 && days < 30) {
+//                //normal xp decay formula
+//                temp = (days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
+//            } else if (days > 20) {
+//                //plateaued xp decay
+//                temp = (8) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8;
+//            }
+//            decay = (long) temp;
+//            //half decay if you turn you xp gain off but only if it is voluntary
+//            if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) {
+//                decay = decay / 2;
+//            }
+//            if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
+//                long pseudoLevel = xpToLevel(u.getXP() + 120);
+//                RewardRoleObject rewardRole = content.config.getCurrentReward(pseudoLevel);
+//                if (rewardRole != null) {
+//                    long rewardFloor = rewardRole.getXp() - 100;
+//                    if (u.getXP() > rewardFloor) {
+//                        u.setXp(u.getXP() - decay);
+//                        // your total xp should never reach below 0;
+//                        if (u.getXP() < 0) {
+//                            u.setXp(0);
+//                        }
+//                        //decay should never lower your total xp below the reward floor.
+//                        if (u.getXP() < rewardFloor) {
+//                            u.setXp(rewardFloor);
+//                        }
+//                        //if user is at level floor add setting.
+//                        if (u.getXP() == rewardFloor && !u.getSettings().contains(HIT_LEVEL_FLOOR)) {
+//                            u.getSettings().add(HIT_LEVEL_FLOOR);
+//                        }
+//                    }
+//                    //if your days away is a multiple of 30 you should be checked if you are at the
+//                    //reward floor, if you are reward decay occurs
+//                    if (days % 30 == 0 && u.getXP() == rewardFloor) {
+//                        u.setXp(u.getXP() - 100);
+//                    }
+//                }
+//            }
+//            //check user's roles and make sure that they have the right roles.
+//        }
+//        checkUsersRoles(u.getUserID(), content);
+//    }
+
+    public static void checkUsersRoles(long id, GuildObject content) {
         //do code.
         ProfileObject userObject = content.users.getUserByID(id);
         if (userObject == null) {
@@ -151,7 +151,7 @@ public class XpHandler {
         }
         if (userObject.getSettings().contains(DENY_AUTO_ROLE)) return;
 
-        IUser user = Globals.getClient().getUserByID(userObject.getID());
+        IUser user = Globals.getClient().getUserByID(userObject.getUserID());
         if (user == null) {
             return;
         }
@@ -172,7 +172,7 @@ public class XpHandler {
         //add the top ten role if they should have it.
         IRole topTenRole = content.get().getRoleByID(content.config.topTenRoleID);
         if (topTenRole != null) {
-            long rank = XpHandler.rank(content.users, content.get(), user.getStringID());
+            long rank = XpHandler.rank(content.users, content.get(), user.getLongID());
             if (rank <= 10 && rank > 0) {
                 userRoles.add(topTenRole);
             }
@@ -180,7 +180,7 @@ public class XpHandler {
         //only do a role update if the role count changes
         List<IRole> currentRoles = user.getRolesForGuild(content.get());
         if (!currentRoles.containsAll(userRoles) || currentRoles.size() != userRoles.size()) {
-            Utility.roleManagement(user, content.get(), userRoles);
+            RequestHandler.roleManagement(user, content.get(), userRoles);
         }
     }
 
@@ -189,21 +189,22 @@ public class XpHandler {
         if (object.user.get().isBot()) return;
 
         //creates a profile for the user if they don't already have one.
-        ProfileObject user = new ProfileObject(object.user.stringID);
-        if (object.guild.users.getUserByID(object.user.stringID) == null) {
+        ProfileObject user = new ProfileObject(object.user.longID);
+        if (object.guild.users.getUserByID(object.user.longID) == null) {
             object.guild.users.getProfiles().add(user);
         } else {
-            user = object.guild.users.getUserByID(object.user.stringID);
+            user = object.guild.users.getUserByID(object.user.longID);
         }
+
+        user.lastTalked = object.message.getTimestamp().toEpochSecond();
 
         //ony do xp checks if module is true
         if (!object.guild.config.modulePixels) return;
         if (!object.guild.config.xpGain) return;
 
-        user.lastTalked = object.message.get().getTimestamp().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toEpochSecond();
 
         //user setting no xp gain
-        if (user.getSettings().contains(NO_XP_GAIN)) return;
+        if (user.getSettings().contains(NO_XP_GAIN) || user.getSettings().contains(DENIED_XP)) return;
 
         //deny xp if they have the xp denied role.
         for (IRole r : object.user.roles) {
@@ -216,7 +217,7 @@ public class XpHandler {
         if (object.guild.getSpokenUsers().contains(object.user.longID)) return;
 
         //messages that might be considered commands should be ignored.
-        ArrayList<String> deniedPrefixes = (ArrayList<String>) object.guild.config.getXPDeniedPrefixes().clone();
+        ArrayList<String> deniedPrefixes = (ArrayList<String>) object.guild.config.getXpDeniedPrefixes().clone();
         deniedPrefixes.add(object.guild.config.getPrefixCommand());
         deniedPrefixes.add(object.guild.config.getPrefixCC());
         for (String s : deniedPrefixes) {
@@ -225,15 +226,25 @@ public class XpHandler {
             }
         }
 
-        //you must have typed at least 10 chars to gain xp
-        if (object.message.get().getContent().length() < 10) return;
+        //you must have typed at least 10 chars to gain xp and doesn't contain an image.
+        if (object.message.get().getContent().length() < 10 &&
+                object.message.get().getAttachments().isEmpty()) return;
 
         //you cannot gain xp in an xpDenied channel
-        ArrayList<String> xpChannels = object.guild.config.getChannelIDsByType(Command.CHANNEL_XP_DENIED);
-        if (xpChannels != null && xpChannels.size() > 0) {
-            if (xpChannels.contains(object.channel.stringID)) return;
+        List<IChannel> xpChannels = object.guild.getChannelsByType(ChannelSetting.XP_DENIED);
+        if (xpChannels.size() > 0) {
+            if (xpChannels.contains(object.channel.get())) {
+                return;
+            }
         }
 
+        // check level cap, don't grant xp to level-capped users
+        if (object.user.getProfile(object.guild) != null) {
+            if (object.user.getProfile(object.guild).getXP() >= Constants.PIXELS_CAP) {
+                user.setXp(Constants.PIXELS_CAP);
+                return;
+            }
+        }
         //gives them their xp.
         user.addXP(object.guild.config);
         object.guild.getSpokenUsers().add(object.user.longID);
@@ -258,9 +269,12 @@ public class XpHandler {
             // level the user up
             user.setCurrentLevel(xpToLevel(user.getXP()));
             UserSetting userOverride = user.getLevelState();
-            StringBuilder levelUpMessage = new StringBuilder(object.guild.config.levelUpMessage);
+            String levelUpMessage = object.guild.config.levelUpMessage;
 
-            levelUpMessage = TagHandler.prepLevelUpMessage(levelUpMessage, object.guild, object.user);
+            //run tags
+            for (TagObject t : TagList.getType(TagType.LEVEL)) {
+                levelUpMessage = t.handleTag(levelUpMessage, object, "");
+            }
 
             //adds a special message if a reward is added.
             for (RewardRoleObject r : object.guild.config.getRewardRoles()) {
@@ -274,16 +288,22 @@ public class XpHandler {
                                 user.getSettings().remove(i);
                             }
                         }
-                        levelUpMessage = new StringBuilder("Welcome Back.\n" + levelUpMessage + "\nYour **" + object.guild.get().getRoleByID(r.getRoleID()) + "** role has been returned to you.");
+                        levelUpMessage = "Welcome Back.\n" + levelUpMessage + "\nYour **@" + object.guild.getRoleByID(r.getRoleID()).getName() + "** role has been returned to you.";
                     } else {
-                        levelUpMessage.append("\nYou have been granted the **" + object.guild.get().getRoleByID(r.getRoleID()) + "** role for reaching this level.");
+                        levelUpMessage += "\nYou have been granted the **@" + object.guild.getRoleByID(r.getRoleID()).getName() + "** role for reaching this level.";
                     }
                     rankedup = true;
                 }
             }
+
+
+            String loggingType = rankedup ? "RANKUP" : "LEVELUP";
+            object.guild.sendDebugLog(object, "PIXELS", loggingType, user.getCurrentLevel() + "");
+
+
             //if the user only just reached level 1 send them a message telling them about the pixelSettings command.
             if (user.getCurrentLevel() == 1) {
-                levelUpMessage.append("\n\n> If you want to change where these messages are sent or want to remove them completely you can change that with `" + new ProfileSettings().getUsage(object) + "`.");
+                levelUpMessage += "\n\n> If you want to change where these messages are sent or want to remove them completely you can change that with `" + new ProfileSettings().getUsage(object) + "`.";
             }
 
             if (userOverride != null) {
@@ -293,40 +313,41 @@ public class XpHandler {
             } else {
                 userOverride = object.guild.config.defaultLevelMode;
             }
-            List<String> levelDenied = object.guild.config.getChannelIDsByType(Command.CHANNEL_LEVEL_UP_DENIED);
-            if (levelDenied != null && levelDenied.contains(object.channel.stringID)) {
-                if (userOverride != SEND_LVLUP_DMS || (userOverride != SEND_LVLUP_RANK_CHANNEL && object.guild.config.getChannelIDsByType(Command.CHANNEL_PIXELS).get(0) != null)) {
+            List<IChannel> levelDenied = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP_DENIED);
+            List<IChannel> levelUpChannel = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP);
+            if (levelDenied.size() != 0 && levelDenied.contains(object.channel.get())) {
+                if (userOverride != SEND_LVLUP_DMS || userOverride != SEND_LVLUP_RANK_CHANNEL && levelUpChannel.size() == 0) {
                     userOverride = DONT_SEND_LVLUP;
                 }
             }
             switch (userOverride) {
                 case SEND_LVLUP_CURRENT_CHANNEL:
-                    selfDestruct = Utility.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
+                    selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
                     break;
                 case SEND_LVLUP_RANK_CHANNEL:
                     IChannel channel = null;
-                    if (object.guild.config.getChannelIDsByType(Command.CHANNEL_LEVEL_UP) != null) {
-                        channel = object.guild.get().getChannelByID(object.guild.config.getChannelIDsByType(Command.CHANNEL_LEVEL_UP).get(0));
+                    if (levelUpChannel.size() != 0) {
+                        channel = levelUpChannel.get(0);
                     }
                     if (channel != null) {
-                        if (channel.getModifiedPermissions(object.client.bot).contains(Permissions.ATTACH_FILES)) {
+                        if (channel.getModifiedPermissions(object.client.bot.get()).contains(Permissions.ATTACH_FILES)) {
                             if (rankedup) {
-                                Utility.sendFileURL(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, channel, false);
+                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, channel);
                             } else {
-                                Utility.sendFileURL(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, channel, false);
+                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, channel);
                             }
                         } else {
-                            Utility.sendMessage(levelUpMessage.toString(), channel).get();
+                            RequestHandler.sendMessage(levelUpMessage.toString(), channel).get();
                         }
                     } else {
-                        selfDestruct = Utility.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
+                        selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
                     }
                     break;
                 case SEND_LVLUP_DMS:
                     if (rankedup) {
-                        Utility.sendFileURL(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel(), false);
+                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel());
                     } else {
-                        Utility.sendFileURL(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel(), false);
+                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel());
                     }
                     break;
                 case DONT_SEND_LVLUP:
@@ -339,7 +360,7 @@ public class XpHandler {
             leveledUp = false;
         }
         if (leveledUp) {
-            checkUsersRoles(user.getID(), object.guild);
+            checkUsersRoles(user.getUserID(), object.guild);
         }
         if (object.guild.config.selfDestructLevelUps && selfDestruct != null && !rankedup) {
             try {
@@ -349,41 +370,49 @@ public class XpHandler {
                 }
                 //self destruct messages after 1 min.
                 Thread.sleep(60 * 1000);
-                Utility.deleteMessage(selfDestruct);
+                RequestHandler.deleteMessage(selfDestruct);
             } catch (InterruptedException e) {
                 Utility.sendStack(e);
             }
         }
-
     }
 
     private static void reactTolevelUp(CommandObject object) {
         if (object.guild.config.reactToLevelUp) {
-            ProfileObject user = object.guild.users.getUserByID(object.user.stringID);
+            ProfileObject user = object.guild.users.getUserByID(object.user.longID);
             if (user != null && user.getSettings().contains(UserSetting.NO_LEVEL_UP_REACTIONS)) {
                 return;
             }
             IEmoji customEmoji = null;
             Emoji emoji = EmojiManager.getByUnicode(object.guild.config.levelUpReaction);
+            boolean found = false;
             for (IGuild g : object.client.get().getGuilds()) {
-                IEmoji test = null;
+                IEmoji test;
                 try {
                     long emojiId = Long.parseLong(object.guild.config.levelUpReaction);
                     test = g.getEmojiByID(emojiId);
                     if (test != null) {
                         customEmoji = test;
-                        break;
+                        found = true;
                     }
                 } catch (NumberFormatException e) {
                     test = g.getEmojiByName(object.guild.config.levelUpReaction);
                     if (test != null) {
                         customEmoji = test;
+                        found = true;
                         break;
                     }
                 }
             }
+            if (object.guild.config.levelUpReaction.equalsIgnoreCase("null")) return;
+            if (found == false) {
+                IChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
+                if (adminChannel == null) adminChannel = object.channel.get();
+                RequestHandler.sendMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
+                return;
+            }
             IEmoji finalCustomEmoji = customEmoji;
-            XRequestBuffer.request(() -> {
+            RequestBuffer.request(() -> {
                 try {
                     if (emoji != null) {
                         object.message.get().addReaction(emoji);
@@ -391,11 +420,13 @@ public class XpHandler {
                         object.message.get().addReaction(finalCustomEmoji);
                     }
                 } catch (DiscordException e) {
-                    logger.error("Discord didn't like the custom emoji that guild with id: " + object.guild.stringID + " chose for a levelUp react.");
+                    logger.error("Discord didn't like the custom emoji that guild with id: " + object.guild.longID + " chose for a levelUp react.");
                     if (emoji != null) {
                         logger.error(emoji.getUnicode());
                     } else if (finalCustomEmoji != null) {
                         logger.error(finalCustomEmoji.toString());
+                    } else {
+                        throw e;
                     }
                     //do nothing
                 } catch (MissingPermissionsException e) {
@@ -434,76 +465,99 @@ public class XpHandler {
         return levelxp;
     }
 
-    public static long rank(GuildUsers guildUsers, IGuild guild, String userID) {
-        ProfileObject user = guildUsers.getUserByID(userID);
+    public static boolean isUnRanked(long userID, GuildUsers users, IGuild guild) {
+        ProfileObject user = users.getUserByID(userID);
+        GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
+        if (user == null) {
+            return true;
+        }
+        if (guild.getUserByID(userID) == null) {
+            return true;
+        }
+        if (user.getXP() == 0) {
+            return true;
+        }
         for (UserSetting s : user.getSettings()) {
             for (UserSetting test : Constants.dontLogStates) {
                 if (s == test) {
-                    return -1;
+                    return true;
                 }
             }
         }
-        if (guild.getUserByID(userID) == null) {
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        long diff = now.toEpochSecond() - user.getLastTalked();
+        long days = TimeUnit.DAYS.convert(diff, TimeUnit.SECONDS);
+        if (days > 14 && guildObject.config.xpDecay && !user.getSettings().contains(UserSetting.DONT_DECAY)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public static long rank(GuildUsers guildUsers, IGuild guild, long userID) {
+        if (isUnRanked(userID, guildUsers, guild)) {
             return -1;
         }
-        if (user.getXP() == 0) {
-            return -1;
-        }
+
+        ProfileObject user = guildUsers.getUserByID(userID);
+
+        //rank calc
         long rank = 0;
         ArrayList<ProfileObject> users = (ArrayList<ProfileObject>) guildUsers.getProfiles().clone();
+        //sort so that can accurately check rank
         Utility.sortUserObjects(users, false);
+
+        //for all the users
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getID().equals(userID)) {
+            if (users.get(i).getUserID() == userID) {
                 return rank + 1;
             } else {
-                boolean hiderank = false;
-                for (UserSetting s : users.get(i).getSettings()) {
-                    for (UserSetting test : Constants.dontLogStates) {
-                        if (s == test) {
-                            hiderank = true;
-                        }
-                    }
-                }
-                if (guild.getUserByID(users.get(i).getID()) != null && !hiderank && user.getXP() != users.get(i).getXP()) {
+                boolean hideRank = isUnRanked(users.get(i).getUserID(), guildUsers, guild);
+                if (!hideRank && user.getXP() != users.get(i).getXP()) {
                     rank++;
                 }
             }
         }
+        // this should never occur
         return rank;
     }
 
     public static long totalRanked(CommandObject command) {
         long totalRanked = 0;
         for (ProfileObject u : command.guild.users.getProfiles()) {
-            boolean hiderank = false;
-            for (UserSetting s : u.getSettings()) {
-                for (UserSetting test : Constants.dontLogStates) {
-                    if (s == test) {
-                        hiderank = true;
-                    }
-                }
-            }
-            if (command.guild.get().getUserByID(u.getID()) != null) {
-                if (u.getXP() != 0) {
-                    if (!hiderank) {
-                        totalRanked++;
-                    }
+            boolean hideRank;
+            UserObject object = new UserObject(command.guild.getUserByID(u.getUserID()), command.guild);
+            hideRank = !object.showRank(command.guild);
+            if (command.guild.getUserByID(u.getUserID()) != null) {
+                if (u.getXP() != 0 && !hideRank) {
+                    totalRanked++;
                 }
             }
         }
         return totalRanked;
     }
 
-    public static int getRewardCount(GuildObject object, String userID) {
+    public static int getRewardCount(GuildObject object, long userID) {
+        if (!object.config.modulePixels) return 4;
         ProfileObject userObject = object.users.getUserByID(userID);
-        ArrayList<RewardRoleObject> allRewards = object.config.getAllRewards(userObject.getCurrentLevel());
-        if (allRewards.size() == 0) {
+        if (userObject == null) {
+            return 0;
+        }
+        List<RewardRoleObject> userRewards = object.config.getAllRewards(userObject.getCurrentLevel());
+        List<RewardRoleObject> allRewards = object.config.getRewardRoles();
+        if (userRewards.size() == 0) {
             return 0;
         } else {
-            if (allRewards.size() > 4) {
-                return 4;
+            if (allRewards.size() < 4) {
+                float value = (userRewards.size() * 100.0f) / allRewards.size();
+                value = value / 25;
+                return (int) value;
             } else {
-                return allRewards.size();
+                if (userRewards.size() > 4) {
+                    return 4;
+                } else {
+                    return userRewards.size();
+                }
             }
         }
     }

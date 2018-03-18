@@ -1,225 +1,273 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.main.Globals;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.modules.ModuleRoles;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.RoleStatsObject;
-import com.github.vaerys.pogos.GuildConfig;
-import sx.blah.discord.handle.obj.*;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildToggle;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IRegion;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class GetGuildInfo implements Command{
+public class GetGuildInfo extends Command {
 
-    IGuild guild;
-    IUser author;
-    GuildConfig config;
+    private final static SubCommandObject GUILD_STATS = new SubCommandObject(
+            new String[]{"GuildStats"},
+            null,
+            "Shows a the basic stats for the server.",
+            SAILType.HELP
+    );
+
+    private XEmbedBuilder resetEmbed(XEmbedBuilder builder, IChannel channel, CommandObject command, int extraLength) {
+        if ((builder.getTotalVisibleCharacters() + extraLength) > 2000 ||
+                builder.getFieldCount() + 1 > EmbedBuilder.FIELD_COUNT_LIMIT) {
+            RequestHandler.sendEmbedMessage("", builder, channel).get();
+            builder = new XEmbedBuilder(command);
+        }
+        return builder;
+    }
 
     @Override
     public String execute(String args, CommandObject command) {
-        guild = command.guild.get();
-        author = command.user.get();
-        config = command.guild.config;
-        String guildName = guild.getName();
-        LocalDateTime creationDate = guild.getCreationDate();
-        IUser guildOwner = guild.getOwner();
-        IRegion region = guild.getRegion();
-        List<IRole> roles = guild.getRoles();
-        StringBuilder builder = new StringBuilder();
-        ArrayList<String> cosmeticRoleStats = new ArrayList<>();
-        ArrayList<String> modifierRoleStats = new ArrayList<>();
-        ArrayList<String> trustedRoleStats = new ArrayList<>();
-        int totalCosmetic = 0;
-        int totalModified = 0;
-        int totalTrusted = 0;
-        boolean manageRoles = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_ROLES}, author, guild) || author.getStringID().equals(Globals.creatorID);
-        boolean manageServer = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_SERVER}, author, guild) || author.getStringID().equals(Globals.creatorID);
-        boolean manageChannels = Utility.testForPerms(new Permissions[]{Permissions.MANAGE_CHANNELS}, author, guild) || author.getStringID().equals(Globals.creatorID);
+        XEmbedBuilder serverInfo = new XEmbedBuilder(command);
+        XEmbedBuilder toggles = new XEmbedBuilder(command);
+        XEmbedBuilder channels = new XEmbedBuilder(command);
 
-        Utility.sendMessage("> Info will be sent to you via Direct Message.",command.channel.get());
-        Utility.sendFileURL("",guild.getIconURL(),command.client.get().getOrCreatePMChannel(command.user.get()),false);
-        builder.append("***[" + guildName.toUpperCase() + "]***");
-        builder.append("\n\n> Guild ID : **" + guild.getLongID());
-        builder.append("**\n> Creation Date : **" + creationDate.getYear() + " " + creationDate.getMonth() + " " + creationDate.getDayOfMonth() + " - " + creationDate.getHour() + ":" + creationDate.getMinute());
-        builder.append("**\n> Guild Owner : **@" + guildOwner.getName() + "#" + guildOwner.getDiscriminator());
-        builder.append("**\n> Command Prefix: **"+  config.getPrefixCommand());
-        builder.append("**\n> Custom Command Prefix: **" + config.getPrefixCC() + "**");
+        boolean isGuildStats = GUILD_STATS.isSubCommand(command);
+
+        IChannel channel = command.user.get().getOrCreatePMChannel();
+        boolean hasManageServer = GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER);
+
+
+        //todo change this to the proper impl when api allows it.
+
+
+        boolean isVIP = command.guild.get().getRegion().isVIPOnly();
+        if (isVIP) {
+            serverInfo.withAuthorIcon("https://i.imgur.com/m0jqzBn.png");
+        }
+
+        serverInfo.withThumbnail(command.guild.get().getIconURL());
+        serverInfo.withAuthorName(command.guild.get().getName());
+        serverInfo.withFooterText("Creation Date");
+        serverInfo.withTimestamp(command.guild.get().getCreationDate());
+
+        StringBuilder serverStats = new StringBuilder();
+        UserObject owner = new UserObject(command.guild.getOwner(), command.guild);
+        serverStats.append("**Guild ID:** " + command.guild.longID);
+        serverStats.append("\n**Guild Owner:** @" + owner.username);
+        IRegion region = command.guild.get().getRegion();
         if (region != null) {
-            builder.append("\n> Region : **" + region.getName() + "**");
+            serverStats.append("\n**Region:** ");
+            serverStats.append(command.guild.get().getRegion().getName());
         }
-        builder.append("\n> Total Members: **" + guild.getUsers().size() + "**");
-        if (manageServer) {
-            ArrayList<String> toggles = new ArrayList<>();
-            ArrayList<String> modules = new ArrayList<>();
-            for (GuildToggle t : command.guild.toggles){
-                String formatted = "\n> " + t.name() + " = **" + t.get(command.guild.config) + "**";
-                if (t.isModule()){
-                    modules.add(formatted);
-                }else {
-                    toggles.add(formatted);
-                }
-            }
-            Collections.sort(toggles);
-            Collections.sort(modules);
-            builder.append("\n\n***[ADMIN INFO]***");
-            builder.append("\n\n**GUILD TOGGLES**");
-            toggles.forEach(builder::append);
-            builder.append("\n\n**GUILD MODULES**");
-            modules.forEach(builder::append);
-            builder.append("\n\n**GUILD DATA**");
-            builder.append("\n> Max Mentions: **" + config.maxMentionLimit + "**");
-            builder.append("\n> Rate Limit: **" + config.messageLimit + "/10s**");
-        }
-        // TODO: 09/04/2017 add this back in, make it display channels better.
-//        if (manageChannels) {
-//            builder.append("\n\n***[CHANNELS]***");
-//            for (ChannelTypeObject c : config.getChannels()) {
-//                builder.append("\n> " + c.getType() + " = **#" + guild.getChannelByID(c.getStringID()).getName() + "**");
-//            }
-//        }
+        serverStats.append("\n**Total Users:** " + command.guild.getUsers().size());
+        serverStats.append("\n**Total Channels:** " + command.guild.get().getChannels().size());
+        serverStats.append("\n**Total Voice Channels:** " + command.guild.get().getVoiceChannels().size());
+        serverStats.append("\n**Total Roles:** " + command.guild.get().getRoles().size());
+        serverStats.append("\n**Command Prefix:** " + command.guild.config.getPrefixCommand());
+        if (command.guild.config.moduleCC)
+            serverStats.append("\n**Custom Command Prefix:** " + command.guild.config.getPrefixCC());
+        if (command.guild.config.rateLimiting)
+            serverStats.append("\n**Guild Rate Limit:** " + command.guild.config.messageLimit + "/10s");
 
-        builder.append("\n\n***[ROLES]***");
-        ArrayList<RoleStatsObject> statsObjects = new ArrayList<>();
-        for (IRole r : roles) {
-            if (!r.isEveryoneRole()) {
-                statsObjects.add(new RoleStatsObject(r, config, guild.getUsersByRole(r).size()));
-            }
-        }
-        for (RoleStatsObject rso : statsObjects) {
-            StringBuilder formatted = new StringBuilder();
-            formatted.append("\n> **" + rso.getRoleName() + "**");
-            if (manageRoles) {
-                formatted.append(" Colour : \"**" + rso.getColour() + "**\",");
-            }
-            formatted.append(" Total Users: \"**" + rso.getTotalUsers() + "**\"");
-            if (rso.isCosmetic()) {
-                cosmeticRoleStats.add(formatted.toString());
-                totalCosmetic += rso.getTotalUsers();
-            }
-            if (rso.isModifier()) {
-                modifierRoleStats.add(formatted.toString());
-                totalModified += rso.getTotalUsers();
-            }
-            if (rso.isTrusted()){
-                trustedRoleStats.add(formatted.toString());
-                totalTrusted += rso.getTotalUsers();
-            }
-        }
-        Collections.sort(cosmeticRoleStats);
-        Collections.sort(modifierRoleStats);
-        builder.append("\n\n**TRUSTED ROLES**");
-        for (String s : trustedRoleStats) {
-            if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getStringID());
-                builder.delete(0, builder.length());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Utility.sendStack(e);
+        if (hasManageServer && !isGuildStats) {
+            StringBuilder adminBuilder = new StringBuilder();
+            if (command.guild.config.maxMentions)
+                adminBuilder.append("\n**Max Mentions:** " + command.guild.config.maxMentionLimit);
+            if (command.guild.config.muteRepeatOffenders && command.guild.config.getMutedRoleID() != -1)
+                adminBuilder.append("\n**Messages Until AutoMute:** " + (command.guild.config.messageLimit - 3));
+            if (command.guild.config.denyInvites) {
+                IRole role = command.guild.getRoleByID(command.guild.config.getInviteAllowedID());
+                if (role != null) {
+                    adminBuilder.append("\n**Invite Allowed Role:** ");
+                    adminBuilder.append(role.getName());
                 }
             }
-            builder.append(s);
-        }
-        builder.append("\n > Total profiles : \"**" + totalTrusted + "**\"");
-        builder.append("\n\n**COSMETIC ROLES**");
-        for (String s : cosmeticRoleStats) {
-            if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getStringID());
-                builder.delete(0, builder.length());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Utility.sendStack(e);
-                }
+            if (adminBuilder.length() != 0) {
+                serverStats.append("\n\n**[ADMIN STATS]**" + adminBuilder.toString());
             }
-            builder.append(s);
         }
-        builder.append("\n > Total profiles : \"**" + totalCosmetic + "**\"");
-        builder.append("\n\n**MODIFIER ROLES**");
-        for (String s : modifierRoleStats) {
-            if (builder.length() > 1800) {
-                Utility.sendDM(builder.toString(), author.getStringID());
-                builder.delete(0, builder.length());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Utility.sendStack(e);
-                }
 
-            }
-            builder.append(s);
+        serverInfo.withDescription(serverStats.toString());
+
+        if (isGuildStats) {
+            RequestHandler.sendEmbedMessage("", serverInfo, command.channel.get()).get();
+            return null;
+        } else {
+            RequestHandler.sendEmbedMessage("", serverInfo, channel).get();
         }
-        builder.append("\n > Total profiles : \"**" + totalModified + "**\"");
-        builder.append("\n\n------{END OF INFO}------");
-        Utility.sendDM(builder.toString(), author.getStringID());
-        return null;
+
+        if (hasManageServer) {
+            List<SAILType> enabledModules = new LinkedList<>();
+            List<SAILType> disabledModules = new LinkedList<>();
+            List<SAILType> enabledSettings = new LinkedList<>();
+            List<SAILType> disabledSettings = new LinkedList<>();
+            for (GuildToggle t : command.guild.toggles) {
+                if (t.isModule()) {
+                    if (t.enabled(command.guild.config)) enabledModules.add(t.name());
+                    else disabledModules.add(t.name());
+                } else {
+                    if (t.enabled(command.guild.config)) enabledSettings.add(t.name());
+                    else disabledSettings.add(t.name());
+                }
+            }
+
+            toggles.appendField("MODULES", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
+                    "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.spacer, true);
+            toggles.appendField("SETTINGS", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
+                    "**Disabled**```" + Utility.listEnumFormatter(disabledSettings, true) + "```", true);
+            RequestHandler.sendEmbedMessage("", toggles, channel).get();
+        }
+
+
+        if (GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+
+            List<ChannelSetting> channelSettings = command.guild.channelSettings;
+            channelSettings.sort(Comparator.comparing(ChannelSetting::toString));
+            channelSettings.sort((o1, o2) -> Boolean.compare(o1.isSetting(), o2.isSetting()));
+
+            for (ChannelSetting s : channelSettings) {
+                List<String> channelList = new ArrayList<>();
+                for (long id : s.getIDs(command.guild)) {
+                    IChannel ch = command.guild.getChannelByID(id);
+                    if (ch != null) {
+                        channelList.add("#" + ch.getName() + "");
+                    }
+                }
+                if (channelList.size() != 0) {
+                    String content = Utility.listFormatter(channelList, true);
+                    channels = resetEmbed(channels, channel, command, s.toString().length() + content.length());
+                    channels.appendField(s.toString(), content, true);
+                }
+            }
+            channels.withTitle("CHANNEL STATS");
+            RequestHandler.sendEmbedMessage("", channels, channel).get();
+        }
+
+        //module builders.
+        XEmbedBuilder moduleStats = new XEmbedBuilder(command);
+        List<GuildToggle> guildmodules = new ArrayList(command.guild.toggles);
+        GuildToggle roleModule = null;
+        for (GuildToggle t : guildmodules) {
+            if (t.name() == new ModuleRoles().name()) {
+                roleModule = t;
+            }
+        }
+        int index = guildmodules.indexOf(roleModule);
+        guildmodules.remove(index);
+        guildmodules.add(0, roleModule);
+        for (GuildToggle toggle : guildmodules) {
+            if (toggle.isModule() && toggle.enabled(command.guild.config)) {
+                String stats = toggle.stats(command);
+                if (stats != null) {
+                    //checks to make sure the field can be added.
+
+                    String[] splitStats = stats.split("\n");
+                    List<String> toSend = new ArrayList<>();
+                    StringBuilder builder = new StringBuilder();
+                    for (String s : splitStats) {
+                        if (builder.length() + s.length() + 1 > EmbedBuilder.FIELD_CONTENT_LIMIT / 4) {
+                            toSend.add(builder.toString());
+                            builder = new StringBuilder();
+                        }
+                        if (s.startsWith("<split>")) {
+                            s = s.replace("<split>", "");
+                            toSend.add(builder.toString());
+                            builder = new StringBuilder();
+                        }
+                        builder.append(s + "\n");
+                    }
+                    if (builder.length() != 0) {
+                        toSend.add(builder.toString());
+                    }
+                    String title = toggle.name().toString().toUpperCase() + " STATS";
+                    if (toSend.size() != 0) {
+                        for (int i = 0; i < toSend.size(); i++) {
+                            moduleStats = resetEmbed(moduleStats, channel, command, title.length() + toSend.get(i).length());
+                            if (i + 1 < toSend.size()) {
+                                if (toSend.get(i).length() + toSend.get(i + 1).length() < EmbedBuilder.FIELD_CONTENT_LIMIT / 4) {
+                                    moduleStats.appendField(title, toSend.get(i) + "\n\n" + toSend.get(i + 1), true);
+                                    i++;
+                                } else {
+                                    moduleStats.appendField(title, toSend.get(i), true);
+                                }
+                            } else {
+                                moduleStats.appendField(title, toSend.get(i), true);
+                            }
+                        }
+                    } else {
+                        moduleStats = resetEmbed(moduleStats, channel, command, title.length() + stats.length());
+                        moduleStats.appendField(title, stats, true);
+                    }
+                }
+            }
+        }
+        RequestHandler.sendEmbedMessage("", moduleStats, channel).get();
+
+        return "> Info sent to Dms.";
     }
 
     @Override
-    public String[] names() {
-        return new String[]{"GetGuildInfo"};
+    protected String[] names() {
+        return new String[]{"GuildInfo", "ServerInfo", "GetGuildInfo"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sends Information about the server to your Direct Messages.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return null;
     }
 
     @Override
-    public String type() {
-        return TYPE_HELP;
+    protected SAILType type() {
+        return SAILType.HELP;
     }
 
     @Override
-    public String channel() {
+    protected ChannelSetting channel() {
         return null;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return false;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
-
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
+    public void init() {
+        subCommands.add(GUILD_STATS);
+        showIndividualSubs = true;
     }
 }

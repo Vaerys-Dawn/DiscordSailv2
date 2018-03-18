@@ -1,11 +1,16 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -13,13 +18,20 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 26/02/2017.
  */
-public class CharInfo implements Command {
+public class CharInfo extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         for (CharacterObject object : command.guild.characters.getCharacters(command.guild.get())) {
             if (object.getName().equalsIgnoreCase(args)) {
-                XEmbedBuilder builder = new XEmbedBuilder();
+                XEmbedBuilder builder = new XEmbedBuilder(command);
                 builder.withTitle(object.getNickname());
+
+                IUser user = command.guild.getUserByID(object.getUserID());
+                if (user == null) {
+                    builder.withFooterText("Author: No longer on this server | Character ID: " + object.getName());
+                }
+                builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
 
                 ArrayList<IRole> roles = new ArrayList<>();
                 ArrayList<String> roleNames = new ArrayList<>();
@@ -30,14 +42,23 @@ public class CharInfo implements Command {
                     }
                 }
                 if (roles.size() != 0) {
-                    builder.withColor(Utility.getUsersColour(roles, command.guild.get()));
+                    builder.withColor(GuildHandler.getUsersColour(roles));
                 } else {
-                    builder.withColor(command.client.color);
+                    builder.withColor(GuildHandler.getUsersColour(user, command.guild.get()));
                 }
 
                 StringBuilder description = new StringBuilder();
                 description.append("**Age:** " + object.getAge());
                 description.append("\n**Gender:** " + object.getGender());
+                if (object.getHeight() != null || object.getWeight() != null) {
+                    description.append("\n");
+                    if (object.getHeight() != null) {
+                        description.append("**Height:** " + object.getHeight() + indent);
+                    }
+                    if (object.getWeight() != null) {
+                        description.append("**Weight:** " + object.getWeight());
+                    }
+                }
                 if (roleNames.size() != 0) {
                     if (command.guild.characters.getRolePrefix() != null && !command.guild.characters.getRolePrefix().isEmpty()) {
                         description.append("\n" + command.guild.characters.getRolePrefix() + " " + Utility.listFormatter(roleNames, true));
@@ -56,7 +77,7 @@ public class CharInfo implements Command {
                     }
                     builder.withThumbnail(object.getAvatarURL());
                 }
-                Utility.sendEmbedMessage("", builder, command.channel.get());
+                RequestHandler.sendEmbedMessage("", builder, command.channel.get());
                 return null;
             }
         }
@@ -64,62 +85,47 @@ public class CharInfo implements Command {
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"CharInfo", "InfoChar"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Gives Information about a certain character.";
     }
 
     @Override
-    public String usage() {
-        return "[Character name]";
+    protected String usage() {
+        return "[Character ID]";
     }
 
     @Override
-    public String type() {
-        return TYPE_CHARACTER;
+    protected SAILType type() {
+        return SAILType.CHARACTER;
     }
 
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return ChannelSetting.CHARACTER;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

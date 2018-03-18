@@ -1,23 +1,25 @@
 package com.github.vaerys.commands.general;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.handle.obj.StatusType;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Vaerys on 27/02/2017.
  */
-public class UserInfo implements Command {
+public class UserInfo extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -36,24 +38,25 @@ public class UserInfo implements Command {
             user = Utility.getUser(command, args, true);
         }
         if (user == null) {
-            return "> Could not find that user.";
+            return "> Could not find user.";
         }
         ProfileObject profile = user.getProfile(command.guild);
         if (profile == null && user.get().isBot()) {
             if (user.get().getPresence().getStatus().equals(StatusType.OFFLINE) || user.get().getPresence().getStatus().equals(StatusType.UNKNOWN)) {
-                return "> Could not get a profile for this user.";
+                return "> Could not get a profile for " + user.displayName + ".";
             }
-            profile = new ProfileObject(user.stringID);
+            profile = new ProfileObject(user.longID);
             command.guild.users.addUser(profile);
         } else if (profile == null) {
-            return "> Could not get a profile for this user.";
+            return "> Could not get a profile for " + user.displayName + ".";
         }
-        if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
-            return "> User has set their profile to private.";
+        if (!GuildHandler.testForPerms(command, Permissions.ADMINISTRATOR) &&
+                (user.isPrivateProfile(command.guild) && user.longID != command.user.longID)) {
+            return "> " + user.displayName + " has set their profile to private.";
         }
 
         //start of the profile builder.
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(user);
         List<IRole> roles = user.roles;
         ArrayList<String> roleNames = new ArrayList<>();
         ArrayList<String> links = new ArrayList<>();
@@ -63,7 +66,10 @@ public class UserInfo implements Command {
             builder.withAuthorIcon("http://i.imgur.com/aRJpAP4.png");
         }
         //sets title to user Display Name;
+
+
         builder.withAuthorName(user.displayName);
+
 
         //sets thumbnail to user Avatar.
         builder.withThumbnail(user.get().getAvatarURL());
@@ -75,24 +81,29 @@ public class UserInfo implements Command {
 
         long difference = nowUTC - creationUTC;
 
-        //sets sidebar colour
-        builder.withColor(user.color);
-
         //collect role names;
         roleNames.addAll(roles.stream().filter(role -> !role.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
 
         if (profile.getLinks() != null && profile.getLinks().size() > 0) {
-            links.addAll(profile.getLinks().stream().map(link -> "[" + link.getName() + "](" + link.getLink() + ")").collect(Collectors.toList()));
+            links.addAll(profile.getLinks().stream().map(link -> link.toString()).collect(Collectors.toList()));
         }
 
         //builds desc
-        DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
         StringBuilder desc = new StringBuilder();
+        StringBuilder footer = new StringBuilder();
+        if (profile.getSettings().contains(UserSetting.READ_RULES) && command.guild.config.readRuleReward) {
+            builder.withFooterIcon(Constants.STICKER_STAR_URL);
+//            builder.withFooterIcon("https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/glowing-star_1f31f.png");
+        }
         if (command.guild.config.userInfoShowsDate) {
-            desc.append("**Account Created: **" + creationDate.format(formatter));
+            builder.withTimestamp(user.get().getCreationDate());
+            footer.append("UserID: " + profile.getUserID() + ", Creation Date");
+//            desc.append("**Account Created: **" + creationDate.format(formatter));
         } else {
             desc.append("**Account Created: **" + Utility.formatTimeDifference(difference));
+            footer.append("User ID: " + profile.getUserID());
         }
+        builder.withFooterText(footer.toString());
         desc.append("\n**Gender: **" + profile.getGender());
 
         boolean showLevel = true;
@@ -115,75 +126,64 @@ public class UserInfo implements Command {
         desc.append("\n\n*" + profile.getQuote() + "*");
         desc.append("\n" + Utility.listFormatter(links, true));
 
+        if (user.isPatron) {
+            builder.withAuthorIcon(Constants.PATREON_ICON_URL);
+        }
+
         builder.withDesc(desc.toString());
-        builder.withFooterText("User ID: " + profile.getID());
+//        builder.withFooterText("User ID: " + profile.getUserID());
 
         //sends Message
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
-            Utility.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
+            RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
             return "> Profile sent to your Direct messages.";
         }
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"Profile", "UserInfo", "Me"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Lets you see some information about yourself or another user.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "(@user)";
     }
 
     @Override
-    public String type() {
-        return TYPE_GENERAL;
+    protected SAILType type() {
+        return SAILType.GENERAL;
     }
 
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return ChannelSetting.PROFILES;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return false;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

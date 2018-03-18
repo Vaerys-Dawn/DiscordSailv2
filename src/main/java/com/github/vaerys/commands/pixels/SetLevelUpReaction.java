@@ -1,15 +1,17 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import sx.blah.discord.handle.obj.IEmoji;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.MessageTokenizer;
 
-public class SetLevelUpReaction implements Command {
+public class SetLevelUpReaction extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -35,62 +37,47 @@ public class SetLevelUpReaction implements Command {
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"SetLevelUpReaction"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Sets the Reaction that the bot will post to the message a user sent to level up.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Emoji]/Remove";
     }
 
     @Override
-    public String type() {
-        return TYPE_PIXEL;
+    protected SAILType type() {
+        return SAILType.PIXEL;
     }
 
     @Override
-    public String channel() {
+    protected ChannelSetting channel() {
         return null;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[]{Permissions.MANAGE_EMOJIS};
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

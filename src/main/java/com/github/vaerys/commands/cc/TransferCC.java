@@ -1,13 +1,15 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.FileHandler;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.pogos.CustomCommands;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
@@ -17,11 +19,15 @@ import java.nio.file.Paths;
 
 /**
  * Created by Vaerys on 01/02/2017.
+ *
+ * @deprecated because shit.
  */
-public class TransferCC implements Command {
+@Deprecated
+public class TransferCC extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
-        String filePath = Constants.DIRECTORY_OLD_FILES + command.guild.stringID + "_CustomCommands.json";
+        String filePath = Constants.DIRECTORY_OLD_FILES + command.guild.longID + "_CustomCommands.json";
         IGuild guild = command.guild.get();
         IUser author = command.user.get();
         IChannel channel = command.channel.get();
@@ -37,14 +43,14 @@ public class TransferCC implements Command {
                 return Constants.ERROR_CC_NOT_FOUND;
             }
             boolean locked = transfering.isLocked();
-            String userID = transfering.getUserID();
+            long userID = transfering.getUserID();
             if (guild.getUserByID(userID) == null) {
-                Utility.sendMessage("> This command's old owner no longer is part of this server.\n" + Constants.PREFIX_INDENT +
+                RequestHandler.sendMessage("> This command's old owner no longer is part of this server.\n" + Constants.PREFIX_INDENT +
                         author.getDisplayName(guild) + " will become the new owner of this command.\n" +
                         "> I am now attempting to transfer the command over.", channel);
-                userID = author.getStringID();
+                userID = author.getLongID();
             } else {
-                Utility.sendMessage("> I am now attempting to transfer " + guild.getUserByID(userID).getDisplayName(guild) + "'s command.", channel);
+                RequestHandler.sendMessage("> I am now attempting to transfer " + guild.getUserByID(userID).getDisplayName(guild) + "'s command.", channel);
             }
             String name = transfering.getName();
             String contents = transfering.getContents(false);
@@ -59,62 +65,47 @@ public class TransferCC implements Command {
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"TransferCC"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Transfers a legacy command to the new system.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Command Name]";
     }
 
     @Override
-    public String type() {
-        return TYPE_CC;
+    protected SAILType type() {
+        return SAILType.CC;
     }
 
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return ChannelSetting.CC_INFO;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

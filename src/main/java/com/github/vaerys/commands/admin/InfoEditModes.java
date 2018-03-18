@@ -1,7 +1,8 @@
 package com.github.vaerys.commands.admin;
 
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IMessage;
@@ -20,14 +21,14 @@ import java.util.ArrayList;
  */
 public class InfoEditModes {
 
-    public static String uploadFile(IMessage message) {
-        if (message.getAttachments() == null || message.getAttachments().size() == 0) {
+    public static String uploadFile(CommandObject command) {
+        if (command.message.getAttachments() == null || command.message.getAttachments().size() == 0) {
             return "> No file to upload found.";
         } else {
             try {
-                IMessage.Attachment attachment = message.getAttachments().get(0);
-                File file = new File(Utility.getGuildImageDir(message.getGuild().getStringID()) + attachment.getFilename());
-                File imagDir = new File(Utility.getGuildImageDir(message.getGuild().getStringID()));
+                IMessage.Attachment attachment = command.message.getAttachments().get(0);
+                File file = new File(Utility.getGuildImageDir(command.guild.longID) + attachment.getFilename());
+                File imagDir = new File(Utility.getGuildImageDir(command.guild.longID));
                 File[] imageList = imagDir.listFiles();
 
                 if (!Utility.isImageLink(attachment.getFilename())) {
@@ -62,8 +63,8 @@ public class InfoEditModes {
         }
     }
 
-    public static String removeFile(String rest, IMessage message) {
-        File imagDir = new File(Utility.getGuildImageDir(message.getGuild().getStringID()));
+    public static String removeFile(String rest, CommandObject command) {
+        File imagDir = new File(Utility.getGuildImageDir(command.guild.longID));
         File[] imageList = imagDir.listFiles();
         for (File f : imageList) {
             if (f.getName().equalsIgnoreCase(rest)) {
@@ -74,29 +75,28 @@ public class InfoEditModes {
         return "> File Not Found.";
     }
 
-    public static String listFiles(IMessage message) {
+    public static String listFiles(CommandObject command) {
         //send Embed
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle("> Here are the files available to you:");
-        File imagDir = new File(Utility.getGuildImageDir(message.getGuild().getStringID()));
+        File imagDir = new File(Utility.getGuildImageDir(command.guild.longID));
         File[] imageList = imagDir.listFiles();
         ArrayList<String> fileNames = new ArrayList<>();
         for (File f : imageList) {
             fileNames.add(f.getName());
         }
-        builder.withColor(Utility.getUsersColour(Globals.getClient().getOurUser(), message.getGuild()));
         builder.withDesc("```\n" + Utility.listFormatter(fileNames, true) + "```");
-        Utility.sendEmbedMessage("", builder, message.getChannel());
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 
-    public static String uploadInfo(IMessage message) {
-        if (message.getAttachments() == null || message.getAttachments().size() == 0) {
+    public static String uploadInfo(CommandObject command) {
+        if (command.message.getAttachments() == null || command.message.getAttachments().size() == 0) {
             return "> No file to upload found.";
         } else {
             try {
-                IMessage.Attachment attachment = message.getAttachments().get(0);
-                File file = new File(Utility.getFilePath(message.getGuild().getStringID(), Constants.FILE_INFO));
+                IMessage.Attachment attachment = command.message.getAttachments().get(0);
+                File file = new File(Utility.getFilePath(command.guild.longID, Constants.FILE_INFO));
 
                 if (!attachment.getFilename().equals(Constants.FILE_INFO)) {
                     return "> Cannot upload file, File name must be \"" + Constants.FILE_INFO + "\"";
@@ -125,11 +125,11 @@ public class InfoEditModes {
         }
     }
 
-    public static String getInfoFile(IMessage message) {
-        String filePath = Utility.getFilePath(message.getGuild().getStringID(), Constants.FILE_INFO);
+    public static String getInfoFile(CommandObject command) {
+        String filePath = Utility.getFilePath(command.guild.longID, Constants.FILE_INFO);
         File file = new File(filePath);
         if (file.exists()) {
-            Utility.sendFile("> Here is your **" + Constants.FILE_INFO + "** file.", file, message.getChannel());
+            RequestHandler.sendFile("> Here is your **" + Constants.FILE_INFO + "** file.", file, command.channel.get());
         } else {
             return "> Cannot send file, **" + Constants.FILE_INFO + "** file does not exist yet.";
         }

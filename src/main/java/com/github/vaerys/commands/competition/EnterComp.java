@@ -1,9 +1,11 @@
 package com.github.vaerys.commands.competition;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.objects.CompObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
@@ -16,7 +18,8 @@ import java.util.List;
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class EnterComp implements Command {
+public class EnterComp extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         GuildConfig guildconfig = command.guild.config;
@@ -39,7 +42,7 @@ public class EnterComp implements Command {
             }
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy - HH:mm:ss");
             Calendar cal = Calendar.getInstance();
-            command.guild.competition.newEntry(new CompObject(author.getDisplayName(command.guild.get()), author.getStringID(), fileName, fileUrl, dateFormat.format(cal.getTime())));
+            command.guild.competition.newEntry(new CompObject(author.getDisplayName(command.guild.get()), author.getLongID(), fileName, fileUrl, dateFormat.format(cal.getTime())));
             return "> Thank you " + author.getDisplayName(command.guild.get()) + " For entering the Competition.";
         } else {
             return "> Competition Entries are closed.";
@@ -47,62 +50,47 @@ public class EnterComp implements Command {
     }
 
     @Override
-    public String[] names() {
-        return new String[]{"EnterComp","Comp","Enter"};
+    protected String[] names() {
+        return new String[]{"EnterComp", "Comp", "Enter"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Enters your image into the Sail Competition.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Image Link or Image File]";
     }
 
     @Override
-    public String type() {
-        return TYPE_COMPETITION;
+    protected SAILType type() {
+        return SAILType.COMPETITION;
     }
 
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return ChannelSetting.BOT_COMMANDS;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return false;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return true;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

@@ -1,13 +1,15 @@
 package com.github.vaerys.commands.pixels;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.RewardRoleObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -17,7 +19,8 @@ import java.time.ZonedDateTime;
 /**
  * Created by Vaerys on 06/07/2017.
  */
-public class TransferLevels implements Command {
+public class TransferLevels extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.config.xpGain) {
@@ -26,94 +29,75 @@ public class TransferLevels implements Command {
         if (command.guild.config.getRewardRoles().size() == 0) {
             return "> No rewards available to grant. cannot transfer levels";
         }
-        IMessage message = Utility.sendMessage("`Working...`", command.channel.get()).get();
+        IMessage message = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
 
         Utility.sortRewards(command.guild.config.getRewardRoles());
-        for (IUser user : command.guild.get().getUsers()) {
+
+        for (IUser user : command.guild.getUsers()) {
             if (!user.isBot()) {
-                ProfileObject uObject = command.guild.users.getUserByID(user.getStringID());
+                ProfileObject uObject = command.guild.users.getUserByID(user.getLongID());
                 if (uObject == null) {
-                    uObject = new ProfileObject(user.getStringID());
+                    uObject = command.guild.users.addUser(user.getLongID());
                 }
                 uObject.lastTalked = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
-//                uObject.setRewardID(-1);
                 uObject.setXp(0);
                 uObject.setCurrentLevel(-1);
-
                 for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
-                    for (IRole uRole : user.getRolesForGuild(command.guild.get())) {
-                        if (r.getRoleID() == uRole.getLongID()) {
-                            uObject.setXp(XpHandler.totalXPForLevel(r.getLevel()));
-//                            uObject.setRewardID(r.getRoleID());
-                            uObject.setCurrentLevel(r.getLevel());
-                        }
+                    if (user.getRolesForGuild(command.guild.get()).contains(r.get(command.guild))) {
+                        uObject.setXp(r.getXp());
+                        uObject.setCurrentLevel(r.getLevel());
                     }
                 }
-                XpHandler.checkUsersRoles(uObject.getID(), command.guild);
+                GuildHandler.checkUsersRoles(uObject.getUserID(), command.guild);
             }
         }
-        Utility.deleteMessage(message);
+        RequestHandler.deleteMessage(message);
         command.guild.config.xpGain = true;
         return "> Transfer Complete.";
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"TransferLevels"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows for the transfer of levels.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return null;
     }
 
     @Override
-    public String type() {
-        return TYPE_PIXEL;
+    protected SAILType type() {
+        return SAILType.PIXEL;
     }
 
     @Override
-    public String channel() {
+    protected ChannelSetting channel() {
         return null;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return false;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return true;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

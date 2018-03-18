@@ -1,13 +1,16 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 07/07/2017.
  */
-public class SetJoinMessage implements Command {
+public class SetJoinMessage extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         command.guild.config.setJoinMessage(args);
@@ -15,12 +18,12 @@ public class SetJoinMessage implements Command {
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"SetJoinMessage"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows for the setting of the message that shows when a user joins the server.\n" +
                 "**Available tags**\n" +
                 "<server> = Server Name\n" +
@@ -28,52 +31,37 @@ public class SetJoinMessage implements Command {
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Message]";
     }
 
     @Override
-    public String type() {
-        return TYPE_ADMIN;
+    protected SAILType type() {
+        return SAILType.ADMIN;
     }
 
     @Override
-    public String channel() {
+    protected ChannelSetting channel() {
         return null;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return true;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

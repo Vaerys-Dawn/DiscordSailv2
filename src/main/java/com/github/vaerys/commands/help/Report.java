@@ -1,30 +1,31 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.List;
+
 /**
  * Created by Vaerys on 30/01/2017.
  */
-public class Report implements Command {
-
-    @Override
-    public String execute(String args, CommandObject command) {
-        return report(args, command, false);
-    }
+public class Report extends Command {
 
     public static String report(String args, CommandObject command, boolean isSilent) {
-        if (command.guild.config.getChannelIDsByType(CHANNEL_ADMIN) != null) {
-            IChannel channel = command.guild.get().getChannelByID(command.guild.config.getChannelIDsByType(CHANNEL_ADMIN).get(0));
+        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.ADMIN);
+        if (channels.size() != 0) {
+            IChannel channel = channels.get(0);
             SplitFirstObject split = new SplitFirstObject(args);
-            UserObject reported = Utility.getUser(command, split.getFirstWord(), false);
+            UserObject reported = Utility.getUser(command, split.getFirstWord(), false, false);
             if (reported == null) {
                 return "> Cannot send report. Could not find user.";
             }
@@ -33,7 +34,7 @@ public class Report implements Command {
             }
             if (channel != null) {
                 StringBuilder builder = new StringBuilder();
-                IRole roleToMention = command.guild.get().getRoleByID(command.guild.config.getRoleToMentionID());
+                IRole roleToMention = command.guild.getRoleByID(command.guild.config.getRoleToMentionID());
                 if (roleToMention != null) {
                     builder.append(roleToMention.mention() + "\n");
                 }
@@ -43,9 +44,13 @@ public class Report implements Command {
                     builder.append("**User Report**\n");
                 }
                 split.editRestReplace(split.getRest(), Utility.convertMentionToText(split.getRest()));
-                builder.append("Reporter: " + command.user.get().mention() + "\nReported: " + reported.get().mention() + "\nReason: `" + split.getRest() + "`");
+                String reason = split.getRest();
+                if (split.getRest() == null) {
+                    reason = "No reason given.";
+                }
+                builder.append("Reporter: " + command.user.get().mention() + "\nReported: " + reported.get().mention() + "\nReason: `" + reason + "`");
                 builder.append("\n" + command.channel.get().mention());
-                IMessage message = Utility.sendMessage(builder.toString(), channel).get();
+                IMessage message = RequestHandler.sendMessage(builder.toString(), channel).get();
                 if (message == null) {
                     return "> User report was not be sent. Looks like I can't send messages to " + channel.mention() + ".";
                 } else {
@@ -59,62 +64,52 @@ public class Report implements Command {
     }
 
     @Override
-    public String[] names() {
+    public String execute(String args, CommandObject command) {
+        return report(args, command, false);
+    }
+
+    @Override
+    protected String[] names() {
         return new String[]{"Report"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Can be used to send a user report to the server staff.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[@User] [Reason]";
     }
 
     @Override
-    public String type() {
-        return TYPE_HELP;
+    protected SAILType type() {
+        return SAILType.HELP;
     }
 
     @Override
-    public String channel() {
+    protected ChannelSetting channel() {
         return null;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return true;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

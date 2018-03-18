@@ -1,18 +1,21 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.interfaces.Command;
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.help.GetGuildInfo;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildModule;
+import sx.blah.discord.handle.obj.IRole;
 
 /**
  * Created by Vaerys on 02/03/2017.
  */
-public class ModuleRoles implements GuildToggle {
+public class ModuleRoles extends GuildModule {
 
     @Override
-    public String name() {
-        return "Roles";
+    public SAILType name() {
+        return SAILType.ROLE_SELECT;
     }
 
     @Override
@@ -21,7 +24,7 @@ public class ModuleRoles implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleRoles;
     }
 
@@ -31,12 +34,55 @@ public class ModuleRoles implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-        guild.removeCommandsByType(Command.TYPE_ROLE_SELECT);
+    public String desc(CommandObject command) {
+        return "This module allows users to select their own roles from a select list via commands.\n\n" +
+                "**Stats:**\n" +
+                "To see the stats of this module you will need to run the **" + new GetGuildInfo().getCommand(command) + "** command.";
     }
 
     @Override
-    public boolean isModule() {
-        return true;
+    public void setup() {
+    }
+
+    @Override
+    public String stats(CommandObject command) {
+        if (command.guild.config.getCosmeticRoleIDs().size() == 0 && command.guild.config.getModifierRoleIDs().size() == 0) {
+            return null;
+        }
+        StringBuilder builder = new StringBuilder();
+        long totalUsers = 0;
+        builder.append("**[COSMETIC ROLES]**" + Command.spacer);
+        for (long id : command.guild.config.getCosmeticRoleIDs()) {
+            totalUsers += appendRole(builder, id, command);
+        }
+        builder.append("**\nTotal:** " + totalUsers);
+        totalUsers = 0;
+        builder.append("\n<split>**[MODIFIER ROLES]**" + Command.spacer);
+        for (long id : command.guild.config.getModifierRoleIDs()) {
+            totalUsers += appendRole(builder, id, command);
+        }
+        builder.append("**\nTotal:** " + totalUsers);
+        return builder.toString();
+    }
+
+    @Override
+    public boolean statsOnInfo() {
+        return false;
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allows users to pick their own roles.";
+    }
+
+    private long appendRole(StringBuilder builder, long id, CommandObject object) {
+        IRole role = object.guild.getRoleByID(id);
+        if (role != null) {
+            String roleName = role.getName();
+            if (role.isEveryoneRole()) roleName = "everyone";
+            builder.append("\n**" + roleName + "** - " + object.guild.get().getUsersByRole(role).size());
+            return object.guild.get().getUsersByRole(role).size();
+        }
+        return 0;
     }
 }

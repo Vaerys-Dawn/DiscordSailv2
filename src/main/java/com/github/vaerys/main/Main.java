@@ -9,12 +9,12 @@ import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RateLimitException;
 
 import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -27,13 +27,15 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
 
-    final static Logger logger = LoggerFactory.getLogger(Main.class);
+    static Logger logger;
 
     public static void main(String[] args) throws UnknownHostException {
-        System.out.println("Starting Program...");
 
         //important, do not move
-        PatchHandler.globalDataPatch();
+        PatchHandler.preInitPatches();
+        logger = LoggerFactory.getLogger(Main.class);
+
+        logger.info("Starting bot...");
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -43,16 +45,16 @@ public class Main {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Utility.sendStack(e);
                     }
                 }
-                Globals.saveFiles();
-                Globals.shuttingDown = true;
+                Globals.saveFiles(true);
             }
         });
 
 
-        String token;
+        String token = null;
+
         // you need to set a token in Token/Token.txt for the bot to run
         try {
             Discord4J.disableAudio();
@@ -63,33 +65,67 @@ public class Main {
             FileHandler.createDirectory(Constants.DIRECTORY_TEMP);
             FileHandler.createDirectory(Constants.DIRECTORY_OLD_FILES);
             FileHandler.createDirectory(Constants.DIRECTORY_ERROR);
-            if (!Files.exists(Paths.get(Constants.FILE_CONFIG))) {
-                FileHandler.writeToJson(Constants.FILE_CONFIG, new Config());
-            }
-            if (!Files.exists(Paths.get(Constants.FILE_GLOBAL_DATA))) {
-                FileHandler.writeToJson(Constants.FILE_GLOBAL_DATA, new GlobalData());
-            }
 
             //load config phase 1
-            Config config = (Config) FileHandler.readFromJson(Constants.FILE_CONFIG, Config.class);
-            GlobalData globalData = (GlobalData) FileHandler.readFromJson(Constants.FILE_GLOBAL_DATA, GlobalData.class);
+            Config config = (Config) Config.create(Constants.FILE_CONFIG, new Config());
+            GlobalData globalData = (GlobalData) GlobalData.create(Constants.FILE_GLOBAL_DATA, new GlobalData());
 
-
-            config.initObject(config);
-            FileHandler.writeToJson(Constants.FILE_CONFIG, config);
+            config = Config.check(config);
 
             //getting bot token
-            token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
-            if (token == null) {
+            try {
+                token = FileHandler.readFromFile(Constants.FILE_TOKEN).get(0);
+            } catch (IndexOutOfBoundsException e) {
                 logger.error("!!!BOT TOKEN NOT VALID PLEASE CHECK \"Storage/Token.txt\" AND UPDATE THE TOKEN!!!");
+                System.exit(Constants.EXITCODE_STOP);
             }
 
-            IDiscordClient client = Client.getClient(token, false);
+            try {
+                List<String> pastebinToken = FileHandler.readFromFile(Constants.FILE_PASTEBIN_TOKEN);
+                Client.initPastebin(pastebinToken);
+            } catch (IndexOutOfBoundsException e) {
+                logger.info("No Pastebin Token found.");
+            }
+
+
+            //stuff that i cant getToggles to work because reasons, ignore completely
+
+//            try{
+//                List<String> richPresesnce = FileHandler.readFromFile(Constants.FILE_RPC_TOKEN);
+//                Client.initRichPresence(richPresesnce);
+//            }catch (IndexOutOfBoundsException e){
+//                logger.info("Rich presence information missing.");
+//            }
+
+//            try {
+//                List<String> imgurToken = FileHandler.readFromFile(Constants.FILE_IMGUR_TOKEN);
+//                Client.initImgur(imgurToken);
+//            } catch (IndexOutOfBoundsException e) {
+//                logger.info("No Patreon Token found.");
+//            }
+
+
+            IDiscordClient client = Client.createClient(token, false);
 
             //load config phase 2
             Globals.initConfig(client, config, globalData);
 
-            PatchHandler.globalPatches();
+            if (Globals.creatorID == 153159020528533505L) {
+                try {
+                    List<String> patreonToken = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN);
+                    Client.initPatreon(patreonToken);
+                } catch (IndexOutOfBoundsException e) {
+                    logger.info("No Patreon Token found.");
+                }
+            }
+
+            Globals.validateConfig();
+            if (Globals.errorStack != null) {
+                logger.error(">\n> Begin Config Error Report <<\n" +
+                        "at " + Constants.DIRECTORY_STORAGE + Constants.FILE_CONFIG +
+                        "\n" + Globals.errorStack + ">> End Error Report <<");
+                System.exit(Constants.EXITCODE_STOP);
+            }
 
 
             ThreadGroup group = new ThreadGroup("GuildCreateGroup");
@@ -97,6 +133,19 @@ public class Main {
 
             //login + register listener.
             client.login();
+
+            // initialize creatorID if it is completely unset:
+            if (config.creatorID == 0) {
+                IUser botOwner = client.getApplicationOwner();
+                config.creatorID = botOwner.getLongID();
+                Globals.creatorID = config.creatorID;
+
+                logger.info("Default creatorID set to user " + botOwner.getName() + "#" + botOwner.getDiscriminator());
+
+                // save it back out to file.
+                config.flushFile();
+            }
+
             ExecutorService guildService = new ThreadPoolExecutor(2, 50, 1,
                     TimeUnit.MINUTES, new ArrayBlockingQueue<>(1000),
                     r -> new Thread(group, r, group.getName() + "-Thread-" + ++count[0]));
@@ -113,12 +162,14 @@ public class Main {
             dispatcher.registerListener(creatorService, new CreatorHandler());
             dispatcher.registerTemporaryListener(new InitEvent());
 
+            //validate config file
+            Globals.setVersion();
 
             //Init Patch system.
 
 
             //timed events getSlashCommands
-            new EventHandler();
+            new TimerHandler();
 
 
         } catch (DiscordException ex) {
@@ -133,15 +184,20 @@ public class Main {
         logger.info("Console input initiated.");
 
         while (scanner.hasNextLine()) {
-            if (Globals.consoleMessageCID != null) {
+            String message = scanner.nextLine();
+            if (message.equalsIgnoreCase("!Shutdown")) {
+                System.exit(Constants.EXITCODE_STOP);
+                return;
+            }
+            if (Globals.consoleMessageCID != -1) {
                 IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
-                String message = scanner.nextLine();
+
                 message = message.replace("#Dawn#", Globals.getClient().getUserByID(153159020528533505L).getName());
                 message = message.replace("teh", "the");
                 message = message.replace("Teh", "The");
 //            System.out.println(message);
                 if (!message.equals("")) {
-                    Utility.sendMessage(message, channel);
+                    RequestHandler.sendMessage(message, channel);
                 }
             }
         }

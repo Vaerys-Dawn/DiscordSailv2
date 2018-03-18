@@ -1,12 +1,15 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.FileHandler;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.io.File;
@@ -14,15 +17,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class SearchCCs implements Command {
+public class SearchCCs extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
-        ArrayList<CCommandObject> searched = new ArrayList<>();
-        StringBuilder builder = new StringBuilder();
+        List<CCommandObject> searched = new ArrayList<>();
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
             StringBuilder toSearch = new StringBuilder();
             toSearch.append(c.getName().toLowerCase());
@@ -37,22 +42,36 @@ public class SearchCCs implements Command {
                 searched.add(c);
             }
         }
-        String title = "> Here is your search:";
-        ArrayList<String> list = new ArrayList<>();
-        for (CCommandObject c : searched) {
-            list.add(command.guild.config.getPrefixCC() + c.getName());
+        if (searched.size() == 0) {
+            return "> Could not find any custom commands that contains **" + args + "**.";
         }
-        XEmbedBuilder embedBuilder = new XEmbedBuilder();
-        Utility.listFormatterEmbed(title,embedBuilder,list,true);
-        embedBuilder.withColor(command.client.color);
-        if (searched.size() < 40) {
-            Utility.sendEmbedMessage("",embedBuilder,command.channel.get());
-            return null;
-        } else {
-            String path = Constants.DIRECTORY_TEMP + command.message.stringID + ".txt";
-            FileHandler.writeToFile(path, Utility.listFormatter(list,true),false);
+
+        String title = "> Here is your search:";
+        XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
+        String contents = Utility.listFormatter(searched.stream().map(cCommandObject -> cCommandObject.getName(command)).collect(Collectors.toList()), true);
+        if (contents.length() > 2040) {
+            List<String> blah = new ArrayList<>();
+            StringBuilder complete = new StringBuilder();
+            complete.append("> Search for \"" + args + "\", Results found: " + searched.size() + "\n");
+            for (CCommandObject c : searched) {
+                if (blah.size() == 8) {
+                    complete.append(Utility.listFormatter(blah, true));
+                    blah = new ArrayList<>();
+                    complete.replace(complete.length() - 1, complete.length(), ",");
+                    complete.append("\n");
+                }
+                blah.add(c.getName(command));
+            }
+            if (blah.size() != 0) {
+                complete.append(Utility.listFormatter(blah, true));
+            }
+            if (complete.toString().endsWith(",\n")) {
+                complete.replace(complete.length() - 2, complete.length() - 1, ".");
+            }
+            String path = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
+            FileHandler.writeToFile(path, complete.toString(), false);
             File file = new File(path);
-            Utility.sendFile(title, file, command.channel.get());
+            RequestHandler.sendFile(title, file, command.channel.get());
             try {
                 Thread.sleep(4000);
                 Files.delete(Paths.get(path));
@@ -62,66 +81,57 @@ public class SearchCCs implements Command {
                 Utility.sendStack(e);
             }
             return null;
+        } else {
+            embedBuilder.withTitle(title);
+            embedBuilder.withDesc("```\n" + contents + spacer + "```");
+            RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
+            embedBuilder.withFooterText("Results Found: " + searched.size());
+            return null;
         }
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"SearchCCs"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Allows you to search the custom command list.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Search Params]";
     }
 
     @Override
-    public String type() {
-        return TYPE_CC;
+    protected SAILType type() {
+        return SAILType.CC;
     }
 
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return ChannelSetting.CC_INFO;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

@@ -1,16 +1,17 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
 /**
  * Created by Vaerys on 04/07/2017.
  */
-public class XpDecay implements GuildToggle {
+public class XpDecay extends GuildSetting {
     @Override
-    public String name() {
-        return "XpDecay";
+    public SAILType name() {
+        return SAILType.XP_DECAY;
     }
 
     @Override
@@ -19,7 +20,7 @@ public class XpDecay implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.xpDecay;
     }
 
@@ -29,12 +30,17 @@ public class XpDecay implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-
+    public String shortDesc(CommandObject command) {
+        return desc(command);
     }
 
     @Override
-    public boolean isModule() {
-        return false;
+    public String desc(CommandObject command) {
+        return "Enables the pixel decay feature.";
+    }
+
+    @Override
+    public void setup() {
+
     }
 }

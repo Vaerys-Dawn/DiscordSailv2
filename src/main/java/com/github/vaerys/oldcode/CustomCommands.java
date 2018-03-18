@@ -1,6 +1,7 @@
 package com.github.vaerys.oldcode;
 
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CCommandObject;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 25/06/2016.
  */
+@Deprecated
 public class CustomCommands {
 
 
@@ -18,29 +20,29 @@ public class CustomCommands {
     ArrayList<String[]> commands = new ArrayList<>();
 //    final String[] commandNotFound = {"noUser", "404", "No Command with that name found."};
 
-    public CCommandObject convertCommand(String command){
-        boolean islocked = false;
-        boolean isfound = false;
+    public CCommandObject convertCommand(String command) {
+        boolean isLocked = false;
+        boolean isFound = false;
         String commandName = null;
-        String userID = null;
+        long userID = -1;
         String commandContents = null;
-        for (String[] c: commands){
-            if (c[1].equalsIgnoreCase(command)){
-                isfound = true;
+        for (String[] c : commands) {
+            if (c[1].equalsIgnoreCase(command)) {
+                isFound = true;
                 commandName = c[1];
                 commandContents = c[2];
-                if (c[0].contains("LockedCommand")){
-                    islocked = true;
-                    userID = Globals.getClient().getOurUser().getStringID();
-                }else {
-                    islocked = false;
-                    userID = c[0];
+                if (c[0].contains("LockedCommand")) {
+                    isLocked = true;
+                    userID = Globals.getClient().getOurUser().getLongID();
+                } else {
+                    isLocked = false;
+                    userID = Utility.stringLong(c[0]);
                 }
             }
         }
-        if (isfound) {
-            return new CCommandObject(islocked, userID, commandName, commandContents, false);
-        }else {
+        if (isFound) {
+            return new CCommandObject(isLocked, userID, commandName, commandContents, false);
+        } else {
             return null;
         }
     }

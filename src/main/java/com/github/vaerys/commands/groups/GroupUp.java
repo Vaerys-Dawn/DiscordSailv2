@@ -1,9 +1,11 @@
 package com.github.vaerys.commands.groups;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.GroupUpObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IPresence;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
@@ -14,7 +16,8 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 31/05/2017.
  */
-public class GroupUp implements Command {
+public class GroupUp extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         String presence = null;
@@ -30,16 +33,19 @@ public class GroupUp implements Command {
         }
         list.add(new GroupUpObject(presence, command.user.longID));
         //person added to list :D
+
         ArrayList<String> completeList = new ArrayList<>();
+
+
         for (GroupUpObject g : list) {
             IUser user = command.client.get().getUserByID(g.getUserID());
             if (user != null) {
                 IPresence userPres = user.getPresence();
                 if (!userPres.getStatus().equals(StatusType.DND) && !userPres.getStatus().equals(StatusType.OFFLINE) && !userPres.getStatus().equals(StatusType.UNKNOWN)) {
-                    if (g.getPresence() != null || userPres.getPlayingText().isPresent()) {
+                    if (g.getPresence() != null || userPres.getText().isPresent()) {
                         String newPres;
                         if (g.getPresence() == null) {
-                            newPres = userPres.getPlayingText().get();
+                            newPres = userPres.getText().get();
                         } else {
                             newPres = g.getPresence();
                         }
@@ -61,62 +67,47 @@ public class GroupUp implements Command {
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"GroupUp", "GroupMe"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Adds you to a list of people that will be mentioned when this command is run.\nRun this command again to leave the list.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "(Game)";
     }
 
     @Override
-    public String type() {
-        return TYPE_GROUPS;
+    protected SAILType type() {
+        return SAILType.GROUPS;
     }
 
     @Override
-    public String channel() {
-        return CHANNEL_GROUPS;
+    protected ChannelSetting channel() {
+        return ChannelSetting.GROUPS;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return false;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

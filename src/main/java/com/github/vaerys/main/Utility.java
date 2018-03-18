@@ -1,114 +1,59 @@
 package com.github.vaerys.main;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.FileHandler;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.*;
-import com.github.vaerys.pogos.DailyMessages;
-import com.github.vaerys.pogos.GuildConfig;
-import org.apache.commons.io.FilenameUtils;
+import com.github.vaerys.templates.Command;
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiManager;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
+import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
-import sx.blah.discord.util.*;
-import sx.blah.discord.util.Image;
+import sx.blah.discord.util.EmbedBuilder;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by Vaerys on 17/08/2016.
  */
+@SuppressWarnings({"StringConcatenationInsideStringBufferAppend", "WeakerAccess"})
 public class Utility {
-
-    static FileHandler handler = new FileHandler();
 
     //Logger
     final static Logger logger = LoggerFactory.getLogger(Utility.class);
 
-    //Discord Utils
-    public static IRole getRoleFromName(String roleName, IGuild guild) {
-        IRole role = null;
-        for (IRole r : guild.getRoles()) {
-            if (r.getName().equalsIgnoreCase(roleName)) {
-                role = r;
-            }
-        }
-        return role;
-    }
-
-    public static boolean testForPerms(Permissions[] perms, IUser user, IGuild guild) {
-        if (perms.length == 0) {
-            return true;
-        }
-        if (guild == null) {
-            return true;
-        }
-        if (user.getStringID().equals(Globals.creatorID)) {
-//            logger.trace("User is Creator, BYPASSING.");
-            return true;
-        }
-        if (user.getLongID() == guild.getOwnerLongID()) {
-//            logger.trace("User is Guild Owner, GUILD : \"" + guild.getStringID() + "\", BYPASSING.");
-            return true;
-        }
-        if (user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)) {
-            return true;
-        }
-        EnumSet<Permissions> toMatch = EnumSet.noneOf(Permissions.class);
-        toMatch.addAll(Arrays.asList(perms));
-        //Debug code.
-        List<String> toMatchList = new ArrayList<String>() {{
-            addAll(toMatch.stream().map(Enum::toString).collect(Collectors.toList()));
-        }};
-        List<String> userList = new ArrayList<String>() {{
-            addAll(user.getPermissionsForGuild(guild).stream().map(Enum::toString).collect(Collectors.toList()));
-        }};
-//        if (true) {
-//            logger.trace("To Match : " + Utility.listFormatter(toMatchList, true));
-//            logger.trace("User Perms : " + Utility.listFormatter(userList, true));
-//            logger.trace("Result : " + user.getPermissionsForGuild(guild).containsAll(toMatch));
-//        }
-        //end Debug
-        return user.getPermissionsForGuild(guild).containsAll(toMatch);
-    }
-
     //Command Utils
     public static String getCommandInfo(Command command, CommandObject commandObject) {
-        StringBuilder response = new StringBuilder(">> **" + commandObject.guild.config.getPrefixCommand() + command.names()[0]);
-        if (command.usage() != null) {
-            response.append(" " + command.usage());
+        StringBuilder response = new StringBuilder(">> **" + commandObject.guild.config.getPrefixCommand() + command.names[0]);
+        if (command.usage != null) {
+            response.append(" " + command.usage);
         }
         response.append("** <<");
         return response.toString();
     }
 
     public static String getCommandInfo(Command command) {
-        StringBuilder response = new StringBuilder(">> **" + Globals.defaultPrefixCommand + command.names()[0]);
-        if (command.usage() != null) {
-            response.append(" " + command.usage());
+        StringBuilder response = new StringBuilder(">> **" + Globals.defaultPrefixCommand + command.names[0]);
+        if (command.usage != null) {
+            response.append(" " + command.usage);
         }
         response.append("** <<");
         return response.toString();
@@ -124,549 +69,94 @@ public class Utility {
     }
 
     //File Utils
-    public static String getFilePath(String guildID, String type) {
+    public static String getFilePath(long guildID, String type) {
         return Constants.DIRECTORY_STORAGE + guildID + "/" + type;
     }
 
-    public static String getFilePath(String guildID, String type, boolean isBackup) {
+    public static String getFilePath(long guildID, String type, boolean isBackup) {
         return Constants.DIRECTORY_BACKUPS + guildID + "/" + type;
     }
 
-    public static String getDirectory(String guildID) {
+    public static String getDirectory(long guildID) {
         return Constants.DIRECTORY_STORAGE + guildID + "/";
     }
 
-    public static String getGuildImageDir(String guildID) {
+    public static String getGuildImageDir(long guildID) {
         return getDirectory(guildID) + Constants.DIRECTORY_GUILD_IMAGES;
     }
 
-    public static String getDirectory(String guildID, boolean isBackup) {
+    public static String getDirectory(long guildID, boolean isBackup) {
         return Constants.DIRECTORY_BACKUPS + guildID + "/";
     }
 
-    public static Object initFile(String guildID, String filePath, Class<?> objClass) {
-        List<String> fileContents = FileHandler.readFromFile(Utility.getFilePath(guildID, filePath));
-        if (fileContents == null || fileContents.size() == 0 || fileContents.get(0).equals("null")) {
-            logger.error(Utility.getFilePath(guildID, filePath) + ". FILE EMPTY PLEASE CHECK FILE OR LOAD BACKUP.");
-            return null;
-        }
-        Object object = null;
-        int counter = 0;
-        while (object == null) {
-            object = handler.readFromJson(Utility.getFilePath(guildID, filePath), objClass);
-            counter++;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                sendStack(e);
-            }
-        }
-        if (counter > 1) {
-            logger.debug(filePath + " File for guild with id " + guildID + " took " + counter + " tries to Init");
-        }
-        return object;
-    }
-
-    public static void flushFile(String guildID, String filePath, Object object, boolean wasInit) {
-        if (wasInit) {
-            logger.trace(filePath + " - Saved.");
-            handler.writeToJson(Utility.getFilePath(guildID, filePath), object);
-        } else ;
-    }
-
-    public static void backupFile(String guildID, String type) {
-        try {
-            File backup1 = new File(getFilePath(guildID, type, true) + 1);
-            File backup2 = new File(getFilePath(guildID, type, true) + 2);
-            File backup3 = new File(getFilePath(guildID, type, true) + 3);
-            File toBackup = new File(getFilePath(guildID, type));
-            if (backup3.exists()) backup3.delete();
-            if (backup2.exists()) backup2.renameTo(backup3);
-            if (backup1.exists()) backup1.renameTo(backup2);
-            if (toBackup.exists())
-                Files.copy(Paths.get(toBackup.getPath()), backup1.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            sendStack(e);
-        }
-    }
-
-    public static void backupConfigFile(String file, String fileBackup) {
-        try {
-            File backup1 = new File(fileBackup + 1);
-            File backup2 = new File(fileBackup + 2);
-            File backup3 = new File(fileBackup + 3);
-            File toBackup = new File(file);
-            if (backup3.exists()) backup3.delete();
-            if (backup2.exists()) backup2.renameTo(backup3);
-            if (backup1.exists()) backup1.renameTo(backup2);
-            if (toBackup.exists())
-                Files.copy(Paths.get(toBackup.getPath()), backup1.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            sendStack(e);
-        }
-    }
-
-    //Discord Request Processors
-    public static XRequestBuffer.RequestFuture<IMessage> sendMessage(String message, IChannel channel) {
-        return XRequestBuffer.request(() -> {
-            IMessage error = null;
-            if (message == null) {
-                return error;
-            }
-            if (message.length() < 2000) {
-                try {
-                    if (channel == null) {
-                        return error;
-                    }
-                    if (StringUtils.containsOnly(message, "\n")) {
-                        return error;
-                    }
-                    if (message != null || !message.equals("")) {
-                        return channel.sendMessage(removeMentions(message));
-                    }
-                } catch (MissingPermissionsException e) {
-                    logger.debug("Error sending message to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
-                            ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
-                    return error;
-                } catch (DiscordException e) {
-                    if (e.getMessage().contains("CloudFlare")) {
-                        return sendMessage(message, channel).get();
-                    } else {
-                        sendStack(e);
-                        logger.error(message);
-                        return error;
-                    }
-                }
-            } else {
-                logger.debug("Message to be sent to channel with id: " + channel.getStringID() + "on guild with id: " + channel.getGuild().getStringID() +
-                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Message to large.");
-                return error;
-            }
-            return error;
-        });
-    }
-
-    public static XRequestBuffer.RequestFuture<Boolean> sendFile(String message, File file, IChannel channel) {
-        return XRequestBuffer.request(() -> {
-            try {
-                if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("")) {
-                    if (file != null) {
-                        channel.sendFile(file);
-                    } else {
-                        logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
-                                ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
-                        return true;
-                    }
-                } else {
-                    if (message != null) {
-                        channel.sendFile(removeMentions(message), file);
-                    } else {
-                        sendMessage(message, channel);
-                        return true;
-                    }
-                }
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    sendFile(message, file, channel);
-                } else {
-                    sendStack(e);
-                    return true;
-                }
-            } catch (IOException e) {
-                sendStack(e);
-            } catch (MissingPermissionsException e) {
-                sendMessage("> Could not send File, missing permissions.", channel);
-                logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
-                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
-                return true;
-            }
-            return false;
-        });
-    }
-
-    public static IMessage sendFileURL(String message, String imageURL, IChannel channel, boolean loadMessage) {
-        IMessage toDelete = null;
-        if (loadMessage) {
-            toDelete = sendMessage("`Loading...`", channel).get();
-        }
-        IMessage sentMessage = null;
-        try {
-            //setup for the stream
-            final HttpURLConnection connection = (HttpURLConnection) new URL(imageURL).openConnection();
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) " + "AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
-            InputStream stream = connection.getInputStream();
-            sentMessage = (IMessage) XRequestBuffer.request(() -> {
-                try {
-                    //set up the file name
-                    URL url = new URL(imageURL);
-                    String filename = FilenameUtils.getName(url.getPath());
-                    if (filename.equalsIgnoreCase("giphy.gif")) {
-                        return sendMessage(message + " " + imageURL, channel).get();
-                    }
-                    //checks if url is valid
-                    if (!isImageLink(filename)) {
-                        return sendMessage(message + " " + imageURL, channel).get();
-                    }
-                    //sends message/files
-                    if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("") && imageURL != null) {
-                        return channel.sendFile("", stream, filename);
-                    } else if (message != null && !message.isEmpty() && imageURL != null) {
-                        return channel.sendFile(removeMentions(message), false, stream, filename);
-                    } else {
-                        logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
-                                ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
-                        return null;
-                    }
-                } catch (DiscordException e) {
-                    if (e.getMessage().contains("CloudFlare")) {
-                        return sendFileURL(message, imageURL, channel, false);
-                    } else {
-                        sendStack(e);
-                        return null;
-                    }
-                } catch (MalformedURLException e) {
-                    return sendMessage(message + " " + imageURL, channel).get();
-                } catch (IOException e) {
-                    sendStack(e);
-                    return null;
-                } catch (MissingPermissionsException e) {
-                    logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
-                            ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
-                    return sendMessage(message + " <" + imageURL + ">", channel).get();
-                }
-            }).get();
-            stream.close();
-        } catch (MalformedURLException e) {
-            sendStack(e);
-        } catch (IOException e) {
-            sendStack(e);
-        }
-        if (loadMessage && toDelete != null) {
-            deleteMessage(toDelete);
-        }
-        return sentMessage;
-    }
-
-    public static IMessage sendDMEmbed(String message, XEmbedBuilder embed, String userID) {
-        IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
-        if (channel != null) {
-            return sendEmbedMessage(message, embed, channel).get();
-        } else {
-            return null;
-        }
-    }
-
-    public static XRequestBuffer.RequestFuture<IMessage> sendEmbedMessage(String message, XEmbedBuilder builder, IChannel channel) {
-
-        //removal of @everyone and @here Mentions.
-        EmbedObject embed = builder.build();
-        return XRequestBuffer.request(() -> {
-            try {
-                String iMessage = message;
-                if (iMessage == null) {
-                    iMessage = "";
-                }
-                return channel.sendMessage(iMessage, builder.build(), false);
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    sendEmbedMessage(message, builder, channel);
-                } else {
-                    sendStack(e);
-                    return null;
-                }
-            } catch (MissingPermissionsException e) {
-                logger.debug("Error sending File to channel with id: " + channel.getStringID() + " on guild with id: " + channel.getGuild().getStringID() +
-                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
-                StringBuilder embedToString = new StringBuilder();
-                if (embed.author != null) embedToString.append("**" + embed.author.name + "**\n");
-                if (embed.title != null) embedToString.append("**" + embed.title + "**\n");
-                if (embed.description != null) embedToString.append(embed.description + "\n");
-                if (embed.fields != null) {
-                    for (EmbedObject.EmbedFieldObject field : embed.fields) {
-                        embedToString.append("**" + field.name + "**\n" + field.value + "\n");
-                    }
-                }
-                if (embed.footer != null) embedToString.append("*" + embed.footer.text + "*");
-                if (embed.image != null) embedToString.append(embed.image.url);
-                return sendMessage(embedToString.toString(), channel).get();
-            }
-            return null;
-        });
-    }
-
     public static String removeMentions(String from) {
+        if (from == null) {
+            return from;
+        }
         return from.replaceAll("(?i)@everyone", "").replaceAll("(?i)@here", "");
     }
 
 
-    public static XRequestBuffer.RequestFuture<IMessage> sendDM(String message, long userID) {
-        return XRequestBuffer.request(() -> {
-            try {
-                IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
-                if (message == null || message.isEmpty()) {
-                    return null;
-                }
-                return sendMessage(message, channel).get();
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    return sendDM(message, userID).get();
-                } else {
-                    sendStack(e);
-                    return null;
-                }
-            } catch (NullPointerException e) {
-                logger.debug("[sendDM] " + e.getMessage());
-                return null;
-            }
-        });
-    }
-
-    public static IMessage sendDM(String message, String userID) {
-        try {
-            return sendDM(message, Long.parseLong(userID)).get();
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    public static XRequestBuffer.RequestFuture<Boolean> sendFileDM(String message, File attatchment, String userID) {
-        return XRequestBuffer.request(() -> {
-            try {
-                IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
-                if (message == null || message.isEmpty()) {
-                    return true;
-                }
-                sendFile(message, attatchment, channel);
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    sendFileDM(message, attatchment, userID);
-                } else {
-                    sendStack(e);
-                    return true;
-                }
-            } catch (NullPointerException e) {
-                logger.debug("[sendDM] " + e.getMessage());
-                return true;
-            }
-            return false;
-        });
-    }
-
-    public static XRequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, long newRoleID,
-                                                                       boolean isAdding) {
-        return XRequestBuffer.request(() -> {
-            try {
-                if (isAdding) {
-                    if (guild.getRoleByID(newRoleID) != null) {
-                        author.addRole(guild.getRoleByID(newRoleID));
-                    } else {
-                        return true;
-                    }
-                } else {
-                    if (guild.getRoleByID(newRoleID) != null) {
-                        author.removeRole(guild.getRoleByID(newRoleID));
-                    } else {
-                        return true;
-                    }
-                }
-            } catch (MissingPermissionsException e) {
-                if (e.getMessage().contains("Edited roles hierarchy is too high.")) {
-                    logger.debug("Error Editing roles of user with id: " + author.getStringID() + " on guild with id: " + guild.getStringID() +
-                            ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
-                    return true;
-                } else {
-                    sendStack(e);
-                    return true;
-                }
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    roleManagement(author, guild, newRoleID, isAdding);
-                } else {
-                    sendStack(e);
-                    return true;
-                }
-            }
-            return false;
-        });
-    }
-
-    public static XRequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild
-            guild, List<IRole> userRoles) {
-        return XRequestBuffer.request(() -> {
-            try {
-                IRole[] roles = new IRole[userRoles.size()];
-                int i = 0;
-                for (IRole r : userRoles) {
-                    if (r == null) {
-                        logger.error("ROLE RETURNED NULL");
-                    }
-                    roles[i] = r;
-                    i++;
-                }
-                guild.editUserRoles(author, roles);
-                return true;
-            } catch (MissingPermissionsException e) {
-                if (e.getMessage().contains("hierarchy")) {
-                    logger.debug("Error Editing roles of user with id: " + author.getStringID() + " on guild with id: " + guild.getStringID() +
-                            ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
-                    return false;
-                } else {
-                    sendStack(e);
-                    return false;
-                }
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    return roleManagement(author, guild, userRoles).get();
-                } else {
-                    sendStack(e);
-                    return false;
-                }
-            }
-        });
-    }
-
-    public static XRequestBuffer.RequestFuture<Boolean> updateAvatar(Image avatar) {
-        return XRequestBuffer.request(() -> {
-            try {
-                Globals.getClient().changeAvatar(avatar);
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    updateAvatar(avatar);
-                } else {
-                    sendStack(e);
-                    return true;
-                }
-            }
-            return false;
-        });
-    }
-
-    public static XRequestBuffer.RequestFuture<Boolean> updateUsername(String botName) {
-        return XRequestBuffer.request(() -> {
-            try {
-                Globals.getClient().changeUsername(botName);
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    updateUsername(botName);
-                } else {
-                    sendStack(e);
-                    return true;
-                }
-            }
-            return false;
-        });
-    }
-
-    public static XRequestBuffer.RequestFuture<Boolean> deleteMessage(IMessage message) {
-        return XRequestBuffer.request(() -> {
-            try {
-                message.delete();
-            } catch (MissingPermissionsException e) {
-                sendStack(e);
-                return true;
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    deleteMessage(message);
-                } else {
-                    sendStack(e);
-                    return true;
-                }
-            }
-            return false;
-        });
-    }
-
-    public static XRequestBuffer.RequestFuture<Boolean> deleteMessage(MessageHistory messages) {
-        return XRequestBuffer.request(() -> {
-            try {
-                messages.bulkDelete();
-            } catch (MissingPermissionsException e) {
-                sendStack(e);
-                return true;
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    deleteMessage(messages);
-                } else {
-                    sendStack(e);
-                    return true;
-                }
-            }
-            return false;
-        });
-    }
-
-    public static XRequestBuffer.RequestFuture<Boolean> updateUserNickName(IUser author, IGuild guild, String nickname) {
-        return XRequestBuffer.request(() -> {
-            try {
-                guild.setUserNickname(author, nickname);
-            } catch (MissingPermissionsException e) {
-                if (e.getMessage().toLowerCase().contains("hierarchy")) {
-                    logger.debug("Could not Update Nickname. User's position in hierarchy is higher than mine.");
-                } else {
-                    sendStack(e);
-                }
-                return true;
-            } catch (DiscordException e) {
-                if (e.getMessage().contains("CloudFlare")) {
-                    updateUserNickName(author, guild, nickname);
-                } else {
-                    sendStack(e);
-                    return true;
-                }
-            }
-            return false;
-        });
-    }
-
-    public static Color getUsersColour(IUser user, IGuild guild) {
-        List<IRole> userRoles = guild.getRolesForUser(user);
-        IRole topColour = null;
-        String defaultColour = "0,0,0";
-        for (IRole role : userRoles) {
-            if (!(role.getColor().getRed() + "," + role.getColor().getGreen() + "," + role.getColor().getBlue()).equals(defaultColour)) {
-                if (topColour != null) {
-                    if (role.getPosition() > topColour.getPosition()) {
-                        topColour = role;
-                    }
-                } else {
-                    topColour = role;
-                }
-            }
-        }
-        if (topColour != null) {
-            return topColour.getColor();
-        }
-        return null;
-    }
-
-    public static Color getUsersColour(List<IRole> userRoles, IGuild guild) {
-        IRole topColour = null;
-        String defaultColour = "0,0,0";
-        for (IRole role : userRoles) {
-            if (!(role.getColor().getRed() + "," + role.getColor().getGreen() + "," + role.getColor().getBlue()).equals(defaultColour)) {
-                if (topColour != null) {
-                    if (role.getPosition() > topColour.getPosition()) {
-                        topColour = role;
-                    }
-                } else {
-                    topColour = role;
-                }
-            }
-        }
-        if (topColour != null) {
-            return topColour.getColor();
-        }
-        return null;
-    }
-
     //Time Utils
-    public static String formatTimeSeconds(long timeMillis) {
-        long second = (timeMillis) % 60;
-        long minute = (timeMillis / 60) % 60;
-        long hour = (timeMillis / (60 * 60)) % 24;
-        String time = String.format("%02d:%02d:%02d", hour, minute, second);
+    public static String formatTime(long timeSeconds, boolean readable) {
+        long days = 0;
+        if (readable) {
+            days = TimeUnit.SECONDS.toDays(timeSeconds);
+            timeSeconds -= TimeUnit.DAYS.toSeconds(days);
+        }
+        long hours = TimeUnit.SECONDS.toHours(timeSeconds);
+        timeSeconds -= TimeUnit.HOURS.toSeconds(hours);
+
+        long minutes = TimeUnit.SECONDS.toMinutes(timeSeconds);
+        timeSeconds -= TimeUnit.MINUTES.toSeconds(minutes);
+
+        long seconds = TimeUnit.SECONDS.toSeconds(timeSeconds);
+        String time;
+        if (readable) {
+            StringBuilder msg = new StringBuilder();
+            int values = 0;
+            if (days != 0) values++;
+            if (hours != 0) values++;
+            if (minutes != 0) values++;
+            if (seconds != 0) values++;
+            if (days != 0) {
+                msg.append(days + " day");
+                addSplit(msg, values, days);
+                values--;
+            }
+            if (hours != 0) {
+                msg.append(hours + " hour");
+                addSplit(msg, values, hours);
+                values--;
+            }
+            if (minutes != 0) {
+                msg.append(minutes + " minute");
+                addSplit(msg, values, minutes);
+                values--;
+            }
+            if (seconds != 0) {
+                msg.append(seconds + " second");
+                addSplit(msg, values, seconds);
+                values--;
+            }
+            time = msg.toString();
+        } else {
+            time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        }
         return time;
     }
+
+    private static StringBuilder addSplit(StringBuilder msg, int values, long time) {
+        if (time > 1) msg.append("s");
+        if (values == 2) msg.append(" and ");
+        if (values > 2) msg.append(", ");
+        return msg;
+    }
+
+    public static String formatTimeSeconds(long timeSeconds) {
+        return formatTime(timeSeconds, false);
+    }
+
 
     public static Boolean testModifier(String modifier) {
         switch (modifier.toLowerCase()) {
@@ -683,56 +173,33 @@ public class Utility {
         }
     }
 
-    public static boolean canBypass(IUser author, IGuild guild, boolean logging) {
-        if (author.getStringID().equals(Globals.creatorID)) {
-            if (logging) {
-                logger.trace("User is Creator, BYPASSING.");
-            }
-            return true;
-        }
-        if (guild == null) {
-            return false;
-        }
-        if (author.getStringID().equals(guild.getOwnerID())) {
-            if (logging) {
-                logger.trace("User is Guild Owner, GUILD : \"" + guild.getStringID() + "\", BYPASSING.");
-            }
-            return true;
-        }
-        if (author.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean canBypass(IUser author, IGuild guild) {
-        return canBypass(author, guild, true);
-    }
-
-    public static String getMentionUserID(String content) {
+    public static long getMentionUserID(String content) {
         if (content.contains("<@")) {
-            String userID = StringUtils.substringBetween(content, "<@!", ">");
-            if (userID == null) {
-                userID = StringUtils.substringBetween(content, "<@", ">");
+            long userID = stringLong(StringUtils.substringBetween(content, "<@!", ">"));
+            if (userID == -1) {
+                userID = stringLong(StringUtils.substringBetween(content, "<@", ">"));
             }
             IUser user = Globals.getClient().getUserByID(userID);
             if (user != null) {
                 return userID;
             } else {
-                return null;
+                return -1;
             }
         } else {
-            return null;
+            return -1;
         }
     }
 
     public static String convertMentionToText(String from) {
         String last;
+        if (from == null || from.isEmpty()) {
+            return from;
+        }
         do {
             last = from;
             if (from.contains("<@") || from.contains("<!@")) {
-                String userID = getMentionUserID(from);
-                if (userID != null) {
+                long userID = getMentionUserID(from);
+                if (userID != -1) {
                     IUser mentioned = Globals.getClient().getUserByID(userID);
                     from = from.replace("<@!" + userID + ">", mentioned.getName() + "#" + mentioned.getDiscriminator());
                     from = from.replace("<@" + userID + ">", mentioned.getName() + "#" + mentioned.getDiscriminator());
@@ -776,60 +243,65 @@ public class Utility {
         }
     }
 
-    public static String listFormatter(List<String> list, boolean horizontal) {
+    public static String listFormatter(List<String> list, boolean singleLine) {
         StringBuilder formattedList = new StringBuilder();
         if (list.size() == 0) {
             return "";
         }
-        if (horizontal) {
+        if (singleLine) {
             for (String s : list) {
-                formattedList.append(s + ", ");
+                formattedList.append(s).append(", ");
             }
             formattedList.delete(formattedList.length() - 2, formattedList.length());
             formattedList.append(".");
             return formattedList.toString();
         } else {
             for (String s : list) {
-                formattedList.append(s + "\n");
+                formattedList.append(s).append("\n");
             }
             return formattedList.toString();
         }
     }
 
-    public static List<IRole> getRolesByName(IGuild guild, String name) {
-        List<IRole> roles = guild.getRoles().stream().filter(r -> r.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
-        return roles;
+    public static String listEnumFormatter(List<? extends Enum<?>> list, boolean singleLine) {
+        return listFormatter(EnumListToStringList(list), singleLine);
     }
 
-    public static String loggingFormatter(CommandObject commandObject, String type) {
-        return "TYPE: \"" + type + "\", GUILD : \"" + commandObject.guild.stringID +
-                "\", CHANNEL : \"" + commandObject.channel.stringID +
-                "\", USER : \"" + commandObject.user.stringID +
-                "\", MESSAGE : \"" + commandObject.message.stringID +
-                "\".";
+    public static List<String> EnumListToStringList(List<? extends Enum<?>> list) {
+        Stream<? extends Enum<?>> EnumStream = list.stream();
+        List<String> lst = EnumStream.map(Enum::toString).collect(Collectors.toList());
+        EnumStream.close();
+        return lst;
     }
 
     public static void sendGlobalAdminLogging(Command command, String args, CommandObject commandObject) {
         for (GuildObject c : Globals.getGuilds()) {
-            StringBuilder message = new StringBuilder("***GLOBAL LOGGING***\n> **@" + commandObject.user.username + "** Has Used Command `" + command.names()[0] + "`");
+            StringHandler message = new StringHandler("***GLOBAL LOGGING***\n> **@")
+                    .append(commandObject.user.username)
+                    .append("** Has Used Command `")
+                    .append(command.names[0]).append("`");
+            List<IChannel> adminlog = c.getChannelsByType(ChannelSetting.ADMIN_LOG);
+            List<IChannel> serverLog = c.getChannelsByType(ChannelSetting.SERVER_LOG);
+
             IChannel channel = null;
+
             if (!(args == null || args.isEmpty())) {
                 message.append(" with args: `" + args + "`");
             }
-            if (c.config.getChannelIDsByType(Command.CHANNEL_SERVER_LOG) != null) {
-                channel = commandObject.client.get().getChannelByID(c.config.getChannelIDsByType(Command.CHANNEL_SERVER_LOG).get(0));
+            if (serverLog.size() != 0) {
+                channel = serverLog.get(0);
             }
-            if (c.config.getChannelIDsByType(Command.CHANNEL_ADMIN_LOG) != null) {
-                channel = commandObject.client.get().getChannelByID(c.config.getChannelIDsByType(Command.CHANNEL_ADMIN_LOG).get(0));
+            if (adminlog.size() != 0) {
+                channel = adminlog.get(0);
             }
             if (channel != null) {
-                sendMessage(message.toString(), channel);
+                RequestHandler.sendMessage(message.toString(), channel);
             }
         }
     }
 
     public static String formatTimeDifference(long difference) {
-        String formatted = "";
+        StringHandler formatted = new StringHandler();
         try {
             long days = TimeUnit.SECONDS.toDays(difference);
             long hours = TimeUnit.SECONDS.toHours(difference);
@@ -839,82 +311,103 @@ public class Utility {
 
             if (days > 0) {
                 if (days > 1) {
-                    formatted = formatted + days + " days, ";
+                    formatted.append(days).append(" days, ");
                 } else {
-                    formatted = formatted + days + " day, ";
+                    formatted.append(days).append(" day, ");
                 }
             }
             if (hours > 0) {
                 if (hours > 1) {
-                    formatted = formatted + hours + " hours and ";
+                    formatted.append(hours).append(" hours and ");
                 } else {
-                    formatted = formatted + hours + " hour and ";
+                    formatted.append(hours).append(" hour and ");
                 }
             }
             if (mins > 1) {
-                formatted = formatted + mins + " minutes ago";
+                formatted.append(mins).append(" minutes ago");
             } else if (mins != 0) {
-                formatted = formatted + mins + " minute ago";
+                formatted.append(mins).append(" minute ago");
             }
             if (difference < 60) {
-                formatted = "less than a minute ago";
+                formatted.setContent("less than a minute ago");
             }
         } catch (NoSuchElementException e) {
             logger.error("Error getting Edited Message Timestamp.");
         }
-        return formatted;
+        return formatted.toString();
     }
 
     public static String removeFun(String from) {
         String last;
-        boolean exit;
+        boolean[] exit = new boolean[]{false};
         do {
+            exit[0] = false;
             last = from;
-            exit = false;
-            if (from.contains("***")) {
-                from = replaceFun(from, "***");
-                exit = true;
-            }
-            if (from.contains("**") && !exit) {
-                from = replaceFun(from, "**");
-                exit = true;
-            }
-            if (from.contains("*") && !exit) {
-                from = replaceFun(from, "*");
-            }
-            exit = false;
-            if (from.contains("```")) {
-                from = replaceFun(from, "```");
-                exit = true;
-            }
-            if (from.contains("`") && !exit) {
-                from = replaceFun(from, "`");
-            }
-            exit = false;
-            if (from.contains("~~")) {
-                from = replaceFun(from, "~~");
-            }
-            if (from.contains("__")) {
-                from = replaceFun(from, "__");
-                exit = true;
-            }
-            if (from.contains("_") && !exit) {
-                from = replaceFun(from, "_");
-            }
+            from = replaceFun(from, "```", exit);
+            if (!exit[0]) from = replaceFun(from, "`", exit);
+            if (!exit[0]) from = replaceFun(from, "~~", exit);
+            if (!exit[0]) from = replaceFun(from, "__", exit);
+            if (!exit[0]) from = replaceFun(from, "_", exit);
+            from = from.replace("*", "");
         } while (last != from);
         return from;
     }
 
-    public static String replaceFun(String from, String fun) {
+    public static String replaceFun(String from, String fun, boolean[] exit) {
         String noFun = StringUtils.substringBetween(from, fun, fun);
         if (noFun != null) {
-            from = from.replace(fun + noFun + fun, noFun);
+            from = from.replace(escapeRegex(fun + noFun + fun), noFun);
+            exit[0] = true;
         }
         return from;
     }
 
-    public static boolean isImageLink(String link) {
+    /**
+     * Shortens a string based on passed parameters. A string that is successfully truncated will have "..." appended to
+     * the end of the string.
+     *
+     * @param str             The string that will be shortened.
+     * @param maxLength       The longest length you want the string to be.
+     * @param truncateAtSpace Set to true to have the method attempt to find the first valid whitespace character
+     *                        to use as the position to truncate the text.
+     * @param search          The number of characters backwards to search. This value is ignored if truncateAtSpace is false.
+     * @return The string passed to str will be returned as-is if the truncation was not successful, otherwise it will
+     * be shortened and have "..." appended to the end.
+     */
+    public static String truncateString(String str, int maxLength, boolean truncateAtSpace, int search) {
+        String result = str;
+
+        if (str.length() > maxLength) {
+            int endI = maxLength;
+            if (truncateAtSpace) {
+                String subStr = str.substring((maxLength - search), maxLength);
+                endI = subStr.lastIndexOf(' ');
+                if (endI == -1) {
+                    endI = maxLength;
+                } else {
+                    endI += (maxLength - search);
+                }
+            }
+            result = str.substring(0, endI) + "...";
+        }
+
+        return result;
+    }
+
+
+    public static String truncateString(String str, int maxLength) {
+        int search = maxLength <= 10 ? maxLength : 10;
+
+        return truncateString(str, maxLength, true, search);
+    }
+
+    public static boolean isImageLink(String link, boolean isSendURL) {
         if (!checkURL(link)) {
+            return false;
+        }
+        try {
+            if (isSendURL) new URL(link);
+        } catch (MalformedURLException e) {
             return false;
         }
         List<String> suffixes = new ArrayList<String>() {{
@@ -922,6 +415,7 @@ public class Utility {
             add(".gif");
             add(".jpg");
             add(".webp");
+            add(".jpeg");
         }};
         if (link.contains("\n") || link.contains(" ")) {
             return false;
@@ -934,19 +428,8 @@ public class Utility {
         return false;
     }
 
-    public static boolean muteUser(long guildID, String userID, boolean isMuting) {
-        GuildObject content = Globals.getGuildContent(guildID);
-        IUser user = Globals.getClient().getUserByID(userID);
-        IGuild guild = Globals.getClient().getGuildByID(guildID);
-        IRole mutedRole = Globals.client.getRoleByID(content.config.getMutedRoleID());
-        List<IRole> oldRoles = user.getRolesForGuild(guild);
-        if (mutedRole != null) {
-            roleManagement(Globals.getClient().getUserByID(userID), Globals.client.getGuildByID(guildID), mutedRole.getLongID(), isMuting);
-            List<IRole> newRoles = user.getRolesForGuild(guild);
-            Globals.getClient().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, user, oldRoles, newRoles));
-            return true;
-        }
-        return false;
+    public static boolean isImageLink(String link) {
+        return isImageLink(link, false);
     }
 
     public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, IGuild guild) {
@@ -971,6 +454,11 @@ public class Utility {
             }
         }
         return true;
+    }
+
+    public static boolean testUserHierarchy(UserObject higherUser, UserObject lowerUser, GuildObject guild) {
+        if (GuildHandler.canBypass(lowerUser.get(), guild.get())) return false;
+        return testUserHierarchy(higherUser.get(), lowerUser.get(), guild.get());
     }
 
     public static boolean testUserHierarchy(IUser author, IRole toTest, IGuild guild) {
@@ -1004,52 +492,70 @@ public class Utility {
         }
     }
 
-    public static void sendLog(String content, GuildConfig config, boolean isAdmin) {
-        IChannel logChannel;
+    public static void sendLog(String content, GuildObject guild, boolean isAdmin, EmbedObject... object) {
+        IChannel logChannel = null;
+        List<IChannel> serverLog = guild.getChannelsByType(ChannelSetting.SERVER_LOG);
+        List<IChannel> adminLog = guild.getChannelsByType(ChannelSetting.ADMIN_LOG);
         if (isAdmin) {
-            if (config.getChannelIDsByType(Command.CHANNEL_ADMIN_LOG) == null) {
-                return;
+            if (adminLog.size() != 0) {
+                logChannel = adminLog.get(0);
             }
-            logChannel = Globals.getClient().getChannelByID(config.getChannelIDsByType(Command.CHANNEL_ADMIN_LOG).get(0));
         } else {
-            if (config.getChannelIDsByType(Command.CHANNEL_SERVER_LOG) == null) {
-                return;
+            if (serverLog.size() != 0) {
+                logChannel = serverLog.get(0);
             }
-            logChannel = Globals.getClient().getChannelByID(config.getChannelIDsByType(Command.CHANNEL_SERVER_LOG).get(0));
         }
         if (logChannel == null) {
             return;
+        } else if (object.length == 0) {
+            RequestHandler.sendMessage(content, logChannel);
         } else {
-            sendMessage(content, logChannel);
+            RequestHandler.sendEmbed(content, object[0], logChannel);
         }
+    }
+
+    public static String embedToString(EmbedObject embed) {
+        if (embed == null) return "";
+        StringHandler embedToString = new StringHandler();
+        if (embed.author != null) embedToString.append("**").append(embed.author.name).append("**\n");
+        if (embed.title != null) embedToString.append("**").append(embed.title).append("**\n");
+        if (embed.description != null) embedToString.append(embed.description).append("\n");
+        if (embed.fields != null) {
+            for (EmbedObject.EmbedFieldObject field : embed.fields) {
+                embedToString.append("**").append(field.name).append("**\n").append(field.value).append("\n");
+            }
+        }
+        if (embed.footer != null) embedToString.append("*").append(embed.footer.text).append("*");
+        if (embed.image != null) embedToString.append("\n").append(embed.image.url);
+        return embedToString.toString();
     }
 
     public static String unFormatMentions(IMessage message) {
-        String from = message.getContent();
+        StringHandler from = new StringHandler(message.getContent());
+        from.replaceRegex("(?i)(@here|@everyone)", "**[REDACTED]**");
         for (IUser user : message.getMentions()) {
-            if (user == null) {
-                break;
+            if (user != null) {
+                StringHandler regex = new StringHandler("<@!?").append(user.getLongID()).append(">");
+                StringHandler replacement = new StringHandler("__@").append(user.getDisplayName(message.getGuild())).append("__");
+                from.replaceRegex(regex, replacement);
             }
-            String mention = "<@" + user.getStringID() + ">";
-            String mentionNic = "<@!" + user.getStringID() + ">";
-            from = from.replace(mention, "__@" + user.getDisplayName(message.getGuild()) + "__");
-            from = from.replace(mentionNic, "__@" + user.getDisplayName(message.getGuild()) + "__");
         }
         for (IRole role : message.getRoleMentions()) {
-            String roleMention = "<@&" + role.getStringID() + ">";
-            from = from.replace(roleMention, "__**@" + role.getName() + "**__");
+            StringHandler toReplace = new StringHandler("<@&").append(role.getLongID()).append(">");
+            StringHandler replaceWith = new StringHandler("__**@").append(role.getName()).append("**__");
+            from.replace(toReplace, replaceWith);
         }
-        return from;
+        return from.toString();
     }
 
     public static String formatTimestamp(ZonedDateTime time) {
-        StringBuilder content = new StringBuilder();
+        StringHandler content = new StringHandler();
         content.append(time.getYear());
-        content.append("/" + time.getMonthValue());
-        content.append("/" + time.getDayOfMonth());
-        content.append(" - " + time.getHour());
-        content.append(":" + time.getMinute());
-        content.append(":" + time.getSecond());
+        content.append("/").append(time.getMonthValue());
+        content.append("/").append(time.getDayOfMonth());
+        content.append(" - ").append(time.getHour());
+        content.append(":").append(time.getMinute());
+        content.append(":").append(time.getSecond());
         return content.toString();
     }
 
@@ -1104,30 +610,11 @@ public class Utility {
         }
     }
 
-    public static long newDailyMsgUID(DailyMessages data) {
-        long result;
-        Random random = new Random();
-        List<Long> uIDs = new ArrayList<>();
-        for (DailyUserMessageObject d : data.getMessages()) {
-            if (d.getUID() != -1) {
-                uIDs.add(d.getUID());
-            }
-        }
-        for (QueueObject o : data.getQueue()) {
-            uIDs.add(o.getuID());
-        }
-        result = random.nextInt(9000) + 1000;
-        while (uIDs.contains(result)) {
-            result = random.nextInt(9000) + 1000;
-        }
-        return result;
-    }
-
-    public static List<String> getChannelMentions(ArrayList<String> channelIDs, CommandObject command) {
+    public static List<String> getChannelMentions(ArrayList<Long> channelIDs, CommandObject command) {
         List<String> channelNames = new ArrayList<>();
         if (channelIDs != null) {
-            for (String s : channelIDs) {
-                IChannel channel = command.guild.get().getChannelByID(s);
+            for (long s : channelIDs) {
+                IChannel channel = command.guild.getChannelByID(s);
                 if (channel != null) {
                     channelNames.add(channel.mention());
                 }
@@ -1137,51 +624,60 @@ public class Utility {
     }
 
     public static void sendStack(Exception e) {
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        System.err.printf("%02d:%02d:%02d.%03d ", now.getHour(), now.getMinute(), now.getSecond(), now.getNano() / 1000000);
-        System.err.print("[" + Thread.currentThread().getName() + "] ERROR ");
-        e.printStackTrace();
+        StringBuffer s = new StringBuffer(ExceptionUtils.getStackTrace(e));
+        s.append(s.substring(0, s.length() - 2));
+        if (!s.toString().endsWith(")")) {
+            s.append(")");
+        }
+        StringHandler builder = new StringHandler();
+        builder.addViaJoin(Globals.getAllLogs(), "\n");
+        logger.error(s.toString() + "\n>> LAST " + Globals.getAllLogs().size() + " DEBUG LOGS<<\n" + builder.toString());
     }
 
-    public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, String type, boolean testPerms) {
+    public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, SAILType type, boolean testPerms) {
         List<Command> toReturn = new ArrayList<>();
-        for (Command c : commands) {
-            String ctype = c.type();
-            if (c.channel() != null && c.channel().equalsIgnoreCase(Command.CHANNEL_DM)) {
-                ctype = Command.TYPE_DM;
-            }
-            boolean isDualType = false;
-            if (c.dualType() != null && c.dualType().equalsIgnoreCase(type)) {
-                isDualType = true;
-            }
-            if (ctype.equalsIgnoreCase(type) || isDualType) {
-                if (testPerms) {
-                    if (c.type().equalsIgnoreCase(Command.TYPE_CREATOR) && !commandObject.user.get().equals(commandObject.client.creator)) {
-                        //do nothing
-                    } else if (isDualType && testForPerms(c.dualPerms(), commandObject.user.get(), commandObject.guild.get())) {
-                        toReturn.add(c);
-                    } else if (testForPerms(c.perms(), commandObject.user.get(), commandObject.guild.get())) {
-                        toReturn.add(c);
-                    }
-                } else {
-                    toReturn.add(c);
-                }
-            }
+
+        //return empty if not creator.
+        if (type == SAILType.CREATOR && !commandObject.user.checkIsCreator()) return toReturn;
+
+        //get command list
+        switch (type) {
+            case DM:
+                toReturn.addAll(commands.stream()
+                        .filter(c -> c.channel == ChannelSetting.FROM_DM)
+                        .filter(c -> {
+                            //only show creator commands if the user the creator.
+                            if (c.type == SAILType.CREATOR && commandObject.user.checkIsCreator())
+                                return true;
+                            if (c.type != SAILType.CREATOR) {
+                                return true;
+                            }
+                            return false;
+                        })
+                        .collect(Collectors.toList()));
+                return toReturn;
+            default:
+                toReturn.addAll(commands.stream()
+                        .filter(c -> c.type == type).collect(Collectors.toList()));
+                break;
         }
-        toReturn.sort(Comparator.comparing(o -> o.names()[0]));
+
+        toReturn.addAll(commands.stream().filter(c -> c.subCommands.size() != 0)
+                .filter(c -> c.hasSubCommands(type))
+                .collect(Collectors.toList()));
+
+        if (testPerms) {
+            toReturn = toReturn.stream()
+                    .filter(c -> c.isVisibleInType(commandObject, type))
+                    .collect(Collectors.toList());
+        }
+        if (type != SAILType.DM) {
+            toReturn = toReturn.stream().filter(c -> c.channel != ChannelSetting.FROM_DM).collect(Collectors.toList());
+        }
+        toReturn.sort(Comparator.comparing(o -> o.names[0]));
         return toReturn;
     }
 
-    public static List<IChannel> getVisibleChannels(List<IChannel> channels, UserObject user) {
-        List<IChannel> newSet = new ArrayList<>();
-        for (IChannel c : channels) {
-            if (c.getModifiedPermissions(user.get()).contains(Permissions.READ_MESSAGES)
-                    && c.getModifiedPermissions(user.get()).contains(Permissions.SEND_MESSAGES)) {
-                newSet.add(c);
-            }
-        }
-        return newSet;
-    }
 
     public static List<String> getChannelMentions(List<IChannel> channels) {
         List<String> mentions = new ArrayList<>();
@@ -1191,7 +687,7 @@ public class Utility {
         return mentions;
     }
 
-    public static UserObject getUser(CommandObject command, String args, boolean doContains) {
+    public static UserObject getUser(CommandObject command, String args, boolean doContains, boolean hasProfile) {
         if (args != null && !args.isEmpty()) {
             IUser user = null;
             IUser conUser = null;
@@ -1201,30 +697,43 @@ public class Utility {
             } else {
                 toTest = escapeRegex(args).replace("_", "[_| ]");
             }
-            for (IUser u : command.guild.get().getUsers()) {
+            List<IUser> guildUsers = command.guild.getUsers();
+            guildUsers.sort(Comparator.comparing(o -> o.getRolesForGuild(command.guild.get()).size()));
+            Collections.reverse(guildUsers);
+            for (IUser u : guildUsers) {
                 if (user != null) {
                     break;
                 }
                 try {
+                    UserObject object = new UserObject(u, command.guild, true);
+
+                    if (hasProfile) {
+                        ProfileObject profile = object.getProfile(command.guild);
+                        if (profile == null || profile.isEmpty()) {
+                            throw new IllegalStateException("Profile Is Null");
+                        }
+                    }
                     if ((u.getName() + "#" + u.getDiscriminator()).matches("(?i)" + toTest)) {
                         user = u;
                     }
-                    if (u.getName().matches("(?i)" + toTest)) {
+                    if (u.getName().matches("(?i)" + toTest) && user == null) {
                         user = u;
                     }
                     String displayName = u.getDisplayName(command.guild.get());
-                    if (displayName.matches("(?i)" + toTest)) {
+                    if (displayName.matches("(?i)" + toTest) && user == null) {
                         user = u;
                     }
                     if (doContains && conUser == null) {
                         if (u.getName().matches("(?i).*" + toTest + ".*")) {
                             conUser = u;
                         }
-                        if (displayName.matches("(?i).*" + toTest + ".*")) {
+                        if (displayName.matches("(?i).*" + toTest + ".*") && conUser == null) {
                             conUser = u;
                         }
                     }
                 } catch (PatternSyntaxException e) {
+                    //continue.
+                } catch (IllegalStateException e) {
                     //continue.
                 }
             }
@@ -1247,21 +756,247 @@ public class Utility {
         return null;
     }
 
-    private static String escapeRegex(String args) {
+    public static UserObject getUser(CommandObject command, String args, boolean doContains) {
+        return getUser(command, args, doContains, true);
+    }
+
+    public static String escapeRegex(String args) {
         //[\^$.|?*+(){}
-        args = args.replace("\\", "\\u005C");
-        args = args.replace("[", "\\u005B");
-        args = args.replace("^", "\\u005E");
-        args = args.replace("$", "\\u0024");
-        args = args.replace(".", "\\u002E");
-        args = args.replace("|", "\\u007C");
-        args = args.replace("?", "\\u003F");
-        args = args.replace("*", "\\u002A");
-        args = args.replace("+", "\\u002B");
-        args = args.replace("(", "\\u0028");
-        args = args.replace(")", "\\u0029");
-        args = args.replace("{", "\\u007B");
-        args = args.replace("}", "\\u007D");
-        return args;
+        StringHandler replace = new StringHandler(args);
+        replace.replace("\\", "\\u005C");
+        replace.replace("[", "\\u005B");
+        replace.replace("^", "\\u005E");
+        replace.replace("$", "\\u0024");
+        replace.replace(".", "\\u002E");
+        replace.replace("|", "\\u007C");
+        replace.replace("?", "\\u003F");
+        replace.replace("*", "\\u002A");
+        replace.replace("+", "\\u002B");
+        replace.replace("(", "\\u0028");
+        replace.replace(")", "\\u0029");
+        replace.replace("{", "\\u007B");
+        replace.replace("}", "\\u007D");
+        return replace.toString();
+    }
+
+    public static long stringLong(String string) {
+        try {
+            return Long.parseUnsignedLong(string);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+
+    public static ReactionEmoji getReaction(String emojiName) {
+        Emoji emoji = EmojiManager.getForAlias(emojiName);
+        if (emoji == null) {
+            throw new IllegalStateException("Invalid unicode call: " + emojiName);
+        }
+        return ReactionEmoji.of(emoji.getUnicode());
+    }
+
+
+    public static boolean canBypass(CommandObject command) {
+        return GuildHandler.canBypass(command.user.get(), command.guild.get());
+    }
+
+    public static String prepArgs(String args) {
+        StringHandler replace = new StringHandler(args);
+        replace.replace("{", "<u007B>");
+        replace.replace("}", "<u007D>");
+        replace.replace("(", "<u0028>");
+        replace.replace(")", "<u0029>");
+        replace.replace(":", "<u003A>");
+        replace.replace(";", "<u003B>");
+        return replace.toString();
+    }
+
+    public static String removePrep(String args) {
+        StringHandler replace = new StringHandler(args);
+        replace.replace("<u007B>", "{");
+        replace.replace("<u007D>", "}");
+        replace.replace("<u0028>", "(");
+        replace.replace("<u0029>", ")");
+        replace.replace("<u003A>", ":");
+        replace.replace("<u003B>", ";");
+        return replace.toString();
+    }
+
+    public static String getDateSuffix(int day) {
+        if (day >= 11 && day <= 13) {
+            return "th";
+        }
+        switch (day % 10) {
+            case 1:
+                return "st";
+            case 2:
+                return "nd";
+            case 3:
+                return "rd";
+            default:
+                return "th";
+        }
+    }
+
+    public static String getStringClosest(List<String> list, String toTest, boolean startsWith, boolean ignoreCase) {
+        float topPercentage = 0;
+        String mostCorrect = null;
+        for (String s : list) {
+            char[] toTestChars;
+            char[] stringChars;
+            if (ignoreCase) toTestChars = toTest.toLowerCase().toCharArray();
+            else toTestChars = toTest.toCharArray();
+
+            if (ignoreCase) stringChars = s.toLowerCase().toCharArray();
+            else stringChars = s.toCharArray();
+
+            float correctChars = 0;
+            for (int i = 0; i < toTest.length(); i++) {
+                try {
+                    boolean valueMatches = toTestChars[i] == stringChars[i];
+                    if (startsWith && !valueMatches) {
+                        break;
+                    } else if (valueMatches) {
+                        correctChars++;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    break;
+                }
+            }
+            float testLength = toTest.length();
+            float percentMatches = correctChars / testLength * 100;
+            if (percentMatches > topPercentage) {
+                topPercentage = percentMatches;
+                mostCorrect = s;
+            }
+        }
+        return mostCorrect;
+    }
+
+    public static String getChannelMessage(List<String> channelMentions) {
+        if (channelMentions.size() == 0) {
+            return "> You do not have access to any channels that you are able to run this command in.";
+        } else if (channelMentions.size() == 1) {
+            return "> Command must be performed in: " + channelMentions.get(0);
+        } else {
+            return "> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true);
+        }
+    }
+
+//    public static boolean isImgurAlbum(String fileURL) {
+//        return Pattern.compile("https?://imgur\\.com/a/.*").matcher(fileURL).matches();
+//    }
+
+    public static String getUnicodeEmoji(String emojiName) {
+        Emoji emoji = EmojiManager.getForAlias(emojiName);
+        if (emoji == null) {
+            throw new IllegalStateException("Invalid unicode call: " + emojiName);
+        }
+        return emoji.getUnicode();
+    }
+
+    public static String formatError(Object object) {
+        return "at " + object.getClass().getName() + "(" + object.getClass().getSimpleName() + ".java:0)\n";
+    }
+
+    public static long getRepeatTimeValue(StringHandler reason) {
+        try {
+            String timeString = reason.split(" ")[0];
+            long timeSecs = 0;
+            List<String> list = new ArrayList<>();
+            for (String s : reason.toString().split(" ")) {
+                if (Pattern.compile("(?i)[0-9]*(s|m|h|d)").matcher(s).matches()) {
+                    list.add(s);
+                } else {
+                    break;
+                }
+            }
+            if (list.size() == 0) {
+                timeSecs = Long.parseLong(timeString) * 60;
+                list.add(timeString);
+            } else {
+                for (String s : list) {
+                    timeSecs += Utility.textToSeconds(s);
+                }
+            }
+            reason.replaceOnce(String.join(" ", list), "");
+            if (reason.startsWith(" ")) {
+                reason.replaceOnce(" ", "");
+            }
+            return timeSecs;
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public static String enumToString(Enum<?> e) {
+        String enumValue = e.toString();
+        enumValue = enumValue.toLowerCase();
+        enumValue = enumValue.replace("_", " ");
+        String[] words = enumValue.split(" ");
+        StringHandler fixedEnum = new StringHandler();
+        for (String s : words) {
+            if (fixedEnum.toString().length() != 0) {
+                fixedEnum.append(" ");
+            }
+            fixedEnum.append(StringUtils.capitalize(s));
+        }
+        return fixedEnum.toString();
     }
 }
+
+//    public static List<String> getAlbumIUrls(String fileURL) {
+//        String id = getImgurID(fileURL);
+//        if (id == null) return new ArrayList<>();
+//        Album album = getAlbum(id);
+//        if (album != null) {
+//            return album.getImages().stream().map(image -> image.getLink()).collect(Collectors.toList());
+//        } else return new ArrayList<>();
+//    }
+
+//    private static String getImgurID(String fileURL) {
+//        if (!isImgurAlbum(fileURL)) return null;
+//        return fileURL.replaceAll("https?://imgur\\.com/a/", "");
+//    }
+
+//    public static Album getAlbum(String id) {
+//        String albulUrl = "https://api.imgur.com/3/album/";
+//        albulUrl += id;
+//        HttpURLConnection request;
+//        try {
+//            URL url = new URL(albulUrl);
+//            request = (HttpURLConnection) url.openConnection();
+//            request.setDoOutput(true);
+//            request.setRequestMethod("GET");
+//            request.connect();
+//            JsonParser parser = new JsonParser();
+//            JsonElement element = parser.parse(new InputStreamReader((org.omg.CORBA.portable.InputStream) request.getContent()));
+//            if (request.getResponseCode() == HttpURLConnection.HTTP_OK) {
+//                Album album = new Gson().fromJson(element.getAsJsonObject().getAsString(), Album.class);
+//                return album;
+//            }
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
+//    public static HttpResponse requestPOST(String requestURL, StringEntity entity) {
+//        String postUrl = requestURL;// put in your url
+//        HttpClient httpClient = HttpClientBuilder.create().build();
+//        HttpPost post = new HttpPost(postUrl);
+//        post.setEntity(entity);
+//        post.setHeader("Content-type", "application/json");
+//        try {
+//            return httpClient.execute(post);
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//}

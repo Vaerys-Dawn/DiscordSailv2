@@ -1,12 +1,17 @@
 package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.TagType;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.DailyUserMessageObject;
+import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -14,7 +19,7 @@ import java.time.DayOfWeek;
 import java.util.Formatter;
 import java.util.ListIterator;
 
-public class DailyMsg implements Command {
+public class DailyMsg extends Command {
 
     String modes = "> Edit - `args = new Contents`\n" +
             "> Delete\n" +
@@ -26,8 +31,8 @@ public class DailyMsg implements Command {
         SplitFirstObject uIDString = new SplitFirstObject(args);
         try {
             long uID = Long.parseLong(uIDString.getFirstWord());
-            DailyUserMessageObject messageObject = null;
-            for (DailyUserMessageObject u : Globals.getDailyMessages().getMessages()) {
+            DailyMessage messageObject = null;
+            for (DailyMessage u : Globals.getDailyMessages().getMessages()) {
                 if (u.getUID() == uID) {
                     messageObject = u;
                 }
@@ -35,7 +40,6 @@ public class DailyMsg implements Command {
             if (messageObject == null) {
                 return "> Could not find daily message with that UID.";
             }
-//            if (uIDString.getRest() != null) {
             SplitFirstObject mode = null;
             String totest;
             if (uIDString.getRest() == null) {
@@ -54,7 +58,7 @@ public class DailyMsg implements Command {
                 case "delete":
                     ListIterator iterator = Globals.getDailyMessages().getMessages().listIterator();
                     while (iterator.hasNext()) {
-                        DailyUserMessageObject object = (DailyUserMessageObject) iterator.next();
+                        DailyMessage object = (DailyMessage) iterator.next();
                         if (object.getUID() == uID) {
                             iterator.remove();
                         }
@@ -73,10 +77,10 @@ public class DailyMsg implements Command {
                         return "> Not a valid day of the week.";
                     }
                 case "info":
-                    Utility.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
+                    RequestHandler.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
                     return null;
                 default:
-                    Utility.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
+                    RequestHandler.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
                     return null;
             }
         } catch (NumberFormatException e) {
@@ -84,82 +88,73 @@ public class DailyMsg implements Command {
         }
     }
 
-    public XEmbedBuilder getInfo(DailyUserMessageObject messageObject, CommandObject command) {
-        XEmbedBuilder embedBuilder = new XEmbedBuilder();
-        embedBuilder.withColor(Utility.getUsersColour(command.client.bot, command.guild.get()));
+    public XEmbedBuilder getInfo(DailyMessage messageObject, CommandObject command) {
+        XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         IUser user = command.client.get().getUserByID(messageObject.getUserID());
         if (user != null) {
             embedBuilder.withAuthorName(user.getName() + "#" + user.getDiscriminator());
         }
-        embedBuilder.withTitle(messageObject.getDay() + "");
-        String contents = messageObject.getContents(command.guild);
+        if (messageObject.getDay() != null) {
+            embedBuilder.withTitle(messageObject.getDay() + "");
+        }
+        String contents = messageObject.getContents(new CommandObject(command.guild, command.channel.get()));
         if (contents.matches("^(> |\\*> |\\*\\*> |\\*\\*\\*> |_> |__> |`> |```> ).*$") || contents.startsWith("> ")) {
             embedBuilder.withDesc(contents);
         } else {
             embedBuilder.withDesc("> " + contents);
         }
-        String formattedFooter = new Formatter().format("UID: %04d", messageObject.getUID()).toString();
+        String formattedFooter;
+        if (messageObject.getUID() != -1) {
+            formattedFooter = new Formatter().format("UID: %04d", messageObject.getUID()).toString();
+        } else {
+            formattedFooter = messageObject.getSpecialID();
+        }
         embedBuilder.withFooterText(formattedFooter);
         return embedBuilder;
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"DailyMsg"};
     }
 
     @Override
-    public String description() {
-        return "allows for editing of the daily message list.\n" + modes;
+    public String description(CommandObject command) {
+        return "allows for editing of the daily message list.\n**Tags:** " + Utility.listFormatter(TagList.getNames(TagType.DAILY), true) + "\n" + modes;
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[ID] (Mode) (args)";
     }
 
     @Override
-    public String type() {
-        return TYPE_CREATOR;
+    protected SAILType type() {
+        return SAILType.CREATOR;
     }
 
     @Override
-    public String channel() {
+    protected ChannelSetting channel() {
         return null;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

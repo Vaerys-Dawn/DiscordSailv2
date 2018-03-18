@@ -1,76 +1,63 @@
 package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 01/02/2017.
  */
-public class DelCC implements Command {
+public class DelCC extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         return command.guild.customCommands.delCommand(args, command.user.get(), command.guild.get());
-
     }
 
     @Override
-    public String[] names() {
-        return new String[]{"DelCC"};
+    protected String[] names() {
+        return new String[]{"DelCC", "DeleteCC", "RemoveCC"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Deletes The custom command.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "[Command Name]";
     }
 
     @Override
-    public String type() {
-        return TYPE_CC;
+    protected SAILType type() {
+        return SAILType.CC;
     }
 
     @Override
-    public String channel() {
-        return null;
+    protected ChannelSetting channel() {
+        return ChannelSetting.MANAGE_CC;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return true;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

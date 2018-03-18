@@ -1,13 +1,15 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
-public class SelfDestructLevelUps implements GuildToggle {
+public class SelfDestructLevelUps extends GuildSetting {
     @Override
-    public String name() {
-        return "SelfDestructLevelUps";
+    public SAILType name() {
+        return SAILType.SELF_DESTRUCT_LEVEL_UPS;
     }
 
     @Override
@@ -16,7 +18,7 @@ public class SelfDestructLevelUps implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.selfDestructLevelUps;
     }
 
@@ -26,12 +28,17 @@ public class SelfDestructLevelUps implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-
+    public String shortDesc(CommandObject command) {
+        return "Enable automatic deletion of \"Ding!\" messages.";
     }
 
     @Override
-    public boolean isModule() {
-        return false;
+    public String desc(CommandObject command) {
+        return "Enables the automatic deletion of level up messages (in every channel except for the " + ChannelSetting.LEVEL_UP.toString() + " channel and Direct messages) after 1 minute.";
+    }
+
+    @Override
+    public void setup() {
+
     }
 }

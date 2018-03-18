@@ -1,29 +1,30 @@
 package com.github.vaerys.objects;
 
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Utility;
 
 /**
  * Created by Vaerys on 05/04/2017.
  */
 public class ReminderObject {
-    String userID;
-    String channelID;
+    long userID;
+    long channelID;
     String message;
     boolean sent = false;
     long executeTime;
 
-    public ReminderObject(String userID, String channelID, String message, long reminderTime) {
+    public ReminderObject(long userID, long channelID, String message, long reminderTime) {
         this.userID = userID;
         this.channelID = channelID;
-        this.message = Globals.getClient().getUserByID(userID).mention() + message;
+        this.message = Globals.getClient().getUserByID(userID).mention() + " " + Utility.removeMentions(message);
         this.executeTime = reminderTime;
     }
 
-    public String getUserID() {
+    public long getUserID() {
         return userID;
     }
 
-    public String getChannelID() {
+    public long getChannelID() {
         return channelID;
     }
 
@@ -35,11 +36,11 @@ public class ReminderObject {
         return executeTime;
     }
 
-    public void setSent(boolean sent) {
-        this.sent = sent;
-    }
-
     public boolean isSent() {
         return sent;
+    }
+
+    public void setSent(boolean sent) {
+        this.sent = sent;
     }
 }

@@ -1,112 +1,105 @@
 package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.interfaces.Command;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IUser;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
-public class ListChars implements Command {
+public class ListChars extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(command);
         UserObject user = command.user;
         String title = "> Here are all of your characters.";
+        //get user
         if (args != null && !args.isEmpty()) {
             user = Utility.getUser(command, args, true);
             if (user == null) {
                 return "> Could not find user.";
             }
             if (user.longID != command.user.longID) {
-                title = "> Here are all of **@" + user.displayName + "'s** Characters.";
+                title = "> Here are all of @" + user.displayName + "'s Characters.";
             }
         }
+        //check private
         if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
             return "> User has set their profile to private.";
         }
-        ArrayList<String> list = new ArrayList<>();
-        for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
-            if (c.getUserID().equals(user.stringID)) {
-                list.add(c.getName());
-            }
+        //generate list
+        List<String> list = user.characters.stream().map(c -> c.getName()).collect(Collectors.toList());
+        //give message if empty
+        if (list.size() == 0) {
+            return "> You do not have any characters yet. Create one with **" + new UpdateChar().getUsage(command) + "**.";
         }
-        Utility.listFormatterEmbed(title, builder, list, true);
-        builder.appendField(spacer, Utility.getCommandInfo(new CharInfo(), command), false);
-        builder.withColor(Utility.getUsersColour(command.client.bot, command.guild.get()));
+        //build embed data
+        builder.withTitle(title);
+        builder.withDesc("```\n" + Utility.listFormatter(list, true) + "```\n" + new CharInfo().missingArgs(command));
+        builder.withFooterText(user.characters.size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
+        //send private char list
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
-            Utility.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
+            RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
             return "> Char list sent to your Direct messages.";
         }
-        Utility.sendEmbedMessage("", builder, command.channel.get());
+        //send regular
+        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 
     @Override
-    public String[] names() {
+    protected String[] names() {
         return new String[]{"ListChars", "Chars", "CharList"};
     }
 
     @Override
-    public String description() {
+    public String description(CommandObject command) {
         return "Shows you all of your characters.";
     }
 
     @Override
-    public String usage() {
+    protected String usage() {
         return "(@User)";
     }
 
     @Override
-    public String type() {
-        return TYPE_CHARACTER;
+    protected SAILType type() {
+        return SAILType.CHARACTER;
     }
 
     @Override
-    public String channel() {
-        return CHANNEL_BOT_COMMANDS;
+    protected ChannelSetting channel() {
+        return ChannelSetting.CHARACTER;
     }
 
     @Override
-    public Permissions[] perms() {
+    protected Permissions[] perms() {
         return new Permissions[0];
     }
 
     @Override
-    public boolean requiresArgs() {
+    protected boolean requiresArgs() {
         return false;
     }
 
     @Override
-    public boolean doAdminLogging() {
+    protected boolean doAdminLogging() {
         return false;
     }
 
     @Override
-    public String dualDescription() {
-        return null;
-    }
+    public void init() {
 
-    @Override
-    public String dualUsage() {
-        return null;
-    }
-
-    @Override
-    public String dualType() {
-        return null;
-    }
-
-    @Override
-    public Permissions[] dualPerms() {
-        return new Permissions[0];
     }
 }

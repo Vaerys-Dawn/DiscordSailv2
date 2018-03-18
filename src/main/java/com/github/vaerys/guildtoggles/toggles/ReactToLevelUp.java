@@ -1,13 +1,15 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.interfaces.GuildToggle;
-import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.pixels.SetLevelUpReaction;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildSetting;
 
-public class ReactToLevelUp implements GuildToggle {
+public class ReactToLevelUp extends GuildSetting {
     @Override
-    public String name() {
-        return "ReactToLevelUp";
+    public SAILType name() {
+        return SAILType.REACT_TO_LEVEL_UP;
     }
 
     @Override
@@ -16,7 +18,7 @@ public class ReactToLevelUp implements GuildToggle {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.reactToLevelUp;
     }
 
@@ -26,12 +28,17 @@ public class ReactToLevelUp implements GuildToggle {
     }
 
     @Override
-    public void execute(GuildObject guild) {
-
+    public String shortDesc(CommandObject command) {
+        return "Enables level up reactions on messages";
     }
 
     @Override
-    public boolean isModule() {
-        return false;
+    public String desc(CommandObject command) {
+        return "Enables the ability to have a reaction automatically added to the messages that caused a user to level up.";
+    }
+
+    @Override
+    public void setup() {
+        commands.add(new SetLevelUpReaction());
     }
 }
