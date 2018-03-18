@@ -28,7 +28,7 @@ public class LoggingHandler {
 
 
     private static boolean isSailMessage(CommandObject command) {
-        return command.client.bot.longID == command.user.longID;
+        return command.user.get().isBot();
     }
 
     private static void sendLog(CommandObject command, String message, boolean isAdmin, EmbedObject... object) {
@@ -41,6 +41,10 @@ public class LoggingHandler {
     }
 
     private static boolean shouldLog(CommandObject command) {
+        String chars200 = command.message.getContent();
+        //pin regex handler
+        String pinRegex = "> (\\*\\*.*?\\*\\*|I have pinned) Has pinned (\\*\\*.*'s\\*\\*|their) art(\\n|.)*";
+        if (command.message.getContent().length() > 200) chars200 = command.message.getContent().substring(0, 200);
         if (command.guild == null) return false;
         if (!command.guild.config.moduleLogging) return false;
         IChannel info = command.guild.getChannelByType(ChannelSetting.INFO);
@@ -49,8 +53,9 @@ public class LoggingHandler {
         List<IChannel> dontLog = command.guild.getChannelsByType(ChannelSetting.DONT_LOG);
         if (dontLog.contains(command.channel.get())) return false;
         if (command.guild.config.dontLogBot && command.user.get().isBot()) return false;
-        if (command.message.getContent().equals("`Working...`") && isSailMessage(command)) return false;
-        if (command.message.getContent().equals("`Loading...`") && isSailMessage(command)) return false;
+        if (chars200.equals("`Working...`") && isSailMessage(command)) return false;
+        if (chars200.equals("`Loading...`") && isSailMessage(command)) return false;
+        if (isSailMessage(command) && chars200.matches(pinRegex)) return false;
         if (serverLog != null && serverLog.equals(command.channel.get()) && isSailMessage(command)) return false;
         if (adminLog != null && adminLog.equals(command.channel.get()) && isSailMessage(command)) return false;
         if (info != null && info.equals(command.channel.get()) && isSailMessage(command)) return false;

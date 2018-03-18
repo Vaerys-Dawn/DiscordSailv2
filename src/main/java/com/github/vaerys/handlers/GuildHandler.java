@@ -5,6 +5,7 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.ChannelObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
@@ -39,7 +40,7 @@ public class GuildHandler {
     public static void checkUsersRoles(long id, GuildObject content) {
 
         //don't try to edit your own roles ya butt.
-        if (id == content.client.bot.longID) return;
+        if (id == Client.getClient().getOurUser().getLongID()) return;
 
         //do code.
         ProfileObject profile = content.users.getUserByID(id);
@@ -120,19 +121,6 @@ public class GuildHandler {
 
     public static IRole getRoleFromName(String roleName, IGuild guild) {
         return getRoleFromName(roleName, guild, false);
-    }
-
-    public static boolean testForPerms(CommandObject command, IChannel channel, Permissions... perms) {
-        boolean hasPerms = true;
-        if (canBypass(command.user.get(), command.guild.get())) {
-            return true;
-        }
-        for (Permissions p : perms) {
-            if (!channel.getModifiedPermissions(command.user.get()).contains(p)) {
-                hasPerms = false;
-            }
-        }
-        return hasPerms;
     }
 
     public static Color getUsersColour(IUser user, IGuild guild) {
@@ -248,5 +236,22 @@ public class GuildHandler {
 
     public static boolean testForPerms(IUser user, IGuild guild, List<Permissions> perms) {
         return testForPerms(user, guild, perms.toArray(new Permissions[perms.size()]));
+    }
+
+    public static boolean testForPerms(CommandObject command, IChannel channel, Permissions... perms) {
+        boolean hasPerms = true;
+        if (canBypass(command.user.get(), command.guild.get())) {
+            return true;
+        }
+        for (Permissions p : perms) {
+            if (!channel.getModifiedPermissions(command.user.get()).contains(p)) {
+                hasPerms = false;
+            }
+        }
+        return hasPerms;
+    }
+
+    public static boolean testForPerms(CommandObject command, ChannelObject channel, Permissions... perms) {
+        return testForPerms(command,channel.get(),perms);
     }
 }
