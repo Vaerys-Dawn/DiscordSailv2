@@ -45,6 +45,7 @@ public class GuildConfig extends GuildFile {
     public boolean adminLogging = true;
     public boolean deleteLogging = true;
     public boolean joinLeaveLogging = true;
+    public boolean banLogging = true;
     public boolean userRoleLogging = false;
     public boolean editLogging = false;
     public boolean extendEditLog = false;

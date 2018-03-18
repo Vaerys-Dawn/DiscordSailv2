@@ -17,6 +17,7 @@ import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.*;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserBanEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
@@ -307,5 +308,10 @@ public class AnnotationListener {
     @EventSubscriber
     public void onUserRoleUpdateEvent(UserRoleUpdateEvent event) {
         LoggingHandler.doRoleUpdateLog(event);
+    }
+
+    @EventSubscriber
+    public void onUserBanEvent(UserBanEvent event) {
+        LoggingHandler.doBanLog(event);
     }
 }
