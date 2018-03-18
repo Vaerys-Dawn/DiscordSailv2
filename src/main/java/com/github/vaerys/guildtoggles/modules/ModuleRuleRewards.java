@@ -5,9 +5,11 @@ import com.github.vaerys.commands.admin.SetRuleCode;
 import com.github.vaerys.commands.admin.SetRuleCodeReward;
 import com.github.vaerys.commands.general.RulesCode;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Permissions;
 
 public class ModuleRuleRewards extends GuildModule {
 
@@ -55,16 +57,19 @@ public class ModuleRuleRewards extends GuildModule {
 
     @Override
     public String stats(CommandObject object) {
-        String response = "";
-        if (object.guild.config.getRuleCode() != null) {
-            response += "**Rule Code:** " + object.guild.config.getRuleCode();
+        if (GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) {
+            String response = "";
+            if (object.guild.config.getRuleCode() != null) {
+                response += "**Rule Code:** " + object.guild.config.getRuleCode();
+            }
+            IRole reward = object.guild.getRoleByID(object.guild.config.ruleCodeRewardID);
+            if (reward != null) {
+                if (!response.isEmpty()) response += "\n";
+                response += "**Reward Role:** " + reward.getName();
+            }
+            if (response.isEmpty()) return null;
+            return response;
         }
-        IRole reward = object.guild.getRoleByID(object.guild.config.ruleCodeRewardID);
-        if (reward != null) {
-            if (!response.isEmpty()) response += "\n";
-            response += "**Reward Role:** " + reward.getName();
-        }
-        if (response.isEmpty()) return null;
-        return response;
+        return null;
     }
 }
