@@ -45,7 +45,7 @@ public class GuildConfig extends GuildFile {
     public boolean adminLogging = true;
     public boolean deleteLogging = true;
     public boolean joinLeaveLogging = true;
-    public boolean banLogging = true;
+    public boolean kickBanLogging = true;
     public boolean userRoleLogging = false;
     public boolean editLogging = false;
     public boolean extendEditLog = false;
@@ -109,7 +109,6 @@ public class GuildConfig extends GuildFile {
     private DailyMessage lastDailyMessage = null;
     private ArrayList<String> xpDeniedPrefixes = new ArrayList<>();
     private String ruleCode = null;
-
 
 
     public DailyMessage getLastDailyMessage() {

@@ -196,7 +196,7 @@ public class LoggingHandler {
                 Utility.sendLog(String.format(output, "has **Joined** the server"), content, false);
             } else {
                 IUser botUser = Client.getClient().getOurUser();
-                if (GuildHandler.testForPerms(botUser, guild, Permissions.VIEW_AUDIT_LOG)) {
+                if (GuildHandler.testForPerms(botUser, guild, Permissions.VIEW_AUDIT_LOG) && content.config.kickBanLogging) {
                     long timestamp = Instant.now().atZone(ZoneOffset.UTC).toEpochSecond() * 1000;
                     String kicked = doKickLog(guild, event.getUser(), timestamp);
                     if (kicked != null) {
@@ -310,7 +310,7 @@ public class LoggingHandler {
     public static void doBanLog(UserBanEvent event) {
         IGuild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
-        if (!guildObject.config.banLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG)) return;
+        if (!guildObject.config.kickBanLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG)) return;
 
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
