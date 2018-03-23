@@ -296,4 +296,13 @@ public abstract class Command {
         }
         return false;
     }
+
+    public boolean testSubCommands(CommandObject command, List<SAILType> types) {
+        for (SubCommandObject s : subCommands) {
+            if (types.contains(s.getType()) && GuildHandler.testForPerms(command, s.getPermissions())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

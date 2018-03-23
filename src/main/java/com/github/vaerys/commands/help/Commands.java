@@ -11,10 +11,7 @@ import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,13 +32,13 @@ public class Commands extends Command {
         //is creator
         if (command.user.checkIsCreator()) {
             dmCommands.addAll(Globals.getCreatorCommands(true));
-            List<Command> creatorCommands = Globals.getCreatorCommands(false);
             //add creator type and page
-            pages.put(SAILType.CREATOR, buildPage(creatorCommands, command, SAILType.CREATOR));
+            List<Command> creatorCommands = Globals.getCreatorCommands(false);
+            pages.put(SAILType.CREATOR, buildPage(creatorCommands, command, SAILType.CREATOR, types));
+
             types.add(SAILType.CREATOR);
         }
         //add dm type and page
-        pages.put(SAILType.DM, buildPage(dmCommands, command, SAILType.DM));
         types.add(SAILType.DM);
 
         //check visible commands;
@@ -52,6 +49,9 @@ public class Commands extends Command {
         //remove duplicates
         types = types.stream().distinct().collect(Collectors.toList());
 
+
+        //build dm page
+        pages.put(SAILType.DM, buildPage(dmCommands, command, SAILType.DM, types));
         //build pages
         for (SAILType s : types) {
             if (s == SAILType.CREATOR || s == SAILType.DM) continue;
@@ -63,7 +63,7 @@ public class Commands extends Command {
                     }
                 }
             }
-            pages.put(s, buildPage(typeCommands, command, s));
+            pages.put(s, buildPage(typeCommands, command, s, types));
         }
 
         //post type list
@@ -90,7 +90,7 @@ public class Commands extends Command {
         return null;
     }
 
-    private String buildPage(List<Command> commands, CommandObject command, SAILType type) {
+    private String buildPage(List<Command> commands, CommandObject command, SAILType type, List<SAILType> types) {
         Map<String, Boolean> commandNames = new TreeMap<>();
 
         //build command name list
@@ -98,7 +98,7 @@ public class Commands extends Command {
             //put command in the map
             boolean isDm = (type == SAILType.DM && c.channel == ChannelSetting.FROM_DM);
             if (c.type == type || isDm) {
-                commandNames.put(c.getCommand(command), c.subCommands.size() != 0);
+                commandNames.put(c.getCommand(command), c.testSubCommands(command, types));
             }
             //add any valid subCommands.
             for (SubCommandObject s : c.subCommands) {
