@@ -24,7 +24,7 @@ public class ListModifs extends Command {
         List<String> list = command.guild.getModifierRoles().stream().map(iRole -> iRole.getName()).collect(Collectors.toList());
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(title);
-        builder.withDesc("```\n" + Utility.listFormatter(list,true)+ "```\n" + new CosmeticRoles().missingArgs(command));
+        builder.withDesc("```\n" + Utility.listFormatter(list,true)+ "```\n" + new ModifierRoles().missingArgs(command));
         return builder;
     }
 
