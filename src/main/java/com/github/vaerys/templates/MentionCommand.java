@@ -23,22 +23,15 @@ public abstract class MentionCommand extends Command {
 
     @Override
     public boolean isCall(String args, CommandObject command) {
+        if (command.guild.client.bot == null) {
+            command.guild.sendDebugLog(command,"MENTION_COMMAND","BOT_NULL",command.message.getContent());
+            return false;
+        }
         SplitFirstObject mention = new SplitFirstObject(args);
         if (mention.getRest() == null) {
             return false;
         }
         List<IUser> users = command.message.getMentions();
-        String error = "> Hello, sorry to interrupt you but i have just encountered a bug, let my developer know by sending me a dm with the following: ";
-        String errorSuffix = "ChannelID: " + command.channel.longID + ", MessageID: " + command.message.longID +
-                ", UserID: " + command.user.longID + ", GuildID: " + command.guild.longID + ", Timestamp: " + (command.message.getTimestamp().toEpochSecond() * 1000);
-        if (command.client == null) {
-            RequestHandler.sendMessage(error + "\n```\ncommand.client == null\n" + errorSuffix + "```", command);
-            return false;
-        }
-        if (command.client.bot == null) {
-            RequestHandler.sendMessage(error + "\n```\ncommand.client.bot == null\n" + errorSuffix + "```", command);
-            return false;
-        }
         IUser bot = command.client.bot.get();
         if (bot == null || !users.contains(bot)) {
             return false;
