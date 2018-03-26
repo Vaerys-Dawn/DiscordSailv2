@@ -14,7 +14,7 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -35,8 +35,6 @@ public class CosmeticRoles extends Command {
             return new ListRoles().execute(args, command);
         }
 
-//        SplitFirstObject modif = new SplitFirstObject(args);
-
         //test to see if the first word is a modifier
 
         if (EDIT_ROLES.isSubCommand(command)) {
@@ -50,12 +48,9 @@ public class CosmeticRoles extends Command {
             } catch (NumberFormatException e) {
                 // move on.
             }
-            if (role == null) {
-                role = GuildHandler.getRoleFromName(subArgs, command.guild.get());
-            }
-            if (role == null) {
-                return "> **" + subArgs + "** is not a valid Role Name.";
-            }
+            if (role == null) role = GuildHandler.getRoleFromName(subArgs, command.guild.get());
+            if (role == null) return "> **" + subArgs + "** is not a valid Role Name.";
+
             //tests to see if the bot is allowed to mess with a role.
             if (!Utility.testUserHierarchy(command.client.bot.get(), role, command.guild.get())) {
                 return "> I do not have permission to modify the **" + role.getName() + "** role.";
@@ -102,7 +97,7 @@ public class CosmeticRoles extends Command {
                 return "> Did you mean `" + command.guild.config.getPrefixCommand() + names()[0] + " " + args.replaceAll("(?i)/remove", "") + "`?";
             }
             List<IRole> userRoles = command.user.roles;
-            String response = Constants.ERROR_UPDATING_ROLE;
+            String response;
             //check if role is valid
             IRole role;
             role = GuildHandler.getRoleFromName(args, command.guild.get());
@@ -114,21 +109,9 @@ public class CosmeticRoles extends Command {
                 return null;
                 //if args = remove. remove the user's cosmetic role
             } else if (args.equalsIgnoreCase("remove")) {
-                ListIterator iterator = userRoles.listIterator();
-                boolean removedSomething = false;
-                while (iterator.hasNext()) {
-                    IRole userRole = (IRole) iterator.next();
-                    if (command.guild.config.isRoleCosmetic(userRole.getLongID())) {
-                        iterator.remove();
-                        removedSomething = true;
-                    }
-
-                }
-                if (removedSomething) {
-                    response = "> You have had your cosmetic role removed.";
-                } else {
-                    response = "> You don't have a role to remove...";
-                }
+                userRoles = userRoles.stream().filter(r -> !command.guild.config.isRoleCosmetic(r.getLongID())).collect(Collectors.toList());
+                if (command.user.getCosmeticRoles(command).size() == 0) return "> You don't have a role to remove...";
+                else response = "> You have had your cosmetic role removed.";
             } else {
                 //check if role is cosmetic
                 if (command.guild.config.isRoleCosmetic(role.getLongID())) {
@@ -136,14 +119,8 @@ public class CosmeticRoles extends Command {
                     if (command.guild.config.roleIsToggle) {
                         //if user has role, remove it.
                         if (userRoles.contains(role)) {
-                            ListIterator iterator = userRoles.listIterator();
-                            while (iterator.hasNext()) {
-                                IRole userRole = (IRole) iterator.next();
-                                if (role.getLongID() == userRole.getLongID()) {
-                                    iterator.remove();
-                                    response = "> You have had the **" + role.getName() + "** role removed.";
-                                }
-                            }
+                            userRoles.remove(role);
+                            response = "> You have had the **" + role.getName() + "** role removed.";
                             //else add that role.
                         } else {
                             userRoles.add(role);
@@ -156,13 +133,7 @@ public class CosmeticRoles extends Command {
                             return "> You already have the **" + role.getName() + "** role.";
                         } else {
                             //remove all cosmetic role and add the new one
-                            ListIterator iterator = userRoles.listIterator();
-                            while (iterator.hasNext()) {
-                                IRole userRole = (IRole) iterator.next();
-                                if (command.guild.config.isRoleCosmetic(userRole.getLongID())) {
-                                    iterator.remove();
-                                }
-                            }
+                            userRoles = userRoles.stream().filter(r -> !command.guild.config.isRoleCosmetic(r.getLongID())).collect(Collectors.toList());
                             userRoles.add(role);
                             response = "> You have selected the cosmetic role: **" + role.getName() + "**.";
                         }

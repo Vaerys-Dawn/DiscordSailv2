@@ -27,8 +27,6 @@ public enum SAILType {
     SETUP("Setup"),
     LOGGING("Logging"),
 
-
-
     //module types
     ART_PINNING("ArtPinning"),
     PROFILES("Profiles"),

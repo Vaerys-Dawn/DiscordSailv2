@@ -132,7 +132,6 @@ public class AnnotationListener {
         }
         updateVariables(event.getNewChannel().getGuild());
         LoggingHandler.doChannelUpdateLog(event);
-
     }
 
     @EventSubscriber

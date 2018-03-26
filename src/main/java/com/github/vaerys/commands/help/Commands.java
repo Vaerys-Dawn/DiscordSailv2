@@ -35,7 +35,6 @@ public class Commands extends Command {
             //add creator type and page
             List<Command> creatorCommands = Globals.getCreatorCommands(false);
             pages.put(SAILType.CREATOR, buildPage(creatorCommands, command, SAILType.CREATOR, types));
-
             types.add(SAILType.CREATOR);
         }
         //add dm type and page
@@ -48,7 +47,6 @@ public class Commands extends Command {
         types.addAll(visibleCommands.stream().map(c -> c.type).collect(Collectors.toList()));
         //remove duplicates
         types = types.stream().distinct().collect(Collectors.toList());
-
 
         //build dm page
         pages.put(SAILType.DM, buildPage(dmCommands, command, SAILType.DM, types));

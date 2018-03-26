@@ -706,12 +706,9 @@ public class Utility {
                 }
                 try {
                     UserObject object = new UserObject(u, command.guild, true);
-
                     if (hasProfile) {
                         ProfileObject profile = object.getProfile(command.guild);
-                        if (profile == null || profile.isEmpty()) {
-                            throw new IllegalStateException("Profile Is Null");
-                        }
+                        if (profile == null || profile.isEmpty()) continue;
                     }
                     if ((u.getName() + "#" + u.getDiscriminator()).matches("(?i)" + toTest)) {
                         user = u;
@@ -733,13 +730,12 @@ public class Utility {
                     }
                 } catch (PatternSyntaxException e) {
                     //continue.
-                } catch (IllegalStateException e) {
-                    //continue.
                 }
             }
+            UserObject userObject = null;
             try {
                 long uID = Long.parseLong(args);
-                user = command.client.get().getUserByID(uID);
+                return new UserObject(uID, command.guild);
             } catch (NumberFormatException e) {
                 if (command.message.get().getMentions().size() > 0) {
                     user = command.message.get().getMentions().get(0);
@@ -749,9 +745,9 @@ public class Utility {
                 user = conUser;
             }
             if (user != null) {
-                UserObject userObject = new UserObject(user, command.guild);
-                return userObject;
+                userObject = new UserObject(user, command.guild);
             }
+            return userObject;
         }
         return null;
     }

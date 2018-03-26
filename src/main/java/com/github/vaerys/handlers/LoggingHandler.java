@@ -20,6 +20,7 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEve
 import sx.blah.discord.handle.impl.events.guild.member.GuildMemberEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserBanEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
+import sx.blah.discord.handle.impl.obj.VoiceChannel;
 import sx.blah.discord.handle.obj.*;
 
 import java.time.Instant;
@@ -140,6 +141,10 @@ public class LoggingHandler {
 
     public static void doChannelUpdateLog(ChannelUpdateEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        if (event.getNewChannel() instanceof IVoiceChannel) {
+            // TODO: 26/03/2018 Add support for voice Channels.
+            return;
+        }
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             if (!event.getOldChannel().getName().equalsIgnoreCase(event.getNewChannel().getName())) {
@@ -310,7 +315,8 @@ public class LoggingHandler {
     public static void doBanLog(UserBanEvent event) {
         IGuild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
-        if (!guildObject.config.banLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG)) return;
+        if (!guildObject.config.banLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
+            return;
 
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
@@ -321,7 +327,7 @@ public class LoggingHandler {
         // and sort them. last entry is most recent.
         recentBans.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getLongID()).toEpochMilli()));
 
-        AuditLogEntry lastBan = recentBans.get(recentBans.size()-1);
+        AuditLogEntry lastBan = recentBans.get(recentBans.size() - 1);
         output.appendFormatted(" by **@%s#%s**", lastBan.getResponsibleUser().getName(), lastBan.getResponsibleUser().getDiscriminator());
         String reason = lastBan.getReason().isPresent() ? lastBan.getReason().get() : "No reason provided";
         output.appendFormatted(" with reason `%s`", reason);

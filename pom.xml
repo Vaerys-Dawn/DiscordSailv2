@@ -9,7 +9,7 @@
     <version>2.10.3</version>
 
     <properties>
-        <discord4j.version>89849cc</discord4j.version>
+        <discord4j.version>fe1cdae</discord4j.version>
         <patreonAPI.version>0.3.0</patreonAPI.version>
     </properties>
 
@@ -91,7 +91,7 @@
             <version>20140107</version>
         </dependency>
         <dependency>
-            <groupId>com.github.austinv11</groupId>
+            <groupId>com.github.Discord4J</groupId>
             <artifactId>Discord4j</artifactId>
             <version>${discord4j.version}</version>
             <classifier>shaded</classifier>

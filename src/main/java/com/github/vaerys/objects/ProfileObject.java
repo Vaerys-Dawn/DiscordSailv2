@@ -13,10 +13,7 @@ import sx.blah.discord.api.IDiscordClient;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.vaerys.enums.UserSetting.DONT_DECAY;
@@ -27,7 +24,6 @@ import static com.github.vaerys.enums.UserSetting.DONT_DECAY;
 public class ProfileObject {
     private static final String defaultQuote = "This person doesn't seem to have much to say for themselves.";
     private static final String defaultGender = "Unknown";
-    public List<ModNoteObject> modNotes;
     public long lastTalked = -1;
     long userID;
     long xp = 0;
@@ -36,6 +32,8 @@ public class ProfileObject {
     String quote = defaultQuote;
     ArrayList<UserSetting> settings = new ArrayList<>();
     ArrayList<UserLinkObject> links = new ArrayList<>();
+    public List<ModNoteObject> modNotes;
+    private String defaultAvatarURL;
 
     public ProfileObject(long userID) {
         this.userID = userID;
@@ -152,7 +150,7 @@ public class ProfileObject {
     }
 
     public UserObject getUser(GuildObject content) {
-        return new UserObject(content.get().getUserByID(userID), content);
+        return new UserObject(userID, content);
     }
 
     public boolean isEmpty() {
@@ -195,5 +193,9 @@ public class ProfileObject {
 
     public void addSailModNote(String contents, CommandObject command) {
         addSailModNote(contents, command, false);
+    }
+
+    public String getDefaultAvatarURL() {
+        return String.format("https://cdn.discordapp.com/embed/avatars/%d.png", new Random(userID).nextInt(5));
     }
 }
