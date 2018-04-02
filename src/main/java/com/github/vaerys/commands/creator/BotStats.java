@@ -14,13 +14,13 @@ import java.util.List;
 
 public class BotStats extends Command {
 
-
     @Override
     public String execute(String args, CommandObject command) {
         List<Double> cpuUsage = TimerHandler.cpuUsage;
         long freeMemory = Runtime.getRuntime().freeMemory();
         long totalMemory = Runtime.getRuntime().totalMemory();
         long usedMemory = totalMemory - freeMemory;
+        long userCount = command.client.get().getUsers().size();
         double usage = cpuUsage.stream().mapToDouble(value -> value).sum() / cpuUsage.size();
         // and make it look pretty
         NumberFormat nf = NumberFormat.getInstance();
@@ -33,6 +33,7 @@ public class BotStats extends Command {
         builder.withFooterText("Creation Date");
         StringHandler handler = new StringHandler();
         handler.append("**Total Servers**: ").append(command.client.get().getGuilds().size());
+        handler.append(indent + "**Total Users**: " + userCount);
         handler.append("\n**Total Active Threads**: ").append(Thread.activeCount());
         handler.append("\n**CPU Usage**: ").append(nf.format(usage * 100)).append("%");
         handler.append("\n**Memory Usage**: ");

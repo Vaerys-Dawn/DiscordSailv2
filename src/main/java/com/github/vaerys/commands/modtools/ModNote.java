@@ -74,8 +74,16 @@ public class ModNote extends Command {
         if (userCall == null || userCall.isEmpty()) return missingArgs(command);
         if (opts == null || opts.isEmpty()) opts = "list";
 
-        UserObject user = Utility.getUser(command, userCall, false, false);
+        UserObject user = Utility.getUser(command, userCall, false, true);
         if (user == null) return "> Could not find user.";
+        if (user.get() == null) {
+            try {
+                long userID = Long.parseLong(userCall);
+                user = new UserObject(userID, command.guild);
+            } catch (NumberFormatException e) {
+                return "> Could not find user.";
+            }
+        }
 
         ProfileObject profile = user.getProfile(command.guild);
         if (profile == null) return "> No profile found for " + user.displayName + ".";
@@ -163,9 +171,13 @@ public class ModNote extends Command {
         UserObject userObject = user.getUser(command.guild);
         XEmbedBuilder builder = new XEmbedBuilder(command);
 
+
         builder.withColor(userObject.color);
         builder.withTitle("Notes for " + userObject.displayName);
-        builder.withThumbnail(userObject.get().getAvatarURL());
+
+        //avatar
+        if (userObject.get() != null) builder.withThumbnail(userObject.get().getAvatarURL());
+        else builder.withThumbnail(user.getDefaultAvatarURL());
 
         // get all notes and put together the bits and bobs
         int counter = 0;
@@ -192,13 +204,16 @@ public class ModNote extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(userObject);
         ModNoteObject noteObject = user.modNotes.get(index);
 
+        String displayName = user.getUser(command.guild).displayName;
+
         // title and avatar of user in question.
         if (noteObject.getStrike()) {
-            builder.withTitle("⚠ Note " + (index + 1) + " - " + userObject.displayName);
+            builder.withTitle("⚠ Note " + (index + 1) + " - " + displayName);
         } else {
-            builder.withTitle("Note " + (index + 1) + " - " + userObject.displayName);
+            builder.withTitle("Note " + (index + 1) + " - " + displayName);
         }
-        builder.withThumbnail(userObject.get().getAvatarURL());
+        if (userObject.get() != null) builder.withThumbnail(userObject.get().getAvatarURL());
+        else builder.withThumbnail(user.getDefaultAvatarURL());
 
         // add note to embed
         builder.appendDesc(noteObject.getNote());

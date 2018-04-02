@@ -21,6 +21,10 @@ public class ListServers extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        if (command.guild.servers.getServers().size() == 0) {
+            return "> No servers have been listed yet, If you would like to list one yourself you can do so using **" +
+                    get(AddServer.class).getUsage(command) + "**.";
+        }
         XEmbedBuilder builder = new XEmbedBuilder(command);
         String title = "> Here are the Servers I have Listed:";
         ArrayList<String> serverNames = command.guild.servers.getServers().stream().map(ServerObject::getName).collect(Collectors.toCollection(ArrayList::new));

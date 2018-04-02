@@ -4,7 +4,8 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.*;
 import sx.blah.discord.handle.obj.*;
@@ -12,11 +13,13 @@ import sx.blah.discord.util.RequestBuffer;
 import sx.blah.discord.util.cache.LongMap;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
+
+/**
+ * Wrapper for the User API object. Contains All bot information linked to that user for the Guild assigned to it.
+ */
 
 public class UserObject {
     public ClientObject client;
@@ -54,11 +57,36 @@ public class UserObject {
 
     public UserObject(long id, GuildObject content) {
         this.client = content.client;
-        init(content.getUserByID(id), content, true);
+        IUser user = content.getUserByID(id);
+        if (user == null) user = Client.getClient().getUserByID(id);
+        if (user == null) {
+            initNull(id);
+            return;
+        }
+        init(user, content, true);
+    }
+
+    private void initNull(long id) {
+        longID = id;
+        object = null;
+        name = longID + "";
+        displayName = longID + "";
+        username = longID + "";
+        color = Color.gray;
+        roles = new LinkedList<>();
+        customCommands = new ArrayList<>();
+        characters = new ArrayList<>();
+        servers = new ArrayList<>();
+        dailyMessages = new ArrayList<>();
+        notAllowed = "> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
+        isPatron = Globals.getPatrons().contains(longID);
     }
 
     private void init(IUser object, GuildObject guild, boolean light) {
-        if (object == null) return;
+        if (object == null) {
+            initNull(-1);
+            return;
+        }
         this.object = object;
         this.longID = object.getLongID();
         this.name = object.getName();
@@ -134,7 +162,7 @@ public class UserObject {
 
     public ProfileObject getProfile(GuildObject guild) {
         ProfileObject profile = guild.users.getUserByID(longID);
-        if (profile == null && object.isBot()) {
+        if (profile == null && (object != null && !object.isBot())) {
             profile = guild.users.addUser(longID);
         }
         if (profile != null && profile.getSettings() != null && profile.getSettings().size() != 0) {
@@ -156,7 +184,7 @@ public class UserObject {
     }
 
     public boolean showRank(GuildObject guild) {
-        return XpHandler.rank(guild.users, guild.get(), longID) != -1;
+        return PixelHandler.rank(guild.users, guild.get(), longID) != -1;
     }
 
 
@@ -203,7 +231,7 @@ public class UserObject {
     }
 
     public int getRewardValue(CommandObject command) {
-        return XpHandler.getRewardCount(command.guild, longID);
+        return PixelHandler.getRewardCount(command.guild, longID);
     }
 
     public List<IRole> getCosmeticRoles(CommandObject command) {

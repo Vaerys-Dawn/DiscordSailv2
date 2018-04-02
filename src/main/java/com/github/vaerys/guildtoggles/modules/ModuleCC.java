@@ -6,6 +6,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.toggles.ShitpostFiltering;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 
 /**
@@ -38,7 +39,7 @@ public class ModuleCC extends GuildModule {
         return "This module allows users to create custom commands.\n" +
                 "> Custom commands use the **" + command.guild.config.getPrefixCC() + "** command prefix.\n" +
                 "> Custom commands are completely user created and they can use the tag system to change how they work.\n" +
-                "> For information about the tag system you can run the **" + new HelpTags().getCommand(command) + "** command.";
+                "> For information about the tag system you can run the **" + Command.get(HelpTags.class).getCommand(command) + "** command.";
     }
 
     @Override

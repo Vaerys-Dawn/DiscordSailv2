@@ -23,14 +23,13 @@ import java.util.stream.Collectors;
 import static com.github.vaerys.enums.UserSetting.DENY_AUTO_ROLE;
 
 public class GuildHandler {
-
     final static Logger logger = LoggerFactory.getLogger(GuildHandler.class);
 
     public static void dailyTask(GuildObject content) {
         for (ProfileObject p : content.users.getProfiles()) {
 
             if (content.config.xpGain && content.config.modulePixels && content.config.xpDecay) {
-                XpHandler.doDecay(content, p);
+                PixelHandler.doDecay(content, p);
             }
             //check user's roles and make sure that they have the right roles.
             checkUsersRoles(p.getUserID(), content);
@@ -83,7 +82,7 @@ public class GuildHandler {
             //add the top ten role if they should have it.
             IRole topTenRole = content.get().getRoleByID(content.config.topTenRoleID);
             if (topTenRole != null) {
-                long rank = XpHandler.rank(content.users, content.get(), user.getLongID());
+                long rank = PixelHandler.rank(content.users, content.get(), user.getLongID());
                 if (rank <= 10 && rank > 0) {
                     userRoles.add(topTenRole);
                 }

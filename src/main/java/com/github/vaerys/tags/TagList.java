@@ -54,9 +54,13 @@ public class TagList {
         tags.add(new TagIfArgs(42, TagType.CC));
         tags.add(new TagIfChannel(43, TagType.CC));
         //replace tags
-        tags.add(new TagReplace(50, TagType.CC));
-        tags.add(new TagReplaceSpecial(51, TagType.CC));
-        tags.add(new TagRegex(52, TagType.CC));
+        tags.add(new TagIfRoleReplace(50, TagType.CC));
+        tags.add(new TagIfNameReplace(51, TagType.CC));
+        tags.add(new TagIfArgsReplace(52, TagType.CC));
+        tags.add(new TagIfChannelReplace(53, TagType.CC));
+        tags.add(new TagReplace(54, TagType.CC));
+        tags.add(new TagReplaceSpecial(55, TagType.CC));
+        tags.add(new TagRegex(56, TagType.CC));
         //random tags (part 2)
         tags.add(new TagRandNum(60, TagType.CC, TagType.DAILY, TagType.JOIN_MESSAGES));
         tags.add(new TagRandEmote(61, TagType.CC, TagType.DAILY, TagType.LEVEL, TagType.JOIN_MESSAGES));

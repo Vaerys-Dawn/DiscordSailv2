@@ -43,7 +43,7 @@ public class TagIfRole extends TagObject {
 
     @Override
     public String usage() {
-        return "Role" + splitter + "True" + "False";
+        return "Role" + splitter + "True" + splitter + "False";
     }
 
     @Override

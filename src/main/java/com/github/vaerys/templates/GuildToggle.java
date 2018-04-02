@@ -126,4 +126,16 @@ public abstract class GuildToggle {
     public abstract String stats(CommandObject command);
 
     public abstract boolean statsOnInfo();
+
+    public static GuildToggle get(Class obj) {
+        if (!GuildToggle.class.isAssignableFrom(obj)) {
+            throw new IllegalArgumentException("Cannot Get Toggle from Class (" + obj.getName() + ")");
+        }
+        for (GuildToggle c : Globals.getGuildToggles()) {
+            if (c.getClass().getName().equals(obj.getName())) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Could not find Toggle (" + obj.getName() + ")");
+    }
 }

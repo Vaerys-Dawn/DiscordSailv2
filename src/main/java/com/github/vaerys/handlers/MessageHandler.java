@@ -39,7 +39,7 @@ public class MessageHandler {
                 // sanitize @here mentions.
                 args = args.replaceAll("@here", "REDACTED");
             }
-            XpHandler.grantXP(command);
+            PixelHandler.grantXP(command);
 //            if (command.guild.config.artPinning) {
 //                if (command.guild.config.autoArtPinning) {
 //                    ArtHandler.pinMessage(command);

@@ -6,7 +6,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -116,10 +116,10 @@ public class UserInfo extends Command {
         if (showCC && !showLevel) {
             desc.append("\n**Custom Commands: **" + command.guild.customCommands.getUserCommandCount(user, command.guild));
         } else if (showLevel && !showCC) {
-            desc.append("\n**Level: **" + XpHandler.xpToLevel(profile.getXP()));
+            desc.append("\n**Level: **" + PixelHandler.xpToLevel(profile.getXP()));
         } else if (showLevel && showCC) {
             desc.append("\n**Custom Commands: **" + command.guild.customCommands.getUserCommandCount(user, command.guild) +
-                    indent + indent + indent + "**Level: **" + XpHandler.xpToLevel(profile.getXP()));
+                    indent + indent + indent + "**Level: **" + PixelHandler.xpToLevel(profile.getXP()));
         }
 
         desc.append("\n**Roles: **" + Utility.listFormatter(roleNames, true));

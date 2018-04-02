@@ -2,7 +2,7 @@ package com.github.vaerys.pogos;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
@@ -104,7 +104,7 @@ public class Characters extends GuildFile {
 
     public int maxCharsForUser(UserObject user, GuildObject guild) {
         int maxChars = 4;
-        int rewardCount = XpHandler.getRewardCount(guild, user.longID);
+        int rewardCount = PixelHandler.getRewardCount(guild, user.longID);
         maxChars += rewardCount * 2;
         if (user.isPatron) maxChars += 4;
         if (GuildHandler.canBypass(user, guild)) maxChars += 4;
