@@ -2,6 +2,7 @@ package com.github.vaerys.templates;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.tags.TagList;
