@@ -5,7 +5,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
@@ -44,13 +44,13 @@ public class Pixels extends Command {
 
         String rankTitle = "Rank: ";
         String rankTotal;
-        if (XpHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) != -1 && profile.getXP() != 0) {
-            rankTotal = XpHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) + "/" + XpHandler.totalRanked(command);
+        if (PixelHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) != -1 && profile.getXP() != 0) {
+            rankTotal = PixelHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) + "/" + PixelHandler.totalRanked(command);
         } else {
             rankTotal = "N/a";
         }
-        long xpForNext = XpHandler.levelToXP(profile.getCurrentLevel() + 1);
-        long xpTillNext = XpHandler.totalXPForLevel(profile.getCurrentLevel() + 1) - profile.getXP();
+        long xpForNext = PixelHandler.levelToXP(profile.getCurrentLevel() + 1);
+        long xpTillNext = PixelHandler.totalXPForLevel(profile.getCurrentLevel() + 1) - profile.getXP();
         long xpProgress = xpForNext - xpTillNext;
         long percentToLvl = (xpProgress * 100) / xpForNext;
         StringBuilder xpBar = new StringBuilder("-------------------");

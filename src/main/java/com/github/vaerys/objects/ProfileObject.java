@@ -2,7 +2,7 @@ package com.github.vaerys.objects;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
@@ -81,7 +81,7 @@ public class ProfileObject {
     public void setXp(long xp, boolean levelUp) {
         this.xp = xp;
         if (levelUp) {
-            this.currentLevel = XpHandler.xpToLevel(xp);
+            this.currentLevel = PixelHandler.xpToLevel(xp);
         }
     }
 
@@ -128,6 +128,10 @@ public class ProfileObject {
 
     public void setCurrentLevel(long currentLevel) {
         this.currentLevel = currentLevel;
+    }
+
+    public void levelUp() {
+        currentLevel = PixelHandler.xpToLevel(xp);
     }
 
     public UserSetting getLevelState() {
@@ -198,4 +202,6 @@ public class ProfileObject {
     public String getDefaultAvatarURL() {
         return String.format("https://cdn.discordapp.com/embed/avatars/%d.png", new Random(userID).nextInt(5));
     }
+
+
 }

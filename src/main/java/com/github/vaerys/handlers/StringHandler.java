@@ -151,4 +151,20 @@ public class StringHandler {
     public boolean isEmpty() {
         return string.toString().isEmpty();
     }
+
+    public void appendFront(String s) {
+        setContent(s + string.toString());
+    }
+
+    public void format(Object... values) {
+        setContent(String.format(string.toString(), values));
+    }
+
+    public int length() {
+        return string.length();
+    }
+
+    public String substring(int start, int end) {
+        return string.substring(start, end);
+    }
 }

@@ -1,12 +1,10 @@
 package com.github.vaerys.main;
 
 import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.handlers.*;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.LogObject;
-import com.github.vaerys.objects.UserCountDown;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -24,12 +22,9 @@ import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
 import sx.blah.discord.handle.impl.obj.ReactionEmoji;
-import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.util.List;
 
 /**
  * Created by Vaerys on 03/08/2016.
@@ -73,6 +68,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onMessageReceivedEvent(MessageReceivedEvent event) {
+        if (!Globals.isReady) return;
         try {
             if (event.getAuthor().isBot()) return;
 
@@ -150,16 +146,6 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onReactionAddEvent(ReactionAddEvent event) {
-
-//        IUser owner1 = event.getMessage().getAuthor();
-//        IUser author = event.getAuthor();
-//        IUser reactor = event.getUser();
-//
-//        System.out.println("Owner: " + owner1.getName() + "#" + owner1.getDiscriminator() + "(" + owner1.getLongID() + ")" + " - " + owner1.getDisplayName(event.getGuild()));
-//        System.out.println("Author: " + author.getName() + "#" + author.getDiscriminator() + "(" + author.getLongID() + ")" + " - " + author.getDisplayName(event.getGuild()));
-//        System.out.println("Reactor: " + reactor.getName() + "#" + reactor.getDiscriminator() + "(" + reactor.getLongID() + ")" + " - " + reactor.getDisplayName(event.getGuild()));
-
-
         if (event.getUser().isBot()) {
             return;
         }
@@ -217,73 +203,20 @@ public class AnnotationListener {
         LoggingHandler.logDelete(command, event.getMessage());
     }
 
-    private boolean shouldLog(CommandObject command) {
-        if (command.guild == null) {
-            return false;
-        }
-        if (!command.guild.config.moduleLogging) return false;
-        List<IChannel> infoID = command.guild.getChannelsByType(ChannelSetting.INFO);
-        List<IChannel> serverLogID = command.guild.getChannelsByType(ChannelSetting.SERVER_LOG);
-        List<IChannel> adminLogID = command.guild.getChannelsByType(ChannelSetting.ADMIN_LOG);
-        List<IChannel> dontLog = command.guild.getChannelsByType(ChannelSetting.DONT_LOG);
-        if (dontLog.size() != 0) {
-            if (dontLog.contains(command.channel.get())) {
-                return false;
-            }
-        }
-        if (command.guild.config.dontLogBot && command.user.get().isBot()) {
-            return false;
-        }
-        if (command.message.get() == null) {
-            return false;
-        }
-        if (serverLogID.size() != 0 && serverLogID.get(0).equals(command.channel.get()) && command.client.bot.longID == command.user.longID) {
-            return false;
-        }
-        if (infoID.size() != 0 && infoID.get(0).equals(command.channel.get()) && command.client.bot.longID == command.user.longID) {
-            return false;
-        }
-        if (adminLogID.size() != 0 && adminLogID.get(0).equals(command.channel.get()) && command.client.bot.longID == command.user.longID) {
-            return false;
-        }
-        return true;
-    }
-
     @EventSubscriber
     public void onUserJoinEvent(UserJoinEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
         UserObject user = new UserObject(event.getUser().getLongID(), content);
         if (content.config.welcomeMessages && !user.get().isBot()) {
-            String message = content.config.getJoinMessage();
-            message = message.replace("<server>", event.getGuild().getName());
-            message = message.replace("<user>", event.getUser().getName());
-            user.sendDm(message);
+            JoinHandler.sendWelcomeMessage(content, event, user);
         }
-        //check to see if the user's account is brand new or not and send a message if true. (new = account is younger than 5 hours)
         if (content.config.checkNewUsers) {
-            long difference = event.getJoinTime().toEpochMilli() - event.getUser().getCreationDate().toEpochMilli();
-            if ((5 * 60 * 60 * 1000) > difference) {
-                IChannel admin = content.getChannelByType(ChannelSetting.ADMIN_LOG);
-                if (admin == null) {
-                    admin = event.getGuild().getDefaultChannel();
-                }
-                if (admin != null) {
-                    RequestHandler.sendMessage("> New user " + user.mention() + " has a creation time less than 5 hours ago.", admin);
-                }
-            }
+            JoinHandler.checkNewUsers(content, event, user);
         }
         if (content.config.moduleJoinMessages && content.config.sendJoinMessages) {
             JoinHandler.customJoinMessages(content, event.getUser());
         }
-        for (UserCountDown u : content.users.mutedUsers) {
-            if (u.getID() == event.getUser().getLongID()) {
-                IChannel admin = content.getChannelByType(ChannelSetting.ADMIN);
-                if (admin != null) {
-                    RequestHandler.sendMessage("> Looks like " + user.mention() + " has returned, I have muted them again for you.", admin);
-                }
-                RequestHandler.roleManagement(user, content, content.config.getMutedRoleID(), true);
-            }
-        }
+        JoinHandler.autoReMute(event, content, user);
         if (!content.config.moduleLogging) return;
         LoggingHandler.doJoinLeaveLog(event, true);
     }

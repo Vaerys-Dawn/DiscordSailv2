@@ -4,7 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.*;
@@ -16,6 +16,10 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
+
+/**
+ * Wrapper for the User API object. Contains All bot information linked to that user for the Guild assigned to it.
+ */
 
 public class UserObject {
     public ClientObject client;
@@ -180,7 +184,7 @@ public class UserObject {
     }
 
     public boolean showRank(GuildObject guild) {
-        return XpHandler.rank(guild.users, guild.get(), longID) != -1;
+        return PixelHandler.rank(guild.users, guild.get(), longID) != -1;
     }
 
 
@@ -227,7 +231,7 @@ public class UserObject {
     }
 
     public int getRewardValue(CommandObject command) {
-        return XpHandler.getRewardCount(command.guild, longID);
+        return PixelHandler.getRewardCount(command.guild, longID);
     }
 
     public List<IRole> getCosmeticRoles(CommandObject command) {

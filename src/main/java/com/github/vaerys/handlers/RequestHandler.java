@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
+import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.*;
 
@@ -454,6 +455,14 @@ public class RequestHandler {
 
     public static RequestBuffer.RequestFuture<Boolean> roleManagement(UserObject user, GuildObject content, long mutedRoleID, boolean isAdding) {
         return roleManagement(user.get(), content.get(), mutedRoleID, isAdding);
+    }
+
+    public static void addReaction(MessageObject message, ReactionEmoji emoji) {
+        RequestBuffer.request(() -> message.get().addReaction(emoji));
+    }
+
+    public static void addReaction(IMessage message, ReactionEmoji emoji) {
+        RequestBuffer.request(() -> message.addReaction(emoji));
     }
 
 

@@ -5,7 +5,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -53,11 +53,11 @@ public class TopUserForRole extends Command {
             return "> Could not find any users with that role!";
         }
 
-        userIDs.removeIf(f -> XpHandler.rank(command.guild.users, command.guild.get(), f) == -1);
+        userIDs.removeIf(f -> PixelHandler.rank(command.guild.users, command.guild.get(), f) == -1);
 
         userIDs.sort((o1, o2) -> {
-            long rank1 = XpHandler.rank(command.guild.users, command.guild.get(), o1);
-            long rank2 = XpHandler.rank(command.guild.users, command.guild.get(), o2);
+            long rank1 = PixelHandler.rank(command.guild.users, command.guild.get(), o1);
+            long rank2 = PixelHandler.rank(command.guild.users, command.guild.get(), o2);
             return Long.compare(rank1, rank2);
         });
         if (userIDs.size() == 0) return "> Could not find any ranked users with that role.";

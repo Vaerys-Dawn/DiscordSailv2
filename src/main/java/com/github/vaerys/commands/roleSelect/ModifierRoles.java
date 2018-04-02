@@ -33,7 +33,7 @@ public class ModifierRoles extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (args == null || args.isEmpty()) {
-            return new ListModifs().execute(args, command);
+            return get(ListModifs.class).execute(args, command);
         }
 //        SplitFirstObject modif = new SplitFirstObject(args);
 

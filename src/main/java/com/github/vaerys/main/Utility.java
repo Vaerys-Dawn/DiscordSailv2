@@ -624,8 +624,8 @@ public class Utility {
     }
 
     public static void sendStack(Exception e) {
-        StringBuffer s = new StringBuffer(ExceptionUtils.getStackTrace(e));
-        s.append(s.substring(0, s.length() - 2));
+        StringHandler s = new StringHandler(ExceptionUtils.getStackTrace(e));
+        s.setContent(s.substring(0, s.length() - 2));
         if (!s.toString().endsWith(")")) {
             s.append(")");
         }

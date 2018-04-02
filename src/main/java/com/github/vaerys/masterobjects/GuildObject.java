@@ -18,11 +18,15 @@ import com.github.vaerys.templates.GuildFile;
 import com.github.vaerys.templates.GuildToggle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Wrapper for the Guild API object. Also contains all bot data related to said Guild.
+ */
 public class GuildObject {
     private final static Logger logger = LoggerFactory.getLogger(GuildObject.class);
     public ClientObject client;

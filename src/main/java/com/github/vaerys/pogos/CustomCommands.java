@@ -4,7 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -51,7 +51,7 @@ public class CustomCommands extends GuildFile {
         if (hasAdminPerms) {
             total += 100;
         }
-        total += (XpHandler.getRewardCount(guild, user.longID) * 10);
+        total += (PixelHandler.getRewardCount(guild, user.longID) * 10);
         if (guild.getOwnerID() == user.longID) {
             total = 200;
         }

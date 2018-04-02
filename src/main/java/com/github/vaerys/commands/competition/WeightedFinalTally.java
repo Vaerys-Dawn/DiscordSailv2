@@ -3,7 +3,7 @@ package com.github.vaerys.commands.competition;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
@@ -35,7 +35,7 @@ public class WeightedFinalTally extends Command {
                         if (entryVotes.containsKey(vote)) {
                             IUser user = command.guild.getUserByID(Utility.stringLong(splitVotes[0]));
                             if (user != null) {
-                                int weight = XpHandler.getRewardCount(command.guild, user.getLongID());
+                                int weight = PixelHandler.getRewardCount(command.guild, user.getLongID());
                                 entryVotes.put(vote, entryVotes.get(vote).longValue() + weight + 1);
                                 totalVotes += weight + 1;
                             }

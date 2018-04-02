@@ -16,7 +16,7 @@ public class GetGuildInfoDm extends DMCommand {
     public String execute(String args, CommandObject command) {
         IGuild guild = command.client.get().getGuildByID(Utility.stringLong(args));
         if (guild != null) {
-            new GetGuildInfo().execute(args, command.setGuild(guild));
+            get(GetGuildInfo.class).execute(args, command.setGuild(guild));
             return null;
         } else {
             return "> Guild ID Invalid";

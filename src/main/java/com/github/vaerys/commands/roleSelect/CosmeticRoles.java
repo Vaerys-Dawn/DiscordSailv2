@@ -32,7 +32,7 @@ public class CosmeticRoles extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (args == null || args.isEmpty()) {
-            return new ListRoles().execute(args, command);
+            return get(ListRoles.class).execute(args, command);
         }
 
         //test to see if the first word is a modifier
@@ -90,10 +90,10 @@ public class CosmeticRoles extends Command {
             //check to make sure that the user isn't including the args brackets or the /remove at the end;
             if (command.guild.config.getCosmeticRoleIDs().size() == 0)
                 return "> No Cosmetic roles are set up right now. Come back later.";
-            if (args.startsWith("[") && args.endsWith("]")) {
+            if (args.matches("[(|\\[].*[)|\\]]")) {
                 return Constants.ERROR_BRACKETS + "\n" + Utility.getCommandInfo(this, command);
             }
-            if (args.toLowerCase().endsWith("/remove")) {
+            if (args.matches(".*/remove")) {
                 return "> Did you mean `" + command.guild.config.getPrefixCommand() + names()[0] + " " + args.replaceAll("(?i)/remove", "") + "`?";
             }
             List<IRole> userRoles = command.user.roles;
