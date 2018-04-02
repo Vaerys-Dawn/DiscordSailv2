@@ -197,8 +197,7 @@ public class PixelHandler {
                 object.message.get().getAttachments().isEmpty()) return;
 
         //you cannot gain xp in an xpDenied channel
-        if (object.channel.settings.contains(ChannelSetting.XP_DENIED)) return;
-
+        if (object.guild.channelHasSetting(ChannelSetting.XP_DENIED, object.channel)) return;
 
         //gives them their xp.
         user.addXP(object.guild.config);
