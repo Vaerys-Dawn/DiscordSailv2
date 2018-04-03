@@ -1,6 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
@@ -200,7 +200,7 @@ public class TimerHandler {
             //reset offenders
             task.resetOffenders();
 
-            //getToggles general channel
+            //getAllToggles general channel
             IChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
 
             //do daily messages

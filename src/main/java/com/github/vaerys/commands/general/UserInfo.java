@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
@@ -43,12 +43,12 @@ public class UserInfo extends Command {
         ProfileObject profile = user.getProfile(command.guild);
         if (profile == null && user.get().isBot()) {
             if (user.get().getPresence().getStatus().equals(StatusType.OFFLINE) || user.get().getPresence().getStatus().equals(StatusType.UNKNOWN)) {
-                return "> Could not get a profile for " + user.displayName + ".";
+                return "> Could not getAllCommands a profile for " + user.displayName + ".";
             }
             profile = new ProfileObject(user.longID);
             command.guild.users.addUser(profile);
         } else if (profile == null) {
-            return "> Could not get a profile for " + user.displayName + ".";
+            return "> Could not getAllCommands a profile for " + user.displayName + ".";
         }
         if (!GuildHandler.testForPerms(command, Permissions.ADMINISTRATOR) &&
                 (user.isPrivateProfile(command.guild) && user.longID != command.user.longID)) {

@@ -1,14 +1,13 @@
 package com.github.vaerys.commands.cc;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.Test;
 import com.github.vaerys.commands.general.Hello;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
@@ -25,13 +24,6 @@ import java.util.ListIterator;
  * Created by Vaerys on 01/02/2017.
  */
 public class NewCC extends Command {
-
-
-    private static final List<Command> exceptions = new ArrayList<Command>() {{
-        add(Command.get(Test.class));
-        add(Command.get(Hello.class));
-    }};
-
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -93,13 +85,17 @@ public class NewCC extends Command {
     }
 
     private boolean handleNameFilter(CommandObject command, String nameCC) {
+        List<Command> exceptions = new ArrayList<Command>() {{
+            add(Command.get(Test.class));
+            add(Command.get(Hello.class));
+        }};
         // ccs cannot have names that match existing commands:
         List<Command> toTest = new ArrayList<>(command.guild.commands);
         toTest.removeAll(exceptions);
 
         for (Command c : command.guild.commands) {
 
-            // get all commands names.
+            // getAllCommands all commands names.
             List<String> names = new ArrayList<>(Arrays.asList(c.names));
             for (SubCommandObject sc : c.subCommands) {
                 names.addAll(Arrays.asList(sc.getNames()));

@@ -1,6 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -110,14 +110,14 @@ public class QueueHandler {
 
         for (QueueObject q : queuedMessages) {
             if (q.getMessageId() == message.getLongID()) {
-                //getToggles the embed
+                //getAllToggles the embed
                 IEmbed embed = message.getEmbeds().get(0);
                 RequestBuffer.request(() -> message.removeAllReactions()).get();
                 switch (q.getType()) {
                     //do if daily request
                     case Constants.QUEUE_DAILY:
                         try {
-                            //getToggles the data
+                            //getAllToggles the data
                             long userID = Long.parseLong(embed.getFooter().getText());
                             long uID = -1;
                             DayOfWeek day = null;

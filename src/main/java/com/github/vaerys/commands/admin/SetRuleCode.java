@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.Command;
@@ -28,9 +28,9 @@ public class SetRuleCode extends Command {
     @Override
     public String description(CommandObject command) {
         if (command.guild.config.xpGain) {
-            return "Adds a Rule code to the bot for users to use to get some pixels and a star on their profile.";
+            return "Adds a Rule code to the bot for users to use to getAllCommands some pixels and a star on their profile.";
         } else {
-            return "Adds a Rule code to the bot for users to use to get a star on their profile.";
+            return "Adds a Rule code to the bot for users to use to getAllCommands a star on their profile.";
         }
     }
 

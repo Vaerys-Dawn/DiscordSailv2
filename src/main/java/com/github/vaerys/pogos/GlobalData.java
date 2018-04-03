@@ -35,7 +35,7 @@ public class GlobalData extends GlobalFile {
 
 //    public void removeReminder(long userID) {
 //        for (int i = 0; i < reminders.size(); i++) {
-//            if (reminders.getToggles(i).getUserID() == userID) {
+//            if (reminders.getAllToggles(i).getUserID() == userID) {
 //                reminders.remove(i);
 //            }
 //        }

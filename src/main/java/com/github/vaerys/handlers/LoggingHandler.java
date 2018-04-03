@@ -1,6 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
@@ -199,7 +199,7 @@ public class LoggingHandler {
             if (joining) {
                 Utility.sendLog(String.format(output, "has **Joined** the server"), content, false);
             } else {
-                doKickLog(guild, event.getUser());
+                if (content.config.kickBanLogging) doKickLog(guild, event.getUser());
                 Utility.sendLog(String.format(output, "has **Left** the server"), content, false);
             }
         }
@@ -298,14 +298,14 @@ public class LoggingHandler {
         List<TargetedEntry> kicksLog = guild.getAuditLog(ActionType.MEMBER_KICK).getEntriesByTarget(user.getLongID());
         if (kicksLog.size() == 0) return;
 
-        //sort kickLog and get latest entry
+        //sort kickLog and getAllCommands latest entry
         kicksLog.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getLongID()).toEpochMilli()));
         AuditLogEntry lastKick = kicksLog.get(kicksLog.size() - 1);
 
-        //get the latest entry's timestamp
+        //getAllCommands the latest entry's timestamp
         long lastKickTime = DiscordUtils.getSnowflakeTimeFromID(lastKick.getLongID()).toEpochMilli();
 
-        //get user responsible
+        //getAllCommands user responsible
         IUser responsible = lastKick.getResponsibleUser();
 
         // Check if timestamp is within fifteen seconds either way, lastKick is valid.
@@ -327,13 +327,12 @@ public class LoggingHandler {
     public static void doBanLog(UserBanEvent event) {
         IGuild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
-        if (!guildObject.config.banLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
-            return;
+        if (!guildObject.config.kickBanLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG)) return;
 
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
 
-        // get recent bans
+        // getAllCommands recent bans
         List<TargetedEntry> recentBans = event.getGuild().getAuditLog(ActionType.MEMBER_BAN_ADD).getEntriesByTarget(event.getUser().getLongID());
         if (recentBans.size() == 0) return;
         // and sort them. last entry is most recent.

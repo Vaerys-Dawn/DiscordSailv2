@@ -1,23 +1,12 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.help.HelpSettings;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.guildtoggles.ToggleInit;
-import com.github.vaerys.guildtoggles.toggles.DebugMode;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.StringHandler;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -40,8 +29,8 @@ public class Test extends Command {
 //                .append("There's a lot of settings in modules, and those will be set there.\n")
 //                .append("Here's a list of the settings that aren't tied to any specific module.\n\n");
 //
-//        List<GuildToggle> globalToggles = ToggleInit.getToggles(false);
-//        List<GuildToggle> modules = ToggleInit.getToggles(true);
+//        List<GuildToggle> globalToggles = ToggleInit.getAllToggles(false);
+//        List<GuildToggle> modules = ToggleInit.getAllToggles(true);
 //        List<String> enabled = new LinkedList<>();
 //        List<String> disabled = new LinkedList<>();
 //
@@ -74,7 +63,7 @@ public class Test extends Command {
 //        output.append("\n");
 //
 //        output.append("You can switch settings on and off with **" +
-//                new Toggle().getCommand(command) + "** and get more info on each setting with **" +
+//                new Toggle().getCommand(command) + "** and getAllCommands more info on each setting with **" +
 //                new HelpSettings().getCommand(command) + "**.");
 //
 //        XEmbedBuilder embed = new XEmbedBuilder(command);

@@ -1,6 +1,5 @@
 package com.github.vaerys.masterobjects;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;

@@ -1,8 +1,9 @@
 package com.github.vaerys.commands.creator;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
@@ -25,7 +26,7 @@ public class GetGlobalStats extends Command {
         ArrayList<String> outToggles = new ArrayList<>();
         ArrayList<String> outModules = new ArrayList<>();
 //        ArrayList<ChannelStatsObject> channelStats = new ArrayList<>();
-        for (GuildToggle g : Globals.getGuildToggles()) {
+        for (GuildToggle g : ToggleList.getAllToggles()) {
             toggleStats.add(new ToggleStatsObject(g.name().toString(), g.isModule()));
         }
 //        for (ChannelSetting c : Globals.getChannelSettings()) {

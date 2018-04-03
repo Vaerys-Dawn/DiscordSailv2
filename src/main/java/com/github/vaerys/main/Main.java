@@ -88,7 +88,7 @@ public class Main {
             }
 
 
-            //stuff that i cant getToggles to work because reasons, ignore completely
+            //stuff that i cant getAllToggles to work because reasons, ignore completely
 
 //            try{
 //                List<String> richPresesnce = FileHandler.readFromFile(Constants.FILE_RPC_TOKEN);

@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.characters;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
@@ -24,7 +24,7 @@ public class ListChars extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         UserObject user = command.user;
         String title = "> Here are all of your characters.";
-        //get user
+        //getAllCommands user
         if (args != null && !args.isEmpty()) {
             user = Utility.getUser(command, args, true);
             if (user == null) {

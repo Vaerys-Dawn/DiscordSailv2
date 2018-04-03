@@ -1,6 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -207,7 +207,7 @@ public class RequestHandler {
                 HttpURLConnection connection = (HttpURLConnection) new URL(imageURL).openConnection();
                 connection.setRequestProperty("User-Agent", Constants.MOZILLA_USER_AGENT);
 
-                //getToggles responseCode in case of IOException;
+                //getAllToggles responseCode in case of IOException;
                 responseCode = connection.getResponseCode();
 
                 //turn the image connection into an inputStream
@@ -520,7 +520,7 @@ public class RequestHandler {
 //                    return error;
 //                } catch (DiscordException e) {
 //                    if (e.getMessage().contains("CloudFlare")) {
-//                        return sendMessage(message, channel).getToggles();
+//                        return sendMessage(message, channel).getAllToggles();
 //                    } else if (e.getMessage().contains("Message was unable to be sent (Discord didn't return a response).")) {
 //                        logger.debug("Could not Send DM, Perhaps the user has Dms from server members turned off.\nMessage: " + message);
 //                    } else {
@@ -559,7 +559,7 @@ public class RequestHandler {
 //            } catch (MissingPermissionsException e) {
 //                logger.debug("Error sending File to channel with id: " + channel.getLongID() + " on guild with id: " + channel.getGuild().getLongID() +
 //                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
-//                return sendMessage(Utility.embedToString(embed), channel).getToggles();
+//                return sendMessage(Utility.embedToString(embed), channel).getAllToggles();
 //            }
 //            return null;
 //        });
@@ -568,7 +568,7 @@ public class RequestHandler {
 //    public static IMessage sendDMEmbed(String message, XEmbedBuilder embed, long userID) {
 //        IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
 //        if (channel != null) {
-//            return sendEmbedMessage(message, embed, channel).getToggles();
+//            return sendEmbedMessage(message, embed, channel).getAllToggles();
 //        } else {
 //            return null;
 //        }
@@ -581,10 +581,10 @@ public class RequestHandler {
 //                if (message == null || message.isEmpty()) {
 //                    return null;
 //                }
-//                return sendMessage(message, channel).getToggles();
+//                return sendMessage(message, channel).getAllToggles();
 //            } catch (DiscordException e) {
 //                if (e.getMessage().contains("CloudFlare")) {
-//                    return sendDM(message, userID).getToggles();
+//                    return sendDM(message, userID).getAllToggles();
 //                } else {
 //                    Utility.sendStack(e);
 //                    return null;
@@ -598,7 +598,7 @@ public class RequestHandler {
 //
 //    public static IMessage sendDM(String message, String userID) {
 //        try {
-//            return sendDM(message, Long.parseLong(userID)).getToggles();
+//            return sendDM(message, Long.parseLong(userID)).getAllToggles();
 //        } catch (NumberFormatException e) {
 //            return null;
 //        }
@@ -667,7 +667,7 @@ public class RequestHandler {
     //    public static IMessage sendFileURL(String message, String imageURL, IChannel channel, boolean loadMessage) {
 //        IMessage toDelete = null;
 //        if (loadMessage) {
-//            toDelete = sendMessage("`Loading...`", channel).getToggles();
+//            toDelete = sendMessage("`Loading...`", channel).getAllToggles();
 //        }
 //        IMessage sentMessage = null;
 //        HttpURLConnection connection = null;
@@ -683,11 +683,11 @@ public class RequestHandler {
 //                    URL url = new URL(imageURL);
 //                    String filename = FilenameUtils.getNames(url.getPath());
 //                    if (filename.equalsIgnoreCase("giphy.gif")) {
-//                        return sendMessage(message + " " + imageURL, channel).getToggles();
+//                        return sendMessage(message + " " + imageURL, channel).getAllToggles();
 //                    }
 //                    //checks if url is valid
 //                    if (!Utility.isImageLink(filename)) {
-//                        return sendMessage(message + " " + imageURL, channel).getToggles();
+//                        return sendMessage(message + " " + imageURL, channel).getAllToggles();
 //                    }
 //                    //sends message/files
 //                    if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("") && imageURL != null) {
@@ -700,22 +700,22 @@ public class RequestHandler {
 //                        return null;
 //                    }
 //                } catch (MalformedURLException e) {
-//                    return sendMessage(message + " " + imageURL, channel).getToggles();
+//                    return sendMessage(message + " " + imageURL, channel).getAllToggles();
 //                } catch (MissingPermissionsException e) {
 //                    missingPermissions("URL_FILE", channel);
-//                    return sendMessage(message + " <" + imageURL + ">", channel).getToggles();
+//                    return sendMessage(message + " <" + imageURL + ">", channel).getAllToggles();
 //                }
-//            }).getToggles();
+//            }).getAllToggles();
 //            stream.close();
 //        } catch (MalformedURLException e) {
 //            Utility.sendStack(e);
 //        } catch (SSLHandshakeException e) {
-//            sendMessage(message + " " + imageURL + " `FAILED TO EMBED - Failed SSL Handshake`", channel).getToggles();
+//            sendMessage(message + " " + imageURL + " `FAILED TO EMBED - Failed SSL Handshake`", channel).getAllToggles();
 //        } catch (IOException e) {
 //            try {
 //                if (connection != null) {
 //                    int responseCode = connection.getResponseCode();
-//                    sendMessage(message + " " + imageURL + " `FAILED TO EMBED - ERROR:" + responseCode + "`", channel).getToggles();
+//                    sendMessage(message + " " + imageURL + " `FAILED TO EMBED - ERROR:" + responseCode + "`", channel).getAllToggles();
 //                } else {
 //                    Utility.sendStack(e);
 //                }

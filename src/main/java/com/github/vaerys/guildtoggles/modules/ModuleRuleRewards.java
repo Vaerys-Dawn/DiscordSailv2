@@ -1,6 +1,6 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.admin.SetRuleCode;
 import com.github.vaerys.commands.admin.SetRuleCodeReward;
 import com.github.vaerys.commands.general.RulesCode;

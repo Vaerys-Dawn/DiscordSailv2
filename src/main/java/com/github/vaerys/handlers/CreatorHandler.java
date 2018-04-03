@@ -1,6 +1,7 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.creator.Restart;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -21,9 +22,9 @@ public class CreatorHandler {
         List<Command> commands;
         CommandObject command = new CommandObject(event.getMessage());
         if (event.getChannel().isPrivate()) {
-            commands = new ArrayList<>(Globals.getCreatorCommands(true));
+            commands = new ArrayList<>(CommandList.getCreatorCommands(true));
         } else {
-            commands = new ArrayList<>(Globals.getCreatorCommands(false));
+            commands = new ArrayList<>(CommandList.getCreatorCommands(false));
         }
         String message = event.getMessage().getContent();
         for (Command c : commands) {

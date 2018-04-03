@@ -1,6 +1,6 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.commands.pixels.DenyXpPrefix;
 import com.github.vaerys.commands.pixels.PixelHelp;
@@ -42,7 +42,7 @@ public class ModulePixels extends GuildModule {
     @Override
     public String desc(CommandObject command) {
         if (command.guild.get() == null) {
-            return "Error, you should not get this message. if you do please report this to the bot developer.";
+            return "Error, you should not getAllCommands this message. if you do please report this to the bot developer.";
         }
         return "This module enables **" + command.client.bot.displayName + "'s** XP system known as pixels.\n" +
                 "> Pixels are a xp system that allows the **granting of roles** at certain levels.\n" +
@@ -105,6 +105,6 @@ public class ModulePixels extends GuildModule {
 
     @Override
     public String shortDesc(CommandObject command) {
-        return "Allows users to get EXP, as \"pixels\" for server activity.";
+        return "Allows users to getAllCommands EXP, as \"pixels\" for server activity.";
     }
 }

@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.pixels;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
@@ -27,17 +27,17 @@ public class TopUserForRole extends Command {
         // init index value
         int index = 1;
 
-        // try to get role.
+        // try to getAllCommands role.
         IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) {
             try {
-                // if role get fails, try again, but this time assume the first "word" is the rank the user wants to get.
+                // if role getAllCommands fails, try again, but this time assume the first "word" is the rank the user wants to getAllCommands.
                 index = Integer.parseInt(new SplitFirstObject(args).getFirstWord());
             } catch (NumberFormatException e) {
                 // not a valid number, can't find role, bork.
                 return "> Invalid Role";
             }
-            // remove index from string, try to get role again.
+            // remove index from string, try to getAllCommands role again.
             args = new SplitFirstObject(args).getRest();
 
             role = GuildHandler.getRoleFromName(args, command.guild.get());

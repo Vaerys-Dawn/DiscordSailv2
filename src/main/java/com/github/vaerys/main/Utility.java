@@ -1,6 +1,6 @@
 package com.github.vaerys.main;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
@@ -640,7 +640,7 @@ public class Utility {
         //return empty if not creator.
         if (type == SAILType.CREATOR && !commandObject.user.checkIsCreator()) return toReturn;
 
-        //get command list
+        //getAllCommands command list
         switch (type) {
             case DM:
                 toReturn.addAll(commands.stream()

@@ -1,7 +1,7 @@
 
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.setup.SetupBack;
 import com.github.vaerys.commands.setup.SetupNext;
 import com.github.vaerys.enums.ChannelSetting;
@@ -20,7 +20,7 @@ public class SetupWizard extends Command {
     public String execute(String args, CommandObject command) {
         // Lots of sanity checking.
 
-        // Debugging: Clear setup mode until we can get it working.
+        // Debugging: Clear setup mode until we can getAllCommands it working.
         //command.guild.config.setupStage = -1;
         //command.guild.config.setupUser = -1;
         // END DEBUG
@@ -38,7 +38,7 @@ public class SetupWizard extends Command {
         }
 
         // Handle Setup beginning
-        String message = "Hi! I'm " + command.client.bot.displayName + " and I'm here to help you get your server set up.\n" +
+        String message = "Hi! I'm " + command.client.bot.displayName + " and I'm here to help you getAllCommands your server set up.\n" +
                 "This guide will walk you through a bunch of commands and things you can do to make your server exactly the way you want it.\n\n" +
                 "You can navigate forwards and backwards in this setup with **" + new SetupBack().getUsage(command) +
                 "** and **" + new SetupNext().getUsage(command) + "**";

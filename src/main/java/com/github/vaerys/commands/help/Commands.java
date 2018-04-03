@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.objects.XEmbedBuilder;
@@ -27,13 +27,13 @@ public class Commands extends Command {
         List<SAILType> types = new LinkedList<>();
         Map<SAILType, String> pages = new TreeMap<>();
 
-        //get dm commands
-        List<Command> dmCommands = Globals.getCommands(true);
+        //getAllCommands dm commands
+        List<Command> dmCommands = CommandList.getCommands(true);
         //is creator
         if (command.user.checkIsCreator()) {
-            dmCommands.addAll(Globals.getCreatorCommands(true));
+            dmCommands.addAll(CommandList.getCreatorCommands(true));
             //add creator type and page
-            List<Command> creatorCommands = Globals.getCreatorCommands(false);
+            List<Command> creatorCommands = CommandList.getCreatorCommands(false);
             pages.put(SAILType.CREATOR, buildPage(creatorCommands, command, SAILType.CREATOR, types));
             types.add(SAILType.CREATOR);
         }
@@ -69,7 +69,7 @@ public class Commands extends Command {
         boolean typeNull = type == null || !types.contains(type);
         boolean argsNull = args == null || args.isEmpty();
         if (typeNull || argsNull) {
-            //get prefix
+            //getAllCommands prefix
             String prefix = typeNull && !argsNull ? "> There are no commands with the type: **" + args + "**." : "";
             //title
             builder.withTitle("Here are the Command Types I have available for use:");

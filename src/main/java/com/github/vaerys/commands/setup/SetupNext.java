@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.setup;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.handlers.SetupHandler.SetupStage;
 import com.github.vaerys.pogos.GuildConfig;
@@ -15,7 +15,7 @@ public class SetupNext extends SetupCommand {
 
         // check if out of bounds.
         try {
-            // get next ordinal value
+            // getAllCommands next ordinal value
             SetupStage next = SetupStage.values()[config.setupStage.ordinal() + 1];
             if (next == SetupStage.SETUP_COMPLETE) {
                 config.setupStage = SetupStage.SETUP_COMPLETE;

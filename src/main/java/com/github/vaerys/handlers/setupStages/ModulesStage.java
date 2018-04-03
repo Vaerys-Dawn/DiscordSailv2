@@ -1,9 +1,9 @@
 package com.github.vaerys.handlers.setupStages;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.admin.Module;
 import com.github.vaerys.commands.help.HelpModules;
-import com.github.vaerys.guildtoggles.ToggleInit;
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.handlers.StringHandler;
@@ -23,7 +23,7 @@ public class ModulesStage extends SetupHandler {
     @Override
     public void stepText(CommandObject command) {
         StringHandler output = new StringHandler();
-        List<GuildToggle> modules = ToggleInit.getToggles(true);
+        List<GuildToggle> modules = ToggleList.getToggles(true);
 
         output.append("First things first. Obviously.\n");
         output.append("You're going to want to choose which modules you would like to use on your server.\n\n");

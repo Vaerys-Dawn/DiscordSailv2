@@ -1,6 +1,6 @@
 package com.github.vaerys.templates;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 
 public abstract class GuildModule extends GuildToggle {
     public GuildModule() {

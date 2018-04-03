@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.admin.ChannelHere;
 import com.github.vaerys.commands.admin.Module;
 import com.github.vaerys.commands.admin.Toggle;

@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
@@ -69,7 +69,7 @@ public class RulesCode extends Command {
         if (command.guild.config.xpGain) {
             return "Enter the rule code found in the rules to receive a rewards.";
         } else {
-            return "Enter the rule code found in the rules to get a star on your profile.";
+            return "Enter the rule code found in the rules to getAllCommands a star on your profile.";
         }
     }
 

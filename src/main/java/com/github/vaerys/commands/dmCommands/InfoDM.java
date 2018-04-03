@@ -1,11 +1,10 @@
 package com.github.vaerys.commands.dmCommands;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.help.Help;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.DMCommand;
 
@@ -20,14 +19,14 @@ public class InfoDM extends DMCommand {
     public String execute(String args, CommandObject command) {
         List<Command> commands = command.guild.getAllCommands(command);
         if (command.user.longID == command.client.creator.longID) {
-            commands.addAll(Globals.getCreatorCommands(true));
+            commands.addAll(CommandList.getCreatorCommands(true));
         }
 
         String error = "> Could not find information on any commands named **" + args + "**.";
         for (Command c : commands) {
             for (String s : c.names) {
                 if (args.equalsIgnoreCase(s)) {
-                    // if (!Utility.testForPerms(c.perms(), command.user.getToggles(), command.guild.getToggles())) {
+                    // if (!Utility.testForPerms(c.perms(), command.user.getAllToggles(), command.guild.getAllToggles())) {
                     // return error;
                     // }
                     RequestHandler.sendEmbedMessage("", c.getCommandInfo(command), command.channel.get());
@@ -37,7 +36,7 @@ public class InfoDM extends DMCommand {
 
         }
         return error;
-        // List<Command> commands = Utility.getCommandsByType(Globals.getAllCommands(), command, TYPE_DM,
+        // List<Command> commands = Utility.getCommandsByType(Globals.getAll(), command, TYPE_DM,
         // true);
         //
         // for (Command c : commands) {
@@ -68,7 +67,7 @@ public class InfoDM extends DMCommand {
         // aliasBuilder.append(".\n");
         // infoEmbed.appendField("Aliases:", aliasBuilder.toString(), false);
         // }
-        // Utility.sendEmbedMessage("", infoEmbed, command.channel.getToggles());
+        // Utility.sendEmbedMessage("", infoEmbed, command.channel.getAllToggles());
         // return "";
         // }
         // }

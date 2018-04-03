@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.roleSelect;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
@@ -14,8 +14,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.

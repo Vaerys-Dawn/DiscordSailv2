@@ -1,6 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
@@ -113,9 +113,9 @@ public class DMHandler {
 
 //            if (command.)
 //
-//                if (command.message.getToggles().getAttachments().size() > 0) {
+//                if (command.message.getAllToggles().getAttachments().size() > 0) {
 //                    String attachmemts = "";
-//                    for (IMessage.Attachment a : command.message.getToggles().getAttachments()) {
+//                    for (IMessage.Attachment a : command.message.getAllToggles().getAttachments()) {
 //                        attachmemts = "\n" + a.getUrl();
 //                    }
 //                    RequestHandler.sendMessage(logging + attachmemts, ownerDm);

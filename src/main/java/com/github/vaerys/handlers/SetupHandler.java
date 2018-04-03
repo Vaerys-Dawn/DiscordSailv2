@@ -1,6 +1,7 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.setupStages.LoggingSetupStage;
 import com.github.vaerys.handlers.setupStages.ModulesStage;
 import com.github.vaerys.handlers.setupStages.SettingsStage;
@@ -68,7 +69,7 @@ public abstract class SetupHandler {
      * @return false if command isn't run, otherwise true.
      */
     private static boolean handleCommand(CommandObject command, String args) {
-        List<Command> commands = Globals.getSetupCommands();
+        List<Command> commands = CommandList.getSetupCommands();
         IChannel currentChannel = command.channel.get();
         String commandArgs;
         for (Command c : commands) {
@@ -102,7 +103,7 @@ public abstract class SetupHandler {
         // send the title and step text to channel
         if (stage != SetupStage.SETUP_UNSET && stage != SetupStage.SETUP_COMPLETE) {
             //command.setChannel(command.user.getDmChannel());
-            // get stage:
+            // getAllCommands stage:
             SetupHandler currentStage = configStages.get(config.setupStage);
             String titleText = "**__Step " + (stage.ordinal()) + ": " + currentStage.title() + "__**";
             RequestHandler.sendMessage(titleText, command.user.getDmChannel());
@@ -197,7 +198,7 @@ public abstract class SetupHandler {
          *
          * @param stage The current Stage value you are querying against.
          * @return The next Stage, if it exists.
-         * @throws ArrayIndexOutOfBoundsException When attempting to get the next stage after setup is complete.
+         * @throws ArrayIndexOutOfBoundsException When attempting to getAllCommands the next stage after setup is complete.
          */
         public static SetupStage getNextStage(SetupStage stage) throws ArrayIndexOutOfBoundsException {
             // move to next stage
@@ -210,7 +211,7 @@ public abstract class SetupHandler {
          *
          * @param stage The current Stage value you are querying against.
          * @return The next stage, if it exists.
-         * @throws ArrayIndexOutOfBoundsException When attempting to get previous stage when setup is not running.
+         * @throws ArrayIndexOutOfBoundsException When attempting to getAllCommands previous stage when setup is not running.
          */
         public static SetupStage getPrevStage(SetupStage stage) throws ArrayIndexOutOfBoundsException {
             // Get previous ordinal value

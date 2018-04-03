@@ -1,6 +1,6 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.general.EditLinks;
 import com.github.vaerys.commands.general.SetGender;
 import com.github.vaerys.commands.general.SetQuote;

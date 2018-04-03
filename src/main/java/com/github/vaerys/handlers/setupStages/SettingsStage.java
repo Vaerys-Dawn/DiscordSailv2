@@ -1,10 +1,10 @@
 package com.github.vaerys.handlers.setupStages;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.admin.Toggle;
 import com.github.vaerys.commands.help.HelpSettings;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.guildtoggles.ToggleInit;
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.guildtoggles.toggles.DebugMode;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.SetupHandler;
@@ -31,8 +31,8 @@ public class SettingsStage extends SetupHandler {
                 .append("Here's a list of the settings that aren't tied to any specific module.\n");
 
         // Get the settings and modules.
-        List<GuildToggle> globalToggles = ToggleInit.getToggles(false);
-        List<GuildToggle> modules = ToggleInit.getToggles(true);
+        List<GuildToggle> globalToggles = ToggleList.getToggles(false);
+        List<GuildToggle> modules = ToggleList.getToggles(true);
         // Sort settings
         globalToggles.sort(Comparator.comparing(GuildToggle::name));
 
@@ -58,7 +58,7 @@ public class SettingsStage extends SetupHandler {
                 // Is part of a module, remove from list
                 iterator.remove();
             } else {
-                // is not, get extra information...
+                // is not, getAllCommands extra information...
                 if (toggle.enabled(command.guild.config)) enabled.add(toggle.name().toString());
                 else disabled.add(toggle.name().toString());
                 // append to list of things.
@@ -68,7 +68,7 @@ public class SettingsStage extends SetupHandler {
 
         // Send message
         output.append("\nYou can switch settings on and off with **" +
-                Command.get(Toggle.class).getCommand(command) + "** and get more info on each setting with **" +
+                Command.get(Toggle.class).getCommand(command) + "** and getAllCommands more info on each setting with **" +
                 Command.get(HelpSettings.class).getCommand(command) + "**.");
 
         // Append additional enabled/disabled state info.

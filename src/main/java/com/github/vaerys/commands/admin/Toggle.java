@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.help.HelpModules;
 import com.github.vaerys.commands.help.HelpSettings;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.guildtoggles.ToggleInit;
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
@@ -32,7 +32,7 @@ public class Toggle extends Command {
         StringBuilder builder = new StringBuilder();
         if (!args.isEmpty()) {
 
-            GuildToggle toggle = ToggleInit.getGuildToggle(args, isModule);
+            GuildToggle toggle = ToggleList.getGuildToggle(args, isModule);
 
             if (toggle == null) {
                 if (isModule) {

@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
@@ -74,8 +74,8 @@ public class ProfileSettings extends Command {
                         "> Your rank is now hidden."));
             } else if (pixels && toTest == UserSetting.NO_LEVEL_UP_REACTIONS) {
                 builder.append(toggleSetting(userObject, UserSetting.NO_LEVEL_UP_REACTIONS,
-                        "> You will now get reactions added to the message that leveled you up.",
-                        "> You will no longer get reactions added to the message that leveled you up."));
+                        "> You will now getAllCommands reactions added to the message that leveled you up.",
+                        "> You will no longer getAllCommands reactions added to the message that leveled you up."));
             } else if (toTest == UserSetting.PRIVATE_PROFILE) {
                 builder.append(toggleSetting(userObject, UserSetting.PRIVATE_PROFILE,
                         "> Your profile is now public.",

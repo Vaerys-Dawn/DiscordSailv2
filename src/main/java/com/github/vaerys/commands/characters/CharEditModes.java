@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.characters;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CharacterObject;
 import org.apache.commons.lang3.StringUtils;

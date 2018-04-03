@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.creator.directmessages;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.DMCommand;
 
@@ -17,7 +17,7 @@ public class TestDM extends DMCommand {
 //            }
 //        }
 //        return "channel could not be found";
-//        return command.guild.getToggles().getLongID() + "";
+//        return command.guild.getAllToggles().getLongID() + "";
         return "> You've done your testing";
     }
 

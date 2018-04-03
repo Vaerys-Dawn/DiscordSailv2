@@ -1,6 +1,6 @@
 package com.github.vaerys.enums;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.help.Report;
 import com.github.vaerys.commands.help.SilentReport;
 import com.github.vaerys.handlers.GuildHandler;

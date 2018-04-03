@@ -1,6 +1,6 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.general.LastDailyMessage;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;

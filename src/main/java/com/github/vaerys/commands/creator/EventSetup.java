@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.creator;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
@@ -280,7 +280,7 @@ public class EventSetup extends Command {
 
     private String deleteEvent(TimedEvent event) {
         if (Globals.getEvents().remove(event)) return "> Event Deleted.";
-        else return "> You should not get this message.";
+        else return "> You should not getAllCommands this message.";
     }
 
     public String getModes() {

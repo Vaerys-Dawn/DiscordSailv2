@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.modtools;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
@@ -179,7 +179,7 @@ public class ModNote extends Command {
         if (userObject.get() != null) builder.withThumbnail(userObject.get().getAvatarURL());
         else builder.withThumbnail(user.getDefaultAvatarURL());
 
-        // get all notes and put together the bits and bobs
+        // getAllCommands all notes and put together the bits and bobs
         int counter = 0;
         String noteLine = "**Note #%d:**\n%s\n";
         StringHandler content = new StringHandler();
@@ -224,7 +224,7 @@ public class ModNote extends Command {
         builder.withTimestamp(noteObject.getTimestamp() * 1000);
 
         if (noteObject.getEditorId() != -1) {
-            // get editor's info and display it?
+            // getAllCommands editor's info and display it?
             UserObject editor = new UserObject(command.guild.getUserByID(noteObject.getEditorId()), command.guild);
             String editFieldText = "\n\n*Last edited by %s %s*";
             long diff = command.message.getTimestamp().toEpochSecond() - noteObject.getLastEditedTimestamp();

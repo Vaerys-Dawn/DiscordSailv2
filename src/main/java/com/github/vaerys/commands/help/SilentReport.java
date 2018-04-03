@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 
 /**

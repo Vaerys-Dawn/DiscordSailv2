@@ -81,7 +81,7 @@ public class Client {
     }
 
 //    public static ImgurAPI initImgur(List<String> imgurToken) throws IndexOutOfBoundsException {
-//        imgurAPI = new ImgurAPI(imgurToken.getToggles(0), imgurToken.getToggles(1));
+//        imgurAPI = new ImgurAPI(imgurToken.getAllToggles(0), imgurToken.getAllToggles(1));
 //        logger.info("Imgur Account Linked.");
 //        return imgurAPI;
 //    }
