@@ -1,5 +1,6 @@
 package com.github.vaerys.guildtoggles.toggles;
 
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
@@ -43,6 +44,6 @@ public class EditLogging extends GuildSetting {
 
     @Override
     public void setup() {
-        settings.add(new ExtendEditLog());
+        settings.add(ToggleList.getSetting(SAILType.EXTEND_EDIT_LOG));
     }
 }

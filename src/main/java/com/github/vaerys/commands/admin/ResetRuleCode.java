@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IMessage;
@@ -22,8 +22,8 @@ public class ResetRuleCode extends Command {
                 p.getSettings().remove(UserSetting.READ_RULES);
             }
         }
-        for (IUser u: command.guild.getUsers()){
-            GuildHandler.checkUsersRoles(u.getLongID(),command.guild);
+        for (IUser u : command.guild.getUsers()) {
+            GuildHandler.checkUsersRoles(u.getLongID(), command.guild);
         }
         RequestHandler.deleteMessage(working);
         return "Done. The Rule code tag has been removed off all profiles.";

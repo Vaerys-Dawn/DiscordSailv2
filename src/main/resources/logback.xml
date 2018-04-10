@@ -37,7 +37,7 @@
             <minIndex>1</minIndex>
             <maxIndex>4</maxIndex>
         </rollingPolicy>
-        <triggeringPolicy class="com.github.vaerys.objects.TriggerOncePolicy"/>
+        <triggeringPolicy class="com.github.vaerys.utilobjects.TriggerOncePolicy"/>
     </appender>
 
     <root level="TRACE">

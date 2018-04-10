@@ -4,6 +4,8 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.modules.*;
 import com.github.vaerys.guildtoggles.toggles.*;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.templates.GuildModule;
+import com.github.vaerys.templates.GuildSetting;
 import com.github.vaerys.templates.GuildToggle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +20,7 @@ public class ToggleList {
 
     final static Logger logger = LoggerFactory.getLogger(ToggleList.class);
 
-    private static final List<GuildToggle> guildSettings = new ArrayList<GuildToggle>() {{
+    private static final List<GuildSetting> guildSettings = new ArrayList<GuildSetting>() {{
         add(new AdminLogging());
         add(new AutoArtPinning());
         add(new ChannelLogging());
@@ -38,7 +40,6 @@ public class ToggleList {
         add(new RoleIsToggle());
         add(new SendJoinMessages());
         add(new ShitpostFiltering());
-        add(new ModuleSlash());
         add(new UserRoleLogging());
         add(new UseTimeStamps());
         add(new Voting());
@@ -51,11 +52,12 @@ public class ToggleList {
         add(new LikeArt());
         add(new DebugMode());
         add(new StopSpamWalls());
-        add(new ModuleRuleRewards());
     }};
 
-    private static final List<GuildToggle> guildModules = new ArrayList<GuildToggle>() {{
+    private static final List<GuildModule> guildModules = new ArrayList<GuildModule>() {{
         //modules
+        add(new ModuleSlash());
+        add(new ModuleRuleRewards());
         add(new ModuleGroups());
         add(new ModuleChars());
         add(new ModuleComp());
@@ -83,6 +85,7 @@ public class ToggleList {
             logger.trace("Validating Tag: " + t.getClass().getName());
             String errorReport = t.validate();
             Globals.addToErrorStack(errorReport);
+            t.setup();
         }
     }
 
@@ -91,8 +94,8 @@ public class ToggleList {
     }
 
     public static List<GuildToggle> getToggles(boolean isModule) {
-        if (isModule) return guildModules;
-        return guildSettings;
+        if (isModule) return new ArrayList<>(guildModules);
+        return new ArrayList<>(guildSettings);
     }
 
     public static GuildToggle getGuildToggle(String args, boolean isModule) {
@@ -114,6 +117,66 @@ public class ToggleList {
             }
         }
         throw new IllegalArgumentException("Could not find Toggle (" + obj.getName() + ")");
+    }
+
+    public static GuildSetting getSetting(SAILType obj) {
+        for (GuildSetting c : guildSettings) {
+            if (c.name() == obj) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Could not find Setting of SAILType: " + obj);
+    }
+
+    public static GuildModule getModule(SAILType obj) {
+        for (GuildModule c : guildModules) {
+            if (c.name() == obj) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Could not find Module of SAILType: " + obj);
+    }
+//
+//    public static GuildSetting getSetting(Class obj) {
+//        if (!GuildSetting.class.isAssignableFrom(obj)) {
+//            throw new IllegalArgumentException("Cannot Get Setting from Class (" + obj.getName() + ")");
+//        }
+//        for (GuildSetting c : guildSettings) {
+//            if (c.getClass().getName().equals(obj.getName())) {
+//                return c;
+//            }
+//        }
+//        throw new IllegalArgumentException("Could not find Setting (" + obj.getName() + ")");
+//    }
+//
+//    public static GuildModule getModule(Class obj) {
+//        if (!GuildModule.class.isAssignableFrom(obj)) {
+//            throw new IllegalArgumentException("Cannot Get Module from Class (" + obj.getName() + ")");
+//        }
+//        for (GuildModule c : guildModules) {
+//            if (c.getClass().getName().equals(obj.getName())) {
+//                return c;
+//            }
+//        }
+//        throw new IllegalArgumentException("Could not find Module (" + obj.getName() + ")");
+//    }
+
+    public static List<GuildSetting> getSettings(boolean validate) {
+        if (validate) validate(new ArrayList<>(guildSettings));
+        return guildSettings;
+    }
+
+    public static List<GuildSetting> getSettings() {
+        return getSettings(false);
+    }
+
+    public static List<GuildModule> getModules(boolean validate) {
+        if (validate) validate(new ArrayList<>(guildModules));
+        return guildModules;
+    }
+
+    public static List<GuildModule> getModules() {
+        return getModules(false);
     }
 }
 

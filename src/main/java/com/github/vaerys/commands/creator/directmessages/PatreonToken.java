@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.creator.directmessages;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.DMCommand;
 
 import java.util.ArrayList;

@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.modtools;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.cctags.TagRemoveMentions;
 import com.github.vaerys.tags.cctags.TagRemoveSanitizeTag;

@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.cache.LongMap;
@@ -21,7 +21,7 @@ public class PropMutePerms extends Command {
             return "> I do not have permission to run this command. I need to have Manage Channels.";
         }
 
-        // getAllCommands current channel's "Muted" role perms
+        // get current channel's "Muted" role perms
         IRole mutedRole = command.guild.getMutedRole();
         if (mutedRole == null) return "> No muted role set.";
         LongMap<PermissionOverride> roleOverrides = command.channel.get().getRoleOverrides();

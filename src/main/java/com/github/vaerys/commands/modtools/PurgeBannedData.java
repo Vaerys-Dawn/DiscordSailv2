@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.modtools;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.ProfileObject;
@@ -51,7 +51,7 @@ public class PurgeBannedData extends Command {
             //do nothing
         }
         if (!command.client.bot.get().getPermissionsForGuild(command.guild.get()).contains(Permissions.BAN)) {
-            return "> I cant purge the data of banned user unless I getAllCommands the ban permission.\n" +
+            return "> I cant purge the data of banned user unless I get the ban permission.\n" +
                     "Feel free to remove the permission after you purge the data as I don't need it.";
         }
         if (userId != -1 && userStringID != null) {

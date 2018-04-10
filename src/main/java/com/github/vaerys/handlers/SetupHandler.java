@@ -10,6 +10,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
@@ -103,7 +104,7 @@ public abstract class SetupHandler {
         // send the title and step text to channel
         if (stage != SetupStage.SETUP_UNSET && stage != SetupStage.SETUP_COMPLETE) {
             //command.setChannel(command.user.getDmChannel());
-            // getAllCommands stage:
+            // get stage:
             SetupHandler currentStage = configStages.get(config.setupStage);
             String titleText = "**__Step " + (stage.ordinal()) + ": " + currentStage.title() + "__**";
             RequestHandler.sendMessage(titleText, command.user.getDmChannel());
@@ -157,7 +158,7 @@ public abstract class SetupHandler {
      * @param command A {@link CommandObject} passed to each setup instance.
      * @return A string value representing the text output.
      * @see RequestHandler#sendMessage(String, IChannel)
-     * @see com.github.vaerys.objects.XEmbedBuilder
+     * @see XEmbedBuilder
      */
     public abstract void stepText(CommandObject command);
 
@@ -198,7 +199,7 @@ public abstract class SetupHandler {
          *
          * @param stage The current Stage value you are querying against.
          * @return The next Stage, if it exists.
-         * @throws ArrayIndexOutOfBoundsException When attempting to getAllCommands the next stage after setup is complete.
+         * @throws ArrayIndexOutOfBoundsException When attempting to get the next stage after setup is complete.
          */
         public static SetupStage getNextStage(SetupStage stage) throws ArrayIndexOutOfBoundsException {
             // move to next stage
@@ -211,7 +212,7 @@ public abstract class SetupHandler {
          *
          * @param stage The current Stage value you are querying against.
          * @return The next stage, if it exists.
-         * @throws ArrayIndexOutOfBoundsException When attempting to getAllCommands previous stage when setup is not running.
+         * @throws ArrayIndexOutOfBoundsException When attempting to get previous stage when setup is not running.
          */
         public static SetupStage getPrevStage(SetupStage stage) throws ArrayIndexOutOfBoundsException {
             // Get previous ordinal value

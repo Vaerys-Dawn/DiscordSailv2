@@ -6,7 +6,7 @@ import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.objects.EventAvatar;
-import com.github.vaerys.objects.PatreonAPI;
+import com.github.vaerys.utilobjects.PatreonAPI;
 import com.github.vaerys.objects.TimedEvent;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
@@ -19,7 +19,6 @@ import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.handle.obj.IEmoji;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
 

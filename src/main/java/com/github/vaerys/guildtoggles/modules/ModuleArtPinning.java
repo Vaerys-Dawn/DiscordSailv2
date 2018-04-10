@@ -1,5 +1,6 @@
 package com.github.vaerys.guildtoggles.modules;
 
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.admin.SetPinLimit;
 import com.github.vaerys.enums.ChannelSetting;
@@ -8,6 +9,7 @@ import com.github.vaerys.guildtoggles.toggles.AutoArtPinning;
 import com.github.vaerys.guildtoggles.toggles.LikeArt;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -45,9 +47,9 @@ public class ModuleArtPinning extends GuildModule {
     @Override
     public void setup() {
         channels.add(ChannelSetting.ART);
-        commands.add(new SetPinLimit());
-        settings.add(new AutoArtPinning());
-        settings.add(new LikeArt());
+        commands.add(Command.get(SetPinLimit.class));
+        settings.add(ToggleList.getSetting(SAILType.AUTO_ART_PINNING));
+        settings.add(ToggleList.getSetting(SAILType.LIKE_ART));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
 
@@ -41,7 +41,7 @@ public class ModuleSlash extends GuildModule {
 
     @Override
     public String stats(CommandObject command) {
-        return desc(command);
+        return null;
     }
 
     @Override

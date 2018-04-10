@@ -1,15 +1,15 @@
 package com.github.vaerys.commands.creator;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.TimedEvent;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -280,7 +280,7 @@ public class EventSetup extends Command {
 
     private String deleteEvent(TimedEvent event) {
         if (Globals.getEvents().remove(event)) return "> Event Deleted.";
-        else return "> You should not getAllCommands this message.";
+        else return "> You should not get this message.";
     }
 
     public String getModes() {

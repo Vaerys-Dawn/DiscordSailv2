@@ -154,7 +154,7 @@ public class PixelHandler {
      * @param object the container for all relevant API content.
      */
     public static void grantXP(CommandObject object) {
-        //bots don't getAllCommands XP
+        //bots don't get XP
         if (object.user.get().isBot()) return;
 
         //creates a profile for the user if they don't already have one.
@@ -221,7 +221,7 @@ public class PixelHandler {
     private static void handleLevelUp(ProfileObject user, CommandObject object) {
         RewardRoleObject reward = null;
 
-        //getAllCommands next level xp
+        //get next level xp
         long nextLevelXp = totalXPForLevel(user.getCurrentLevel() + 1);
 
         //sanity check the level
@@ -278,7 +278,7 @@ public class PixelHandler {
             userState = defaultOverride;
         }
 
-        //getAllCommands custom level up message.
+        //get custom level up message.
         StringHandler levelUpMessage = new StringHandler(object.guild.config.levelUpMessage);
 
         //handle level up tags
@@ -353,7 +353,7 @@ public class PixelHandler {
         if (object.guild.config.levelUpReaction.equalsIgnoreCase("null")) return;
         ReactionEmoji emoji;
 
-        //getAllCommands Emoji
+        //get Emoji
         try {
             long emojiID = Long.parseUnsignedLong(object.guild.config.levelUpReaction);
             emoji = ReactionEmoji.of(object.client.getEmojiByID(emojiID));
@@ -612,7 +612,7 @@ public class PixelHandler {
 //                    }
 //                    if (user.getSettings().contains(HIT_LEVEL_FLOOR)) {
 //                        for (int i = 0; i < user.getSettings().size(); i++) {
-//                            if (user.getSettings().getAllCommands(i) == HIT_LEVEL_FLOOR) {
+//                            if (user.getSettings().get(i) == HIT_LEVEL_FLOOR) {
 //                                user.getSettings().remove(i);
 //                            }
 //                        }
@@ -643,39 +643,39 @@ public class PixelHandler {
 //            }
 //            List<IChannel> levelDenied = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP_DENIED);
 //            List<IChannel> levelUpChannel = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP);
-//            if (levelDenied.size() != 0 && levelDenied.contains(object.channel.getAllCommands())) {
+//            if (levelDenied.size() != 0 && levelDenied.contains(object.channel.get())) {
 //                if (userOverride != SEND_LVLUP_DMS || userOverride != SEND_LVLUP_RANK_CHANNEL && levelUpChannel.size() == 0) {
 //                    userOverride = DONT_SEND_LVLUP;
 //                }
 //            }
 //            switch (userOverride) {
 //                case SEND_LVLUP_CURRENT_CHANNEL:
-//                    selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.getAllCommands()).getAllCommands();
+//                    selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
 //                    break;
 //                case SEND_LVLUP_RANK_CHANNEL:
 //                    IChannel channel = null;
 //                    if (levelUpChannel.size() != 0) {
-//                        channel = levelUpChannel.getAllCommands(0);
+//                        channel = levelUpChannel.get(0);
 //                    }
 //                    if (channel != null) {
-//                        if (channel.getModifiedPermissions(object.client.bot.getAllCommands()).contains(Permissions.ATTACH_FILES)) {
+//                        if (channel.getModifiedPermissions(object.client.bot.get()).contains(Permissions.ATTACH_FILES)) {
 //                            if (rankedup) {
 //                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, channel);
 //                            } else {
 //                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, channel);
 //                            }
 //                        } else {
-//                            RequestHandler.sendMessage(levelUpMessage.toString(), channel).getAllCommands();
+//                            RequestHandler.sendMessage(levelUpMessage.toString(), channel).get();
 //                        }
 //                    } else {
-//                        selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.getAllCommands()).getAllCommands();
+//                        selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
 //                    }
 //                    break;
 //                case SEND_LVLUP_DMS:
 //                    if (rankedup) {
-//                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.user.getAllCommands().getOrCreatePMChannel());
+//                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel());
 //                    } else {
-//                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.user.getAllCommands().getOrCreatePMChannel());
+//                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel());
 //                    }
 //                    break;
 //                case DONT_SEND_LVLUP:
@@ -714,7 +714,7 @@ public class PixelHandler {
 //            IEmoji customEmoji = null;
 //            Emoji emoji = EmojiManager.getByUnicode(object.guild.config.levelUpReaction);
 //            boolean found = false;
-//            for (IGuild g : object.client.getAllCommands().getGuilds()) {
+//            for (IGuild g : object.client.get().getGuilds()) {
 //                IEmoji test;
 //                try {
 //                    long emojiId = Long.parseLong(object.guild.config.levelUpReaction);
@@ -735,7 +735,7 @@ public class PixelHandler {
 //            if (object.guild.config.levelUpReaction.equalsIgnoreCase("null")) return;
 //            if (found == false) {
 //                IChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
-//                if (adminChannel == null) adminChannel = object.channel.getAllCommands();
+//                if (adminChannel == null) adminChannel = object.channel.get();
 //                RequestHandler.sendMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
 //                return;
 //            }
@@ -743,9 +743,9 @@ public class PixelHandler {
 //            RequestBuffer.request(() -> {
 //                try {
 //                    if (emoji != null) {
-//                        object.message.getAllCommands().addReaction(emoji);
+//                        object.message.get().addReaction(emoji);
 //                    } else if (finalCustomEmoji != null) {
-//                        object.message.getAllCommands().addReaction(finalCustomEmoji);
+//                        object.message.get().addReaction(finalCustomEmoji);
 //                    }
 //                } catch (DiscordException e) {
 //                    logger.error("Discord didn't like the custom emoji that guild with id: " + object.guild.longID + " chose for a levelUp react.");

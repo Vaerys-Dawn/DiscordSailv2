@@ -9,7 +9,7 @@ import com.github.vaerys.masterobjects.ChannelObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.MessageObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -55,6 +55,7 @@ public class RequestHandler {
             //message and channel checking
             if (!Globals.client.isReady()) return null;
             if (message == null || message.isEmpty()) return null;
+            if (channel == null) return null;
             if (message.length() > 2000) {
                 StringHandler error = new StringHandler("> Could not send message, Too large. ")
                         .append("Please contact my developer by sending me a **Direct Message** with the **Command Name** that caused this message.");
@@ -62,7 +63,6 @@ public class RequestHandler {
                 sendError("Could not send message, Too Large.", message, channel);
                 return null;
             }
-            if (channel == null) return null;
             if (StringUtils.containsOnly(message, "\n")) return null;
             if (StringUtils.isBlank(message)) return null;
             try {

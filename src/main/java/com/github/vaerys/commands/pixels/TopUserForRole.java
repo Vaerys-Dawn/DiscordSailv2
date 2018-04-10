@@ -1,15 +1,15 @@
 package com.github.vaerys.commands.pixels;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
@@ -27,17 +27,17 @@ public class TopUserForRole extends Command {
         // init index value
         int index = 1;
 
-        // try to getAllCommands role.
+        // try to get role.
         IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) {
             try {
-                // if role getAllCommands fails, try again, but this time assume the first "word" is the rank the user wants to getAllCommands.
+                // if role get fails, try again, but this time assume the first "word" is the rank the user wants to get.
                 index = Integer.parseInt(new SplitFirstObject(args).getFirstWord());
             } catch (NumberFormatException e) {
                 // not a valid number, can't find role, bork.
                 return "> Invalid Role";
             }
-            // remove index from string, try to getAllCommands role again.
+            // remove index from string, try to get role again.
             args = new SplitFirstObject(args).getRest();
 
             role = GuildHandler.getRoleFromName(args, command.guild.get());

@@ -1,17 +1,20 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandList;
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +30,7 @@ public class Commands extends Command {
         List<SAILType> types = new LinkedList<>();
         Map<SAILType, String> pages = new TreeMap<>();
 
-        //getAllCommands dm commands
+        //get dm commands
         List<Command> dmCommands = CommandList.getCommands(true);
         //is creator
         if (command.user.checkIsCreator()) {
@@ -69,7 +72,7 @@ public class Commands extends Command {
         boolean typeNull = type == null || !types.contains(type);
         boolean argsNull = args == null || args.isEmpty();
         if (typeNull || argsNull) {
-            //getAllCommands prefix
+            //get prefix
             String prefix = typeNull && !argsNull ? "> There are no commands with the type: **" + args + "**." : "";
             //title
             builder.withTitle("Here are the Command Types I have available for use:");

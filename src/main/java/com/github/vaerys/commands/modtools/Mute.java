@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.modtools;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
@@ -40,8 +40,10 @@ public class Mute extends Command {
 
         // Un mute subtype
         if (UN_MUTE.isSubCommand(command)) {
-            if (!muted.roles.contains(mutedRole)) return "> " + muted.displayName + " is not muted.";
             command.guild.users.unMuteUser(muted.longID, command.guild.longID);
+            if (!muted.roles.contains(mutedRole)) {
+                return "> " + muted.displayName + " is not muted.";
+            }
             return "> " + muted.displayName + " was UnMuted.";
         }
 

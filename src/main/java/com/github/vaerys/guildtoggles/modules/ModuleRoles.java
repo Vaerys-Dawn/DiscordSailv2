@@ -42,6 +42,7 @@ public class ModuleRoles extends GuildModule {
 
     @Override
     public void setup() {
+
     }
 
     @Override

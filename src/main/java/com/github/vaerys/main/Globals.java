@@ -119,7 +119,8 @@ public class Globals {
         logger.info(CommandList.getSetupCommands(true).size() + " Setup Commands Loaded.");
         logger.info(SAILType.values().length + " SAIL Types Loaded.");
         logger.info(ChannelSetting.values().length + " Channel Types Loaded.");
-        logger.info(ToggleList.getAllToggles(true).size() + " Guild Toggles Loaded.");
+        logger.info(ToggleList.getSettings(true).size() + " Guild Settings Loaded.");
+        logger.info(ToggleList.getModules(true).size() + " Guild Modules Loaded.");
         logger.info(TagList.get(true).size() + " Tags Loaded.");
     }
 

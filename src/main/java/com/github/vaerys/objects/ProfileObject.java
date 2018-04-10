@@ -1,11 +1,11 @@
 package com.github.vaerys.objects;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.pogos.GuildConfig;
@@ -28,12 +28,11 @@ public class ProfileObject {
     long userID;
     long xp = 0;
     long currentLevel = -1;
-    String gender = "Unknown";
+    String gender = defaultGender;
     String quote = defaultQuote;
     ArrayList<UserSetting> settings = new ArrayList<>();
     ArrayList<UserLinkObject> links = new ArrayList<>();
     public List<ModNoteObject> modNotes;
-    private String defaultAvatarURL;
 
     public ProfileObject(long userID) {
         this.userID = userID;
@@ -204,4 +203,18 @@ public class ProfileObject {
     }
 
 
+    public void toggleSetting(UserSetting setting) {
+        if (!settings.remove(setting)) {
+            settings.add(setting);
+        }
+    }
+
+    public String toggleSetting(UserSetting setting, String remove, String add) {
+        if (settings.remove(setting)) {
+            return remove;
+        } else {
+            settings.add(setting);
+            return add;
+        }
+    }
 }

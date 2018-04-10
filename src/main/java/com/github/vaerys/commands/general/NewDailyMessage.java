@@ -1,6 +1,5 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
@@ -8,6 +7,7 @@ import com.github.vaerys.handlers.QueueHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;

@@ -8,7 +8,7 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ public abstract class Command {
      * The code to be executed when the command is ran
      *
      * @param args    - The args passed to the command
-     * @param command - The command object to getAllCommands data about where the command was sent from
+     * @param command - The command object to get data about where the command was sent from
      * @return The text or data to send back for the command
      */
     public abstract String execute(String args, CommandObject command);

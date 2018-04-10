@@ -1,13 +1,14 @@
 package com.github.vaerys.commands.modtools;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.*;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.text.SimpleDateFormat;
@@ -179,7 +180,7 @@ public class ModNote extends Command {
         if (userObject.get() != null) builder.withThumbnail(userObject.get().getAvatarURL());
         else builder.withThumbnail(user.getDefaultAvatarURL());
 
-        // getAllCommands all notes and put together the bits and bobs
+        // get all notes and put together the bits and bobs
         int counter = 0;
         String noteLine = "**Note #%d:**\n%s\n";
         StringHandler content = new StringHandler();
@@ -224,7 +225,7 @@ public class ModNote extends Command {
         builder.withTimestamp(noteObject.getTimestamp() * 1000);
 
         if (noteObject.getEditorId() != -1) {
-            // getAllCommands editor's info and display it?
+            // get editor's info and display it?
             UserObject editor = new UserObject(command.guild.getUserByID(noteObject.getEditorId()), command.guild);
             String editFieldText = "\n\n*Last edited by %s %s*";
             long diff = command.message.getTimestamp().toEpochSecond() - noteObject.getLastEditedTimestamp();

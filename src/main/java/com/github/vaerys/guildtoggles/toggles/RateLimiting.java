@@ -4,6 +4,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.modtools.SetRateLimit;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildSetting;
 
 /**
@@ -43,6 +44,6 @@ public class RateLimiting extends GuildSetting {
 
     @Override
     public void setup() {
-        commands.add(new SetRateLimit());
+        commands.add(Command.get(SetRateLimit.class));
     }
 }

@@ -5,6 +5,7 @@ import com.github.vaerys.commands.general.LastDailyMessage;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildSetting;
 
 /**
@@ -44,7 +45,7 @@ public class DailyMessage extends GuildSetting {
 
     @Override
     public void setup() {
-        commands.add(new LastDailyMessage());
+        commands.add(Command.get(LastDailyMessage.class));
     }
 
 }

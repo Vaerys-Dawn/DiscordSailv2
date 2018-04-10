@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.dmCommands;
 
 import com.github.vaerys.commands.CommandList;
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.help.Commands;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.DMCommand;
 

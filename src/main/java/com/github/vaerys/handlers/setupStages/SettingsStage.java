@@ -10,7 +10,7 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
 
@@ -58,7 +58,7 @@ public class SettingsStage extends SetupHandler {
                 // Is part of a module, remove from list
                 iterator.remove();
             } else {
-                // is not, getAllCommands extra information...
+                // is not, get extra information...
                 if (toggle.enabled(command.guild.config)) enabled.add(toggle.name().toString());
                 else disabled.add(toggle.name().toString());
                 // append to list of things.
@@ -68,7 +68,7 @@ public class SettingsStage extends SetupHandler {
 
         // Send message
         output.append("\nYou can switch settings on and off with **" +
-                Command.get(Toggle.class).getCommand(command) + "** and getAllCommands more info on each setting with **" +
+                Command.get(Toggle.class).getCommand(command) + "** and get more info on each setting with **" +
                 Command.get(HelpSettings.class).getCommand(command) + "**.");
 
         // Append additional enabled/disabled state info.

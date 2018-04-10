@@ -195,6 +195,10 @@ public class GuildHandler {
         return canBypass(user.get(), guild.get());
     }
 
+    public static boolean canBypass(CommandObject command) {
+        return canBypass(command.user.get(), command.guild.get());
+    }
+
     public static boolean testForPerms(IUser user, IGuild guild, Permissions... perms) {
         if (perms.length == 0) return true;
         if (guild == null) return true;
@@ -253,4 +257,6 @@ public class GuildHandler {
     public static boolean testForPerms(CommandObject command, ChannelObject channel, Permissions... perms) {
         return testForPerms(command,channel.get(),perms);
     }
+
+
 }

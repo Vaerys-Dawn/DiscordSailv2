@@ -95,7 +95,7 @@ public class NewCC extends Command {
 
         for (Command c : command.guild.commands) {
 
-            // getAllCommands all commands names.
+            // get all commands names.
             List<String> names = new ArrayList<>(Arrays.asList(c.names));
             for (SubCommandObject sc : c.subCommands) {
                 names.addAll(Arrays.asList(sc.getNames()));

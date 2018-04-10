@@ -41,7 +41,7 @@ public class InfoHandler {
         String lastChunk;
         String nextChunk;
         String imageTag;
-        String[] splited;
+        String[] split;
         String imagePrefix = "<image>{";
         String imageSuffix = "}";
         String tagBreak = "<split>";
@@ -54,9 +54,9 @@ public class InfoHandler {
                 //code for image handling
                 if (builder.toString().contains(imagePrefix)) {
                     imageTag = imagePrefix + StringUtils.substringBetween(builder.toString(), imagePrefix, imageSuffix) + imageSuffix;
-                    splited = builder.toString().split(Pattern.quote(imageTag));
-                    lastChunk = splited[0];
-                    nextChunk = splited[1];
+                    split = builder.toString().split(Pattern.quote(imageTag));
+                    lastChunk = split[0];
+                    nextChunk = split[1];
                     stringChunks.add(lastChunk);
                     stringChunks.add(imageTag);
                     builder.delete(0, builder.length());
@@ -64,9 +64,9 @@ public class InfoHandler {
                 }
                 // tag tells the system to save chunk and move to the next one
                 if (builder.toString().contains(tagBreak)) {
-                    splited = builder.toString().split(Pattern.quote(tagBreak));
-                    lastChunk = splited[0];
-                    nextChunk = splited[1];
+                    split = builder.toString().split(Pattern.quote(tagBreak));
+                    lastChunk = split[0];
+                    nextChunk = split[1];
                     stringChunks.add(lastChunk);
                     builder.delete(0, builder.length());
                     builder.append(nextChunk);

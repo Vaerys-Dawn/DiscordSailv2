@@ -1,8 +1,8 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
@@ -63,7 +63,7 @@ public class Test extends Command {
 //        output.append("\n");
 //
 //        output.append("You can switch settings on and off with **" +
-//                new Toggle().getCommand(command) + "** and getAllCommands more info on each setting with **" +
+//                new Toggle().getCommand(command) + "** and get more info on each setting with **" +
 //                new HelpSettings().getCommand(command) + "**.");
 //
 //        XEmbedBuilder embed = new XEmbedBuilder(command);

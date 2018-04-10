@@ -3,7 +3,7 @@ package com.github.vaerys.templates;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.tags.TagList;
 import org.apache.commons.lang3.StringUtils;
 

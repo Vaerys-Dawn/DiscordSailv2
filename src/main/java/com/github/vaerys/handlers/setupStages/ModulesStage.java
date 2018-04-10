@@ -7,7 +7,7 @@ import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.handlers.StringHandler;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.GuildToggle;
 
 import java.util.Comparator;

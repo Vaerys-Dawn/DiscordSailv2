@@ -1,15 +1,17 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.commands.pixels.DenyXpPrefix;
 import com.github.vaerys.commands.pixels.PixelHelp;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.guildtoggles.toggles.*;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
@@ -42,7 +44,7 @@ public class ModulePixels extends GuildModule {
     @Override
     public String desc(CommandObject command) {
         if (command.guild.get() == null) {
-            return "Error, you should not getAllCommands this message. if you do please report this to the bot developer.";
+            return "Error, you should not get this message. if you do please report this to the bot developer.";
         }
         return "This module enables **" + command.client.bot.displayName + "'s** XP system known as pixels.\n" +
                 "> Pixels are a xp system that allows the **granting of roles** at certain levels.\n" +
@@ -58,18 +60,18 @@ public class ModulePixels extends GuildModule {
 
     @Override
     public void setup() {
-        commands.add(new DenyXpPrefix());
+        commands.add(Command.get(DenyXpPrefix.class));
 
         channels.add(ChannelSetting.LEVEL_UP);
         channels.add(ChannelSetting.PIXELS);
         channels.add(ChannelSetting.LEVEL_UP_DENIED);
         channels.add(ChannelSetting.XP_DENIED);
 
-        settings.add(new XpDecay());
-        settings.add(new XpGain());
-        settings.add(new SelfDestructLevelUps());
-        settings.add(new ReactToLevelUp());
-        settings.add(new LikeArt());
+        settings.add(ToggleList.getSetting(SAILType.XP_DECAY));
+        settings.add(ToggleList.getSetting(SAILType.XP_GAIN));
+        settings.add(ToggleList.getSetting(SAILType.SELF_DESTRUCT_LEVEL_UPS));
+        settings.add(ToggleList.getSetting(SAILType.REACT_TO_LEVEL_UP));
+        settings.add(ToggleList.getSetting(SAILType.LIKE_ART));
     }
 
     @Override
@@ -105,6 +107,6 @@ public class ModulePixels extends GuildModule {
 
     @Override
     public String shortDesc(CommandObject command) {
-        return "Allows users to getAllCommands EXP, as \"pixels\" for server activity.";
+        return "Allows users to get EXP, as \"pixels\" for server activity.";
     }
 }

@@ -3,9 +3,7 @@ package com.github.vaerys.tags;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.tags.cctags.*;
-import com.github.vaerys.tags.infotags.TagChannel;
-import com.github.vaerys.tags.infotags.TagDisplayName;
-import com.github.vaerys.tags.infotags.TagEmoji;
+import com.github.vaerys.tags.infotags.*;
 import com.github.vaerys.tags.leveluptags.TagLevel;
 import com.github.vaerys.tags.leveluptags.TagUser;
 import com.github.vaerys.templates.TagObject;
@@ -22,7 +20,7 @@ public class TagList {
 
     final static Logger logger = LoggerFactory.getLogger(TagList.class);
 
-    private static final List<TagObject> tags = new ArrayList<TagObject>(){{
+    private static final List<TagObject> tags = new ArrayList<TagObject>() {{
         //args
         add(new TagSearchTags(0, TagType.CC));
         add(new TagIfArgsEmpty(1, TagType.CC));
@@ -40,6 +38,7 @@ public class TagList {
         add(new TagDisplayName(10, TagType.INFO));
         add(new TagServer(10, TagType.CC, TagType.JOIN_MESSAGES));
         add(new TagChannelMention(10, TagType.CC));
+        add(new TagSplit(10, TagType.INFO));
         //single args
         add(new TagSingleArgs(20, TagType.CC));
         //random tags (part 1)
@@ -72,6 +71,7 @@ public class TagList {
         add(new TagDelCall(85, TagType.CC));
         add(new TagRemoveMentions(100, TagType.CC, TagType.DAILY, TagType.INFO));
         add(new TagEmbedImage(999, TagType.CC));
+        add(new TagImage(999, TagType.INFO));
     }};
 
     public static List<TagObject> get(boolean validate) {

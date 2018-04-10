@@ -7,7 +7,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.pogos.GuildConfig;
 
 import java.util.ArrayList;
@@ -23,11 +23,6 @@ public abstract class GuildToggle {
     public List<Command> commands = new ArrayList<>();
     public List<GuildSetting> settings = new ArrayList<>();
     public List<ChannelSetting> channels = new ArrayList<>();
-
-    public GuildToggle() {
-        setup();
-    }
-
 
     public void execute(GuildObject guild) {
         guild.removeCommandsByType(affectsType);

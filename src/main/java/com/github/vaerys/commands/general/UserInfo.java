@@ -1,17 +1,17 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
@@ -43,12 +43,12 @@ public class UserInfo extends Command {
         ProfileObject profile = user.getProfile(command.guild);
         if (profile == null && user.get().isBot()) {
             if (user.get().getPresence().getStatus().equals(StatusType.OFFLINE) || user.get().getPresence().getStatus().equals(StatusType.UNKNOWN)) {
-                return "> Could not getAllCommands a profile for " + user.displayName + ".";
+                return "> Could not get a profile for " + user.displayName + ".";
             }
             profile = new ProfileObject(user.longID);
             command.guild.users.addUser(profile);
         } else if (profile == null) {
-            return "> Could not getAllCommands a profile for " + user.displayName + ".";
+            return "> Could not get a profile for " + user.displayName + ".";
         }
         if (!GuildHandler.testForPerms(command, Permissions.ADMINISTRATOR) &&
                 (user.isPrivateProfile(command.guild) && user.longID != command.user.longID)) {
@@ -93,7 +93,6 @@ public class UserInfo extends Command {
         StringBuilder footer = new StringBuilder();
         if (profile.getSettings().contains(UserSetting.READ_RULES) && command.guild.config.readRuleReward) {
             builder.withFooterIcon(Constants.STICKER_STAR_URL);
-//            builder.withFooterIcon("https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/glowing-star_1f31f.png");
         }
         if (command.guild.config.userInfoShowsDate) {
             builder.withTimestamp(user.get().getCreationDate());
@@ -126,8 +125,12 @@ public class UserInfo extends Command {
         desc.append("\n\n*" + profile.getQuote() + "*");
         desc.append("\n" + Utility.listFormatter(links, true));
 
+        //Author Icon
         if (user.isPatron) {
             builder.withAuthorIcon(Constants.PATREON_ICON_URL);
+        }
+        if (user.longID == 153159020528533505L) {
+            builder.withAuthorIcon(Constants.DEV_IMAGE_URL);
         }
 
         builder.withDesc(desc.toString());

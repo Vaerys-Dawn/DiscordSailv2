@@ -5,6 +5,7 @@ import com.github.vaerys.commands.modtools.Mute;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
@@ -41,7 +42,7 @@ public class ModuleModMuting extends GuildModule {
 
     @Override
     public void setup() {
-        commands.add(new Mute());
+        commands.add(Command.get(Mute.class));
     }
 
     @Override

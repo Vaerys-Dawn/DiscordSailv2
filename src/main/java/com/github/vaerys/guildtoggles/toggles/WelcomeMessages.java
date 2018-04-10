@@ -4,6 +4,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.admin.SetJoinMessage;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildSetting;
 
 /**
@@ -43,6 +44,6 @@ public class WelcomeMessages extends GuildSetting {
 
     @Override
     public void setup() {
-        commands.add(new SetJoinMessage());
+        commands.add(Command.get(SetJoinMessage.class));
     }
 }

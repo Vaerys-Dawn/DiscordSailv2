@@ -1,5 +1,6 @@
 package com.github.vaerys.guildtoggles.modules;
 
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.help.HelpTags;
 import com.github.vaerys.enums.ChannelSetting;
@@ -45,7 +46,7 @@ public class ModuleCC extends GuildModule {
     @Override
     public void setup() {
         channels.add(ChannelSetting.SHITPOST);
-        settings.add(new ShitpostFiltering());
+        settings.add(ToggleList.getSetting(SAILType.SHITPOST_FILTERING));
         channels.add(ChannelSetting.CC_INFO);
         channels.add(ChannelSetting.CC_DENIED);
         channels.add(ChannelSetting.MANAGE_CC);

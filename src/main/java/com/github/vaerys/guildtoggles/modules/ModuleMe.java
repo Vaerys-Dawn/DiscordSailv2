@@ -1,13 +1,15 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.general.EditLinks;
 import com.github.vaerys.commands.general.SetGender;
 import com.github.vaerys.commands.general.SetQuote;
 import com.github.vaerys.commands.general.UserInfo;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.guildtoggles.toggles.UserInfoShowsDate;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 
 /**
@@ -42,11 +44,11 @@ public class ModuleMe extends GuildModule {
 
     @Override
     public void setup() {
-        commands.add(new UserInfo());
-        commands.add(new SetGender());
-        commands.add(new SetQuote());
-        commands.add(new EditLinks());
-        settings.add(new UserInfoShowsDate());
+        commands.add(Command.get(UserInfo.class));
+        commands.add(Command.get(SetGender.class));
+        commands.add(Command.get(SetQuote.class));
+        commands.add(Command.get(EditLinks.class));
+        settings.add(ToggleList.getSetting(SAILType.USER_INFO_SHOWS_DATE));
     }
 
     @Override

@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.help;
 
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
@@ -30,7 +30,7 @@ public class BotInfo extends Command {
         response.append("**@").append(c0bra.getName()).append("#").append(c0bra.getDiscriminator()).append("**.");
         builder.withDesc(response.toString());
         builder.withThumbnail(command.client.bot.getAvatarURL());
-        builder.withFooterText("Bot Version: " + Globals.version+ " | D4J Version: " + Globals.d4jVersion);
+        builder.withFooterText("Bot Version: " + Globals.version + " | D4J Version: " + Globals.d4jVersion);
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }

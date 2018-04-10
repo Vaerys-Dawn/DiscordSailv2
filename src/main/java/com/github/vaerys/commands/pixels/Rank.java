@@ -1,15 +1,15 @@
 package com.github.vaerys.commands.pixels;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
@@ -30,7 +30,7 @@ public class Rank extends Command {
                 return "> Could not find user.";
             }
         }
-        String error = "> Cannot getAllCommands rank stats for " + user.displayName + ".";
+        String error = "> Cannot get rank stats for " + user.displayName + ".";
         if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
             return "> " + user.displayName + " has set their profile to private.";
         } else if (user.isPrivateProfile(command.guild) && user.longID == command.user.longID) {

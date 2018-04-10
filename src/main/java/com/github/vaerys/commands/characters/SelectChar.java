@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.characters;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
