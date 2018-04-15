@@ -171,6 +171,10 @@ public class TimerHandler {
                     //backups
                     Globals.backupAll();
 
+                    // clear blacklist
+                    List<BlacklistedUserObject> blacklistedUserObjects = Globals.getGlobalData().getBlacklistedUsers();
+                    blacklistedUserObjects.removeIf(object -> object.getCounter() < 5);
+
                     dailyMessageHandler(event);
 
 

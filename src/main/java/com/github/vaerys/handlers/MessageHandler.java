@@ -30,6 +30,7 @@ public class MessageHandler {
         if (!isPrivate) {
             if (SpamHandler.checkForInvites(command)) return;
             if (SpamHandler.checkMentionCount(command)) return;
+            if (SpamHandler.commandBlacklisting(command)) return;
             if (SpamHandler.rateLimiting(command)) return;
             if (SpamHandler.catchWalls(command)) return;
             // check for role mentions:
