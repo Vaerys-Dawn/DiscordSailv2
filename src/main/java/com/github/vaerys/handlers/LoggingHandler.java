@@ -199,7 +199,7 @@ public class LoggingHandler {
             if (joining) {
                 Utility.sendLog(String.format(output, "has **Joined** the server"), content, false);
             } else {
-                doKickLog(guild, event.getUser());
+                if (content.config.kickLogging) { doKickLog(guild, event.getUser()); }
                 Utility.sendLog(String.format(output, "has **Left** the server"), content, false);
             }
         }
@@ -292,7 +292,7 @@ public class LoggingHandler {
         long timeStamp = Instant.now().atZone(ZoneOffset.UTC).toEpochSecond() * 1000;
 
         //build Message
-        StringHandler kickLog = new StringHandler("**@%s#%d** has been **Kicked** by **@%s#%d**");
+        StringHandler kickLog = new StringHandler("**@%s#%s** has been **Kicked** by **@%s#%s**");
 
         // do some checks to make sure the user was in fact kicked
         List<TargetedEntry> kicksLog = guild.getAuditLog(ActionType.MEMBER_KICK).getEntriesByTarget(user.getLongID());
@@ -310,10 +310,10 @@ public class LoggingHandler {
 
         // Check if timestamp is within fifteen seconds either way, lastKick is valid.
         long timeDiff = Math.abs(timeStamp - lastKickTime);
-        if (timeDiff > 15000) return;
+        //if (timeDiff > 15000) return;
 
         //format and send message
-        kickLog.format(user.getName(), user.getDiscriminator(), responsible.getName(), responsible.getName());
+        kickLog.format(user.getName(), user.getDiscriminator(), responsible.getName(), responsible.getDiscriminator());
         if (lastKick.getReason().isPresent()) {
             kickLog.appendFormatted(" with reason `%s`", lastKick.getReason().get());
         }

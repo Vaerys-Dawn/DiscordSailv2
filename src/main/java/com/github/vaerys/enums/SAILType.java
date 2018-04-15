@@ -64,7 +64,9 @@ public enum SAILType {
     XP_DECAY("XpDecay"),
     XP_GAIN("XpGain"),
     CHECK_NEW_USERS("CheckNewUsers"),
-    SEND_JOIN_MESSAGES("SendJoinMessages");
+    SEND_JOIN_MESSAGES("SendJoinMessages"),
+    BAN_LOGGING("BanLogging"),
+    KICK_LOGGING("KickLogging");
 
     private String name;
 
