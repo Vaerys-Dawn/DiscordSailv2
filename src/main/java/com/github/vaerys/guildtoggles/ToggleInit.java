@@ -36,7 +36,6 @@ public class ToggleInit {
         guildToggles.add(new ExtendEditLog());
         guildToggles.add(new GeneralLogging());
         guildToggles.add(new JoinLeaveLogging());
-        guildToggles.add(new KickBanLogging());
         guildToggles.add(new MentionSpam());
         guildToggles.add(new MuteRepeatOffender());
         guildToggles.add(new RateLimiting());

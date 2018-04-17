@@ -112,6 +112,7 @@ public class GuildConfig extends GuildFile {
     private String ruleCode = null;
 
 
+
     public DailyMessage getLastDailyMessage() {
         return lastDailyMessage;
     }
