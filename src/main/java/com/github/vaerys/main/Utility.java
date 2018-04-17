@@ -8,7 +8,10 @@ import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.*;
+import com.github.vaerys.objects.BlackListObject;
+import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.objects.RewardRoleObject;
+import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.vdurmont.emoji.Emoji;
@@ -97,7 +100,7 @@ public class Utility {
         if (from == null) {
             return from;
         }
-        from = from.replaceAll("<@&[0-9]*>","");
+        from = from.replaceAll("<@&[0-9]*>", "");
         return from.replaceAll("(?i)@everyone", "").replaceAll("(?i)@here", "");
     }
 
@@ -748,8 +751,10 @@ public class Utility {
                 long uID = Long.parseLong(args);
                 return new UserObject(uID, command.guild);
             } catch (NumberFormatException e) {
-                if (command.message.get().getMentions().size() > 0) {
-                    user = command.message.get().getMentions().get(0);
+                List<IUser> mention = command.message.getMentions();
+                if (mention.size() > 0) {
+                    Collections.reverse(mention);
+                    user = mention.get(0);
                 }
             }
             if (user == null && doContains) {

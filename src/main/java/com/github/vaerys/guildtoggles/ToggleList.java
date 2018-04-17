@@ -52,7 +52,8 @@ public class ToggleList {
         add(new LikeArt());
         add(new DebugMode());
         add(new StopSpamWalls());
-        add(new KickBanLogging());
+        add(new KickLogging());
+        add(new BanLogging());
     }};
 
     private static final List<GuildModule> guildModules = new ArrayList<GuildModule>() {{

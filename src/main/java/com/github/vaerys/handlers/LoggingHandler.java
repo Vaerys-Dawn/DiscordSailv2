@@ -200,7 +200,9 @@ public class LoggingHandler {
             if (joining) {
                 Utility.sendLog(String.format(output, "has **Joined** the server"), content, false);
             } else {
-                if (content.config.kickLogging) { doKickLog(guild, event.getUser()); }
+                if (content.config.kickLogging) {
+                    doKickLog(guild, event.getUser());
+                }
                 Utility.sendLog(String.format(output, "has **Left** the server"), content, false);
             }
         }
@@ -293,6 +295,7 @@ public class LoggingHandler {
         long timeStamp = Instant.now().atZone(ZoneOffset.UTC).toEpochSecond() * 1000;
 
         //build Message
+
         StringHandler kickLog = new StringHandler("**@%s#%s** has been **Kicked** by **@%s#%s**");
 
         // do some checks to make sure the user was in fact kicked
@@ -311,7 +314,7 @@ public class LoggingHandler {
 
         // Check if timestamp is within fifteen seconds either way, lastKick is valid.
         long timeDiff = Math.abs(timeStamp - lastKickTime);
-        //if (timeDiff > 15000) return;
+        if (timeDiff > 15000) return;
 
         //format and send message
         kickLog.format(user.getName(), user.getDiscriminator(), responsible.getName(), responsible.getDiscriminator());
@@ -328,9 +331,8 @@ public class LoggingHandler {
     public static void doBanLog(UserBanEvent event) {
         IGuild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
-        if (!guildObject.config.kickBanLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
+        if (!guildObject.config.banLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
             return;
-
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
 
