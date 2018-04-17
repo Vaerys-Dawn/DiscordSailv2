@@ -68,6 +68,7 @@ public enum SAILType {
     BAN_LOGGING("BanLogging"),
     KICK_LOGGING("KickLogging");
 
+
     private String name;
 
     SAILType(String name) {
