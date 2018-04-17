@@ -330,7 +330,6 @@ public class LoggingHandler {
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
         if (!guildObject.config.kickBanLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
             return;
-
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
 
