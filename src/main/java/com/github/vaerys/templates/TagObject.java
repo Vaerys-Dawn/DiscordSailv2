@@ -2,8 +2,10 @@ package com.github.vaerys.templates;
 
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.tags.TagList;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -222,5 +224,17 @@ public abstract class TagObject {
 
     public List<TagType> getTypes() {
         return types;
+    }
+
+    public static TagObject get(Class obj) {
+        if (!TagObject.class.isAssignableFrom(obj)) {
+            throw new IllegalArgumentException("Cannot Get Tag from Class (" + obj.getName() + ")");
+        }
+        for (TagObject t : TagList.get()) {
+            if (t.getClass().getName().equals(obj.getName())) {
+                return t;
+            }
+        }
+        throw new IllegalArgumentException("Could not find Tag (" + obj.getName() + ")");
     }
 }

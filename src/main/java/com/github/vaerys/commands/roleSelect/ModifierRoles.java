@@ -15,6 +15,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -32,7 +33,7 @@ public class ModifierRoles extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (args == null || args.isEmpty()) {
-            return new ListModifs().execute(args, command);
+            return get(ListModifs.class).execute(args, command);
         }
 //        SplitFirstObject modif = new SplitFirstObject(args);
 
@@ -49,12 +50,10 @@ public class ModifierRoles extends Command {
             } catch (NumberFormatException e) {
                 // move on.
             }
-            if (role == null) {
-                role = GuildHandler.getRoleFromName(subArgs, command.guild.get());
-            }
-            if (role == null) {
-                return "> **" + subArgs + "** is not a valid Role Name.";
-            }
+
+            if (role == null) role = GuildHandler.getRoleFromName(subArgs, command.guild.get());
+            if (role == null) return "> **" + subArgs + "** is not a valid Role Name.";
+
             //tests to see if the bot is allowed to mess with a role.
             if (!Utility.testUserHierarchy(command.client.bot.get(), role, command.guild.get())) {
                 return "> I do not have permission to modify the **" + role.getName() + "** role.";
@@ -99,7 +98,7 @@ public class ModifierRoles extends Command {
                 role = GuildHandler.getRoleFromName(args, command.guild.get(), true);
             }
             List<IRole> userRoles = command.user.roles;
-            String response = Constants.ERROR_UPDATING_ROLE;
+            String response;
             if (role == null) {
                 RequestHandler.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListModifs.getList(command), command.channel.get());
                 return null;
@@ -107,14 +106,8 @@ public class ModifierRoles extends Command {
                 if (command.guild.config.isRoleModifier(role.getLongID())) {
                     //if user has role remove it
                     if (userRoles.contains(role)) {
-                        ListIterator iterator = userRoles.listIterator();
-                        while (iterator.hasNext()) {
-                            IRole userRole = (IRole) iterator.next();
-                            if (userRole.getLongID() == role.getLongID()) {
-                                iterator.remove();
-                                response = "> You have had the **" + role.getName() + "** role removed.";
-                            }
-                        }
+                        userRoles.remove(role);
+                        response = "> You have had the **" + role.getName() + "** role removed.";
                         //else add it
                     } else {
                         userRoles.add(role);

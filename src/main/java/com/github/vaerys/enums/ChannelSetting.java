@@ -187,7 +187,6 @@ public enum ChannelSetting {
         return name;
     }
 
-    ;
 
     /**
      * checks if the setting is actually a channel setting

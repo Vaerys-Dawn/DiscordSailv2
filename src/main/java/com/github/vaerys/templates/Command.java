@@ -4,6 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
@@ -295,5 +296,29 @@ public abstract class Command {
             }
         }
         return false;
+    }
+
+    public boolean testSubCommands(CommandObject command, List<SAILType> types) {
+        for (SubCommandObject s : subCommands) {
+            if (types.contains(s.getType()) && GuildHandler.testForPerms(command, s.getPermissions())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Command get(Class obj) {
+        if (!Command.class.isAssignableFrom(obj)) {
+            throw new IllegalArgumentException("Cannot Get Command from Class (" + obj.getName() + ")");
+        }
+        for (Command c : Globals.getAllCommands()) {
+            if (c.getClass().getName().equals(obj.getName())) {
+                return c;
+            }
+        }
+        if (Globals.getAllCommands().size() != 0) {
+            throw new IllegalArgumentException("Could not find Command (" + obj.getName() + ")");
+        }
+        return null;
     }
 }

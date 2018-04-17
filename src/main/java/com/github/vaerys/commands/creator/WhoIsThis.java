@@ -11,7 +11,7 @@ public class WhoIsThis extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return new WhoWasThat().execute(args, command);
+        return get(WhoWasThat.class).execute(args, command);
     }
 
     @Override

@@ -7,10 +7,8 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +22,7 @@ public class ListModifs extends Command {
         List<String> list = command.guild.getModifierRoles().stream().map(iRole -> iRole.getName()).collect(Collectors.toList());
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(title);
-        builder.withDesc("```\n" + Utility.listFormatter(list,true)+ "```\n" + new ModifierRoles().missingArgs(command));
+        builder.withDesc("```\n" + Utility.listFormatter(list, true) + "```\n" + get(ModifierRoles.class).missingArgs(command));
         return builder;
     }
 

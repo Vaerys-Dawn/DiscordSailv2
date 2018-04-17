@@ -3,7 +3,7 @@ package com.github.vaerys.main;
 import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.StartUpGuide;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.objects.DailyMessage;
 
 import java.awt.*;
@@ -69,7 +69,7 @@ public class Constants {
     public static final String STICKER_STAR_URL = "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/white-medium-star_2b50.png";
     public static final String PIXELS_ICON = "http://i.imgur.com/r5usgN7.png";
     public static final Long LEVEL_CAP = 1000L; //Anything more than this is too much CPU time to calculate
-    public static final Long PIXELS_CAP = XpHandler.levelToXP(LEVEL_CAP); //1000 levels.
+    public static final Long PIXELS_CAP = PixelHandler.levelToXP(LEVEL_CAP); //1000 levels.
     //EnumSets
     public static final ArrayList<UserSetting> levelUpStates = new ArrayList<UserSetting>() {{
         add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);

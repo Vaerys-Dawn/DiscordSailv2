@@ -30,6 +30,7 @@ public class MessageHandler {
         if (!isPrivate) {
             if (SpamHandler.checkForInvites(command)) return;
             if (SpamHandler.checkMentionCount(command)) return;
+            if (SpamHandler.commandBlacklisting(command)) return;
             if (SpamHandler.rateLimiting(command)) return;
             if (SpamHandler.catchWalls(command)) return;
             // check for role mentions:
@@ -39,7 +40,7 @@ public class MessageHandler {
                 // sanitize @here mentions.
                 args = args.replaceAll("@here", "REDACTED");
             }
-            XpHandler.grantXP(command);
+            PixelHandler.grantXP(command);
 //            if (command.guild.config.artPinning) {
 //                if (command.guild.config.autoArtPinning) {
 //                    ArtHandler.pinMessage(command);

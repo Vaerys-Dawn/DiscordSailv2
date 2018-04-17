@@ -53,7 +53,7 @@ public class UserSettings extends Command {
         }
         ProfileObject profile = user.getProfile(command.guild);
         if (profile != null) {
-            if (split.getRest().equalsIgnoreCase("list")) {
+            if (split.getRest() == null || split.getRest().equalsIgnoreCase("list")) {
                 return sendList("", profile, command, user, false);
             }
             UserSetting toTest = UserSetting.get(split.getRest());

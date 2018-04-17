@@ -57,6 +57,8 @@ public class ToggleInit {
         guildToggles.add(new DebugMode());
         guildToggles.add(new StopSpamWalls());
         guildToggles.add(new ModuleRuleRewards());
+        guildToggles.add(new KickLogging());
+        guildToggles.add(new BanLogging());
 
         //modules
         guildToggles.add(new ModuleGroups());

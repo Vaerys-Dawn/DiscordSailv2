@@ -11,6 +11,7 @@ import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
 
 import java.util.*;
@@ -53,7 +54,7 @@ public class SettingsStage extends SetupHandler {
         ListIterator iterator = globalToggles.listIterator();
         while (iterator.hasNext()) {
             GuildToggle toggle = (GuildToggle) iterator.next();
-            if (types.contains(toggle.name())){
+            if (types.contains(toggle.name())) {
                 // Is part of a module, remove from list
                 iterator.remove();
             } else {
@@ -67,8 +68,8 @@ public class SettingsStage extends SetupHandler {
 
         // Send message
         output.append("\nYou can switch settings on and off with **" +
-                new Toggle().getCommand(command) + "** and get more info on each setting with **" +
-                new HelpSettings().getCommand(command) + "**.");
+                Command.get(Toggle.class).getCommand(command) + "** and get more info on each setting with **" +
+                Command.get(HelpSettings.class).getCommand(command) + "**.");
 
         // Append additional enabled/disabled state info.
         XEmbedBuilder embed = new XEmbedBuilder(command);

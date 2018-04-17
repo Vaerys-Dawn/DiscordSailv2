@@ -70,7 +70,6 @@ public class Globals {
     private static List<GuildToggle> guildToggles = new LinkedList<>();
     private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
     private static List<LogObject> allLogs = new LinkedList<>();
-    private static List<TagObject> tags = new LinkedList<>();
     private static List<String> blacklistedURls;
     private static GlobalData globalData;
     private static DailyMessages dailyMessages;
@@ -399,10 +398,6 @@ public class Globals {
 
     public static List<Command> getALLCreatorCommands() {
         return creatorCommands;
-    }
-
-    public static List<TagObject> getTags() {
-        return tags;
     }
 
     public static List<Long> getPatrons() {

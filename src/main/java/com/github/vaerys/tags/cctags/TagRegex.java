@@ -5,8 +5,8 @@ import com.github.vaerys.enums.TagType;
 import com.github.vaerys.objects.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 public class TagRegex extends TagReplaceObject {
 
@@ -17,6 +17,13 @@ public class TagRegex extends TagReplaceObject {
     @Override
     public String execute(String from, CommandObject command, String args, List<ReplaceObject> toReplace) {
         List<String> splitArgs = getSplit(from);
+        String test = "Testing.";
+        try {
+            test.replaceAll(splitArgs.get(0), test);
+        } catch (PatternSyntaxException e) {
+            from = replaceFirstTag(from, error);
+            return from;
+        }
         from = removeFirstTag(from);
         toReplace.add(new ReplaceObject(splitArgs.get(0), splitArgs.get(1)));
         return from;

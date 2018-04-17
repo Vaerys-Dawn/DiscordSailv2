@@ -4,7 +4,7 @@ import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -121,7 +121,7 @@ public class PixelHelp extends Command {
             if (level > Constants.LEVEL_CAP) {
                 return "> No, I don't want to calculate the total xp for level " + NumberFormat.getInstance().format(level) + "!";
             }
-            return "> Level: " + level + " = " + NumberFormat.getInstance().format(XpHandler.totalXPForLevel(level)) + " pixels.";
+            return "> Level: " + level + " = " + NumberFormat.getInstance().format(PixelHandler.totalXPForLevel(level)) + " pixels.";
         } catch (NumberFormatException e) {
             return "> You must supply a valid number.";
         }
@@ -136,7 +136,7 @@ public class PixelHelp extends Command {
             if (xp > Constants.PIXELS_CAP) {
                 return "> Its something over level 1000, could you leave me alone.";
             }
-            return "> " + NumberFormat.getInstance().format(xp) + "XP = Level: " + XpHandler.xpToLevel(xp);
+            return "> " + NumberFormat.getInstance().format(xp) + "XP = Level: " + PixelHandler.xpToLevel(xp);
         } catch (NumberFormatException e) {
             return "> You must supply a valid number.";
         }

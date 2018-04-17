@@ -20,9 +20,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
+/**
+ * Wrapper for the Guild API object. Also contains all bot data related to said Guild.
+ */
 public class GuildObject {
     private final static Logger logger = LoggerFactory.getLogger(GuildObject.class);
     public ClientObject client;
@@ -67,12 +73,12 @@ public class GuildObject {
             add(guildLog);
         }};
         customCommands.initCustomCommands(get());
-        this.client = new ClientObject( this);
+        this.client = new ClientObject(this);
         loadCommandData();
     }
 
     public GuildObject() {
-        this.client = new ClientObject( this);
+        this.client = new ClientObject(this);
         this.object = null;
         this.longID = -1;
         this.config = new GuildConfig();
@@ -382,5 +388,19 @@ public class GuildObject {
 
     public IRole getRuleCodeRole() {
         return object.getRoleByID(config.ruleCodeRewardID);
+    }
+
+    public boolean channelHasSetting(ChannelSetting setting, long channelID) {
+        ChannelSettingObject settings = channelData.getChannelSetting(setting);
+        if (settings == null) return false;
+        return settings.getChannelIDs().contains(channelID);
+    }
+
+    public boolean channelHasSetting(ChannelSetting setting, IChannel channel) {
+        return channelHasSetting(setting, channel.getLongID());
+    }
+
+    public boolean channelHasSetting(ChannelSetting setting, ChannelObject channel) {
+        return channelHasSetting(setting, channel.longID);
     }
 }
