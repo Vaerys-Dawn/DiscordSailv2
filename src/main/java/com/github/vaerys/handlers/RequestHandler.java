@@ -1,14 +1,10 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.ChannelObject;
-import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.masterobjects.MessageObject;
-import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.masterobjects.*;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @SuppressWarnings("CaughtExceptionImmediatelyRethrown")
@@ -277,18 +274,11 @@ public class RequestHandler {
     public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, long newRoleID, boolean isAdding) {
         return RequestBuffer.request(() -> {
             try {
+                if (guild.getRoleByID(newRoleID) == null) return true;
                 if (isAdding) {
-                    if (guild.getRoleByID(newRoleID) != null) {
-                        author.addRole(guild.getRoleByID(newRoleID));
-                    } else {
-                        return true;
-                    }
+                    author.addRole(guild.getRoleByID(newRoleID));
                 } else {
-                    if (guild.getRoleByID(newRoleID) != null) {
-                        author.removeRole(guild.getRoleByID(newRoleID));
-                    } else {
-                        return true;
-                    }
+                    author.removeRole(guild.getRoleByID(newRoleID));
                 }
             } catch (RateLimitException e) {
                 throw e;
@@ -312,15 +302,7 @@ public class RequestHandler {
     public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, List<IRole> userRoles) {
         return RequestBuffer.request(() -> {
             try {
-                IRole[] roles = new IRole[userRoles.size()];
-                int i = 0;
-                for (IRole r : userRoles) {
-                    if (r == null) {
-                        logger.error("ROLE RETURNED NULL");
-                    }
-                    roles[i] = r;
-                    i++;
-                }
+                IRole[] roles = (IRole[]) userRoles.stream().filter(r -> r != null).collect(Collectors.toList()).toArray();
                 guild.editUserRoles(author, roles);
                 return true;
             } catch (RateLimitException e) {

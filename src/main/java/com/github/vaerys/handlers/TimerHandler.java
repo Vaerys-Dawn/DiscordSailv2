@@ -1,10 +1,10 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.*;
@@ -266,8 +266,12 @@ public class TimerHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                IMessage message = RequestHandler.sendMessage(object.getMessage(), Globals.getClient().getChannelByID(object.getChannelID())).get();
-                if (message == null) {
+                IChannel channel = Client.getClient().getChannelByID(object.getChannelID());
+                // sanitize channel
+                if (channel == null) Globals.getGlobalData().removeReminder(object);
+                IMessage message = RequestHandler.sendMessage(object.getMessage(), channel).get();
+                //check message sent.
+                if (message == null && !channel.isPrivate()) {
                     logger.error("REMINDER FAILED FOR USER WITH ID \"" + object.getUserID() + "\" TO SEND. WILL ATTEMPT TO SEND AGAIN IN 5 MINS.");
                     object.setSent(false);
                 } else {

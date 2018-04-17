@@ -1,7 +1,11 @@
 package com.github.vaerys.commands.cc;
 
+import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.commands.admin.Test;
+import com.github.vaerys.commands.creator.directmessages.Echo;
 import com.github.vaerys.commands.general.Hello;
+import com.github.vaerys.commands.general.Patreon;
+import com.github.vaerys.commands.help.Ping;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
@@ -88,12 +92,16 @@ public class NewCC extends Command {
         List<Command> exceptions = new ArrayList<Command>() {{
             add(Command.get(Test.class));
             add(Command.get(Hello.class));
+            add(Command.get(Patreon.class));
+            add(Command.get(Echo.class));
+            add(Command.get(Ping.class));
+            addAll(CommandList.getCommandsByType(SAILType.SLASH));
         }};
         // ccs cannot have names that match existing commands:
         List<Command> toTest = new ArrayList<>(command.guild.commands);
         toTest.removeAll(exceptions);
 
-        for (Command c : command.guild.commands) {
+        for (Command c : toTest) {
 
             // get all commands names.
             List<String> names = new ArrayList<>(Arrays.asList(c.names));

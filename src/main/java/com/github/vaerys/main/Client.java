@@ -96,7 +96,9 @@ public class Client {
 
     public static void checkPatrons() {
         if (!checkPatreonIsValid()) return;
-        List<Long> patronIDs = new ArrayList<>();
+        List<Long> patronIDs = new ArrayList<Long>(){{
+            add(153159020528533505L);
+        }};
         try {
             if (patreonApi == null) return;
             List<Campaign> campaigns = patreonApi.fetchCampaigns().get();

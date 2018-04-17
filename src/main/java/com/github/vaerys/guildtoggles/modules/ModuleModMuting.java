@@ -1,9 +1,10 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.commands.admin.PropMutePerms;
 import com.github.vaerys.commands.modtools.Mute;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
@@ -37,12 +38,16 @@ public class ModuleModMuting extends GuildModule {
 
     @Override
     public String desc(CommandObject command) {
-        return "This module enables the **" + new Mute().getCommand(command) + "** command";
+        return "This module enables the **" +
+                Command.get(Mute.class).getCommand(command) +
+                "** and **" + Command.get(PropMutePerms.class).getCommand(command) +
+                "** commands";
     }
 
     @Override
     public void setup() {
         commands.add(Command.get(Mute.class));
+        commands.add(Command.get(PropMutePerms.class));
     }
 
     @Override

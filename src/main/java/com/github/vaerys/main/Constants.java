@@ -127,15 +127,19 @@ public class Constants {
     //queue types
     public static final String QUEUE_DAILY = "DAILY_MESSAGE";
     public static final String DAILY_SPECIALID = "Default Daily Message.";
-    public static final String EMOJI_REMOVE_PIN = "x";
-    public static final String EMOJI_ADD_PIN = "pushpin";
-    public static final String EMOJI_LIKE_PIN = "heart";
+
 
 
     //Emoji Constants
-    public static final String EMOJI_DISAPPROVE = "thumbsdown";
-    public static final String EMOJI_APPROVE = "thumbsup";
+    public static final String EMOJI_THUMBS_DOWN = "thumbsdown";
+    public static final String EMOJI_THUMBS_UP = "thumbsup";
+    public static final String EMOJI_DENY= "no_entry_sign";
+    public static final String EMOJI_ALLOW = "white_check_mark";
+    public static final String EMOJI_REMOVE_PIN = "x";
+    public static final String EMOJI_ADD_PIN = "pushpin";
+    public static final String EMOJI_LIKE_PIN = "heart";
     public static final String INFO_TEMPLATE = "Info.Template";
+    public static final String LINK_GITHUB = "https://github.com/Vaerys-Dawn/DiscordSailv2";
     //colours
     public static Color pixelColour = new Color(226, 218, 117);
 

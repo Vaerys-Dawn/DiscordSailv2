@@ -28,6 +28,7 @@ import com.github.vaerys.commands.setup.SetupQuit;
 import com.github.vaerys.commands.setup.SetupRepeat;
 import com.github.vaerys.commands.slash.*;
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.templates.Command;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 20/02/2017.
@@ -289,12 +291,10 @@ public class CommandList {
     public static List<Command> getCommands(boolean isDm) {
         List<Command> getCommands = new ArrayList<>();
         for (Command c : commands) {
-            if (isDm) {
-                if (c.channel != null && c.channel == ChannelSetting.FROM_DM)
-                    getCommands.add(c);
+            if (isDm && c.channel == ChannelSetting.FROM_DM) {
+                getCommands.add(c);
             } else {
-                if (c.channel == null || c.channel != ChannelSetting.FROM_DM)
-                    getCommands.add(c);
+                getCommands.add(c);
             }
         }
         return getCommands;
@@ -327,5 +327,9 @@ public class CommandList {
             throw new IllegalArgumentException("Could not find Command (" + obj.getName() + ")");
         }
         return null;
+    }
+
+    public static List<Command> getCommandsByType(SAILType type) {
+        return getAll().stream().filter(c -> c.type == type).collect(Collectors.toList());
     }
 }

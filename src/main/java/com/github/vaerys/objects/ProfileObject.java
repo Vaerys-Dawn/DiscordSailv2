@@ -27,7 +27,7 @@ public class ProfileObject {
     public long lastTalked = -1;
     long userID;
     long xp = 0;
-    long currentLevel = -1;
+    long currentLevel = 0;
     String gender = defaultGender;
     String quote = defaultQuote;
     ArrayList<UserSetting> settings = new ArrayList<>();

@@ -11,8 +11,8 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.handle.obj.StatusType;
@@ -126,12 +126,13 @@ public class UserInfo extends Command {
         desc.append("\n" + Utility.listFormatter(links, true));
 
         //Author Icon
-        if (user.isPatron) {
-            builder.withAuthorIcon(Constants.PATREON_ICON_URL);
-        }
         if (user.longID == 153159020528533505L) {
             builder.withAuthorIcon(Constants.DEV_IMAGE_URL);
+            builder.withAuthorUrl(Constants.LINK_GITHUB);
+        } else if (user.isPatron) {
+            builder.withAuthorIcon(Constants.PATREON_ICON_URL);
         }
+
 
         builder.withDesc(desc.toString());
 //        builder.withFooterText("User ID: " + profile.getUserID());

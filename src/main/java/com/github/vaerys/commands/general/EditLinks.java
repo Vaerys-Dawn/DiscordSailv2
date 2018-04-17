@@ -81,6 +81,9 @@ public class EditLinks extends Command {
             if (linkName.getFirstWord().length() > 15) {
                 return "> Link Name too long. (Max 15 chars)";
             }
+            if (linkName.getFirstWord().contains("\n")){
+                return "> Link Name cannot contain Newlines.";
+            }
             if (Utility.checkURL(linkName.getRest())) {
                 try {
                     new URL(linkName.getRest());

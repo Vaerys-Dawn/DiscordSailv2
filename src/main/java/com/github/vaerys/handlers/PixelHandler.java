@@ -224,12 +224,6 @@ public class PixelHandler {
         //get next level xp
         long nextLevelXp = totalXPForLevel(user.getCurrentLevel() + 1);
 
-        //sanity check the level
-        if (user.getCurrentLevel() == -1) {
-            user.levelUp();
-            return;
-        }
-
         //check if the user actually leveled up
         if (user.getXP() < nextLevelXp) return;
         user.levelUp();

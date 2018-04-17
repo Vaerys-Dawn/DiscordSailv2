@@ -25,8 +25,8 @@ public class QueueHandler {
     private static String uIDString = "UID";
 
     public static void addToQueue(CommandObject object, String content, DayOfWeek dayOfWeek, String type) {
-        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
-        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
         IChannel channel = object.client.get().getChannelByID(Globals.queueChannelID);
 
         if (channel != null) {
@@ -65,9 +65,7 @@ public class QueueHandler {
             QueueObject object = (QueueObject) iterator.next();
             IMessage item = queueChannel.getMessageByID(object.getMessageId());
             if (item == null) {
-                item = RequestBuffer.request(() -> {
-                    return queueChannel.fetchMessage(object.getMessageId());
-                }).get();
+                item = RequestBuffer.request(() -> queueChannel.fetchMessage(object.getMessageId())).get();
             }
             if (item == null) {
                 iterator.remove();
@@ -79,10 +77,10 @@ public class QueueHandler {
 
 
     public static void reactionAdded(CommandObject object, IReaction reaction) {
-        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
-        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
-        ReactionEmoji ok = Utility.getReaction("white_check_mark");
-        ReactionEmoji no = Utility.getReaction(Constants.EMOJI_REMOVE_PIN);
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
+        ReactionEmoji ok = Utility.getReaction(Constants.EMOJI_ALLOW);
+        ReactionEmoji no = Utility.getReaction(Constants.EMOJI_DENY);
         ArrayList<QueueObject> queuedMessages = Globals.getDailyMessages().getQueue();
         IMessage message = object.message.get();
         IUser owner = object.client.creator.get();

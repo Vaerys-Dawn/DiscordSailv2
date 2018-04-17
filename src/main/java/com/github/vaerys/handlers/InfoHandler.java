@@ -92,11 +92,6 @@ public class InfoHandler {
             } else {
                 RequestHandler.sendMessage(contents, channel).get();
             }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Utility.sendStack(e);
-            }
         }
     }
 

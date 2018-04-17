@@ -15,10 +15,7 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -310,4 +307,6 @@ public abstract class Command {
     public static Command get(Class obj){
         return CommandList.getCommand(obj);
     }
+
+
 }

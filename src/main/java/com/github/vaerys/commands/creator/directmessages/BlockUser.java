@@ -16,7 +16,7 @@ public class BlockUser extends DMCommand {
     public String execute(String args, CommandObject command) {
         long userId = Globals.lastDmUserID;
         if (args != null && !args.isEmpty()) {
-            userId = Utility.stringLong(args.split("")[0]);
+            userId = Utility.stringLong(args.split(" ")[0]);
         }
         GlobalData globalData = Globals.getGlobalData();
         if (userId == Globals.creatorID) {

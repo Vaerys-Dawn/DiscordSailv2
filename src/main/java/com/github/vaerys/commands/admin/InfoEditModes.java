@@ -16,6 +16,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 26/06/2017.
@@ -129,8 +130,10 @@ public class InfoEditModes {
     public static String getInfoFile(CommandObject command) {
         String filePath = Utility.getFilePath(command.guild.longID, Constants.FILE_INFO);
         File file = new File(filePath);
-        if (file.exists()) {
+        if (FileHandler.readFromFile(filePath).isEmpty()){
             FileHandler.writeToFile(FileHandler.readFromFile(Constants.INFO_TEMPLATE), filePath);
+        }
+        if (file.exists()) {
             RequestHandler.sendFile("> Here is your **" + Constants.FILE_INFO + "** file.", file, command.channel.get());
         } else {
             return "> Cannot send file, **" + Constants.FILE_INFO + "** file does not exist yet.";

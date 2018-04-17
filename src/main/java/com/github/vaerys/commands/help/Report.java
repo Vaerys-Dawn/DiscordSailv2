@@ -6,6 +6,7 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.AutoBlocker;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
@@ -13,6 +14,8 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 /**
@@ -20,12 +23,19 @@ import java.util.List;
  */
 public class Report extends Command {
 
+    private static List<AutoBlocker> lastUsers = new ArrayList<>(5);
+
     public static String report(String args, CommandObject command, boolean isSilent) {
         List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.ADMIN);
         if (channels.size() != 0) {
             IChannel channel = channels.get(0);
             SplitFirstObject split = new SplitFirstObject(args);
             UserObject reported = Utility.getUser(command, split.getFirstWord(), false, false);
+
+            addUser(command);
+            if (command.user.isBlockedFromDms()) {
+                return "> " + command.user.mention() + ", You have been blocked, you can no longer send any more report requests.";
+            }
             if (reported == null) {
                 return "> Cannot send report. Could not find user.";
             }
@@ -60,6 +70,23 @@ public class Report extends Command {
             return "> Your report could not be sent as the server does not have an admin channel set up at this time.";
         } else {
             return "> Your report could not be sent as the server does not have an admin channel set up at this time.";
+        }
+    }
+
+    private static void addUser(CommandObject command) {
+        AutoBlocker blocker = null;
+        for (AutoBlocker a : lastUsers) {
+            if (a.getUserID() == command.user.longID) {
+                a.addCount(command.message.get().getTimestamp());
+            }
+        }
+        if (blocker == null) lastUsers.add(new AutoBlocker(command));
+        try {
+            while (lastUsers.size() > 5) {
+                lastUsers.remove(0);
+            }
+        } catch (ConcurrentModificationException e) {
+            return;
         }
     }
 
