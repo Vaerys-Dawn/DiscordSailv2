@@ -200,7 +200,9 @@ public class LoggingHandler {
             if (joining) {
                 Utility.sendLog(String.format(output, "has **Joined** the server"), content, false);
             } else {
-                if (content.config.kickBanLogging) doKickLog(guild, event.getUser());
+                if (content.config.kickLogging) {
+                    doKickLog(guild, event.getUser());
+                }
                 Utility.sendLog(String.format(output, "has **Left** the server"), content, false);
             }
         }
@@ -293,7 +295,8 @@ public class LoggingHandler {
         long timeStamp = Instant.now().atZone(ZoneOffset.UTC).toEpochSecond() * 1000;
 
         //build Message
-        StringHandler kickLog = new StringHandler("**@%s#%d** has been **Kicked** by **@%s#%d**");
+
+        StringHandler kickLog = new StringHandler("**@%s#%s** has been **Kicked** by **@%s#%s**");
 
         // do some checks to make sure the user was in fact kicked
         List<TargetedEntry> kicksLog = guild.getAuditLog(ActionType.MEMBER_KICK).getEntriesByTarget(user.getLongID());
@@ -314,7 +317,7 @@ public class LoggingHandler {
         if (timeDiff > 15000) return;
 
         //format and send message
-        kickLog.format(user.getName(), user.getDiscriminator(), responsible.getName(), responsible.getName());
+        kickLog.format(user.getName(), user.getDiscriminator(), responsible.getName(), responsible.getDiscriminator());
         if (lastKick.getReason().isPresent()) {
             kickLog.appendFormatted(" with reason `%s`", lastKick.getReason().get());
         }
@@ -328,7 +331,7 @@ public class LoggingHandler {
     public static void doBanLog(UserBanEvent event) {
         IGuild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
-        if (!guildObject.config.kickBanLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
+        if (!guildObject.config.banLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
             return;
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
