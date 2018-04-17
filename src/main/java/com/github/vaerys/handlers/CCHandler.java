@@ -1,6 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.enums.UserSetting;

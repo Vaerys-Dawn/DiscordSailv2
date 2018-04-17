@@ -1,9 +1,10 @@
 package com.github.vaerys.masterobjects;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.commands.general.NewDailyMessage;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
@@ -89,7 +90,7 @@ public class GuildObject {
         this.users = new GuildUsers();
         this.channelData = new ChannelData();
         this.guildFiles = new ArrayList<>();
-        this.commands = new ArrayList<>(Globals.getCommands(true));
+        this.commands = new ArrayList<>(CommandList.getCommands(true));
     }
 
     public void sendDebugLog(CommandObject command, String type, String name, String contents) {
@@ -104,8 +105,8 @@ public class GuildObject {
     }
 
     public void loadCommandData() {
-        this.commands = new ArrayList<>(Globals.getCommands(false));
-        this.toggles = new ArrayList<>(Globals.getGuildToggles());
+        this.commands = new ArrayList<>(CommandList.getCommands(false));
+        this.toggles = new ArrayList<>(ToggleList.getAllToggles());
         this.channelSettings = new ArrayList<>(Globals.getChannelSettings());
         this.commandTypes = new ArrayList<>(Globals.getCommandTypes());
         checkToggles();
@@ -264,7 +265,7 @@ public class GuildObject {
     public List<Command> getAllCommands(CommandObject command) {
         List<Command> allCommands = new ArrayList<>(commands);
         if (command.user.get().equals(command.client.creator)) {
-            allCommands.addAll(Globals.getALLCreatorCommands());
+            allCommands.addAll(CommandList.getCreatorCommands());
         }
         return allCommands;
     }

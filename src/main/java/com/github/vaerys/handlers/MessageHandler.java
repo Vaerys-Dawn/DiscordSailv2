@@ -1,7 +1,7 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -66,7 +66,7 @@ public class MessageHandler {
 //        if (!isPrivate) return false;
 //        for (GuildObject g : Globals.getGuilds()) {
 //            if (g.config.getSatrtupState().equals(BEGIN_SETUP) && command.user.longID == g.getSetupUser()) {
-//                command.setGuild(g.getToggles());
+//                command.setGuild(g.getAllToggles());
 //                cont(command);
 //                return true;
 //            }
@@ -75,9 +75,9 @@ public class MessageHandler {
 //    }
 
     protected static void handleLogging(CommandObject commandObject, Command command, String args) {
-        if (!command.doAdminLogging && !commandObject.guild.config.adminLogging) {
+        if (command.doAdminLogging && !commandObject.guild.config.adminLogging) {
             return;
-        } else if (!commandObject.guild.config.generalLogging) {
+        } else if (!command.doAdminLogging && !commandObject.guild.config.generalLogging) {
             return;
         }
         StringHandler builder = new StringHandler("> **@").append(commandObject.user.username).append("** Has Used Command `").append(command.getCommand(commandObject)).append("`");
@@ -132,8 +132,8 @@ public class MessageHandler {
                 //command logging
                 handleLogging(command, c, commandArgs);
                 RequestBuffer.request(() -> command.channel.get().setTypingStatus(true)).get();
-//                if (!command.channel.getToggles().getTypingStatus()) {
-//                    command.channel.getToggles().toggleTypingStatus();
+//                if (!command.channel.getAllToggles().getTypingStatus()) {
+//                    command.channel.getAllToggles().toggleTypingStatus();
 //                }
                 String response = c.execute(commandArgs, command);
                 RequestHandler.sendMessage(response, currentChannel);

@@ -7,7 +7,7 @@ class Test_Commands {
 
 //    @Test
 //    public void NoCommandNameAreTheSame() {
-//        List<Command> commands = CommandInit.getToggles();
+//        List<Command> commands = CommandInit.getAllToggles();
 //        for(Command c : commands) {
 //            String[] names = c.names;
 //            for (String name : names) {

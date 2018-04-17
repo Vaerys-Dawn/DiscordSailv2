@@ -1,6 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
@@ -195,6 +195,10 @@ public class GuildHandler {
         return canBypass(user.get(), guild.get());
     }
 
+    public static boolean canBypass(CommandObject command) {
+        return canBypass(command.user.get(), command.guild.get());
+    }
+
     public static boolean testForPerms(IUser user, IGuild guild, Permissions... perms) {
         if (perms.length == 0) return true;
         if (guild == null) return true;
@@ -253,4 +257,6 @@ public class GuildHandler {
     public static boolean testForPerms(CommandObject command, ChannelObject channel, Permissions... perms) {
         return testForPerms(command,channel.get(),perms);
     }
+
+
 }

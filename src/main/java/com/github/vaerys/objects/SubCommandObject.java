@@ -1,7 +1,7 @@
 package com.github.vaerys.objects;
 
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.StringHandler;

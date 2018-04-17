@@ -65,6 +65,9 @@ public class Main {
             FileHandler.createDirectory(Constants.DIRECTORY_TEMP);
             FileHandler.createDirectory(Constants.DIRECTORY_OLD_FILES);
             FileHandler.createDirectory(Constants.DIRECTORY_ERROR);
+            if (!FileHandler.exists(Constants.INFO_TEMPLATE)){
+                Constants.initInfoTemplate();
+            }
 
             //load config phase 1
             Config config = (Config) Config.create(Constants.FILE_CONFIG, new Config());
@@ -88,7 +91,7 @@ public class Main {
             }
 
 
-            //stuff that i cant getToggles to work because reasons, ignore completely
+            //stuff that i cant getAllToggles to work because reasons, ignore completely
 
 //            try{
 //                List<String> richPresesnce = FileHandler.readFromFile(Constants.FILE_RPC_TOKEN);

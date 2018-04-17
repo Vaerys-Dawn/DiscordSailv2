@@ -1,7 +1,7 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
 
 public class TagAllCaps extends TagObject {
@@ -12,6 +12,7 @@ public class TagAllCaps extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
+        removeAllTag(from);
         from = from.toUpperCase();
         from = from.replace("<DELCALL>", "<delCall>");
         return from.replace("<EMBEDIMAGE>", "<embedImage>");

@@ -1,6 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.general.ProfileSettings;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.TagType;
@@ -223,12 +223,6 @@ public class PixelHandler {
 
         //get next level xp
         long nextLevelXp = totalXPForLevel(user.getCurrentLevel() + 1);
-
-        //sanity check the level
-        if (user.getCurrentLevel() == -1) {
-            user.levelUp();
-            return;
-        }
 
         //check if the user actually leveled up
         if (user.getXP() < nextLevelXp) return;

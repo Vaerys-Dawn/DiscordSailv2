@@ -1,6 +1,6 @@
 package com.github.vaerys.objects;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.masterobjects.GuildObject;
 import sx.blah.discord.handle.obj.IGuild;

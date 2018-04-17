@@ -1,6 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.cc.EditCC;
 import com.github.vaerys.commands.cc.NewCC;
 import com.github.vaerys.enums.ChannelSetting;

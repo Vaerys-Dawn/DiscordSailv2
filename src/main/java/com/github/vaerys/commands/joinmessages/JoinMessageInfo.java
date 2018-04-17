@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.joinmessages;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.JoinMessage;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -42,7 +42,7 @@ public class JoinMessageInfo extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"JoinMessage","JoinMessageInfo"};
+        return new String[]{"JoinMessage", "JoinMessageInfo"};
     }
 
     @Override

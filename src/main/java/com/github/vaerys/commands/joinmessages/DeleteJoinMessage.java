@@ -1,8 +1,8 @@
 package com.github.vaerys.commands.joinmessages;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.JoinMessage;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
@@ -29,7 +29,7 @@ public class DeleteJoinMessage extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"DeleteJoinMessage","RemoveJoinMessage"};
+        return new String[]{"DeleteJoinMessage", "RemoveJoinMessage"};
     }
 
     @Override

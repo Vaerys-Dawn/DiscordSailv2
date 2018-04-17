@@ -1,10 +1,10 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,6 +96,7 @@ public class LoggingHandler {
     }
 
     public static void logDelete(CommandObject command, IMessage deletedMessage) {
+        if (!command.guild.config.deleteLogging) return;
         if (!shouldLog(command)) return;
         if (messageEmpty(deletedMessage)) return;
         StringBuffer content;
@@ -327,7 +328,7 @@ public class LoggingHandler {
     public static void doBanLog(UserBanEvent event) {
         IGuild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
-        if (!guildObject.config.banLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
+        if (!guildObject.config.kickBanLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
             return;
 
         StringHandler output = new StringHandler("> **@%s#%s** was banned");

@@ -1,6 +1,6 @@
 package com.github.vaerys.main;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.*;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
@@ -151,8 +151,8 @@ public class AnnotationListener {
         }
         ReactionEmoji x = Utility.getReaction("x");
         ReactionEmoji pin = Utility.getReaction(Constants.EMOJI_ADD_PIN);
-        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
-        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
         ReactionEmoji heart = Utility.getReaction(Constants.EMOJI_LIKE_PIN);
         ReactionEmoji remove = Utility.getReaction(Constants.EMOJI_REMOVE_PIN);
         ReactionEmoji emoji = event.getReaction().getEmoji();

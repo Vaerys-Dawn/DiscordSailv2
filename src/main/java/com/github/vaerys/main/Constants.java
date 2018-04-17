@@ -1,9 +1,10 @@
 package com.github.vaerys.main;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.help.StartUpGuide;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.DailyMessage;
 
 import java.awt.*;
@@ -65,6 +66,7 @@ public class Constants {
     public static final String FILE_AUTH_TO_RESTART = DIRECTORY_STORAGE + "Auth_Restart.txt";
     public static final String LEVEL_UP_IMAGE_URL = "http://i.imgur.com/Vdt2DkK.gif";
     public static final String RANK_UP_IMAGE_URL = "http://i.imgur.com/MwsPixA.gif";
+    public static final String DEV_IMAGE_URL = "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/131/hammer-and-wrench_1f6e0.png";
     public static final String PATREON_ICON_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/1024px-Patreon_logo.svg.png";
     public static final String STICKER_STAR_URL = "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/white-medium-star_2b50.png";
     public static final String PIXELS_ICON = "http://i.imgur.com/r5usgN7.png";
@@ -125,14 +127,19 @@ public class Constants {
     //queue types
     public static final String QUEUE_DAILY = "DAILY_MESSAGE";
     public static final String DAILY_SPECIALID = "Default Daily Message.";
-    public static final String EMOJI_REMOVE_PIN = "x";
-    public static final String EMOJI_ADD_PIN = "pushpin";
-    public static final String EMOJI_LIKE_PIN = "heart";
+
 
 
     //Emoji Constants
-    public static final String EMOJI_DISAPPROVE = "thumbsdown";
-    public static final String EMOJI_APPROVE = "thumbsup";
+    public static final String EMOJI_THUMBS_DOWN = "thumbsdown";
+    public static final String EMOJI_THUMBS_UP = "thumbsup";
+    public static final String EMOJI_DENY= "no_entry_sign";
+    public static final String EMOJI_ALLOW = "white_check_mark";
+    public static final String EMOJI_REMOVE_PIN = "x";
+    public static final String EMOJI_ADD_PIN = "pushpin";
+    public static final String EMOJI_LIKE_PIN = "heart";
+    public static final String INFO_TEMPLATE = "Info.Template";
+    public static final String LINK_GITHUB = "https://github.com/Vaerys-Dawn/DiscordSailv2";
     //colours
     public static Color pixelColour = new Color(226, 218, 117);
 
@@ -154,5 +161,25 @@ public class Constants {
             add(new DailyMessage(Constants.DAILY_MESSAGE_7, DayOfWeek.SUNDAY, creatorID, DAILY_SPECIALID));
         }};
         return dailyMessages;
+    }
+
+    public static void initInfoTemplate() {
+        FileHandler.writeToFile(Constants.INFO_TEMPLATE,
+                "// <image>{server-icon.png}\n" +
+                        "// You can upload a server icon with $EditInfoFiles UploadImage [Image File], and then remove the \"//\" to display it.\n" +
+                        "// Make sure that the image name and the name within the brackets are the same or it wont work.\n" +
+                        "\n" +
+                        "***RULES***\n" +
+                        "// You can put your rules here, it looks nice when you format them like so: \n" +
+                        "// **Num - RuleName**\n" +
+                        "// Rule description\n" +
+                        "\n" +
+                        "***LINKS***\n" +
+                        "// Want any links you should put them here. \n" +
+                        "// TIP if you don't want your link embedding in chat you can surround the link with \"< >\"\n" +
+                        "\n" +
+                        "***RELATED SERVERS***\n" +
+                        "// This would be a great place for you to share some servers you like.",
+                true);
     }
 }
