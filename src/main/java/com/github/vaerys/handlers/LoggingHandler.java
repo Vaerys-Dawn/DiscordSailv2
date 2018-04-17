@@ -1,10 +1,10 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,6 +96,7 @@ public class LoggingHandler {
     }
 
     public static void logDelete(CommandObject command, IMessage deletedMessage) {
+        if (!command.guild.config.deleteLogging) return;
         if (!shouldLog(command)) return;
         if (messageEmpty(deletedMessage)) return;
         StringBuffer content;
@@ -140,6 +141,10 @@ public class LoggingHandler {
 
     public static void doChannelUpdateLog(ChannelUpdateEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        if (event.getNewChannel() instanceof IVoiceChannel) {
+            // TODO: 26/03/2018 Add support for voice Channels.
+            return;
+        }
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             if (!event.getOldChannel().getName().equalsIgnoreCase(event.getNewChannel().getName())) {
@@ -188,22 +193,14 @@ public class LoggingHandler {
         if (!content.config.moduleLogging) return;
 
         String output = "> **@%s#%s** %s.\n**Current Users:** %s."; //name, descriminator, thinger, usercount.
-        output = String.format(output, event.getUser().getName(), event.getUser().getDiscriminator(), "%s", event.getGuild().getTotalMemberCount());
+        output = String.format(output, event.getUser().getName(), event.getUser().getDiscriminator(), "%s", event.getGuild().getUsers().size());
         //String builder = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **%s** the server.\n**Current Users:** " + event.getGuild().getUsers().size() + ".";
 
         if (content.config.joinLeaveLogging) {
             if (joining) {
                 Utility.sendLog(String.format(output, "has **Joined** the server"), content, false);
             } else {
-                IUser botUser = Client.getClient().getOurUser();
-                if (GuildHandler.testForPerms(botUser, guild, Permissions.VIEW_AUDIT_LOG) && content.config.kickBanLogging) {
-                    long timestamp = Instant.now().atZone(ZoneOffset.UTC).toEpochSecond() * 1000;
-                    String kicked = doKickLog(guild, event.getUser(), timestamp);
-                    if (kicked != null) {
-                        Utility.sendLog(String.format(output, kicked), content, true);
-                        return;
-                    }
-                }
+                if (content.config.kickLogging) { doKickLog(guild, event.getUser()); }
                 Utility.sendLog(String.format(output, "has **Left** the server"), content, false);
             }
         }
@@ -281,36 +278,58 @@ public class LoggingHandler {
         }
     }
 
-    private static String doKickLog(IGuild guild, IUser user, long timeStamp) {
-        StringHandler output = new StringHandler("has been **Kicked** by");
+    /***
+     * Handler for logging Kicks.
+     *
+     * @param guild the Guild the user left.
+     * @param user  the User that left the server.
+     */
+    private static void doKickLog(IGuild guild, IUser user) {
+        IUser botUser = Client.getClient().getOurUser();
+        //test if the bot has auditLog perms
+        if (!GuildHandler.testForPerms(botUser, guild, Permissions.VIEW_AUDIT_LOG)) return;
+
+        //getTimestamp
+        long timeStamp = Instant.now().atZone(ZoneOffset.UTC).toEpochSecond() * 1000;
+
+        //build Message
+        StringHandler kickLog = new StringHandler("**@%s#%s** has been **Kicked** by **@%s#%s**");
 
         // do some checks to make sure the user was in fact kicked
         List<TargetedEntry> kicksLog = guild.getAuditLog(ActionType.MEMBER_KICK).getEntriesByTarget(user.getLongID());
-        if (kicksLog.size() == 0) return null;
+        if (kicksLog.size() == 0) return;
 
+        //sort kickLog and get latest entry
         kicksLog.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getLongID()).toEpochMilli()));
         AuditLogEntry lastKick = kicksLog.get(kicksLog.size() - 1);
+
+        //get the latest entry's timestamp
         long lastKickTime = DiscordUtils.getSnowflakeTimeFromID(lastKick.getLongID()).toEpochMilli();
 
-        // Check if timestamp is within fifteen seconds either way, lastkick is valid.
-        long timeDiff = timeStamp - lastKickTime;
-        if (timeDiff >= -15000 && timeDiff <= 15000) {
-            output.appendFormatted(" **@%s#%s**", lastKick.getResponsibleUser().getName(), lastKick.getResponsibleUser().getDiscriminator());
-            if (lastKick.getReason().isPresent()) {
-                output.appendFormatted(" with reason `%s`", lastKick.getReason().get());
-            }
+        //get user responsible
+        IUser responsible = lastKick.getResponsibleUser();
 
-        } else {
-            return null;
+        // Check if timestamp is within fifteen seconds either way, lastKick is valid.
+        long timeDiff = Math.abs(timeStamp - lastKickTime);
+        //if (timeDiff > 15000) return;
+
+        //format and send message
+        kickLog.format(user.getName(), user.getDiscriminator(), responsible.getName(), responsible.getDiscriminator());
+        if (lastKick.getReason().isPresent()) {
+            kickLog.appendFormatted(" with reason `%s`", lastKick.getReason().get());
         }
-        return output.toString();
+
+        //send log
+        GuildObject content = Globals.getGuildContent(guild.getLongID());
+        Utility.sendLog(kickLog.toString(), content, true);
     }
 
 
     public static void doBanLog(UserBanEvent event) {
         IGuild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
-        if (!guildObject.config.kickBanLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG)) return;
+        if (!guildObject.config.kickBanLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
+            return;
 
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
@@ -321,7 +340,7 @@ public class LoggingHandler {
         // and sort them. last entry is most recent.
         recentBans.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getLongID()).toEpochMilli()));
 
-        AuditLogEntry lastBan = recentBans.get(recentBans.size()-1);
+        AuditLogEntry lastBan = recentBans.get(recentBans.size() - 1);
         output.appendFormatted(" by **@%s#%s**", lastBan.getResponsibleUser().getName(), lastBan.getResponsibleUser().getDiscriminator());
         String reason = lastBan.getReason().isPresent() ? lastBan.getReason().get() : "No reason provided";
         output.appendFormatted(" with reason `%s`", reason);

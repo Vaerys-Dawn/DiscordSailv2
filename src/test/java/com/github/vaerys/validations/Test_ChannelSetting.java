@@ -1,6 +1,7 @@
 package com.github.vaerys.validations;
 
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.masterobjects.CommandObject;
 import junit.framework.TestCase;
 
 /**
@@ -44,13 +45,13 @@ public class Test_ChannelSetting extends TestCase {
 
 
     /**
-     * Checks if the {@link ChannelSetting#getDesc(com.github.vaerys.commands.CommandObject)} method
+     * Checks if the {@link ChannelSetting#getDesc(CommandObject)} method
      * returns the same thing as {@link ChannelSetting#getDesc()} method
      */
 //    @Test
     public void testDescriptionWithNullParameter() {
         for (ChannelSetting setting : ChannelSetting.values()) {
-            // other getToggles desc
+            // other getAllToggles desc
             if (setting.getDesc(null) == null) {
                 fail(String.format("The \"%s\" channel setting's description cannot be unset.", setting.name()));
             }

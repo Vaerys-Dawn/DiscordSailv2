@@ -1,13 +1,13 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.ChannelHere;
 import com.github.vaerys.commands.admin.Module;
 import com.github.vaerys.commands.admin.Toggle;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -23,29 +23,29 @@ public class StartUpGuide extends Command {
         builder.withTitle("Helpful Commands.");
         String desc = "**" + new Commands().getUsage(command) + "**\n" +
                 "Lists all commands.\n**" +
-                new Help().getUsage(command) + "**\n" +
+                get(Help.class).getUsage(command) + "**\n" +
                 "Gives you information about a command.\n**" +
-                new Module().getUsage(command) + "**\n" +
+                get(Module.class).getUsage(command) + "**\n" +
                 "Lists all available modules and allows you to toggle them.\n**" +
-                new HelpModules().getUsage(command) + "**\n" +
+                get(HelpModules.class).getUsage(command) + "**\n" +
                 "Gives you information about a module.\n**" +
-                new Toggle().getUsage(command) + "**\n" +
+                get(Toggle.class).getUsage(command) + "**\n" +
                 "Lists all available settings and allows you to toggle them.\n**" +
-                new HelpSettings().getUsage(command) + "**\n" +
+                get(HelpSettings.class).getUsage(command) + "**\n" +
                 "Gives you information about a setting.\n**" +
-                new ChannelHere().getUsage(command) + "**\n" +
+                get(ChannelHere.class).getUsage(command) + "**\n" +
                 "Lists all available channel settings/types and allows you to toggle them.\n**" +
-                new HelpChannel().getUsage(command) + "**\n" +
+                get(HelpChannel.class).getUsage(command) + "**\n" +
                 "Gives you information about a channel setting/type.\n**" +
-                new ListTags().getUsage(command) + "**\n" +
+                get(ListTags.class).getUsage(command) + "**\n" +
                 "Lists all tags available for use in customCommand, Info, Daily and LevelUp messages.\n**" +
-                new HelpTags().getUsage(command) + "**\n" +
+                get(HelpTags.class).getUsage(command) + "**\n" +
                 "Gives you information about a tag.\n**" +
-                new GetGuildInfo().getUsage(command) + "**\n" +
+                get(GetGuildInfo.class).getUsage(command) + "**\n" +
                 "Gives you information about this server's setup.\n**" +
-                new BotInfo().getUsage(command) + "**\n" +
+                get(BotInfo.class).getUsage(command) + "**\n" +
                 "Gives you information about this bot.\n**" +
-                new BotHelp().getUsage(command) + "**\n" +
+                get(BotHelp.class).getUsage(command) + "**\n" +
                 "Gives you information about various bot features.";
         builder.withDesc(desc);
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());

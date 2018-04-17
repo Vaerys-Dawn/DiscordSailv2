@@ -1,9 +1,10 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.pixels.SetLevelUpReaction;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildSetting;
 
 public class ReactToLevelUp extends GuildSetting {
@@ -39,6 +40,6 @@ public class ReactToLevelUp extends GuildSetting {
 
     @Override
     public void setup() {
-        commands.add(new SetLevelUpReaction());
+        commands.add(Command.get(SetLevelUpReaction.class));
     }
 }

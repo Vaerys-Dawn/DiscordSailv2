@@ -1,18 +1,18 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.handle.obj.StatusType;
@@ -93,7 +93,6 @@ public class UserInfo extends Command {
         StringBuilder footer = new StringBuilder();
         if (profile.getSettings().contains(UserSetting.READ_RULES) && command.guild.config.readRuleReward) {
             builder.withFooterIcon(Constants.STICKER_STAR_URL);
-//            builder.withFooterIcon("https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/glowing-star_1f31f.png");
         }
         if (command.guild.config.userInfoShowsDate) {
             builder.withTimestamp(user.get().getCreationDate());
@@ -116,19 +115,24 @@ public class UserInfo extends Command {
         if (showCC && !showLevel) {
             desc.append("\n**Custom Commands: **" + command.guild.customCommands.getUserCommandCount(user, command.guild));
         } else if (showLevel && !showCC) {
-            desc.append("\n**Level: **" + XpHandler.xpToLevel(profile.getXP()));
+            desc.append("\n**Level: **" + PixelHandler.xpToLevel(profile.getXP()));
         } else if (showLevel && showCC) {
             desc.append("\n**Custom Commands: **" + command.guild.customCommands.getUserCommandCount(user, command.guild) +
-                    indent + indent + indent + "**Level: **" + XpHandler.xpToLevel(profile.getXP()));
+                    indent + indent + indent + "**Level: **" + PixelHandler.xpToLevel(profile.getXP()));
         }
 
         desc.append("\n**Roles: **" + Utility.listFormatter(roleNames, true));
         desc.append("\n\n*" + profile.getQuote() + "*");
         desc.append("\n" + Utility.listFormatter(links, true));
 
-        if (user.isPatron) {
+        //Author Icon
+        if (user.longID == 153159020528533505L) {
+            builder.withAuthorIcon(Constants.DEV_IMAGE_URL);
+            builder.withAuthorUrl(Constants.LINK_GITHUB);
+        } else if (user.isPatron) {
             builder.withAuthorIcon(Constants.PATREON_ICON_URL);
         }
+
 
         builder.withDesc(desc.toString());
 //        builder.withFooterText("User ID: " + profile.getUserID());

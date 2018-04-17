@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.servers;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.ServerObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -21,6 +21,10 @@ public class ListServers extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        if (command.guild.servers.getServers().size() == 0) {
+            return "> No servers have been listed yet, If you would like to list one yourself you can do so using **" +
+                    get(AddServer.class).getUsage(command) + "**.";
+        }
         XEmbedBuilder builder = new XEmbedBuilder(command);
         String title = "> Here are the Servers I have Listed:";
         ArrayList<String> serverNames = command.guild.servers.getServers().stream().map(ServerObject::getName).collect(Collectors.toCollection(ArrayList::new));

@@ -1,13 +1,13 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
@@ -63,7 +63,7 @@ public class ListTags extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"ListTags"};
+        return new String[]{"ListTags", "TagList"};
     }
 
     @Override

@@ -1,15 +1,16 @@
 package com.github.vaerys.main;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.*;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +35,6 @@ import java.util.stream.Stream;
 /**
  * Created by Vaerys on 17/08/2016.
  */
-@SuppressWarnings({"StringConcatenationInsideStringBufferAppend", "WeakerAccess"})
 public class Utility {
 
     //Logger
@@ -74,7 +74,9 @@ public class Utility {
     }
 
     public static String getFilePath(long guildID, String type, boolean isBackup) {
-        return Constants.DIRECTORY_BACKUPS + guildID + "/" + type;
+        if (isBackup) {
+            return Constants.DIRECTORY_BACKUPS + guildID + "/" + type;
+        } else return getFilePath(guildID, type);
     }
 
     public static String getDirectory(long guildID) {
@@ -86,13 +88,16 @@ public class Utility {
     }
 
     public static String getDirectory(long guildID, boolean isBackup) {
-        return Constants.DIRECTORY_BACKUPS + guildID + "/";
+        if (isBackup) {
+            return Constants.DIRECTORY_BACKUPS + guildID + "/";
+        } else return getDirectory(guildID);
     }
 
     public static String removeMentions(String from) {
         if (from == null) {
             return from;
         }
+        from = from.replaceAll("<@&[0-9]*>","");
         return from.replaceAll("(?i)@everyone", "").replaceAll("(?i)@here", "");
     }
 
@@ -525,7 +530,13 @@ public class Utility {
                 embedToString.append("**").append(field.name).append("**\n").append(field.value).append("\n");
             }
         }
-        if (embed.footer != null) embedToString.append("*").append(embed.footer.text).append("*");
+        if (embed.footer != null) {
+            embedToString.append("*").append(embed.footer.text).append("*");
+            if (embed.timestamp != null) embedToString.append(" | ");
+        }
+        if (embed.timestamp != null) {
+            embedToString.append(" | " + embed.timestamp);
+        }
         if (embed.image != null) embedToString.append("\n").append(embed.image.url);
         return embedToString.toString();
     }
@@ -624,8 +635,8 @@ public class Utility {
     }
 
     public static void sendStack(Exception e) {
-        StringBuffer s = new StringBuffer(ExceptionUtils.getStackTrace(e));
-        s.append(s.substring(0, s.length() - 2));
+        StringHandler s = new StringHandler(ExceptionUtils.getStackTrace(e));
+        s.setContent(s.substring(0, s.length() - 2));
         if (!s.toString().endsWith(")")) {
             s.append(")");
         }
@@ -706,12 +717,9 @@ public class Utility {
                 }
                 try {
                     UserObject object = new UserObject(u, command.guild, true);
-
                     if (hasProfile) {
                         ProfileObject profile = object.getProfile(command.guild);
-                        if (profile == null || profile.isEmpty()) {
-                            throw new IllegalStateException("Profile Is Null");
-                        }
+                        if (profile == null || profile.isEmpty()) continue;
                     }
                     if ((u.getName() + "#" + u.getDiscriminator()).matches("(?i)" + toTest)) {
                         user = u;
@@ -733,13 +741,12 @@ public class Utility {
                     }
                 } catch (PatternSyntaxException e) {
                     //continue.
-                } catch (IllegalStateException e) {
-                    //continue.
                 }
             }
+            UserObject userObject = null;
             try {
                 long uID = Long.parseLong(args);
-                user = command.client.get().getUserByID(uID);
+                return new UserObject(uID, command.guild);
             } catch (NumberFormatException e) {
                 if (command.message.get().getMentions().size() > 0) {
                     user = command.message.get().getMentions().get(0);
@@ -749,9 +756,9 @@ public class Utility {
                 user = conUser;
             }
             if (user != null) {
-                UserObject userObject = new UserObject(user, command.guild);
-                return userObject;
+                userObject = new UserObject(user, command.guild);
             }
+            return userObject;
         }
         return null;
     }
@@ -796,10 +803,6 @@ public class Utility {
         return ReactionEmoji.of(emoji.getUnicode());
     }
 
-
-    public static boolean canBypass(CommandObject command) {
-        return GuildHandler.canBypass(command.user.get(), command.guild.get());
-    }
 
     public static String prepArgs(String args) {
         StringHandler replace = new StringHandler(args);

@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 
 /**
  * Created by Vaerys on 30/01/2017.

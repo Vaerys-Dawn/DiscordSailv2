@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.pixels;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -29,7 +29,7 @@ public class SetLevel extends Command {
             long level = Long.parseLong(xpArgs.getRest());
             if (level > Constants.LEVEL_CAP)
                 return "> No... " + level + " Is way too many levels. Im not setting your level that high.";
-            long xp = XpHandler.totalXPForLevel(level);
+            long xp = PixelHandler.totalXPForLevel(level);
             ProfileObject userObject = user.getProfile(command.guild);
             if (userObject == null) {
                 return "> User does not have a profile.";

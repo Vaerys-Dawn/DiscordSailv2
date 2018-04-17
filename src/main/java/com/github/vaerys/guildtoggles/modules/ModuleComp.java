@@ -1,6 +1,7 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.guildtoggles.ToggleList;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.toggles.CompEntries;
 import com.github.vaerys.guildtoggles.toggles.Voting;
@@ -41,8 +42,8 @@ public class ModuleComp extends GuildModule {
 
     @Override
     public void setup() {
-        settings.add(new Voting());
-        settings.add(new CompEntries());
+        settings.add(ToggleList.getSetting(SAILType.VOTING));
+        settings.add(ToggleList.getSetting(SAILType.COMP_ENTRIES));
     }
 
     @Override

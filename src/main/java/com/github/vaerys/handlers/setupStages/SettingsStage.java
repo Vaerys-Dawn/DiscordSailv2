@@ -1,16 +1,17 @@
 package com.github.vaerys.handlers.setupStages;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.admin.Toggle;
 import com.github.vaerys.commands.help.HelpSettings;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.guildtoggles.ToggleInit;
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.guildtoggles.toggles.DebugMode;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
 
 import java.util.*;
@@ -30,8 +31,8 @@ public class SettingsStage extends SetupHandler {
                 .append("Here's a list of the settings that aren't tied to any specific module.\n");
 
         // Get the settings and modules.
-        List<GuildToggle> globalToggles = ToggleInit.getToggles(false);
-        List<GuildToggle> modules = ToggleInit.getToggles(true);
+        List<GuildToggle> globalToggles = ToggleList.getToggles(false);
+        List<GuildToggle> modules = ToggleList.getToggles(true);
         // Sort settings
         globalToggles.sort(Comparator.comparing(GuildToggle::name));
 
@@ -53,7 +54,7 @@ public class SettingsStage extends SetupHandler {
         ListIterator iterator = globalToggles.listIterator();
         while (iterator.hasNext()) {
             GuildToggle toggle = (GuildToggle) iterator.next();
-            if (types.contains(toggle.name())){
+            if (types.contains(toggle.name())) {
                 // Is part of a module, remove from list
                 iterator.remove();
             } else {
@@ -67,8 +68,8 @@ public class SettingsStage extends SetupHandler {
 
         // Send message
         output.append("\nYou can switch settings on and off with **" +
-                new Toggle().getCommand(command) + "** and get more info on each setting with **" +
-                new HelpSettings().getCommand(command) + "**.");
+                Command.get(Toggle.class).getCommand(command) + "** and get more info on each setting with **" +
+                Command.get(HelpSettings.class).getCommand(command) + "**.");
 
         // Append additional enabled/disabled state info.
         XEmbedBuilder embed = new XEmbedBuilder(command);

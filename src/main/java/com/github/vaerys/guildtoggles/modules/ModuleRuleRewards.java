@@ -1,12 +1,13 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.SetRuleCode;
 import com.github.vaerys.commands.admin.SetRuleCodeReward;
 import com.github.vaerys.commands.general.RulesCode;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
@@ -50,9 +51,9 @@ public class ModuleRuleRewards extends GuildModule {
 
     @Override
     public void setup() {
-        commands.add(new RulesCode());
-        commands.add(new SetRuleCode());
-        commands.add(new SetRuleCodeReward());
+        commands.add(Command.get(RulesCode.class));
+        commands.add(Command.get(SetRuleCode.class));
+        commands.add(Command.get(SetRuleCodeReward.class));
     }
 
     @Override

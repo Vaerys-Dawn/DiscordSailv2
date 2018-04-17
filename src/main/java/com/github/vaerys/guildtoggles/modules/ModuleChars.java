@@ -1,6 +1,7 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.guildtoggles.ToggleList;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.toggles.RoleIsToggle;
@@ -45,7 +46,7 @@ public class ModuleChars extends GuildModule {
     @Override
     public void setup() {
         channels.add(ChannelSetting.CHARACTER);
-        settings.add(new RoleIsToggle());
+        settings.add(ToggleList.getSetting(SAILType.ROLE_IS_TOGGLE));
     }
 
     @Override

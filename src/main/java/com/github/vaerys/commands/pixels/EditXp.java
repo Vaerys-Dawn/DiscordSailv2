@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.pixels;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SubCommandObject;
@@ -19,19 +19,19 @@ import sx.blah.discord.handle.obj.Permissions;
 public class EditXp extends Command {
 
     private static final SubCommandObject SET_XP = new SubCommandObject(
-            new String[]{"SetPixels"},
+            new String[]{"SetPixels", "SetXp"},
             "[@User] [Amount]",
             "Set's the user's pixels to the amount specified.",
             SAILType.PIXEL
     );
     private static final SubCommandObject DEL_XP = new SubCommandObject(
-            new String[]{"RemovePixels", "SubPixels"},
+            new String[]{"RemovePixels", "SubPixels", "RemoveXp", "SubXp"},
             "[@User] [Amount]",
             "Removes the specified amount of pixels from the user's profile.",
             SAILType.PIXEL
     );
     private static final SubCommandObject ADD_XP = new SubCommandObject(
-            new String[]{"AddPixels"},
+            new String[]{"AddPixels", "AddXp"},
             "[@User] [Amount]",
             "Adds the specified amount of pixels to the user's profile.",
             SAILType.PIXEL
@@ -158,7 +158,7 @@ public class EditXp extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"EditXp", "EditPixels"};
+        return new String[]{"EditPixels", "EditXp"};
     }
 
     @Override

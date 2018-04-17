@@ -1,23 +1,21 @@
 package com.github.vaerys.templates;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -296,4 +294,19 @@ public abstract class Command {
         }
         return false;
     }
+
+    public boolean testSubCommands(CommandObject command, List<SAILType> types) {
+        for (SubCommandObject s : subCommands) {
+            if (types.contains(s.getType()) && GuildHandler.testForPerms(command, s.getPermissions())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Command get(Class obj){
+        return CommandList.getCommand(obj);
+    }
+
+
 }

@@ -1,16 +1,14 @@
 package com.github.vaerys.commands.roleSelect;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +22,7 @@ public class ListRoles extends Command {
         List<String> list = command.guild.getCosmeticRoles().stream().map(iRole -> iRole.getName()).collect(Collectors.toList());
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(title);
-        builder.withDesc("```\n" + Utility.listFormatter(list,true)+ "```\n" + new CosmeticRoles().missingArgs(command));
+        builder.withDesc("```\n" + Utility.listFormatter(list, true) + "```\n" + get(CosmeticRoles.class).missingArgs(command));
         return builder;
     }
 

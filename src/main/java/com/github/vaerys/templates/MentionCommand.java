@@ -1,7 +1,6 @@
 package com.github.vaerys.templates;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -24,7 +23,7 @@ public abstract class MentionCommand extends Command {
     @Override
     public boolean isCall(String args, CommandObject command) {
         if (command.guild.client.bot == null) {
-            command.guild.sendDebugLog(command,"MENTION_COMMAND","BOT_NULL","");
+            command.guild.sendDebugLog(command, "MENTION_COMMAND", "BOT_NULL", command.message.getContent());
             return false;
         }
         SplitFirstObject mention = new SplitFirstObject(args);

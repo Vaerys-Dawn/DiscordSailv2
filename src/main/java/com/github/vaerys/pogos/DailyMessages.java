@@ -1,6 +1,6 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.QueueObject;

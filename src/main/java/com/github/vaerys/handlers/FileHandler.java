@@ -76,7 +76,7 @@ public class FileHandler {
                 fileWriter.close();
             } else {
                 FileWriter fileWriter = new FileWriter(file, true);
-                fileWriter.append(text + "\n");
+                fileWriter.append("\n" + text);
                 fileWriter.flush();
                 fileWriter.close();
             }

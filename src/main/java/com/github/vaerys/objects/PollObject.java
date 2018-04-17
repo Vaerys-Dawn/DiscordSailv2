@@ -2,6 +2,7 @@ package com.github.vaerys.objects;
 
 import com.github.vaerys.commands.competition.EnterVote;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 
 import java.util.ArrayList;
 
@@ -45,7 +46,7 @@ public class PollObject {
             return "> Poll voting closed.";
         } else {
             return "> Poll voting Open, you can vote in this poll by running\n`" + config.getPrefixCommand() +
-                    new EnterVote().names[0] + " " + pollName + " [Vote]";
+                    Command.get(EnterVote.class).names[0] + " " + pollName + " [Vote]";
         }
     }
 

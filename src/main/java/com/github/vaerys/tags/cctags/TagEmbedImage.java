@@ -1,6 +1,6 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
@@ -24,7 +24,7 @@ public class TagEmbedImage extends TagObject {
             boolean hasPerm = GuildHandler.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS);
             String replaceWith = hasPerm ? "" : "<" + imageURL + ">";
             from = replaceAllTag(from, replaceWith);
-            from = new TagRemoveMentions(0).handleTag(from, command, args);
+            from = get(TagRemoveMentions.class).handleTag(from, command, args);
             if (hasPerm) {
                 RequestHandler.sendFileURL(from, imageURL, command.channel.get(), true);
             } else {
@@ -32,7 +32,7 @@ public class TagEmbedImage extends TagObject {
             }
         } catch (MalformedURLException e) {
             from = replaceFirstTag(from, imageURL);
-            return new TagRemoveMentions(0).handleTag(from, command, args);
+            return get(TagRemoveMentions.class).handleTag(from, command, args);
         }
         return "";
     }

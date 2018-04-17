@@ -1,5 +1,6 @@
 package com.github.vaerys.pogos;
 
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.GroupUpObject;
 import com.github.vaerys.objects.JoinMessage;
@@ -66,5 +67,12 @@ public class ChannelData extends GuildFile {
 
     public List<JoinMessage> getJoinMessages() {
         return joinMessages;
+    }
+
+    public ChannelSettingObject getChannelSetting(ChannelSetting setting) {
+        for (ChannelSettingObject c : channelSettings) {
+            if (c.getType() == setting) return c;
+        }
+        return null;
     }
 }

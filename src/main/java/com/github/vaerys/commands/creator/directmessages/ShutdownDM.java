@@ -1,8 +1,8 @@
 package com.github.vaerys.commands.creator.directmessages;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.creator.Shutdown;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.DMCommand;
 
 
@@ -13,7 +13,7 @@ public class ShutdownDM extends DMCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return new Shutdown().execute(args, command);
+        return get(Shutdown.class).execute(args, command);
     }
 
     @Override

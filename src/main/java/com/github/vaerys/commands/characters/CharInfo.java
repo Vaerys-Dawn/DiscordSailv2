@@ -1,13 +1,13 @@
 package com.github.vaerys.commands.characters;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CharacterObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
@@ -30,8 +30,9 @@ public class CharInfo extends Command {
                 IUser user = command.guild.getUserByID(object.getUserID());
                 if (user == null) {
                     builder.withFooterText("Author: No longer on this server | Character ID: " + object.getName());
+                } else {
+                    builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
                 }
-                builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
 
                 ArrayList<IRole> roles = new ArrayList<>();
                 ArrayList<String> roleNames = new ArrayList<>();

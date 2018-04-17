@@ -1,11 +1,17 @@
 package com.github.vaerys.commands.cc;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.commands.admin.Test;
+import com.github.vaerys.commands.creator.directmessages.Echo;
+import com.github.vaerys.commands.general.Hello;
+import com.github.vaerys.commands.general.Patreon;
+import com.github.vaerys.commands.help.Ping;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
@@ -49,30 +55,8 @@ public class NewCC extends Command {
         String nameCC = splitFirst.getFirstWord();
         String argsCC = splitFirst.getRest();
 
-        // ccs cannot have names that match existing commands:
-        for (Command c : command.guild.commands) {
-
-            // get all commands names.
-            List<String> names = new ArrayList<>(Arrays.asList(c.names));
-            for (SubCommandObject sc : c.subCommands) {
-                names.addAll(Arrays.asList(sc.getNames()));
-            }
-
-            // convert them to lowercase.
-            ListIterator<String> li = names.listIterator();
-            while (li.hasNext()) {
-                li.set(li.next().toLowerCase());
-            }
-
-            // special exceptions:
-            names.remove("hello");
-            names.remove("hi");
-            names.remove("greetings");
-
-            // do check
-            if (names.contains(nameCC.toLowerCase())) {
-                return "> Custom Commands cannot have the same name as built-in commands.";
-            }
+        if (handleNameFilter(command, nameCC)) {
+            return "> Custom Commands cannot have the same name as built-in commands.";
         }
 
         if ((argsCC == null || argsCC.isEmpty()) && command.message.get().getAttachments().size() == 0) {
@@ -102,6 +86,41 @@ public class NewCC extends Command {
             isLocked = true;
         }
         return command.guild.customCommands.addCommand(isLocked, nameCC, argsCC, isShitpost, command);
+    }
+
+    private boolean handleNameFilter(CommandObject command, String nameCC) {
+        List<Command> exceptions = new ArrayList<Command>() {{
+            add(Command.get(Test.class));
+            add(Command.get(Hello.class));
+            add(Command.get(Patreon.class));
+            add(Command.get(Echo.class));
+            add(Command.get(Ping.class));
+            addAll(CommandList.getCommandsByType(SAILType.SLASH));
+        }};
+        // ccs cannot have names that match existing commands:
+        List<Command> toTest = new ArrayList<>(command.guild.commands);
+        toTest.removeAll(exceptions);
+
+        for (Command c : toTest) {
+
+            // get all commands names.
+            List<String> names = new ArrayList<>(Arrays.asList(c.names));
+            for (SubCommandObject sc : c.subCommands) {
+                names.addAll(Arrays.asList(sc.getNames()));
+            }
+
+            // convert them to lowercase.
+            ListIterator<String> li = names.listIterator();
+            while (li.hasNext()) {
+                li.set(li.next().toLowerCase());
+            }
+
+            // do check
+            if (names.contains(nameCC.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

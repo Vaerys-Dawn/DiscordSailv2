@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;

@@ -1,15 +1,16 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.templates.Command;
+import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -45,9 +46,15 @@ public class SetQuote extends Command {
         if (user.isPatron) {
             maxLength += 140;
         }
+        int maxNewlines = 2;
+        if (user.isPatron) {
+            maxNewlines += 2;
+        }
         ProfileObject u = user.getProfile(command.guild);
         quote = Utility.removeFun(quote);
         if (quote == null || quote.isEmpty()) return "> You can't have an empty quote.";
+        if (StringUtils.countMatches(quote, "\n") > maxNewlines)
+            return "> You have too many newlines in that quote. (Max: " + maxNewlines + ")";
         for (String s : quote.split(" ")) {
             if (!Utility.checkURL(s)) {
                 return "> Cannot add quote. Malicious link found.";

@@ -6,7 +6,7 @@ import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.objects.EventAvatar;
-import com.github.vaerys.objects.PatreonAPI;
+import com.github.vaerys.utilobjects.PatreonAPI;
 import com.github.vaerys.objects.TimedEvent;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
@@ -80,7 +80,7 @@ public class Client {
     }
 
 //    public static ImgurAPI initImgur(List<String> imgurToken) throws IndexOutOfBoundsException {
-//        imgurAPI = new ImgurAPI(imgurToken.getToggles(0), imgurToken.getToggles(1));
+//        imgurAPI = new ImgurAPI(imgurToken.getAllToggles(0), imgurToken.getAllToggles(1));
 //        logger.info("Imgur Account Linked.");
 //        return imgurAPI;
 //    }
@@ -96,7 +96,9 @@ public class Client {
 
     public static void checkPatrons() {
         if (!checkPatreonIsValid()) return;
-        List<Long> patronIDs = new ArrayList<>();
+        List<Long> patronIDs = new ArrayList<Long>(){{
+            add(153159020528533505L);
+        }};
         try {
             if (patreonApi == null) return;
             List<Campaign> campaigns = patreonApi.fetchCampaigns().get();
