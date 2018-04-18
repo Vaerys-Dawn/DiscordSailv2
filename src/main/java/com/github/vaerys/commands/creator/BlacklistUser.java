@@ -10,37 +10,39 @@ import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class UnBlacklistUser extends Command {
-
+public class BlacklistUser extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (args == null || args.isEmpty()) return missingArgs(command);
 
-        // Attempt to get an IUser so we know our thing is real.
+        // cast args to IUser to make sure there's no funny business.
         UserObject user = Utility.getUser(command, args, false);
-        if (user == null) return "> Could not find user.";
+        if (user == null) return "> User does not exist.";
+
+        if (command.user.longID == user.longID) return "> Why are you trying to blacklist yourself?";
 
         GlobalData globalData = Globals.getGlobalData();
-        if (globalData == null) throw new NullPointerException("GlobalData not loaded yet!");
-        if (globalData.getBlacklistedUsers().removeIf(o -> o.getUserID() == user.longID)) {
-            return "> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** un-blacklisted.";
-        }
-        return "> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** could not be removed from blacklist or is not blacklisted.";
+        if (globalData == null) throw new NullPointerException("GlobalData not loaded!");
+
+        if (globalData.blacklistUser(user.longID, 5) != null)
+            return "> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** blacklisted.";
+
+        return "> Failed to blacklist user.";
     }
 
     @Override
     protected String[] names() {
-        return new String[]{"UnBlacklistUser", "UnBlacklist"};
+        return new String[]{"BlacklistUser", "Blacklist"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Removes a user from the command blacklist";
+        return "Adds a user to the command blacklist, preventing that person from using any bot commands on any server.";
     }
 
     @Override
     protected String usage() {
-        return "[@user]";
+        return "[@User]";
     }
 
     @Override
