@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.roleSelect;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IRole;
@@ -91,7 +91,7 @@ public class CosmeticRoles extends Command {
             if (command.guild.config.getCosmeticRoleIDs().size() == 0)
                 return "> No Cosmetic roles are set up right now. Come back later.";
             if (args.matches("[(|\\[].*[)|\\]]")) {
-                return Constants.ERROR_BRACKETS + "\n" + Utility.getCommandInfo(this, command);
+                return Constants.ERROR_BRACKETS + "\n" + missingArgs(command);
             }
             if (args.matches(".*/remove")) {
                 return "> Did you mean `" + command.guild.config.getPrefixCommand() + names()[0] + " " + args.replaceAll("(?i)/remove", "") + "`?";

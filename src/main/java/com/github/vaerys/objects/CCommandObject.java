@@ -1,6 +1,6 @@
 package com.github.vaerys.objects;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 
 import java.util.Arrays;
 import java.util.List;

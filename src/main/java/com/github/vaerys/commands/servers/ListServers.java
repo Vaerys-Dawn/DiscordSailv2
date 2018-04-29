@@ -1,13 +1,13 @@
 package com.github.vaerys.commands.servers;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.ServerObject;
-import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class ListServers extends Command {
         String title = "> Here are the Servers I have Listed:";
         ArrayList<String> serverNames = command.guild.servers.getServers().stream().map(ServerObject::getName).collect(Collectors.toCollection(ArrayList::new));
         Collections.sort(serverNames);
-        String suffix = Utility.getCommandInfo(new Server(), command);
+        String suffix = get(Server.class).missingArgs(command);
         Utility.listFormatterEmbed(title, builder, serverNames, false, suffix);
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;

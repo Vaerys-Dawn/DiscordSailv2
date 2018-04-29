@@ -1,29 +1,34 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.cc.EditCC;
 import com.github.vaerys.commands.cc.NewCC;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.BlacklistedUserObject;
 import com.github.vaerys.objects.OffenderObject;
 import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.internal.DiscordUtils;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.Instant;
+import java.util.*;
 
 public class SpamHandler {
 
     final static Logger logger = LoggerFactory.getLogger(SpamHandler.class);
+    private static Map<Long, Integer> spamCounter = new HashMap<>();
+    private static Map<Long, Long> spamTimeout = new HashMap<>();
 
     /*TODO: MAJOR RATELIMIT REFACTOR (AndrielChaoti 2/3/2018)*/
 
@@ -192,7 +197,7 @@ public class SpamHandler {
         IUser author = command.user.get();
         List<String> inviteformats = new ArrayList<String>() {{
             add("discord.gg");
-            add("discordapp.com/Invite/");
+            add("discordapp.com/Invite");
         }};
         if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
 
@@ -227,6 +232,73 @@ public class SpamHandler {
             command.guild.sendDebugLog(command, "INVITE_REMOVAL", "REMOVED", message.getContent());
             RequestHandler.sendMessage(response, command.channel.get());
             return true;
+        }
+        return false;
+    }
+
+    public static boolean commandBlacklisting(CommandObject command) {
+        // This is not something guilds can turn on/off, it is a temporary blacklist to keep spammers from abusing bot commands.
+
+        // check if this is even a command first:
+        List<Command> commands = new ArrayList<>(command.guild.commands);
+        boolean isCommand = false;
+        for (Command c : commands) {
+            if (c.isCall(command.message.get().getContent(), command)) {
+                isCommand = true;
+                break;
+            }
+        }
+        if (!isCommand) return false;
+
+        UserObject user = command.user;
+        GlobalData globalData = Globals.getGlobalData();
+        if (globalData == null) throw new NullPointerException();
+
+        // first we need to see if there *are* blacklisted users and ignore them:
+        List<BlacklistedUserObject> blacklistedUsers = globalData.getBlacklistedUsers();
+        for (BlacklistedUserObject object : blacklistedUsers) {
+            if (user.longID == object.getUserID()) {
+                // user is on blacklist, and hasn't timed out...
+                if (Instant.now().toEpochMilli() <= object.getEndTime()) return true;
+            }
+        }
+
+        // this handles people who aren't blacklisted currently:
+        long userID = user.longID;
+        int count = 1;
+
+        if (spamCounter.containsKey(userID)) {
+            // reset counter:
+            if (spamTimeout.get(userID) <= Instant.now().toEpochMilli()) {
+                spamCounter.put(userID, count);
+                spamTimeout.put(userID, Instant.now().toEpochMilli() + 10000);
+            } else {
+                count = spamCounter.get(userID);
+                count++;
+                spamCounter.put(userID, count);
+                logger.trace("counter is now " + count + " for " + userID);
+                if (count >= 5) {
+                    // User has spammed *too much*.
+                    BlacklistedUserObject blUser = globalData.blacklistUser(userID);
+                    long diffTime = blUser.getEndTime() - Instant.now().toEpochMilli();
+
+                    if (blUser.getCounter() >= 5) {
+                        RequestHandler.sendMessage("> OKAY, ENOUGH " + user.mention() + ". You've been permanently blacklisted from using commands.", command.channel);
+                    } else {
+                        RequestHandler.sendMessage("> You're using commands too much " + user.mention() +
+                                ". Take a chill pill, and try again in " + Utility.formatTime(diffTime / 1000, true), command.channel);
+                    }
+
+                    spamCounter.remove(userID);
+                    spamTimeout.remove(userID);
+                    logger.info("User " + userID + "(" + user.mention() + ") blacklisted for spamming commands (x" + blUser.getCounter() + ")");
+                    return true;
+                }
+            }
+        } else {
+            spamCounter.put(userID, count);
+            spamTimeout.put(userID, Instant.now().toEpochMilli() + 10000);
+            logger.trace("counter created for " + userID);
         }
         return false;
     }

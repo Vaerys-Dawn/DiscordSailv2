@@ -5,7 +5,7 @@ import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.BlackListObject;
 import com.github.vaerys.objects.ServerObject;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GlobalFile;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.Permissions;
@@ -16,11 +16,11 @@ import java.util.Arrays;
 /**
  * Created by Vaerys on 14/08/2016.
  */
-public class Servers extends GuildFile {
+public class Servers extends GlobalFile {
     public static final String FILE_PATH = "Servers.json";
+    private double fileVersion = 1.0;
     ArrayList<BlackListObject> blackList = new ArrayList<>();
     ArrayList<ServerObject> servers = new ArrayList<>();
-    private double fileVersion = 1.0;
 
     public String addToBlacklist(String phrase, String reason) {
         for (BlackListObject b : blackList) {

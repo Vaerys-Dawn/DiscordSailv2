@@ -1,10 +1,9 @@
 package com.github.vaerys.commands.creator.directmessages;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.templates.DMCommand;
 
@@ -17,7 +16,7 @@ public class BlockUser extends DMCommand {
     public String execute(String args, CommandObject command) {
         long userId = Globals.lastDmUserID;
         if (args != null && !args.isEmpty()) {
-            userId = Utility.stringLong(args.split("")[0]);
+            userId = Utility.stringLong(args.split(" ")[0]);
         }
         GlobalData globalData = Globals.getGlobalData();
         if (userId == Globals.creatorID) {

@@ -1,4 +1,4 @@
-package com.github.vaerys.objects;
+package com.github.vaerys.utilobjects;
 
 
 import ch.qos.logback.core.rolling.TriggeringPolicyBase;

@@ -1,6 +1,5 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.general.ProfileSettings;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.TagType;
@@ -8,8 +7,8 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.pogos.GuildUsers;
@@ -29,6 +28,7 @@ import java.util.ListIterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.github.vaerys.enums.UserSetting.*;
 
@@ -186,6 +186,7 @@ public class PixelHandler {
         List<String> deniedPrefixes = new ArrayList<>(object.guild.config.getXpDeniedPrefixes());
         deniedPrefixes.add(object.guild.config.getPrefixCommand());
         deniedPrefixes.add(object.guild.config.getPrefixCC());
+        deniedPrefixes.add(object.guild.config.getPrefixAdminCC());
         for (String s : deniedPrefixes) {
             if (object.message.get().getContent().startsWith(s)) {
                 return;
@@ -197,8 +198,7 @@ public class PixelHandler {
                 object.message.get().getAttachments().isEmpty()) return;
 
         //you cannot gain xp in an xpDenied channel
-        if (object.channel.settings.contains(ChannelSetting.XP_DENIED)) return;
-
+        if (object.guild.channelHasSetting(ChannelSetting.XP_DENIED, object.channel)) return;
 
         //gives them their xp.
         user.addXP(object.guild.config);
@@ -224,12 +224,6 @@ public class PixelHandler {
 
         //get next level xp
         long nextLevelXp = totalXPForLevel(user.getCurrentLevel() + 1);
-
-        //sanity check the level
-        if (user.getCurrentLevel() == -1) {
-            user.levelUp();
-            return;
-        }
 
         //check if the user actually leveled up
         if (user.getXP() < nextLevelXp) return;
@@ -473,19 +467,27 @@ public class PixelHandler {
     }
 
     public static long totalRanked(CommandObject command) {
-        long totalRanked = 0;
-        for (ProfileObject u : command.guild.users.getProfiles()) {
-            boolean hideRank;
-            UserObject object = new UserObject(command.guild.getUserByID(u.getUserID()), command.guild);
-            hideRank = !object.showRank(command.guild);
-            if (command.guild.getUserByID(u.getUserID()) != null) {
-                if (u.getXP() != 0 && !hideRank) {
-                    totalRanked++;
-                }
-            }
-        }
-        return totalRanked;
+        return command.guild.users.getProfiles().stream()
+                .filter(p -> command.guild.getUserByID(p.getUserID()) != null)
+                .filter(p -> p.showRank(command.guild))
+                .filter(p -> p.getXP() > 0)
+                .collect(Collectors.toList()).size();
     }
+
+//    public static long totalRanked(CommandObject command) {
+//        long totalRanked = 0;
+//        for (ProfileObject u : command.guild.users.getProfiles()) {
+//            boolean hideRank;
+//            UserObject object = new UserObject(command.guild.getUserByID(u.getUserID()), command.guild);
+//            hideRank = !object.showRank(command.guild);
+//            if (command.guild.getUserByID(u.getUserID()) != null) {
+//                if (u.getXP() != 0 && !hideRank) {
+//                    totalRanked++;
+//                }
+//            }
+//        }
+//        return totalRanked;
+//    }
 
     public static int getRewardCount(GuildObject object, long userID) {
         if (!object.config.modulePixels) return 4;

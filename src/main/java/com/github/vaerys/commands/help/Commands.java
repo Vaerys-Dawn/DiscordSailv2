@@ -1,17 +1,20 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -28,12 +31,12 @@ public class Commands extends Command {
         Map<SAILType, String> pages = new TreeMap<>();
 
         //get dm commands
-        List<Command> dmCommands = Globals.getCommands(true);
+        List<Command> dmCommands = CommandList.getCommands(true);
         //is creator
         if (command.user.checkIsCreator()) {
-            dmCommands.addAll(Globals.getCreatorCommands(true));
+            dmCommands.addAll(CommandList.getCreatorCommands(true));
             //add creator type and page
-            List<Command> creatorCommands = Globals.getCreatorCommands(false);
+            List<Command> creatorCommands = CommandList.getCreatorCommands(false);
             pages.put(SAILType.CREATOR, buildPage(creatorCommands, command, SAILType.CREATOR, types));
             types.add(SAILType.CREATOR);
         }
@@ -83,7 +86,7 @@ public class Commands extends Command {
 
         //send page
         builder.withTitle("> Here are all of the " + type.toString() + " Commands I have available.");
-        builder.withDesc(pages.get(type) + missingArgs(command));
+        builder.withDesc(pages.get(type) + get(Help.class).missingArgs(command));
         builder.send(command);
         return null;
     }

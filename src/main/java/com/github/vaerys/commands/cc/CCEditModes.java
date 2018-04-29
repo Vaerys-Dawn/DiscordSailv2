@@ -1,7 +1,7 @@
 package com.github.vaerys.commands.cc;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.tags.cctags.TagSearchTags;
 import org.apache.commons.lang3.StringUtils;

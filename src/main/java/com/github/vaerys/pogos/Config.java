@@ -12,11 +12,13 @@ import java.util.ArrayList;
  */
 public class Config extends GlobalFile {
     public static final String FILE_PATH = "Config.json";
+    private double fileVersion = 1.1;
     public boolean resetToDefault = false;
     public String botName = "S.A.I.L";
     public long creatorID = 0;
     public String defaultPrefixCommand = "$";
     public String defaultPrefixCC = "$$";
+    public String defaultPrefixAdminCC = "$!";
     public String defaultAvatarFile = "Avatar.png";
     public boolean doDailyAvatars = false;
     public String dailyAvatarName = "Avatar_For_#day#.png";
@@ -45,8 +47,6 @@ public class Config extends GlobalFile {
         add(new RandomStatusObject("Wanderlust Adventure", 1));
         add(new RandomStatusObject("Wanderlust Rebirth", 1));
     }};
-    private double fileVersion = 1.1;
-
 
     public static Config check(Config config) {
         if (config.resetToDefault) {

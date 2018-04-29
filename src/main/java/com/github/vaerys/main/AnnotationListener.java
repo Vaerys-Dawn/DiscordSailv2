@@ -1,6 +1,6 @@
 package com.github.vaerys.main;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.*;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
@@ -100,8 +100,10 @@ public class AnnotationListener {
             }
             builder.append("```");
             RequestHandler.sendMessage(builder.toString(), event.getChannel());
-            Globals.addToLog(new LogObject("ERROR", "MESSAGE_HANDLER", event.getMessage().getContent(),
-                    event.getChannel().getLongID(), event.getAuthor().getLongID(), event.getMessageID(), event.getGuild().getLongID()));
+            if (event.getGuild() != null) {
+                Globals.addToLog(new LogObject("ERROR", "MESSAGE_HANDLER", event.getMessage().getContent(),
+                        event.getChannel().getLongID(), event.getAuthor().getLongID(), event.getMessageID(), event.getGuild().getLongID()));
+            }
             Utility.sendStack(e);
         }
     }
@@ -151,8 +153,8 @@ public class AnnotationListener {
         }
         ReactionEmoji x = Utility.getReaction("x");
         ReactionEmoji pin = Utility.getReaction(Constants.EMOJI_ADD_PIN);
-        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
-        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
         ReactionEmoji heart = Utility.getReaction(Constants.EMOJI_LIKE_PIN);
         ReactionEmoji remove = Utility.getReaction(Constants.EMOJI_REMOVE_PIN);
         ReactionEmoji emoji = event.getReaction().getEmoji();

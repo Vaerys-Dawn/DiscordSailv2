@@ -1,7 +1,7 @@
 package com.github.vaerys.templates;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.ReplaceObject;
 
 import java.util.LinkedList;
@@ -11,7 +11,13 @@ public abstract class TagReplaceObject extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        return null;
+        List<ReplaceObject> toReplace = new LinkedList<>();
+        String old = from;
+        from = this.handleReplaceTag(from, command, args);
+        if (!from.equals(old)) {
+            from = replaceMode(from, toReplace);
+        }
+        return from;
     }
 
     public abstract String execute(String from, CommandObject command, String args, List<ReplaceObject> toReplace);
@@ -20,18 +26,15 @@ public abstract class TagReplaceObject extends TagObject {
         super(priority, types);
     }
 
-    @Override
-    public String handleTag(String from, CommandObject command, String args) {
+    public String handleReplaceTag(String from, CommandObject command, String args) {
         //cloned from the super and updated to suit replaces
         List<ReplaceObject> toReplace = new LinkedList<>();
         String old = from;
         while (cont(from)) {
             int absoluteArgs = Math.abs(requiredArgs);
-            if (requiredArgs == 0) {
-                from = execute(from, command, args, toReplace);
-            } else if (requiredArgs < 0 && getSplit(from).size() >= absoluteArgs) {
-                from = execute(from, command, args, toReplace);
-            } else if (requiredArgs == getSplit(from).size()) {
+            if (requiredArgs == 0 ||
+                    requiredArgs < 0 && getSplit(from).size() >= absoluteArgs ||
+                    requiredArgs == getSplit(from).size()) {
                 from = execute(from, command, args, toReplace);
             } else {
                 from = replaceFirstTag(from, error);

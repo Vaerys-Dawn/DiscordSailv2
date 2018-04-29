@@ -1,10 +1,9 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.InfoHandler;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
@@ -20,7 +19,7 @@ public class UpdateInfo extends Command {
     public String execute(String args, CommandObject command) {
         List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.INFO);
         if (channels.size() == 0) {
-            return "> No Info channel set up yet, you need to set one up in order to run this command.\n" + Utility.getCommandInfo(this, command);
+            return "> No Info channel set up yet, you need to set one up in order to run this command.\n" + missingArgs(command);
         }
         if (channels.get(0).getLongID() == command.channel.longID) {
             new InfoHandler(command);

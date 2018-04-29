@@ -1,10 +1,10 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.TrackLikes;
@@ -121,15 +121,15 @@ public class ArtHandler {
             }
 
             String response;
-            if (!command.guild.config.autoArtPinning) {
+            if (command.guild.config.autoArtPinning && reacted.longID == command.client.bot.longID) {
+                response = "> I have pinned **" + owner.displayName + "'s** art.";
+            } else {
                 if (owner.longID == reacted.longID) {
                     response = "> **" + reacted.displayName + "** Has pinned their";
                 } else {
                     response = "> **" + reacted.displayName + "** Has pinned **" + owner.displayName + "'s**";
                 }
                 response += " art by reacting with the \uD83D\uDCCC emoji.";
-            } else {
-                response = "> I have pinned **" + owner.displayName + "'s** art.";
             }
             if (command.guild.config.likeArt && command.guild.config.modulePixels) {
                 response += "\nYou can now react with a \u2764 emoji to give the user some pixels.";
@@ -234,8 +234,8 @@ public class ArtHandler {
 //        List<Long> pinnedMessages = command.guild.channelData.getPinnedMessages();
 //        List<TrackLikes> likes = command.guild.channelData.getLikes();
 //        List<IMessage> pins = RequestBuffer.request(() -> {
-//            return command.channel.getToggles().getPinnedMessages();
-//        }).getToggles();
+//            return command.channel.getAllToggles().getPinnedMessages();
+//        }).getAllToggles();
 //        List<IMessage> markedForUnpin = new ArrayList<>();
 //        int tries = 0;
 //
@@ -244,11 +244,11 @@ public class ArtHandler {
 //        try {
 //            while (iterator.hasNext()) {
 //                Long id = (Long) iterator.next();
-//                IMessage pin = command.channel.getToggles().getMessageByID(id);
+//                IMessage pin = command.channel.getAllToggles().getMessageByID(id);
 //                if (pin == null) {
 //                    pin = RequestBuffer.request(() -> {
-//                        return command.channel.getToggles().fetchMessage(id);
-//                    }).getToggles();
+//                        return command.channel.getAllToggles().fetchMessage(id);
+//                    }).getAllToggles();
 //                }
 //                if (pin == null) iterator.remove();
 //                else if (!pin.isPinned()) iterator.remove();
@@ -261,7 +261,7 @@ public class ArtHandler {
 //
 //        while (pinnedMessages.size() > pinLimit && tries < 50) {
 //            for (IMessage p : pins) {
-//                if (pinnedMessages.contains(p.getLongID()) && pinnedMessages.getToggles(0) == p.getLongID()) {
+//                if (pinnedMessages.contains(p.getLongID()) && pinnedMessages.getAllToggles(0) == p.getLongID()) {
 //                    //adds the pin to the messages to be unpinned
 //                    markedForUnpin.add(p);
 //                    removePin(p, pinnedMessages);
@@ -276,7 +276,7 @@ public class ArtHandler {
 //            for (IMessage message : markedForUnpin) {
 //                try {
 //                    if (message.isPinned()) {
-//                        RequestBuffer.request(() -> command.channel.getToggles().unpin(message)).getToggles();
+//                        RequestBuffer.request(() -> command.channel.getAllToggles().unpin(message)).getAllToggles();
 //                        logger.debug(Utility.loggingFormatter(command.setMessage(message), "ART_PINNED", "UNPIN", "PIN TOTAL = " + command.channel.getPinCount()));
 //                        expectedSize--;
 //                    }
@@ -286,8 +286,8 @@ public class ArtHandler {
 //                    }
 //                }
 ////                List<IMessage> pinned = RequestBuffer.request(() -> {
-////                    return command.channel.getToggles().getPinnedMessages();
-////                }).getToggles();
+////                    return command.channel.getAllToggles().getPinnedMessages();
+////                }).getAllToggles();
 ////                int size = pinned.size();
 ////                if (size > expectedSize) {
 ////                    flag = true;

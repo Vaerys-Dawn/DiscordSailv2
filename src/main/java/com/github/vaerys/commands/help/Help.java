@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.main.Globals;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -26,7 +26,7 @@ public class Help extends Command {
 
         List<Command> commands = command.guild.getAllCommands(command);
         if (command.user.longID == command.client.creator.longID) {
-            commands.addAll(Globals.getCreatorCommands(false));
+            commands.addAll(CommandList.getCreatorCommands(false));
         }
 
         Command foundCommand = null;

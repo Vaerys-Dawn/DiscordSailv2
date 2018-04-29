@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.modtools;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.cctags.TagRemoveMentions;
-import com.github.vaerys.tags.cctags.TagRemoveSanitizeTag;
+import com.github.vaerys.tags.cctags.TagRemovePrep;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
 import sx.blah.discord.handle.obj.Permissions;
@@ -26,13 +26,16 @@ public class AdminEcho extends Command {
                 iterator.remove();
             }
         }
-        args += new TagRemoveSanitizeTag(0).name;
+        args += TagList.getTag(TagRemovePrep.class).name;
         TagList.sort(tags);
         for (TagObject t : tags) {
             args = t.handleTag(args, command, "");
         }
         return args;
     }
+
+
+    public void HelloWorld(){}
 
     @Override
     public String description(CommandObject command) {

@@ -1,7 +1,7 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,6 +30,7 @@ public class MessageHandler {
         if (!isPrivate) {
             if (SpamHandler.checkForInvites(command)) return;
             if (SpamHandler.checkMentionCount(command)) return;
+            if (SpamHandler.commandBlacklisting(command)) return;
             if (SpamHandler.rateLimiting(command)) return;
             if (SpamHandler.catchWalls(command)) return;
             // check for role mentions:
@@ -40,14 +41,19 @@ public class MessageHandler {
                 args = args.replaceAll("@here", "REDACTED");
             }
             PixelHandler.grantXP(command);
-//            if (command.guild.config.artPinning) {
-//                if (command.guild.config.autoArtPinning) {
-//                    ArtHandler.pinMessage(command);
-//                }
-//            }
+            if (command.guild.config.artPinning) {
+                if (command.guild.config.autoArtPinning) {
+                    ArtHandler.pinMessage(command, command.message.author, command.client.bot);
+                }
+            }
             if (command.guild.config.moduleCC) {
                 if (args.toLowerCase().startsWith(command.guild.config.getPrefixCC().toLowerCase())) {
                     CCHandler.handleCommand(args, command);
+                }
+            }
+            if (command.guild.config.moduleAdminCC) {
+                if (args.toLowerCase().startsWith(command.guild.config.getPrefixAdminCC().toLowerCase())) {
+                    CCHandler.handleAdminCC(args, command);
                 }
             }
         } else {
@@ -65,7 +71,7 @@ public class MessageHandler {
 //        if (!isPrivate) return false;
 //        for (GuildObject g : Globals.getGuilds()) {
 //            if (g.config.getSatrtupState().equals(BEGIN_SETUP) && command.user.longID == g.getSetupUser()) {
-//                command.setGuild(g.getToggles());
+//                command.setGuild(g.getAllToggles());
 //                cont(command);
 //                return true;
 //            }
@@ -74,9 +80,9 @@ public class MessageHandler {
 //    }
 
     protected static void handleLogging(CommandObject commandObject, Command command, String args) {
-        if (!command.doAdminLogging && !commandObject.guild.config.adminLogging) {
+        if (command.doAdminLogging && !commandObject.guild.config.adminLogging) {
             return;
-        } else if (!commandObject.guild.config.generalLogging) {
+        } else if (!command.doAdminLogging && !commandObject.guild.config.generalLogging) {
             return;
         }
         StringHandler builder = new StringHandler("> **@").append(commandObject.user.username).append("** Has Used Command `").append(command.getCommand(commandObject)).append("`");
@@ -125,14 +131,14 @@ public class MessageHandler {
                 }
                 if (c.requiresArgs && (commandArgs == null || commandArgs.isEmpty())) {
 
-                    RequestHandler.sendMessage(Utility.getCommandInfo(c, command), currentChannel);
+                    RequestHandler.sendMessage(c.missingArgs(command), currentChannel);
                     return true;
                 }
                 //command logging
                 handleLogging(command, c, commandArgs);
                 RequestBuffer.request(() -> command.channel.get().setTypingStatus(true)).get();
-//                if (!command.channel.getToggles().getTypingStatus()) {
-//                    command.channel.getToggles().toggleTypingStatus();
+//                if (!command.channel.getAllToggles().getTypingStatus()) {
+//                    command.channel.getAllToggles().toggleTypingStatus();
 //                }
                 String response = c.execute(commandArgs, command);
                 RequestHandler.sendMessage(response, currentChannel);

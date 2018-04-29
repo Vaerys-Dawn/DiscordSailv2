@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -80,6 +80,9 @@ public class EditLinks extends Command {
             }
             if (linkName.getFirstWord().length() > 15) {
                 return "> Link Name too long. (Max 15 chars)";
+            }
+            if (linkName.getFirstWord().contains("\n")){
+                return "> Link Name cannot contain Newlines.";
             }
             if (Utility.checkURL(linkName.getRest())) {
                 try {

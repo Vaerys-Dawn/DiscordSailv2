@@ -136,28 +136,32 @@ public class StringHandler {
         return string.toString().split(s);
     }
 
-    public void replaceOnce(String replace, String withThis) {
+    public StringHandler replaceOnce(String replace, String withThis) {
         setContent(StringUtils.replaceOnce(string.toString(), replace, withThis));
+        return this;
     }
 
     public boolean startsWith(String s) {
         return s.startsWith(s);
     }
 
-    public void addViaJoin(List<LogObject> allLogs, String s) {
+    public StringHandler addViaJoin(List<LogObject> allLogs, String s) {
         append(String.join(s, allLogs.stream().map(logObject -> logObject.getOutput()).collect(Collectors.toList())));
+        return this;
     }
 
     public boolean isEmpty() {
         return string.toString().isEmpty();
     }
 
-    public void appendFront(String s) {
+    public StringHandler appendFront(String s) {
         setContent(s + string.toString());
+        return this;
     }
 
-    public void format(Object... values) {
+    public StringHandler format(Object... values) {
         setContent(String.format(string.toString(), values));
+        return this;
     }
 
     public int length() {
@@ -166,5 +170,10 @@ public class StringHandler {
 
     public String substring(int start, int end) {
         return string.substring(start, end);
+    }
+
+    public StringHandler delete(int start, int end) {
+        string.delete(start,end);
+        return this;
     }
 }

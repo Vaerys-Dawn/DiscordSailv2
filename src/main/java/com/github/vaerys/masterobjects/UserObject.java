@@ -1,13 +1,14 @@
 package com.github.vaerys.masterobjects;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.*;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;
 import sx.blah.discord.util.cache.LongMap;
@@ -15,6 +16,8 @@ import sx.blah.discord.util.cache.LongMap;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -115,8 +118,32 @@ public class UserObject {
             servers = new ArrayList<>();
             dailyMessages = new ArrayList<>();
         }
+        escapeMentions(guild);
         notAllowed = "> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
         isPatron = Globals.getPatrons().contains(longID);
+    }
+
+    private void escapeMentions(GuildObject guild) {
+        Pattern pattern = Pattern.compile("(?i)@(everyone|here)");
+        Matcher nameMatcher = pattern.matcher(name);
+        Matcher displayMatcher = pattern.matcher(displayName);
+
+        if (nameMatcher.find() || displayMatcher.find()) {
+            name = name.replace("@", "@" + Command.spacer);
+            displayName = displayName.replace("@", "@" + Command.spacer);
+            username = username.replace("@", "@" + Command.spacer);
+        }
+//        while (nameMatcher.find()) {
+//            String beginning = name.substring(0, nameMatcher.start());
+//            String end = name.substring(nameMatcher.start(), name.length());
+//            name = beginning + Command.spacer + end;
+//            username = name + "#" + object.getDiscriminator();
+//        }
+//        while (displayMatcher.find()) {
+//            String beginning = displayName.substring(0, displayMatcher.start() + 1);
+//            String end = displayName.substring(displayMatcher.start() + 1, displayName.length());
+//            displayName = beginning + Command.spacer + end;
+//        }
     }
 
     public UserObject loadExtraData(GuildObject guild) {

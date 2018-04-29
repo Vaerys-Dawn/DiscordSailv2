@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.characters;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.templates.Command;
@@ -19,8 +19,10 @@ public class EditChar extends Command {
             "> Gender - `Max Chars: 20`\n" +
             "> Height - `Max Chars: 20`\n" +
             "> Weight - `Max Chars: 20`\n" +
+            "> Name - `Min Chars 2, Max chars 32`\n" +
+            "> Roles - `Uses your current Cosmetic roles.`\n" +
             "> Avatar - `Needs Valid Image URL or Image`\n" +
-            "> Bio - `Max Chars: 300`\n" +
+            "> Bio - `Max Chars: 450`\n" +
             "> LongDesc - `Needs Valid URL`";
 
     @Override
@@ -50,9 +52,13 @@ public class EditChar extends Command {
                         case "longdesc":
                             return CharEditModes.longDesc(rest, c);
                         case "weight":
-                            return CharEditModes.weight(rest,c,command);
+                            return CharEditModes.weight(rest, c, command);
                         case "height":
-                            return CharEditModes.height(rest,c,command);
+                            return CharEditModes.height(rest, c, command);
+                        case "name":
+                            return CharEditModes.name(rest, c);
+                        case "roles":
+                            return CharEditModes.roles(command, c);
                         default:
                             return "> Mode not Valid.";
                     }

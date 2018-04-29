@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.creator.directmessages;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.templates.DMCommand;
 

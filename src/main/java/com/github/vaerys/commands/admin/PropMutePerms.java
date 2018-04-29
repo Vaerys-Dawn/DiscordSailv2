@@ -1,12 +1,10 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.cache.LongMap;
 
@@ -20,9 +18,9 @@ public class PropMutePerms extends Command {
         // check if bot has perms
         EnumSet<Permissions> botPerms = command.client.bot.getPermissions(command.guild);
         if (!botPerms.contains(Permissions.MANAGE_CHANNELS)) {
-            return "> I do not have permission to run this command. I need to have Manage Channels.";
+            return "> I do not have permission to run this command. I need to have Manage Channels.\n" +
+                    "Feel free to remove the permission after i am done as I will no longer need it.";
         }
-
         // get current channel's "Muted" role perms
         IRole mutedRole = command.guild.getMutedRole();
         if (mutedRole == null) return "> No muted role set.";
@@ -44,7 +42,8 @@ public class PropMutePerms extends Command {
 
         RequestHandler.deleteMessage(workingMsg);
         return "> Set permissions for " + counter + " channels to:\n**Allow**:" + mutedPermissions.allow().toString() +
-                "\n**Deny**:" + mutedPermissions.deny().toString();
+                "\n**Deny**:" + mutedPermissions.deny().toString() +
+                "\n\nYou are now free to remove my **Manage Channels** Permission as I no longer need it.";
     }
 
     @Override

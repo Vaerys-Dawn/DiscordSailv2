@@ -1,4 +1,4 @@
-package com.github.vaerys.objects;
+package com.github.vaerys.utilobjects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;

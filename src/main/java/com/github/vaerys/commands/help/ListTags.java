@@ -1,15 +1,16 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -22,22 +23,39 @@ public class ListTags extends Command {
 
     private static final SubCommandObject TAGS = new SubCommandObject(new String[]{"Tags"}, "",
             "Shows the cc tags.", SAILType.CC);
+    private static final SubCommandObject TAGS_ADMIN = new SubCommandObject(new String[]{"AdminTags", "TagsAdmin"}, "",
+            "Shows the cc tags and admin cc tags in one list.", SAILType.ADMIN_CC, Permissions.MANAGE_SERVER, Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES);
 
-    private static final List<String> modes = new ArrayList<String>() {{
-        add(TagType.CC.toString());
-        add(TagType.INFO.toString());
-        add(TagType.DAILY.toString());
-        add(TagType.LEVEL.toString());
-    }};
+
+    public static List<String> getModes(CommandObject command) {
+        List<String> modes = new ArrayList<String>() {{
+            add(TagType.INFO.toString());
+            add(TagType.DAILY.toString());
+            add(TagType.LEVEL.toString());
+        }};
+        if (command.guild.config.moduleCC) {
+            modes.add(TagType.CC.toString());
+        }
+        if (command.guild.config.moduleAdminCC) {
+            modes.add(TagType.ADMIN_CC.toString());
+        }
+        return modes;
+    }
+
 
     @Override
     public String execute(String args, CommandObject command) {
         List<String> list;
         XEmbedBuilder builder = new XEmbedBuilder(command);
         TagType type = TagType.get(args);
-        if (args.isEmpty() && !TAGS.isSubCommand(command)) {
+        if (args.isEmpty() && !TAGS.isSubCommand(command) && !TAGS_ADMIN.isSubCommand(command)) {
             sendModes(command, "");
             return null;
+        } else if (TAGS_ADMIN.isSubCommand(command)) {
+            List<TagObject> tags = TagList.getType(TagType.CC);
+            tags.addAll(TagList.getType(TagType.ADMIN_CC));
+            TagList.sort(tags);
+            list = tags.stream().map(t -> t.name).collect(Collectors.toList());
         } else if (TAGS.isSubCommand(command)) {
             list = TagList.getNames(TagType.CC);
         } else {
@@ -57,18 +75,18 @@ public class ListTags extends Command {
     private void sendModes(CommandObject command, String s) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle("> Modes");
-        builder.withDesc("```\n" + Utility.listFormatter(modes, false) + "```\n" + missingArgs(command));
+        builder.withDesc("```\n" + Utility.listFormatter(getModes(command), false) + "```\n" + missingArgs(command));
         RequestHandler.sendEmbedMessage(s, builder, command);
     }
 
     @Override
     protected String[] names() {
-        return new String[]{"ListTags"};
+        return new String[]{"ListTags", "TagList"};
     }
 
     @Override
     public String description(CommandObject command) {
-        String formatted = Utility.listFormatter(modes.stream().map(s -> "> " + s).collect(Collectors.toList()), false);
+        String formatted = Utility.listFormatter(getModes(command).stream().map(s -> "> " + s).collect(Collectors.toList()), false);
         return "Lists all of a certain type of tag, defaults to Custom command tags.\n" +
                 "**Tag Types:**\n" + formatted;
     }
@@ -106,6 +124,7 @@ public class ListTags extends Command {
     @Override
     public void init() {
         subCommands.add(TAGS);
+        subCommands.add(TAGS_ADMIN);
         showIndividualSubs = true;
     }
 }

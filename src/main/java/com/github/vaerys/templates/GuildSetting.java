@@ -1,6 +1,6 @@
 package com.github.vaerys.templates;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 
 public abstract class GuildSetting extends GuildToggle {
 
@@ -18,5 +18,4 @@ public abstract class GuildSetting extends GuildToggle {
     public boolean statsOnInfo() {
         return false;
     }
-
 }

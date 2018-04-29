@@ -1,7 +1,6 @@
-package com.github.vaerys.commands;
+package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.masterobjects.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;

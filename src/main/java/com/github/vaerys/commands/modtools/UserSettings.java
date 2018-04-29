@@ -1,21 +1,20 @@
 package com.github.vaerys.commands.modtools;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 06/07/2017.
@@ -61,19 +60,19 @@ public class UserSettings extends Command {
             if (command.guild.config.modulePixels) {
                 switch (toTest) {
                     case DENIED_XP:
-                        return toggleSetting(profile, UserSetting.DENIED_XP,
+                        return profile.toggleSetting(UserSetting.DENIED_XP,
                                 "> **" + user.displayName + "** will now gain xp again.",
                                 "> **" + user.displayName + "** will no longer gain XP.");
                     case DONT_SHOW_LEADERBOARD:
-                        return toggleSetting(profile, UserSetting.DONT_SHOW_LEADERBOARD,
+                        return profile.toggleSetting(UserSetting.DONT_SHOW_LEADERBOARD,
                                 "> **" + user.displayName + "'s** rank is now visible.",
                                 "> **" + user.displayName + "** will no longer show their rank.");
                     case DONT_DECAY:
-                        return toggleSetting(profile, UserSetting.DONT_DECAY,
+                        return profile.toggleSetting(UserSetting.DONT_DECAY,
                                 "> **" + user.displayName + "** will now have pixel decay.",
                                 "> **" + user.displayName + "** will no longer have pixel decay.");
                     case DENY_AUTO_ROLE:
-                        return toggleSetting(profile, UserSetting.DENY_AUTO_ROLE,
+                        return profile.toggleSetting(UserSetting.DENY_AUTO_ROLE,
                                 "> **" + user.displayName + "** will now automatically be granted roles.",
                                 "> **" + user.displayName + "** will no longer automatically be granted roles.");
                 }
@@ -81,15 +80,15 @@ public class UserSettings extends Command {
             if (command.guild.config.moduleCC) {
                 switch (toTest) {
                     case DENY_MAKE_CC:
-                        return toggleSetting(profile, UserSetting.DENY_MAKE_CC,
+                        return profile.toggleSetting(UserSetting.DENY_MAKE_CC,
                                 "> **" + user.displayName + "** can now make custom commands.",
                                 "> **" + user.displayName + "** can no longer make custom commands.");
                     case DENY_USE_CCS:
-                        return toggleSetting(profile, UserSetting.DENY_USE_CCS,
+                        return profile.toggleSetting(UserSetting.DENY_USE_CCS,
                                 "> **" + user.displayName + "** can now use custom commands.",
                                 "> **" + user.displayName + "** can no longer use custom commands.");
                     case AUTO_SHITPOST:
-                        return toggleSetting(profile, UserSetting.AUTO_SHITPOST,
+                        return profile.toggleSetting(UserSetting.AUTO_SHITPOST,
                                 "> **" + user.displayName + "** no longer has the shitpost tag automatically added to all of their new Custom Commands.",
                                 "> **" + user.displayName + "** now has the shitpost tag automatically added to all of their new Custom Commands.");
                 }
@@ -97,20 +96,20 @@ public class UserSettings extends Command {
             if (command.guild.config.artPinning) {
                 switch (toTest) {
                     case DENY_ART_PINNING:
-                        return toggleSetting(profile, UserSetting.DENY_ART_PINNING,
+                        return profile.toggleSetting(UserSetting.DENY_ART_PINNING,
                                 "> **" + user.displayName + "** can now pin art.",
                                 "> **" + user.displayName + "** can no longer pin art.");
                 }
             }
             switch (toTest) {
                 case DENY_INVITES:
-                    return toggleSetting(profile,UserSetting.DENY_INVITES,
+                    return profile.toggleSetting(UserSetting.DENY_INVITES,
                             "> **" + user.displayName + "** can now post instant invites.",
                             "> **" + user.displayName + "** can no longer post instant invites.");
                 default:
                     String response = (split.getRest() == null || split.getRest().isEmpty()) ? "" : "> Not a valid User Setting.\n\n";
                     if (profile.getSettings().size() == 0) {
-                        return response + "> **" + user.displayName + "** has no settings attached to their profile.\n\n" + settings(command) + "\n\n" + Utility.getCommandInfo(this, command);
+                        return response + "> **" + user.displayName + "** has no settings attached to their profile.\n\n" + settings(command) + "\n\n" + missingArgs(command);
                     } else {
                         return sendList(response, profile, command, user, true);
                     }
@@ -132,28 +131,12 @@ public class UserSettings extends Command {
         } else {
             String desc = "```\n" + Utility.listFormatter(userSettings, true) + "```";
             if (showCommand) {
-                desc += "\n" + Utility.getCommandInfo(this, command);
+                desc += "\n" + missingArgs(command);
             }
             builder.withDesc(desc);
         }
         RequestHandler.sendEmbedMessage(prefix, builder, command.channel.get());
         return "";
-    }
-
-    private String toggleSetting(ProfileObject user, UserSetting setting, String remove, String add) {
-        if (user.getSettings().contains(setting)) {
-            ListIterator iterator = user.getSettings().listIterator();
-            while (iterator.hasNext()) {
-                UserSetting s = (UserSetting) iterator.next();
-                if (s == setting) {
-                    iterator.remove();
-                }
-            }
-            return remove;
-        } else {
-            user.getSettings().add(setting);
-            return add;
-        }
     }
 
     @Override

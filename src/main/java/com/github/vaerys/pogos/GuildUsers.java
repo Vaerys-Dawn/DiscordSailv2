@@ -3,18 +3,18 @@ package com.github.vaerys.pogos;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.UserCountDown;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GlobalFile;
 
 import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 03/02/2017.
  */
-public class GuildUsers extends GuildFile {
+public class GuildUsers extends GlobalFile {
     public static final String FILE_PATH = "Guild_Users.json";
+    private double fileVersion = 1.2;
     public ArrayList<ProfileObject> profiles = new ArrayList<>();
     public ArrayList<UserCountDown> mutedUsers = new ArrayList<>();
-    private double fileVersion = 1.2;
 
     public ArrayList<ProfileObject> getProfiles() {
         return profiles;

@@ -1,10 +1,10 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.*;
@@ -171,6 +171,10 @@ public class TimerHandler {
                     //backups
                     Globals.backupAll();
 
+                    // clear blacklist
+                    List<BlacklistedUserObject> blacklistedUserObjects = Globals.getGlobalData().getBlacklistedUsers();
+                    blacklistedUserObjects.removeIf(object -> object.getCounter() < 5);
+
                     dailyMessageHandler(event);
 
 
@@ -200,7 +204,10 @@ public class TimerHandler {
             //reset offenders
             task.resetOffenders();
 
-            //getToggles general channel
+            //reset Admin CC counters
+            task.adminCCs.dailyReset();
+
+            //getAllToggles general channel
             IChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
 
             //do daily messages
@@ -266,8 +273,12 @@ public class TimerHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                IMessage message = RequestHandler.sendMessage(object.getMessage(), Globals.getClient().getChannelByID(object.getChannelID())).get();
-                if (message == null) {
+                IChannel channel = Client.getClient().getChannelByID(object.getChannelID());
+                // sanitize channel
+                if (channel == null) Globals.getGlobalData().removeReminder(object);
+                IMessage message = RequestHandler.sendMessage(object.getMessage(), channel).get();
+                //check message sent.
+                if (message == null && !channel.isPrivate()) {
                     logger.error("REMINDER FAILED FOR USER WITH ID \"" + object.getUserID() + "\" TO SEND. WILL ATTEMPT TO SEND AGAIN IN 5 MINS.");
                     object.setSent(false);
                 } else {
@@ -407,8 +418,11 @@ public class TimerHandler {
 
                     botStatsHandler();
 
-                    saveHandler();
+                    for (GuildObject g: Globals.getGuilds()){
+                        g.adminCCs.purgeKeys();
+                    }
 
+                    saveHandler();
                 } catch (Exception e) {
                     Utility.sendStack(e);
                 }

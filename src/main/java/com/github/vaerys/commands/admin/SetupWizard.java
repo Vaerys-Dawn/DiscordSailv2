@@ -1,7 +1,5 @@
-
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.setup.SetupBack;
 import com.github.vaerys.commands.setup.SetupNext;
 import com.github.vaerys.enums.ChannelSetting;
@@ -9,6 +7,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.handlers.SetupHandler.SetupStage;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.templates.Command;

@@ -1,12 +1,11 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
 
 import java.util.List;
-import java.util.regex.PatternSyntaxException;
 
 public class TagRegex extends TagReplaceObject {
 
@@ -20,7 +19,7 @@ public class TagRegex extends TagReplaceObject {
         String test = "Testing.";
         try {
             test.replaceAll(splitArgs.get(0), test);
-        } catch (PatternSyntaxException e) {
+        } catch (Exception e) {
             from = replaceFirstTag(from, error);
             return from;
         }
@@ -52,7 +51,11 @@ public class TagRegex extends TagReplaceObject {
     @Override
     public String replaceMode(String from, List<ReplaceObject> toReplace) {
         for (ReplaceObject t : toReplace) {
-            from = from.replaceAll(t.getFrom(), t.getTo());
+            try {
+                from = from.replaceAll(t.getFrom(), t.getTo());
+            } catch (IllegalArgumentException e) {
+                from = from.replaceAll(t.getFrom(), prepReplace(t.getTo()));
+            }
         }
         return from;
     }

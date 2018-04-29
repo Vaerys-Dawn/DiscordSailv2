@@ -1,11 +1,11 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.ChannelObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
@@ -53,6 +53,7 @@ public class GuildHandler {
             return;
         }
         List<IRole> userRoles = user.getRolesForGuild(content.get());
+        if (userRoles.contains(content.getMutedRole())) return;
 
         if (content.config.readRuleReward) {
             IRole ruleReward = content.getRoleByID(content.config.ruleCodeRewardID);
@@ -165,16 +166,17 @@ public class GuildHandler {
     }
 
     public static boolean canBypass(IUser author, IGuild guild, boolean logging) {
-        GuildConfig config = Globals.getGuildContent(guild.getLongID()).config;
+        if (guild == null) return false;
+        GuildObject object = Globals.getGuildContent(guild.getLongID());
+        if (object == null) return false;
+        GuildConfig config = object.config;
         if (author.getLongID() == Globals.creatorID && config.debugMode) {
             if (logging) {
                 logger.trace("User is Creator, BYPASSING.");
             }
             return true;
         }
-        if (guild == null) {
-            return false;
-        }
+
         if (author.getLongID() == guild.getOwnerLongID()) {
             if (logging) {
                 logger.trace("User is Guild Owner, GUILD : \"" + guild.getLongID() + "\", BYPASSING.");
@@ -193,6 +195,10 @@ public class GuildHandler {
 
     public static boolean canBypass(UserObject user, GuildObject guild) {
         return canBypass(user.get(), guild.get());
+    }
+
+    public static boolean canBypass(CommandObject command) {
+        return canBypass(command.user.get(), command.guild.get());
     }
 
     public static boolean testForPerms(IUser user, IGuild guild, Permissions... perms) {
@@ -251,6 +257,8 @@ public class GuildHandler {
     }
 
     public static boolean testForPerms(CommandObject command, ChannelObject channel, Permissions... perms) {
-        return testForPerms(command,channel.get(),perms);
+        return testForPerms(command, channel.get(), perms);
     }
+
+
 }

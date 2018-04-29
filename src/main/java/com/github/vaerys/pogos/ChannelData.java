@@ -1,10 +1,11 @@
 package com.github.vaerys.pogos;
 
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.GroupUpObject;
 import com.github.vaerys.objects.JoinMessage;
 import com.github.vaerys.objects.TrackLikes;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GlobalFile;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 
@@ -16,14 +17,15 @@ import java.util.ListIterator;
 /**
  * Created by Vaerys on 12/05/2017.
  */
-public class ChannelData extends GuildFile {
+public class ChannelData extends GlobalFile {
     public static final String FILE_PATH = "Channel_Data.json";
+    private double fileVersion = 1.3;
     List<ChannelSettingObject> channelSettings = new ArrayList<>();
     ArrayList<Long> pinnedMessages = new ArrayList<>();
     ArrayList<GroupUpObject> groupUpObjects = new ArrayList<>();
     List<TrackLikes> likes = new ArrayList<>();
-    private double fileVersion = 1.3;
     private List<JoinMessage> joinMessages = new LinkedList<>();
+
 
     public ArrayList<GroupUpObject> getGroupUpObjects() {
         return groupUpObjects;
@@ -66,5 +68,12 @@ public class ChannelData extends GuildFile {
 
     public List<JoinMessage> getJoinMessages() {
         return joinMessages;
+    }
+
+    public ChannelSettingObject getChannelSetting(ChannelSetting setting) {
+        for (ChannelSettingObject c : channelSettings) {
+            if (c.getType() == setting) return c;
+        }
+        return null;
     }
 }

@@ -1,11 +1,11 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
@@ -42,7 +42,7 @@ public class EditInfoFiles extends Command {
                 return InfoEditModes.getInfoFile(command);
             }
             default:
-                return "Invalid Edit Mode.\n" + Utility.getCommandInfo(this, command);
+                return "Invalid Edit Mode.\n" + missingArgs(command);
         }
     }
 

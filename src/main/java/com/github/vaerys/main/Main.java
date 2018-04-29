@@ -1,8 +1,10 @@
 package com.github.vaerys.main;
 
+import com.github.vaerys.enums.FilePaths;
 import com.github.vaerys.handlers.*;
 import com.github.vaerys.pogos.Config;
 import com.github.vaerys.pogos.GlobalData;
+import com.github.vaerys.templates.FileFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.Discord4J;
@@ -65,10 +67,13 @@ public class Main {
             FileHandler.createDirectory(Constants.DIRECTORY_TEMP);
             FileHandler.createDirectory(Constants.DIRECTORY_OLD_FILES);
             FileHandler.createDirectory(Constants.DIRECTORY_ERROR);
+            if (!FileHandler.exists(Constants.INFO_TEMPLATE)) {
+                Constants.initInfoTemplate();
+            }
 
             //load config phase 1
-            Config config = (Config) Config.create(Constants.FILE_CONFIG, new Config());
-            GlobalData globalData = (GlobalData) GlobalData.create(Constants.FILE_GLOBAL_DATA, new GlobalData());
+            Config config = FileFactory.create(FilePaths.CONFIG, Config.class);
+            GlobalData globalData = FileFactory.create(FilePaths.GLOBAL_DATA, GlobalData.class);
 
             config = Config.check(config);
 
@@ -88,7 +93,7 @@ public class Main {
             }
 
 
-            //stuff that i cant getToggles to work because reasons, ignore completely
+            //stuff that i cant getAllToggles to work because reasons, ignore completely
 
 //            try{
 //                List<String> richPresesnce = FileHandler.readFromFile(Constants.FILE_RPC_TOKEN);

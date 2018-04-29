@@ -1,14 +1,15 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.handlers.setupStages.LoggingSetupStage;
 import com.github.vaerys.handlers.setupStages.ModulesStage;
 import com.github.vaerys.handlers.setupStages.SettingsStage;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
@@ -68,7 +69,7 @@ public abstract class SetupHandler {
      * @return false if command isn't run, otherwise true.
      */
     private static boolean handleCommand(CommandObject command, String args) {
-        List<Command> commands = Globals.getSetupCommands();
+        List<Command> commands = CommandList.getSetupCommands();
         IChannel currentChannel = command.channel.get();
         String commandArgs;
         for (Command c : commands) {
@@ -78,7 +79,7 @@ public abstract class SetupHandler {
                 MessageHandler.handleLogging(command, c, commandArgs);
                 if (c.requiresArgs && (commandArgs == null || commandArgs.isEmpty())) {
 
-                    RequestHandler.sendMessage(Utility.getCommandInfo(c, command), currentChannel);
+                    RequestHandler.sendMessage(c.missingArgs(command), currentChannel);
                     return true;
                 }
                 RequestBuffer.request(() -> command.channel.get().setTypingStatus(true)).get();
@@ -156,7 +157,7 @@ public abstract class SetupHandler {
      * @param command A {@link CommandObject} passed to each setup instance.
      * @return A string value representing the text output.
      * @see RequestHandler#sendMessage(String, IChannel)
-     * @see com.github.vaerys.objects.XEmbedBuilder
+     * @see XEmbedBuilder
      */
     public abstract void stepText(CommandObject command);
 
