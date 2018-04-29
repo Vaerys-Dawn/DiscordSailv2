@@ -204,6 +204,9 @@ public class TimerHandler {
             //reset offenders
             task.resetOffenders();
 
+            //reset Admin CC counters
+            task.adminCCs.dailyReset();
+
             //getAllToggles general channel
             IChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
 
@@ -415,8 +418,11 @@ public class TimerHandler {
 
                     botStatsHandler();
 
-                    saveHandler();
+                    for (GuildObject g: Globals.getGuilds()){
+                        g.adminCCs.purgeKeys();
+                    }
 
+                    saveHandler();
                 } catch (Exception e) {
                     Utility.sendStack(e);
                 }

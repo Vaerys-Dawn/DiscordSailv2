@@ -18,9 +18,9 @@ public class PropMutePerms extends Command {
         // check if bot has perms
         EnumSet<Permissions> botPerms = command.client.bot.getPermissions(command.guild);
         if (!botPerms.contains(Permissions.MANAGE_CHANNELS)) {
-            return "> I do not have permission to run this command. I need to have Manage Channels.";
+            return "> I do not have permission to run this command. I need to have Manage Channels.\n" +
+                    "Feel free to remove the permission after i am done as I will no longer need it.";
         }
-
         // get current channel's "Muted" role perms
         IRole mutedRole = command.guild.getMutedRole();
         if (mutedRole == null) return "> No muted role set.";
@@ -42,7 +42,8 @@ public class PropMutePerms extends Command {
 
         RequestHandler.deleteMessage(workingMsg);
         return "> Set permissions for " + counter + " channels to:\n**Allow**:" + mutedPermissions.allow().toString() +
-                "\n**Deny**:" + mutedPermissions.deny().toString();
+                "\n**Deny**:" + mutedPermissions.deny().toString() +
+                "\n\nYou are now free to remove my **Manage Channels** Permission as I no longer need it.";
     }
 
     @Override

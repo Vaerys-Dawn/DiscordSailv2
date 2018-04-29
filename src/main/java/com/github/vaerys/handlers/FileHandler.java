@@ -1,15 +1,21 @@
 package com.github.vaerys.handlers;
 
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.google.gson.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.obj.IMessage;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by Vaerys on 04/06/2016.
@@ -96,6 +102,9 @@ public class FileHandler {
             logger.trace("Reading Data from Json File: " + file + " applying to Object: " + objClass.getName());
             reader.close();
             return newObject;
+        } catch (JsonSyntaxException e) {
+            logger.error(file);
+            Utility.sendStack(e);
         } catch (IOException e) {
             logger.error(e.getCause().toString());
         }
@@ -107,6 +116,7 @@ public class FileHandler {
      * saves data from POGO of type "object" using path "file".
      */
     public static void writeToJson(String file, Object object) {
+        if (object == null) return;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             gson.toJson(object, writer);
@@ -152,5 +162,30 @@ public class FileHandler {
             toSave += s;
         }
         writeToFile(path, toSave, true);
+    }
+
+    /***
+     * Handler to read the contents of a discord attachment.
+     *
+     * @param attachment the file to be decoded.
+     * @return the contents of the file.
+     */
+    public static String readFromFile(IMessage.Attachment attachment) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(attachment.getUrl()).openConnection();
+            connection.setRequestProperty("User-Agent", Constants.MOZILLA_USER_AGENT);
+            Scanner s = new Scanner(connection.getInputStream());
+            StringHandler content = new StringHandler();
+            while (s.hasNextLine()) {
+                if (content.length() != 0) content.append("\n");
+                content.append(s.nextLine());
+            }
+            s.close();
+            return content.toString();
+        } catch (MalformedURLException e) {
+            return "";
+        } catch (IOException e) {
+            return "";
+        }
     }
 }

@@ -24,7 +24,7 @@ public class RemindMe extends Command {
         long timeSecs = Utility.getRepeatTimeValue(contents);
         if (timeSecs == -1) {
             return "> Could not find a valid time value.\n" +
-                    Utility.getCommandInfo(this, command);
+                    missingArgs(command);
         }
         if (timeSecs < 30) {
             return "> You can't set a reminder for less than 30 seconds.";

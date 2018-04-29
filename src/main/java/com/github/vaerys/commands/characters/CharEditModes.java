@@ -4,9 +4,12 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CharacterObject;
 import org.apache.commons.lang3.StringUtils;
+import sx.blah.discord.handle.obj.IRole;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 04/04/2017.
@@ -92,7 +95,7 @@ public class CharEditModes {
     }
 
     public static String desc(String args, CharacterObject character, CommandObject command) {
-        long maxChars = 300;
+        long maxChars = 450;
         long maxNewlines = 5;
         if (command.user.isPatron) {
             maxChars += maxChars;
@@ -123,5 +126,22 @@ public class CharEditModes {
         } catch (MalformedURLException e) {
             return "> Specified URL is invalid.";
         }
+    }
+
+    public static String name(String args, CharacterObject character) {
+        if (args.length() > 32 || args.length() < 2) {
+            return "> Character Name must between 2 and 32 chars.";
+        }
+        if (args.contains("\n")) {
+            return "> Character cannot contain newlines.";
+        }
+        character.setNickname(args);
+        return "> Character Name Updated.";
+    }
+
+    public static String roles(CommandObject command, CharacterObject c) {
+        List<IRole> cosmetics = command.user.roles.stream().filter(r -> command.guild.config.isRoleCosmetic(r.getLongID())).collect(Collectors.toList());
+        c.update(c.getName(), cosmetics);
+        return "> Character Roles Updated.";
     }
 }

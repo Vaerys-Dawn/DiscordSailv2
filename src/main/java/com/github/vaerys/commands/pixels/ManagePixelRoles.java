@@ -3,12 +3,11 @@ package com.github.vaerys.commands.pixels;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -117,7 +116,7 @@ public class ManagePixelRoles extends Command {
                     return "> **" + role.getName() + "** is not a valid Pixel role.";
                 default:
                     return "> Invalid Mode.\n" + modes +
-                            Utility.getCommandInfo(this, command);
+                            missingArgs(command);
             }
         }
     }

@@ -2,6 +2,7 @@ package com.github.vaerys.commands.groups;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.GroupUpObject;
@@ -49,11 +50,12 @@ public class GroupUp extends Command {
                         } else {
                             newPres = g.getPresence();
                         }
-                        StringBuilder builder = new StringBuilder(newPres);
+                        StringHandler builder = new StringHandler(newPres);
                         if (builder.length() > 40) {
-                            builder.delete(0, 40);
+                            builder.delete(41, builder.length());
                             builder.append("...");
                         }
+                        builder.replaceRegex("(?i)@(here|everyone)", "[REDACTED]");
                         completeList.add(indent + user.mention() + " Playing: " + builder.toString());
                     } else {
                         completeList.add(indent + user.mention());
@@ -63,7 +65,7 @@ public class GroupUp extends Command {
         }
         return "**> You have been added to the GroupUp list.**\n\n" + "Here are the others currently waiting:\n" +
                 Utility.listFormatter(completeList, false) + "\n*To opt out simply run this command again*\n" +
-                Utility.getCommandInfo(this, command);
+                missingArgs(command);
     }
 
     @Override

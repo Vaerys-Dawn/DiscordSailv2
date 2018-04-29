@@ -2,6 +2,7 @@ package com.github.vaerys.main;
 
 import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.FilePaths;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.handlers.FileHandler;
@@ -16,7 +17,8 @@ import com.github.vaerys.pogos.DailyMessages;
 import com.github.vaerys.pogos.Events;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.FileFactory;
+import com.github.vaerys.templates.GlobalFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
@@ -39,6 +41,7 @@ public class Globals {
     public static long creatorID = -1;
     public static String defaultPrefixCommand = null;
     public static String defaultPrefixCC = null;
+    public static String defaultPrefixAdminCC = null;
     public static String defaultAvatarFile = null;
     public static boolean doDailyAvatars = false;
     public static boolean doRandomGames = false;
@@ -73,6 +76,7 @@ public class Globals {
     private static String currentEvent = null;
     public static long lastRateLimitReset = System.currentTimeMillis();
 
+
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
         if (newGlobalData != null) {
             globalData = newGlobalData;
@@ -82,6 +86,7 @@ public class Globals {
         creatorID = config.creatorID;
         defaultPrefixCommand = config.defaultPrefixCommand;
         defaultPrefixCC = config.defaultPrefixCC;
+        defaultPrefixAdminCC = config.defaultPrefixAdminCC;
         defaultAvatarFile = config.defaultAvatarFile;
         doDailyAvatars = config.doDailyAvatars;
         dailyAvatarName = config.dailyAvatarName;
@@ -97,8 +102,8 @@ public class Globals {
         randomStatuses = config.randomStatuses;
         queueChannelID = config.queueChannelID;
         blacklistedURls = FileHandler.readFromFile("website.blacklist");
-        dailyMessages = (DailyMessages) DailyMessages.create(DailyMessages.FILE_PATH, new DailyMessages());
-        events = (Events) Events.create(Events.FILE_PATH, new Events());
+        dailyMessages = FileFactory.create(FilePaths.DAILY_MESSAGES, DailyMessages.class);
+        events = FileFactory.create(FilePaths.EVENTS, Events.class);
         updateEvent();
         initCommands();
     }
@@ -249,7 +254,7 @@ public class Globals {
             globalData.flushFile();
         // guild files
         for (GuildObject g : guilds) {
-            for (GuildFile file : g.guildFiles) {
+            for (GlobalFile file : g.guildFiles) {
                 file.flushFile();
             }
         }
@@ -271,7 +276,7 @@ public class Globals {
             globalData.backUp();
         // guild files
         for (GuildObject g : guilds) {
-            for (GuildFile file : g.guildFiles) {
+            for (GlobalFile file : g.guildFiles) {
                 file.backUp();
             }
         }

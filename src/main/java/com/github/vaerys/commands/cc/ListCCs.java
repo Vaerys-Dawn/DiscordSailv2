@@ -52,7 +52,7 @@ public class ListCCs extends Command {
         command.setAuthor(user);
         int max = command.guild.customCommands.maxCCs(command.user, command.guild);
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        String title = "> Here are the custom commands for user: **@" + user.getName() + "#" + user.getDiscriminator() + "**.";
+        String title = "> Here are the custom commands for user: @" + user.getName() + "#" + user.getDiscriminator() + ".";
         List<String> list = new ArrayList<>();
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
             if (c.getUserID() == userID) {

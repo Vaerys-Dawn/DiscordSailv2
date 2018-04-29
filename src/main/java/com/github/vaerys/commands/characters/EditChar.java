@@ -19,8 +19,10 @@ public class EditChar extends Command {
             "> Gender - `Max Chars: 20`\n" +
             "> Height - `Max Chars: 20`\n" +
             "> Weight - `Max Chars: 20`\n" +
+            "> Name - `Min Chars 2, Max chars 32`\n" +
+            "> Roles - `Uses your current Cosmetic roles.`\n" +
             "> Avatar - `Needs Valid Image URL or Image`\n" +
-            "> Bio - `Max Chars: 300`\n" +
+            "> Bio - `Max Chars: 450`\n" +
             "> LongDesc - `Needs Valid URL`";
 
     @Override
@@ -53,6 +55,10 @@ public class EditChar extends Command {
                             return CharEditModes.weight(rest, c, command);
                         case "height":
                             return CharEditModes.height(rest, c, command);
+                        case "name":
+                            return CharEditModes.name(rest, c);
+                        case "roles":
+                            return CharEditModes.roles(command, c);
                         default:
                             return "> Mode not Valid.";
                     }

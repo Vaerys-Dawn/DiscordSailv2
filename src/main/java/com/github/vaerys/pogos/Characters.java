@@ -1,13 +1,13 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Constants;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.CharacterObject;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GlobalFile;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
  * Created by Vaerys on 14/08/2016.
  */
 
-public class Characters extends GuildFile {
+public class Characters extends GlobalFile {
     public static final String FILE_PATH = "Characters.json";
-    ArrayList<CharacterObject> characters = new ArrayList<>();
     private double fileVersion = 1.0;
+    ArrayList<CharacterObject> characters = new ArrayList<>();
     private String rolePrefix = "";
 
     public ArrayList<CharacterObject> getCharacters(IGuild guild) {

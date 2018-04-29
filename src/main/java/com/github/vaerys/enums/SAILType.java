@@ -66,7 +66,8 @@ public enum SAILType {
     CHECK_NEW_USERS("CheckNewUsers"),
     SEND_JOIN_MESSAGES("SendJoinMessages"),
     BAN_LOGGING("BanLogging"),
-    KICK_LOGGING("KickLogging");
+    KICK_LOGGING("KickLogging"),
+    ADMIN_CC("AdminCC");
 
     private String name;
 

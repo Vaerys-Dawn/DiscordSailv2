@@ -1,12 +1,11 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandList;
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.setupStages.LoggingSetupStage;
 import com.github.vaerys.handlers.setupStages.ModulesStage;
 import com.github.vaerys.handlers.setupStages.SettingsStage;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
@@ -80,7 +79,7 @@ public abstract class SetupHandler {
                 MessageHandler.handleLogging(command, c, commandArgs);
                 if (c.requiresArgs && (commandArgs == null || commandArgs.isEmpty())) {
 
-                    RequestHandler.sendMessage(Utility.getCommandInfo(c, command), currentChannel);
+                    RequestHandler.sendMessage(c.missingArgs(command), currentChannel);
                     return true;
                 }
                 RequestBuffer.request(() -> command.channel.get().setTypingStatus(true)).get();

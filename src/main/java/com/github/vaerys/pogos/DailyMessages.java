@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 
 public class DailyMessages extends GlobalFile {
     public static final String FILE_PATH = "DailyMessages.json";
+    private double fileVersion = 1.1;
     ArrayList<DailyMessage> dailyMessages = new ArrayList<>();
     ArrayList<QueueObject> queuedRequests = new ArrayList<>();
-    private double fileVersion = 1.1;
 
     public long newDailyMsgUID() {
         long result;

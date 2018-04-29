@@ -197,7 +197,7 @@ public class SpamHandler {
         IUser author = command.user.get();
         List<String> inviteformats = new ArrayList<String>() {{
             add("discord.gg");
-            add("discordapp.com/Invite/");
+            add("discordapp.com/Invite");
         }};
         if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
 
@@ -276,7 +276,7 @@ public class SpamHandler {
                 count = spamCounter.get(userID);
                 count++;
                 spamCounter.put(userID, count);
-                logger.debug("counter is now " + count + " for " + userID);
+                logger.trace("counter is now " + count + " for " + userID);
                 if (count >= 5) {
                     // User has spammed *too much*.
                     BlacklistedUserObject blUser = globalData.blacklistUser(userID);
@@ -298,7 +298,7 @@ public class SpamHandler {
         } else {
             spamCounter.put(userID, count);
             spamTimeout.put(userID, Instant.now().toEpochMilli() + 10000);
-            logger.debug("counter created for " + userID);
+            logger.trace("counter created for " + userID);
         }
         return false;
     }

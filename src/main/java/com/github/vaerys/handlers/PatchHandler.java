@@ -1,11 +1,13 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.FilePaths;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.PatchObject;
 import com.github.vaerys.pogos.*;
+import com.github.vaerys.templates.FileFactory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -181,7 +183,7 @@ public class PatchHandler {
         if (checkPatch(1.2, guild, "Update_Notes_To_Strikes", json)) return;
 
         // patch
-        GuildUsers guildUsers = (GuildUsers) GuildUsers.create(GuildUsers.FILE_PATH, guild.getLongID(), new GuildUsers());
+        GuildUsers guildUsers = FileFactory.create(guild.getLongID(), FilePaths.GUILD_USERS, GuildUsers.class);
         guildUsers.profiles.forEach(object -> {
             if (object.modNotes == null) return;
 
@@ -207,7 +209,7 @@ public class PatchHandler {
         JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.5, guild, "Remove_Null_Prefixes_CustomCommands", json)) return;
 
-        CustomCommands commands = (CustomCommands) CustomCommands.create(CustomCommands.FILE_PATH, guild.getLongID(), new CustomCommands());
+        CustomCommands commands = FileFactory.create(guild.getLongID(), FilePaths.CUSTOM_COMMANDS, CustomCommands.class);
         commands.getCommandList().forEach(object -> {
             String contents = object.getContents(false);
             if (contents.startsWith("null")) {
@@ -227,7 +229,7 @@ public class PatchHandler {
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.2, null, "Fix_Multiple_Daily_Messages", json)) return;
-        DailyMessages messages = (DailyMessages) DailyMessages.create(DailyMessages.FILE_PATH, new DailyMessages());
+        DailyMessages messages = FileFactory.create(FilePaths.DAILY_MESSAGES, DailyMessages.class);
         ArrayList<DailyMessage> dailyMessages = new ArrayList<>();
 
         for (DailyMessage message : messages.getMessages()) {

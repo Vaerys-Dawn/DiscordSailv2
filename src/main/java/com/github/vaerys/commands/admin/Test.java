@@ -2,9 +2,12 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.tags.admintags.TagPath;
 import com.github.vaerys.templates.Command;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
 
@@ -95,7 +98,10 @@ public class Test extends Command {
 //        return botPerms.contains(Permissions.MANAGE_CHANNELS) ? "> I HAVE MANAGE_CHANNELS" : "> I DO NOT HAVE MANAGE_CHANNELS";
 
 //        return object.isSubCommand(command) + " " + object.getArgs(command) + " " + object.getCommandUsage(command);
+
+
         throw new DiscordException("TestException");
+
     }
 
     @Override

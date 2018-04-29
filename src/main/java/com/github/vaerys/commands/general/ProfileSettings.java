@@ -4,7 +4,6 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.templates.Command;
@@ -33,7 +32,7 @@ public class ProfileSettings extends Command {
         StringBuilder builder = new StringBuilder();
         boolean pixels = command.guild.config.modulePixels;
         boolean levelChannel = command.guild.getChannelsByType(ChannelSetting.LEVEL_UP).size() != 0;
-        String error = getSettings(command) + "\n" + Utility.getCommandInfo(this, command);
+        String error = getSettings(command) + "\n" + missingArgs(command);
 
         for (String s : args.split(" ")) {
             UserSetting toTest = UserSetting.get(s);

@@ -2,10 +2,11 @@ package com.github.vaerys.templates;
 
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.objects.CCommandObject;
 
-public abstract class EmptyTagObject extends TagObject {
+public abstract class TagEmptyObject extends TagObject {
 
-    public EmptyTagObject(int priority, TagType... types) {
+    public TagEmptyObject(int priority, TagType... types) {
         super(priority, types);
     }
 

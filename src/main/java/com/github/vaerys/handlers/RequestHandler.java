@@ -302,7 +302,7 @@ public class RequestHandler {
     public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, List<IRole> userRoles) {
         return RequestBuffer.request(() -> {
             try {
-                IRole[] roles = (IRole[]) userRoles.stream().filter(r -> r != null).collect(Collectors.toList()).toArray();
+                IRole[] roles = userRoles.stream().filter(r -> r != null).collect(Collectors.toList()).toArray(new IRole[userRoles.size()]);
                 guild.editUserRoles(author, roles);
                 return true;
             } catch (RateLimitException e) {
@@ -439,12 +439,25 @@ public class RequestHandler {
         return roleManagement(user.get(), content.get(), mutedRoleID, isAdding);
     }
 
-    public static void addReaction(MessageObject message, ReactionEmoji emoji) {
-        RequestBuffer.request(() -> message.get().addReaction(emoji));
+    public static void addReaction(IMessage message, ReactionEmoji emoji) {
+        RequestBuffer.request(() -> {
+            try {
+                message.addReaction(emoji);
+            } catch (MissingPermissionsException e) {
+                logger.debug("Could not add reaction to message. Reason: Missing Permission ADD_REACTIONS\n" +
+                        "MessageID: " + message.getLongID() + ", ReactionID: " +
+                        (emoji.isUnicode() ? emoji.getName() : emoji.getLongID()) + ", GuildID: " +
+                        (message.getGuild() == null ? -1 : message.getGuild().getLongID()));
+            }
+        });
     }
 
-    public static void addReaction(IMessage message, ReactionEmoji emoji) {
-        RequestBuffer.request(() -> message.addReaction(emoji));
+    public static void addReaction(MessageObject message, ReactionEmoji emoji) {
+        addReaction(message.get(), emoji);
+    }
+
+    public static void roleManagement(CommandObject command, IRole role, boolean isAdding) {
+        roleManagement(command.user.get(), command.guild.get(), role.getLongID(), isAdding);
     }
 
 

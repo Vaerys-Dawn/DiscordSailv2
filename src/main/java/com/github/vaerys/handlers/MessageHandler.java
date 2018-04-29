@@ -41,14 +41,19 @@ public class MessageHandler {
                 args = args.replaceAll("@here", "REDACTED");
             }
             PixelHandler.grantXP(command);
-//            if (command.guild.config.artPinning) {
-//                if (command.guild.config.autoArtPinning) {
-//                    ArtHandler.pinMessage(command);
-//                }
-//            }
+            if (command.guild.config.artPinning) {
+                if (command.guild.config.autoArtPinning) {
+                    ArtHandler.pinMessage(command, command.message.author, command.client.bot);
+                }
+            }
             if (command.guild.config.moduleCC) {
                 if (args.toLowerCase().startsWith(command.guild.config.getPrefixCC().toLowerCase())) {
                     CCHandler.handleCommand(args, command);
+                }
+            }
+            if (command.guild.config.moduleAdminCC) {
+                if (args.toLowerCase().startsWith(command.guild.config.getPrefixAdminCC().toLowerCase())) {
+                    CCHandler.handleAdminCC(args, command);
                 }
             }
         } else {
@@ -126,7 +131,7 @@ public class MessageHandler {
                 }
                 if (c.requiresArgs && (commandArgs == null || commandArgs.isEmpty())) {
 
-                    RequestHandler.sendMessage(Utility.getCommandInfo(c, command), currentChannel);
+                    RequestHandler.sendMessage(c.missingArgs(command), currentChannel);
                     return true;
                 }
                 //command logging

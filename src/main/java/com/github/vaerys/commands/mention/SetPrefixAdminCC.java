@@ -1,43 +1,41 @@
-package com.github.vaerys.commands.admin;
+package com.github.vaerys.commands.mention;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.MentionCommand;
 import sx.blah.discord.handle.obj.Permissions;
 
-/**
- * Created by Vaerys on 07/07/2017.
- */
-public class SetJoinMessage extends Command {
+public class SetPrefixAdminCC extends MentionCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
-        command.guild.config.setJoinMessage(args);
-        return "> New Join Message set.";
+        boolean isAlphanumeric = args.matches("[A-Za-z0-9]+");
+        if (args.contains(" ") || args.contains("\n") || args.length() > 5 || args.contains("#") || args.contains("@") || isAlphanumeric) {
+            return "> Not a valid Prefix.";
+        }
+        command.guild.config.setPrefixAdminCC(args);
+        return "> Admin Custom Command Prefix set to: " + args;
     }
 
     @Override
     protected String[] names() {
-        return new String[]{"SetJoinMessage"};
+        return new String[]{"SetPrefixAdminCC","SetAdminCCPrefix"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Allows for the setting of the message that shows when a user joins the server.\n" +
-                "**Available tags**\n" +
-                "<server> = Server Name\n" +
-                "<user> = User's Name";
+        return "Sets the prefix for Admin Custom Commands.";
     }
 
     @Override
     protected String usage() {
-        return "[Message]";
+        return "[Prefix]";
     }
 
     @Override
     protected SAILType type() {
-        return SAILType.ADMIN;
+        return SAILType.ADMIN_CC;
     }
 
     @Override
@@ -58,10 +56,5 @@ public class SetJoinMessage extends Command {
     @Override
     protected boolean doAdminLogging() {
         return true;
-    }
-
-    @Override
-    public void init() {
-
     }
 }

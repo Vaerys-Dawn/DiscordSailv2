@@ -7,8 +7,8 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.LinkedList;
@@ -86,7 +86,7 @@ public class Commands extends Command {
 
         //send page
         builder.withTitle("> Here are all of the " + type.toString() + " Commands I have available.");
-        builder.withDesc(pages.get(type) + missingArgs(command));
+        builder.withDesc(pages.get(type) + get(Help.class).missingArgs(command));
         builder.send(command);
         return null;
     }

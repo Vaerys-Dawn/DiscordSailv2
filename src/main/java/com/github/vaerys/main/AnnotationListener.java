@@ -100,8 +100,10 @@ public class AnnotationListener {
             }
             builder.append("```");
             RequestHandler.sendMessage(builder.toString(), event.getChannel());
-            Globals.addToLog(new LogObject("ERROR", "MESSAGE_HANDLER", event.getMessage().getContent(),
-                    event.getChannel().getLongID(), event.getAuthor().getLongID(), event.getMessageID(), event.getGuild().getLongID()));
+            if (event.getGuild() != null) {
+                Globals.addToLog(new LogObject("ERROR", "MESSAGE_HANDLER", event.getMessage().getContent(),
+                        event.getChannel().getLongID(), event.getAuthor().getLongID(), event.getMessageID(), event.getGuild().getLongID()));
+            }
             Utility.sendStack(e);
         }
     }

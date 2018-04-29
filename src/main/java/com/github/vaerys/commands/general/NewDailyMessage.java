@@ -39,7 +39,7 @@ public class NewDailyMessage extends Command {
                 RequestHandler.deleteMessage(working);
                 return "> Request Sent.";
             } else {
-                return Utility.getCommandInfo(this, command);
+                return missingArgs(command);
             }
         } catch (IllegalArgumentException e) {
             return "> Not a valid Day of the week.";
@@ -58,7 +58,7 @@ public class NewDailyMessage extends Command {
             while (lastUsers.size() > 5) {
                 lastUsers.remove(0);
             }
-        } catch (ConcurrentModificationException e){
+        } catch (ConcurrentModificationException e) {
             return;
         }
     }
