@@ -54,7 +54,8 @@ public class EditAdminCC extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows for editing of Admin Custom Commands.";
+        return "Allows for editing of Admin Custom Commands.\n" +
+                "[Example Tag usages.](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/AdminCC-Tag-Examples)";
     }
 
     @Override

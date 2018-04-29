@@ -66,7 +66,8 @@ public class NewAdminCC extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows the creation of Admin Custom Commands. These commands allow for extra levels of interactions with " + Globals.botName + " and Discord.";
+        return "Allows the creation of Admin Custom Commands. These commands allow for extra levels of interactions with " + Globals.botName + " and Discord.\n" +
+                "[Example Tag usages.](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/AdminCC-Tag-Examples)";
     }
 
     @Override
