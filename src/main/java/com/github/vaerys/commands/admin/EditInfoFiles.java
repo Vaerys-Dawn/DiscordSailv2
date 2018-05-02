@@ -42,7 +42,7 @@ public class EditInfoFiles extends Command {
                 return InfoEditModes.getInfoFile(command);
             }
             default:
-                return "Invalid Edit Mode.\n" + Utility.getCommandInfo(this, command);
+                return "Invalid Edit Mode.\n" + missingArgs(command);
         }
     }
 

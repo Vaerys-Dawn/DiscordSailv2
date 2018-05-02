@@ -2,6 +2,7 @@ package com.github.vaerys.tags;
 
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.tags.admintags.*;
 import com.github.vaerys.tags.cctags.*;
 import com.github.vaerys.tags.infotags.*;
 import com.github.vaerys.tags.leveluptags.TagLevel;
@@ -39,11 +40,16 @@ public class TagList {
         add(new TagServer(10, TagType.CC, TagType.JOIN_MESSAGES));
         add(new TagChannelMention(10, TagType.CC));
         add(new TagSplit(10, TagType.INFO));
+        add(new TagBreak(10, TagType.CC, TagType.INFO));
+        add(new TagNoBreakShort(10, TagType.CC, TagType.INFO));
+
         //single args
         add(new TagSingleArgs(20, TagType.CC));
+        add(new TagLimitTry(21, TagType.ADMIN_CC));
         //random tags (part 1)
         add(new TagRandom(30, TagType.CC, TagType.DAILY, TagType.JOIN_MESSAGES));
         add(new TagReplaceRandom(31, TagType.CC, TagType.JOIN_MESSAGES));
+        add(new TagShuffle(32, TagType.CC));
         //if tags
         add(new TagIfRole(40, TagType.CC));
         add(new TagIfName(41, TagType.CC));
@@ -57,18 +63,34 @@ public class TagList {
         add(new TagReplace(54, TagType.CC));
         add(new TagReplaceSpecial(55, TagType.CC));
         add(new TagRegex(56, TagType.CC));
+        add(new TagShuffleReplace(57, TagType.CC));
         //random tags (part 2)
         add(new TagRandNum(60, TagType.CC, TagType.DAILY, TagType.JOIN_MESSAGES));
         add(new TagRandEmote(61, TagType.CC, TagType.DAILY, TagType.LEVEL, TagType.JOIN_MESSAGES));
         add(new TagReplaceError(62, TagType.CC));
+        //path
+        add(new TagPath(65, TagType.ADMIN_CC));
+        add(new TagNoPath(66, TagType.ADMIN_CC));
+        add(new TagPathRandom(67, TagType.ADMIN_CC));
+        add(new TagPathReplace(68, TagType.ADMIN_CC));
+        add(new TagPathReplaceRandom(69, TagType.ADMIN_CC));
+        //granters/removers
+        add(new TagClearPaths(70, TagType.ADMIN_CC));
+        add(new TagRemovePath(71, TagType.ADMIN_CC));
+        add(new TagGrantPath(72, TagType.ADMIN_CC));
+        add(new TagListKeys(73, TagType.ADMIN_CC));
+        add(new TagAddTry(74, TagType.ADMIN_CC));
+        add(new TagGrantRole(75, TagType.ADMIN_CC));
         //empty tag
-        add(new TagEmpty(70, TagType.CC, TagType.DAILY, TagType.JOIN_MESSAGES));
+        add(new TagEmpty(79, TagType.CC, TagType.DAILY, TagType.JOIN_MESSAGES));
+        //pixels
+        add(new TagAddPixels(80, TagType.ADMIN_CC));
+        add(new TagRemovePixels(81, TagType.ADMIN_CC));
         //no string additions should be allowed past this point;
-        add(new TagAllCaps(80, TagType.CC));
-        add(new TagRemoveSanitizeTag(81, TagType.CC));
-        add(new TagRemovePrep(81, TagType.CC));
-        add(new TagCheckLength(82, TagType.CC));
-        add(new TagDelCall(85, TagType.CC));
+        add(new TagAllCaps(90, TagType.CC));
+        add(new TagRemovePrep(91, TagType.CC));
+        add(new TagCheckLength(92, TagType.CC));
+        add(new TagDelCall(95, TagType.CC));
         add(new TagRemoveMentions(100, TagType.CC, TagType.DAILY, TagType.INFO));
         add(new TagEmbedImage(999, TagType.CC));
         add(new TagImage(999, TagType.INFO));
@@ -114,13 +136,13 @@ public class TagList {
         list.sort(Comparator.comparingInt(TagObject::getPriority));
     }
 
-    public static TagObject getTag(Class obj) {
+    public static <T extends TagObject> T getTag(Class obj) {
         if (!TagObject.class.isAssignableFrom(obj)) {
             throw new IllegalArgumentException("Cannot Get Tag from Class (" + obj.getName() + ")");
         }
         for (TagObject t : get()) {
             if (t.getClass().getName().equals(obj.getName())) {
-                return t;
+                return (T) t;
             }
         }
         throw new IllegalArgumentException("Could not find Tag (" + obj.getName() + ")");

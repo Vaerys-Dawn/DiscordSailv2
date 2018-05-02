@@ -44,4 +44,9 @@ public class TagCheckLength extends TagObject {
     public String desc() {
         return "Checks the length of the cc. If the final output is over 2000 chars it sends an error.";
     }
+
+    @Override
+    public String handleTag(String from, CommandObject command, String args) {
+        return execute(from,command,args);
+    }
 }

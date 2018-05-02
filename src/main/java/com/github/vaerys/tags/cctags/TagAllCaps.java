@@ -12,9 +12,10 @@ public class TagAllCaps extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        removeAllTag(from);
+        from = removeAllTag(from);
         from = from.toUpperCase();
         from = from.replace("<DELCALL>", "<delCall>");
+        from = from.replace("<DONTSANITIZE>", "<dontSanitize>");
         return from.replace("<EMBEDIMAGE>", "<embedImage>");
     }
 

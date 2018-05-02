@@ -9,8 +9,8 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -109,7 +109,7 @@ public class UserSettings extends Command {
                 default:
                     String response = (split.getRest() == null || split.getRest().isEmpty()) ? "" : "> Not a valid User Setting.\n\n";
                     if (profile.getSettings().size() == 0) {
-                        return response + "> **" + user.displayName + "** has no settings attached to their profile.\n\n" + settings(command) + "\n\n" + Utility.getCommandInfo(this, command);
+                        return response + "> **" + user.displayName + "** has no settings attached to their profile.\n\n" + settings(command) + "\n\n" + missingArgs(command);
                     } else {
                         return sendList(response, profile, command, user, true);
                     }
@@ -131,7 +131,7 @@ public class UserSettings extends Command {
         } else {
             String desc = "```\n" + Utility.listFormatter(userSettings, true) + "```";
             if (showCommand) {
-                desc += "\n" + Utility.getCommandInfo(this, command);
+                desc += "\n" + missingArgs(command);
             }
             builder.withDesc(desc);
         }

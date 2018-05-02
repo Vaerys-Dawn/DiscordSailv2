@@ -1,18 +1,18 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.BlackListObject;
 import com.github.vaerys.objects.CCommandObject;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GlobalFile;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -30,16 +30,10 @@ import java.util.ArrayList;
 /**
  * Created by Vaerys on 14/08/2016.
  */
-public class CustomCommands extends GuildFile {
+public class CustomCommands extends GlobalFile {
     public static final String FILE_PATH = "Custom_Commands.json";
-    ArrayList<BlackListObject> blackList = new ArrayList<BlackListObject>() {{
-        add(new BlackListObject("discord.gg", "Please do not put **invites** in Custom Commands."));
-        add(new BlackListObject("discordapp.com/Invite/", "Please do not put **invites** in Custom Commands."));
-        add(new BlackListObject("@everyone", "Please go not put **mentions** in Custom Commands."));
-        add(new BlackListObject("@here", "Please go not put **mentions** in Custom Commands."));
-    }};
-    ArrayList<CCommandObject> commands = new ArrayList<>();
     private double fileVersion = 1.5;
+    ArrayList<CCommandObject> commands = new ArrayList<>();
 
     public int maxCCs(UserObject user, GuildObject guild) {
         int total = 10;
@@ -64,18 +58,14 @@ public class CustomCommands extends GuildFile {
     public String addCommand(boolean isLocked, String commandName, String commandContents, boolean isShitPost, CommandObject object) {
         int counter = 0;
         int limitCCs;
-        String toCheck = commandName + commandContents;
-        if (Utility.checkBlacklist(toCheck, blackList) != null) {
-            return Utility.checkBlacklist(toCheck, blackList);
-        }
         if (commandName.length() > 50) {
             return "> Command name too long.";
         }
         if (commandName.isEmpty()) {
             return "> Command name cannot be empty.";
         }
-        if (StringUtils.countMatches(commandContents, "#embedImage#{") > 1) {
-            return "> Custom Commands Cannot have multiple #embedImage# tags";
+        if (StringUtils.countMatches(commandContents, "<embedImage>{") > 1) {
+            return "> Custom Commands Cannot have multiple <embedImage> tags";
         }
         limitCCs = maxCCs(object.user, object.guild);
 
@@ -132,10 +122,6 @@ public class CustomCommands extends GuildFile {
 
     public ArrayList<CCommandObject> getCommandList() {
         return commands;
-    }
-
-    public String checkblackList(String args) {
-        return Utility.checkBlacklist(args, blackList);
     }
 
     @Deprecated

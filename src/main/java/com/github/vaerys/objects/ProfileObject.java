@@ -70,10 +70,17 @@ public class ProfileObject {
         xp += config.xpRate * config.xpModifier;
     }
 
-    public void addXP(long xp, GuildConfig config) {
-        this.xp += config.xpModifier * xp;
+    public void addXP(long pixels, GuildConfig config) {
+        this.xp += config.xpModifier * pixels;
         if (xp > Constants.PIXELS_CAP) {
             this.xp = Constants.PIXELS_CAP;
+        }
+    }
+
+    public void removePixels(long pixels, GuildConfig config) {
+        this.xp -= config.xpModifier * pixels;
+        if (xp < 0) {
+            this.xp = 0;
         }
     }
 
@@ -217,4 +224,10 @@ public class ProfileObject {
             return add;
         }
     }
+
+    public boolean showRank(GuildObject guild) {
+        return PixelHandler.rank(guild.users, guild.get(), userID) != -1;
+    }
+
+
 }

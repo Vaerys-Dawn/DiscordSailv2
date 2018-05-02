@@ -64,9 +64,6 @@ public class EditCC extends Command {
         if ((customCommand.isLocked() && !canBypass) || (!canBypass && !isAuthor)) {
             return "> You do not have permission to edit this command.";
         }
-        if (command.guild.customCommands.checkblackList(args) != null) {
-            return command.guild.customCommands.checkblackList(args);
-        }
         if (customCommand.isLocked() && !canBypass) {
             return "> This command is locked and cannot be edited.";
         }

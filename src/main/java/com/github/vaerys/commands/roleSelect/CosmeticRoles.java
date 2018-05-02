@@ -91,7 +91,7 @@ public class CosmeticRoles extends Command {
             if (command.guild.config.getCosmeticRoleIDs().size() == 0)
                 return "> No Cosmetic roles are set up right now. Come back later.";
             if (args.matches("[(|\\[].*[)|\\]]")) {
-                return Constants.ERROR_BRACKETS + "\n" + Utility.getCommandInfo(this, command);
+                return Constants.ERROR_BRACKETS + "\n" + missingArgs(command);
             }
             if (args.matches(".*/remove")) {
                 return "> Did you mean `" + command.guild.config.getPrefixCommand() + names()[0] + " " + args.replaceAll("(?i)/remove", "") + "`?";

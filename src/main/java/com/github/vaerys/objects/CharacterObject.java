@@ -57,7 +57,7 @@ public class CharacterObject {
         this.avatarURL = avatarURL;
     }
 
-    public void setUsername(String nickname) {
+    public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 

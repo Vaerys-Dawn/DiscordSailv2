@@ -16,19 +16,15 @@ import java.util.ListIterator;
 
 public class PurgeBannedData extends Command {
 
-    private long purgedProfiles = 0;
-    private long purgedCCs = 0;
-    private long purgedCharacters = 0;
-    private long purgedServers = 0;
-    private long purgedDailyMessages = 0;
-
     @Override
     public String execute(String args, CommandObject command) {
-        purgedProfiles = 0;
-        purgedCCs = 0;
-        purgedCharacters = 0;
-        purgedServers = 0;
-        purgedDailyMessages = 0;
+        /***
+         * 0: Profiles
+         * 1: Custom Commands
+         * 2: Characters
+         * 3: Servers
+         */
+        long[] purgedData = new long[]{0, 0, 0, 0};
 
         long userId = -1;
         String userStringID = null;
@@ -51,30 +47,32 @@ public class PurgeBannedData extends Command {
             //do nothing
         }
         if (!command.client.bot.get().getPermissionsForGuild(command.guild.get()).contains(Permissions.BAN)) {
-            return "> I cant purge the data of banned user unless I get the ban permission.\n" +
-                    "Feel free to remove the permission after you purge the data as I don't need it.";
+            return "> I cant purge the data of banned user unless I get the **Ban Members** permission.\n" +
+                    "Feel free to remove the permission after you purge the data as I will no longer need it.";
         }
         if (userId != -1 && userStringID != null) {
-            purgeData(userId, command);
+            purgeData(userId, command, purgedData);
         } else {
             for (IUser user : command.guild.get().getBannedUsers()) {
-                purgeData(user.getLongID(), command);
+                purgeData(user.getLongID(), command, purgedData);
             }
         }
-        return "> Purged Profiles: **" + purgedProfiles + "**." +
-                "\n> Purged CCs: **" + purgedCCs + "**." +
-                "\n> Purged Characters: **" + purgedCharacters + "**." +
-                "\n> Purged Server Listings: **" + purgedServers + "**.";
-//                "\n> Purged Daily Messages: **" + purgedDailyMessages + "**.";
+        String response = "> Purged Profiles: **" + purgedData[0] + "**." +
+                "\n> Purged CCs: **" + purgedData[1] + "**." +
+                "\n> Purged Characters: **" + purgedData[2] + "**." +
+                "\n> Purged Server Listings: **" + purgedData[3] + "**." +
+                "\n\nYou are now free to remove my **Ban Members** Permission as I no longer need it.";
+
+        return response;
     }
 
-    public void purgeData(long userID, CommandObject command) {
+    public void purgeData(long userID, CommandObject command, long[] purgedData) {
         ListIterator iterator = command.guild.users.profiles.listIterator();
         while (iterator.hasNext()) {
             ProfileObject object = (ProfileObject) iterator.next();
             if (userID == object.getUserID()) {
                 iterator.remove();
-                purgedProfiles++;
+                purgedData[0]++;
             }
         }
         iterator = command.guild.customCommands.getCommandList().listIterator();
@@ -82,7 +80,7 @@ public class PurgeBannedData extends Command {
             CCommandObject ccObject = (CCommandObject) iterator.next();
             if (userID == ccObject.getUserID()) {
                 iterator.remove();
-                purgedCCs++;
+                purgedData[1]++;
             }
         }
         iterator = command.guild.characters.getCharacters(command.guild.get()).listIterator();
@@ -90,7 +88,7 @@ public class PurgeBannedData extends Command {
             CharacterObject charObject = (CharacterObject) iterator.next();
             if (charObject.getUserID() == userID) {
                 iterator.remove();
-                purgedCharacters++;
+                purgedData[2]++;
             }
         }
         iterator = command.guild.servers.getServers().listIterator();
@@ -98,17 +96,9 @@ public class PurgeBannedData extends Command {
             ServerObject serverObject = (ServerObject) iterator.next();
             if (serverObject.getCreatorID() == userID) {
                 iterator.remove();
-                purgedServers++;
+                purgedData[3]++;
             }
         }
-//        iterator = Globals.getDailyMessages().getMessages().listIterator();
-//        while (iterator.hasNext()) {
-//            DailyMessage dailyObject = (DailyMessage) iterator.next();
-//            if (dailyObject.getUserID() == userID) {
-//                iterator.remove();
-//                purgedDailyMessages++;
-//            }
-//        }
     }
 
     @Override

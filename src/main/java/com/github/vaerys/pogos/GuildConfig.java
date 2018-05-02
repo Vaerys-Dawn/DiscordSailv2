@@ -8,7 +8,7 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.OffenderObject;
 import com.github.vaerys.objects.RewardRoleObject;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GlobalFile;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Vaerys on 03/08/2016.
  */
-public class GuildConfig extends GuildFile {
+public class GuildConfig extends GlobalFile {
     public static final String FILE_PATH = "Guild_Config.json";
     private double fileVersion = 1.4;
     //setup vars
@@ -81,6 +81,7 @@ public class GuildConfig extends GuildFile {
     public boolean modulePixels = false;
     public boolean moduleLogging = false;
     public boolean moduleJoinMessages = false;
+    public boolean moduleAdminCC = false;
     public int maxMentionLimit = 8;
     public int messageLimit = 10;
     public int xpRate = 20;
@@ -94,6 +95,7 @@ public class GuildConfig extends GuildFile {
     public long ruleCodeRewardID = -1;
     String prefixCommand = Globals.defaultPrefixCommand;
     String prefixCC = Globals.defaultPrefixCC;
+    private String prefixAdminCC = Globals.defaultPrefixAdminCC;
     String guildName = "";
     long guildID = -1;
     long roleToMentionID = -1;
@@ -140,14 +142,17 @@ public class GuildConfig extends GuildFile {
         this.prefixCC = prefixCC;
     }
 
-//    public void addChannelSetting(String type, long id) {
-//        channelSettings.add(new ChannelSettingObject(type, id));
-//    }
+    public String getPrefixAdminCC() {
+        return prefixAdminCC;
+    }
+
+    public void setPrefixAdminCC(String prefixAdminCC) {
+        this.prefixAdminCC = prefixAdminCC;
+    }
 
     public void setGuildName(String guildName) {
         this.guildName = guildName;
     }
-
 
     public void updateVariables(IGuild guild) {
         //update Guild Name
@@ -454,4 +459,6 @@ public class GuildConfig extends GuildFile {
     public void setInviteAllowed(long inviteAllowed) {
         this.inviteAllowedID = inviteAllowed;
     }
+
+
 }

@@ -72,6 +72,7 @@ public class ToggleList {
         add(new ModulePixels());
         add(new ModuleLogging());
         add(new ModuleJoinMessages());
+        add(new ModuleAdminCC());
     }};
 
     public static List<GuildToggle> getAllToggles(boolean validate) {
@@ -103,7 +104,7 @@ public class ToggleList {
     public static GuildToggle getGuildToggle(String args, boolean isModule) {
         for (GuildToggle t : getToggles(isModule)) {
             if (SAILType.get(args) == t.name()) {
-                return t;
+                return  t;
             }
         }
         return null;
@@ -121,7 +122,7 @@ public class ToggleList {
         throw new IllegalArgumentException("Could not find Toggle (" + obj.getName() + ")");
     }
 
-    public static GuildSetting getSetting(SAILType obj) {
+    public static  GuildSetting getSetting(SAILType obj) {
         for (GuildSetting c : guildSettings) {
             if (c.name() == obj) {
                 return c;

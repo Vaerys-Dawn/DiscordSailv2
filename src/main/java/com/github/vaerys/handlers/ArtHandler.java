@@ -1,10 +1,10 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.TrackLikes;
@@ -121,15 +121,15 @@ public class ArtHandler {
             }
 
             String response;
-            if (!command.guild.config.autoArtPinning) {
+            if (command.guild.config.autoArtPinning && reacted.longID == command.client.bot.longID) {
+                response = "> I have pinned **" + owner.displayName + "'s** art.";
+            } else {
                 if (owner.longID == reacted.longID) {
                     response = "> **" + reacted.displayName + "** Has pinned their";
                 } else {
                     response = "> **" + reacted.displayName + "** Has pinned **" + owner.displayName + "'s**";
                 }
                 response += " art by reacting with the \uD83D\uDCCC emoji.";
-            } else {
-                response = "> I have pinned **" + owner.displayName + "'s** art.";
             }
             if (command.guild.config.likeArt && command.guild.config.modulePixels) {
                 response += "\nYou can now react with a \u2764 emoji to give the user some pixels.";

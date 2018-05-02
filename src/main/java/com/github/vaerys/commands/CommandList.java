@@ -1,6 +1,10 @@
 package com.github.vaerys.commands;
 
 import com.github.vaerys.commands.admin.*;
+import com.github.vaerys.commands.adminccs.DeleteAdminCC;
+import com.github.vaerys.commands.adminccs.EditAdminCC;
+import com.github.vaerys.commands.adminccs.ListAdminCCs;
+import com.github.vaerys.commands.adminccs.NewAdminCC;
 import com.github.vaerys.commands.cc.*;
 import com.github.vaerys.commands.characters.*;
 import com.github.vaerys.commands.competition.*;
@@ -14,6 +18,7 @@ import com.github.vaerys.commands.groups.GroupUp;
 import com.github.vaerys.commands.help.*;
 import com.github.vaerys.commands.joinmessages.*;
 import com.github.vaerys.commands.mention.SetPrefix;
+import com.github.vaerys.commands.mention.SetPrefixAdminCC;
 import com.github.vaerys.commands.mention.SetPrefixCC;
 import com.github.vaerys.commands.modtools.*;
 import com.github.vaerys.commands.pixels.*;
@@ -61,7 +66,7 @@ public class CommandList {
         add(new PruneEmptyProfiles());
         add(new PurgeBannedData());
         add(new SetAdminRole());
-        add(new SetJoinMessage());
+        add(new SetWelcomeMessage());
         add(new SetMutedRole());
         add(new SetPinLimit());
         add(new SetRateLimit());
@@ -192,6 +197,7 @@ public class CommandList {
         //mention Commands
         add(new SetPrefix());
         add(new SetPrefixCC());
+        add(new SetPrefixAdminCC());
 
         //joinMessage Commands
         add(new DeleteJoinMessage());
@@ -199,6 +205,12 @@ public class CommandList {
         add(new JoinMessageInfo());
         add(new ListJoinMessages());
         add(new NewJoinMessage());
+
+        //admin CCs
+        add(new NewAdminCC());
+        add(new ListAdminCCs());
+        add(new EditAdminCC());
+        add(new DeleteAdminCC());
     }};
 
     private static final List<Command> creatorCommands = new ArrayList<Command>() {{
@@ -295,7 +307,7 @@ public class CommandList {
         for (Command c : commands) {
             if (isDm && c.channel == ChannelSetting.FROM_DM) {
                 getCommands.add(c);
-            } else {
+            } else if (!isDm && c.channel != ChannelSetting.FROM_DM) {
                 getCommands.add(c);
             }
         }

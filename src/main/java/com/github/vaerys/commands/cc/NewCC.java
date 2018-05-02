@@ -130,7 +130,9 @@ public class NewCC extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Creates a Custom Command.";
+        return "Creates a Custom Command. (Max Command Name length: 50 chars)\n" +
+                "\n" +
+                "Commands are created on a per server basis.";
     }
 
     @Override

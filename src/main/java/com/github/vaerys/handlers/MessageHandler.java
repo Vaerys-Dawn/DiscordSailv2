@@ -35,20 +35,23 @@ public class MessageHandler {
             if (SpamHandler.catchWalls(command)) return;
             // check for role mentions:
             if (!GuildHandler.testForPerms(command, command.channel.get(), Permissions.MENTION_EVERYONE)) {
-                // sanitize @everyone mentions.
-                args = args.replaceAll(command.guild.get().getEveryoneRole().mention(), "REDACTED");
-                // sanitize @here mentions.
-                args = args.replaceAll("@here", "REDACTED");
+                // sanitize @everyone and @here mentions.
+                args = args.replaceAll("(?i)@(everyone|here)" , "REDACTED");
             }
             PixelHandler.grantXP(command);
-//            if (command.guild.config.artPinning) {
-//                if (command.guild.config.autoArtPinning) {
-//                    ArtHandler.pinMessage(command);
-//                }
-//            }
+            if (command.guild.config.artPinning) {
+                if (command.guild.config.autoArtPinning) {
+                    ArtHandler.pinMessage(command, command.message.author, command.client.bot);
+                }
+            }
             if (command.guild.config.moduleCC) {
                 if (args.toLowerCase().startsWith(command.guild.config.getPrefixCC().toLowerCase())) {
                     CCHandler.handleCommand(args, command);
+                }
+            }
+            if (command.guild.config.moduleAdminCC) {
+                if (args.toLowerCase().startsWith(command.guild.config.getPrefixAdminCC().toLowerCase())) {
+                    CCHandler.handleAdminCC(args, command);
                 }
             }
         } else {
@@ -126,7 +129,7 @@ public class MessageHandler {
                 }
                 if (c.requiresArgs && (commandArgs == null || commandArgs.isEmpty())) {
 
-                    RequestHandler.sendMessage(Utility.getCommandInfo(c, command), currentChannel);
+                    RequestHandler.sendMessage(c.missingArgs(command), currentChannel);
                     return true;
                 }
                 //command logging

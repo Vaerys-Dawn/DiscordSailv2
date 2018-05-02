@@ -44,23 +44,23 @@ public class Utility {
     final static Logger logger = LoggerFactory.getLogger(Utility.class);
 
     //Command Utils
-    public static String getCommandInfo(Command command, CommandObject commandObject) {
-        StringBuilder response = new StringBuilder(">> **" + commandObject.guild.config.getPrefixCommand() + command.names[0]);
-        if (command.usage != null) {
-            response.append(" " + command.usage);
-        }
-        response.append("** <<");
-        return response.toString();
-    }
-
-    public static String getCommandInfo(Command command) {
-        StringBuilder response = new StringBuilder(">> **" + Globals.defaultPrefixCommand + command.names[0]);
-        if (command.usage != null) {
-            response.append(" " + command.usage);
-        }
-        response.append("** <<");
-        return response.toString();
-    }
+//    public static String getCommandInfo(Command command, CommandObject commandObject) {
+//        StringBuilder response = new StringBuilder(">> **" + commandObject.guild.config.getPrefixCommand() + command.names[0]);
+//        if (command.usage != null) {
+//            response.append(" " + command.usage);
+//        }
+//        response.append("** <<");
+//        return response.toString();
+//    }
+//
+//    public static String getCommandInfo(Command command) {
+//        StringBuilder response = new StringBuilder(">> **" + Globals.defaultPrefixCommand + command.names[0]);
+//        if (command.usage != null) {
+//            response.append(" " + command.usage);
+//        }
+//        response.append("** <<");
+//        return response.toString();
+//    }
 
     public static String checkBlacklist(String message, List<BlackListObject> blacklist) {
         for (BlackListObject b : blacklist) {
@@ -440,6 +440,15 @@ public class Utility {
         return isImageLink(link, false);
     }
 
+
+    /***
+     * Tests the role hierarchy of two users.
+     *
+     * @param higherUser the user that will be performing the action
+     * @param lowerUser the user that the action will performed on
+     * @param guild the guild the action should take place
+     * @return if the higher user is above the lower user
+     */
     public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, IGuild guild) {
         List<IRole> lowerRoles = lowerUser.getRolesForGuild(guild);
         List<IRole> higherRoles = higherUser.getRolesForGuild(guild);
@@ -464,6 +473,14 @@ public class Utility {
         return true;
     }
 
+    /***
+     * Tests the role hierarchy of two users.
+     *
+     * @param higherUser the user that will be performing the action
+     * @param lowerUser the user that the action will performed on
+     * @param guild the guild the action should take place
+     * @return if the higher user is above the lower user
+     */
     public static boolean testUserHierarchy(UserObject higherUser, UserObject lowerUser, GuildObject guild) {
         if (GuildHandler.canBypass(lowerUser.get(), guild.get())) return false;
         return testUserHierarchy(higherUser.get(), lowerUser.get(), guild.get());

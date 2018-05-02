@@ -18,7 +18,7 @@ public class TagRemovePrep extends TagObject {
 
     @Override
     public String tagName() {
-        return "<removePrep>";
+        return "<dontSanitize>";
     }
 
     @Override
@@ -38,7 +38,7 @@ public class TagRemovePrep extends TagObject {
 
     @Override
     public String desc() {
-        return "Removes the sanitation from the args tag.";
+        return "This tag is used to tell the <args> tag not to sanitize the input.";
     }
 
     @Override

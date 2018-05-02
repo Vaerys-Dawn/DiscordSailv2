@@ -25,7 +25,7 @@ public class TagSearchTags extends TagObject {
         String from = object.getContents(false);
         List<String> splitContents = new ArrayList<>(Arrays.asList(args.split("(, |,|\n|" + splitter + ")")));
         if (cont(from)) {
-            splitContents.addAll(getSplitContents(from));
+            splitContents.addAll(getSplit(from));
         }
         String newContents = String.join(";;", splitContents);
         if (cont(from)) {
@@ -41,7 +41,7 @@ public class TagSearchTags extends TagObject {
         if (!cont(from)) {
             return false;
         }
-        List<String> splitContents = getSplitContents(from);
+        List<String> splitContents = getSplit(from);
 
         boolean removed = false;
         ListIterator iterator = splitContents.listIterator();

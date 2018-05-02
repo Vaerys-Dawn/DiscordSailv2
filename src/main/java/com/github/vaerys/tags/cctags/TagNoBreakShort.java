@@ -1,12 +1,12 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
 
-public class TagRemoveSanitizeTag extends TagObject {
+public class TagNoBreakShort extends TagObject {
 
-    public TagRemoveSanitizeTag(int priority, TagType... types) {
+    public TagNoBreakShort(int priority, TagType... types) {
         super(priority, types);
     }
 
@@ -17,7 +17,12 @@ public class TagRemoveSanitizeTag extends TagObject {
 
     @Override
     public String tagName() {
-        return "<dontSanitize>";
+        return "<!br>";
+    }
+
+    @Override
+    public String prefix() {
+        return name + "\n";
     }
 
     @Override
@@ -32,6 +37,6 @@ public class TagRemoveSanitizeTag extends TagObject {
 
     @Override
     public String desc() {
-        return "this tag is used to tell the <args> tag not to sanitize the input.";
+        return "When this tag is put at the end of a line it removes the line break.";
     }
 }

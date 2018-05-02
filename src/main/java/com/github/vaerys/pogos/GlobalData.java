@@ -14,10 +14,10 @@ import java.util.ListIterator;
  */
 public class GlobalData extends GlobalFile {
     public static final String FILE_PATH = "Global_Data.json";
+    private double fileVersion = 1.0;
     ArrayList<Long> blockedFromDMS = new ArrayList<>();
     List<BlacklistedUserObject> blacklistedUsers = new ArrayList<>();
     ArrayList<ReminderObject> reminders = new ArrayList<>();
-    private double fileVersion = 1.0;
 
     public List<BlacklistedUserObject> getBlacklistedUsers() {
         return blacklistedUsers;

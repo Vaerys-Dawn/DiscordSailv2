@@ -8,8 +8,8 @@ import java.util.List;
 
 public class Events extends GlobalFile {
     public static final String FILE_PATH = "Events.json";
-    List<TimedEvent> events = new ArrayList<>();
     private double fileVersion = 1.0;
+    List<TimedEvent> events = new ArrayList<>();
 
     public List<TimedEvent> getEvents() {
         return events;

@@ -3,6 +3,7 @@ package com.github.vaerys.masterobjects;
 import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.commands.general.NewDailyMessage;
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.FilePaths;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.handlers.GuildHandler;
@@ -15,7 +16,8 @@ import com.github.vaerys.objects.LogObject;
 import com.github.vaerys.objects.UserRateObject;
 import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.FileFactory;
+import com.github.vaerys.templates.GlobalFile;
 import com.github.vaerys.templates.GuildToggle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +44,8 @@ public class GuildObject {
     public GuildUsers users;
     public ChannelData channelData;
     public GuildLog guildLog;
-    public List<GuildFile> guildFiles;
+    public AdminCCs adminCCs;
+    public List<GlobalFile> guildFiles;
     public List<Command> commands;
     public List<GuildToggle> toggles;
     public List<ChannelSetting> channelSettings;
@@ -55,15 +58,16 @@ public class GuildObject {
     public GuildObject(IGuild object) {
         this.object = object;
         this.longID = object.getLongID();
-        this.config = (GuildConfig) GuildConfig.create(GuildConfig.FILE_PATH, longID, new GuildConfig());
-        this.customCommands = (CustomCommands) CustomCommands.create(CustomCommands.FILE_PATH, longID, new CustomCommands());
-        this.servers = (Servers) Servers.create(Servers.FILE_PATH, longID, new Servers());
-        this.characters = (Characters) Characters.create(Characters.FILE_PATH, longID, new Characters());
-        this.competition = (Competition) Competition.create(Competition.FILE_PATH, longID, new Competition());
-        this.users = (GuildUsers) GuildUsers.create(GuildUsers.FILE_PATH, longID, new GuildUsers());
-        this.channelData = (ChannelData) ChannelData.create(ChannelData.FILE_PATH, longID, new ChannelData());
-        this.guildLog = (GuildLog) GuildLog.create(GuildLog.FILE_PATH, longID, new GuildLog());
-        this.guildFiles = new ArrayList<GuildFile>() {{
+        this.config = FileFactory.create(longID, FilePaths.GUILD_CONFIG, GuildConfig.class);
+        this.customCommands = FileFactory.create(longID, FilePaths.CUSTOM_COMMANDS, CustomCommands.class);
+        this.servers = FileFactory.create(longID, FilePaths.SERVERS, Servers.class);
+        this.characters = FileFactory.create(longID, FilePaths.CHARACTERS, Characters.class);
+        this.competition = FileFactory.create(longID, FilePaths.COMPETITION, Competition.class);
+        this.users = FileFactory.create(longID, FilePaths.GUILD_USERS, GuildUsers.class);
+        this.channelData = FileFactory.create(longID, FilePaths.CHANNEL_DATA, ChannelData.class);
+        this.guildLog = FileFactory.create(longID, FilePaths.GUILD_LOG, GuildLog.class);
+        this.adminCCs = FileFactory.create(longID, FilePaths.ADMIN_CCS, AdminCCs.class);
+        this.guildFiles = new ArrayList<GlobalFile>() {{
             add(config);
             add(customCommands);
             add(servers);
@@ -72,6 +76,7 @@ public class GuildObject {
             add(users);
             add(channelData);
             add(guildLog);
+            add(adminCCs);
         }};
         customCommands.initCustomCommands(get());
         this.client = new ClientObject(this);
@@ -91,6 +96,7 @@ public class GuildObject {
         this.channelData = new ChannelData();
         this.guildFiles = new ArrayList<>();
         this.commands = new ArrayList<>(CommandList.getCommands(true));
+        this.object = null;
     }
 
     public void sendDebugLog(CommandObject command, String type, String name, String contents) {
