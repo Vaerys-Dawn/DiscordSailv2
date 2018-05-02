@@ -196,6 +196,7 @@ Global_Data.json
 *.ttf
 CC templates/
 Storage/
+/modules/
 
 ### Build Artifacts ###
 !target/JavaDiscordSAILv2.jar

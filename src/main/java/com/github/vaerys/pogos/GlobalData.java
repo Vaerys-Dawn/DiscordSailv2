@@ -32,19 +32,25 @@ public class GlobalData extends GlobalFile {
     }
 
     public BlacklistedUserObject blacklistUser(long userID) {
+        return blacklistUser(userID, 0);
+    }
+
+    public BlacklistedUserObject blacklistUser(long userID, long count) {
         BlacklistedUserObject blacklistedUser;
-        long blacklistCounter = 0;
-        ListIterator<BlacklistedUserObject> iterator = blacklistedUsers.listIterator();
-        while(iterator.hasNext()) {
-            blacklistedUser = iterator.next();
+
+        ListIterator<BlacklistedUserObject> litr = blacklistedUsers.listIterator();
+
+        while (litr.hasNext()) {
+            blacklistedUser = litr.next();
             if (userID == blacklistedUser.getUserID()) {
-                blacklistCounter = blacklistedUser.getCounter();
-                iterator.remove();
+                if (count != 0) count = blacklistedUser.getCounter();
+                litr.remove();
                 break;
             }
         }
-        blacklistCounter++;
-        blacklistedUser = new BlacklistedUserObject(userID, blacklistCounter);
+
+        count++;
+        blacklistedUser = new BlacklistedUserObject(userID, count);
         blacklistedUsers.add(blacklistedUser);
         return blacklistedUser;
     }

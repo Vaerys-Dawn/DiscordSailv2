@@ -214,6 +214,8 @@ public class CommandList {
         add(new DailyMsg());
         add(new EventSetup());
         add(new WhoIsThis());
+        add(new UnBlacklistUser());
+        add(new BlacklistUser());
 
         //DM Creator Commands
         add(new BlockUser());
