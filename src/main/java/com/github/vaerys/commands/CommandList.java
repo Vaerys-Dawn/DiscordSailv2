@@ -83,6 +83,7 @@ public class CommandList {
         add(new ClearReminder());
         add(new EditLinks());
         add(new GetAvatar());
+        add(new GetReminders());
         add(new Hello());
         add(new LastDailyMessage());
         add(new NewDailyMessage());
