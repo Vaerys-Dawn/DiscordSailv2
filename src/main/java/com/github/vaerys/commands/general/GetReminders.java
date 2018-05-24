@@ -7,64 +7,56 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.ReminderObject;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
+import java.time.Instant;
+import java.util.List;
 
 public class GetReminders extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        ArrayList<ReminderObject> reminders = new ArrayList<>();
-        for (ReminderObject r : Globals.getGlobalData().getReminders()) {
-            if (r.getUserID() == command.user.longID) {
-                reminders.add(r);
+        List<ReminderObject> reminders = Globals.getGlobalData().getRemindersUser(command.user.longID);
+
+        if (reminders.size() == 0) return "> You have no reminders set.";
+
+        XEmbedBuilder embed = new XEmbedBuilder(command);
+        int i = 1;
+        for (ReminderObject r : reminders) {
+            long timeSecs = r.getExecuteTime() - Instant.now().getEpochSecond();
+            String timeFormatted = Utility.formatTime(timeSecs, true);
+
+            IChannel channel = command.client.get().getChannelByID(r.getChannelID());
+            if (channel == null) {
+                // try to verify it's a DM channel instead.
+                channel = command.user.getDmChannel();
+                if ( channel == null || (channel.getLongID() != r.getChannelID()) ) continue;
             }
+
+            String mention = "your Direct Messages";
+            String guildName = "";
+            if (!channel.isPrivate()) {
+                // not a DM channel.
+                mention = channel.mention();
+                IGuild guild = channel.getGuild();
+                guildName = (guild.getLongID() == command.guild.longID) ? "" : " (" + guild.getName() + ")";
+            }
+
+            embed.appendDesc( String.format("\n`%d.` **%s** in %s%s.", i, timeFormatted, mention, guildName) );
+            i++;
         }
 
-        if (reminders.size() > 0) {
-            ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-            StringBuilder replystr = new StringBuilder("> Here are all of your current Reminders:\n");
-            for (int i=0; i < reminders.size(); i++) {
-                ReminderObject rem = reminders.get(i);
-                replystr.append( "**" + convSec(rem.getExecuteTime() - now.toEpochSecond()) + "**" )
-                        .append( " | " )
-                        .append( Utility.convertMentionToText(
-                                    rem.getMessage().replaceFirst("<@!?"+command.user.longID+"> ","")
-                                ))  // remove user mentions and remove the default reminder mention.
-                        .append( "\n" );
-            }
-            return replystr.toString();
-        } else {
-            return "> You have no reminders set.";
-        }
-    }
-
-    private static String convSec(long totalSecs) {  // move to Utility
-        int secs = ((int) totalSecs) % 60;
-        long totalMins = totalSecs / 60;
-
-        int mins = ((int) totalMins) % 60;
-        long totalHours = totalMins / 60;
-
-        int hours = ((int) totalHours) % 24;
-        int days = ((int) totalHours) / 24;
-
-        // format is 999d, 23h 59m 59s
-        // or 23h 59m 59s
-        // or 59m 59s
-        // and 0m 59s
-        return String.format("%s%s%sm %ss",
-                (days > 0)  ? (days + "d, ") : "",
-                (hours > 0) ? (hours + "h ") : "",
-                mins, secs);
+        embed.withTitle( String.format("> You have %d Reminder%s:", i - 1, (i==2) ? "":"s" ) );
+        embed.send(command);
+        return null;
     }
 
     @Override
     protected String[] names() {
-        return new String[]{"GetReminders","Reminders"};
+        return new String[]{"GetReminders", "Reminders", "ListReminders"};
     }
 
     @Override

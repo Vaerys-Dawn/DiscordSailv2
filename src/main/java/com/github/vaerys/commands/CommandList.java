@@ -180,6 +180,7 @@ public class CommandList {
         //Dm commands
         add(new BotInfoDm());
         add(new ClearReminderDM());
+        add(new GetRemindersDM());
         add(new HelpDM());
         add(new InfoDM());
         add(new ReminderDM());
