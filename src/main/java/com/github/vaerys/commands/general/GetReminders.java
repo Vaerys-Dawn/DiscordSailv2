@@ -48,8 +48,8 @@ public class GetReminders extends Command {
             embed.appendDesc( String.format("\n`%d.` **%s** in %s%s.", i, timeFormatted, mention, guildName) );
             i++;
         }
-
-        embed.withTitle( String.format("> You have %d Reminder%s:", i - 1, (i==2) ? "":"s" ) );
+        i--;   // oh of course
+        embed.withTitle( String.format("> You have %d Reminder%s:", i, (i==1) ? "":"s" ) );
         embed.send(command);
         return null;
     }
