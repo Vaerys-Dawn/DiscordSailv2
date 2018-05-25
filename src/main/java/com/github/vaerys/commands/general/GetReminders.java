@@ -33,7 +33,7 @@ public class GetReminders extends Command {
             if (channel == null) {
                 // try to verify it's a DM channel instead.
                 channel = command.user.getDmChannel();
-                if ( channel == null || (channel.getLongID() != r.getChannelID()) ) continue;
+                if ( channel == null ) continue;
             }
 
             String mention = "your Direct Messages";
