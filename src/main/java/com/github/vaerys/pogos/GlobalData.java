@@ -8,6 +8,7 @@ import com.github.vaerys.templates.GlobalFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 10/02/2017.
@@ -57,6 +58,10 @@ public class GlobalData extends GlobalFile {
 
     public ArrayList<ReminderObject> getReminders() {
         return reminders;
+    }
+
+    public List<ReminderObject> getRemindersUser(long userID) {
+        return reminders.stream().filter(r-> r.getUserID() == userID).collect(Collectors.toList());
     }
 
     public void addReminder(ReminderObject object) {
