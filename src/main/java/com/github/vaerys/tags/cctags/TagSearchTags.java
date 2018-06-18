@@ -2,7 +2,7 @@ package com.github.vaerys.tags.cctags;
 
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
-import com.github.vaerys.objects.CCommandObject;
+import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.TagObject;
 
 import java.util.ArrayList;

@@ -5,7 +5,7 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.DailyMessage;
+import com.github.vaerys.objects.userlevel.DailyMessage;
 
 import java.awt.*;
 import java.time.DayOfWeek;
@@ -45,6 +45,7 @@ public class Constants {
             "AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31";
     //Directories
     public static final String DIRECTORY_STORAGE = "Storage/";
+    public static final String WIKI_DIR = "wiki/";
 
     //-------FilePath Constants--------
     public static final String DIRECTORY_BACKUPS = DIRECTORY_STORAGE + "Backups/";
@@ -64,12 +65,6 @@ public class Constants {
     public static final String FILE_CONFIG = "Config.json";
     public static final String FILE_GLOBAL_DATA = "Global_Data.json";
     public static final String FILE_AUTH_TO_RESTART = DIRECTORY_STORAGE + "Auth_Restart.txt";
-    public static final String LEVEL_UP_IMAGE_URL = "http://i.imgur.com/Vdt2DkK.gif";
-    public static final String RANK_UP_IMAGE_URL = "http://i.imgur.com/MwsPixA.gif";
-    public static final String DEV_IMAGE_URL = "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/131/hammer-and-wrench_1f6e0.png";
-    public static final String PATREON_ICON_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/1024px-Patreon_logo.svg.png";
-    public static final String STICKER_STAR_URL = "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/white-medium-star_2b50.png";
-    public static final String PIXELS_ICON = "http://i.imgur.com/r5usgN7.png";
     public static final Long LEVEL_CAP = 1000L; //Anything more than this is too much CPU time to calculate
     public static final Long PIXELS_CAP = PixelHandler.totalXPForLevel(LEVEL_CAP); //1000 levels.
     //EnumSets
@@ -138,7 +133,20 @@ public class Constants {
     public static final String EMOJI_ADD_PIN = "pushpin";
     public static final String EMOJI_LIKE_PIN = "heart";
     public static final String INFO_TEMPLATE = "Info.Template";
+
+    //image Constants
     public static final String LINK_GITHUB = "https://github.com/Vaerys-Dawn/DiscordSailv2";
+    public static final String UNKNOWN_USER_URL = "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/139/black-question-mark-ornament_2753.png";
+    public static final String LEVEL_UP_IMAGE_URL = "http://i.imgur.com/Vdt2DkK.gif";
+    public static final String RANK_UP_IMAGE_URL = "http://i.imgur.com/MwsPixA.gif";
+    public static final String DEV_IMAGE_URL = "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/131/hammer-and-wrench_1f6e0.png";
+    public static final String PATREON_ICON_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/1024px-Patreon_logo.svg.png";
+    public static final String STICKER_STAR_URL = "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/white-medium-star_2b50.png";
+    public static final String PIXELS_ICON = "http://i.imgur.com/r5usgN7.png";
+    public static final String BOT_USER_URL = "http://i.imgur.com/aRJpAP4.png";
+
+    //urlConstants
+    public static final String wikiURL = "https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/";
 
     //colours
     public static Color pixelColour = new Color(226, 218, 117);

@@ -8,9 +8,9 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.BlacklistedUserObject;
-import com.github.vaerys.objects.OffenderObject;
-import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.adminlevel.OffenderObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
@@ -142,7 +142,7 @@ public class SpamHandler {
         List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
         if (channels.contains(command.channel.get())) return false;
 
-        if (!command.guild.rateLimit(command.user.longID, command.channel.get(), command.message.getTimestamp().toEpochSecond()))
+        if (!command.guild.rateLimit(command.user.longID, command.channel.get(), command.message.getTimestampZone().toEpochSecond()))
             return false;
         if (Globals.lastRateLimitReset + 20 * 1000 < System.currentTimeMillis()) {
             command.guild.resetRateLimit();
@@ -255,8 +255,8 @@ public class SpamHandler {
         if (globalData == null) throw new NullPointerException();
 
         // first we need to see if there *are* blacklisted users and ignore them:
-        List<BlacklistedUserObject> blacklistedUsers = globalData.getBlacklistedUsers();
-        for (BlacklistedUserObject object : blacklistedUsers) {
+        List<BlackListObject.BlacklistedUserObject> blacklistedUsers = globalData.getBlacklistedUsers();
+        for (BlackListObject.BlacklistedUserObject object : blacklistedUsers) {
             if (user.longID == object.getUserID()) {
                 // user is on blacklist, and hasn't timed out...
                 if (Instant.now().toEpochMilli() <= object.getEndTime()) return true;
@@ -279,7 +279,7 @@ public class SpamHandler {
                 logger.trace("counter is now " + count + " for " + userID);
                 if (count >= 5) {
                     // User has spammed *too much*.
-                    BlacklistedUserObject blUser = globalData.blacklistUser(userID);
+                    BlackListObject.BlacklistedUserObject blUser = globalData.blacklistUser(userID);
                     long diffTime = blUser.getEndTime() - Instant.now().toEpochMilli();
 
                     if (blUser.getCounter() >= 5) {

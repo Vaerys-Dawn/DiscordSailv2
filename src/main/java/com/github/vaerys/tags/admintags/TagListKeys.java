@@ -2,7 +2,7 @@ package com.github.vaerys.tags.admintags;
 
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminObject;
 
 import java.util.stream.Collectors;
@@ -20,7 +20,7 @@ public class TagListKeys extends TagAdminObject {
     }
 
     @Override
-    protected String tagName() {
+    public String tagName() {
         return "listKeys";
     }
 

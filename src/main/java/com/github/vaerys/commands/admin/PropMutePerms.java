@@ -3,6 +3,7 @@ package com.github.vaerys.commands.admin;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.*;
@@ -18,8 +19,8 @@ public class PropMutePerms extends Command {
         // check if bot has perms
         EnumSet<Permissions> botPerms = command.client.bot.getPermissions(command.guild);
         if (!botPerms.contains(Permissions.MANAGE_CHANNELS)) {
-            return "> I do not have permission to run this command. I need to have Manage Channels.\n" +
-                    "Feel free to remove the permission after i am done as I will no longer need it.";
+            return "> I do not have permission to run this command. I need to have **Manage Channels**.\n" +
+                    "Feel free to remove the permission after I am done as I will no longer need it.";
         }
         // get current channel's "Muted" role perms
         IRole mutedRole = command.guild.getMutedRole();
@@ -30,19 +31,28 @@ public class PropMutePerms extends Command {
 
         IMessage workingMsg = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
 
+        StringHandler extraComments = new StringHandler();
         PermissionOverride mutedPermissions = roleOverrides.get(mutedRole.getLongID());
         List<IChannel> guildChannels = command.guild.get().getChannels();
         int counter = 0;
         for (IChannel channel : guildChannels) {
             // remove old permissions, then add our stored set.
-            channel.removePermissionsOverride(mutedRole);
-            channel.overrideRolePermissions(mutedRole, mutedPermissions.allow(), mutedPermissions.deny());
-            counter++;
+            if (!channel.getModifiedPermissions(command.client.bot.get()).contains(Permissions.MANAGE_PERMISSIONS)) {
+                if (extraComments.isEmpty()) {
+                    extraComments.append("> Could not apply the permissions to the following channels:");
+                }
+                extraComments.append("\n" + channel.mention());
+            } else {
+                channel.removePermissionsOverride(mutedRole);
+                channel.overrideRolePermissions(mutedRole, mutedPermissions.allow(), mutedPermissions.deny());
+                counter++;
+            }
         }
 
         RequestHandler.deleteMessage(workingMsg);
         return "> Set permissions for " + counter + " channels to:\n**Allow**:" + mutedPermissions.allow().toString() +
                 "\n**Deny**:" + mutedPermissions.deny().toString() +
+                (extraComments.isEmpty() ? "" : "\n" + extraComments) +
                 "\n\nYou are now free to remove my **Manage Channels** Permission as I no longer need it.";
     }
 

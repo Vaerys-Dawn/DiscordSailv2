@@ -3,7 +3,7 @@ package com.github.vaerys.commands.pixels;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;

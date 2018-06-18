@@ -10,10 +10,10 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.objects.ChannelSettingObject;
-import com.github.vaerys.objects.GuildLogObject;
-import com.github.vaerys.objects.LogObject;
-import com.github.vaerys.objects.UserRateObject;
+import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
+import com.github.vaerys.objects.utils.GuildLogObject;
+import com.github.vaerys.objects.utils.LogObject;
+import com.github.vaerys.objects.adminlevel.UserRateObject;
 import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.FileFactory;
@@ -22,11 +22,9 @@ import com.github.vaerys.templates.GuildToggle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.RequestBuffer;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -122,6 +120,7 @@ public class GuildObject {
         return object;
     }
 
+
     private void checkToggles() {
         toRemove = new ArrayList<>();
         for (GuildToggle g : toggles) {
@@ -156,6 +155,7 @@ public class GuildObject {
             }
         }
     }
+
 
     public void removeCommandsByType(SAILType type) {
         ListIterator iterator = commands.listIterator();
@@ -409,5 +409,16 @@ public class GuildObject {
 
     public boolean channelHasSetting(ChannelSetting setting, ChannelObject channel) {
         return channelHasSetting(setting, channel.longID);
+    }
+
+    public IMessage fetchMessage(long l) {
+        for (IChannel c : object.getChannels()) {
+            EnumSet<Permissions> perms = c.getModifiedPermissions(client.bot.get());
+            if (!perms.contains(Permissions.READ_MESSAGE_HISTORY) || !perms.contains(Permissions.READ_MESSAGES))
+                continue;
+            IMessage message = RequestBuffer.request(() -> c.fetchMessage(l)).get();
+            if (message != null) return message;
+        }
+        return null;
     }
 }

@@ -3,12 +3,13 @@ package com.github.vaerys.handlers;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
-import com.github.vaerys.objects.CCommandObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
+import com.github.vaerys.objects.userlevel.CCommandObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.TagObject;
 import org.slf4j.Logger;
@@ -57,10 +58,33 @@ public class CCHandler {
         tags.addAll(TagList.getType(TagType.ADMIN_CC));
         TagList.sort(tags);
 
+
         for (TagObject t : tags) {
-            contents = t.handleTag(contents, command, ccArgs, cc);
-            if (contents == null) return;
+            try {
+
+////            } catch (StackOverflowError e) {
+//                String ccContents = t.contents(contents);
+//                String ccPrefix;
+//                if (t instanceof TagAdminSubTagObject) {
+//                    TagAdminSubTagObject tag = (TagAdminSubTagObject) t;
+//                    String subTag = tag.getSubTag(contents);
+//                    ccPrefix = String.format("<%s:%s>%s", tag.tagName(), subTag, t.requiredArgs != 0 ? "{" : "");
+//                } else {
+//                    ccPrefix = t.prefix;
+//                }
+//                String fullTag = t.requiredArgs == 0 ? ccPrefix : ccPrefix + ccContents + t.suffix;
+//                System.out.println(fullTag);
+////                RequestHandler.sendMessage(String.format("A stack overflow error occurred within one of the **%s** tags.\n\n**Tag Details:**```\n%s```", t.name, fullTag), command);
+////                return;
+                FileHandler.writeToFile(Constants.DIRECTORY_STORAGE + "Error.txt", contents, true);
+                contents = t.handleTag(contents, command, ccArgs, cc);
+                if (contents == null) return;
+            } catch (StackOverflowError e) {
+                System.out.println("Error caught");
+                return;
+            }
         }
+
         cc.cullKeys();
         RequestHandler.sendMessage(contents, command.channel.get());
     }
@@ -99,8 +123,7 @@ public class CCHandler {
             List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
             if (channels.size() != 0 && !channels.contains(command.channel.get())) {
                 channels = command.user.getVisibleChannels(channels);
-                List<String> channelMentions = Utility.getChannelMentions(channels);
-                RequestHandler.sendMessage(Utility.getChannelMessage(channelMentions), command.channel.get());
+                RequestHandler.sendMessage(Utility.getChannelMessage(channels), command.channel.get());
                 return;
             }
         }
@@ -110,6 +133,8 @@ public class CCHandler {
             contents = t.handleTag(contents, command, ccArgs);
             if (contents == null) return;
         }
+
+
         RequestHandler.sendMessage(contents, command.channel.get());
     }
 }

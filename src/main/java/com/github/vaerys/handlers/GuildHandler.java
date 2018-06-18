@@ -8,8 +8,8 @@ import com.github.vaerys.masterobjects.ChannelObject;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.RewardRoleObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.pogos.GuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +32,15 @@ public class GuildHandler {
                 PixelHandler.doDecay(content, p);
             }
             //check user's roles and make sure that they have the right roles.
-            checkUsersRoles(p.getUserID(), content);
+            checkUsersRoles(p.getUserID(), content, true);
         }
     }
 
     public static void checkUsersRoles(long id, GuildObject content) {
+        checkUsersRoles(id, content, false);
+    }
+
+    public static void checkUsersRoles(long id, GuildObject content, boolean suppressWarnings) {
 
         //don't try to edit your own roles ya butt.
         if (id == Client.getClient().getOurUser().getLongID()) return;
@@ -93,7 +97,7 @@ public class GuildHandler {
         //only do a role update if the role count changes
         List<IRole> currentRoles = user.getRolesForGuild(content.get());
         if (!currentRoles.containsAll(userRoles) || currentRoles.size() != userRoles.size()) {
-            RequestHandler.roleManagement(user, content.get(), userRoles);
+            RequestHandler.roleManagement(user, content.get(), userRoles, suppressWarnings);
         }
     }
 
@@ -166,6 +170,7 @@ public class GuildHandler {
     }
 
     public static boolean canBypass(IUser author, IGuild guild, boolean logging) {
+        if (author == null) return false;
         if (guild == null) return false;
         GuildObject object = Globals.getGuildContent(guild.getLongID());
         if (object == null) return false;
@@ -203,6 +208,7 @@ public class GuildHandler {
 
     public static boolean testForPerms(IUser user, IGuild guild, Permissions... perms) {
         if (perms.length == 0) return true;
+        if (user == null) return false;
         if (guild == null) return true;
         if (canBypass(user, guild)) return true;
         EnumSet<Permissions> toMatch = EnumSet.noneOf(Permissions.class);

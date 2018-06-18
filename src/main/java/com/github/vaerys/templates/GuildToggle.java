@@ -20,20 +20,20 @@ import java.util.stream.Collectors;
 public abstract class GuildToggle {
 
     public SAILType affectsType;
-    public List<Command> commands = new ArrayList<>();
-    public List<GuildSetting> settings = new ArrayList<>();
+    public List<Class<? extends Command>> commands = new ArrayList<>();
+    public List<SAILType> settings = new ArrayList<>();
     public List<ChannelSetting> channels = new ArrayList<>();
 
     public void execute(GuildObject guild) {
         guild.removeCommandsByType(affectsType);
-        for (Command c : commands) {
-            guild.removeCommand(c.names);
+        for (Class<? extends Command> c : commands) {
+            guild.removeCommand(Command.get(c).names);
         }
         for (ChannelSetting c : channels) {
             guild.removeChannelSetting(c);
         }
-        for (GuildSetting s : settings) {
-            guild.removeToggle(s.name());
+        for (SAILType s : settings) {
+            guild.removeToggle(s);
         }
     }
 
@@ -52,12 +52,12 @@ public abstract class GuildToggle {
             }
         }
         builder.withDesc(fullDesc);
-        List<String> commandNames = commands.stream().map(command1 -> command1.getCommand(command)).collect(Collectors.toList());
+        List<String> commandNames = commands.stream().map(c -> Command.get(c).getCommand(command)).collect(Collectors.toList());
         commandNames.addAll(CommandList.getAll().stream()
                 .filter(command1 -> command1.type() == affectsType)
                 .map(command1 -> command1.getCommand(command)).collect(Collectors.toList()));
         commandNames = commandNames.stream().distinct().collect(Collectors.toList());
-        List<SAILType> settingNames = settings.stream().map(guildSetting -> guildSetting.name()).collect(Collectors.toList());
+        List<SAILType> settingNames = settings;
         List<ChannelSetting> channelNames = channels.stream().collect(Collectors.toList());
 
         if (commandNames.size() != 0) {

@@ -2,20 +2,14 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.CCommandObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
+import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,18 +62,7 @@ public class SearchCCs extends Command {
             if (complete.toString().endsWith(",\n")) {
                 complete.replace(complete.length() - 2, complete.length() - 1, ".");
             }
-            String path = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
-            FileHandler.writeToFile(path, complete.toString(), false);
-            File file = new File(path);
-            RequestHandler.sendFile(title, file, command.channel.get());
-            try {
-                Thread.sleep(4000);
-                Files.delete(Paths.get(path));
-            } catch (IOException e) {
-                Utility.sendStack(e);
-            } catch (InterruptedException e) {
-                Utility.sendStack(e);
-            }
+            RequestHandler.sendFile(title, complete.toString(), String.format("Search_%s.txt", args), command.channel.get());
             return null;
         } else {
             embedBuilder.withTitle(title);

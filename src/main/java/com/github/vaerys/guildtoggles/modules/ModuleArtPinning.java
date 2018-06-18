@@ -47,9 +47,9 @@ public class ModuleArtPinning extends GuildModule {
     @Override
     public void setup() {
         channels.add(ChannelSetting.ART);
-        commands.add(Command.get(SetPinLimit.class));
-        settings.add(ToggleList.getSetting(SAILType.AUTO_ART_PINNING));
-        settings.add(ToggleList.getSetting(SAILType.LIKE_ART));
+        commands.add(SetPinLimit.class);
+        settings.add(SAILType.AUTO_ART_PINNING);
+        settings.add(SAILType.LIKE_ART);
     }
 
     @Override

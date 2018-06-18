@@ -1,9 +1,9 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
-import com.github.vaerys.objects.DualVar;
-import com.github.vaerys.objects.TriVar;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
+import com.github.vaerys.objects.utils.DualVar;
+import com.github.vaerys.objects.utils.TriVar;
 import com.github.vaerys.templates.GlobalFile;
 
 import java.time.Instant;
@@ -98,11 +98,20 @@ public class AdminCCs extends GlobalFile {
     }
 
     public void removeCommand(String args) {
-        for (AdminCCObject c: commands){
-            if (c.getName().equalsIgnoreCase(args)){
+        for (AdminCCObject c : commands) {
+            if (c.getName().equalsIgnoreCase(args)) {
                 commands.remove(c);
                 return;
             }
         }
+    }
+
+    public boolean checkForUser(long userID) {
+        if (commands.stream().map(c -> c.getCreatorID()).filter(c -> c == userID).toArray().length != 0) return true;
+        return false;
+    }
+
+    public int getUsedSlots() {
+        return getCommands().stream().mapToInt(c -> (c.getContents(false).length() / 10000) + 1).sum();
     }
 }

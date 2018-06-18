@@ -8,10 +8,10 @@ import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.BlackListObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.RewardRoleObject;
-import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.adminlevel.RewardRoleObject;
+import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.vdurmont.emoji.Emoji;
@@ -101,7 +101,7 @@ public class Utility {
             return from;
         }
         from = from.replaceAll("<@&[0-9]*>", "");
-        return from.replaceAll("(?i)@everyone", "").replaceAll("(?i)@here", "");
+        return from.replaceAll("(?i)@(everyone|here)", "");
     }
 
 
@@ -308,6 +308,13 @@ public class Utility {
         }
     }
 
+
+    /***
+     * Formats seconds to plain text.
+     *
+     * @param difference time in seconds
+     * @return time unit to plain text.
+     */
     public static String formatTimeDifference(long difference) {
         StringHandler formatted = new StringHandler();
         try {
@@ -517,28 +524,6 @@ public class Utility {
         }
     }
 
-    public static void sendLog(String content, GuildObject guild, boolean isAdmin, EmbedObject... object) {
-        IChannel logChannel = null;
-        List<IChannel> serverLog = guild.getChannelsByType(ChannelSetting.SERVER_LOG);
-        List<IChannel> adminLog = guild.getChannelsByType(ChannelSetting.ADMIN_LOG);
-        if (isAdmin) {
-            if (adminLog.size() != 0) {
-                logChannel = adminLog.get(0);
-            }
-        } else {
-            if (serverLog.size() != 0) {
-                logChannel = serverLog.get(0);
-            }
-        }
-        if (logChannel == null) {
-            return;
-        } else if (object.length == 0) {
-            RequestHandler.sendMessage(content, logChannel);
-        } else {
-            RequestHandler.sendEmbed(content, object[0], logChannel);
-        }
-    }
-
     public static String embedToString(EmbedObject embed) {
         if (embed == null) return "";
         StringHandler embedToString = new StringHandler();
@@ -555,7 +540,7 @@ public class Utility {
             if (embed.timestamp != null) embedToString.append(" | ");
         }
         if (embed.timestamp != null) {
-            embedToString.append(" | " + embed.timestamp);
+            embedToString.append(embed.timestamp);
         }
         if (embed.image != null) embedToString.append("\n").append(embed.image.url);
         return embedToString.toString();
@@ -654,6 +639,7 @@ public class Utility {
         return channelNames;
     }
 
+
     public static void sendStack(Exception e) {
         StringHandler s = new StringHandler(ExceptionUtils.getStackTrace(e));
         s.setContent(s.substring(0, s.length() - 2));
@@ -719,70 +705,75 @@ public class Utility {
     }
 
     public static UserObject getUser(CommandObject command, String args, boolean doContains, boolean hasProfile) {
-        if (args != null && !args.isEmpty()) {
-            IUser user = null;
-            IUser conUser = null;
-            String toTest;
-            if (args.split(" ").length != 1) {
-                toTest = escapeRegex(args);
-            } else {
-                toTest = escapeRegex(args).replace("_", "[_| ]");
+        if (args == null || args.isEmpty()) return null;
+        try {
+            long userId = Long.parseUnsignedLong(args);
+            IUser user = command.client.fetchUser(userId);
+            if (user != null || UserObject.checkForUser(userId, command.guild)) {
+                return UserObject.getNewUserObject(userId, command.guild);
             }
-            List<IUser> guildUsers = command.guild.getUsers();
-            guildUsers.sort(Comparator.comparing(o -> o.getRolesForGuild(command.guild.get()).size()));
-            Collections.reverse(guildUsers);
-            for (IUser u : guildUsers) {
-                if (user != null) {
-                    break;
-                }
-                try {
-                    UserObject object = new UserObject(u, command.guild, true);
-                    if (hasProfile) {
-                        ProfileObject profile = object.getProfile(command.guild);
-                        if (profile == null || profile.isEmpty()) continue;
-                    }
-                    if ((u.getName() + "#" + u.getDiscriminator()).matches("(?i)" + toTest)) {
-                        user = u;
-                    }
-                    if (u.getName().matches("(?i)" + toTest) && user == null) {
-                        user = u;
-                    }
-                    String displayName = u.getDisplayName(command.guild.get());
-                    if (displayName.matches("(?i)" + toTest) && user == null) {
-                        user = u;
-                    }
-                    if (doContains && conUser == null) {
-                        if (u.getName().matches("(?i).*" + toTest + ".*")) {
-                            conUser = u;
-                        }
-                        if (displayName.matches("(?i).*" + toTest + ".*") && conUser == null) {
-                            conUser = u;
-                        }
-                    }
-                } catch (PatternSyntaxException e) {
-                    //continue.
-                }
-            }
-            UserObject userObject = null;
-            try {
-                long uID = Long.parseLong(args);
-                return new UserObject(uID, command.guild);
-            } catch (NumberFormatException e) {
-                List<IUser> mention = command.message.getMentions();
-                if (mention.size() > 0) {
-                    Collections.reverse(mention);
-                    user = mention.get(0);
-                }
-            }
-            if (user == null && doContains) {
-                user = conUser;
-            }
-            if (user != null) {
-                userObject = new UserObject(user, command.guild);
-            }
-            return userObject;
+        } catch (NumberFormatException e) {
+            //skip
         }
-        return null;
+
+        IUser user = null;
+        IUser conUser = null;
+        String toTest;
+        if (args.split(" ").length != 1) {
+            toTest = escapeRegex(args);
+        } else {
+            toTest = escapeRegex(args).replace("_", "[_| ]");
+        }
+        List<IUser> guildUsers = command.guild.getUsers();
+        guildUsers.sort(Comparator.comparing(o -> o.getRolesForGuild(command.guild.get()).size()));
+        Collections.reverse(guildUsers);
+        for (IUser u : guildUsers) {
+            if (user != null) {
+                break;
+            }
+            try {
+                UserObject object = new UserObject(u, command.guild, true);
+                if (hasProfile) {
+                    ProfileObject profile = object.getProfile(command.guild);
+                    if (profile == null || profile.isEmpty()) continue;
+                }
+                if ((u.getName() + "#" + u.getDiscriminator()).matches("(?i)" + toTest)) {
+                    user = u;
+                }
+                if (u.getName().matches("(?i)" + toTest) && user == null) {
+                    user = u;
+                }
+                String displayName = u.getDisplayName(command.guild.get());
+                if (displayName.matches("(?i)" + toTest) && user == null) {
+                    user = u;
+                }
+                if (doContains && conUser == null) {
+                    if (u.getName().matches("(?i).*" + toTest + ".*")) {
+                        conUser = u;
+                    }
+                    if (displayName.matches("(?i).*" + toTest + ".*") && conUser == null) {
+                        conUser = u;
+                    }
+                }
+            } catch (PatternSyntaxException e) {
+                //continue.
+            }
+        }
+        UserObject userObject = null;
+        if (user == null) {
+            List<IUser> mention = command.message.getMentions();
+            if (mention.size() > 0) {
+                Collections.reverse(mention);
+                user = mention.get(0);
+            }
+        }
+        if (user == null && doContains) {
+            user = conUser;
+        }
+        if (user != null) {
+            userObject = new UserObject(user, command.guild);
+        }
+        return userObject;
     }
 
     public static UserObject getUser(CommandObject command, String args, boolean doContains) {
@@ -816,6 +807,10 @@ public class Utility {
         }
     }
 
+    public static String getDefaultAvatarURL(long userID) {
+        return String.format("https://cdn.discordapp.com/embed/avatars/%d.png", new Random(userID).nextInt(5));
+    }
+
 
     public static ReactionEmoji getReaction(String emojiName) {
         Emoji emoji = EmojiManager.getForAlias(emojiName);
@@ -828,6 +823,7 @@ public class Utility {
 
     public static String prepArgs(String args) {
         StringHandler replace = new StringHandler(args);
+        replace.replace(">", "<u003E>");
         replace.replace("{", "<u007B>");
         replace.replace("}", "<u007D>");
         replace.replace("(", "<u0028>");
@@ -839,6 +835,7 @@ public class Utility {
 
     public static String removePrep(String args) {
         StringHandler replace = new StringHandler(args);
+        replace.replace("<u003E>", ">");
         replace.replace("<u007B>", "{");
         replace.replace("<u007D>", "}");
         replace.replace("<u0028>", "(");
@@ -899,10 +896,11 @@ public class Utility {
         return mostCorrect;
     }
 
-    public static String getChannelMessage(List<String> channelMentions) {
-        if (channelMentions.size() == 0) {
+    public static String getChannelMessage(List<IChannel> channels) {
+        List<String> channelMentions = Utility.getChannelMentions(channels);
+        if (channels.size() == 0) {
             return "> You do not have access to any channels that you are able to run this command in.";
-        } else if (channelMentions.size() == 1) {
+        } else if (channels.size() == 1) {
             return "> Command must be performed in: " + channelMentions.get(0);
         } else {
             return "> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true);
@@ -969,6 +967,8 @@ public class Utility {
         }
         return fixedEnum.toString();
     }
+
+
 }
 
 //    public static List<String> getAlbumIUrls(String fileURL) {

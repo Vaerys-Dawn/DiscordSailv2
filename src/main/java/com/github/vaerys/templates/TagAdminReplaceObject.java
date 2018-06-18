@@ -2,8 +2,8 @@ package com.github.vaerys.templates;
 
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
-import com.github.vaerys.objects.ReplaceObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
+import com.github.vaerys.objects.utils.ReplaceObject;
 
 import java.util.LinkedList;
 import java.util.List;

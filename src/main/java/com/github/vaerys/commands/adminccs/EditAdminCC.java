@@ -2,17 +2,11 @@ package com.github.vaerys.commands.adminccs;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.StringHandler;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
-import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.tags.TagList;
-import com.github.vaerys.tags.cctags.TagEmbedImage;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class EditAdminCC extends Command {
@@ -24,27 +18,23 @@ public class EditAdminCC extends Command {
         AdminCCObject cc = command.guild.adminCCs.getCommand(object.getFirstWord());
         if (cc == null) return "> Could not find any admin custom commands with that name.";
 
-        StringHandler contents = new StringHandler(object.getRest());
-        IMessage.Attachment attachment = null;
-        if (command.message.getAttachments().size() != 0) {
-            attachment = command.message.getAttachments().get(0);
-        }
-        if (attachment != null && attachment.getFilename().endsWith(".txt")) {
-            contents.append(FileHandler.readFromFile(attachment));
-        }
-        TagEmbedImage tag = TagList.getTag(TagEmbedImage.class);
-        if (attachment != null && Utility.isImageLink(attachment.getFilename())) {
-            contents.append(tag.prefix).append(attachment.getUrl()).append(tag.suffix);
-        }
-        if (StringUtils.countMatches(object.getRest(), tag.prefix) > 1) {
-            return "> Cannot edit Admin CC, Contents contains more than one <embedImage> tag.";
-        }
+        StringHandler contents = NewAdminCC.getContents(command, object.getRest());
+        NewAdminCC.ResponseCode response = NewAdminCC.testContents(command, contents, cc);
 
-        if (contents.isEmpty()) return "> Cannot edit Admin CC, Contents is empty.";
-        if (contents.length() > 10000) return "> Cannot edit Admin CC, Contents is too long. (Max Chars 10000)";
+        switch (response) {
+            case EMPTY_CONTENTS:
+                return "> Cannot edit Admin CC, Contents is empty.";
+            case TOO_MANY_EMBEDS:
+                return "> Cannot edit Admin CC, Contents contains more than one <embedImage> tag.";
+            case NOT_ENOUGH_SLOTS:
+                return "> This message should never run, but if you did get this message it means you somehow have gone over the slot limit for Admin Custom Commands.";
+            case OVERLOADS_SLOTS:
+                return "> There are not enough slots left for you to edit this Admin Custom Command. The new length of the command is too long.";
+        }
 
         cc.setContents(contents.toString());
-        return "> Admin custom command contents updated.";
+        int remainder = (20 - command.guild.adminCCs.getUsedSlots());
+        return String.format("> Admin custom command contents updated. (%d Admin CC slot%s remain)", remainder, remainder != 1 ? "s" : "");
     }
 
     @Override
@@ -70,7 +60,7 @@ public class EditAdminCC extends Command {
 
     @Override
     protected ChannelSetting channel() {
-        return ChannelSetting.MANAGE_CC;
+        return null;
     }
 
     @Override

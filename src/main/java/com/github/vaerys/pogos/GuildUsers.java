@@ -1,8 +1,8 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.UserCountDown;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.adminlevel.UserCountDown;
 import com.github.vaerys.templates.GlobalFile;
 
 import java.util.ArrayList;
@@ -64,5 +64,11 @@ public class GuildUsers extends GlobalFile {
 
     public void addUser(ProfileObject profile) {
         profiles.add(profile);
+    }
+
+    public boolean checkForUser(long userID) {
+        if (profiles.stream().map(c -> c.getUserID()).filter(c -> c == userID).toArray().length != 0) return true;
+        if (mutedUsers.stream().map(c -> c.getID()).filter(c -> c == userID).toArray().length != 0) return true;
+        return false;
     }
 }

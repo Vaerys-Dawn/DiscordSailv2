@@ -36,7 +36,7 @@ public class MessageHandler {
             // check for role mentions:
             if (!GuildHandler.testForPerms(command, command.channel.get(), Permissions.MENTION_EVERYONE)) {
                 // sanitize @everyone and @here mentions.
-                args = args.replaceAll("(?i)@(everyone|here)" , "REDACTED");
+                args = args.replaceAll("(?i)@(everyone|here)", "REDACTED");
             }
             PixelHandler.grantXP(command);
             if (command.guild.config.artPinning) {
@@ -44,14 +44,15 @@ public class MessageHandler {
                     ArtHandler.pinMessage(command, command.message.author, command.client.bot);
                 }
             }
-            if (command.guild.config.moduleCC) {
-                if (args.toLowerCase().startsWith(command.guild.config.getPrefixCC().toLowerCase())) {
-                    CCHandler.handleCommand(args, command);
-                }
-            }
             if (command.guild.config.moduleAdminCC) {
                 if (args.toLowerCase().startsWith(command.guild.config.getPrefixAdminCC().toLowerCase())) {
                     CCHandler.handleAdminCC(args, command);
+                }
+
+            }
+            if (command.guild.config.moduleCC) {
+                if (args.toLowerCase().startsWith(command.guild.config.getPrefixCC().toLowerCase())) {
+                    CCHandler.handleCommand(args, command);
                 }
             }
         } else {
@@ -98,7 +99,7 @@ public class MessageHandler {
         } else {
             builder.append(" in channel ").append(commandObject.channel.get().mention()).append(".");
         }
-        Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
+        LoggingHandler.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
     }
 
     //Command Handler
@@ -121,8 +122,8 @@ public class MessageHandler {
                     if (c.channel != null && !GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
                         List<IChannel> channels = command.guild.getChannelsByType(c.channel);
                         if (channels.size() != 0 && !channels.contains(command.channel.get())) {
-                            List<String> list = Utility.getChannelMentions(command.user.getVisibleChannels(channels));
-                            RequestHandler.sendMessage(Utility.getChannelMessage(list), command.channel.get());
+                            List<IChannel> visibleChannels = command.user.getVisibleChannels(channels);
+                            RequestHandler.sendMessage(Utility.getChannelMessage(visibleChannels), command.channel.get());
                             return true;
                         }
                     }

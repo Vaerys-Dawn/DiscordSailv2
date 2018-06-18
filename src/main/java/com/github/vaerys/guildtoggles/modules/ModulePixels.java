@@ -6,10 +6,9 @@ import com.github.vaerys.commands.pixels.PixelHelp;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleList;
-import com.github.vaerys.guildtoggles.toggles.*;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.RewardRoleObject;
+import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
@@ -60,18 +59,18 @@ public class ModulePixels extends GuildModule {
 
     @Override
     public void setup() {
-        commands.add(Command.get(DenyXpPrefix.class));
+        commands.add(DenyXpPrefix.class);
 
         channels.add(ChannelSetting.LEVEL_UP);
         channels.add(ChannelSetting.PIXELS);
         channels.add(ChannelSetting.LEVEL_UP_DENIED);
         channels.add(ChannelSetting.XP_DENIED);
 
-        settings.add(ToggleList.getSetting(SAILType.XP_DECAY));
-        settings.add(ToggleList.getSetting(SAILType.XP_GAIN));
-        settings.add(ToggleList.getSetting(SAILType.SELF_DESTRUCT_LEVEL_UPS));
-        settings.add(ToggleList.getSetting(SAILType.REACT_TO_LEVEL_UP));
-        settings.add(ToggleList.getSetting(SAILType.LIKE_ART));
+        settings.add(SAILType.XP_DECAY);
+        settings.add(SAILType.XP_GAIN);
+        settings.add(SAILType.SELF_DESTRUCT_LEVEL_UPS);
+        settings.add(SAILType.REACT_TO_LEVEL_UP);
+        settings.add(SAILType.LIKE_ART);
     }
 
     @Override

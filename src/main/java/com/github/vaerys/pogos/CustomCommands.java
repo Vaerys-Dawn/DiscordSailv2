@@ -1,25 +1,19 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.PixelHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.BlackListObject;
-import com.github.vaerys.objects.CCommandObject;
+import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.GlobalFile;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.io.File;
 import java.util.ArrayList;
 
 // TODO: 31/08/2016 Add the ability to search for a custom command based on name, contents, or ShitPost (use separate commands) -- partially complete.
@@ -124,28 +118,28 @@ public class CustomCommands extends GlobalFile {
         return commands;
     }
 
-    @Deprecated
-    public String sendCCasJSON(long channelID, String commandName) {
-        IChannel channel = Globals.getClient().getChannelByID(channelID);
-        for (CCommandObject c : commands) {
-            if (c.getName().equalsIgnoreCase(commandName)) {
-                FileHandler.writeToJson(Constants.DIRECTORY_TEMP + c.getName() + ".json", c);
-                File file = new File(Constants.DIRECTORY_TEMP + c.getName() + ".json");
-                if (RequestHandler.sendFile("> Here is the Raw Data for Custom Command: **" + c.getName() + "**", file, channel).get() == null) {
-                    RequestHandler.sendMessage("> An error occurred when attempting to getSlashCommands CC data.", channel);
-                }
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    Utility.sendStack(e);
-                }
-                file.delete();
-                return null;
-            }
-        }
-        RequestHandler.sendMessage(Constants.ERROR_CC_NOT_FOUND, channel);
-        return null;
-    }
+//    @Deprecated
+//    public String sendCCasJSON(long channelID, String commandName) {
+//        IChannel channel = Globals.getClient().getChannelByID(channelID);
+//        for (CCommandObject c : commands) {
+//            if (c.getName().equalsIgnoreCase(commandName)) {
+//                FileHandler.writeToJson(Constants.DIRECTORY_TEMP + c.getName() + ".json", c);
+//                File file = new File(Constants.DIRECTORY_TEMP + c.getName() + ".json");
+//                if (RequestHandler.sendFile("> Here is the Raw Data for Custom Command: **" + c.getName() + "**", file, channel).get() == null) {
+//                    RequestHandler.sendMessage("> An error occurred when attempting to getSlashCommands CC data.", channel);
+//                }
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    Utility.sendStack(e);
+//                }
+//                file.delete();
+//                return null;
+//            }
+//        }
+//        RequestHandler.sendMessage(Constants.ERROR_CC_NOT_FOUND, channel);
+//        return null;
+//    }
 
 
     public String delCommand(String args, IUser author, IGuild guild) {
@@ -201,5 +195,10 @@ public class CustomCommands extends GlobalFile {
             }
         }
         return null;
+    }
+
+    public boolean checkForUser(long userID) {
+        if (commands.stream().map(c -> c.getUserID()).filter(c -> c == userID).toArray().length != 0) return true;
+        return false;
     }
 }

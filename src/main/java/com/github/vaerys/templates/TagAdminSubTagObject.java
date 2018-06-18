@@ -3,7 +3,7 @@ package com.github.vaerys.templates;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,6 +15,14 @@ public abstract class TagAdminSubTagObject extends TagObject {
     protected String usageName;
 
     protected final String ERROR_PIXELS_DISABLED = "#ERROR#:<" + tagName() + ":PIXELS_DISABLED" + Command.spacer + ">";
+
+    private String getSubPrefix(String from) {
+        return "<" + tagName() + ":" + getSubTag(from) + ">{";
+    }
+
+    private String getFullTag(String from) {
+        return getSubPrefix(from) + contents(from) + suffix;
+    }
 
     @Override
     public String execute(String from, CommandObject command, String args) {
@@ -43,9 +51,9 @@ public abstract class TagAdminSubTagObject extends TagObject {
     public String getSubTag(String from) {
         if (requiredArgs != 0) {
             try {
-                Matcher p = Pattern.compile(prefix + group + suffix).matcher(from);
-                p.find();
-                return p.group(1);
+                String tagPrefix = "<" + tagName() + ":";
+                String subTag = StringUtils.substringBetween(from, tagPrefix, ">");
+                return Pattern.compile("([\\w| ]+?)").matcher(subTag).matches() ? subTag : "";
             } catch (Exception e) {
                 return "";
             }
@@ -63,15 +71,17 @@ public abstract class TagAdminSubTagObject extends TagObject {
     public String contents(String from) {
         if (requiredArgs != 0) {
             try {
-                Matcher p = Pattern.compile(prefix + group + suffix).matcher(from);
-                p.find();
-                return p.group(2);
+                return StringUtils.substringBetween(from, getSubPrefix(from), suffix);
             } catch (Exception e) {
                 return "";
             }
         } else {
             return "";
         }
+    }
+
+    public String getUsage() {
+        return requiredArgs != 0 ? usageName + usage + suffix : usageName;
     }
 
     public XEmbedBuilder getInfo(CommandObject command) {
@@ -96,9 +106,7 @@ public abstract class TagAdminSubTagObject extends TagObject {
     public boolean cont(String from) {
         if (requiredArgs != 0) {
             try {
-                Matcher p = Pattern.compile(prefix + group + suffix).matcher(from);
-                p.find();
-                return p.group(2) != null;
+                return StringUtils.substringBetween(from, getSubPrefix(from), suffix) != null;
             } catch (Exception e) {
                 return false;
             }
@@ -117,7 +125,7 @@ public abstract class TagAdminSubTagObject extends TagObject {
         if (requiredArgs == 0) {
             return from.replaceFirst(prefix, withThis);
         } else {
-            return from.replaceFirst(prefix + group + suffix, prepReplace(withThis));
+            return StringUtils.replaceOnce(from, getFullTag(from), withThis);
         }
     }
 
@@ -125,7 +133,7 @@ public abstract class TagAdminSubTagObject extends TagObject {
         if (requiredArgs == 0) {
             return from.replaceFirst(prefix, "");
         } else {
-            return from.replaceFirst(prefix + group + suffix, "");
+            return StringUtils.replaceOnce(from, getFullTag(from), "");
         }
     }
 

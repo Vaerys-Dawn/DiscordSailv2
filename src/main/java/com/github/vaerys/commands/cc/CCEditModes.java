@@ -2,7 +2,7 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.CCommandObject;
+import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.tags.cctags.TagSearchTags;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IGuild;

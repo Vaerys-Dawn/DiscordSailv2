@@ -5,7 +5,9 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.*;
+import com.github.vaerys.objects.utils.WebHookObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
+import com.google.gson.Gson;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,13 +19,9 @@ import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.*;
 
 import javax.net.ssl.SSLHandshakeException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -102,7 +100,7 @@ public class RequestHandler {
                 String debugMessage;
                 if (checkedMessage.isEmpty()) debugMessage = Utility.embedToString(embed);
                 else debugMessage = checkedMessage + "\n" + Utility.embedToString(embed);
-                missingPermissions(debugMessage, channel);
+                missingPermissions("EMBED_LINKS", channel);
                 return sendMessage(debugMessage, channel).get();
             }
         });
@@ -162,6 +160,28 @@ public class RequestHandler {
         });
     }
 
+    public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, String fileContents, String fileName, IChannel channel) {
+        return RequestBuffer.request(() -> {
+            String checkedMessage = message;
+            if (checkedMessage == null) checkedMessage = "";
+            InputStream stream = new ByteArrayInputStream(fileContents.getBytes(StandardCharsets.UTF_8));
+            try {
+                IMessage sent = channel.sendFile(checkedMessage, stream, fileName);
+                stream.close();
+                return sent;
+            } catch (MissingPermissionsException e) {
+                String debugMessage;
+                if (checkedMessage.isEmpty()) debugMessage = "FILE";
+                else debugMessage = checkedMessage + "\nFILE";
+                sendMessage("> Could not send File, missing permissions.", channel);
+                missingPermissions(debugMessage, channel);
+                return null;
+            } catch (IOException e) {
+                return null;
+            }
+        });
+    }
+
     public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, File file, ChannelObject channel) {
         return sendFile(message, file, channel.get());
     }
@@ -169,6 +189,15 @@ public class RequestHandler {
     public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, File file, CommandObject command) {
         return sendFile(message, file, command.channel.get());
     }
+
+    public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, String fileContents, String fileName, ChannelObject channel) {
+        return sendFile(message, fileContents, fileName, channel.get());
+    }
+
+    public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, String fileContents, String fileName, CommandObject command) {
+        return sendFile(message, fileContents, fileName, command.channel.get());
+    }
+
 
     public static RequestBuffer.RequestFuture<IMessage> sendFileURL(String preMessage, String imageURL, IChannel channel, boolean loadMessage) {
         // if url is empty send as regular Image
@@ -300,6 +329,10 @@ public class RequestHandler {
     }
 
     public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, List<IRole> userRoles) {
+        return roleManagement(author, guild, userRoles, false);
+    }
+
+    public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, List<IRole> userRoles, boolean suppressWarnings) {
         return RequestBuffer.request(() -> {
             try {
                 IRole[] roles = userRoles.stream().filter(r -> r != null).collect(Collectors.toList()).toArray(new IRole[userRoles.size()]);
@@ -309,8 +342,10 @@ public class RequestHandler {
                 throw e;
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("hierarchy")) {
-                    logger.debug("Error Editing roles of user with id: " + author.getLongID() + " on guild with id: " + guild.getLongID() +
-                            ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
+                    if (!suppressWarnings) {
+                        logger.warn("Error Editing roles of user with id: " + author.getLongID() + " on guild with id: " + guild.getLongID() +
+                                ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
+                    }
                     return false;
                 } else {
                     Utility.sendStack(e);
@@ -458,6 +493,31 @@ public class RequestHandler {
 
     public static void roleManagement(CommandObject command, IRole role, boolean isAdding) {
         roleManagement(command.user.get(), command.guild.get(), role.getLongID(), isAdding);
+    }
+
+    public static void sendWebHook(String webHookUrl, WebHookObject object) {
+        try {
+            URL url = new URL(webHookUrl);
+            URLConnection con = url.openConnection();
+            con.setRequestProperty("User-Agent", Constants.MOZILLA_USER_AGENT);
+            HttpURLConnection http = (HttpURLConnection) con;
+            http.setRequestMethod("POST"); // PUT is another valid option
+            http.setDoOutput(true);
+            Gson gson = new Gson();
+            byte[] contents = gson.toJson(object).getBytes(StandardCharsets.UTF_8);
+            http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            http.setFixedLengthStreamingMode(contents.length);
+            try (OutputStream os = http.getOutputStream()) {
+                os.write(contents);
+                os.close();
+            }
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

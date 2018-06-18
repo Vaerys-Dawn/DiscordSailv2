@@ -5,7 +5,7 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminSubTagObject;
 import sx.blah.discord.handle.obj.IRole;
 
@@ -36,7 +36,7 @@ public class TagGrantRole extends TagAdminSubTagObject {
     }
 
     @Override
-    protected String tagName() {
+    public String tagName() {
         return "grantRole";
     }
 
