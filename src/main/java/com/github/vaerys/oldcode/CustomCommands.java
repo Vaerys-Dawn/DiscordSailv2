@@ -2,7 +2,7 @@ package com.github.vaerys.oldcode;
 
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.CCommandObject;
+import com.github.vaerys.objects.userlevel.CCommandObject;
 
 import java.util.ArrayList;
 

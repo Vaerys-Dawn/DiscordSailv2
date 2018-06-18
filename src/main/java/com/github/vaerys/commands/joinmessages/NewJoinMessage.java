@@ -5,7 +5,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.JoinMessage;
+import com.github.vaerys.objects.adminlevel.JoinMessage;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;

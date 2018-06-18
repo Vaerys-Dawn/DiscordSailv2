@@ -45,7 +45,7 @@ public class DailyMessage extends GuildSetting {
 
     @Override
     public void setup() {
-        commands.add(Command.get(LastDailyMessage.class));
+        commands.add(LastDailyMessage.class);
     }
 
 }

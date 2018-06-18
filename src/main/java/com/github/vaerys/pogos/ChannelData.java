@@ -1,14 +1,18 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.objects.ChannelSettingObject;
-import com.github.vaerys.objects.GroupUpObject;
-import com.github.vaerys.objects.JoinMessage;
-import com.github.vaerys.objects.TrackLikes;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
+import com.github.vaerys.objects.adminlevel.JoinMessage;
+import com.github.vaerys.objects.botlevel.TrackLikes;
+import com.github.vaerys.objects.userlevel.GroupUpObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.GlobalFile;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -75,5 +79,46 @@ public class ChannelData extends GlobalFile {
             if (c.getType() == setting) return c;
         }
         return null;
+    }
+
+    public void checkGroupUp(CommandObject command) {
+        ListIterator iterator = groupUpObjects.listIterator();
+        while (iterator.hasNext()) {
+            GroupUpObject g = (GroupUpObject) iterator.next();
+            // if they aren't on the guild anymore remove them
+            UserObject user = UserObject.getNewUserObject(g.getUserID(), command.guild);
+            if (user == null) {
+                iterator.remove();
+                continue;
+            }
+            //if they have no profile remove them.
+            ProfileObject profile = user.getProfile(command);
+            if (profile == null) {
+                iterator.remove();
+                continue;
+            }
+            // if user hasn't spoken in the past 2 days remove from the list.
+            Instant now = command.message.getTimestamp();
+            long time = now.toEpochMilli() / 1000;
+            long diff = time - profile.getLastTalked();
+            long twoDays = 5 * 24 * 60 * 60;
+            if (diff > twoDays) iterator.remove();
+        }
+    }
+
+    public boolean checkForUser(long userID) {
+        if (likes.stream()
+                .map(c -> c.getUsers())
+                .filter(c -> c.contains(userID))
+                .toArray().length != 0) return true;
+        if (groupUpObjects.stream()
+                .map(c -> c.getUserID())
+                .filter(c -> c == userID)
+                .toArray().length != 0) return true;
+        if (joinMessages.stream()
+                .map(c -> c.getCreator())
+                .filter(c -> c == userID)
+                .toArray().length != 0) return true;
+        return false;
     }
 }

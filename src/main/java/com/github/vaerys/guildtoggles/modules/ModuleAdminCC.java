@@ -44,9 +44,6 @@ public class ModuleAdminCC extends GuildModule {
 
     @Override
     public void setup() {
-        channels.add(ChannelSetting.CC_INFO);
-        channels.add(ChannelSetting.CC_DENIED);
-        channels.add(ChannelSetting.MANAGE_CC);
     }
 
 

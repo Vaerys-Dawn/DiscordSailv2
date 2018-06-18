@@ -1,6 +1,6 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.objects.TimedEvent;
+import com.github.vaerys.objects.events.TimedEvent;
 import com.github.vaerys.templates.GlobalFile;
 
 import java.util.ArrayList;

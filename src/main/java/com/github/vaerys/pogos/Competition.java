@@ -1,8 +1,8 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.CompObject;
-import com.github.vaerys.objects.PollObject;
+import com.github.vaerys.objects.userlevel.CompObject;
+import com.github.vaerys.objects.userlevel.PollObject;
 import com.github.vaerys.templates.GlobalFile;
 
 import java.util.ArrayList;
@@ -88,5 +88,10 @@ public class Competition extends GlobalFile {
 
     public List<String> getVoters() {
         return voting;
+    }
+
+    public boolean checkForUser(long userID) {
+        if (entries.stream().map(c -> c.getUserID()).filter(c -> c == userID).toArray().length != 0) return true;
+        return false;
     }
 }

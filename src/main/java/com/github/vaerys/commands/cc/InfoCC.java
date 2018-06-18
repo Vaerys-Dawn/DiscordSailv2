@@ -5,10 +5,10 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.CCommandObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IUser;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -25,10 +25,8 @@ public class InfoCC extends Command {
         StringBuilder builder = new StringBuilder();
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String title = "> Here is the information for command: **" + customCommand.getName() + "**\n";
-        IUser createdBy = command.guild.getUserByID(customCommand.getUserID());
-        if (createdBy == null) createdBy = command.client.get().fetchUser(customCommand.getUserID());
-        if (createdBy == null) builder.append("Creator: **Null**\n");
-        else builder.append("Creator: **@" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "**\n");
+        UserObject createdBy = UserObject.getNewUserObject(customCommand.getUserID(), command.guild);
+        builder.append("Creator: **@" + createdBy.username + "**\n");
         builder.append("Time Run: **" + customCommand.getTimesRun() + "**\n");
         builder.append("Is Locked: **" + customCommand.isLocked() + "**\n");
         builder.append("Is ShitPost: **" + customCommand.isShitPost() + "**");

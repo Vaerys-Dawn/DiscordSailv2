@@ -12,9 +12,9 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
+import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
@@ -37,17 +37,13 @@ public class NewCC extends Command {
         }
         if (command.guild.getChannelsByType(ChannelSetting.CC_DENIED).contains(command.channel.get()))
             return "> This Channel has CCs Denied, You cannot create ccs here.";
-        boolean isShitpost = false;
+        boolean isShitpost;
         boolean isLocked = false;
         SplitFirstObject splitFirst = new SplitFirstObject(args);
         List<IChannel> shitpostChannels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
-        if (shitpostChannels != null) {
-            for (IChannel channel : shitpostChannels) {
-                if (command.channel.longID == channel.getLongID()) {
-                    isShitpost = true;
-                }
-            }
-        }
+
+        isShitpost = shitpostChannels.contains(command.channel);
+
         if (object.getSettings().contains(UserSetting.AUTO_SHITPOST)) {
             isShitpost = true;
         }

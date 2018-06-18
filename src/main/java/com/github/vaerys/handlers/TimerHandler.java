@@ -7,7 +7,14 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.*;
+import com.github.vaerys.objects.adminlevel.UserCountDown;
+import com.github.vaerys.objects.adminlevel.UserRateObject;
+import com.github.vaerys.objects.botlevel.RandomStatusObject;
+import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.userlevel.DailyMessage;
+import com.github.vaerys.objects.events.TimedEvent;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.userlevel.ReminderObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.sun.management.OperatingSystemMXBean;
 import org.slf4j.Logger;
@@ -172,7 +179,7 @@ public class TimerHandler {
                     Globals.backupAll();
 
                     // clear blacklist
-                    List<BlacklistedUserObject> blacklistedUserObjects = Globals.getGlobalData().getBlacklistedUsers();
+                    List<BlackListObject.BlacklistedUserObject> blacklistedUserObjects = Globals.getGlobalData().getBlacklistedUsers();
                     blacklistedUserObjects.removeIf(object -> object.getCounter() < 5);
 
                     dailyMessageHandler(event);
@@ -352,7 +359,7 @@ public class TimerHandler {
 
                 //logging
                 if (task.config.deleteLogging) {
-                    Utility.sendLog("> **@" + offender.getName() + "#" + offender.getDiscriminator() + "** was muted for breaking rate limit.", task, true);
+                    LoggingHandler.sendLog("> **@" + offender.getName() + "#" + offender.getDiscriminator() + "** was muted for breaking rate limit.", task, true);
                 }
 
                 ProfileObject profile = task.users.getUserByID(u.getID());

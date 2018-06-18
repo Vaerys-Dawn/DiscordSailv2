@@ -135,6 +135,7 @@ public class CommandList {
         add(new SelectChar());
         add(new SetBioRolePrefix());
         add(new UpdateChar());
+        add(new EditDungeonChar());
 
         //CC commands
         add(new DelCC());

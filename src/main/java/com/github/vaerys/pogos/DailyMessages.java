@@ -2,8 +2,8 @@ package com.github.vaerys.pogos;
 
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.objects.DailyMessage;
-import com.github.vaerys.objects.QueueObject;
+import com.github.vaerys.objects.userlevel.DailyMessage;
+import com.github.vaerys.objects.botlevel.QueueObject;
 import com.github.vaerys.templates.GlobalFile;
 
 import java.time.DayOfWeek;

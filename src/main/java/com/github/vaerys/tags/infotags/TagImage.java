@@ -10,7 +10,7 @@ public class TagImage extends TagEmptyObject {
     }
 
     @Override
-    protected String tagName() {
+    public String tagName() {
         return "<image>";
     }
 

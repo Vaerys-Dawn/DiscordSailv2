@@ -9,8 +9,8 @@ import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.RewardRoleObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.pogos.GuildUsers;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
@@ -166,7 +166,7 @@ public class PixelHandler {
         }
 
         //update last talked timestamp
-        user.lastTalked = object.message.getTimestamp().toEpochSecond();
+        user.lastTalked = object.message.getTimestampZone().toEpochSecond();
 
         //ony do xp checks if module is true
         if (!object.guild.config.modulePixels) return;

@@ -1,8 +1,10 @@
 package com.github.vaerys.tags.admintags;
 
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminSubTagObject;
 
 import java.util.List;
@@ -30,7 +32,9 @@ public class TagPathRandom extends TagAdminSubTagObject {
         } else {
             from = removeFirstTag(from);
         }
+        FileHandler.writeToFile(Constants.DIRECTORY_STORAGE + "Error.txt", from, true);
         return from;
+
     }
 
     protected static String handleRandom(List<String> contents) {
@@ -45,7 +49,7 @@ public class TagPathRandom extends TagAdminSubTagObject {
     }
 
     @Override
-    protected String tagName() {
+    public String tagName() {
         return "pathRandom";
     }
 

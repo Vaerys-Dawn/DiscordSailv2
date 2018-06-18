@@ -7,8 +7,8 @@ import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
+import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRole;
@@ -34,7 +34,7 @@ public class Mute extends Command {
         SplitFirstObject userCall = new SplitFirstObject(args);
         IRole mutedRole = command.guild.getMutedRole();
         UserObject muted = Utility.getUser(command, userCall.getFirstWord(), false, false);
-        if (muted == null) return "> Could not find user";
+        if (muted == null || muted.get() == null) return "> Could not find user";
         if (muted.getProfile(command.guild) == null) muted.addProfile(command.guild);
         if (mutedRole == null) return "> Muted role is not configured.";
 

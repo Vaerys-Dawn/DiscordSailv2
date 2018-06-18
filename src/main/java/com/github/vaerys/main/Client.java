@@ -5,9 +5,11 @@ import com.github.kennedyoliveira.pastebin4j.PasteBin;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
-import com.github.vaerys.objects.EventAvatar;
+import com.github.vaerys.objects.events.EventAvatar;
+import com.github.vaerys.objects.events.TimedEvent;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.templates.TagObject;
 import com.github.vaerys.utilobjects.PatreonAPI;
-import com.github.vaerys.objects.TimedEvent;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
@@ -96,7 +98,7 @@ public class Client {
 
     public static void checkPatrons() {
         if (!checkPatreonIsValid()) return;
-        List<Long> patronIDs = new ArrayList<Long>(){{
+        List<Long> patronIDs = new ArrayList<Long>() {{
             add(153159020528533505L);
         }};
         try {

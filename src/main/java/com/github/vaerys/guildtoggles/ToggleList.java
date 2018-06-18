@@ -54,6 +54,7 @@ public class ToggleList {
         add(new StopSpamWalls());
         add(new KickLogging());
         add(new BanLogging());
+        add(new DungeonChars());
     }};
 
     private static final List<GuildModule> guildModules = new ArrayList<GuildModule>() {{

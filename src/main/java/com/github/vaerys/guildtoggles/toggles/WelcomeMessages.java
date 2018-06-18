@@ -44,6 +44,6 @@ public class WelcomeMessages extends GuildSetting {
 
     @Override
     public void setup() {
-        commands.add(Command.get(SetWelcomeMessage.class));
+        commands.add(SetWelcomeMessage.class);
     }
 }

@@ -7,7 +7,7 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.CCommandObject;
+import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.pogos.CustomCommands;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;

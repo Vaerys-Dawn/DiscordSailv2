@@ -92,7 +92,7 @@ public class DMHandler {
             Color color = command.user.getRandomColour();
             builder.withColor(color);
             builder.withAuthorName(command.user.username + " | " + command.user.longID);
-            builder.withAuthorIcon(command.user.getAvatarURL());
+            builder.withAuthorIcon(command.user.avatarURL);
             int attatchmentStart = 0;
             List<IMessage.Attachment> attachmentList = command.message.getAttachments();
             if (attachmentList.size() != 0 && Utility.isImageLink(attachmentList.get(0).getUrl())) {

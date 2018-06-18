@@ -1,6 +1,9 @@
 package com.github.vaerys.tags;
 
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.handlers.StringHandler;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.tags.admintags.*;
 import com.github.vaerys.tags.cctags.*;
@@ -23,10 +26,11 @@ public class TagList {
 
     private static final List<TagObject> tags = new ArrayList<TagObject>() {{
         //args
-        add(new TagSearchTags(0, TagType.CC));
-        add(new TagIfArgsEmpty(1, TagType.CC));
-        add(new TagIfArgsEmptyReplace(2, TagType.CC));
-        add(new TagArgs(3, TagType.CC));
+        add(new TagChannelLock(0, TagType.CC));
+        add(new TagSearchTags(1, TagType.CC));
+        add(new TagIfArgsEmpty(2, TagType.CC));
+        add(new TagIfArgsEmptyReplace(3, TagType.CC));
+        add(new TagArgs(4, TagType.CC));
         //simple string replaces
         add(new TagNoBreak(10, TagType.CC, TagType.INFO, TagType.DAILY, TagType.JOIN_MESSAGES));
         add(new TagSpacer(10, TagType.CC, TagType.INFO, TagType.DAILY, TagType.JOIN_MESSAGES));
@@ -146,5 +150,17 @@ public class TagList {
             }
         }
         throw new IllegalArgumentException("Could not find Tag (" + obj.getName() + ")");
+    }
+
+    public static void main(String[] args) {
+        StringHandler builder = new StringHandler();
+        for (TagObject t : get(true)) {
+            if (!builder.isEmpty()) builder.append("\n\n");
+            builder.appendFormatted("### %s - %s  \n%s  \n**Usage:** `%s`", t.name, t.getTypeString(), t.desc, t.getUsage());
+        }
+        builder.replace("<", "\\<");
+        builder.replace("`\\<","`<");
+        FileHandler.createDirectory(Constants.DIRECTORY_STORAGE);
+        FileHandler.writeToFile(Constants.WIKI_DIR + "Tag-Info.md", builder.toString(), true);
     }
 }

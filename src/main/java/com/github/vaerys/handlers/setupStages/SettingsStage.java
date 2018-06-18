@@ -49,7 +49,7 @@ public class SettingsStage extends SetupHandler {
         // Filter toggles that are not part of modules.
         List<SAILType> types = new LinkedList<>();
 
-        modules.forEach(t -> types.addAll(t.settings.stream().map(s -> s.name()).collect(Collectors.toList())));
+        modules.forEach(t -> types.addAll(t.settings));
 
         ListIterator iterator = globalToggles.listIterator();
         while (iterator.hasNext()) {

@@ -1,6 +1,6 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.objects.LogObject;
+import com.github.vaerys.objects.utils.LogObject;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

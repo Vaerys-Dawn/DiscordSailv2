@@ -2,10 +2,9 @@ package com.github.vaerys.tags.admintags;
 
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
-import com.github.vaerys.objects.ReplaceObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
+import com.github.vaerys.objects.utils.ReplaceObject;
 import com.github.vaerys.templates.TagAdminReplaceObject;
-import com.github.vaerys.templates.TagAdminSubTagObject;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -52,7 +51,7 @@ public class TagPathReplace extends TagAdminReplaceObject {
     }
 
     @Override
-    protected String tagName() {
+    public String tagName() {
         return "pathReplace";
     }
 
