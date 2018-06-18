@@ -66,7 +66,7 @@ public class Constants {
     public static final String FILE_GLOBAL_DATA = "Global_Data.json";
     public static final String FILE_AUTH_TO_RESTART = DIRECTORY_STORAGE + "Auth_Restart.txt";
     public static final Long LEVEL_CAP = 1000L; //Anything more than this is too much CPU time to calculate
-    public static final Long PIXELS_CAP = PixelHandler.levelToXP(LEVEL_CAP); //1000 levels.
+    public static final Long PIXELS_CAP = PixelHandler.totalXPForLevel(LEVEL_CAP); //1000 levels.
     //EnumSets
     public static final ArrayList<UserSetting> levelUpStates = new ArrayList<UserSetting>() {{
         add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
