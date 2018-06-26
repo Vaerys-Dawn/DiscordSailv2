@@ -25,7 +25,7 @@ public class TagNoPath extends TagAdminObject {
             }
         }
         if (hasKeys && !foundKey) {
-            from = replaceFirstTag(from, contents(from));
+            from = replaceFirstTag(from, getContents(from));
         } else {
             from = removeFirstTag(from);
         }

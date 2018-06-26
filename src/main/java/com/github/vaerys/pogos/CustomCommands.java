@@ -16,8 +16,8 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
 
-// TODO: 31/08/2016 Add the ability to search for a custom command based on name, contents, or ShitPost (use separate commands) -- partially complete.
-// name:[name] shitpost contents:[contents]
+// TODO: 31/08/2016 Add the ability to search for a custom command based on name, getContents, or ShitPost (use separate commands) -- partially complete.
+// name:[name] shitpost getContents:[getContents]
 // TODO: 31/08/2016 Add blacklisting of phrases to custom command creation, editing and execution
 // TODO: 07/10/2016 add tag `variant` that allows people to use $editcc [command Name] addvariant [Content] to that (would use 'Random' tag as a base)
 

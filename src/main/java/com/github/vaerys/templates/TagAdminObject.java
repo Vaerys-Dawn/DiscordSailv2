@@ -3,7 +3,6 @@ package com.github.vaerys.templates;
 import com.github.vaerys.enums.TagType;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class TagAdminObject extends TagAdminSubTagObject {
@@ -33,7 +32,7 @@ public abstract class TagAdminObject extends TagAdminSubTagObject {
         }
     }
 
-    public String contents(String from) {
+    public String getContents(String from) {
         if (requiredArgs != 0) {
             try {
                 return StringUtils.substringBetween(from, usageName, suffix);
@@ -49,7 +48,7 @@ public abstract class TagAdminObject extends TagAdminSubTagObject {
         if (requiredArgs == 0) {
             return from.replaceFirst(prefix, withThis);
         } else {
-            return StringUtils.replaceOnce(from, usageName + contents(from) + suffix, withThis);
+            return StringUtils.replaceOnce(from, usageName + getContents(from) + suffix, withThis);
         }
     }
 
@@ -57,7 +56,7 @@ public abstract class TagAdminObject extends TagAdminSubTagObject {
         if (requiredArgs == 0) {
             return from.replaceFirst(prefix, "");
         } else {
-            return StringUtils.replaceOnce(from, usageName + contents(from) + suffix, "");
+            return StringUtils.replaceOnce(from, usageName + getContents(from) + suffix, "");
         }
     }
 }

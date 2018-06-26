@@ -11,13 +11,19 @@ import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
+import com.github.vaerys.tags.admintags.TagAutoDelete;
+import com.github.vaerys.tags.cctags.TagRemoveMentions;
 import com.github.vaerys.templates.TagObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Vaerys on 27/08/2016.
@@ -25,6 +31,8 @@ import java.util.List;
 public class CCHandler {
 
     private final static Logger logger = LoggerFactory.getLogger(CCHandler.class);
+
+    private final static ScheduledExecutorService deleter = Executors.newScheduledThreadPool(50);
 
     public static void handleAdminCC(String args, CommandObject command) {
 
@@ -63,11 +71,11 @@ public class CCHandler {
             try {
 
 ////            } catch (StackOverflowError e) {
-//                String ccContents = t.contents(contents);
+//                String ccContents = t.getContents(getContents);
 //                String ccPrefix;
 //                if (t instanceof TagAdminSubTagObject) {
 //                    TagAdminSubTagObject tag = (TagAdminSubTagObject) t;
-//                    String subTag = tag.getSubTag(contents);
+//                    String subTag = tag.getSubTag(getContents);
 //                    ccPrefix = String.format("<%s:%s>%s", tag.tagName(), subTag, t.requiredArgs != 0 ? "{" : "");
 //                } else {
 //                    ccPrefix = t.prefix;
@@ -86,6 +94,21 @@ public class CCHandler {
         }
 
         cc.cullKeys();
+        TagAutoDelete autoDelete = TagList.getTag(TagAutoDelete.class);
+        TagRemoveMentions removeMentions = TagList.getTag(TagRemoveMentions.class);
+
+        if (autoDelete.cont(contents)) {
+            try {
+                int time = Integer.parseInt(autoDelete.getSubTag(contents));
+                contents = autoDelete.removeAllTag(contents);
+                contents = removeMentions.handleTag(contents, command, "");
+                IMessage message = RequestHandler.sendMessage(contents, command.channel.get()).get();
+                autoDelete(message, time);
+                return;
+            } catch (NumberFormatException e) {
+                //do nothing
+            }
+        }
         RequestHandler.sendMessage(contents, command.channel.get());
     }
 
@@ -134,7 +157,11 @@ public class CCHandler {
             if (contents == null) return;
         }
 
-
         RequestHandler.sendMessage(contents, command.channel.get());
+
+    }
+
+    public static void autoDelete(IMessage message, int time) {
+        deleter.schedule(() -> RequestHandler.deleteMessage(message), time, TimeUnit.MINUTES);
     }
 }

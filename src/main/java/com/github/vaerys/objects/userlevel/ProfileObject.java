@@ -189,7 +189,7 @@ public class ProfileObject {
     }
 
     /**
-     * @param contents the contents of the new mod note.
+     * @param contents the getContents of the new mod note.
      * @param command  Used to parse in the variables needed to access the guild, channel, message,
      *                 and user objects. these objects allows access to the api.
      * @param isStrike weather the note is a strike or not.

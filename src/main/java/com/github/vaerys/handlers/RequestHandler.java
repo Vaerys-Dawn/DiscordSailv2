@@ -205,7 +205,7 @@ public class RequestHandler {
             return sendMessage(preMessage, channel);
         }
 
-        //make sure that the message contents is valid
+        //make sure that the message getContents is valid
         if (StringUtils.containsOnly(preMessage, "\n") || preMessage == null || preMessage.isEmpty()) {
             preMessage = "";
         }

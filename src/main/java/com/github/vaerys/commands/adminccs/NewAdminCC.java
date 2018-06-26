@@ -16,6 +16,9 @@ import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class NewAdminCC extends Command {
 
     protected enum ResponseCode {
@@ -76,6 +79,15 @@ public class NewAdminCC extends Command {
         if (attachment != null && Utility.isImageLink(attachment.getFilename())) {
             contents.append(tag.prefix).append(attachment.getUrl()).append(tag.suffix);
         }
+        StringHandler temp = new StringHandler();
+        List<String> lines = Arrays.asList(contents.split("\n"));
+        for (String line : lines) {
+            if (!temp.isEmpty()) temp.append("\n");
+            if (!line.startsWith("//")) {
+                temp.append(line);
+            }
+        }
+        contents = temp;
         return contents;
     }
 
@@ -88,7 +100,7 @@ public class NewAdminCC extends Command {
         if (StringUtils.countMatches(contents.toString(), tag.prefix) > 1) return ResponseCode.TOO_MANY_EMBEDS;
         if (cc != null) {
             if (ccSlots + usedSlots - cc.getSlots() > 20) return ResponseCode.OVERLOADS_SLOTS;
-        }else {
+        } else {
             if (ccSlots + usedSlots > 20) return ResponseCode.OVERLOADS_SLOTS;
         }
         return ResponseCode.OKAY;

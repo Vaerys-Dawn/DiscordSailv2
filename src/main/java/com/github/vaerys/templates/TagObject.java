@@ -67,7 +67,7 @@ public abstract class TagObject {
         }
     }
 
-    public String contents(String from) {
+    public String getContents(String from) {
         if (requiredArgs != 0) {
             String subString = StringUtils.substringBetween(from, prefix, suffix);
             if (subString != null) {
@@ -81,7 +81,7 @@ public abstract class TagObject {
     }
 
     public List<String> getSplit(String from) {
-        String toSplit = contents(from);
+        String toSplit = getContents(from);
         String[] isSplit = toSplit.split(splitter);
         if (isSplit.length == 0) {
             return new ArrayList<>();
@@ -105,7 +105,7 @@ public abstract class TagObject {
         if (requiredArgs == 0) {
             return StringUtils.replaceOnce(from, prefix, withThis);
         } else {
-            return StringUtils.replaceOnce(from, prefix + contents(from) + suffix, withThis);
+            return StringUtils.replaceOnce(from, prefix + getContents(from) + suffix, withThis);
         }
     }
 
@@ -113,7 +113,7 @@ public abstract class TagObject {
         if (requiredArgs == 0) {
             return StringUtils.replaceOnce(from, prefix, "");
         } else {
-            String toRemove = prefix + contents(from) + suffix;
+            String toRemove = prefix + getContents(from) + suffix;
             return StringUtils.replaceOnce(from, toRemove, "");
         }
     }
@@ -122,7 +122,7 @@ public abstract class TagObject {
         if (requiredArgs == 0) {
             return from.replace(prefix, withThis);
         } else {
-            return from.replace(prefix + contents(from) + suffix, withThis);
+            return from.replace(prefix + getContents(from) + suffix, withThis);
         }
     }
 
@@ -130,7 +130,7 @@ public abstract class TagObject {
         if (requiredArgs == 0) {
             return from.replace(prefix, "");
         } else {
-            return from.replace(prefix + contents(from) + suffix, "");
+            return from.replace(prefix + getContents(from) + suffix, "");
         }
     }
 

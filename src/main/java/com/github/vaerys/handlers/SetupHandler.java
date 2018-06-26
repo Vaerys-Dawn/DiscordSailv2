@@ -65,7 +65,7 @@ public abstract class SetupHandler {
      * Handle commands in the Setup Mode DMs.
      *
      * @param command The {@link CommandObject} associated with this setup.
-     * @param args    The contents of the message sent.
+     * @param args    The getContents of the message sent.
      * @return false if command isn't run, otherwise true.
      */
     private static boolean handleCommand(CommandObject command, String args) {

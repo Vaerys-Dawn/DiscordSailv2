@@ -16,12 +16,12 @@ public abstract class TagAdminSubTagObject extends TagObject {
 
     protected final String ERROR_PIXELS_DISABLED = "#ERROR#:<" + tagName() + ":PIXELS_DISABLED" + Command.spacer + ">";
 
-    private String getSubPrefix(String from) {
+    public String getSubPrefix(String from) {
         return "<" + tagName() + ":" + getSubTag(from) + ">{";
     }
 
     private String getFullTag(String from) {
-        return getSubPrefix(from) + contents(from) + suffix;
+        return getSubPrefix(from) + getContents(from) + suffix;
     }
 
     @Override
@@ -68,7 +68,7 @@ public abstract class TagAdminSubTagObject extends TagObject {
         }
     }
 
-    public String contents(String from) {
+    public String getContents(String from) {
         if (requiredArgs != 0) {
             try {
                 return StringUtils.substringBetween(from, getSubPrefix(from), suffix);

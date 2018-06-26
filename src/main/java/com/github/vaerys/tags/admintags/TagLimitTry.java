@@ -14,7 +14,7 @@ public class TagLimitTry extends TagAdminObject {
     @Override
     public String execute(String from, CommandObject command, String args, AdminCCObject cc) {
         if (command.guild.adminCCs.checkAttempt(command, cc)) {
-            return contents(from);
+            return getContents(from);
         } else {
             return removeFirstTag(from);
         }

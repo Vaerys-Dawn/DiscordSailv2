@@ -165,10 +165,10 @@ public class FileHandler {
     }
 
     /***
-     * Handler to read the contents of a discord attachment.
+     * Handler to read the getContents of a discord attachment.
      *
      * @param attachment the file to be decoded.
-     * @return the contents of the file.
+     * @return the getContents of the file.
      */
     public static String readFromFile(IMessage.Attachment attachment) {
         try {

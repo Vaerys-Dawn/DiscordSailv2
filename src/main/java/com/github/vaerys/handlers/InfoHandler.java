@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * This Class Is the Handler for the updateInfo Method it pulls the info.txt doc and then updates the channel based on the contents of the file.
+ * This Class Is the Handler for the updateInfo Method it pulls the info.txt doc and then updates the channel based on the getContents of the file.
  */
 public class InfoHandler {
     List<String> infoContents;

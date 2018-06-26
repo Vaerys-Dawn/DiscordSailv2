@@ -13,7 +13,7 @@ public class ModNoteObject {
     private boolean isStrike = false;
 
     /**
-     * @param note  contents of the note.
+     * @param note  getContents of the note.
      * @param modId the userId of the creator of the note.
      * @param time  timestamp epoch second value.
      */

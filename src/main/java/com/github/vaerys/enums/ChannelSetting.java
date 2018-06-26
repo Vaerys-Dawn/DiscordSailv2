@@ -118,7 +118,7 @@ public enum ChannelSetting {
     ART("Art", false, "Where art is enabled to be pinned by users via sail."),
 
     /**
-     * Command.CHANNEL_INFO, false, "Channel to post the contents of the Info.txt file."
+     * Command.CHANNEL_INFO, false, "Channel to post the getContents of the Info.txt file."
      */
     INFO("Info", false, "Channel to post the contents of the Info.txt file."),
 

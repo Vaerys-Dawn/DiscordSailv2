@@ -14,7 +14,7 @@ public class TagDisplayName extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        IUser user = command.guild.getUserByID(Utility.stringLong(contents(from)));
+        IUser user = command.guild.getUserByID(Utility.stringLong(getContents(from)));
         if (user != null) {
             return replaceFirstTag(from, user.getDisplayName(command.guild.get()));
         } else {

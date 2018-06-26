@@ -13,7 +13,7 @@ public class TagEmoji extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        IEmoji emoji = command.guild.getEmojiByName(contents(from));
+        IEmoji emoji = command.guild.getEmojiByName(getContents(from));
         if (emoji == null) {
             return replaceFirstTag(from, error);
         }

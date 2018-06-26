@@ -14,7 +14,7 @@ public class TagChannel extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        IChannel channel = command.guild.getChannelByID(Utility.stringLong(contents(from)));
+        IChannel channel = command.guild.getChannelByID(Utility.stringLong(getContents(from)));
         if (channel != null) {
             return replaceFirstTag(from, channel.mention());
         } else {

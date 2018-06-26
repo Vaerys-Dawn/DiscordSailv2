@@ -84,18 +84,20 @@ public class TagList {
         add(new TagGrantPath(72, TagType.ADMIN_CC));
         add(new TagListKeys(73, TagType.ADMIN_CC));
         add(new TagAddTry(74, TagType.ADMIN_CC));
-        add(new TagGrantRole(75, TagType.ADMIN_CC));
         //empty tag
         add(new TagEmpty(79, TagType.CC, TagType.DAILY, TagType.JOIN_MESSAGES));
-        //pixels
+        //xp/roles/alerts
         add(new TagAddPixels(80, TagType.ADMIN_CC));
         add(new TagRemovePixels(81, TagType.ADMIN_CC));
+        add(new TagGrantRole(82, TagType.ADMIN_CC));
+        add(new TagAlert(83, TagType.ADMIN_CC));
         //no string additions should be allowed past this point;
         add(new TagAllCaps(90, TagType.CC));
         add(new TagRemovePrep(91, TagType.CC));
         add(new TagCheckLength(92, TagType.CC));
         add(new TagDelCall(95, TagType.CC));
         add(new TagRemoveMentions(100, TagType.CC, TagType.DAILY, TagType.INFO));
+        add(new TagAutoDelete(990, TagType.ADMIN_CC));
         add(new TagEmbedImage(999, TagType.CC));
         add(new TagImage(999, TagType.INFO));
     }};
@@ -159,7 +161,7 @@ public class TagList {
             builder.appendFormatted("### %s - %s  \n%s  \n**Usage:** `%s`", t.name, t.getTypeString(), t.desc, t.getUsage());
         }
         builder.replace("<", "\\<");
-        builder.replace("`\\<","`<");
+        builder.replace("`\\<", "`<");
         FileHandler.createDirectory(Constants.DIRECTORY_STORAGE);
         FileHandler.writeToFile(Constants.WIKI_DIR + "Tag-Info.md", builder.toString(), true);
     }
