@@ -371,7 +371,7 @@ public class Utility {
     public static String replaceFun(String from, String fun, boolean[] exit) {
         String noFun = StringUtils.substringBetween(from, fun, fun);
         if (noFun != null) {
-            from = from.replace(escapeRegex(fun + noFun + fun), noFun);
+            from = from.replace(escapeRegex(fun), "");
             exit[0] = true;
         }
         return from;
