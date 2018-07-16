@@ -254,6 +254,10 @@ public class SpamHandler {
         GlobalData globalData = Globals.getGlobalData();
         if (globalData == null) throw new NullPointerException();
 
+        if (GuildHandler.testForPerms(user, command.guild, Permissions.MANAGE_MESSAGES)) {
+            return false;
+        }
+
         // first we need to see if there *are* blacklisted users and ignore them:
         List<BlackListObject.BlacklistedUserObject> blacklistedUsers = globalData.getBlacklistedUsers();
         for (BlackListObject.BlacklistedUserObject object : blacklistedUsers) {
