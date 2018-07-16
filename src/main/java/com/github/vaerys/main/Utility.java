@@ -373,8 +373,7 @@ public class Utility {
         from = from.replace("`","\\`");
         from = from.replace("*","\\*");
         from = from.replace("_","\\_");
-        from = from.replace("~","\\~");
-        return from;
+        return from.replace("~","\\~");
     }
 
     public static String replaceFun(String from, String fun, boolean[] exit) {
