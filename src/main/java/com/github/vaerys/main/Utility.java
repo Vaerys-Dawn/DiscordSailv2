@@ -368,6 +368,15 @@ public class Utility {
         return from;
     }
 
+    public static String escapeFun(String from) {
+
+        from = from.replace("`","\\`");
+        from = from.replace("*","\\*");
+        from = from.replace("_","\\_");
+        from = from.replace("~","\\~");
+        return from;
+    }
+
     public static String replaceFun(String from, String fun, boolean[] exit) {
         String noFun = StringUtils.substringBetween(from, fun, fun);
         if (noFun != null) {
