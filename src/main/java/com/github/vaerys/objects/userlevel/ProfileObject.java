@@ -15,10 +15,14 @@ import sx.blah.discord.handle.obj.IUser;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.vaerys.enums.UserSetting.DONT_DECAY;
+import static com.github.vaerys.enums.UserSetting.PRIVATE_PROFILE;
 
 /**
  * Created by Vaerys on 27/08/2016.
@@ -225,11 +229,18 @@ public class ProfileObject {
     }
 
     public boolean showRank(GuildObject guild) {
-        return PixelHandler.rank(guild.users, guild.get(), userID) != -1;
+        return !PixelHandler.isUnRanked(userID, guild.users, guild.get());
     }
-
 
     public String getDefaultAvatarURL() {
         return Utility.getDefaultAvatarURL(userID);
+    }
+
+    public boolean isPrivate() {
+        return settings.contains(PRIVATE_PROFILE);
+    }
+
+    public boolean hasSetting(UserSetting setting) {
+        return settings.contains(setting);
     }
 }

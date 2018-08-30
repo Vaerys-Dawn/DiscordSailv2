@@ -3,6 +3,7 @@ package com.github.vaerys.handlers;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.google.gson.*;
+import com.google.gson.stream.MalformedJsonException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;
@@ -147,6 +148,9 @@ public class FileHandler {
             JsonElement jsonElement = parser.parse(reader);
             reader.close();
             jsonObject = jsonElement.getAsJsonObject();
+        } catch (JsonSyntaxException e) {
+            System.err.printf("File \"%s\" has malformed json data or is corrupted.\n", filePath);
+            Utility.sendStack(e);
         } catch (FileNotFoundException e) {
             Utility.sendStack(e);
         } catch (IOException e) {

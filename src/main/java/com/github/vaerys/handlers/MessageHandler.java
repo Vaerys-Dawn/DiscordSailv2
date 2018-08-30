@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.RequestBuffer;
 
@@ -37,6 +38,9 @@ public class MessageHandler {
             if (!GuildHandler.testForPerms(command, command.channel.get(), Permissions.MENTION_EVERYONE)) {
                 // sanitize @everyone and @here mentions.
                 args = args.replaceAll("(?i)@(everyone|here)", "REDACTED");
+                for (IRole r : command.message.get().getRoleMentions()) {
+                    args = args.replaceAll(r.mention(), r.getName());
+                }
             }
             PixelHandler.grantXP(command);
             if (command.guild.config.artPinning) {

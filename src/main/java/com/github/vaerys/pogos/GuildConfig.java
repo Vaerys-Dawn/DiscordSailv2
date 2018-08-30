@@ -62,7 +62,7 @@ public class GuildConfig extends GlobalFile {
     public boolean rateLimiting = false;
     public boolean slashCommands = false;
     public boolean roleIsToggle = false;
-    public boolean userInfoShowsDate = false;
+    public boolean userInfoShowsDate = true;
     public boolean debugMode = true;
     public boolean readRuleReward = false;
     public boolean checkNewUsers = false;

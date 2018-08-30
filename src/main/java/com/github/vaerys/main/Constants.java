@@ -143,10 +143,12 @@ public class Constants {
     public static final String PATREON_ICON_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/1024px-Patreon_logo.svg.png";
     public static final String STICKER_STAR_URL = "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/white-medium-star_2b50.png";
     public static final String PIXELS_ICON = "http://i.imgur.com/r5usgN7.png";
+    //https://i.imgur.com/U4wcdlJ.png
     public static final String BOT_USER_URL = "http://i.imgur.com/aRJpAP4.png";
 
     //urlConstants
     public static final String wikiURL = "https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/";
+    public static final Color DEFAULT_COLOUR = new Color(89, 91, 105);
 
     //colours
     public static Color pixelColour = new Color(226, 218, 117);

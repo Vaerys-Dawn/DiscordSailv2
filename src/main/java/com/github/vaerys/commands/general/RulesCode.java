@@ -39,6 +39,7 @@ public class RulesCode extends Command {
             if (ruleReward != null) {
                 response += "\nYou have also been granted the **" + ruleReward.getName() + "** Role.";
             }
+            response += "\n\n**Remainder:** Do not share the secret code, it wouldn't be much of a secret if you did.";
             GuildHandler.checkUsersRoles(command.user.longID, command.guild);
             command.user.sendDm(response);
             return null;
@@ -67,7 +68,7 @@ public class RulesCode extends Command {
     @Override
     public String description(CommandObject command) {
         if (command.guild.config.xpGain) {
-            return "Enter the rule code found in the rules to receive a rewards.";
+            return "Enter the rule code found in the rules to receive rewards.";
         } else {
             return "Enter the rule code found in the rules to get a star on your profile.";
         }

@@ -4,23 +4,21 @@ import com.github.kennedyoliveira.pastebin4j.AccountCredentials;
 import com.github.kennedyoliveira.pastebin4j.PasteBin;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.objects.events.EventAvatar;
 import com.github.vaerys.objects.events.TimedEvent;
-import com.github.vaerys.tags.TagList;
-import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.objects.patreonlevel.PatreonSAIL;
 import com.github.vaerys.utilobjects.PatreonAPI;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
 import org.apache.commons.io.FilenameUtils;
-import org.jsoup.HttpStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.api.events.IListener;
-import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.Image;
 
@@ -29,6 +27,7 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -62,9 +61,16 @@ public class Client {
 
 
     public static void main(String[] args) {
-        IDiscordClient client = new ClientBuilder().withToken(args[0]).build();
-        client.getDispatcher().registerListener((IListener<ReadyEvent>) readyEvent -> System.out.println("login successful"));
-        client.login();
+//        IDiscordClient client = new ClientBuilder().withToken(args[0]).build();
+//        client.getDispatcher().registerListener((IListener<ReadyEvent>) readyEvent -> System.out.println("login successful"));
+//        client.login();
+        JsonObject object = FileHandler.fileToJsonObject(Constants.DIRECTORY_STORAGE + "content.json");
+        JsonArray array = object.getAsJsonArray("Changes");
+        List<JsonElement> sorting = new ArrayList<>(array.size());
+        array.forEach(j -> sorting.add(j));
+        sorting.sort(Comparator.comparing(o -> o.getAsString()));
+        sorting.forEach(j -> array.set(sorting.indexOf(j), j));
+        FileHandler.writeToJson(Constants.DIRECTORY_STORAGE + "content.json", object);
     }
 
 
@@ -174,26 +180,27 @@ public class Client {
         }
     }
 
-
     public static void refreshPatreonToken(String clientID, String clientSecret, String refreshToken) {
-        try {
-            patreonOAuth = new PatreonOAuth(clientID, clientSecret, "");
-            PatreonOAuth.TokensResponse refresh = patreonOAuth.refreshTokens(refreshToken);
-            StringHandler tokenData = new StringHandler();
-            tokenData.append(refresh.getAccessToken() + "\n");
-            tokenData.append(clientID + "\n");
-            tokenData.append(clientSecret + "\n");
-            tokenData.append(refresh.getRefreshToken());
-            FileHandler.writeToFile(Constants.FILE_PATREON_TOKEN, tokenData.toString(), true);
-            patreonApi = new PatreonAPI(refresh.getAccessToken());
-        } catch (HttpStatusException e) {
-            if (e.getStatusCode() == 401) {
-                logger.error("Refresh Token is invalid.");
-                return;
-            }
-            Utility.sendStack(e);
-        } catch (IOException e) {
-            Utility.sendStack(e);
-        }
+        PatreonSAIL.refreshToken(clientID, clientSecret, refreshToken);
+        String access = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN).get(0);
+        patreonApi = new PatreonAPI(access);
+//        try {
+//        patreonOAuth = new PatreonOAuth(clientID, clientSecret, "");
+//            PatreonOAuth.TokensResponse refresh = patreonOAuth.refreshTokens(refreshToken);
+//            StringHandler tokenData = new StringHandler();
+//            tokenData.append(refresh.getAccessToken() + "\n");
+//            tokenData.append(clientID + "\n");
+//            tokenData.append(clientSecret + "\n");
+//            tokenData.append(refresh.getRefreshToken());
+//            FileHandler.writeToFile(Constants.FILE_PATREON_TOKEN, tokenData.toString(), true);
+//        } catch (HttpStatusException e) {
+//            if (e.getStatusCode() == 401) {
+//                logger.error("Refresh Token is invalid.");
+//                return;
+//            }
+//            Utility.sendStack(e);
+//        } catch (IOException e) {
+//            Utility.sendStack(e);
+//        }
     }
 }

@@ -8,6 +8,7 @@
     </option>
   </component>
   <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/pull_request_template.md" />
     <file url="file://$PROJECT_DIR$/wiki/_Sidebar.md" />
     <file url="file://$PROJECT_DIR$/wiki/AdminCC-Tag-Examples.md" />
     <file url="file://$PROJECT_DIR$/wiki/Contributor-Message-Formatting-Guide.md" />

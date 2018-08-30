@@ -3,9 +3,12 @@ package com.github.vaerys.commands.cc;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.cctags.TagEmbedImage;
 import com.github.vaerys.templates.Command;
@@ -19,10 +22,14 @@ public class RandomCC extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        ProfileObject object = command.guild.users.getUserByID(command.user.longID);
+        if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
+            return "> Nothing interesting happens. `(ERROR: 403)`";
+        }
         if (command.guild.channelHasSetting(ChannelSetting.CC_DENIED,command.channel.longID)) {
             return "> Custom Command usage has been disabled for this channel.";
         }
-        Random random = new Random();
+        Random random = Globals.getGlobalRandom();
         int counter = 0;
         List<CCommandObject> commands = command.guild.customCommands.getCommandList();
         CCommandObject randCC = commands.get(random.nextInt(commands.size()));

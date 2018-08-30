@@ -5,16 +5,15 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.text.NumberFormat;
 
 /**
  * Created by Vaerys on 01/07/2017.
@@ -23,61 +22,53 @@ public class Pixels extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder();
+        XEmbedBuilder builder = new XEmbedBuilder(Constants.pixelColour);
         UserObject user = command.user;
-        if (args != null && !args.isEmpty()) {
+        if (!args.isEmpty()) {
             user = Utility.getUser(command, args, true);
-            if (user == null) {
-                return "> Could not find user.";
-            }
+            if (user == null) return "> Could not find user.";
         }
-        ProfileObject profile = command.guild.users.getUserByID(user.longID);
+        ProfileObject profile = user.getProfile(command.guild);
         if (profile == null) {
-            return "> " + user.displayName + " currently does not have a profile.";
+            return String.format("> %s does not have a profile yet.", user.displayName);
         }
-        if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
-            return "> " + user.displayName + " has set their profile to private.";
+        if (user.isPrivateProfile(command.guild) && !user.equals(command.user)) {
+            return String.format("> %s has set their profile to private.", user.displayName);
         }
-        String xpTitle = "Total Pixels: ";
-        String xpTotal = NumberFormat.getInstance().format(profile.getXP());
-        String levelTitle = "Level Progress: ";
+        //init vars
 
-        String rankTitle = "Rank: ";
-        String rankTotal;
-        if (PixelHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) != -1 && profile.getXP() != 0) {
-            rankTotal = PixelHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) + "/" + PixelHandler.totalRanked(command);
-        } else {
-            rankTotal = "N/a";
-        }
-        long xpForNext = PixelHandler.levelToXP(profile.getCurrentLevel() + 1);
-        long xpTillNext = PixelHandler.totalXPForLevel(profile.getCurrentLevel() + 1) - profile.getXP();
-        long xpProgress = xpForNext - xpTillNext;
-        long percentToLvl = (xpProgress * 100) / xpForNext;
-        StringBuilder xpBar = new StringBuilder("-------------------");
-        int pos = (int) (percentToLvl / 5);
-        if (pos < 0) {
-            pos = 0;
-        }
-        if (pos > xpBar.length()) {
-            pos = xpBar.length();
-        }
-        if (user.isDecaying(command.guild)) {
-            xpBar.replace(pos, pos, "**<**");
-        } else {
-            xpBar.replace(pos, pos, "**>**");
-        }
-        String levelTotal = "**" + profile.getCurrentLevel() + "** [" + xpBar.toString() + "] **" + (profile.getCurrentLevel() + 1) + "**";
+        long currentLevel = profile.getCurrentLevel();
 
-        builder.withColor(Constants.pixelColour); //colour of pixels
+        long pixels = profile.getXP();
+        long rank = PixelHandler.rank(command.guild, user);
+        long totalRanked = PixelHandler.totalRanked(command);
+
+
+        //field headers.
+        String titlePixels = "Total Pixels:";
+        String titleRank = "Rank:";
+        String titleProgress = "Level Progress:";
+
+        //field contents
+        String contentsPixels = pixels < 1 ? "N/a" : String.format("%,d", pixels);
+        String contentsRank = rank == -1 ? "N/a" : String.format("%d/%d", rank, totalRanked);
+        StringHandler contentsProgress = new StringHandler();
+
+        //calculate progress
+        if (pixels > 0) {
+            int progress = getProgress(profile);
+            contentsProgress.setContent("-------------------").replace(progress, progress, user.isDecaying(command.guild) ? "**<**" : "**>**");
+            contentsProgress.appendFrontFormatted("**%d** [", currentLevel).appendFormatted("] **%d**", currentLevel + 1);
+        } else {
+            contentsProgress.setContent("N/a");
+        }
+
+        //build embed
         builder.withAuthorName(user.displayName + "'s Pixel stats.");
         builder.withAuthorIcon(Constants.PIXELS_ICON); //pixel icon
-        builder.appendField(xpTitle, xpTotal, true);
-        builder.appendField(rankTitle, rankTotal, true);
-        if (profile.getXP() != 0) {
-            builder.appendField(levelTitle, levelTotal, false);
-        } else {
-            builder.appendField(levelTitle, "N/a", false);
-        }
+        builder.appendField(titlePixels, contentsPixels, true);
+        builder.appendField(titleRank, contentsRank, true);
+        builder.appendField(titleProgress, contentsProgress.toString(), false);
 
         if (profile.getSettings().contains(UserSetting.HIT_LEVEL_FLOOR)) {
             builder.withDescription("**You have decayed to the level floor,\nYou will need to level up again to see your rank.**");
@@ -88,7 +79,23 @@ public class Pixels extends Command {
         }
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
+    }
 
+    /***
+     * Calculator for the progress for next rank based on a number between 0 and 19.
+     *
+     * @param profile the user being tested
+     * @return progress [0-19]
+     */
+    private int getProgress(ProfileObject profile) {
+        long nextLevel = profile.getCurrentLevel() + 1;
+        long xpForNext = PixelHandler.levelToXP(nextLevel);
+        long xpTillNext = PixelHandler.totalXPForLevel(nextLevel) - profile.getXP();
+        long progress = ((xpForNext - xpTillNext) * 100) / xpForNext;
+        int pos = (int) (progress / 5);
+        if (pos < 0) pos = 0;
+        if (pos > 19) pos = 19;
+        return pos;
     }
 
     @Override

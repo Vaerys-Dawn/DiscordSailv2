@@ -10,7 +10,7 @@ public class StringHandler {
     private StringBuffer string;
 
     public StringHandler(String s) {
-        if (s == null) this.string = new StringBuffer("");
+        if (s == null) this.string = new StringBuffer();
         else this.string = new StringBuffer(s);
     }
 
@@ -22,9 +22,13 @@ public class StringHandler {
         this.string = new StringBuffer();
     }
 
+    public StringHandler(String s, Object... objects) {
+        this.string = new StringBuffer(String.format(s, objects));
+    }
+
     public StringHandler setContent(String content) {
         string.replace(0, string.length(), content);
-        return null;
+        return this;
     }
 
     public StringHandler emptyContent() {
@@ -173,7 +177,16 @@ public class StringHandler {
     }
 
     public StringHandler delete(int start, int end) {
-        string.delete(start,end);
+        string.delete(start, end);
         return this;
+    }
+
+    public StringHandler appendFrontFormatted(String s, Object... objects) {
+        setContent(String.format(s, objects) + string.toString());
+        return this;
+    }
+
+    public StringHandler appendFront(StringHandler response) {
+        return appendFront(response.toString());
     }
 }

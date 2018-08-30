@@ -279,4 +279,8 @@ public class UserObject {
         Instant now = Instant.now();
         return now.getEpochSecond() - creationDate.getEpochSecond();
     }
+
+    public boolean equals(UserObject user) {
+        return user.longID == this.longID;
+    }
 }

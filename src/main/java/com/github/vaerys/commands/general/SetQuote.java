@@ -61,6 +61,9 @@ public class SetQuote extends Command {
             }
         }
         if (adminEdit) {
+            if (u == null){
+                u = command.guild.users.addUser(user.longID);
+            }
             if (quote.length() > maxLength) {
                 return "> Quote is too long...\n(must be under " + maxLength + " chars)";
             }

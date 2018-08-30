@@ -1,10 +1,7 @@
 package com.github.vaerys.commands;
 
 import com.github.vaerys.commands.admin.*;
-import com.github.vaerys.commands.adminccs.DeleteAdminCC;
-import com.github.vaerys.commands.adminccs.EditAdminCC;
-import com.github.vaerys.commands.adminccs.ListAdminCCs;
-import com.github.vaerys.commands.adminccs.NewAdminCC;
+import com.github.vaerys.commands.adminccs.*;
 import com.github.vaerys.commands.cc.*;
 import com.github.vaerys.commands.characters.*;
 import com.github.vaerys.commands.competition.*;
@@ -96,6 +93,7 @@ public class CommandList {
         add(new Test());
         add(new UserInfo());
         add(new WhatsMyColour());
+        add(new Invite());
 
         //Help commands
         add(new BotHelp());
@@ -136,7 +134,7 @@ public class CommandList {
         add(new SelectChar());
         add(new SetBioRolePrefix());
         add(new UpdateChar());
-        add(new EditDungeonChar());
+//        add(new EditDungeonChar());
 
         //CC commands
         add(new DelCC());
@@ -214,6 +212,8 @@ public class CommandList {
         add(new ListAdminCCs());
         add(new EditAdminCC());
         add(new DeleteAdminCC());
+        add(new ResetTries());
+        add(new AdminCCInfo());
     }};
 
     private static final List<Command> creatorCommands = new ArrayList<Command>() {{
@@ -331,13 +331,13 @@ public class CommandList {
         return getCommands;
     }
 
-    public static Command getCommand(Class obj) {
+    public static <T extends Command> T getCommand(Class obj) {
         if (!Command.class.isAssignableFrom(obj)) {
             throw new IllegalArgumentException("Cannot Get Command from Class (" + obj.getName() + ")");
         }
         for (Command c : getAll()) {
             if (c.getClass().getName().equals(obj.getName())) {
-                return c;
+                return (T) c;
             }
         }
         if (getAll().size() != 0) {

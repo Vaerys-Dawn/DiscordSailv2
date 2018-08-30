@@ -95,4 +95,8 @@ public class CommandObject {
         this.message = new MessageObject(message, guild);
         return this;
     }
+
+    public String getMessageLink() {
+        return String.format("https://discordapp.com/channels/%d/%d/%d", guild.longID, channel.longID, message.longID);
+    }
 }

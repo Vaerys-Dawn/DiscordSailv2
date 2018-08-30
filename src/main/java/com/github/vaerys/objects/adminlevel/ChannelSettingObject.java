@@ -17,8 +17,8 @@ public class ChannelSettingObject {
         channelIDs.add(id);
     }
 
-    public ChannelSettingObject(String type) {
-        this.type = ChannelSetting.get(type);
+    public ChannelSettingObject(ChannelSetting type) {
+        this.type = type;
     }
 
     public ChannelSetting getType() {

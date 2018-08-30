@@ -41,9 +41,13 @@ public class SetGender extends Command {
             maxLength += 20;
         }
         ProfileObject u = user.getProfile(command.guild);
+
         quote = Utility.removeFun(quote);
         if (quote == null || quote.isEmpty()) return "> You can't have an empty gender.";
         if (adminEdit) {
+            if (u == null){
+                u = command.guild.users.addUser(user.longID);
+            }
             if (quote.length() > maxLength) {
                 return "> Gender's Length is too long...\n(Must be under " + maxLength + " chars)";
             }

@@ -3,6 +3,7 @@ package com.github.vaerys.tags.admintags;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminSubTagObject;
@@ -38,7 +39,7 @@ public class TagPathRandom extends TagAdminSubTagObject {
     }
 
     protected static String handleRandom(List<String> contents) {
-        Random random = new Random();
+        Random random = Globals.getGlobalRandom();
         return contents.get(random.nextInt(contents.size()));
     }
 
