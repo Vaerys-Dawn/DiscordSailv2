@@ -1,14 +1,14 @@
 package com.github.vaerys.enums;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.help.Report;
 import com.github.vaerys.commands.help.SilentReport;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IChannel;
 
 import java.util.ArrayList;
@@ -266,57 +266,32 @@ public enum ChannelSetting {
         return builder;
     }
 
-    public String toggleSetting(GuildObject guild, long channelID) {
-        List<ChannelSettingObject> objects = guild.channelData.getChannelSettings();
-        boolean isFound = false;
-
-        String modifier = isSetting ? "Setting" : "Type";
-
-        ChannelSettingObject channel = null;
-
-
-        for (ChannelSettingObject s : objects) {
-            if (s.getType() == this) {
-                isFound = true;
-                channel = s;
-            }
-        }
-        if (!isFound) {
-            channel = new ChannelSettingObject(name);
-            objects.add(channel);
-        }
-
-        String error = "> An error occurred Trying to toggle the Channel " + modifier + ".";
-
-        //this should never run.
-        if (channel == null) return error;
-
+    public String toggleSetting(CommandObject command) {
+        ChannelSettingObject settingObject = command.guild.channelData.getChannelSetting(this);
+        if (settingObject == null) settingObject = command.guild.channelData.initSetting(this);
+        String mention = command.channel.mention;
+        long channelID = command.channel.longID;
         if (isSetting) {
-            if (channel.getChannelIDs().isEmpty() || !channel.getChannelIDs().contains(channelID)) {
-                channel.getChannelIDs().add(channelID);
-                return "> " + guild.getChannelByID(channelID).mention() + ". Channel setting: **" + name + "** added.";
-            } else {
-                for (int i = 0; i < channel.getChannelIDs().size(); i++) {
-                    if (channelID == channel.getChannelIDs().get(i)) {
-                        channel.getChannelIDs().remove(i);
-                        return "> " + guild.getChannelByID(channelID).mention() + ". Channel setting: **" + name + "** removed.";
-                    }
-                }
+            String mode = "removed";
+            if (!settingObject.getChannelIDs().removeIf(l -> l == channelID)) {
+                settingObject.getChannelIDs().add(channelID);
+                mode = "added";
             }
+            return String.format("> %s, Channel setting: **%s** %s.", mention, name, mode);
         } else {
-            if (channel.getChannelIDs().isEmpty() || !channel.getChannelIDs().get(0).equals(channelID)) {
-                if (channel.getChannelIDs().isEmpty()) {
-                    channel.getChannelIDs().add(channelID);
-                } else {
-                    channel.getChannelIDs().set(0, channelID);
-                }
-                return "> " + guild.getChannelByID(channelID).mention() + " is now the Server's **" + name + "** channel.";
+            boolean isAdding = true;
+            if (settingObject.getChannelIDs().isEmpty()) {
+                settingObject.getChannelIDs().add(channelID);
             } else {
-                channel.getChannelIDs().remove(0);
-                return "> " + guild.getChannelByID(channelID).mention() + " is no longer the Server's **" + name + "** channel.";
+                if (settingObject.getChannelIDs().get(0) == channelID) {
+                    settingObject.getChannelIDs().clear();
+                    isAdding = false;
+                } else {
+                    settingObject.getChannelIDs().set(0, channelID);
+                }
             }
+            return String.format("> %s is %s the Server's **%s** channel.", mention, isAdding ? "is now" : "is no longer", name);
         }
-        return error;
     }
 }
 

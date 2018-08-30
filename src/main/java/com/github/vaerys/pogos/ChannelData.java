@@ -121,4 +121,10 @@ public class ChannelData extends GlobalFile {
                 .toArray().length != 0) return true;
         return false;
     }
+
+    public ChannelSettingObject initSetting(ChannelSetting setting) {
+        ChannelSettingObject newObject = new ChannelSettingObject(setting);
+        channelSettings.add(newObject);
+        return newObject;
+    }
 }

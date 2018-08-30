@@ -1,50 +1,74 @@
 package com.github.vaerys.objects.adminlevel;
 
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
+import sx.blah.discord.api.internal.DiscordUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IUser;
 
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by Vaerys on 21/02/2017.
  */
 public class UserRateObject {
-    public int counter;
     private long userID;
-    List<Long> channels = new LinkedList<>();
-    public long timeStamp;
+    private List<Long> messageIDs = new LinkedList<>();
+    private List<Long> channelIDs = new LinkedList<>();
+    private boolean muted = false;
 
-    public UserRateObject(long userID, IChannel channel, long timeStamp) {
-        this.userID = userID;
-        counter = 1;
-        channels.add(channel.getLongID());
-        this.timeStamp = timeStamp;
+    public UserRateObject(CommandObject command) {
+        this.userID = command.user.longID;
+        messageIDs.add(command.message.longID);
+        channelIDs.add(command.channel.longID);
     }
 
-    public void counterUp(IChannel channel, long timeStamp) {
-        counter++;
-        if (!channels.contains(channel.getLongID())) {
-            channels.add(channel.getLongID());
+    public boolean isRateLimited(GuildObject guild) {
+        if (messageIDs.size() > guild.config.messageLimit) {
+            return getDifference() < 10000;
         }
-        this.timeStamp = timeStamp;
+        return false;
     }
 
-    public long getID() {
+    public void addMessage(CommandObject command) {
+        messageIDs.add(command.message.longID);
+        if (!channelIDs.contains(command.channel.longID)) channelIDs.add(command.channel.longID);
+    }
+
+    private long getDifference() {
+        Instant startTime = DiscordUtils.getSnowflakeTimeFromID(messageIDs.get(0));
+        Instant testTime = DiscordUtils.getSnowflakeTimeFromID(messageIDs.get(messageIDs.size() - 1));
+        return testTime.toEpochMilli() - startTime.toEpochMilli();
+    }
+
+    public int getSize() {
+        return messageIDs.size();
+    }
+
+    public List<IChannel> getChannels(GuildObject guild) {
+        return channelIDs.stream().map(l -> guild.getChannelByID(l)).collect(Collectors.toList());
+    }
+
+    public IUser getUser(GuildObject guild) {
+        return guild.getUserByID(userID);
+    }
+
+    public long getUserID() {
         return userID;
     }
 
-    public List<IChannel> getChannels(GuildObject task) {
-        Stream<Long> stream = channels.stream();
-        List<IChannel> channelObjects = stream.map(id -> task.getChannelByID(id)).collect(Collectors.toList());
-        stream.close();
-        return channelObjects;
+    public boolean isMuted() {
+        return muted;
     }
 
-    public IUser getUser(GuildObject task) {
-        return task.getUserByID(userID);
+    public void mute() {
+        muted = true;
+    }
+
+    public long getTimeStamp() {
+        return DiscordUtils.getSnowflakeTimeFromID(messageIDs.get(messageIDs.size() - 1)).toEpochMilli() * 1000;
     }
 }

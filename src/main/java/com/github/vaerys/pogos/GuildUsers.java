@@ -1,9 +1,13 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.UserCountDown;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.GlobalFile;
+import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
 
@@ -20,7 +24,7 @@ public class GuildUsers extends GlobalFile {
         return profiles;
     }
 
-    public boolean muteUser(long userID, long time, long guildID) {
+    public boolean muteUser(long userID, long guildID, long time) {
         boolean found = false;
         for (UserCountDown c : mutedUsers) {
             if (c.getID() == userID) {
@@ -70,5 +74,24 @@ public class GuildUsers extends GlobalFile {
         if (profiles.stream().map(c -> c.getUserID()).filter(c -> c == userID).toArray().length != 0) return true;
         if (mutedUsers.stream().map(c -> c.getID()).filter(c -> c == userID).toArray().length != 0) return true;
         return false;
+    }
+
+    public boolean muteUser(UserObject user, GuildObject guild, long timeSecs) {
+        return muteUser(user.longID, guild.longID, timeSecs);
+    }
+
+    public boolean unMuteUser(UserObject user, GuildObject guild) {
+        return unMuteUser(user.longID, guild.longID);
+    }
+
+    public boolean isUserMuted(IUser user) {
+        for (UserCountDown u : mutedUsers) {
+            if (u.getID() == user.getLongID()) return true;
+        }
+        return false;
+    }
+
+    public void muteUser(CommandObject command, int i) {
+        muteUser(command.user.longID, command.guild.longID, i);
     }
 }

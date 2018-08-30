@@ -86,7 +86,7 @@ public class ListCCs extends Command {
             totalCCs++;
             counter++;
         }
-        pages.add("`" + Utility.listFormatter(list, true) + "`");
+        pages.add("```" + Utility.listFormatter(list, true) + "```");
         try {
             String title = "> Here is Page **" + page + "/" + pages.size() + "** of Custom Commands:";
             builder.appendField(title, pages.get(page - 1), false);

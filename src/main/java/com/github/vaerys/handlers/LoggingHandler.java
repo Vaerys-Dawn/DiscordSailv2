@@ -322,8 +322,8 @@ public class LoggingHandler {
             charLimit = 1800;
         }
 
-        String oldContent = oldMessage.getContent() == null ? "" : oldMessage.getContent();
-        String newContent = newMessage.getContent() == null ? "" : newMessage.getContent();
+        String oldContent = oldMessage.getContent() == null ? "" : Utility.unFormatMentions(oldMessage);
+        String newContent = newMessage.getContent() == null ? "" : Utility.unFormatMentions(newMessage);
         oldContent = oldContent.length() > charLimit ? oldContent.substring(0, charLimit).concat("...") : oldContent;
         newContent = newContent.length() > charLimit ? newContent.substring(0, charLimit).concat("...") : newContent;
         StringBuilder extraContent = new StringBuilder();

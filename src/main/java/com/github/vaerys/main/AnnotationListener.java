@@ -82,8 +82,10 @@ public class AnnotationListener {
             command.guild.handleWelcome(command);
 
             //message and command handling
-            new MessageHandler(command.message.get().getContent(), command, event.getChannel().isPrivate());
-        }catch (StackOverflowError e){
+            String args = command.message.getContent().isEmpty() ? "" : command.message.getContent();
+
+            new MessageHandler(args, command, event.getChannel().isPrivate());
+        } catch (StackOverflowError e) {
             System.out.println("caught");
         } catch (Exception e) {
             String errorPos = "";
@@ -181,9 +183,10 @@ public class AnnotationListener {
         if (!event.getChannel().isPrivate() && emoji.isUnicode()) {
             //if is x and can bypass
             if (emoji.equals(remove)) ArtHandler.unPin(object);
-            if (emoji.equals(x) && GuildHandler.testForPerms(object, Permissions.MANAGE_MESSAGES)
-                    && object.client.bot.longID == object.user.longID)
+            if (emoji.equals(x) && GuildHandler.testForPerms(event.getUser(), event.getGuild(), Permissions.MANAGE_MESSAGES) &&
+                    object.client.bot.longID == object.user.longID) {
                 RequestHandler.deleteMessage(object.message);
+            }
             //if is pushpin
             if (emoji.equals(pin)) ArtHandler.pinMessage(object, pinner, owner);
 
@@ -226,6 +229,7 @@ public class AnnotationListener {
         if (content.config.moduleJoinMessages && content.config.sendJoinMessages) {
             JoinHandler.customJoinMessages(content, event.getUser());
         }
+        GuildHandler.checkUsersRoles(user.longID,content);
         JoinHandler.autoReMute(event, content, user);
         if (!content.config.moduleLogging) return;
         LoggingHandler.doJoinLeaveLog(event, true);

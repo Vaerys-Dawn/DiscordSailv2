@@ -1,5 +1,6 @@
 package com.github.vaerys.tags.cctags;
 
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.templates.TagObject;
@@ -17,7 +18,7 @@ public class TagRandEmote extends TagObject {
     @Override
     public String execute(String from, CommandObject command, String args) {
         List<IEmoji> emojis = command.guild.get().getEmojis();
-        Random random = new Random();
+        Random random = Globals.getGlobalRandom();
         IEmoji emoji = emojis.get(random.nextInt(emojis.size()));
         String output;
         if (emoji.getImageUrl().endsWith(".gif")) {

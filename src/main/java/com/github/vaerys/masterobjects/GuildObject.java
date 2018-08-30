@@ -11,9 +11,9 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
+import com.github.vaerys.objects.adminlevel.UserRateObject;
 import com.github.vaerys.objects.utils.GuildLogObject;
 import com.github.vaerys.objects.utils.LogObject;
-import com.github.vaerys.objects.adminlevel.UserRateObject;
 import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.FileFactory;
@@ -49,7 +49,7 @@ public class GuildObject {
     public List<ChannelSetting> channelSettings;
     public List<SAILType> commandTypes;
     private IGuild object;
-    private List<UserRateObject> rateLimiting = new ArrayList<>();
+    private List<UserRateObject> rateUsers = new ArrayList<>();
     private List<Long> spokenUsers = new ArrayList<>();
     private List<GuildToggle> toRemove = new ArrayList<>();
 
@@ -108,6 +108,17 @@ public class GuildObject {
         logger.trace(output);
     }
 
+    public void sendDebugLog(IUser user, IChannel channel, String type, String name, String contents) {
+        GuildLogObject object = new GuildLogObject(user, channel, type, name, contents);
+        String output = object.getOutput(this);
+        if (object != null) {
+            guildLog.addLog(object, longID);
+        } else {
+            Globals.addToLog(new LogObject(object, -1));
+        }
+        logger.trace(output);
+    }
+
     public void loadCommandData() {
         this.commands = new ArrayList<>(CommandList.getCommands(false));
         this.toggles = new ArrayList<>(ToggleList.getAllToggles());
@@ -119,7 +130,6 @@ public class GuildObject {
     public IGuild get() {
         return object;
     }
-
 
     private void checkToggles() {
         toRemove = new ArrayList<>();
@@ -213,8 +223,8 @@ public class GuildObject {
         }
     }
 
-    public List<UserRateObject> getRateLimiting() {
-        return rateLimiting;
+    public List<UserRateObject> getRateUsers() {
+        return rateUsers;
     }
 
     public List<Long> getSpokenUsers() {
@@ -222,41 +232,11 @@ public class GuildObject {
     }
 
     public void forceClearRate() {
-        rateLimiting = new ArrayList<>();
-    }
-
-    public boolean rateLimit(long userID, IChannel channel, long timeStamp) {
-        int max = config.messageLimit;
-        if (max == -1) {
-            return false;
-        }
-        boolean isfound = false;
-        for (UserRateObject r : rateLimiting) {
-            if (r.getID() == userID) {
-                r.counterUp(channel, timeStamp);
-                isfound = true;
-                if (r.counter > max) {
-                    return true;
-                }
-            }
-        }
-        if (!isfound) {
-            rateLimiting.add(new UserRateObject(userID, channel, timeStamp));
-        }
-        return false;
-    }
-
-    public int getUserRate(long userID) {
-        for (UserRateObject u : rateLimiting) {
-            if (u.getID() == userID) {
-                return u.counter;
-            }
-        }
-        return 0;
+        rateUsers = new ArrayList<>();
     }
 
     public void resetRateLimit() {
-        rateLimiting.clear();
+        rateUsers.clear();
     }
 
     public List<SAILType> getAllTypes(CommandObject command) {
@@ -420,5 +400,24 @@ public class GuildObject {
             if (message != null) return message;
         }
         return null;
+    }
+
+    public IMessage getMessageByID(Long l) {
+        return object.getMessageByID(l);
+    }
+
+    public UserRateObject rateLimit(CommandObject command) {
+        UserRateObject rateObject = null;
+        for (UserRateObject r : rateUsers) {
+            if (r.getUserID() == command.user.longID) {
+                rateObject = r;
+                rateObject.addMessage(command);
+            }
+        }
+        if (rateObject == null) {
+            rateObject = new UserRateObject(command);
+            rateUsers.add(rateObject);
+        }
+        return rateObject;
     }
 }

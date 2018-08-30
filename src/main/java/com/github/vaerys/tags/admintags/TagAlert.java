@@ -34,7 +34,7 @@ public class TagAlert extends TagAdminSubTagObject {
             if (!message.contains("<mention>")) return replaceFirstTag(from, error + "(Missing <mention> tag)");
             message = message.replace("<mention>", command.user.mention());
             message = message.replace("<ccName>", cc.getName(command));
-            message = message.replaceAll("(?i)@[here|everyone]", "[REDACTED]");
+            message = message.replaceAll("(?i)@(here|everyone)", "[REDACTED]");
             message = message.replaceAll("<@&[0-9]*>","[REDACTED]");
             RequestHandler.sendMessage(message, destination);
             return removeAllTag(from);

@@ -28,70 +28,72 @@ public class Mute extends Command {
             SAILType.MOD_TOOLS
     );
 
-
     @Override
     public String execute(String args, CommandObject command) {
+        // init vars
         SplitFirstObject userCall = new SplitFirstObject(args);
         IRole mutedRole = command.guild.getMutedRole();
-        UserObject muted = Utility.getUser(command, userCall.getFirstWord(), false, false);
-        if (muted == null || muted.get() == null) return "> Could not find user";
-        if (muted.getProfile(command.guild) == null) muted.addProfile(command.guild);
-        if (mutedRole == null) return "> Muted role is not configured.";
-
-        // Un mute subtype
-        if (UN_MUTE.isSubCommand(command)) {
-            command.guild.users.unMuteUser(muted.longID, command.guild.longID);
-            if (!muted.roles.contains(mutedRole)) {
-                return "> " + muted.displayName + " is not muted.";
-            }
-            return "> " + muted.displayName + " was UnMuted.";
-        }
-
-        if (muted.longID == command.user.longID) return "> Don't try to mute yourself you numpty.";
-        if (!Utility.testUserHierarchy(command.client.bot.get(), mutedRole, command.guild.get()))
-            return "> Cannot Mute " + muted.displayName + ". **" + mutedRole.getName() + "** role has a higher hierarchy than me.";
-        if (!Utility.testUserHierarchy(command.user.get(), muted.get(), command.guild.get()))
-            return "> Cannot Mute/UnMute " + muted.displayName + ". User hierarchy higher than yours.";
+        UserObject mutedUser = Utility.getUser(command, userCall.getFirstWord(), false, false);
+        StringHandler response = new StringHandler("> %s %s.");
+        StringHandler responseAdmin = new StringHandler("> %s %s by %s in %s with reason `%s`.");
+        StringHandler modNote = new StringHandler("> %s by %s. Reason: `%s`. Time: %s. Channel: %s.");
+        boolean isMute = !UN_MUTE.isSubCommand(command);
+        String mode = isMute ? "**Muted**" : "**UnMuted**";
         StringHandler reason = new StringHandler(userCall.getRest());
         long timeSecs = Utility.getRepeatTimeValue(reason);
-        boolean isStrike = false;
-//        if (reason.toString().isEmpty()) return "> Reason Cannot be empty";
-
-        //mute the offender
-        command.guild.users.muteUser(muted.longID, timeSecs, command.guild.longID);
-
-        //build the response
-        //time value
-        String timeValue = "";
-
-        if (timeSecs > 0) {
-            timeValue = Utility.formatTime(timeSecs, true);
+        if (reason.isEmpty()) reason.setContent("No reason given");
+        StringHandler timeValue = new StringHandler("was %s", mode);
+        String formattedTime = "Permanent";
+        if (timeSecs >= 0) {
+            formattedTime = Utility.formatTime(timeSecs, true);
+            timeValue.setContent(isMute ? "was %s for %s" : "will be %s in %s");
+            timeValue.format(mode, formattedTime);
         }
-
-        if (Pattern.compile("(^⚠ | ⚠|⚠)").matcher(reason.toString()).find()) {
-            reason.replaceRegex("(^⚠ | ⚠|⚠)", "");
-            isStrike = true;
-        }
-
-        // setup muted messages
-        String msgFormat = "> **%s** was muted%s"; // name was muted for timevalue;
-        String adminMsg = " by %s in %s with reason `%s`."; // > name was muted for timevalue by mod in channel with `reason`;
-        String modnote = "Muted by %s. Reason: `%s`. Time: %s. Channel: %s."; //name muted with reason `reason` for timevalue in channel;
         IChannel adminChannel = command.guild.getChannelByType(ChannelSetting.ADMIN);
 
+        // check for user and muted role
+        if (mutedUser == null || mutedUser.get() == null) return "> Could not find user";
+        if (mutedUser.getProfile(command.guild) == null) mutedUser.addProfile(command.guild);
+        if (mutedRole == null) return "> Muted role is not configured.";
 
-        if (reason.toString().isEmpty()) reason.setContent("No reason given");
-        // final responses:
-        String responseTime = !timeValue.isEmpty() ? " for " + timeValue : "";
-        String response = String.format(msgFormat, muted.mention(), responseTime);
+        // check hierarchy
+        if (mutedUser.longID == command.user.longID && isMute) return "> Don't try to mute yourself you numpty.";
+        if (!Utility.testUserHierarchy(command.client.bot.get(), mutedRole, command.guild.get()))
+            return String.format("> Cannot %s %s. The **%s** role has a higher hierarchy than me.", mode, mutedUser.displayName, mutedRole.getName());
+        if (!Utility.testUserHierarchy(command.user.get(), mutedUser.get(), command.guild.get()))
+            return String.format("> Cannot %s %s. User hierarchy higher than yours.", mode, mutedUser.displayName);
 
-        if (adminChannel != null) {
-            RequestHandler.sendMessage(response + String.format(adminMsg, command.user.displayName,
-                    command.channel.mention, reason), adminChannel);
+        if (!isMute && !mutedUser.roles.contains(mutedRole) && !command.guild.users.isUserMuted(mutedUser.get())) {
+            return String.format("> %s is not muted.", mutedUser.displayName);
         }
 
-        muted.getProfile(command.guild).addSailModNote(String.format(modnote, command.user.displayName, reason, timeValue, command.channel.mention), command, isStrike);
-        return response + ".";
+        // mute/un-mute user
+        if (!isMute && timeSecs == -1) {
+            command.guild.users.unMuteUser(mutedUser, command.guild);
+        } else {
+            command.guild.users.muteUser(mutedUser, command.guild, timeSecs);
+        }
+
+        // add mod note
+        if (isMute) {
+            boolean isStrike = false;
+            if (Pattern.compile("(^⚠ | ⚠|⚠)").matcher(reason.toString()).find()) {
+                reason.replaceRegex("(^⚠ | ⚠|⚠)", "");
+                isStrike = true;
+            }
+            modNote.format(mode, command.user.displayName, reason, formattedTime, command.channel.mention);
+            mutedUser.getProfile(command).addSailModNote(modNote.toString(), command, isStrike);
+        }
+
+        // send admin report
+        if (adminChannel != null) {
+            responseAdmin.format(mutedUser.mention(), timeValue, command.user.displayName, command.channel.mention, reason);
+            RequestHandler.sendMessage(responseAdmin.toString(), adminChannel);
+        }
+
+        // send final response
+        response.format(mutedUser.mention(), timeValue);
+        return response.toString();
     }
 
     @Override

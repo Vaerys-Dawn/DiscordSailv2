@@ -1,6 +1,9 @@
 package com.github.vaerys.objects.utils;
 
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.GuildObject;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IUser;
 
 public class GuildLogObject {
 
@@ -38,8 +41,21 @@ public class GuildLogObject {
         this.messageID = logObject.messageID;
     }
 
-    public String getOutput(CommandObject command) {
+    public GuildLogObject(IUser user, IChannel channel, String type, String name, String contents) {
+        this.type = type;
+        this.name = name;
+        this.contents = contents;
+        this.messageID = -1;
+        this.channelID = channel.getLongID();
+        this.userID = user.getLongID();
+    }
+
+    public String getOutput(GuildObject guild) {
         String format = "{\"TYPE\": \"%s\", \"NAME\": \"%s\", \"CONTENTS\": \"%s\", \"GUILD\": %d, \"CHANNEL\": %d, \"USER\": %d, \"MESSAGE\": %d}";
-        return String.format(format, type, name, contents, command.guild.longID, channelID, userID, messageID);
+        return String.format(format, type, name, contents, guild.longID, channelID, userID, messageID);
+    }
+
+    public String getOutput(CommandObject command) {
+        return getOutput(command.guild);
     }
 }

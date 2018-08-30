@@ -335,7 +335,10 @@ public class RequestHandler {
     public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, List<IRole> userRoles, boolean suppressWarnings) {
         return RequestBuffer.request(() -> {
             try {
-                IRole[] roles = userRoles.stream().filter(r -> r != null).collect(Collectors.toList()).toArray(new IRole[userRoles.size()]);
+                List<IRole> temp = userRoles.stream().filter(r -> r != null).collect(Collectors.toList());
+                IRole[] roles = temp.toArray(new IRole[temp.size()]);
+                List<IRole> tempUserRoles = author.getRolesForGuild(guild);
+                if (tempUserRoles.containsAll(temp) && temp.containsAll(tempUserRoles)) return false;
                 guild.editUserRoles(author, roles);
                 return true;
             } catch (RateLimitException e) {
@@ -504,7 +507,8 @@ public class RequestHandler {
             http.setRequestMethod("POST"); // PUT is another valid option
             http.setDoOutput(true);
             Gson gson = new Gson();
-            byte[] contents = gson.toJson(object).getBytes(StandardCharsets.UTF_8);
+            String json = gson.toJson(object);
+            byte[] contents = json.getBytes(StandardCharsets.UTF_8);
             http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             http.setFixedLengthStreamingMode(contents.length);
             try (OutputStream os = http.getOutputStream()) {
@@ -518,6 +522,20 @@ public class RequestHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static RequestBuffer.RequestFuture<Boolean> roleManagement(UserObject user, GuildObject guild, List<IRole> roles) {
+        return roleManagement(user.get(), guild.get(), roles);
+    }
+
+    public static RequestBuffer.RequestFuture<IMessage> sendCreatorDm(String s) {
+        IChannel creatorDm = RequestBuffer.request(() -> Globals.getCreator().getOrCreatePMChannel()).get();
+        return sendMessage(s, creatorDm);
+    }
+
+    public static RequestBuffer.RequestFuture<Boolean> roleManagement(UserObject u, GuildObject content, IRole topTenRole, boolean b) {
+        long roleID = topTenRole.getLongID();
+        return roleManagement(u, content, roleID, b);
     }
 
 

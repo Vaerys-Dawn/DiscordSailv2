@@ -307,7 +307,7 @@ public abstract class Command {
         return false;
     }
 
-    public static Command get(Class obj) {
+    public static <T extends Command> T get(Class obj) {
         return CommandList.getCommand(obj);
     }
 

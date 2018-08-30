@@ -107,6 +107,7 @@ public class Utility {
 
     //Time Utils
     public static String formatTime(long timeSeconds, boolean readable) {
+        if (timeSeconds == 0) return "0 seconds";
         long days = 0;
         if (readable) {
             days = TimeUnit.SECONDS.toDays(timeSeconds);
@@ -714,6 +715,7 @@ public class Utility {
 
     public static UserObject getUser(CommandObject command, String args, boolean doContains, boolean hasProfile) {
         if (args == null || args.isEmpty()) return null;
+
         try {
             long userId = Long.parseUnsignedLong(args);
             IUser user = command.client.fetchUser(userId);
@@ -721,8 +723,13 @@ public class Utility {
                 return UserObject.getNewUserObject(userId, command.guild);
             }
         } catch (NumberFormatException e) {
-            //skip
+            List<IUser> mention = command.message.getMentions();
+            if (mention.size() > 0) {
+                Collections.reverse(mention);
+                return new UserObject(mention.get(0), command.guild);
+            }
         }
+
 
         IUser user = null;
         IUser conUser = null;
@@ -768,13 +775,6 @@ public class Utility {
             }
         }
         UserObject userObject = null;
-        if (user == null) {
-            List<IUser> mention = command.message.getMentions();
-            if (mention.size() > 0) {
-                Collections.reverse(mention);
-                user = mention.get(0);
-            }
-        }
         if (user == null && doContains) {
             user = conUser;
         }
