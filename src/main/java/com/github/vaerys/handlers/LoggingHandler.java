@@ -37,7 +37,7 @@ public class LoggingHandler {
 
 
     private static boolean isSailMessage(CommandObject command) {
-        return command.user.get().isBot();
+        return command.user.longID == command.client.bot.longID;
     }
 
     private static void sendLog(String message, CommandObject command, boolean isAdmin, EmbedObject... object) {
