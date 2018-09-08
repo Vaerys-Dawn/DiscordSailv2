@@ -70,6 +70,7 @@ public class LoggingHandler {
         if (chars200.equals("`Working...`") && isSailMessage(command)) return false;
         if (chars200.equals("`Loading...`") && isSailMessage(command)) return false;
         if (isSailMessage(command) && chars200.matches(pinRegex)) return false;
+        if (isSailMessage(command) && command.message.get().getEmbeds().size() != 0) return false;
         if (serverLog != null && serverLog.equals(command.channel.get()) && isSailMessage(command)) return false;
         if (adminLog != null && adminLog.equals(command.channel.get()) && isSailMessage(command)) return false;
         if (info != null && info.equals(command.channel.get()) && isSailMessage(command)) return false;
@@ -414,8 +415,8 @@ public class LoggingHandler {
     public static void doBanLog(UserBanEvent event) {
         IGuild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
-        if (!guildObject.config.banLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
-            return;
+        if (!guildObject.config.moduleLogging || !guildObject.config.banLogging) return;
+        if (!GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG)) return;
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
 

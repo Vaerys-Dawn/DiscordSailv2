@@ -284,11 +284,12 @@ public class Utility {
     }
 
     public static void sendGlobalAdminLogging(Command command, String args, CommandObject commandObject) {
+        StringHandler message = new StringHandler("***GLOBAL LOGGING***\n> **@%s** Has Used Command `%s`",
+                commandObject.user.username, command.names[0]);
         for (GuildObject c : Globals.getGuilds()) {
-            StringHandler message = new StringHandler("***GLOBAL LOGGING***\n> **@")
-                    .append(commandObject.user.username)
-                    .append("** Has Used Command `")
-                    .append(command.names[0]).append("`");
+            if (!c.config.moduleLogging) continue;
+            if (!c.config.adminLogging) continue;
+
             List<IChannel> adminlog = c.getChannelsByType(ChannelSetting.ADMIN_LOG);
             List<IChannel> serverLog = c.getChannelsByType(ChannelSetting.SERVER_LOG);
 

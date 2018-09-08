@@ -83,6 +83,7 @@ public class MessageHandler {
 //    }
 
     protected static void handleLogging(CommandObject commandObject, Command command, String args) {
+        if (!commandObject.guild.config.moduleLogging) return;
         if (command.doAdminLogging && !commandObject.guild.config.adminLogging) {
             return;
         } else if (!command.doAdminLogging && !commandObject.guild.config.generalLogging) {

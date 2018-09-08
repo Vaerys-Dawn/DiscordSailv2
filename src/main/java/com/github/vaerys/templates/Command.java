@@ -136,14 +136,13 @@ public abstract class Command {
                 validStates.add(s + subCommandObject.getRegex());
             }
         });
-        String toTest = command.message.getContent();
-        if (toTest.length() > 200) {
-            toTest = StringUtils.truncate(toTest, 200);
+        if (args.length() > 200) {
+            args = StringUtils.truncate(args, 200);
         }
         for (String s : validStates) {
             String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + " (.|\n)*";
             String regexStringEnd = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + "$";
-            if (Pattern.compile(regexString).matcher(toTest).matches() || Pattern.compile(regexStringEnd).matcher(toTest).matches()) {
+            if (Pattern.compile(regexString).matcher(args).matches() || Pattern.compile(regexStringEnd).matcher(args).matches()) {
                 return true;
             }
         }

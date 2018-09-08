@@ -183,6 +183,7 @@ public class CommandList {
         add(new HelpDM());
         add(new InfoDM());
         add(new ReminderDM());
+        add(new InviteDm());
 
         //slashCommands
         add(new DealWithIt());

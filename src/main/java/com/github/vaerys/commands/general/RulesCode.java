@@ -4,19 +4,27 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class RulesCode extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        List<IChannel> botCommands = command.guild.getChannelsByType(ChannelSetting.BOT_COMMANDS);
+        if (!botCommands.isEmpty() && !botCommands.contains(command.channel.get())
+                && !GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+            return Utility.getChannelMessage(botCommands);
+        }
         if (command.guild.config.getRuleCode() == null) {
             return "> no rule code exists try again later.";
         }
@@ -86,7 +94,7 @@ public class RulesCode extends Command {
 
     @Override
     protected ChannelSetting channel() {
-        return ChannelSetting.BOT_COMMANDS;
+        return null;
     }
 
     @Override
