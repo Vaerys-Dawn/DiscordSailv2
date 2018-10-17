@@ -32,8 +32,10 @@ public class RulesCode extends Command {
         ProfileObject profile = command.user.getProfile(command.guild);
         if (profile == null)
             return "> **" + command.user.displayName + "** An error occurred, You do not have a profile yet. please dm me this error as this should never happen.";
-        if (profile.getSettings().contains(UserSetting.READ_RULES))
+        if (profile.getSettings().contains(UserSetting.READ_RULES)) {
+            GuildHandler.checkUsersRoles(command.user.longID, command.guild);
             return "> **" + command.user.displayName + "** You have already guessed the code correctly.";
+        }
         if (args.equalsIgnoreCase(command.guild.config.getRuleCode())) {
             profile.getSettings().add(UserSetting.READ_RULES);
             String response = "> Congratulations you have guessed the Rule Code correctly, A Star";
@@ -47,7 +49,7 @@ public class RulesCode extends Command {
             if (ruleReward != null) {
                 response += "\nYou have also been granted the **" + ruleReward.getName() + "** Role.";
             }
-            response += "\n\n**Remainder:** Do not share the secret code, it wouldn't be much of a secret if you did.";
+            response += "\n\n**Reminder:** Do not share the secret code, it wouldn't be much of a secret if you did.";
             GuildHandler.checkUsersRoles(command.user.longID, command.guild);
             command.user.sendDm(response);
             return null;
