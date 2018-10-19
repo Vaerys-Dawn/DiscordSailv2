@@ -97,7 +97,7 @@ public class GuildUsers extends GlobalFile {
         return false;
     }
 
-    public void muteUser(CommandObject command, int i) {
-        muteUser(command.user.longID, command.guild.longID, i);
+    public void muteUser(CommandObject command, int duration) {
+        muteUser(command.user.longID, command.guild.longID, duration);
     }
 }

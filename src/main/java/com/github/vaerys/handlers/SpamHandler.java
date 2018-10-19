@@ -18,7 +18,6 @@ import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
 
 import java.time.Instant;
@@ -56,7 +55,7 @@ public class SpamHandler {
                 int offenceCount = command.guild.config.getOffender(command.user.longID).getCount();
                 if (offenceCount > 2) {
                     if (command.guild.config.muteRepeatOffenders) {
-                        RequestHandler.muteUser(command, true);
+                        command.guild.users.muteUser(command, -1);
                         command.user.sendDm("You were muted for spamming.");
                         command.guild.sendDebugLog(command, "CATCH_SPAM_WALLS", "MUTE", offenceCount + " Offences");
                         IChannel admin = command.guild.getChannelByType(ChannelSetting.ADMIN);
@@ -106,9 +105,8 @@ public class SpamHandler {
                         i++;
                         if (o.getCount() >= Globals.maxWarnings) {
                             String report = "> %s has been muted for repeat offences of spamming mentions.";
-                            RequestHandler.roleManagement(author, guild, guildconfig.getMutedRoleID(), true);
+                            command.guild.users.muteUser(command, -1);
                             command.guild.sendDebugLog(command, "STOP_MASS_MENTIONS", "MUTE", o.getCount() + " Offences");
-                            command.client.get().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, author, oldRoles, command.user.get().getRolesForGuild(guild)));
                             // add strike in modnote
                             command.user.getProfile(command.guild).addSailModNote(String.format(report, author.mention()), command, false);
                             // send admin notification
@@ -178,7 +176,6 @@ public class SpamHandler {
             userRate.mute();
             //mute user for 300 seconds
             command.guild.users.muteUser(command, 300);
-            RequestHandler.roleManagement(command, mutedRole, true);
             command.user.sendDm(String.format(muteFormat, guildName, messageLimit)).get();
             return true;
         }
