@@ -11,10 +11,12 @@ public class Invite extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        String user = command.user.displayName;
+        String bot = command.client.bot.displayName;
         return String.format("> Hello %s, %s is currently still in beta and as such inviting the bot to your server " +
                 "requires Developer help.\n\nIf you wish to get %s on your server you will need to " +
                 "contact %s on the support server which you can find here: <https://discord.gg/XSyQQrR>",
-                command.user.displayName, command.client.bot.displayName, command.client.bot.displayName, Globals.getCreator().getName());
+                user, bot, bot, Globals.getCreator().getName());
     }
 
     @Override

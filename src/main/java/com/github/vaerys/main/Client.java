@@ -29,6 +29,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 19/05/2016.
@@ -142,6 +143,13 @@ public class Client {
                 refreshPatreonToken(token.get(1), token.get(2), token.get(3));
             }
         }
+        if (FileHandler.exists(Constants.DIRECTORY_STORAGE + "manual_patron.txt")) {
+            List<Long> patronIDs = FileHandler.readFromFile(Constants.DIRECTORY_STORAGE + "manual_patron.txt").stream()
+                    .map(s -> Utility.stringLong(s)).filter(l -> l != -1).distinct().collect(Collectors.toList());
+            Globals.setPatrons(patronIDs);
+            logger.info("Patron List Updated.");
+            return false;
+        }
         try {
             patreonApi.fetchCampaigns();
             logger.info("Patreon Account Linked.");
@@ -149,6 +157,7 @@ public class Client {
             logger.info("Could not Link Patreon Account.");
             return false;
         }
+
         return true;
     }
 
@@ -192,7 +201,7 @@ public class Client {
 //            tokenData.append(clientID + "\n");
 //            tokenData.append(clientSecret + "\n");
 //            tokenData.append(refresh.getRefreshToken());
-//            FileHandler.writeToFile(Constants.FILE_PATREON_TOKEN, tokenData.toString(), true);
+//            FileHandler.copyToFile(Constants.FILE_PATREON_TOKEN, tokenData.toString(), true);
 //        } catch (HttpStatusException e) {
 //            if (e.getStatusCode() == 401) {
 //                logger.error("Refresh Token is invalid.");

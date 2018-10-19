@@ -39,7 +39,7 @@ public class TagList {
         add(new TagEmoji(10, TagType.INFO));
         add(new TagLevel(10, TagType.LEVEL, TagType.PIXEL));
         add(new TagUser(10, TagType.LEVEL, TagType.JOIN_MESSAGES));
-        add(new TagChannel(10, TagType.INFO));
+//        add(new TagChannel(10, TagType.INFO));
         add(new TagDisplayName(10, TagType.INFO));
         add(new TagServer(10, TagType.CC, TagType.JOIN_MESSAGES));
         add(new TagChannelMention(10, TagType.CC));

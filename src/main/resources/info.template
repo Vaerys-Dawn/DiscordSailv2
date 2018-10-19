@@ -1,0 +1,69 @@
+// <image>{server-icon.png}
+// You can upload a server icon with $EditInfoFiles UploadImage [Image File], and then remove the "//" to display it.
+// Make sure that the image name and the name within the brackets are the same or it wont work.
+
+***LINKS***
+// Want any links you should put them here. 
+// TIP if you don't want your link embedding in chat you can surround the link with "< >"
+
+***RELATED SERVERS***
+// This would be a great place for you to share some servers you like.
+
+***RULES***
+// You can put your rules here, it looks nice when you format them like so:
+// **Num - RuleName**
+// Rule description
+
+
+// Discord Formatting Tips:
+// *Text* or _text_ = Italics
+// **Text** = Bold
+// ***Text*** = Bold Italics
+// __Text__ = Underline
+// ~~Text~~ = Strike through
+// `Text` = Single Line codeblock
+// ```Text``` = CodeBlock (You can also have it code highlight, see all available styles here: https://gist.github.com/ringmatthew/9f7bbfd102003963f9be7dbcf7d40e51#syntax-highlighting)
+// <#ChannelID> = Channel Mention
+// <@UserID> = User Mention
+// <@!UserID> = User Mention with nickname
+// <@&RoleID> = Role mention
+
+
+// Info tags:
+// These are tags you can use to spice up your info file.
+//
+// <!break>
+// When this tag is put at the end of a line it removes the line break.
+// **Usage:** `<!break>\n`
+//
+// <spacer>
+// Replaces itself with an invisible character that takes up no space.
+// **Usage:** `<spacer>`
+//
+// <emoji>
+// Replaces itself with the emoji of the same name.
+// **Usage:** `#:EmojiName:#`
+//
+// <displayName>
+// Replaces the tag with the display name of the user.
+// **Usage:** `<displayName>{UserID}`
+//
+// <server> - CustomCommand, Join
+// Replaces itself with the current server's name.
+// **Usage:** `<server>`
+//
+// <split> - Info
+// When placed anywhere in the info.txt file it will create a new message starting at the tag.
+// **Usage:** `<split>`
+//
+// <br> - CustomCommand, Info
+// Replaces itself with a newline character.
+// **Usage:** `<br>`
+//
+// <!br> - CustomCommand, Info
+// When this tag is put at the end of a line it removes the line break.
+// **Usage:** `<!br>\n`
+//
+// <image> - Info
+// Sends the image specified from the internal storage. Will fail if the path is wrong or the file doesn't exist.
+// **Usage:** `<image>{ImageName.format}`

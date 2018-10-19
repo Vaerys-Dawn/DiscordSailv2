@@ -20,10 +20,7 @@ import com.sun.management.OperatingSystemMXBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 
 import java.io.File;
@@ -282,10 +279,14 @@ public class TimerHandler {
             public void run() {
                 IChannel channel = Client.getClient().getChannelByID(object.getChannelID());
                 // sanitize channel
-                if (channel == null) Globals.getGlobalData().removeReminder(object);
+                if (channel == null) {
+                    channel = Client.getClient().getUserByID(object.getUserID()).getOrCreatePMChannel();
+                }
                 IMessage message = RequestHandler.sendMessage(object.getMessage(), channel).get();
+
+                boolean canSend = channel.getModifiedPermissions(Client.getClient().getOurUser()).contains(Permissions.SEND_MESSAGES);
                 //check message sent.
-                if (message == null && !channel.isPrivate()) {
+                if (message == null && !channel.isPrivate() && canSend) {
                     logger.error("REMINDER FAILED FOR USER WITH ID \"" + object.getUserID() + "\" TO SEND. WILL ATTEMPT TO SEND AGAIN IN 5 MINS.");
                     object.setSent(false);
                 } else {

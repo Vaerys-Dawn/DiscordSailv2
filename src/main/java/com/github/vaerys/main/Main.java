@@ -64,9 +64,9 @@ public class Main {
             FileHandler.createDirectory(Constants.DIRECTORY_TEMP);
             FileHandler.createDirectory(Constants.DIRECTORY_OLD_FILES);
             FileHandler.createDirectory(Constants.DIRECTORY_ERROR);
-            if (!FileHandler.exists(Constants.INFO_TEMPLATE)) {
-                Constants.initInfoTemplate();
-            }
+//            if (!FileHandler.exists(Constants.INFO_TEMPLATE)) {
+//                Constants.initInfoTemplate();
+//            }
 
             //load config phase 1
             Config config = FileFactory.create(FilePaths.CONFIG, Config.class);

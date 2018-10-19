@@ -34,7 +34,7 @@ public class UpdateRolePerms extends Command {
         }
         for (IRole r : command.guild.get().getRoles()) {
             if (command.guild.config.isRoleCosmetic(r.getLongID())) {
-                if (!r.getPermissions().containsAll(parentPerms)) {
+                if (!r.getPermissions().containsAll(parentPerms) && !parentPerms.containsAll(r.getPermissions())) {
                     EnumSet finalParentPerms = parentPerms;
                     RequestBuffer.request(() -> r.changePermissions(finalParentPerms));
                 }
