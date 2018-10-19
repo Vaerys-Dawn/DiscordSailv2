@@ -54,6 +54,7 @@ public class ToggleList {
         add(new StopSpamWalls());
         add(new KickLogging());
         add(new BanLogging());
+        add(new MuteRemovesRoles());
 //        add(new DungeonChars());
     }};
 

@@ -78,6 +78,10 @@ public class GuildHandler {
         if (profile == null) return;
         if (profile.getSettings().contains(DENY_AUTO_ROLE)) return;
 
+        // skip muted users
+        if (content.config.muteRemovesRoles &&
+                content.users.getMutedUser(profile.getUserID()) != null) return;
+
         IUser user = content.getUserByID(profile.getUserID());
         if (user == null) return;
 

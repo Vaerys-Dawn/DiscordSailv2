@@ -1,12 +1,12 @@
 package com.github.vaerys.handlers;
 
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.JoinMessage;
-import com.github.vaerys.objects.adminlevel.UserCountDown;
+import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
 import sx.blah.discord.handle.obj.IChannel;
@@ -79,7 +79,7 @@ public class JoinHandler {
      * @param event   The event that calls this. ({@link UserJoinEvent})
      */
     public static void autoReMute(UserJoinEvent event, GuildObject content, UserObject user) {
-        for (UserCountDown u : content.users.mutedUsers) {
+        for (MutedUserObject u : content.users.mutedUsers) {
             if (u.getID() == event.getUser().getLongID()) {
                 IChannel admin = content.getChannelByType(ChannelSetting.ADMIN);
                 if (admin != null) {

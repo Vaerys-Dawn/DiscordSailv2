@@ -469,6 +469,8 @@ public class Utility {
     public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, IGuild guild) {
         List<IRole> lowerRoles = lowerUser.getRolesForGuild(guild);
         List<IRole> higherRoles = higherUser.getRolesForGuild(guild);
+        // higher user is guild owner, automatically has highest role:
+        if (guild.getOwner().equals(higherUser)) return true;
         IRole topRole = null;
         int topRolePos = 0;
         for (IRole role : higherRoles) {

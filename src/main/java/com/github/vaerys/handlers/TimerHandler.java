@@ -7,7 +7,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.adminlevel.UserCountDown;
+import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.adminlevel.UserRateObject;
 import com.github.vaerys.objects.botlevel.RandomStatusObject;
 import com.github.vaerys.objects.depreciated.BlackListObject;
@@ -362,7 +362,7 @@ public class TimerHandler {
             task.forceClearRate();
         }
         //Mutes.
-        ArrayList<UserCountDown> mutedUsers = task.users.getMutedUsers();
+        ArrayList<MutedUserObject> mutedUsers = task.users.getMutedUsers();
         for (int i = 0; i < mutedUsers.size(); i++) {
             if (mutedUsers.get(i).getRemainderSecs() != -1) {
                 mutedUsers.get(i).tickDown(10);
