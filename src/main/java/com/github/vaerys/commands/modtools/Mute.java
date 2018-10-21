@@ -36,7 +36,7 @@ public class Mute extends Command {
         UserObject mutedUser = Utility.getUser(command, userCall.getFirstWord(), false, false);
         StringHandler response = new StringHandler("> %s %s.");
         StringHandler responseAdmin = new StringHandler("> %s %s by %s in %s with reason `%s`.");
-        StringHandler modNote = new StringHandler("> %s by %s. Reason: `%s`. Time: %s. Channel: %s.");
+        StringHandler modNote = new StringHandler("> %s by **%s**. Reason: `%s`. Time: %s. Channel: %s.");
         boolean isMute = !UN_MUTE.isSubCommand(command);
         String mode = isMute ? "**Muted**" : "**UnMuted**";
         StringHandler reason = new StringHandler(userCall.getRest());
@@ -81,7 +81,7 @@ public class Mute extends Command {
                 reason.replaceRegex("(^⚠ | ⚠|⚠)", "");
                 isStrike = true;
             }
-            modNote.format(mode, command.user.displayName, reason, formattedTime, command.channel.mention);
+            modNote.format(mode, command.user.username, reason, formattedTime, command.channel.mention);
             mutedUser.getProfile(command).addSailModNote(modNote.toString(), command, isStrike);
         }
 
