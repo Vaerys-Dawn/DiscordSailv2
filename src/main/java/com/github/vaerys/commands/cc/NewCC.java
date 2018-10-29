@@ -55,6 +55,10 @@ public class NewCC extends Command {
             return "> Custom Commands cannot have the same name as built-in commands.";
         }
 
+        if (nameCC.contains("```")) {
+            return "> Custom Command names cannot contain code blocks";
+        }
+
         if ((argsCC == null || argsCC.isEmpty()) && command.message.get().getAttachments().size() == 0) {
             return "> Custom command contents cannot be blank.";
         }
