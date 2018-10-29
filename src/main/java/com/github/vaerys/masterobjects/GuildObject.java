@@ -420,4 +420,20 @@ public class GuildObject {
         }
         return rateObject;
     }
+
+    public List<GuildToggle> getSettings() {
+        List<SAILType> settings = new LinkedList<>();
+        for (GuildToggle toggle : toggles) {
+            if (toggle.isModule() && toggle.enabled(config)) settings.addAll(toggle.settings);
+        }
+        return settings.stream().map(s -> ToggleList.getSetting(s)).collect(Collectors.toList());
+    }
+
+    public GuildToggle getSetting(SAILType type) {
+        List<GuildToggle> settings = getSettings();
+        for (GuildToggle setting : settings) {
+            if (setting.name() == type) return setting;
+        }
+        return null;
+    }
 }

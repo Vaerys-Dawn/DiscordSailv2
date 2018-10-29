@@ -84,4 +84,11 @@ public class DailyMessages extends GlobalFile {
         }
         return object;
     }
+
+    public QueueObject getRequestItem(long longID) {
+        for (QueueObject q : queuedRequests){
+            if (q.getMessageId() == longID) return q;
+        }
+        return null;
+    }
 }

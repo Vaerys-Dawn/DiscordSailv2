@@ -28,7 +28,7 @@ public class NewJoinMessage extends Command {
             return "> You cannot put everyone or here mentions in join messages.";
         }
         messages.add(new JoinMessage(command.user.longID, args));
-        return "> New Custom Join Message added at index" + command.guild.channelData.getJoinMessages().size() + ".";
+        return "> New Custom Join Message added at index " + command.guild.channelData.getJoinMessages().size() + ".";
     }
 
     @Override

@@ -40,6 +40,7 @@ public class ChannelHere extends Command {
         Collections.sort(types);
         desc += "**Types**\n```\n" + spacer + Utility.listFormatter(types, true) + "```\n" + spacer + "**Settings**\n```\n" + Utility.listFormatter(settings, true) + "```\n";
         desc += "The Command **" + get(HelpChannel.class).getUsage(command) + "** Can give you extra information about each of the above.\n\n";
+        desc += "See what is enabled on a channel via **" +get(ChannelStats.class).getUsage(command) + "**\n\n";
         desc += missingArgs(command);
         embedBuilder.withDesc(desc);
         embedBuilder.withTitle(title);

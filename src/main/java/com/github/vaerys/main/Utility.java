@@ -466,7 +466,7 @@ public class Utility {
      * @param guild the guild the action should take place
      * @return if the higher user is above the lower user
      */
-    public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, IGuild guild) {
+    public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, IGuild guild, boolean sameLevel) {
         List<IRole> lowerRoles = lowerUser.getRolesForGuild(guild);
         List<IRole> higherRoles = higherUser.getRolesForGuild(guild);
         // higher user is guild owner, automatically has highest role:
@@ -485,11 +485,21 @@ public class Utility {
             }
         }
         for (IRole role : lowerRoles) {
-            if (role.getPosition() > topRolePos) {
-                return false;
+            if (sameLevel) {
+                if (role.getPosition() > topRolePos) {
+                    return false;
+                }
+            } else {
+                if (role.getPosition() >= topRolePos) {
+                    return false;
+                }
             }
         }
         return true;
+    }
+
+    public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, IGuild guild) {
+        return testUserHierarchy(higherUser, lowerUser, guild, true);
     }
 
     /***

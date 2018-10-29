@@ -42,7 +42,9 @@ public class ListChars extends Command {
         List<String> list = user.characters.stream().map(c -> c.getName()).collect(Collectors.toList());
         //give message if empty
         if (list.size() == 0) {
-            return "> You do not have any characters yet. Create one with **" + new UpdateChar().getUsage(command) + "**.";
+            return user.longID == command.user.longID ?
+                    "> You do not have any characters yet. Create one with **" + new UpdateChar().getUsage(command) + "**." :
+                    "> User does not have any characters yet.";
         }
         //build embed data
         builder.withTitle(title);
