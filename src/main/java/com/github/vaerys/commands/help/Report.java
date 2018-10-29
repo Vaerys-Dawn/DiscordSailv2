@@ -8,13 +8,11 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.botlevel.AutoBlocker;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
@@ -55,9 +53,9 @@ public class Report extends Command {
         IRole roleToMention = command.guild.getRoleByID(command.guild.config.getRoleToMentionID());
         split.editRestReplace(split.getRest(), Utility.convertMentionToText(split.getRest()));
         String reason = split.getRest() != null ? split.getRest() : "No reason given.";
-        String format = "**%s**\nReported User: %s\nReported by: %s\nReason: `%s`\nChannel: %s\n\nLink to Report:\n%s";
+        String format = "**%s**\nReported User: %s\nReason: `%s`\nChannel: %s\n\nLink to Report:\n%s\nReported by: %s";
         String reportType = isSilent ? "User Report - Silent" : "User Report";
-        String message = String.format(format, reportType, reported.mention(), command.user.mention(), reason, command.channel.mention, command.getMessageLink());
+        String message = String.format(format, reportType, reported.mention(), reason, command.channel.mention, command.getMessageLink(), command.user.mention());
 //        embed.withTitle(reportType);
         IMessage response;
 

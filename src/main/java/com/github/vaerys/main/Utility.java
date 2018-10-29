@@ -370,10 +370,18 @@ public class Utility {
         return from;
     }
 
+    public static String escapeFun(String from) {
+
+        from = from.replace("`","\\`");
+        from = from.replace("*","\\*");
+        from = from.replace("_","\\_");
+        return from.replace("~","\\~");
+    }
+
     public static String replaceFun(String from, String fun, boolean[] exit) {
         String noFun = StringUtils.substringBetween(from, fun, fun);
         if (noFun != null) {
-            from = from.replace(escapeRegex(fun + noFun + fun), noFun);
+            from = from.replace(escapeRegex(fun), "");
             exit[0] = true;
         }
         return from;
@@ -461,6 +469,8 @@ public class Utility {
     public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, IGuild guild, boolean sameLevel) {
         List<IRole> lowerRoles = lowerUser.getRolesForGuild(guild);
         List<IRole> higherRoles = higherUser.getRolesForGuild(guild);
+        // higher user is guild owner, automatically has highest role:
+        if (guild.getOwner().equals(higherUser)) return true;
         IRole topRole = null;
         int topRolePos = 0;
         for (IRole role : higherRoles) {

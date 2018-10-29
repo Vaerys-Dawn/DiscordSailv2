@@ -48,6 +48,7 @@ public class ModuleModMuting extends GuildModule {
     @Override
     public void setup() {
         settings.add(SAILType.MUTE_REPEAT_OFFENDER);
+        settings.add(SAILType.MUTE_REMOVES_ROLES);
         settings.add(SAILType.STOP_SPAM_WALLS);
         settings.add(SAILType.RATE_LIMITING);
         settings.add(SAILType.MENTION_SPAM);

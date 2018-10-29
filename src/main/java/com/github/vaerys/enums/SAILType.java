@@ -68,7 +68,8 @@ public enum SAILType {
     SEND_JOIN_MESSAGES("SendJoinMessages"),
     BAN_LOGGING("BanLogging"),
     KICK_LOGGING("KickLogging"),
-    DUNGEON_CHARS("DungeonChars");
+    DUNGEON_CHARS("DungeonChars"),
+    MUTE_REMOVES_ROLES("MuteRemovesRoles");
 
     private String name;
 

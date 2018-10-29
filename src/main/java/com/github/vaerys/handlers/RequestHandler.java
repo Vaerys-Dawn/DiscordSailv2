@@ -22,6 +22,7 @@ import javax.net.ssl.SSLHandshakeException;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -431,22 +432,34 @@ public class RequestHandler {
     }
 
 
-    public static boolean muteUser(long guildID, long userID, boolean isMuting) {
+    public static RequestBuffer.RequestFuture<Boolean> muteUser(long guildID, long userID, boolean isMuting) {
         GuildObject content = Globals.getGuildContent(guildID);
         IUser user = Globals.getClient().getUserByID(userID);
         IGuild guild = Globals.getClient().getGuildByID(guildID);
         IRole mutedRole = Globals.client.getRoleByID(content.config.getMutedRoleID());
-        List<IRole> oldRoles = user.getRolesForGuild(guild);
-        if (mutedRole != null) {
-            roleManagement(Globals.getClient().getUserByID(userID), Globals.client.getGuildByID(guildID), mutedRole.getLongID(), isMuting);
-            List<IRole> newRoles = user.getRolesForGuild(guild);
-            Globals.getClient().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, user, oldRoles, newRoles));
-            return true;
+
+        List<IRole> newRoles = user.getRolesForGuild(guild);
+        //roles for logging
+        List<IRole> oldRoles = new ArrayList<>(newRoles);
+
+        if (mutedRole == null) return RequestBuffer.request(() -> true);
+
+        if (isMuting) {
+            if (content.config.muteRemovesRoles) {
+                content.users.getMutedUser(userID).setRoles(newRoles);
+                newRoles.clear();
+            }
+            newRoles.add(mutedRole);
+        } else {
+            newRoles.remove(mutedRole);
+            newRoles.addAll(content.users.getMutedUser(userID).getRoles(guild));
         }
-        return false;
+        RequestBuffer.RequestFuture<Boolean> passed = roleManagement(user, guild, newRoles);
+        Globals.getClient().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, user, oldRoles, newRoles));
+        return passed;
     }
 
-    public static boolean muteUser(CommandObject command, boolean b) {
+    public static RequestBuffer.RequestFuture<Boolean> muteUser(CommandObject command, boolean b) {
         return muteUser(command.guild.longID, command.user.longID, b);
     }
 
