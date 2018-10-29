@@ -32,17 +32,25 @@ public class Toggle extends Command {
         HelpModules modules = get(HelpModules.class);
         HelpSettings settings = get(HelpSettings.class);
 
-        StringBuilder builder = new StringBuilder();
+        StringHandler desc = new StringHandler();
         if (!args.isEmpty()) {
-            GuildToggle toggle = ToggleList.getGuildToggle(args, isModule);
-            if (toggle == null) {
+            GuildToggle toggle;
+            SAILType setting = SAILType.get(args);
+            if (isModule) {
+                toggle = ToggleList.getGuildToggle(args, isModule);
+            } else {
+                toggle = command.guild.getSetting(setting);
+            }
+            if (toggle == null && setting != null && ToggleList.getSetting(setting) != null) {
+                GuildToggle module = ToggleList.getModuleFromSetting(setting);
+                desc.appendFormatted("> Could not toggle Setting **%s**, Module **%s** is disabled.\n\n", args, module.name());
+            } else if (toggle == null) {
                 if (isModule) {
-                    builder.append("> Could not find Module \"" + args + "\".\n");
+                    desc.append("> Could not find Module **" + args + "**.\n\n");
                 } else {
-                    builder.append("> Could not find Setting \"" + args + "\".\n");
+                    desc.append("> Could not find Setting **" + args + "**.\n\n");
                 }
             } else {
-
                 toggle.toggle(command.guild.config);
                 command.guild.loadCommandData();
 
@@ -52,7 +60,6 @@ public class Toggle extends Command {
                 return "> **" + toggle.name() + "** is now **" + mode + "**.\n\n" +
                         "To see more info about what this " + type + " " + mode + " you can run **" + helpCommand + "**.";
             }
-
         }
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String modifier = isModule ? "Module" : "Setting";
@@ -70,9 +77,6 @@ public class Toggle extends Command {
         Collections.sort(typesActive);
         Collections.sort(typesDeactivated);
         embedBuilder.withTitle(title);
-
-        StringHandler desc = new StringHandler();
-
 
         desc.append("**Activated**\n```\n" + spacer + Utility.listEnumFormatter(typesActive, true) + "```\n" +
                 "**Deactivated**\n```\n" + spacer + Utility.listEnumFormatter(typesDeactivated, true) + "```\n");

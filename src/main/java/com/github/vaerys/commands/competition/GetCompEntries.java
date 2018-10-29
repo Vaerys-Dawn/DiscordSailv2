@@ -36,7 +36,7 @@ public class GetCompEntries extends Command {
                 builder.withThumbnail(compObjects.get(i).getFileUrl());
             } else {
                 if (user != null) {
-                    builder.withDesc(user.mention() + "\n" + compObjects.get(i).getFileUrl());
+                    builder.withDesc(user.mention(false) + "\n" + compObjects.get(i).getFileUrl());
                 } else {
                     builder.withDesc(compObjects.get(i).getFileUrl());
                 }

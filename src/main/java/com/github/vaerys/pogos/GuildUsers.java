@@ -39,11 +39,7 @@ public class GuildUsers extends GlobalFile {
     }
 
     public boolean unMuteUser(long userID, long guildID) {
-        for (int i = 0; i < mutedUsers.size(); i++) {
-            if (mutedUsers.get(i).getID() == userID) {
-                mutedUsers.remove(i);
-            }
-        }
+        mutedUsers.removeIf(m -> m.getID() == userID);
         return RequestHandler.muteUser(guildID, userID, false);
     }
 

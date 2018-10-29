@@ -41,7 +41,7 @@ public class TransferLevels extends Command {
                 }
                 uObject.lastTalked = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
                 uObject.setXp(0);
-                uObject.setCurrentLevel(-1);
+                uObject.setCurrentLevel(0);
                 for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
                     if (user.getRolesForGuild(command.guild.get()).contains(r.get(command.guild))) {
                         uObject.setXp(r.getXp());

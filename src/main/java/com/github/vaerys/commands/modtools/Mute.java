@@ -60,7 +60,7 @@ public class Mute extends Command {
         if (mutedUser.longID == command.user.longID && isMute) return "> Don't try to mute yourself you numpty.";
         if (!Utility.testUserHierarchy(command.client.bot.get(), mutedRole, command.guild.get()))
             return String.format("> Cannot %s %s. The **%s** role has a higher hierarchy than me.", mode, mutedUser.displayName, mutedRole.getName());
-        if (!Utility.testUserHierarchy(command.user.get(), mutedUser.get(), command.guild.get()))
+        if (!Utility.testUserHierarchy(command.user.get(), mutedUser.get(), command.guild.get(), false))
             return String.format("> Cannot %s %s. User hierarchy higher than yours.", mode, mutedUser.displayName);
 
         if (!isMute && !mutedUser.roles.contains(mutedRole) && !command.guild.users.isUserMuted(mutedUser.get())) {

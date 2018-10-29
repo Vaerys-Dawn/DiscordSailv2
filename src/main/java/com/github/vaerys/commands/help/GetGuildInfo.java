@@ -78,9 +78,15 @@ public class GetGuildInfo extends Command {
             serverStats.append("\n**Region:** ");
             serverStats.append(command.guild.get().getRegion().getName());
         }
+        long totalChannels = command.guild.get().getChannels().size();
+        long totalVoiceChannels = command.guild.get().getVoiceChannels().size();
+        totalChannels -= totalVoiceChannels;
+        long totalCategories = command.guild.get().getCategories().size();
+
         serverStats.append("\n**Total Users:** " + command.guild.getUsers().size());
-        serverStats.append("\n**Total Channels:** " + command.guild.get().getChannels().size());
-        serverStats.append("\n**Total Voice Channels:** " + command.guild.get().getVoiceChannels().size());
+        serverStats.append("\n**Total Text Channels:** " + totalChannels);
+        serverStats.append("\n**Total Voice Channels:** " + totalVoiceChannels);
+        serverStats.append("\n**Total Categories:** " + totalCategories);
         serverStats.append("\n**Total Roles:** " + command.guild.get().getRoles().size());
         serverStats.append("\n**Command Prefix:** " + command.guild.config.getPrefixCommand());
         if (command.guild.config.moduleCC)

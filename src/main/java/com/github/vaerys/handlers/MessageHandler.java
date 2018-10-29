@@ -1,5 +1,6 @@
 package com.github.vaerys.handlers;
 
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
@@ -34,6 +35,7 @@ public class MessageHandler {
             if (SpamHandler.commandBlacklisting(command)) return;
             if (SpamHandler.rateLimiting(command)) return;
             if (SpamHandler.catchWalls(command)) return;
+            if (checkMuteAppeals(command)) return;
             // check for role mentions:
             if (!GuildHandler.testForPerms(command, command.channel.get(), Permissions.MENTION_EVERYONE)) {
                 // sanitize @everyone and @here mentions.
@@ -68,6 +70,16 @@ public class MessageHandler {
         if (isPrivate) {
             new DMHandler(command);
         }
+    }
+
+    private boolean checkMuteAppeals(CommandObject command) {
+        if (!command.guild.config.moduleModMute) return false;
+        IRole muted = command.guild.getMutedRole();
+        if (muted == null) return false;
+        if (!command.guild.getChannelsByType(ChannelSetting.MUTE_APPEALS).contains(command.channel.get())) return false;
+        if (GuildHandler.canBypass(command)) return false;
+        if (command.user.roles.contains(muted)) return true;
+        return false;
     }
 
 //    public static boolean isActive(boolean isPrivate, CommandObject command) {

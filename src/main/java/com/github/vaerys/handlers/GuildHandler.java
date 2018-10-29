@@ -158,6 +158,7 @@ public class GuildHandler {
 
     public static Color getUsersColour(IUser user, IGuild guild) {
         //before
+        if (user == null) return Constants.DEFAULT_COLOUR;
         List<IRole> userRoles = guild.getRolesForUser(user);
         IRole topColour = null;
         String defaultColour = "0,0,0";
