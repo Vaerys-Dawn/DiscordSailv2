@@ -99,10 +99,10 @@ public class CosmeticRoles extends Command {
             List<IRole> userRoles = command.user.roles;
             String response;
             //check if role is valid
-            IRole role;
-            role = GuildHandler.getRoleFromName(args, command.guild.get());
+            IRole role;         
+            role = GuildHandler.getRoleFromName(args, command.guild.get(), command.guild.config.getCosmeticRoleIDs());
             if (role == null && args.length() > 3) {
-                role = GuildHandler.getRoleFromName(args, command.guild.get(), true);
+                role = GuildHandler.getRoleFromName(args, command.guild.get(), command.guild.config.getCosmeticRoleIDs(), true);
             }
             if (role == null && !args.equalsIgnoreCase("remove")) {
                 RequestHandler.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListRoles.getList(command), command.channel.get());

@@ -91,9 +91,9 @@ public class ModifierRoles extends Command {
             if (command.guild.config.getModifierRoleIDs().size() == 0)
                 return "> No Modifier roles are set up right now. Come back later.";
             IRole role;
-            role = GuildHandler.getRoleFromName(args, command.guild.get());
+            role = GuildHandler.getRoleFromName(args, command.guild.get(), command.guild.config.getModifierRoleIDs());
             if (role == null && args.length() > 3) {
-                role = GuildHandler.getRoleFromName(args, command.guild.get(), true);
+                role = GuildHandler.getRoleFromName(args, command.guild.get(), command.guild.config.getModifierRoleIDs(), true);
             }
             List<IRole> userRoles = command.user.roles;
             String response;

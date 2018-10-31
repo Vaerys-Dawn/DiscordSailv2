@@ -98,16 +98,77 @@ public class GuildHandler {
     }
 
     //Discord Utils
+
+
+    /**
+     * Searches for a role within the guild
+     * @param roleName - the full or partial name of the role
+     * @param guild - the guild to search within
+     * @return The closest matching role
+     */
+    public static IRole getRoleFromName(String roleName, IGuild guild) {
+        return getRoleFromName(roleName, guild, false);
+    }
+    
+    /**
+     * Searches for a role within the guild
+     * @param roleName - the full or partial name of the role
+     * @param guild - the guild to search within
+     * @param startsWith - Whether the search should look for
+     * @return The closest matching role
+     */
     public static IRole getRoleFromName(String roleName, IGuild guild, boolean startsWith) {
-        IRole role = null;
-        for (IRole r : guild.getRoles()) {
-            if (startsWith) {
+        return getRoleFromName(roleName, guild.getRoles(), false);
+    }
+    
+    /**
+     * Searches for a role within the guild
+     * @param roleName - the full or partial name of the role
+     * @param guild - the guild to search within
+     * @param filterIds - a list of role ids to filter in
+     * @return The closest matching role
+     */
+    public static IRole getRoleFromName(String roleName, IGuild guild, List<Long> filterIds) {
+    	return getRoleFromName(roleName, guild, filterIds, false );
+    }
+    
+    /**
+     * Searches for a role within the guild
+     * @param roleName - the full or partial name of the role
+     * @param guild - the guild to search within
+     * @param filterIds - a list of role ids to filter in
+     * @param startsWith - Whether the search should look for
+     * @return The closest matching role
+     */
+    public static IRole getRoleFromName(String roleName, IGuild guild, List<Long> filterIds, boolean startsWith) {
+    	List<IRole> filtered =
+    			guild
+    			.getRoles()
+    			.stream()
+    			.filter((IRole r) -> { return filterIds.contains(r.getLongID());})
+    			.collect(Collectors.toList()) ;
+    	return getRoleFromName(roleName, filtered, startsWith );
+    }
+    
+    /**
+     * Searches for a role within the guild
+     * @param roleName - The full or partial name of the role
+     * @param rolesToSearch - The list of roles to search through
+     * @param startsWith - Whether the search should look for
+     * @return The closest matching role
+     */
+    public static IRole getRoleFromName(String roleName, List<IRole> rolesToSearch, boolean startsWith) {
+    	IRole role = null;
+        for (IRole r : rolesToSearch) {
+    		if (startsWith) {
                 if (r.getName().toLowerCase().startsWith(roleName.toLowerCase())) {
                     role = r;
+                    break;
                 }
             } else {
                 if (r.getName().equalsIgnoreCase(roleName)) {
                     role = r;
+                    break;
                 }
             }
         }
@@ -117,10 +178,6 @@ public class GuildHandler {
     public static List<IRole> getRolesByName(IGuild guild, String name) {
         List<IRole> roles = guild.getRoles().stream().filter(r -> r.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
         return roles;
-    }
-
-    public static IRole getRoleFromName(String roleName, IGuild guild) {
-        return getRoleFromName(roleName, guild, false);
     }
 
     public static Color getUsersColour(IUser user, IGuild guild) {
