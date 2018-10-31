@@ -37,17 +37,19 @@ public class ModuleLogging extends GuildModule {
 
     @Override
     public void setup() {
-        settings.add(ToggleList.getSetting(SAILType.ADMIN_LOGGING));
-        settings.add(ToggleList.getSetting(SAILType.GENERAL_LOGGING));
-        settings.add(ToggleList.getSetting(SAILType.JOIN_LEAVE_LOGGING));
-        settings.add(ToggleList.getSetting(SAILType.CHANNEL_LOGGING));
-        settings.add(ToggleList.getSetting(SAILType.DELETE_LOGGING));
-        settings.add(ToggleList.getSetting(SAILType.EDIT_LOGGING));
-        settings.add(ToggleList.getSetting(SAILType.DONT_LOG_BOT));
-        settings.add(ToggleList.getSetting(SAILType.USER_ROLE_LOGGING));
-        settings.add(ToggleList.getSetting(SAILType.USE_TIME_STAMPS));
-        settings.add(ToggleList.getSetting(SAILType.EXTEND_EDIT_LOG));
-        settings.add(ToggleList.getSetting(SAILType.CHECK_NEW_USERS));
+        settings.add(SAILType.ADMIN_LOGGING);
+        settings.add(SAILType.GENERAL_LOGGING);
+        settings.add(SAILType.JOIN_LEAVE_LOGGING);
+        settings.add(SAILType.CHANNEL_LOGGING);
+        settings.add(SAILType.DELETE_LOGGING);
+        settings.add(SAILType.EDIT_LOGGING);
+        settings.add(SAILType.DONT_LOG_BOT);
+        settings.add(SAILType.USER_ROLE_LOGGING);
+        settings.add(SAILType.USE_TIME_STAMPS);
+        settings.add(SAILType.EXTEND_EDIT_LOG);
+        settings.add(SAILType.CHECK_NEW_USERS);
+        settings.add(SAILType.BAN_LOGGING);
+        settings.add(SAILType.KICK_LOGGING);
         channels.add(ChannelSetting.ADMIN_LOG);
         channels.add(ChannelSetting.SERVER_LOG);
         channels.add(ChannelSetting.DONT_LOG);

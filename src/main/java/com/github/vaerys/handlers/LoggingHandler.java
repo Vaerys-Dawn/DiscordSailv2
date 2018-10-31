@@ -6,6 +6,7 @@ import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.internal.DiscordUtils;
@@ -15,11 +16,10 @@ import sx.blah.discord.handle.audit.entry.AuditLogEntry;
 import sx.blah.discord.handle.audit.entry.TargetedEntry;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.member.GuildMemberEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserBanEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
+import sx.blah.discord.handle.impl.obj.VoiceChannel;
 import sx.blah.discord.handle.obj.*;
 
 import java.time.Instant;
@@ -27,6 +27,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,14 +37,19 @@ public class LoggingHandler {
 
 
     private static boolean isSailMessage(CommandObject command) {
-        return command.user.get().isBot();
+        return command.user.longID == command.client.bot.longID;
     }
 
-    private static void sendLog(CommandObject command, String message, boolean isAdmin, EmbedObject... object) {
+    private static void sendLog(String message, CommandObject command, boolean isAdmin, EmbedObject... object) {
+        sendLog(message, command.guild, isAdmin, object);
+    }
+
+    public static void sendLog(String message, GuildObject guild, boolean isAdmin, EmbedObject... object) {
         IChannel channel;
-        if (isAdmin) channel = command.guild.getChannelByType(ChannelSetting.ADMIN_LOG);
-        else channel = command.guild.getChannelByType(ChannelSetting.SERVER_LOG);
+        if (isAdmin) channel = guild.getChannelByType(ChannelSetting.ADMIN_LOG);
+        else channel = guild.getChannelByType(ChannelSetting.SERVER_LOG);
         if (channel == null) return;
+        message = message.replaceAll("(?i)@(here|everyone)", "[REDACTED]");
         if (object.length == 0 || object[0] == null) RequestHandler.sendMessage(message, channel);
         else RequestHandler.sendEmbed(message, object[0], channel);
     }
@@ -64,6 +70,7 @@ public class LoggingHandler {
         if (chars200.equals("`Working...`") && isSailMessage(command)) return false;
         if (chars200.equals("`Loading...`") && isSailMessage(command)) return false;
         if (isSailMessage(command) && chars200.matches(pinRegex)) return false;
+        if (isSailMessage(command) && command.message.get().getEmbeds().size() != 0) return false;
         if (serverLog != null && serverLog.equals(command.channel.get()) && isSailMessage(command)) return false;
         if (adminLog != null && adminLog.equals(command.channel.get()) && isSailMessage(command)) return false;
         if (info != null && info.equals(command.channel.get()) && isSailMessage(command)) return false;
@@ -136,37 +143,133 @@ public class LoggingHandler {
         }
         vars.add(3, content.toString());
         content = new StringBuffer(String.format(format, vars.toArray()));
-        sendLog(command, content.toString(), false, embed);
+        sendLog(content.toString(), command, false, embed);
     }
 
-    public static void doChannelUpdateLog(ChannelUpdateEvent event) {
-        GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
-        if (event.getNewChannel() instanceof IVoiceChannel) {
-            // TODO: 26/03/2018 Add support for voice Channels.
-            return;
+
+    //global updates:
+    //channel moved (Category changed), channel name updated.
+    private static final String channelUpdateFormat = "> %s's %s.\n%s";
+
+    public static void logChannelUpdate(GuildObject guild, IChannel oldChannel, IChannel newChannel) {
+        if (!guild.config.moduleLogging) return;
+        if (!guild.config.channelLogging) return;
+        boolean isVoice = newChannel instanceof VoiceChannel;
+        List<String> logs = new LinkedList<>();
+        String newChannelName = isVoice ? String.format("**%s**", newChannel.getName()) : newChannel.mention();
+        int oldPosition = oldChannel.getPosition();
+        int newPosition = newChannel.getPosition();
+        ICategory oldCategory = oldChannel.getCategory();
+        ICategory newCategory = newChannel.getCategory();
+        boolean categoryChanged = (oldCategory == null ? !newCategory.equals(oldCategory) : !oldCategory.equals(newCategory));
+
+        if (!oldChannel.getName().equalsIgnoreCase(newChannel.getName())) {
+            logs.add(String.format(channelUpdateFormat, newChannelName, " name was **Updated**", String.format("**Old Name:** %s%s", (isVoice ? "" : "#"), oldChannel.getName())));
+        } else if (oldPosition != newPosition || categoryChanged) {
+            logs.add(logChannelMove(newChannelName, oldChannel, newChannel, guild));
         }
-        if (!content.config.moduleLogging) return;
-        if (content.config.channelLogging) {
-            if (!event.getOldChannel().getName().equalsIgnoreCase(event.getNewChannel().getName())) {
-                String log = "> Channel " + event.getNewChannel().mention() + "'s name was changed.\nOld name : #" + event.getOldChannel().getName() + ".";
-                Utility.sendLog(log, content, false);
-            } else if ((event.getOldChannel().getTopic() == null || event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() == null || event.getNewChannel().getTopic().isEmpty())) {
-                //do nothing
-            } else if ((event.getOldChannel().getTopic() == null || event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() != null || !event.getNewChannel().getTopic().isEmpty())) {
-                StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was added.\n");
-                log.append("**New Topic**: " + event.getNewChannel().getTopic());
-                Utility.sendLog(log.toString(), content, false);
-            } else if ((event.getOldChannel().getTopic() != null || !event.getOldChannel().getTopic().isEmpty()) && (event.getNewChannel().getTopic() == null || event.getNewChannel().getTopic().isEmpty())) {
-                StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was removed.\n");
-                log.append("**Old Topic**: " + event.getOldChannel().getTopic());
-                Utility.sendLog(log.toString(), content, false);
-            } else if (!event.getOldChannel().getTopic().equalsIgnoreCase(event.getNewChannel().getTopic())) {
-                StringBuilder log = new StringBuilder("> Channel " + event.getNewChannel().mention() + "'s Channel topic was changed.");
-                log.append("\n**Old Topic**: " + event.getOldChannel().getTopic());
-                log.append("\n**New Topic**: " + event.getNewChannel().getTopic());
-                Utility.sendLog(log.toString(), content, false);
+
+        if (isVoice) {
+            logs.add(logVoiceUpdate(newChannelName, (VoiceChannel) oldChannel, (VoiceChannel) newChannel));
+        } else {
+            logs.add(logTextUpdate(newChannelName, oldChannel, newChannel));
+        }
+        logs = logs.stream().filter(l -> !l.isEmpty()).collect(Collectors.toList());
+        sendLog(String.join("\n", logs), guild, false);
+    }
+
+    //Text Only
+    //toggle NSFW, change topic, remove topic, add topic
+    private static String logTextUpdate(String channelName, IChannel oldChannel, IChannel newChannel) {
+        StringHandler action = new StringHandler();
+        StringHandler extraContent = new StringHandler();
+        String oldTopic = oldChannel.getTopic() == null ? "" : oldChannel.getTopic();
+        String newTopic = newChannel.getTopic() == null ? "" : newChannel.getTopic();
+        if (oldChannel.isNSFW() != newChannel.isNSFW()) {
+            action.appendFormatted("NSFW Tag was %s", (newChannel.isNSFW() ? "**Added**" : "**Removed**"));
+        }
+
+        if (!oldTopic.equalsIgnoreCase(newTopic)) {
+            if (!action.isEmpty()) action.append(" and the Channel's ");
+            if (oldTopic.isEmpty()) action.append("Topic was **Created**");
+            else if (newTopic.isEmpty()) action.append("Topic was **Removed**");
+            else action.append("Topic was **Updated**");
+
+            if (!oldTopic.isEmpty()) {
+                oldTopic = oldChannel.getTopic().length() < 300 ? oldChannel.getTopic() : oldChannel.getTopic().substring(0, 300).concat("...");
+                extraContent.appendFormatted("**Old Topic:** `%s`", oldTopic);
+            }
+            if (!newTopic.isEmpty()) {
+                if (!extraContent.isEmpty()) extraContent.append("\n");
+                newTopic = newChannel.getTopic().length() < 300 ? newChannel.getTopic() : newChannel.getTopic().substring(0, 300).concat("...");
+                extraContent.appendFormatted("**New Topic:** `%s`", newTopic);
             }
         }
+        if (!action.isEmpty()) {
+            return String.format(channelUpdateFormat, channelName, action, extraContent);
+        }
+        return "";
+    }
+
+    //Voice only
+    //Changed User Cap, Changed bitrate
+    private static String logVoiceUpdate(String channelName, VoiceChannel oldChannel, VoiceChannel newChannel) {
+        int oldUserCap = oldChannel.getUserLimit();
+        int newUserCap = newChannel.getUserLimit();
+        int oldBitrate = oldChannel.getBitrate() / 1000;
+        int newBitrate = newChannel.getBitrate() / 1000;
+        StringHandler action = new StringHandler();
+        StringHandler extraContent = new StringHandler();
+
+        if (oldUserCap != newUserCap) {
+            if (oldUserCap == 0) action.append("User Limit was **Added**");
+            else if (newUserCap == 0) action.append("User Limit was **Removed**");
+            else action.append("User Limit was **Updated**");
+            if (oldUserCap != 0) extraContent.appendFormatted("**Old User Limit:** %d", oldUserCap);
+            if (newUserCap != 0) {
+                if (!extraContent.isEmpty()) extraContent.append(", ");
+                extraContent.appendFormatted("**New User Limit:** %d", newUserCap);
+            }
+        }
+        if (oldBitrate != newBitrate) {
+            if (!action.isEmpty()) action.append(" and the Channel's ");
+            if (!extraContent.isEmpty()) extraContent.append("\n");
+            action.append("Bitrate was **Updated**");
+            extraContent.appendFormatted("**Old Bitrate:** %dkbps, **New Bitrate:** %dkbps", oldBitrate, newBitrate);
+        }
+        if (!action.isEmpty()) {
+            return String.format(channelUpdateFormat, channelName, action, extraContent);
+        }
+        return "";
+    }
+
+    private static String logChannelMove(String channelName, IChannel oldChannel, IChannel newChannel, GuildObject guild) {
+        int oldPosition = oldChannel.getPosition();
+        int newPosition = newChannel.getPosition();
+        ICategory oldCategory = oldChannel.getCategory();
+        ICategory newCategory = newChannel.getCategory();
+        String oldCategoryName = oldCategory == null ? "No Category" : oldCategory.getName();
+        String newCategoryName = newCategory == null ? "No Category" : newCategory.getName();
+        StringHandler action = new StringHandler();
+        StringHandler extraContent = new StringHandler();
+
+        if (!oldCategory.equals(newCategory)) {
+            if (!action.isEmpty()) action.append(" and it's ");
+            if (!extraContent.isEmpty()) extraContent.append("\n");
+            action.append("Category was **Changed**");
+            extraContent.appendFormatted("**Old Category:** %s, **New Category:** %s", oldCategoryName, newCategoryName);
+//            if ((newChannel instanceof VoiceChannel ? guild.get().getVoiceChannels().size() : guild.get().getChannels().size()) > 1) {
+//                extraContent.appendFormatted("\n**Old Position:** %d, **New Position:** %d", oldPosition, newPosition);
+//            }
+        } else if (oldPosition != newPosition) {
+            action.append("Position was **Updated**");
+            extraContent.appendFormatted("**Old Position:** %d, **New Position:** %d", oldPosition, newPosition);
+        }
+
+        if (!action.isEmpty()) {
+            return String.format(channelUpdateFormat, channelName, action, extraContent);
+        }
+        return "";
     }
 
     public static void doChannelDeleteLog(ChannelDeleteEvent event) {
@@ -174,7 +277,7 @@ public class LoggingHandler {
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel #" + event.getChannel().getName() + " was deleted.";
-            Utility.sendLog(log, content, false);
+            sendLog(log, content, false);
         }
     }
 
@@ -183,7 +286,7 @@ public class LoggingHandler {
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel " + event.getChannel().mention() + " was created.";
-            Utility.sendLog(log, content, false);
+            sendLog(log, content, false);
         }
     }
 
@@ -198,68 +301,49 @@ public class LoggingHandler {
 
         if (content.config.joinLeaveLogging) {
             if (joining) {
-                Utility.sendLog(String.format(output, "has **Joined** the server"), content, false);
+                sendLog(String.format(output, "has **Joined** the server"), content, false);
             } else {
                 if (content.config.kickLogging) {
                     doKickLog(guild, event.getUser());
                 }
-                Utility.sendLog(String.format(output, "has **Left** the server"), content, false);
+                sendLog(String.format(output, "has **Left** the server"), content, false);
             }
         }
     }
 
-    public static void doMessageEditLog(MessageUpdateEvent event) {
-
-        CommandObject command = new CommandObject(event.getMessage());
-        IUser ourUser = command.client.bot.get();
-
+    public static void doMessageEditLog(CommandObject command, IMessage oldMessage, IMessage newMessage) {
         if (!shouldLog(command)) return;
 
-        if (command.guild.config.editLogging) {
-            //formats how long ago this was.
-            String formatted;
-            String oldContent;
-            String newContent;
-            StringBuilder response = new StringBuilder();
-            ZonedDateTime oldMessageTime = event.getOldMessage().getTimestamp().atZone(ZoneOffset.UTC);
-            ZonedDateTime newMessageTime = event.getNewMessage().getEditedTimestamp().get().atZone(ZoneOffset.UTC);
-            int charLimit;
-            long difference = newMessageTime.toEpochSecond() - oldMessageTime.toEpochSecond();
-            if (command.guild.config.useTimeStamps) {
-                formatted = "at `" + Utility.formatTimestamp(oldMessageTime) + " - UTC`";
-            } else {
-                formatted = "from " + Utility.formatTimeDifference(difference);
-            }
-            response.append("> **@" + command.user.username + "'s** Message " + formatted + " was **Edited** in channel: " + command.channel.get().mention() + ". ");
-            //remove excess text that would cause a max char limit error.
-            if (command.message.get().getContent().isEmpty()) {
-                return;
-            }
-            if (command.guild.config.extendEditLog) {
-                charLimit = 900;
-            } else {
-                charLimit = 1800;
-            }
-            if (event.getOldMessage().getContent().length() > charLimit) {
-                oldContent = Utility.unFormatMentions(event.getOldMessage()).substring(0, charLimit) + "...";
-            } else {
-                oldContent = Utility.unFormatMentions(event.getOldMessage());
-            }
-            if (event.getNewMessage().getContent().length() > charLimit) {
-                newContent = Utility.unFormatMentions(event.getNewMessage()).substring(0, charLimit) + "...";
-            } else {
-                newContent = Utility.unFormatMentions(event.getNewMessage());
-            }
-            response.append("**\nMessage's Old Contents:**\n" + oldContent);
-            if (command.guild.config.extendEditLog) {
-                response.append("\n**Message's New Contents:**\n" + newContent);
-            }
-            Utility.sendLog(response.toString(), command.guild, false);
+        if (!command.guild.config.editLogging) return;
+        //formats how long ago this was.
+        int charLimit;
+        if (command.guild.config.extendEditLog) {
+            charLimit = 900;
+        } else {
+            charLimit = 1800;
         }
+
+        String oldContent = oldMessage.getContent() == null ? "" : Utility.unFormatMentions(oldMessage);
+        String newContent = newMessage.getContent() == null ? "" : Utility.unFormatMentions(newMessage);
+        oldContent = oldContent.length() > charLimit ? oldContent.substring(0, charLimit).concat("...") : oldContent;
+        newContent = newContent.length() > charLimit ? newContent.substring(0, charLimit).concat("...") : newContent;
+        StringBuilder extraContent = new StringBuilder();
+
+        if (command.message.get().getContent().isEmpty()) return;
+
+        extraContent.append("**\nMessage's Old Contents:**\n" + oldContent);
+        if (command.guild.config.extendEditLog) {
+            extraContent.append("\n**Message's New Contents:**\n" + newContent);
+        }
+
+        String response = String.format("> **@%s's** Message %s was **Edited** in channel: %s.\n%s", command.user.username,
+                getFormattedTimeStamp(command, oldMessage), command.channel.mention, extraContent);
+        sendLog(response, command.guild, false);
     }
 
     public static void doRoleUpdateLog(UserRoleUpdateEvent event) {
         IGuild guild = event.getGuild();
+        UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getLongID()));
         GuildObject content = Globals.getGuildContent(guild.getLongID());
         if (!content.config.moduleLogging) return;
         if (content.config.userRoleLogging) {
@@ -275,8 +359,8 @@ public class LoggingHandler {
             for (String r : newRoles) {
                 newRoleList.append(r + ", ");
             }
-            String prefix = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "'s** Role have been Updated.";
-            Utility.sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content, false);
+            String prefix = "> **@" + user.username + "'s** Role have been Updated.";
+            sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content, false);
         }
     }
 
@@ -291,7 +375,7 @@ public class LoggingHandler {
         //test if the bot has auditLog perms
         if (!GuildHandler.testForPerms(botUser, guild, Permissions.VIEW_AUDIT_LOG)) return;
 
-        //getTimestamp
+        //getTimestampZone
         long timeStamp = Instant.now().atZone(ZoneOffset.UTC).toEpochSecond() * 1000;
 
         //build Message
@@ -324,15 +408,15 @@ public class LoggingHandler {
 
         //send log
         GuildObject content = Globals.getGuildContent(guild.getLongID());
-        Utility.sendLog(kickLog.toString(), content, true);
+        sendLog(kickLog.toString(), content, true);
     }
 
 
     public static void doBanLog(UserBanEvent event) {
         IGuild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
-        if (!guildObject.config.banLogging || !GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG))
-            return;
+        if (!guildObject.config.moduleLogging || !guildObject.config.banLogging) return;
+        if (!GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG)) return;
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
 
@@ -346,6 +430,6 @@ public class LoggingHandler {
         output.appendFormatted(" by **@%s#%s**", lastBan.getResponsibleUser().getName(), lastBan.getResponsibleUser().getDiscriminator());
         String reason = lastBan.getReason().isPresent() ? lastBan.getReason().get() : "No reason provided";
         output.appendFormatted(" with reason `%s`", reason);
-        Utility.sendLog(output.toString(), guildObject, true);
+        sendLog(output.toString(), guildObject, true);
     }
 }

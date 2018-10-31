@@ -56,13 +56,13 @@ public class ModuleRoles extends GuildModule {
         for (long id : command.guild.config.getCosmeticRoleIDs()) {
             totalUsers += appendRole(builder, id, command);
         }
-        builder.append("**\nTotal:** " + totalUsers);
+        builder.append("\n**Total:** " + totalUsers);
         totalUsers = 0;
         builder.append("\n<split>**[MODIFIER ROLES]**" + Command.spacer);
         for (long id : command.guild.config.getModifierRoleIDs()) {
             totalUsers += appendRole(builder, id, command);
         }
-        builder.append("**\nTotal:** " + totalUsers);
+        builder.append("\n**Total:** " + totalUsers);
         return builder.toString();
     }
 

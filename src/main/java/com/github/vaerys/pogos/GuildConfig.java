@@ -5,9 +5,9 @@ import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.objects.DailyMessage;
-import com.github.vaerys.objects.OffenderObject;
-import com.github.vaerys.objects.RewardRoleObject;
+import com.github.vaerys.objects.adminlevel.OffenderObject;
+import com.github.vaerys.objects.adminlevel.RewardRoleObject;
+import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.templates.GlobalFile;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
@@ -40,6 +40,7 @@ public class GuildConfig extends GlobalFile {
     public boolean reactToLevelUp = false;
     public boolean likeArt = false;
     public boolean sendJoinMessages = true;
+    public boolean muteRemovesRoles = false;
     //--Logging
     public boolean generalLogging = true;
     public boolean adminLogging = true;
@@ -62,13 +63,15 @@ public class GuildConfig extends GlobalFile {
     public boolean rateLimiting = false;
     public boolean slashCommands = false;
     public boolean roleIsToggle = false;
-    public boolean userInfoShowsDate = false;
+    public boolean userInfoShowsDate = true;
     public boolean debugMode = true;
     public boolean readRuleReward = false;
     public boolean checkNewUsers = false;
     //--Competition
     public boolean compEntries = false;
     public boolean compVoting = false;
+    //--Other
+    public boolean dungeonChars = false;
     //modules
     public boolean moduleServers = false;
     public boolean moduleChars = false;

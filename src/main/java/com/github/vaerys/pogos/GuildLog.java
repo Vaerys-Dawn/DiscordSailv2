@@ -1,8 +1,8 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.objects.GuildLogObject;
-import com.github.vaerys.objects.LogObject;
+import com.github.vaerys.objects.utils.GuildLogObject;
+import com.github.vaerys.objects.utils.LogObject;
 import com.github.vaerys.templates.GlobalFile;
 
 import java.util.LinkedList;

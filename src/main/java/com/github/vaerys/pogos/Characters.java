@@ -6,7 +6,8 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.CharacterObject;
+import com.github.vaerys.objects.userlevel.CharacterObject;
+import com.github.vaerys.objects.userlevel.DungeonCharObject;
 import com.github.vaerys.templates.GlobalFile;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
@@ -27,6 +28,7 @@ public class Characters extends GlobalFile {
     public static final String FILE_PATH = "Characters.json";
     private double fileVersion = 1.0;
     ArrayList<CharacterObject> characters = new ArrayList<>();
+    List<DungeonCharObject> dungeonChars = new ArrayList<>();
     private String rolePrefix = "";
 
     public ArrayList<CharacterObject> getCharacters(IGuild guild) {
@@ -121,4 +123,12 @@ public class Characters extends GlobalFile {
     }
 
 
+    public void addDungeonChar(String test) {
+        dungeonChars.add(new DungeonCharObject(test));
+    }
+
+    public boolean checkForUser(long userID) {
+        if (characters.stream().map(c -> c.getUserID()).filter(c -> c == userID).toArray().length != 0) return true;
+        return false;
+    }
 }

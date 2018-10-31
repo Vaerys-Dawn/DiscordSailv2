@@ -44,11 +44,11 @@ public class ModuleMe extends GuildModule {
 
     @Override
     public void setup() {
-        commands.add(Command.get(UserInfo.class));
-        commands.add(Command.get(SetGender.class));
-        commands.add(Command.get(SetQuote.class));
-        commands.add(Command.get(EditLinks.class));
-        settings.add(ToggleList.getSetting(SAILType.USER_INFO_SHOWS_DATE));
+        commands.add(UserInfo.class);
+        commands.add(SetGender.class);
+        commands.add(SetQuote.class);
+        commands.add(EditLinks.class);
+        settings.add(SAILType.USER_INFO_SHOWS_DATE);
     }
 
     @Override

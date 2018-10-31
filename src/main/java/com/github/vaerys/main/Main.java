@@ -39,20 +39,17 @@ public class Main {
 
         logger.info("Starting bot...");
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                logger.info(">>> Running Shutdown Process <<<");
-                if (Globals.savingFiles) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        Utility.sendStack(e);
-                    }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            logger.info(">>> Running Shutdown Process <<<");
+            if (Globals.savingFiles) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Utility.sendStack(e);
                 }
-                Globals.saveFiles(true);
             }
-        });
+            Globals.saveFiles(true);
+        }));
 
 
         String token = null;
@@ -67,9 +64,9 @@ public class Main {
             FileHandler.createDirectory(Constants.DIRECTORY_TEMP);
             FileHandler.createDirectory(Constants.DIRECTORY_OLD_FILES);
             FileHandler.createDirectory(Constants.DIRECTORY_ERROR);
-            if (!FileHandler.exists(Constants.INFO_TEMPLATE)) {
-                Constants.initInfoTemplate();
-            }
+//            if (!FileHandler.exists(Constants.INFO_TEMPLATE)) {
+//                Constants.initInfoTemplate();
+//            }
 
             //load config phase 1
             Config config = FileFactory.create(FilePaths.CONFIG, Config.class);

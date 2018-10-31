@@ -6,8 +6,8 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.Collections;
@@ -22,14 +22,14 @@ public class ChannelHere extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         String desc = "";
-        if (!args.isEmpty()) {
-            for (ChannelSetting s : command.guild.channelSettings) {
-                if (args.equalsIgnoreCase(s.toString())) {
-                    return s.toggleSetting(command.guild, command.channel.longID);
-                }
 
+        if (!args.isEmpty()) {
+            ChannelSetting setting = ChannelSetting.get(args);
+            if (setting == null) {
+                desc = "> Could not find channel type \"" + args + "\"\n";
+            } else {
+                return setting.toggleSetting(command);
             }
-            desc = "> Could not find channel type \"" + args + "\"\n";
         }
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String title = "> Here are all of the channel Types and Settings:";
@@ -40,6 +40,7 @@ public class ChannelHere extends Command {
         Collections.sort(types);
         desc += "**Types**\n```\n" + spacer + Utility.listFormatter(types, true) + "```\n" + spacer + "**Settings**\n```\n" + Utility.listFormatter(settings, true) + "```\n";
         desc += "The Command **" + get(HelpChannel.class).getUsage(command) + "** Can give you extra information about each of the above.\n\n";
+        desc += "See what is enabled on a channel via **" +get(ChannelStats.class).getUsage(command) + "**\n\n";
         desc += missingArgs(command);
         embedBuilder.withDesc(desc);
         embedBuilder.withTitle(title);

@@ -4,7 +4,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.JoinMessage;
+import com.github.vaerys.objects.adminlevel.JoinMessage;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
@@ -29,12 +29,12 @@ public class JoinMessageInfo extends Command {
         JoinMessage message = messages.get(index);
         builder.withTitle("Message #" + (index + 1));
         builder.withDesc(message.getContent());
-        UserObject user = new UserObject(message.getCreator(), command.guild);
-        if (user.get() == null) {
+        UserObject user = UserObject.getNewUserObject(message.getCreator(), command.guild);
+        if (user == null) {
             builder.withFooterText("Could not find user.");
         } else {
             builder.withFooterText("Creator: @" + user.username);
-            builder.withFooterIcon(user.getAvatarURL());
+            builder.withFooterIcon(user.avatarURL);
         }
         builder.send(command.channel);
         return null;

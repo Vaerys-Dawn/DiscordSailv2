@@ -42,8 +42,8 @@ public class ModuleComp extends GuildModule {
 
     @Override
     public void setup() {
-        settings.add(ToggleList.getSetting(SAILType.VOTING));
-        settings.add(ToggleList.getSetting(SAILType.COMP_ENTRIES));
+        settings.add(SAILType.VOTING);
+        settings.add(SAILType.COMP_ENTRIES);
     }
 
     @Override

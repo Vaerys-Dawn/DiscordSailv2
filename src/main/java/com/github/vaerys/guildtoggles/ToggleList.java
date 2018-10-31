@@ -54,6 +54,8 @@ public class ToggleList {
         add(new StopSpamWalls());
         add(new KickLogging());
         add(new BanLogging());
+        add(new MuteRemovesRoles());
+//        add(new DungeonChars());
     }};
 
     private static final List<GuildModule> guildModules = new ArrayList<GuildModule>() {{
@@ -104,7 +106,7 @@ public class ToggleList {
     public static GuildToggle getGuildToggle(String args, boolean isModule) {
         for (GuildToggle t : getToggles(isModule)) {
             if (SAILType.get(args) == t.name()) {
-                return  t;
+                return t;
             }
         }
         return null;
@@ -122,7 +124,7 @@ public class ToggleList {
         throw new IllegalArgumentException("Could not find Toggle (" + obj.getName() + ")");
     }
 
-    public static  GuildSetting getSetting(SAILType obj) {
+    public static GuildSetting getSetting(SAILType obj) {
         for (GuildSetting c : guildSettings) {
             if (c.name() == obj) {
                 return c;
@@ -180,6 +182,17 @@ public class ToggleList {
 
     public static List<GuildModule> getModules() {
         return getModules(false);
+    }
+
+    public static GuildToggle getModule(String args) {
+        return getModule(SAILType.get(args));
+    }
+
+    public static GuildToggle getModuleFromSetting(SAILType setting) {
+        for (GuildToggle m : guildModules) {
+            if (m.settings.contains(setting)) return m;
+        }
+        return null;
     }
 }
 

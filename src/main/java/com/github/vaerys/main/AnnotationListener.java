@@ -1,10 +1,10 @@
 package com.github.vaerys.main;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.*;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.LogObject;
+import com.github.vaerys.objects.utils.LogObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -21,6 +21,7 @@ import sx.blah.discord.handle.impl.events.guild.member.UserLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
+import sx.blah.discord.handle.impl.events.guild.voice.VoiceChannelUpdateEvent;
 import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
@@ -81,7 +82,11 @@ public class AnnotationListener {
             command.guild.handleWelcome(command);
 
             //message and command handling
-            new MessageHandler(command.message.get().getContent(), command, event.getChannel().isPrivate());
+            String args = command.message.getContent().isEmpty() ? "" : command.message.getContent();
+
+            new MessageHandler(args, command, event.getChannel().isPrivate());
+        } catch (StackOverflowError e) {
+            System.out.println("caught");
         } catch (Exception e) {
             String errorPos = "";
             for (StackTraceElement s : e.getStackTrace()) {
@@ -124,12 +129,17 @@ public class AnnotationListener {
     }
 
     @EventSubscriber
+    public void onVoiceChannelUpdateEvent(VoiceChannelUpdateEvent event) {
+        LoggingHandler.logChannelUpdate(Globals.getGuildContent(event.getGuild().getLongID()), event.getOldVoiceChannel(), event.getNewVoiceChannel());
+    }
+
+    @EventSubscriber
     public void onChannelUpdateEvent(ChannelUpdateEvent event) {
         if (event.getChannel().isPrivate()) {
             return;
         }
         updateVariables(event.getNewChannel().getGuild());
-        LoggingHandler.doChannelUpdateLog(event);
+        LoggingHandler.logChannelUpdate(Globals.getGuildContent(event.getGuild().getLongID()), event.getOldChannel(), event.getNewChannel());
     }
 
     @EventSubscriber
@@ -173,9 +183,10 @@ public class AnnotationListener {
         if (!event.getChannel().isPrivate() && emoji.isUnicode()) {
             //if is x and can bypass
             if (emoji.equals(remove)) ArtHandler.unPin(object);
-            if (emoji.equals(x) && GuildHandler.testForPerms(object, Permissions.MANAGE_MESSAGES)
-                    && object.client.bot.longID == object.user.longID)
+            if (emoji.equals(x) && GuildHandler.testForPerms(event.getUser(), event.getGuild(), Permissions.MANAGE_MESSAGES) &&
+                    object.client.bot.longID == object.user.longID) {
                 RequestHandler.deleteMessage(object.message);
+            }
             //if is pushpin
             if (emoji.equals(pin)) ArtHandler.pinMessage(object, pinner, owner);
 
@@ -208,7 +219,7 @@ public class AnnotationListener {
     @EventSubscriber
     public void onUserJoinEvent(UserJoinEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
-        UserObject user = new UserObject(event.getUser().getLongID(), content);
+        UserObject user = new UserObject(event.getUser(), content);
         if (content.config.welcomeMessages && !user.get().isBot()) {
             JoinHandler.sendWelcomeMessage(content, event, user);
         }
@@ -218,6 +229,7 @@ public class AnnotationListener {
         if (content.config.moduleJoinMessages && content.config.sendJoinMessages) {
             JoinHandler.customJoinMessages(content, event.getUser());
         }
+        GuildHandler.checkUsersRoles(user.longID,content);
         JoinHandler.autoReMute(event, content, user);
         if (!content.config.moduleLogging) return;
         LoggingHandler.doJoinLeaveLog(event, true);
@@ -235,8 +247,9 @@ public class AnnotationListener {
         if (event.getNewMessage().getContent().isEmpty() || event.getOldMessage().getContent().isEmpty()) return;
         if (event.getNewMessage().getContent().equals(event.getOldMessage().getContent())) return;
         if (event.getChannel().isPrivate()) return;
+        CommandObject command = new CommandObject(event.getMessage());
 
-        LoggingHandler.doMessageEditLog(event);
+        LoggingHandler.doMessageEditLog(command, event.getOldMessage(), event.getNewMessage());
     }
 
     @EventSubscriber

@@ -3,7 +3,7 @@ package com.github.vaerys.commands.servers;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.ServerObject;
+import com.github.vaerys.objects.userlevel.ServerObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;

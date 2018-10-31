@@ -9,9 +9,9 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.Collections;
@@ -29,29 +29,37 @@ public class Toggle extends Command {
     }
 
     public String getContent(String args, CommandObject command, boolean isModule) {
-        StringBuilder builder = new StringBuilder();
+        HelpModules modules = get(HelpModules.class);
+        HelpSettings settings = get(HelpSettings.class);
+
+        StringHandler desc = new StringHandler();
         if (!args.isEmpty()) {
-
-            GuildToggle toggle = ToggleList.getGuildToggle(args, isModule);
-
-            if (toggle == null) {
+            GuildToggle toggle;
+            SAILType setting = SAILType.get(args);
+            if (isModule) {
+                toggle = ToggleList.getGuildToggle(args, isModule);
+            } else {
+                toggle = command.guild.getSetting(setting);
+            }
+            if (toggle == null && setting != null && ToggleList.getSetting(setting) != null) {
+                GuildToggle module = ToggleList.getModuleFromSetting(setting);
+                desc.appendFormatted("> Could not toggle Setting **%s**, Module **%s** is disabled.\n\n", args, module.name());
+            } else if (toggle == null) {
                 if (isModule) {
-                    builder.append("> Could not find Module \"" + args + "\".\n");
+                    desc.append("> Could not find Module **" + args + "**.\n\n");
                 } else {
-                    builder.append("> Could not find Setting \"" + args + "\".\n");
+                    desc.append("> Could not find Setting **" + args + "**.\n\n");
                 }
             } else {
-
                 toggle.toggle(command.guild.config);
                 command.guild.loadCommandData();
 
                 String mode = toggle.enabled(command.guild.config) ? "enabled" : "disabled";
                 String type = toggle.isModule() ? "module" : "setting";
-                String helpCommand = toggle.isModule() ? new HelpModules().getUsage(command) : new HelpSettings().getUsage(command);
+                String helpCommand = toggle.isModule() ? modules.getUsage(command) : settings.getUsage(command);
                 return "> **" + toggle.name() + "** is now **" + mode + "**.\n\n" +
                         "To see more info about what this " + type + " " + mode + " you can run **" + helpCommand + "**.";
             }
-
         }
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String modifier = isModule ? "Module" : "Setting";
@@ -70,19 +78,18 @@ public class Toggle extends Command {
         Collections.sort(typesDeactivated);
         embedBuilder.withTitle(title);
 
-        StringHandler desc = new StringHandler();
-
-
         desc.append("**Activated**\n```\n" + spacer + Utility.listEnumFormatter(typesActive, true) + "```\n" +
                 "**Deactivated**\n```\n" + spacer + Utility.listEnumFormatter(typesDeactivated, true) + "```\n");
         desc.append("The Command **");
         if (isModule) {
-            desc.append(new HelpModules().getUsage(command));
+            desc.append(modules.getUsage(command));
         } else {
-            desc.append(new HelpSettings().getUsage(command));
+            desc.append(settings.getUsage(command));
         }
         desc.append("** Can give you extra information about each of the above.\n\n");
+
         desc.append(missingArgs(command));
+
         embedBuilder.withDescription(desc.toString());
         RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
         return null;

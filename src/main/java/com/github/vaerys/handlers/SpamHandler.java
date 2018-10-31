@@ -1,25 +1,24 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.cc.EditCC;
 import com.github.vaerys.commands.cc.NewCC;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.BlacklistedUserObject;
-import com.github.vaerys.objects.OffenderObject;
-import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.objects.adminlevel.OffenderObject;
+import com.github.vaerys.objects.adminlevel.UserRateObject;
+import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
 import sx.blah.discord.handle.obj.*;
-import sx.blah.discord.util.RequestBuffer;
 
 import java.time.Instant;
 import java.util.*;
@@ -56,7 +55,7 @@ public class SpamHandler {
                 int offenceCount = command.guild.config.getOffender(command.user.longID).getCount();
                 if (offenceCount > 2) {
                     if (command.guild.config.muteRepeatOffenders) {
-                        RequestHandler.muteUser(command, true);
+                        command.guild.users.muteUser(command, -1);
                         command.user.sendDm("You were muted for spamming.");
                         command.guild.sendDebugLog(command, "CATCH_SPAM_WALLS", "MUTE", offenceCount + " Offences");
                         IChannel admin = command.guild.getChannelByType(ChannelSetting.ADMIN);
@@ -106,9 +105,8 @@ public class SpamHandler {
                         i++;
                         if (o.getCount() >= Globals.maxWarnings) {
                             String report = "> %s has been muted for repeat offences of spamming mentions.";
-                            RequestHandler.roleManagement(author, guild, guildconfig.getMutedRoleID(), true);
+                            command.guild.users.muteUser(command, -1);
                             command.guild.sendDebugLog(command, "STOP_MASS_MENTIONS", "MUTE", o.getCount() + " Offences");
-                            command.client.get().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, author, oldRoles, command.user.get().getRolesForGuild(guild)));
                             // add strike in modnote
                             command.user.getProfile(command.guild).addSailModNote(String.format(report, author.mention()), command, false);
                             // send admin notification
@@ -136,24 +134,54 @@ public class SpamHandler {
 
     public static boolean rateLimiting(CommandObject command) {
         //make sure that the rate limiting should actually happen
-        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
         if (!command.guild.config.rateLimiting) return false;
+        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
 
+        //ignore spam in tagged channels
         List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
         if (channels.contains(command.channel.get())) return false;
 
-        if (!command.guild.rateLimit(command.user.longID, command.channel.get(), command.message.getTimestamp().toEpochSecond()))
-            return false;
+        //increase the counter and get the object
+        UserRateObject userRate = command.guild.rateLimit(command);
+
+        //Force Reset rate limiter if things go wrong
         if (Globals.lastRateLimitReset + 20 * 1000 < System.currentTimeMillis()) {
             command.guild.resetRateLimit();
             RequestHandler.sendMessage("> Forced Rate Limit Reset. **Guild ID:** " + command.guild.longID +
                     ", **Guild Name:** " + command.guild.get().getName(), command.client.creator.getDmChannel());
         }
-        //send a dm to let the user know that they are being rate limited
-        IChannel userDMs = command.user.get().getOrCreatePMChannel();
-        if (userDMs != null) {
-            RequestHandler.sendMessage("Your message was deleted because you are being rate limited.\nMax messages per 10 seconds : " + command.guild.config.messageLimit, userDMs);
+
+        //check if user is rate limited
+        if (!userRate.isRateLimited(command.guild)) return false;
+
+        //delete messages
+        logDelete(command, "RATE_LIMITING", "MESSAGE_DELETED");
+        command.message.delete();
+
+        String rateLimitFormat = "> Whoa there, You're typing too fast! You're breaking %s's Rate limit. (%d messages every 10 seconds)";
+        String muteFormat = "> Time to chill! You have been muted for 5 minutes for breaking %s's Rate limit. (%d messages every 10 seconds)";
+        String guildName = command.guild.get().getName();
+        int messageLimit = command.guild.config.messageLimit;
+
+        //send warnings
+        if (userRate.getSize() < messageLimit + 4) {
+            command.user.sendDm(String.format(rateLimitFormat, guildName, messageLimit));
+            return true;
+        } else {
+            //mute handling
+            if (!command.guild.config.muteRepeatOffenders) return true;
+            if (userRate.isMuted()) return true;
+            IRole mutedRole = command.guild.getMutedRole();
+            if (mutedRole == null) return true;
+            userRate.mute();
+            //mute user for 300 seconds
+            command.guild.users.muteUser(command, 300);
+            command.user.sendDm(String.format(muteFormat, guildName, messageLimit)).get();
+            return true;
         }
+    }
+
+    private static void logDelete(CommandObject command, String type, String reason) {
         String contents = command.message.getContent();
         for (IMessage.Attachment a : command.message.getAttachments()) {
             contents += " <" + a.getUrl() + ">";
@@ -161,30 +189,7 @@ public class SpamHandler {
         if (command.message.getContent() == null || command.message.getContent().isEmpty()) {
             contents = contents.replace("  ", "");
         }
-        command.guild.sendDebugLog(command, "RATE_LIMITING", "MESSAGE_DELETED", contents);
-
-        //user is now being rate limited
-        RequestHandler.deleteMessage(command.message.get());
-
-        //if mute continue
-        if (!command.guild.config.muteRepeatOffenders) return true;
-        IRole muteRole = command.guild.getRoleByID(command.guild.config.getMutedRoleID());
-        if (muteRole == null) return true;
-
-        //if they are over the rate limit start muting
-        int rate = command.guild.getUserRate(command.user.longID);
-        if (rate - 3 < command.guild.config.messageLimit) return true;
-
-        command.guild.sendDebugLog(command, "RATE_LIMITING", "MUTE", rate - 3 + " Over Rate");
-
-        //this mutes them
-        if (!command.user.roles.contains(muteRole)) {
-            RequestBuffer.request(() -> command.user.get().addRole(muteRole));
-        }
-
-        //sends the response if they got muted
-        command.user.sendDm("You have been muted for abusing the Guild rate limit.");
-        return true;
+        command.guild.sendDebugLog(command, type, reason, contents);
     }
 
     public static boolean checkForInvites(CommandObject command) {
@@ -239,6 +244,9 @@ public class SpamHandler {
     public static boolean commandBlacklisting(CommandObject command) {
         // This is not something guilds can turn on/off, it is a temporary blacklist to keep spammers from abusing bot commands.
 
+        //exit thinger if is staff or can bypass
+        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
+
         // check if this is even a command first:
         List<Command> commands = new ArrayList<>(command.guild.commands);
         boolean isCommand = false;
@@ -255,8 +263,8 @@ public class SpamHandler {
         if (globalData == null) throw new NullPointerException();
 
         // first we need to see if there *are* blacklisted users and ignore them:
-        List<BlacklistedUserObject> blacklistedUsers = globalData.getBlacklistedUsers();
-        for (BlacklistedUserObject object : blacklistedUsers) {
+        List<BlackListObject.BlacklistedUserObject> blacklistedUsers = globalData.getBlacklistedUsers();
+        for (BlackListObject.BlacklistedUserObject object : blacklistedUsers) {
             if (user.longID == object.getUserID()) {
                 // user is on blacklist, and hasn't timed out...
                 if (Instant.now().toEpochMilli() <= object.getEndTime()) return true;
@@ -279,11 +287,12 @@ public class SpamHandler {
                 logger.trace("counter is now " + count + " for " + userID);
                 if (count >= 5) {
                     // User has spammed *too much*.
-                    BlacklistedUserObject blUser = globalData.blacklistUser(userID);
+                    BlackListObject.BlacklistedUserObject blUser = globalData.blacklistUser(userID);
                     long diffTime = blUser.getEndTime() - Instant.now().toEpochMilli();
 
                     if (blUser.getCounter() >= 5) {
                         RequestHandler.sendMessage("> OKAY, ENOUGH " + user.mention() + ". You've been permanently blacklisted from using commands.", command.channel);
+                        RequestHandler.sendCreatorDm(String.format("> @%s(%d) was blacklisted from using commands", user.username, user.longID));
                     } else {
                         RequestHandler.sendMessage("> You're using commands too much " + user.mention() +
                                 ". Take a chill pill, and try again in " + Utility.formatTime(diffTime / 1000, true), command.channel);
@@ -291,7 +300,7 @@ public class SpamHandler {
 
                     spamCounter.remove(userID);
                     spamTimeout.remove(userID);
-                    logger.info("User " + userID + "(" + user.mention() + ") blacklisted for spamming commands (x" + blUser.getCounter() + ")");
+                    logger.info("User " + userID + "(@" + user.username + ") blacklisted for spamming commands (x" + blUser.getCounter() + ")");
                     return true;
                 }
             }

@@ -44,6 +44,6 @@ public class EditLogging extends GuildSetting {
 
     @Override
     public void setup() {
-        settings.add(ToggleList.getSetting(SAILType.EXTEND_EDIT_LOG));
+        settings.add(SAILType.EXTEND_EDIT_LOG);
     }
 }

@@ -5,7 +5,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.JoinMessage;
+import com.github.vaerys.objects.adminlevel.JoinMessage;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;

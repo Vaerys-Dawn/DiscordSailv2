@@ -10,10 +10,10 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.objects.ChannelSettingObject;
-import com.github.vaerys.objects.GuildLogObject;
-import com.github.vaerys.objects.LogObject;
-import com.github.vaerys.objects.UserRateObject;
+import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
+import com.github.vaerys.objects.adminlevel.UserRateObject;
+import com.github.vaerys.objects.utils.GuildLogObject;
+import com.github.vaerys.objects.utils.LogObject;
 import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.FileFactory;
@@ -22,11 +22,9 @@ import com.github.vaerys.templates.GuildToggle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.RequestBuffer;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -51,7 +49,7 @@ public class GuildObject {
     public List<ChannelSetting> channelSettings;
     public List<SAILType> commandTypes;
     private IGuild object;
-    private List<UserRateObject> rateLimiting = new ArrayList<>();
+    private List<UserRateObject> rateUsers = new ArrayList<>();
     private List<Long> spokenUsers = new ArrayList<>();
     private List<GuildToggle> toRemove = new ArrayList<>();
 
@@ -110,6 +108,17 @@ public class GuildObject {
         logger.trace(output);
     }
 
+    public void sendDebugLog(IUser user, IChannel channel, String type, String name, String contents) {
+        GuildLogObject object = new GuildLogObject(user, channel, type, name, contents);
+        String output = object.getOutput(this);
+        if (object != null) {
+            guildLog.addLog(object, longID);
+        } else {
+            Globals.addToLog(new LogObject(object, -1));
+        }
+        logger.trace(output);
+    }
+
     public void loadCommandData() {
         this.commands = new ArrayList<>(CommandList.getCommands(false));
         this.toggles = new ArrayList<>(ToggleList.getAllToggles());
@@ -156,6 +165,7 @@ public class GuildObject {
             }
         }
     }
+
 
     public void removeCommandsByType(SAILType type) {
         ListIterator iterator = commands.listIterator();
@@ -213,8 +223,8 @@ public class GuildObject {
         }
     }
 
-    public List<UserRateObject> getRateLimiting() {
-        return rateLimiting;
+    public List<UserRateObject> getRateUsers() {
+        return rateUsers;
     }
 
     public List<Long> getSpokenUsers() {
@@ -222,41 +232,11 @@ public class GuildObject {
     }
 
     public void forceClearRate() {
-        rateLimiting = new ArrayList<>();
-    }
-
-    public boolean rateLimit(long userID, IChannel channel, long timeStamp) {
-        int max = config.messageLimit;
-        if (max == -1) {
-            return false;
-        }
-        boolean isfound = false;
-        for (UserRateObject r : rateLimiting) {
-            if (r.getID() == userID) {
-                r.counterUp(channel, timeStamp);
-                isfound = true;
-                if (r.counter > max) {
-                    return true;
-                }
-            }
-        }
-        if (!isfound) {
-            rateLimiting.add(new UserRateObject(userID, channel, timeStamp));
-        }
-        return false;
-    }
-
-    public int getUserRate(long userID) {
-        for (UserRateObject u : rateLimiting) {
-            if (u.getID() == userID) {
-                return u.counter;
-            }
-        }
-        return 0;
+        rateUsers = new ArrayList<>();
     }
 
     public void resetRateLimit() {
-        rateLimiting.clear();
+        rateUsers.clear();
     }
 
     public List<SAILType> getAllTypes(CommandObject command) {
@@ -409,5 +389,51 @@ public class GuildObject {
 
     public boolean channelHasSetting(ChannelSetting setting, ChannelObject channel) {
         return channelHasSetting(setting, channel.longID);
+    }
+
+    public IMessage fetchMessage(long l) {
+        for (IChannel c : object.getChannels()) {
+            EnumSet<Permissions> perms = c.getModifiedPermissions(client.bot.get());
+            if (!perms.contains(Permissions.READ_MESSAGE_HISTORY) || !perms.contains(Permissions.READ_MESSAGES))
+                continue;
+            IMessage message = RequestBuffer.request(() -> c.fetchMessage(l)).get();
+            if (message != null) return message;
+        }
+        return null;
+    }
+
+    public IMessage getMessageByID(Long l) {
+        return object.getMessageByID(l);
+    }
+
+    public UserRateObject rateLimit(CommandObject command) {
+        UserRateObject rateObject = null;
+        for (UserRateObject r : rateUsers) {
+            if (r.getUserID() == command.user.longID) {
+                rateObject = r;
+                rateObject.addMessage(command);
+            }
+        }
+        if (rateObject == null) {
+            rateObject = new UserRateObject(command);
+            rateUsers.add(rateObject);
+        }
+        return rateObject;
+    }
+
+    public List<GuildToggle> getSettings() {
+        List<SAILType> settings = new LinkedList<>();
+        for (GuildToggle toggle : toggles) {
+            if (toggle.isModule() && toggle.enabled(config)) settings.addAll(toggle.settings);
+        }
+        return settings.stream().map(s -> ToggleList.getSetting(s)).collect(Collectors.toList());
+    }
+
+    public GuildToggle getSetting(SAILType type) {
+        List<GuildToggle> settings = getSettings();
+        for (GuildToggle setting : settings) {
+            if (setting.name() == type) return setting;
+        }
+        return null;
     }
 }

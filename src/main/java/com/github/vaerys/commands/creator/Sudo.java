@@ -8,7 +8,7 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -19,7 +19,7 @@ public class Sudo extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        if (!command.guild.config.debugMode) return "> Debug mode is disabled. No Sudo for you missy.";
+        if (!command.guild.config.debugMode) return "> Debug mode is disabled. No Sudo for you.";
         SplitFirstObject sudo = new SplitFirstObject(args);
         UserObject user = Utility.getUser(command, sudo.getFirstWord(), false, false);
         if (user == null) {

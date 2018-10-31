@@ -2,8 +2,8 @@ package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.ReminderObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.userlevel.ReminderObject;
 
 import java.util.ArrayList;
 import java.util.List;

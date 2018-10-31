@@ -6,9 +6,9 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
+import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.Permissions;
@@ -61,6 +61,9 @@ public class SetQuote extends Command {
             }
         }
         if (adminEdit) {
+            if (u == null){
+                u = command.guild.users.addUser(user.longID);
+            }
             if (quote.length() > maxLength) {
                 return "> Quote is too long...\n(must be under " + maxLength + " chars)";
             }

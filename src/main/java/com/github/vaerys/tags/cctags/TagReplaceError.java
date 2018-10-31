@@ -2,7 +2,7 @@ package com.github.vaerys.tags.cctags;
 
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
-import com.github.vaerys.objects.ReplaceObject;
+import com.github.vaerys.objects.utils.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class TagReplaceError extends TagReplaceObject {
 
     @Override
     public String execute(String from, CommandObject command, String args, List<ReplaceObject> toReplace) {
-        from = from.replaceAll("#ERROR#:<(?i)[a-z!]*?>", contents(from));
+        from = from.replaceAll("#ERROR#:<(?i)[a-z!]*?>", getContents(from));
         from = removeAllTag(from);
         return from;
     }

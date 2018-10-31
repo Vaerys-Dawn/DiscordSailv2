@@ -3,16 +3,15 @@ package com.github.vaerys.templates;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
-import com.github.vaerys.objects.ReplaceObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class TagObject {
 
@@ -25,7 +24,7 @@ public abstract class TagObject {
     public String error;
     public final int requiredArgs;
     private final int priority;
-    List<TagType> types = new ArrayList<>();
+    List<TagType> types;
     public String group = "((.|\n)+?)";
 
     public TagObject(int priority, TagType... types) {
@@ -43,7 +42,7 @@ public abstract class TagObject {
 
     public abstract String execute(String from, CommandObject command, String args);
 
-    protected abstract String tagName();
+    public abstract String tagName();
 
     protected abstract int argsRequired();
 
@@ -68,7 +67,7 @@ public abstract class TagObject {
         }
     }
 
-    public String contents(String from) {
+    public String getContents(String from) {
         if (requiredArgs != 0) {
             String subString = StringUtils.substringBetween(from, prefix, suffix);
             if (subString != null) {
@@ -82,7 +81,7 @@ public abstract class TagObject {
     }
 
     public List<String> getSplit(String from) {
-        String toSplit = contents(from);
+        String toSplit = getContents(from);
         String[] isSplit = toSplit.split(splitter);
         if (isSplit.length == 0) {
             return new ArrayList<>();
@@ -106,7 +105,7 @@ public abstract class TagObject {
         if (requiredArgs == 0) {
             return StringUtils.replaceOnce(from, prefix, withThis);
         } else {
-            return StringUtils.replaceOnce(from, prefix + contents(from) + suffix, withThis);
+            return StringUtils.replaceOnce(from, prefix + getContents(from) + suffix, withThis);
         }
     }
 
@@ -114,7 +113,7 @@ public abstract class TagObject {
         if (requiredArgs == 0) {
             return StringUtils.replaceOnce(from, prefix, "");
         } else {
-            String toRemove = prefix + contents(from) + suffix;
+            String toRemove = prefix + getContents(from) + suffix;
             return StringUtils.replaceOnce(from, toRemove, "");
         }
     }
@@ -123,7 +122,7 @@ public abstract class TagObject {
         if (requiredArgs == 0) {
             return from.replace(prefix, withThis);
         } else {
-            return from.replace(prefix + contents(from) + suffix, withThis);
+            return from.replace(prefix + getContents(from) + suffix, withThis);
         }
     }
 
@@ -131,7 +130,7 @@ public abstract class TagObject {
         if (requiredArgs == 0) {
             return from.replace(prefix, "");
         } else {
-            return from.replace(prefix + contents(from) + suffix, "");
+            return from.replace(prefix + getContents(from) + suffix, "");
         }
     }
 
@@ -155,6 +154,10 @@ public abstract class TagObject {
         }
     }
 
+    public String getUsage() {
+        return requiredArgs != 0 ? prefix + usage + suffix : prefix;
+    }
+
     public String handleTag(String from, CommandObject command, String args) {
         if (from == null) from = "";
         while (cont(from)) {
@@ -173,7 +176,12 @@ public abstract class TagObject {
 
     public String handleTag(String from, CommandObject command, String args, AdminCCObject cc) {
         if (from == null) from = "";
-        while (cont(from)) {
+        if (isPassive()) {
+            return handleTag(from, command, args);
+        }
+        String last = "";
+        while (cont(from) && !last.equals(from)) {
+            last = from;
             int absoluteArgs = Math.abs(requiredArgs);
             if (requiredArgs == 0 ||
                     requiredArgs < 0 && getSplit(from).size() >= absoluteArgs ||
@@ -244,5 +252,9 @@ public abstract class TagObject {
 
     public String prepReplace(String withThis) {
         return withThis.replace("$", "\\$");
+    }
+
+    public String getTypeString() {
+        return String.join(", ", getTypes().stream().map(ty -> ty.toString()).collect(Collectors.toList()));
     }
 }

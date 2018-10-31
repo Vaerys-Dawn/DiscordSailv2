@@ -1,5 +1,6 @@
 package com.github.vaerys.handlers;
 
+import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
@@ -7,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.RequestBuffer;
 
@@ -33,10 +35,14 @@ public class MessageHandler {
             if (SpamHandler.commandBlacklisting(command)) return;
             if (SpamHandler.rateLimiting(command)) return;
             if (SpamHandler.catchWalls(command)) return;
+            if (checkMuteAppeals(command)) return;
             // check for role mentions:
             if (!GuildHandler.testForPerms(command, command.channel.get(), Permissions.MENTION_EVERYONE)) {
                 // sanitize @everyone and @here mentions.
-                args = args.replaceAll("(?i)@(everyone|here)" , "REDACTED");
+                args = args.replaceAll("(?i)@(everyone|here)", "REDACTED");
+                for (IRole r : command.message.get().getRoleMentions()) {
+                    args = args.replaceAll(r.mention(), r.getName());
+                }
             }
             PixelHandler.grantXP(command);
             if (command.guild.config.artPinning) {
@@ -44,14 +50,15 @@ public class MessageHandler {
                     ArtHandler.pinMessage(command, command.message.author, command.client.bot);
                 }
             }
-            if (command.guild.config.moduleCC) {
-                if (args.toLowerCase().startsWith(command.guild.config.getPrefixCC().toLowerCase())) {
-                    CCHandler.handleCommand(args, command);
-                }
-            }
             if (command.guild.config.moduleAdminCC) {
                 if (args.toLowerCase().startsWith(command.guild.config.getPrefixAdminCC().toLowerCase())) {
                     CCHandler.handleAdminCC(args, command);
+                }
+
+            }
+            if (command.guild.config.moduleCC) {
+                if (args.toLowerCase().startsWith(command.guild.config.getPrefixCC().toLowerCase())) {
+                    CCHandler.handleCommand(args, command);
                 }
             }
         } else {
@@ -63,6 +70,16 @@ public class MessageHandler {
         if (isPrivate) {
             new DMHandler(command);
         }
+    }
+
+    private boolean checkMuteAppeals(CommandObject command) {
+        if (!command.guild.config.moduleModMute) return false;
+        IRole muted = command.guild.getMutedRole();
+        if (muted == null) return false;
+        if (!command.guild.getChannelsByType(ChannelSetting.MUTE_APPEALS).contains(command.channel.get())) return false;
+        if (GuildHandler.canBypass(command)) return false;
+        if (command.user.roles.contains(muted)) return true;
+        return false;
     }
 
 //    public static boolean isActive(boolean isPrivate, CommandObject command) {
@@ -78,6 +95,7 @@ public class MessageHandler {
 //    }
 
     protected static void handleLogging(CommandObject commandObject, Command command, String args) {
+        if (!commandObject.guild.config.moduleLogging) return;
         if (command.doAdminLogging && !commandObject.guild.config.adminLogging) {
             return;
         } else if (!command.doAdminLogging && !commandObject.guild.config.generalLogging) {
@@ -98,7 +116,7 @@ public class MessageHandler {
         } else {
             builder.append(" in channel ").append(commandObject.channel.get().mention()).append(".");
         }
-        Utility.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
+        LoggingHandler.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
     }
 
     //Command Handler
@@ -121,8 +139,8 @@ public class MessageHandler {
                     if (c.channel != null && !GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
                         List<IChannel> channels = command.guild.getChannelsByType(c.channel);
                         if (channels.size() != 0 && !channels.contains(command.channel.get())) {
-                            List<String> list = Utility.getChannelMentions(command.user.getVisibleChannels(channels));
-                            RequestHandler.sendMessage(Utility.getChannelMessage(list), command.channel.get());
+                            List<IChannel> visibleChannels = command.user.getVisibleChannels(channels);
+                            RequestHandler.sendMessage(Utility.getChannelMessage(visibleChannels), command.channel.get());
                             return true;
                         }
                     }

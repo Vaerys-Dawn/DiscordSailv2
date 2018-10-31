@@ -2,7 +2,7 @@ package com.github.vaerys.templates;
 
 import com.github.vaerys.main.Client;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.List;

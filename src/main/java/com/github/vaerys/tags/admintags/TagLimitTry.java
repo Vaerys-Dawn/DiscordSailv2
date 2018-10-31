@@ -2,7 +2,7 @@ package com.github.vaerys.tags.admintags;
 
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminObject;
 
 public class TagLimitTry extends TagAdminObject {
@@ -14,14 +14,14 @@ public class TagLimitTry extends TagAdminObject {
     @Override
     public String execute(String from, CommandObject command, String args, AdminCCObject cc) {
         if (command.guild.adminCCs.checkAttempt(command, cc)) {
-            return contents(from);
+            return getContents(from);
         } else {
             return removeFirstTag(from);
         }
     }
 
     @Override
-    protected String tagName() {
+    public String tagName() {
         return "limitTry";
     }
 

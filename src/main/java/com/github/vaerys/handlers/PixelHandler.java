@@ -9,8 +9,9 @@ import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.RewardRoleObject;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.adminlevel.RewardRoleObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.pogos.GuildUsers;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
@@ -166,7 +167,7 @@ public class PixelHandler {
         }
 
         //update last talked timestamp
-        user.lastTalked = object.message.getTimestamp().toEpochSecond();
+        user.lastTalked = object.message.getTimestampZone().toEpochSecond();
 
         //ony do xp checks if module is true
         if (!object.guild.config.modulePixels) return;
@@ -351,21 +352,30 @@ public class PixelHandler {
         //get Emoji
         try {
             long emojiID = Long.parseUnsignedLong(object.guild.config.levelUpReaction);
-            emoji = ReactionEmoji.of(object.client.getEmojiByID(emojiID));
+            IEmoji react = object.client.getEmojiByID(emojiID);
+            if (react == null) {
+                sendReactionError(object);
+                return;
+            }
+            emoji = ReactionEmoji.of(react);
         } catch (NumberFormatException e) {
             emoji = ReactionEmoji.of(object.guild.config.levelUpReaction);
         }
 
         //send error if the reaction failed
         if (emoji == null) {
-            IChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
-            if (adminChannel == null) adminChannel = object.channel.get();
-            RequestHandler.sendMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
-            return;
+            sendReactionError(object);
         }
 
         //add the reaction
         RequestHandler.addReaction(object.message, emoji);
+    }
+
+    private static void sendReactionError(CommandObject object) {
+        IChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
+        if (adminChannel == null) adminChannel = object.channel.get();
+        RequestHandler.sendMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
+        return;
     }
 
     /***
@@ -412,21 +422,12 @@ public class PixelHandler {
     public static boolean isUnRanked(long userID, GuildUsers users, IGuild guild) {
         ProfileObject user = users.getUserByID(userID);
         GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
-        if (user == null) {
+        if (user == null) return true;
+        if (guild.getUserByID(userID) == null) return true;
+        if (user.getXP() == 0) return true;
+
+        if (user.getSettings().stream().anyMatch(Constants.dontLogStates::contains)) {
             return true;
-        }
-        if (guild.getUserByID(userID) == null) {
-            return true;
-        }
-        if (user.getXP() == 0) {
-            return true;
-        }
-        for (UserSetting s : user.getSettings()) {
-            for (UserSetting test : Constants.dontLogStates) {
-                if (s == test) {
-                    return true;
-                }
-            }
         }
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         long diff = now.toEpochSecond() - user.getLastTalked();
@@ -466,28 +467,15 @@ public class PixelHandler {
         return rank;
     }
 
-    public static long totalRanked(CommandObject command) {
-        return command.guild.users.getProfiles().stream()
-                .filter(p -> command.guild.getUserByID(p.getUserID()) != null)
-                .filter(p -> p.showRank(command.guild))
-                .filter(p -> p.getXP() > 0)
-                .collect(Collectors.toList()).size();
+    public static long rank(GuildObject guild, UserObject user) {
+        return rank(guild.users, guild.get(), user.longID);
     }
 
-//    public static long totalRanked(CommandObject command) {
-//        long totalRanked = 0;
-//        for (ProfileObject u : command.guild.users.getProfiles()) {
-//            boolean hideRank;
-//            UserObject object = new UserObject(command.guild.getUserByID(u.getUserID()), command.guild);
-//            hideRank = !object.showRank(command.guild);
-//            if (command.guild.getUserByID(u.getUserID()) != null) {
-//                if (u.getXP() != 0 && !hideRank) {
-//                    totalRanked++;
-//                }
-//            }
-//        }
-//        return totalRanked;
-//    }
+    public static long totalRanked(CommandObject command) {
+        return command.guild.users.getProfiles().stream()
+                .filter(p -> p.showRank(command.guild))
+                .collect(Collectors.toList()).size();
+    }
 
     public static int getRewardCount(GuildObject object, long userID) {
         if (!object.config.modulePixels) return 4;

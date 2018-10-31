@@ -3,8 +3,8 @@ package com.github.vaerys.tags.admintags;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
-import com.github.vaerys.objects.ReplaceObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
+import com.github.vaerys.objects.utils.ReplaceObject;
 import com.github.vaerys.templates.TagAdminReplaceObject;
 
 import java.util.Collections;
@@ -44,7 +44,7 @@ public class TagShuffleReplace extends TagAdminReplaceObject {
     }
 
     @Override
-    protected String tagName() {
+    public String tagName() {
         return "shuffleReplace";
     }
 

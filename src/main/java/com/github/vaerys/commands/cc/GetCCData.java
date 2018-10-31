@@ -2,17 +2,12 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.CCommandObject;
+import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-
-import java.io.File;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -21,30 +16,22 @@ public class GetCCData extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        for (CCommandObject c : command.guild.customCommands.getCommandList()) {
-            if (c.getName().equalsIgnoreCase(args)) {
-                StringBuilder content = new StringBuilder("Command Name: \"" + c.getName() + "\"");
-                IUser createdBy = command.guild.getUserByID(c.getUserID());
-                if (createdBy == null) createdBy = command.client.get().fetchUser(c.getUserID());
-                if (createdBy == null) content.append("\nCreated by: \"null\"");
-                else
-                    content.append("\nCreated by: \"" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "\"");
-                content.append("\nTimes run: \"" + c.getTimesRun() + "\"");
-                content.append("\nContents: \"" + c.getContents(false) + "\"");
-                String filePath = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
-                FileHandler.writeToFile(filePath, content.toString(), false);
-                RequestHandler.sendFile("> Here is the raw data for Custom Command: **" + c.getName() + "**", new File(filePath), command.channel.get());
-                try {
-                    Thread.sleep(4000);
-                    new File(filePath).delete();
-                } catch (InterruptedException e) {
-                    Utility.sendStack(e);
-                }
-                return "";
-            }
+        CCommandObject cc = command.guild.customCommands.getCommand(args);
+
+        if (cc == null) return "> Custom command " + args + " could not be found.";
+
+        StringBuilder content = new StringBuilder("Command Name: \"" + cc.getName() + "\"");
+        IUser createdBy = command.guild.getUserByID(cc.getUserID());
+        if (createdBy == null) createdBy = command.client.get().fetchUser(cc.getUserID());
+        if (createdBy == null) content.append("\nCreated by: \"null\"");
+        else {
+            content.append("\nCreated by: \"" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "\"");
         }
-        return "> Custom command " + args + " could not be found.";
-//        return command.customCommands.sendCCasJSON(command.channelSID, args);
+        content.append("\nTimes run: \"" + cc.getTimesRun() + "\"");
+        content.append("\nContents: \"" + cc.getContents(false) + "\"");
+        String fileName = String.format("%s.txt",cc.getName());
+        RequestHandler.sendFile("> Here is the raw data for Custom Command: **" + cc.getName() + "**", content.toString(), fileName, command.channel.get()).get();
+        return "";
     }
 
     @Override

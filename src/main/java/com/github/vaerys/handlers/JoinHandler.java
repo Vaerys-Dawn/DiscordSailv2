@@ -1,11 +1,13 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.main.Globals;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.JoinMessage;
-import com.github.vaerys.objects.UserCountDown;
+import com.github.vaerys.objects.adminlevel.JoinMessage;
+import com.github.vaerys.objects.adminlevel.MutedUserObject;
+import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IUser;
@@ -24,7 +26,7 @@ public class JoinHandler {
     public static void customJoinMessages(GuildObject content, IUser user) {
         IChannel channel = content.getChannelByType(ChannelSetting.JOIN_CHANNEL);
         if (channel == null) return;
-        Random random = new Random();
+        Random random = Globals.getGlobalRandom();
         List<JoinMessage> joinMessageList = content.channelData.getJoinMessages();
         if (joinMessageList.size() == 0) return;
         JoinMessage message = joinMessageList.get(random.nextInt(joinMessageList.size()));
@@ -41,6 +43,9 @@ public class JoinHandler {
      */
     public static void checkNewUsers(GuildObject content, UserJoinEvent event, UserObject user) {
         long difference = event.getJoinTime().toEpochMilli() - event.getUser().getCreationDate().toEpochMilli();
+        if (StringUtils.containsIgnoreCase(user.username,"igg-games.com")){
+            RequestHandler.roleManagement(user, content, content.config.getMutedRoleID(), true);
+        }
         if ((5 * 60 * 60 * 1000) > difference) {
             IChannel admin = content.getChannelByType(ChannelSetting.ADMIN_LOG);
             if (admin == null) {
@@ -74,7 +79,7 @@ public class JoinHandler {
      * @param event   The event that calls this. ({@link UserJoinEvent})
      */
     public static void autoReMute(UserJoinEvent event, GuildObject content, UserObject user) {
-        for (UserCountDown u : content.users.mutedUsers) {
+        for (MutedUserObject u : content.users.mutedUsers) {
             if (u.getID() == event.getUser().getLongID()) {
                 IChannel admin = content.getChannelByType(ChannelSetting.ADMIN);
                 if (admin != null) {

@@ -2,20 +2,16 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.CCommandObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
+import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IUser;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +25,7 @@ public class ListCCs extends Command {
         if (args.length() > 3) {
             UserObject user = Utility.getUser(command, args, true);
             if (user != null) {
-                return getUserCommands(command, user.longID);
+                return getUserCommands(command, user);
             }
         }
         try {
@@ -46,16 +42,16 @@ public class ListCCs extends Command {
         }
     }
 
-    public String getUserCommands(CommandObject command, long userID) {
-        IUser user = Globals.getClient().getUserByID(userID);
+    public String getUserCommands(CommandObject command, UserObject user) {
+        if (user == null) return "> Could not find user.";
         int total = 0;
-        command.setAuthor(user);
-        int max = command.guild.customCommands.maxCCs(command.user, command.guild);
+//        command.setAuthor(user);
+        int max = command.guild.customCommands.maxCCs(user, command.guild);
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        String title = "> Here are the custom commands for user: @" + user.getName() + "#" + user.getDiscriminator() + ".";
+        String title = "> Here are the custom commands for user: @" + user.username + ".";
         List<String> list = new ArrayList<>();
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
-            if (c.getUserID() == userID) {
+            if (c.getUserID() == user.longID) {
                 list.add(command.guild.config.getPrefixCC() + c.getName());
                 total++;
             }
@@ -63,10 +59,8 @@ public class ListCCs extends Command {
         builder.withTitle(title);
         String content = Utility.listFormatter(list, true);
         if (content.length() > 2000) {
-            String path = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
-            FileHandler.writeToFile(path, content, false);
-            File file = new File(path);
-            RequestHandler.sendFile(title, file, command.channel.get());
+            String fileName = String.format("Commands_%s.txt", command.user.name);
+            RequestHandler.sendFile(title, content, fileName, command.channel.get());
             return null;
         }
         builder.withDescription("```\n" + content + "```");
@@ -92,7 +86,7 @@ public class ListCCs extends Command {
             totalCCs++;
             counter++;
         }
-        pages.add("`" + Utility.listFormatter(list, true) + "`");
+        pages.add("```" + Utility.listFormatter(list, true) + "```");
         try {
             String title = "> Here is Page **" + page + "/" + pages.size() + "** of Custom Commands:";
             builder.appendField(title, pages.get(page - 1), false);

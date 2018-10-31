@@ -1,14 +1,14 @@
 package com.github.vaerys.enums;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.help.Report;
 import com.github.vaerys.commands.help.SilentReport;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.objects.ChannelSettingObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
+import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IChannel;
 
 import java.util.ArrayList;
@@ -29,54 +29,24 @@ public enum ChannelSetting {
 
     // "Settings"
 
-    /**
-     * General Bot Command Channel.
-     */
     BOT_COMMANDS("BotCommands", true, "General Bot Command Channel."),
 
-    /**
-     * Channel for general use of the base CC commands.
-     */
     CC_INFO("CustomCommands", true, "Channel for general use of the base CC commands."),
 
-    /**
-     * When this setting is enabled on a channel it will deny the use of custom commands in it.
-     */
     CC_DENIED("CCDenied", true, "When this setting is enabled on a channel it will deny the use of custom commands in it."),
 
-    /**
-     * General Channel for Character related commands.
-     */
     CHARACTER("Characters", true, "General Channel for Character related commands."),
 
-    /**
-     * Channel for creating, editing and deleting custom commands.
-     */
     MANAGE_CC("ManageCC", true, "Channel for creating, editing and deleting custom commands."),
 
-    /**
-     * When enabled on a channel, no message logs will occur for the channel.
-     */
     DONT_LOG("DontLog", true, "When enabled on a channel, no message logs will occur for the channel."),
 
-    /**
-     * Channel for the group commands.
-     */
     GROUPS("Groups", true, "Channel for the group commands."),
 
-    /**
-     * When this setting is on a channel no level up messages will be sent to the channel.
-     */
     LEVEL_UP_DENIED("LevelUpDenied", true, "When this setting is on a channel no level up messages will be sent to the channel."),
 
-    /**
-     * Channel for pixel commands.
-     */
     PIXELS("Pixels", true, "Channel for pixel commands."),
 
-    /**
-     * Channel for the server listing commands.
-     */
     SERVERS("Servers", true, "Channel for the server listing commands."),
 
     /**
@@ -85,68 +55,35 @@ public enum ChannelSetting {
      */
     SHITPOST("ShitPost", true, "When this setting is on a channel all custom commands create in it will be, automatically tagged shitpost. shitpost commands can only be run in shitpost channels."),
 
-    /**
-     * When this setting is on a channel no pixels will be gained in the channel.
-     */
     XP_DENIED("XpDenied", true, "When this setting is on a channel no pixels will be gained in the  channel."),
 
-    /**
-     * Where all the general type logging will be sent.
-     */
-    FROM_DM("DirectMessages", false, "The command can only be ran in DMs."),
+    PROFILES("Profiles", true, "Channel For Profile related Commands."),
 
-    /**
-     * Channel For Profile related Commands.
-     */
-    PROFILES("Profiles", false, "Channel For Profile related Commands."),
+    IGNORE_SPAM("IgnoreSpam", true, "When Enabled Spam Type messages will be ignored."),
+
+    MUTE_APPEALS("MuteAppeals", true, "Stops muted people from using commands in the channel."),
 
     // "Types"
 
-    /**
-     * Where messages related to moderation will be sent.
-     */
     ADMIN("Admin", false, "Where messages related to moderation will be sent."),
 
-    /**
-     * Where all of the admin type logging will be sent.
-     */
     ADMIN_LOG("AdminLog", false, "Where all of the admin type logging will be sent."),
 
-    /**
-     * Where art is enabled to be pinned by users via sail.
-     */
     ART("Art", false, "Where art is enabled to be pinned by users via sail."),
 
-    /**
-     * Command.CHANNEL_INFO, false, "Channel to post the contents of the Info.txt file."
-     */
     INFO("Info", false, "Channel to post the contents of the Info.txt file."),
 
-    /**
-     * Where is where daily messages will be sent.
-     */
     GENERAL("General", false, "Where is where daily messages will be sent."),
 
-    /**
-     * Where the LevelChannel profile setting will send level up messages.
-     */
     LEVEL_UP("LevelUp", false, "Where the LevelChannel profile setting will send level up messages."),
 
-    /**
-     * Where all the general type logging will be sent.
-     */
     SERVER_LOG("ServerLog", false, "Where all the general type logging will be sent."),
 
+    JOIN_CHANNEL("JoinChannel", false, "Where Custom join messages will be sent."),
 
-    /**
-     * When Enabled Spam Type messages will be ignored.
-     */
-    IGNORE_SPAM("IgnoreSpam", true, "When Enabled Spam Type messages will be ignored."),
+    // direct messages should not be accessible
 
-    /**
-     * Where Custom join messages will be sent.
-     */
-    JOIN_CHANNEL("JoinChannel", true, "Where Custom join messages will be sent.");
+    FROM_DM("DirectMessages", false, "The command can only be ran in DMs.");
 
 
     protected String name;
@@ -169,6 +106,7 @@ public enum ChannelSetting {
     }
 
     public static ChannelSetting get(String type) {
+        if (type.equalsIgnoreCase(FROM_DM.toString())) return null;
         for (ChannelSetting c : values()) {
             if (c.toString().equalsIgnoreCase(type)) {
                 return c;
@@ -209,7 +147,6 @@ public enum ChannelSetting {
         } else {
             return String.format(desc, new Report().getCommand(command), new SilentReport().getCommand(command));
         }
-
     }
 
     /**
@@ -266,57 +203,32 @@ public enum ChannelSetting {
         return builder;
     }
 
-    public String toggleSetting(GuildObject guild, long channelID) {
-        List<ChannelSettingObject> objects = guild.channelData.getChannelSettings();
-        boolean isFound = false;
-
-        String modifier = isSetting ? "Setting" : "Type";
-
-        ChannelSettingObject channel = null;
-
-
-        for (ChannelSettingObject s : objects) {
-            if (s.getType() == this) {
-                isFound = true;
-                channel = s;
-            }
-        }
-        if (!isFound) {
-            channel = new ChannelSettingObject(name);
-            objects.add(channel);
-        }
-
-        String error = "> An error occurred Trying to toggle the Channel " + modifier + ".";
-
-        //this should never run.
-        if (channel == null) return error;
-
+    public String toggleSetting(CommandObject command) {
+        ChannelSettingObject settingObject = command.guild.channelData.getChannelSetting(this);
+        if (settingObject == null) settingObject = command.guild.channelData.initSetting(this);
+        String mention = command.channel.mention;
+        long channelID = command.channel.longID;
         if (isSetting) {
-            if (channel.getChannelIDs().isEmpty() || !channel.getChannelIDs().contains(channelID)) {
-                channel.getChannelIDs().add(channelID);
-                return "> " + guild.getChannelByID(channelID).mention() + ". Channel setting: **" + name + "** added.";
-            } else {
-                for (int i = 0; i < channel.getChannelIDs().size(); i++) {
-                    if (channelID == channel.getChannelIDs().get(i)) {
-                        channel.getChannelIDs().remove(i);
-                        return "> " + guild.getChannelByID(channelID).mention() + ". Channel setting: **" + name + "** removed.";
-                    }
-                }
+            String mode = "removed";
+            if (!settingObject.getChannelIDs().removeIf(l -> l == channelID)) {
+                settingObject.getChannelIDs().add(channelID);
+                mode = "added";
             }
+            return String.format("> %s, Channel setting: **%s** %s.", mention, name, mode);
         } else {
-            if (channel.getChannelIDs().isEmpty() || !channel.getChannelIDs().get(0).equals(channelID)) {
-                if (channel.getChannelIDs().isEmpty()) {
-                    channel.getChannelIDs().add(channelID);
-                } else {
-                    channel.getChannelIDs().set(0, channelID);
-                }
-                return "> " + guild.getChannelByID(channelID).mention() + " is now the Server's **" + name + "** channel.";
+            boolean isAdding = true;
+            if (settingObject.getChannelIDs().isEmpty()) {
+                settingObject.getChannelIDs().add(channelID);
             } else {
-                channel.getChannelIDs().remove(0);
-                return "> " + guild.getChannelByID(channelID).mention() + " is no longer the Server's **" + name + "** channel.";
+                if (settingObject.getChannelIDs().get(0) == channelID) {
+                    settingObject.getChannelIDs().clear();
+                    isAdding = false;
+                } else {
+                    settingObject.getChannelIDs().set(0, channelID);
+                }
             }
+            return String.format("> %s is %s the Server's **%s** channel.", mention, isAdding ? "is now" : "is no longer", name);
         }
-        return error;
     }
 }
 

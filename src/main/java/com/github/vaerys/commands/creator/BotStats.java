@@ -43,7 +43,7 @@ public class BotStats extends Command {
         handler.append(nf.format(freeMemory / mb)).append("MB free");
         handler.append("\n**Ping**: ").append(nf.format(ping)).append("ms");
         builder.withDesc(handler.toString());
-        builder.withThumbnail(command.client.bot.getAvatarURL());
+        builder.withThumbnail(command.client.bot.avatarURL);
         builder.send(command.channel);
         return null;
     }

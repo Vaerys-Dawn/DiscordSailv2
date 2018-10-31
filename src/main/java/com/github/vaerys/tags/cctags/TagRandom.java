@@ -1,5 +1,6 @@
 package com.github.vaerys.tags.cctags;
 
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.templates.TagObject;
@@ -15,7 +16,7 @@ public class TagRandom extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        Random random = new Random();
+        Random random = Globals.getGlobalRandom();
         List<String> splitArgs = getSplit(from);
         return replaceFirstTag(from, splitArgs.get(random.nextInt(splitArgs.size())));
     }

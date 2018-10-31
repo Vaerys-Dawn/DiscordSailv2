@@ -5,7 +5,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.CompObject;
+import com.github.vaerys.objects.userlevel.CompObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IUser;
@@ -36,7 +36,7 @@ public class GetCompEntries extends Command {
                 builder.withThumbnail(compObjects.get(i).getFileUrl());
             } else {
                 if (user != null) {
-                    builder.withDesc(user.mention() + "\n" + compObjects.get(i).getFileUrl());
+                    builder.withDesc(user.mention(false) + "\n" + compObjects.get(i).getFileUrl());
                 } else {
                     builder.withDesc(compObjects.get(i).getFileUrl());
                 }

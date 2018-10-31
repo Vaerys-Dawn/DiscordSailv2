@@ -1,9 +1,9 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
-import com.github.vaerys.objects.DualVar;
-import com.github.vaerys.objects.TriVar;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
+import com.github.vaerys.objects.utils.DualVar;
+import com.github.vaerys.objects.utils.TriVar;
 import com.github.vaerys.templates.GlobalFile;
 
 import java.time.Instant;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 public class AdminCCs extends GlobalFile {
     private double fileVersion = 1.0;
@@ -98,11 +99,29 @@ public class AdminCCs extends GlobalFile {
     }
 
     public void removeCommand(String args) {
-        for (AdminCCObject c: commands){
-            if (c.getName().equalsIgnoreCase(args)){
+        for (AdminCCObject c : commands) {
+            if (c.getName().equalsIgnoreCase(args)) {
+                removeTries(c);
                 commands.remove(c);
                 return;
             }
         }
+    }
+
+    public void removeTries(AdminCCObject c) {
+        tries.removeIf(item -> item.getVar2().equalsIgnoreCase(c.getName()));
+    }
+
+    public boolean checkForUser(long userID) {
+        if (commands.stream().map(c -> c.getCreatorID()).filter(c -> c == userID).toArray().length != 0) return true;
+        return false;
+    }
+
+    public int getUsedSlots() {
+        return getCommands().stream().mapToInt(c -> (c.getContents(false).length() / 10000) + 1).sum();
+    }
+
+    public List<DualVar<Long, String>> getTries(AdminCCObject cc) {
+        return getTries().stream().filter(item -> item.getVar2().equalsIgnoreCase(cc.getName())).collect(Collectors.toList());
     }
 }

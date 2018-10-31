@@ -51,9 +51,9 @@ public class ModuleRuleRewards extends GuildModule {
 
     @Override
     public void setup() {
-        commands.add(Command.get(RulesCode.class));
-        commands.add(Command.get(SetRuleCode.class));
-        commands.add(Command.get(SetRuleCodeReward.class));
+        commands.add(RulesCode.class);
+        commands.add(SetRuleCode.class);
+        commands.add(SetRuleCodeReward.class);
     }
 
     @Override

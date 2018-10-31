@@ -6,7 +6,10 @@ import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.*;
+import com.github.vaerys.objects.adminlevel.ModNoteObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
+import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
@@ -77,19 +80,11 @@ public class ModNote extends Command {
 
         UserObject user = Utility.getUser(command, userCall, false, true);
         if (user == null) return "> Could not find user.";
-        if (user.get() == null) {
-            try {
-                long userID = Long.parseLong(userCall);
-                user = new UserObject(userID, command.guild);
-            } catch (NumberFormatException e) {
-                return "> Could not find user.";
-            }
-        }
 
         ProfileObject profile = user.getProfile(command.guild);
         if (profile == null) return "> No profile found for " + user.displayName + ".";
 
-        long timestamp = command.message.getTimestamp().toEpochSecond();
+        long timestamp = command.message.getTimestampZone().toEpochSecond();
         String mode = new SplitFirstObject(opts.trim()).getFirstWord().toLowerCase();
 
         // shortcut to "info [index]"
@@ -221,14 +216,14 @@ public class ModNote extends Command {
         // Get a UserObject from the stored ID to add to the embed.
         UserObject creator = new UserObject(command.guild.getUserByID(noteObject.getCreatorId()), command.guild);
         builder.withFooterText("Created by " + creator.displayName);
-        builder.withFooterIcon(creator.get().getAvatarURL());
+        builder.withFooterIcon(creator.avatarURL);
         builder.withTimestamp(noteObject.getTimestamp() * 1000);
 
         if (noteObject.getEditorId() != -1) {
             // get editor's info and display it?
             UserObject editor = new UserObject(command.guild.getUserByID(noteObject.getEditorId()), command.guild);
             String editFieldText = "\n\n*Last edited by %s %s*";
-            long diff = command.message.getTimestamp().toEpochSecond() - noteObject.getLastEditedTimestamp();
+            long diff = command.message.getTimestampZone().toEpochSecond() - noteObject.getLastEditedTimestamp();
             if (diff >= 86400 * 7) { // 7d
                 String editDate = new SimpleDateFormat("dd/MMM/yyyy").format(noteObject.getLastEditedTimestamp() * 1000);
                 builder.appendDesc(String.format(editFieldText, editor.displayName, "on " + editDate));

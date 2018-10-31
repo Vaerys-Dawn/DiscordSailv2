@@ -3,8 +3,8 @@ package com.github.vaerys.pogos;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.BlackListObject;
-import com.github.vaerys.objects.ServerObject;
+import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.userlevel.ServerObject;
 import com.github.vaerys.templates.GlobalFile;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.IGuild;
@@ -144,6 +144,10 @@ public class Servers extends GlobalFile {
         return "> Server with that name not found.";
     }
 
+    public boolean checkForUser(long userID) {
+        if (servers.stream().map(c -> c.getCreatorID()).filter(c -> c == userID).toArray().length != 0) return true;
+        return false;
+    }
 }
 
 

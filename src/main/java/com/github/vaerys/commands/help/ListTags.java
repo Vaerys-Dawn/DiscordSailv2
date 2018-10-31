@@ -6,7 +6,7 @@ import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,12 +46,19 @@ public class ListTags extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        List<String> list;
+        List<String> list = new LinkedList<>();
         XEmbedBuilder builder = new XEmbedBuilder(command);
         TagType type = TagType.get(args);
-        if (args.isEmpty() && !TAGS.isSubCommand(command) && !TAGS_ADMIN.isSubCommand(command)) {
-            sendModes(command, "");
-            return null;
+        boolean isTags = TAGS.isSubCommand(command);
+        boolean isAdminTags = TAGS_ADMIN.isSubCommand(command);
+
+        if (!isTags && !isAdminTags) {
+            if (args.isEmpty()) {
+                sendModes(command, "");
+                return null;
+            } else {
+                list = TagList.getType(type).stream().map(t -> t.name).collect(Collectors.toList());
+            }
         } else if (TAGS_ADMIN.isSubCommand(command)) {
             List<TagObject> tags = TagList.getType(TagType.CC);
             tags.addAll(TagList.getType(TagType.ADMIN_CC));
@@ -58,10 +66,8 @@ public class ListTags extends Command {
             list = tags.stream().map(t -> t.name).collect(Collectors.toList());
         } else if (TAGS.isSubCommand(command)) {
             list = TagList.getNames(TagType.CC);
-        } else {
-            list = TagList.getNames(type);
         }
-        if (list.size() == 0) {
+        if (list.isEmpty()) {
             sendModes(command, "> Invalid mode.");
             return null;
         }

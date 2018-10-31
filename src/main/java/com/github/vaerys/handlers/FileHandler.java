@@ -3,6 +3,7 @@ package com.github.vaerys.handlers;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.google.gson.*;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;
@@ -11,8 +12,10 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
@@ -147,6 +150,9 @@ public class FileHandler {
             JsonElement jsonElement = parser.parse(reader);
             reader.close();
             jsonObject = jsonElement.getAsJsonObject();
+        } catch (JsonSyntaxException e) {
+            System.err.printf("File \"%s\" has malformed json data or is corrupted.\n", filePath);
+            Utility.sendStack(e);
         } catch (FileNotFoundException e) {
             Utility.sendStack(e);
         } catch (IOException e) {
@@ -165,10 +171,10 @@ public class FileHandler {
     }
 
     /***
-     * Handler to read the contents of a discord attachment.
+     * Handler to read the getContents of a discord attachment.
      *
      * @param attachment the file to be decoded.
-     * @return the contents of the file.
+     * @return the getContents of the file.
      */
     public static String readFromFile(IMessage.Attachment attachment) {
         try {
@@ -186,6 +192,29 @@ public class FileHandler {
             return "";
         } catch (IOException e) {
             return "";
+        }
+    }
+
+    public static boolean isEmpty(String filePath) {
+        if (!exists(filePath)) return true;
+        return String.join("", FileHandler.readFromFile(filePath)).isEmpty();
+    }
+
+    public static File copyToFile(String filePath, InputStream file) {
+        try {
+            Path newFile = Paths.get(filePath);
+            try {
+                if (!exists(filePath)) {
+                    Files.createFile(newFile);
+                }
+                IOUtils.copy(file, new FileWriter(filePath), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                Utility.sendStack(e);
+            }
+            file.close();
+            return new File(filePath);
+        } catch (IOException e) {
+            return null;
         }
     }
 }

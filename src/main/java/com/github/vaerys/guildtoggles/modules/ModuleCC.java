@@ -46,7 +46,7 @@ public class ModuleCC extends GuildModule {
     @Override
     public void setup() {
         channels.add(ChannelSetting.SHITPOST);
-        settings.add(ToggleList.getSetting(SAILType.SHITPOST_FILTERING));
+        settings.add(SAILType.SHITPOST_FILTERING);
         channels.add(ChannelSetting.CC_INFO);
         channels.add(ChannelSetting.CC_DENIED);
         channels.add(ChannelSetting.MANAGE_CC);

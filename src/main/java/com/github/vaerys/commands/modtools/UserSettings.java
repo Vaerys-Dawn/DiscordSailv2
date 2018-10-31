@@ -3,12 +3,14 @@ package com.github.vaerys.commands.modtools;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
@@ -22,24 +24,27 @@ import java.util.List;
 public class UserSettings extends Command {
 
     private static String settings(CommandObject command) {
-        String settings = "**Settings**";
+        StringHandler settings = new StringHandler("**Settings**");
         if (command.guild.config.modulePixels) {
-            settings += "\n> " + UserSetting.DENIED_XP +
-                    "\n> " + UserSetting.DONT_SHOW_LEADERBOARD +
-                    "\n> " + UserSetting.DENY_AUTO_ROLE +
-                    "\n> " + UserSetting.DONT_DECAY;
+            settings.append("\n> " + UserSetting.DENIED_XP)
+                    .append("\n> " + UserSetting.DONT_SHOW_LEADERBOARD)
+                    .append("\n> " + UserSetting.DENY_AUTO_ROLE)
+                    .append("\n> " + UserSetting.DONT_DECAY);
         }
         if (command.guild.config.moduleCC) {
-            settings += "\n> " + UserSetting.DENY_MAKE_CC +
-                    "\n> " + UserSetting.DENY_USE_CCS +
-                    "\n> " + UserSetting.AUTO_SHITPOST;
+            settings.append("\n> " + UserSetting.DENY_MAKE_CC)
+                    .append("\n> " + UserSetting.DENY_USE_CCS)
+                    .append("\n> " + UserSetting.AUTO_SHITPOST);
         }
         if (command.guild.config.artPinning) {
-            settings += "\n> " + UserSetting.DENY_ART_PINNING;
+            settings.append("\n> " + UserSetting.DENY_ART_PINNING);
         }
-        settings += "\n> " + UserSetting.DENY_INVITES;
-        settings += "\n> List - `Shows the user's settings.`";
-        return settings;
+        if (command.guild.config.readRuleReward) {
+            settings.append("\n> " + UserSetting.READ_RULES);
+        }
+        settings.append("\n> " + UserSetting.DENY_INVITES);
+        settings.append("\n> List - `Shows the user's settings.`");
+        return settings.toString();
     }
 
     @Override
@@ -94,11 +99,19 @@ public class UserSettings extends Command {
                 }
             }
             if (command.guild.config.artPinning) {
-                switch (toTest) {
-                    case DENY_ART_PINNING:
-                        return profile.toggleSetting(UserSetting.DENY_ART_PINNING,
-                                "> **" + user.displayName + "** can now pin art.",
-                                "> **" + user.displayName + "** can no longer pin art.");
+                if (toTest == UserSetting.DENY_ART_PINNING) {
+                    return profile.toggleSetting(UserSetting.DENY_ART_PINNING,
+                            "> **" + user.displayName + "** can now pin art.",
+                            "> **" + user.displayName + "** can no longer pin art.");
+                }
+            }
+            if (command.guild.config.readRuleReward) {
+                if (toTest == UserSetting.READ_RULES) {
+                    String response = profile.toggleSetting(UserSetting.READ_RULES,
+                            "> Read Rules status has been disabled for **" + user.displayName + "**.",
+                            "> Read Rules status has been enabled for **" + user.displayName + "**.");
+                    RequestHandler.roleManagement(command, command.guild.getRuleCodeRole(), profile.hasSetting(UserSetting.READ_RULES));
+                    return response;
                 }
             }
             switch (toTest) {
@@ -141,7 +154,7 @@ public class UserSettings extends Command {
 
     @Override
     protected String[] names() {
-        return new String[]{"UserSettings"};
+        return new String[]{"UserSettings", "UserSetting", "USetting"};
     }
 
     @Override

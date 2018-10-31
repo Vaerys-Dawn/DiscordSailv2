@@ -43,7 +43,7 @@ public class ModuleJoinMessages extends GuildModule {
 
     @Override
     public void setup() {
-        settings.add(ToggleList.getSetting(SAILType.SEND_JOIN_MESSAGES));
+        settings.add(SAILType.SEND_JOIN_MESSAGES);
         channels.add(ChannelSetting.JOIN_CHANNEL);
     }
 

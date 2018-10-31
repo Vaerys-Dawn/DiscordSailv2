@@ -10,7 +10,7 @@ public class TagSplit extends TagEmptyObject {
     }
 
     @Override
-    protected String tagName() {
+    public String tagName() {
         return "<split>";
     }
 

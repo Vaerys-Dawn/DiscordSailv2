@@ -6,8 +6,8 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.RewardRoleObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
@@ -41,7 +41,7 @@ public class TransferLevels extends Command {
                 }
                 uObject.lastTalked = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
                 uObject.setXp(0);
-                uObject.setCurrentLevel(-1);
+                uObject.setCurrentLevel(0);
                 for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
                     if (user.getRolesForGuild(command.guild.get()).contains(r.get(command.guild))) {
                         uObject.setXp(r.getXp());

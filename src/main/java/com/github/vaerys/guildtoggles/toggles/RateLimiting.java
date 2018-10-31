@@ -44,6 +44,6 @@ public class RateLimiting extends GuildSetting {
 
     @Override
     public void setup() {
-        commands.add(Command.get(SetRateLimit.class));
+        commands.add(SetRateLimit.class);
     }
 }

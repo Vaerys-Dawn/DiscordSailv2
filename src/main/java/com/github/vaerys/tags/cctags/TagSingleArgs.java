@@ -28,7 +28,7 @@ public class TagSingleArgs extends TagObject {
             splitArgs = Arrays.asList(args.split(" "));
         }
         try {
-            int position = Integer.parseInt(contents(from)) - 1;
+            int position = Integer.parseInt(getContents(from)) - 1;
             if (position >= splitArgs.size() || position < 0) {
                 from = removeFirstTag(from);
             } else {

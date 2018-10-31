@@ -1,8 +1,8 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.slf4j.Logger;
@@ -58,12 +58,12 @@ public class DMHandler {
             }
             if (command.message.getContent().equalsIgnoreCase(step4)) {
                 command.user.sendDm(step5);
+                Globals.getGlobalData().getBlockedFromDMS().add(command.user.longID);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     Utility.sendStack(e);
                 }
-                Globals.getGlobalData().getBlockedFromDMS().add(command.user.longID);
                 command.user.sendDm("> You were blocked.");
                 RequestHandler.sendMessage("> " + command.user.username + " was blocked for being a smart ass.", ownerDm);
                 return;
@@ -92,7 +92,7 @@ public class DMHandler {
             Color color = command.user.getRandomColour();
             builder.withColor(color);
             builder.withAuthorName(command.user.username + " | " + command.user.longID);
-            builder.withAuthorIcon(command.user.getAvatarURL());
+            builder.withAuthorIcon(command.user.avatarURL);
             int attatchmentStart = 0;
             List<IMessage.Attachment> attachmentList = command.message.getAttachments();
             if (attachmentList.size() != 0 && Utility.isImageLink(attachmentList.get(0).getUrl())) {

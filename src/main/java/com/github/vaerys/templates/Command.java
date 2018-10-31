@@ -6,8 +6,8 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
+import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -136,14 +136,13 @@ public abstract class Command {
                 validStates.add(s + subCommandObject.getRegex());
             }
         });
-        String toTest = command.message.getContent();
-        if (toTest.length() > 200) {
-            toTest = StringUtils.truncate(toTest, 200);
+        if (args.length() > 200) {
+            args = StringUtils.truncate(args, 200);
         }
         for (String s : validStates) {
             String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + " (.|\n)*";
             String regexStringEnd = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + "$";
-            if (Pattern.compile(regexString).matcher(toTest).matches() || Pattern.compile(regexStringEnd).matcher(toTest).matches()) {
+            if (Pattern.compile(regexString).matcher(args).matches() || Pattern.compile(regexStringEnd).matcher(args).matches()) {
                 return true;
             }
         }
@@ -307,7 +306,7 @@ public abstract class Command {
         return false;
     }
 
-    public static Command get(Class obj) {
+    public static <T extends Command> T get(Class obj) {
         return CommandList.getCommand(obj);
     }
 

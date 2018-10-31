@@ -18,7 +18,7 @@ public class TagEmbedImage extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        String imageURL = contents(from);
+        String imageURL = getContents(from);
         try {
             new URL(imageURL);
             boolean hasPerm = GuildHandler.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS);

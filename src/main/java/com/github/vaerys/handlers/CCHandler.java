@@ -3,20 +3,27 @@ package com.github.vaerys.handlers;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
-import com.github.vaerys.objects.CCommandObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
+import com.github.vaerys.objects.userlevel.CCommandObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
+import com.github.vaerys.tags.admintags.TagAutoDelete;
+import com.github.vaerys.tags.cctags.TagRemoveMentions;
 import com.github.vaerys.templates.TagObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Vaerys on 27/08/2016.
@@ -24,6 +31,8 @@ import java.util.List;
 public class CCHandler {
 
     private final static Logger logger = LoggerFactory.getLogger(CCHandler.class);
+
+    private final static ScheduledExecutorService deleter = Executors.newScheduledThreadPool(50);
 
     public static void handleAdminCC(String args, CommandObject command) {
 
@@ -57,11 +66,49 @@ public class CCHandler {
         tags.addAll(TagList.getType(TagType.ADMIN_CC));
         TagList.sort(tags);
 
+
         for (TagObject t : tags) {
-            contents = t.handleTag(contents, command, ccArgs, cc);
-            if (contents == null) return;
+            try {
+
+////            } catch (StackOverflowError e) {
+//                String ccContents = t.getContents(getContents);
+//                String ccPrefix;
+//                if (t instanceof TagAdminSubTagObject) {
+//                    TagAdminSubTagObject tag = (TagAdminSubTagObject) t;
+//                    String subTag = tag.getSubTag(getContents);
+//                    ccPrefix = String.format("<%s:%s>%s", tag.tagName(), subTag, t.requiredArgs != 0 ? "{" : "");
+//                } else {
+//                    ccPrefix = t.prefix;
+//                }
+//                String fullTag = t.requiredArgs == 0 ? ccPrefix : ccPrefix + ccContents + t.suffix;
+//                System.out.println(fullTag);
+////                RequestHandler.sendMessage(String.format("A stack overflow error occurred within one of the **%s** tags.\n\n**Tag Details:**```\n%s```", t.name, fullTag), command);
+////                return;
+                FileHandler.writeToFile(Constants.DIRECTORY_STORAGE + "Error.txt", contents, true);
+                contents = t.handleTag(contents, command, ccArgs, cc);
+                if (contents == null) return;
+            } catch (StackOverflowError e) {
+                System.out.println("Error caught");
+                return;
+            }
         }
+
         cc.cullKeys();
+        TagAutoDelete autoDelete = TagList.getTag(TagAutoDelete.class);
+        TagRemoveMentions removeMentions = TagList.getTag(TagRemoveMentions.class);
+
+        if (autoDelete.cont(contents)) {
+            try {
+                int time = Integer.parseInt(autoDelete.getSubTag(contents));
+                contents = autoDelete.removeAllTag(contents);
+                contents = removeMentions.handleTag(contents, command, "");
+                IMessage message = RequestHandler.sendMessage(contents, command.channel.get()).get();
+                autoDelete(message, time);
+                return;
+            } catch (NumberFormatException e) {
+                //do nothing
+            }
+        }
         RequestHandler.sendMessage(contents, command.channel.get());
     }
 
@@ -99,8 +146,7 @@ public class CCHandler {
             List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
             if (channels.size() != 0 && !channels.contains(command.channel.get())) {
                 channels = command.user.getVisibleChannels(channels);
-                List<String> channelMentions = Utility.getChannelMentions(channels);
-                RequestHandler.sendMessage(Utility.getChannelMessage(channelMentions), command.channel.get());
+                RequestHandler.sendMessage(Utility.getChannelMessage(channels), command.channel.get());
                 return;
             }
         }
@@ -110,6 +156,12 @@ public class CCHandler {
             contents = t.handleTag(contents, command, ccArgs);
             if (contents == null) return;
         }
+
         RequestHandler.sendMessage(contents, command.channel.get());
+
+    }
+
+    public static void autoDelete(IMessage message, int time) {
+        deleter.schedule(() -> RequestHandler.deleteMessage(message), time, TimeUnit.MINUTES);
     }
 }

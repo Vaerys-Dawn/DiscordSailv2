@@ -7,16 +7,20 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.*;
+import com.github.vaerys.objects.adminlevel.MutedUserObject;
+import com.github.vaerys.objects.adminlevel.UserRateObject;
+import com.github.vaerys.objects.botlevel.RandomStatusObject;
+import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.events.TimedEvent;
+import com.github.vaerys.objects.userlevel.DailyMessage;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.userlevel.ReminderObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.sun.management.OperatingSystemMXBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 
 import java.io.File;
@@ -172,7 +176,7 @@ public class TimerHandler {
                     Globals.backupAll();
 
                     // clear blacklist
-                    List<BlacklistedUserObject> blacklistedUserObjects = Globals.getGlobalData().getBlacklistedUsers();
+                    List<BlackListObject.BlacklistedUserObject> blacklistedUserObjects = Globals.getGlobalData().getBlacklistedUsers();
                     blacklistedUserObjects.removeIf(object -> object.getCounter() < 5);
 
                     dailyMessageHandler(event);
@@ -191,7 +195,7 @@ public class TimerHandler {
 
         logger.info("Running Daily tasks for " + day);
 
-        Random random = new Random();
+        Random random = Globals.getGlobalRandom();
 
         //uncomment for a random day of the week.
 //          day = DayOfWeek.values()[random.nextInt(DayOfWeek.values().length)];
@@ -275,10 +279,14 @@ public class TimerHandler {
             public void run() {
                 IChannel channel = Client.getClient().getChannelByID(object.getChannelID());
                 // sanitize channel
-                if (channel == null) Globals.getGlobalData().removeReminder(object);
+                if (channel == null) {
+                    channel = Client.getClient().getUserByID(object.getUserID()).getOrCreatePMChannel();
+                }
                 IMessage message = RequestHandler.sendMessage(object.getMessage(), channel).get();
+
+                boolean canSend = channel.getModifiedPermissions(Client.getClient().getOurUser()).contains(Permissions.SEND_MESSAGES);
                 //check message sent.
-                if (message == null && !channel.isPrivate()) {
+                if (message == null && !channel.isPrivate() && canSend) {
                     logger.error("REMINDER FAILED FOR USER WITH ID \"" + object.getUserID() + "\" TO SEND. WILL ATTEMPT TO SEND AGAIN IN 5 MINS.");
                     object.setSent(false);
                 } else {
@@ -308,57 +316,40 @@ public class TimerHandler {
         }, 1000 * 10, 10 * 1000);
     }
 
-    private static void reportHandling(GuildObject task) {
-        List<UserRateObject> offenders = task.getRateLimiting();
+    private static void reportHandling(GuildObject guild) {
+        List<UserRateObject> offenders = guild.getRateUsers();
 
-        IRole muteRole = task.getRoleByID(task.config.getMutedRoleID());
+        IRole muteRole = guild.getRoleByID(guild.config.getMutedRoleID());
         if (muteRole == null) return;
 
-        IChannel admin = task.getChannelByType(ChannelSetting.ADMIN);
+        IChannel admin = guild.getChannelByType(ChannelSetting.ADMIN);
 
         for (UserRateObject u : offenders) {
-            if (u.counter - 3 > task.config.messageLimit) {
-                List<IChannel> channels = u.getChannels(task);
-                if (admin == null && !channels.isEmpty()) {
-                    admin = channels.get(channels.size() - 1);
-                }
-                StringHandler output = new StringHandler();
-                StringHandler modNote = new StringHandler();
-                IUser offender = u.getUser(task);
-
-                long rate = u.counter - task.config.messageLimit;
-
-                String formattedChannels = String.join(", ", channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()));
-
-                //Admin Message output
-                output.append("> ").append(offender.mention());
-                output.append(" Has Been muted for breaking the guild rate limit (");
-                output.append(rate);
-                output.append(" Over Rate)");
-                if (channels.size() == 1) {
-                    output.append(" in ").append(channels.get(0).mention());
-                } else if (channels.size() > 1) {
-                    output.append(" in channels: ");
-                    output.append(formattedChannels);
-                }
-                output.append(".");
-
-                //modNote Output
-                modNote.append("> Muted by Rate Limiter, ");
-                modNote.append(rate).append(" Over Rate, ");
-                modNote.append("Channel");
-                if (channels.size() > 1) modNote.append("s");
-                modNote.append(": ").append(formattedChannels);
-
-                //logging
-                if (task.config.deleteLogging) {
-                    Utility.sendLog("> **@" + offender.getName() + "#" + offender.getDiscriminator() + "** was muted for breaking rate limit.", task, true);
-                }
-
-                ProfileObject profile = task.users.getUserByID(u.getID());
-                profile.addSailModNote(modNote.toString(), u.timeStamp, false);
-                RequestHandler.sendMessage(output.toString(), admin);
+            //ignore non muted users
+            if (!u.isMuted()) continue;
+            //set up messages
+            String adminFormat = "> %s was muted for breaking the guild's rate limit (%d Over Limit) in %s.";
+            String modNoteFormat = "> Muted by Rate Limiter, %d Over Limit. Channel%s: %s.";
+            //get channels
+            List<IChannel> channels = u.getChannels(guild);
+            //get admin channel
+            if (admin == null && !channels.isEmpty()) admin = channels.get(channels.size() - 1);
+            //get offender
+            IUser offender = u.getUser(guild);
+            ProfileObject profile = guild.users.getUserByID(u.getUserID());
+            //get amount over limit
+            long rate = u.getSize() - guild.config.messageLimit;
+            //format channel mentions
+            String formattedChannels = String.join(", ", channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()));
+            //debug log mute
+            guild.sendDebugLog(offender, admin, "RATE_LIMITING", "MUTE", rate + " over limit.");
+            //logging
+            if (guild.config.deleteLogging) {
+                LoggingHandler.sendLog("> **@" + offender.getName() + "#" + offender.getDiscriminator() + "** was muted for breaking rate limit.", guild, true);
             }
+            //send messages
+            profile.addSailModNote(String.format(modNoteFormat, rate, channels.size() > 1 ? "s" : "", formattedChannels), u.getTimeStamp(), false);
+            RequestHandler.sendMessage(String.format(adminFormat, offender.mention(), rate, channels.size() > 1 ? "channels: " + formattedChannels : formattedChannels), admin);
         }
     }
 
@@ -366,12 +357,12 @@ public class TimerHandler {
     private static void tenSecGuildTask(GuildObject task) {
         task.resetRateLimit();
         Globals.lastRateLimitReset = System.currentTimeMillis();
-        if (task.getRateLimiting().size() != 0) {
+        if (task.getRateUsers().size() != 0) {
             logger.error("Failed to clear list, forcing it to clear.");
             task.forceClearRate();
         }
         //Mutes.
-        ArrayList<UserCountDown> mutedUsers = task.users.getMutedUsers();
+        ArrayList<MutedUserObject> mutedUsers = task.users.getMutedUsers();
         for (int i = 0; i < mutedUsers.size(); i++) {
             if (mutedUsers.get(i).getRemainderSecs() != -1) {
                 mutedUsers.get(i).tickDown(10);
@@ -418,7 +409,7 @@ public class TimerHandler {
 
                     botStatsHandler();
 
-                    for (GuildObject g: Globals.getGuilds()){
+                    for (GuildObject g : Globals.getGuilds()) {
                         g.adminCCs.purgeKeys();
                     }
 
@@ -510,7 +501,7 @@ public class TimerHandler {
     }
 
     private static void randomPlayingStatus() {
-        Random random = new Random();
+        Random random = Globals.getGlobalRandom();
         String status = Globals.playing;
         if (Globals.doRandomGames && Globals.getRandomStatuses().size() != 0) {
             ArrayList<String> games = new ArrayList<>();

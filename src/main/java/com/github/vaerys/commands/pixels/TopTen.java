@@ -6,14 +6,16 @@ import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TopTen extends Command {
 
@@ -22,11 +24,14 @@ public class TopTen extends Command {
         ArrayList<ProfileObject> ranks = new ArrayList<>();
         ArrayList<String> response = new ArrayList<>();
 
-        for (ProfileObject u : command.guild.users.getProfiles()) {
-            long rank = PixelHandler.rank(command.guild.users, command.guild.get(), u.getUserID());
-            if (rank <= 10 && rank != -1) {
-                ranks.add(u);
-            }
+        List<ProfileObject> profiles = new ArrayList<>(command.guild.users.profiles);
+        Utility.sortUserObjects(profiles, false);
+        int counter = 0;
+        for (ProfileObject p : profiles) {
+            if (counter >= 10) break;
+            if (!p.showRank(command.guild)) continue;
+            ranks.add(p);
+            counter++;
         }
 
         Utility.sortUserObjects(ranks, false);

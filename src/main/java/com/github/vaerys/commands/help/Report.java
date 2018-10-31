@@ -2,12 +2,11 @@ package com.github.vaerys.commands.help;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.AutoBlocker;
-import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.objects.botlevel.AutoBlocker;
+import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
@@ -26,50 +25,51 @@ public class Report extends Command {
     private static List<AutoBlocker> lastUsers = new ArrayList<>(5);
 
     public static String report(String args, CommandObject command, boolean isSilent) {
-        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.ADMIN);
-        if (channels.size() != 0) {
-            IChannel channel = channels.get(0);
-            SplitFirstObject split = new SplitFirstObject(args);
-            UserObject reported = Utility.getUser(command, split.getFirstWord(), false, false);
+        IChannel channel = command.guild.getChannelByType(ChannelSetting.ADMIN);
+        if (channel == null) {
+            return "> Your report could not be sent as the server does not have an admin channel set up at this time.";
+        }
 
-            addUser(command);
-            if (command.user.isBlockedFromDms()) {
-                return "> " + command.user.mention() + ", You have been blocked, you can no longer send any more report requests.";
-            }
-            if (reported == null) {
-                return "> Cannot send report. Could not find user.";
-            }
-            if (reported.longID == command.user.longID) {
-                return "> You can't report yourself.";
-            }
-            if (channel != null) {
-                StringBuilder builder = new StringBuilder();
-                IRole roleToMention = command.guild.getRoleByID(command.guild.config.getRoleToMentionID());
-                if (roleToMention != null) {
-                    builder.append(roleToMention.mention() + "\n");
-                }
-                if (isSilent) {
-                    builder.append("**User Report - Silent**\n");
-                } else {
-                    builder.append("**User Report**\n");
-                }
-                split.editRestReplace(split.getRest(), Utility.convertMentionToText(split.getRest()));
-                String reason = split.getRest();
-                if (split.getRest() == null) {
-                    reason = "No reason given.";
-                }
-                builder.append("Reporter: " + command.user.get().mention() + "\nReported: " + reported.get().mention() + "\nReason: `" + reason + "`");
-                builder.append("\n" + command.channel.get().mention());
-                IMessage message = RequestHandler.sendMessage(builder.toString(), channel).get();
-                if (message == null) {
-                    return "> User report was not be sent. Looks like I can't send messages to " + channel.mention() + ".";
-                } else {
-                    return "> User Report sent.";
-                }
-            }
+        SplitFirstObject split = new SplitFirstObject(args);
+        UserObject reported = Utility.getUser(command, split.getFirstWord(), false, false);
+
+        addUser(command);
+
+        if (command.user.isBlockedFromDms()) {
+            return "> " + command.user.mention() + ", You have been blocked, you can no longer send any more report requests.";
+        }
+        if (reported == null) {
+            return "> Cannot send report. Could not find user.";
+        }
+        if (reported.longID == command.user.longID) {
+            return "> You can't report yourself.";
+        }
+        if (channel == null) {
             return "> Your report could not be sent as the server does not have an admin channel set up at this time.";
+        }
+
+        //build embed
+//        XEmbedBuilder embed = new XEmbedBuilder(new Color(250, 166, 26));
+        IRole roleToMention = command.guild.getRoleByID(command.guild.config.getRoleToMentionID());
+        split.editRestReplace(split.getRest(), Utility.convertMentionToText(split.getRest()));
+        String reason = split.getRest() != null ? split.getRest() : "No reason given.";
+        String format = "**%s**\nReported User: %s\nReason: `%s`\nChannel: %s\n\nLink to Report:\n%s\nReported by: %s";
+        String reportType = isSilent ? "User Report - Silent" : "User Report";
+        String message = String.format(format, reportType, reported.mention(), reason, command.channel.mention, command.getMessageLink(), command.user.mention());
+//        embed.withTitle(reportType);
+        IMessage response;
+
+        //send report
+        if (roleToMention == null) {
+            response = channel.sendMessage(message);
         } else {
-            return "> Your report could not be sent as the server does not have an admin channel set up at this time.";
+            response = channel.sendMessage(roleToMention.mention() + "\n" + message);
+        }
+        //send response
+        if (response == null) {
+            return "> User report was not be sent. Looks like I can't send messages to " + channel.mention() + ".";
+        } else {
+            return "> User Report sent.";
         }
     }
 

@@ -2,8 +2,8 @@ package com.github.vaerys.pogos;
 
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.objects.DailyMessage;
-import com.github.vaerys.objects.QueueObject;
+import com.github.vaerys.objects.userlevel.DailyMessage;
+import com.github.vaerys.objects.botlevel.QueueObject;
 import com.github.vaerys.templates.GlobalFile;
 
 import java.time.DayOfWeek;
@@ -22,7 +22,7 @@ public class DailyMessages extends GlobalFile {
 
     public long newDailyMsgUID() {
         long result;
-        Random random = new Random();
+        Random random = Globals.getGlobalRandom();
         List<Long> uIDs = dailyMessages.stream().filter(dailyMessage ->
                 dailyMessage.getUID() != -1).map(dailyMessage ->
                 dailyMessage.getUID()).collect(Collectors.toList());
@@ -83,5 +83,12 @@ public class DailyMessages extends GlobalFile {
             }
         }
         return object;
+    }
+
+    public QueueObject getRequestItem(long longID) {
+        for (QueueObject q : queuedRequests){
+            if (q.getMessageId() == longID) return q;
+        }
+        return null;
     }
 }

@@ -19,8 +19,9 @@ public class CheckPixelRoles extends Command {
     public String execute(String args, CommandObject command) {
         IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
         for (IUser user : command.guild.getUsers()) {
-            GuildHandler.checkUsersRoles(user.getLongID(), command.guild);
+            GuildHandler.checkUsersRoles(user.getLongID(), command.guild, true);
         }
+        GuildHandler.checkTopTen(command.guild);
         RequestHandler.deleteMessage(working);
         return "> Done.";
     }

@@ -2,7 +2,7 @@ package com.github.vaerys.tags.admintags;
 
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.AdminCCObject;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminSubTagObject;
 
 public class TagPath extends TagAdminSubTagObject {
@@ -20,10 +20,10 @@ public class TagPath extends TagAdminSubTagObject {
     public String execute(String from, CommandObject command, String args, AdminCCObject cc) {
         String subTag = getSubTag(from);
 
-        String contents = contents(from);
+        String contents = getContents(from);
 
         if (cc.getKeysUser(command.user.longID).size() == 0 && subTag.equalsIgnoreCase("Start")) {
-            from = replaceFirstTag(from, contents(from));
+            from = replaceFirstTag(from, getContents(from));
         }
         if (cc.searchKeys(subTag, command) && args.equalsIgnoreCase(subTag)) {
             from = replaceFirstTag(from, contents);
@@ -36,7 +36,7 @@ public class TagPath extends TagAdminSubTagObject {
     }
 
     @Override
-    protected String tagName() {
+    public String tagName() {
         return "path";
     }
 

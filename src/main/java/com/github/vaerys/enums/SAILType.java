@@ -32,6 +32,7 @@ public enum SAILType {
     PROFILES("Profiles"),
     MOD_MUTE("ModMute"),
     READ_RULES_REWARDS("RuleCode"),
+    ADMIN_CC("AdminCC"),
 
     //Toggle types
     ADMIN_LOGGING("AdminLogging"),
@@ -67,7 +68,8 @@ public enum SAILType {
     SEND_JOIN_MESSAGES("SendJoinMessages"),
     BAN_LOGGING("BanLogging"),
     KICK_LOGGING("KickLogging"),
-    ADMIN_CC("AdminCC");
+    DUNGEON_CHARS("DungeonChars"),
+    MUTE_REMOVES_ROLES("MuteRemovesRoles");
 
     private String name;
 
