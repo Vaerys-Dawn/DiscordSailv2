@@ -1,19 +1,16 @@
 package com.github.vaerys.commands.help;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.modules.ModuleRoles;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.objects.SubCommandObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRegion;
@@ -21,11 +18,22 @@ import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by Vaerys on 30/01/2017.
  */
 public class GetGuildInfo extends Command {
 
+    private final static SubCommandObject GUILD_STATS = new SubCommandObject(
+            new String[]{"GuildStats"},
+            null,
+            "Shows a the basic stats for the server.",
+            SAILType.HELP
+    );
 
     private XEmbedBuilder resetEmbed(XEmbedBuilder builder, IChannel channel, CommandObject command, int extraLength) {
         if ((builder.getTotalVisibleCharacters() + extraLength) > 2000 ||
@@ -42,10 +50,10 @@ public class GetGuildInfo extends Command {
         XEmbedBuilder toggles = new XEmbedBuilder(command);
         XEmbedBuilder channels = new XEmbedBuilder(command);
 
-        boolean isGuildStats = isSubtype(command, "GuildStats");
+        boolean isGuildStats = GUILD_STATS.isSubCommand(command);
 
         IChannel channel = command.user.get().getOrCreatePMChannel();
-        boolean hasManageServer = Utility.testForPerms(command, Permissions.MANAGE_SERVER);
+        boolean hasManageServer = GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER);
 
 
         //todo change this to the proper impl when api allows it.
@@ -87,15 +95,11 @@ public class GetGuildInfo extends Command {
             if (command.guild.config.muteRepeatOffenders && command.guild.config.getMutedRoleID() != -1)
                 adminBuilder.append("\n**Messages Until AutoMute:** " + (command.guild.config.messageLimit - 3));
             if (command.guild.config.denyInvites) {
-                adminBuilder.append("\n**Trusted Roles:** ");
-                List<String> trustedRoles = new ArrayList<>();
-                for (Long id : command.guild.config.getTrustedRoleIDs()) {
-                    IRole role = command.guild.getRoleByID(id);
-                    if (role != null) {
-                        trustedRoles.add(role.getName());
-                    }
+                IRole role = command.guild.getRoleByID(command.guild.config.getInviteAllowedID());
+                if (role != null) {
+                    adminBuilder.append("\n**Invite Allowed Role:** ");
+                    adminBuilder.append(role.getName());
                 }
-                adminBuilder.append(Utility.listFormatter(trustedRoles, true));
             }
             if (adminBuilder.length() != 0) {
                 serverStats.append("\n\n**[ADMIN STATS]**" + adminBuilder.toString());
@@ -118,25 +122,25 @@ public class GetGuildInfo extends Command {
             List<SAILType> disabledSettings = new LinkedList<>();
             for (GuildToggle t : command.guild.toggles) {
                 if (t.isModule()) {
-                    if (t.get(command.guild.config)) enabledModules.add(t.name());
+                    if (t.enabled(command.guild.config)) enabledModules.add(t.name());
                     else disabledModules.add(t.name());
                 } else {
-                    if (t.get(command.guild.config)) enabledSettings.add(t.name());
+                    if (t.enabled(command.guild.config)) enabledSettings.add(t.name());
                     else disabledSettings.add(t.name());
                 }
             }
 
-            toggles.appendField("MODULES", "**Enabled**```\n" + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
-                    "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.spacer , true);
-            toggles.appendField("SETTINGS", "**Enabled**```\n" + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
+            toggles.appendField("MODULES", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
+                    "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.spacer, true);
+            toggles.appendField("SETTINGS", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
                     "**Disabled**```" + Utility.listEnumFormatter(disabledSettings, true) + "```", true);
             RequestHandler.sendEmbedMessage("", toggles, channel).get();
         }
 
 
-        if (Utility.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+        if (GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
 
-            List<ChannelSetting> channelSettings = Arrays.asList(command.guild.channelSettings);
+            List<ChannelSetting> channelSettings = command.guild.channelSettings;
             channelSettings.sort(Comparator.comparing(ChannelSetting::toString));
             channelSettings.sort((o1, o2) -> Boolean.compare(o1.isSetting(), o2.isSetting()));
 
@@ -171,7 +175,7 @@ public class GetGuildInfo extends Command {
         guildmodules.remove(index);
         guildmodules.add(0, roleModule);
         for (GuildToggle toggle : guildmodules) {
-            if (toggle.isModule() && toggle.get(command.guild.config)) {
+            if (toggle.isModule() && toggle.enabled(command.guild.config)) {
                 String stats = toggle.stats(command);
                 if (stats != null) {
                     //checks to make sure the field can be added.
@@ -221,58 +225,49 @@ public class GetGuildInfo extends Command {
         return "> Info sent to Dms.";
     }
 
-    protected static final String[] NAMES = new String[]{"GuildInfo", "GuildStats", "ServerInfo", "GetGuildInfo"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"GuildInfo", "ServerInfo", "GetGuildInfo"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Sends Information about the server to your Direct Messages.\n" +
-                "**SubCommands:**\n" +
-                "> " + command.guild.config.getPrefixCommand() + "GuildStats - `Posts a Short description of the server to the current channel.`";
+        return "Sends Information about the server to your Direct Messages.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override
     public void init() {
-
+        subCommands.add(GUILD_STATS);
+        showIndividualSubs = true;
     }
 }

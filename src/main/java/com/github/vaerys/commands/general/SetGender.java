@@ -1,9 +1,9 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
@@ -15,21 +15,26 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 27/02/2017.
  */
 public class SetGender extends Command {
+
+    public static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
+            new String[]{"SetUserGender"},
+            "[@User] [Gender]",
+            "Edits a user's gender.",
+            SAILType.MOD_TOOLS,
+            Permissions.MANAGE_MESSAGES
+    );
+
     @Override
     public String execute(String args, CommandObject command) {
         UserObject user = command.user;
         String quote = args;
         boolean adminEdit = false;
-        if (isSubtype(command, "SetUserGender")) {
-            if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
-                SplitFirstObject userCall = new SplitFirstObject(quote);
-                user = Utility.getUser(command, userCall.getFirstWord(), false, true);
-                if (user == null) return "> Could not find user.";
-                quote = userCall.getRest();
-                adminEdit = true;
-            } else {
-                return command.user.notAllowed;
-            }
+        if (ADMIN_EDIT.isSubCommand(command)) {
+            SplitFirstObject userCall = new SplitFirstObject(quote);
+            user = Utility.getUser(command, userCall.getFirstWord(), false, true);
+            if (user == null) return "> Could not find user.";
+            quote = userCall.getRest();
+            adminEdit = true;
         }
         int maxLength = 20;
         if (user.isPatron) {
@@ -54,74 +59,46 @@ public class SetGender extends Command {
 
     }
 
-    protected static final String[] NAMES = new String[]{"SetGender", "SetUserGender"};
-
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"SetGender"};
     }
 
     @Override
     public String description(CommandObject command) {
         String response = "Allows you to set your Gender. Limit 20 chars (or 40 if you are a patron).";
-        if (Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
-            response += "\n\n**" + command.guild.config.getPrefixCommand() + names[1] + " [@User] [Gender]**\n" +
-                    "**Desc:** Edits a user's gender.\n" +
-                    "**Permissions:** " + Permissions.MANAGE_MESSAGES + ".\n";
-        }
         return response;
     }
 
-    protected static final String USAGE = "[Gender]";
-
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Gender]";
     }
-
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.GENERAL;
     }
-
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
 
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.PROFILES;
     }
-
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
 
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
-
-    protected static final boolean REQUIRES_ARGS = true;
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
-
-    protected static final boolean DO_ADMIN_LOGGING = false;
 
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
-
-    public static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
-            new String[]{"SetUserGender"},
-            "[@User] [Gender]",
-            "Edits a user's gender.",
-            SAILType.ADMIN,
-            Permissions.MANAGE_MESSAGES
-    );
-
 
     @Override
     public void init() {

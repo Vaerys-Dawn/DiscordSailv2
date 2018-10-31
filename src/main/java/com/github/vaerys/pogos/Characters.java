@@ -1,13 +1,13 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.CharacterObject;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GlobalFile;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * Created by Vaerys on 14/08/2016.
  */
 
-public class Characters extends GuildFile {
+public class Characters extends GlobalFile {
     public static final String FILE_PATH = "Characters.json";
     private double fileVersion = 1.0;
     ArrayList<CharacterObject> characters = new ArrayList<>();
@@ -48,12 +48,12 @@ public class Characters extends GuildFile {
         return Constants.ERROR_CHAR_NOT_FOUND;
     }
 
-    public void setRolePrefix(String rolePrefix) {
-        this.rolePrefix = rolePrefix;
-    }
-
     public String getRolePrefix() {
         return rolePrefix;
+    }
+
+    public void setRolePrefix(String rolePrefix) {
+        this.rolePrefix = rolePrefix;
     }
 
     public void validateRoles(IGuild guild) {
@@ -104,11 +104,11 @@ public class Characters extends GuildFile {
 
     public int maxCharsForUser(UserObject user, GuildObject guild) {
         int maxChars = 4;
-        int rewardCount = XpHandler.getRewardCount(guild, user.longID);
+        int rewardCount = PixelHandler.getRewardCount(guild, user.longID);
         maxChars += rewardCount * 2;
         if (user.isPatron) maxChars += 4;
-        if (Utility.canBypass(user, guild)) maxChars += 4;
-        if (Utility.testForPerms(user, guild, Permissions.MANAGE_MESSAGES)) maxChars += 4;
+        if (GuildHandler.canBypass(user, guild)) maxChars += 4;
+        if (GuildHandler.testForPerms(user, guild, Permissions.MANAGE_MESSAGES)) maxChars += 4;
         return maxChars;
     }
 

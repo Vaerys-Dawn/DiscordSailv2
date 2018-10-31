@@ -1,24 +1,25 @@
 package com.github.vaerys.masterobjects;
 
-import java.util.LinkedList;
-import java.util.List;
 import com.github.vaerys.enums.ChannelSetting;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.RequestBuffer;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class ChannelObject {
     public ClientObject client;
-    private IChannel object;
     public long longID;
     public String name;
     public long position;
     public String mention = "#DM";
     public List<ChannelSetting> settings = new LinkedList<>();
+    private IChannel object;
 
     public ChannelObject(IChannel channel, GuildObject guild) {
         if (channel == null) return;
-        this.client = new ClientObject(channel.getClient(), guild);
+        this.client = new ClientObject( guild);
         this.object = channel;
         this.longID = channel.getLongID();
         this.name = channel.getName();

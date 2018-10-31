@@ -1,22 +1,24 @@
 package com.github.vaerys.commands.cc;
 
-import java.io.File;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CCommandObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.io.File;
 
 /**
  * Created by Vaerys on 01/02/2017.
  */
 public class GetCCData extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
@@ -25,7 +27,8 @@ public class GetCCData extends Command {
                 IUser createdBy = command.guild.getUserByID(c.getUserID());
                 if (createdBy == null) createdBy = command.client.get().fetchUser(c.getUserID());
                 if (createdBy == null) content.append("\nCreated by: \"null\"");
-                else content.append("\nCreated by: \"" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "\"");
+                else
+                    content.append("\nCreated by: \"" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "\"");
                 content.append("\nTimes run: \"" + c.getTimesRun() + "\"");
                 content.append("\nContents: \"" + c.getContents(false) + "\"");
                 String filePath = Constants.DIRECTORY_TEMP + command.message.longID + ".txt";
@@ -44,10 +47,9 @@ public class GetCCData extends Command {
 //        return command.customCommands.sendCCasJSON(command.channelSID, args);
     }
 
-    protected static final String[] NAMES = new String[]{"GetCCdata"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"GetCCdata"};
     }
 
     @Override
@@ -55,40 +57,34 @@ public class GetCCData extends Command {
         return "Sends a Json File with all of the Custom command's data.";
     }
 
-    protected static final String USAGE = "[Command Name]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Command Name]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CC;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.CC_INFO;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.CC_INFO;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.creator.DailyMsg;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.objects.DailyMessage;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class LastDailyMessage extends Command {
@@ -20,10 +20,9 @@ public class LastDailyMessage extends Command {
         } else return "> It appears that there have been no daily messages stored.";
     }
 
-    protected static final String[] NAMES = new String[]{"LastDailyMessage", "LastDailyMsg"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"LastDailyMessage", "LastDailyMsg"};
     }
 
     @Override
@@ -31,41 +30,34 @@ public class LastDailyMessage extends Command {
         return "Gives the information of the last Daily message that was sent to this server.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.GENERAL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is not essential but helps to get you used to logback -->
+<!-- This file is not essential but helps to getAllToggles you used to logback -->
 <!-- Put this file under src/com.github.vaerys.main/resources folder -->
 
 <configuration scan="true">
@@ -34,10 +34,10 @@
         <file>Storage/logs/bot.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <fileNamePattern>Storage/logs/bot-%i.log</fileNamePattern>
-            <minIndex>1</minIndex>
-            <maxIndex>4</maxIndex>
+            <minIndex>0</minIndex>
+            <maxIndex>9</maxIndex>
         </rollingPolicy>
-        <triggeringPolicy class="com.github.vaerys.objects.TriggerOncePolicy"/>
+        <triggeringPolicy class="com.github.vaerys.utilobjects.TriggerOncePolicy"/>
     </appender>
 
     <root level="TRACE">

@@ -1,26 +1,26 @@
 package com.github.vaerys.commands.creator;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Client;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.main.Client;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
 public class UpdateAvatar extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         Client.handleAvatars();
         return "> Avatar Updated.";
     }
 
-    protected static final String[] NAMES = new String[]{"UpdateAvatar"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"UpdateAvatar"};
     }
 
     @Override
@@ -28,40 +28,34 @@ public class UpdateAvatar extends Command {
         return "Update's the bot's Avatar.\n" + ownerOnly;
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CREATOR;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

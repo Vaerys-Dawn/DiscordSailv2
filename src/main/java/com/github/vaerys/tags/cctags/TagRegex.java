@@ -1,23 +1,28 @@
 package com.github.vaerys.tags.cctags;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.objects.ReplaceObject;
-import com.github.vaerys.templates.TagObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.objects.ReplaceObject;
+import com.github.vaerys.templates.TagReplaceObject;
 
-public class TagRegex extends TagObject {
+import java.util.List;
 
-    List<ReplaceObject> toReplace = new ArrayList<>();
+public class TagRegex extends TagReplaceObject {
 
     public TagRegex(int priority, TagType... types) {
         super(priority, types);
     }
 
     @Override
-    public String execute(String from, CommandObject command, String args) {
+    public String execute(String from, CommandObject command, String args, List<ReplaceObject> toReplace) {
         List<String> splitArgs = getSplit(from);
+        String test = "Testing.";
+        try {
+            test.replaceAll(splitArgs.get(0), test);
+        } catch (Exception e) {
+            from = replaceFirstTag(from, error);
+            return from;
+        }
         from = removeFirstTag(from);
         toReplace.add(new ReplaceObject(splitArgs.get(0), splitArgs.get(1)));
         return from;
@@ -44,10 +49,13 @@ public class TagRegex extends TagObject {
     }
 
     @Override
-    public String handleTag(String from, CommandObject command, String args) {
-        from = super.handleTag(from, command, args);
+    public String replaceMode(String from, List<ReplaceObject> toReplace) {
         for (ReplaceObject t : toReplace) {
-            from = from.replaceAll(t.getFrom(), t.getTo());
+            try {
+                from = from.replaceAll(t.getFrom(), t.getTo());
+            } catch (IllegalArgumentException e) {
+                from = from.replaceAll(t.getFrom(), prepReplace(t.getTo()));
+            }
         }
         return from;
     }

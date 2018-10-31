@@ -1,13 +1,14 @@
 package com.github.vaerys.tags.cctags;
 
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.enums.TagType;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.templates.TagObject;
+import sx.blah.discord.handle.obj.Permissions;
+
 import java.net.MalformedURLException;
 import java.net.URL;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
-import sx.blah.discord.handle.obj.Permissions;
 
 public class TagEmbedImage extends TagObject {
 
@@ -19,16 +20,19 @@ public class TagEmbedImage extends TagObject {
     public String execute(String from, CommandObject command, String args) {
         String imageURL = contents(from);
         try {
-            URL url = new URL(imageURL);
-            if (Utility.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS)) {
-                from = removeAllTag(from);
+            new URL(imageURL);
+            boolean hasPerm = GuildHandler.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS);
+            String replaceWith = hasPerm ? "" : "<" + imageURL + ">";
+            from = replaceAllTag(from, replaceWith);
+            from = get(TagRemoveMentions.class).handleTag(from, command, args);
+            if (hasPerm) {
                 RequestHandler.sendFileURL(from, imageURL, command.channel.get(), true);
             } else {
-                from = replaceAllTag(from, "<" + imageURL + ">");
                 RequestHandler.sendMessage(from, command.channel.get());
             }
         } catch (MalformedURLException e) {
-            return replaceFirstTag(from, imageURL);
+            from = replaceFirstTag(from, imageURL);
+            return get(TagRemoveMentions.class).handleTag(from, command, args);
         }
         return "";
     }

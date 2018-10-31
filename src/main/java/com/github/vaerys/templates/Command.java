@@ -1,18 +1,26 @@
 package com.github.vaerys.templates;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 29/01/2017.
@@ -24,6 +32,7 @@ public abstract class Command {
     public static final String codeBlock = "```";
     public static final String ownerOnly = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
 
+    private final static Logger logger = LoggerFactory.getLogger(Command.class);
 
     public final ChannelSetting channel;
     public final SAILType type;
@@ -32,7 +41,9 @@ public abstract class Command {
     public final Permissions[] perms;
     public final boolean requiresArgs;
     public final boolean doAdminLogging;
-   
+    public List<SubCommandObject> subCommands = new LinkedList<>();
+    public boolean showIndividualSubs = false;
+
 
     public Command() {
         this.type = type();
@@ -42,14 +53,13 @@ public abstract class Command {
         this.perms = perms();
         this.requiresArgs = requiresArgs();
         this.doAdminLogging = doAdminLogging();
-    };
-    
-
-    public List<SubCommandObject> subCommands = new LinkedList<>();
+        init();
+    }
 
     /**
      * The code to be executed when the command is ran
-     * @param args - The args passed to the command
+     *
+     * @param args    - The args passed to the command
      * @param command - The command object to get data about where the command was sent from
      * @return The text or data to send back for the command
      */
@@ -58,34 +68,39 @@ public abstract class Command {
 
     /**
      * Gets the list of names that are associated with the command
+     *
      * @return the list of names associated with he command
      */
     protected abstract String[] names();
-    
+
     /**
      * The description of the command
+     *
      * @return the description of the command
      */
     public abstract String description(CommandObject command);
 
     /**
      * Gets the usage of the command
+     *
      * @return the usage of the command
      */
     protected abstract String usage();
 
     /**
      * Gets the command type
+     *
      * @return the command type
      */
     protected abstract SAILType type();
 
     /**
      * The channel type the command can be ran in
+     *
      * @return the type of channel it can be ran in
      */
     protected abstract ChannelSetting channel();
-    
+
     protected abstract Permissions[] perms();
 
     protected abstract boolean requiresArgs();
@@ -115,9 +130,20 @@ public abstract class Command {
     }
 
     public boolean isCall(String args, CommandObject command) {
-        SplitFirstObject call = new SplitFirstObject(args);
-        for (String s : names) {
-            if ((command.guild.config.getPrefixCommand() + s).equalsIgnoreCase(call.getFirstWord())) {
+        List<String> validStates = new ArrayList(Arrays.asList(names));
+        subCommands.forEach(subCommandObject -> {
+            for (String s : subCommandObject.getNames()) {
+                validStates.add(s + subCommandObject.getRegex());
+            }
+        });
+        String toTest = command.message.getContent();
+        if (toTest.length() > 200) {
+            toTest = StringUtils.truncate(toTest, 200);
+        }
+        for (String s : validStates) {
+            String regexString = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + " (.|\n)*";
+            String regexStringEnd = "^(?i)" + Utility.escapeRegex(command.guild.config.getPrefixCommand()) + s + "$";
+            if (Pattern.compile(regexString).matcher(toTest).matches() || Pattern.compile(regexStringEnd).matcher(toTest).matches()) {
                 return true;
             }
         }
@@ -134,6 +160,7 @@ public abstract class Command {
 
     /**
      * Creates a message used to fetch the command's documentations
+     *
      * @param command
      * @return
      */
@@ -142,47 +169,56 @@ public abstract class Command {
 
         //command info
         StringBuilder builder = new StringBuilder();
-        builder.append("**" + getUsage(command) + "**\n");
-        builder.append("**Desc: **" + description(command) + "\n");
-        builder.append("**Type: **" + type.toString() + "\n");
-        
+        builder.append(description(command) + "\n");
+        builder.append("**Type: **" + type.toString() + ".");
+
+
         // display permissions
         if (perms != null && perms.length != 0) {
 
-            builder.append("**Perms: **");
+            builder.append("\n**Perms: **");
             ArrayList<String> permList = new ArrayList<>(perms.length);
             for (Permissions p : perms) {
-                permList.add(p.toString());
+                permList.add(Utility.enumToString(p));
             }
             builder.append(Utility.listFormatter(permList, true));
         }
 
-        infoEmbed.appendField("> Help - " + names()[0], builder.toString(), false);
+        if (names.length > 1) {
+            List<String> aliases = Arrays.asList(names).stream().map(s -> command.guild.config.getPrefixCommand() + s).collect(Collectors.toList());
+            aliases.remove(0);
+            builder.append("\n**Aliases:** " + Utility.listFormatter(aliases, true));
+        }
 
+        List<SubCommandObject> objectList = subCommands.stream()
+                .filter(subCommandObject -> GuildHandler.testForPerms(command, subCommandObject.getPermissions()))
+                .collect(Collectors.toList());
+
+        if (objectList.size() != 0) builder.append("\n" + Command.spacer);
+
+        infoEmbed.withTitle("> Help - " + names()[0]);
+        infoEmbed.appendField("**" + getUsage(command) + "**    " + Command.spacer, builder.toString(), true);
+
+
+        for (SubCommandObject s : objectList) {
+            infoEmbed.appendField(s.getCommandUsage(command) + "    " + Command.spacer, s.getHelpDesc(command), true);
+        }
 
         //Handle channels
         List<IChannel> channels = command.guild.getChannelsByType(channel);
-        List<String> channelMentions = Utility.getChannelMentions(channels);
+        List<String> channelMentions = command.user.getVisibleChannels(channels).stream().map(c -> c.mention()).collect(Collectors.toList());
 
         //channel
-        if (channelMentions.size() > 0) {
-            if (channelMentions.size() == 1) {
-                infoEmbed.appendField("Channel ", Utility.listFormatter(channelMentions, true), false);
+        if (channels.size() > 0) {
+            if (channelMentions.size() != 0) {
+                infoEmbed.appendField(channels.size() == 1 ? "Channel " : "Channels", Utility.listFormatter(channelMentions, true), false);
             } else {
-                infoEmbed.appendField("Channels ", Utility.listFormatter(channelMentions, true), false);
+                infoEmbed.appendField("Channels", "You do not have access to any channels that you are able to run this command in.", false);
             }
         }
 
         //aliases
-        if (names.length > 1) {
-            StringBuilder aliasBuilder = new StringBuilder();
-            for (int i = 1; i < names.length; i++) {
-                aliasBuilder.append(getCommand(command, i) + ", ");
-            }
-            aliasBuilder.delete(aliasBuilder.length() - 2, aliasBuilder.length());
-            aliasBuilder.append(".\n");
-            infoEmbed.appendField("Aliases", aliasBuilder.toString(), false);
-        }
+
         return infoEmbed;
     }
 
@@ -214,7 +250,66 @@ public abstract class Command {
         }
     }
 
-    public boolean isSubtype(CommandObject command, String subType) {
+    public boolean isAlias(CommandObject command, String subType) {
         return command.message.get().getContent().toLowerCase().startsWith(command.guild.config.getPrefixCommand() + subType.toLowerCase());
     }
+
+    public boolean hasSubCommands(SAILType type) {
+        boolean subFound = false;
+        for (SubCommandObject sb : subCommands) {
+            if (sb.getType() == type) {
+                subFound = true;
+                break;
+            }
+        }
+        return subFound;
+    }
+
+    public boolean isVisibleInType(CommandObject commandObject, SAILType type) {
+        if (this.type == type) {
+            return GuildHandler.testForPerms(commandObject, perms);
+        } else {
+            boolean hasPerms = false;
+            for (SubCommandObject s : subCommands) {
+                List<Permissions> allPerms = new ArrayList<>(Arrays.asList(perms));
+                allPerms.addAll(Arrays.asList(s.getPermissions()));
+                if (GuildHandler.testForPerms(commandObject, allPerms)) {
+                    hasPerms = true;
+                }
+            }
+            return hasPerms;
+        }
+    }
+
+    public boolean isName(String args, CommandObject command) {
+        String prefix = command.guild.config.getPrefixCommand();
+        List<String> allNames = new ArrayList<>(Arrays.asList(names));
+        for (SubCommandObject s : subCommands) {
+            if (GuildHandler.testForPerms(command, s.getPermissions())) {
+                allNames.addAll(Arrays.asList(s.getNames()));
+            }
+        }
+        allNames = allNames.stream().distinct().collect(Collectors.toList());
+        for (String s : allNames) {
+            if (s.equalsIgnoreCase(args) || args.equalsIgnoreCase(prefix + s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean testSubCommands(CommandObject command, List<SAILType> types) {
+        for (SubCommandObject s : subCommands) {
+            if (types.contains(s.getType()) && GuildHandler.testForPerms(command, s.getPermissions())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Command get(Class obj) {
+        return CommandList.getCommand(obj);
+    }
+
+
 }

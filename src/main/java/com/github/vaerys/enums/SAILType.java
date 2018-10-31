@@ -2,32 +2,37 @@ package com.github.vaerys.enums;
 
 /**
  * used to differentiate the different command types
- * @author C0bra5
  *
+ * @author C0bra5
  */
 public enum SAILType {
     //command types
-    GENERAL("General"),
+
     ADMIN("Admin"),
-    ROLE_SELECT("Role"),
-    CHARACTER("Chars"),
-    SERVERS("Servers"),
     CC("CC"),
-    HELP("Help"),
     COMPETITION("Comp"),
-    DM("DM"),
+    CHARACTER("Chars"),
     CREATOR("Creator"),
-    PIXEL("Pixels"),
+    DM("DM"),
+    GENERAL("General"),
     GROUPS("Groups"),
+    HELP("Help"),
+    CUSTOM_JOIN_MESSAGES("JoinMessages"),
+//    MENTION("Mention"),
+    MOD_TOOLS("ModTools"),
+    PIXEL("Pixels"),
+    ROLE_SELECT("Role"),
+    SERVERS("Servers"),
     SLASH("Slash"),
-    MENTION("Mention"),
+    SETUP("Setup"),
     LOGGING("Logging"),
-    
+
     //module types
     ART_PINNING("ArtPinning"),
     PROFILES("Profiles"),
     MOD_MUTE("ModMute"),
-    
+    READ_RULES_REWARDS("RuleCode"),
+
     //Toggle types
     ADMIN_LOGGING("AdminLogging"),
     AUTO_ART_PINNING("AutoArtPinning"),
@@ -42,13 +47,12 @@ public enum SAILType {
     EXTEND_EDIT_LOG("ExtendEditLog"),
     GENERAL_LOGGING("GeneralLogging"),
     JOIN_LEAVE_LOGGING("JoinLeaveLogging"),
-    JOIN_SERVER_MESSAGES("JoinServerMessages"),
-    LIKE_ART("Like_Art"),
+    JOIN_SERVER_MESSAGES("WelcomeMessages"),
+    LIKE_ART("LikeArt"),
     MENTION_SPAM("MentionSpam"),
     MUTE_REPEAT_OFFENDER("MuteRepeatOffender"),
     RATE_LIMITING("RateLimiting"),
     REACT_TO_LEVEL_UP("ReactToLevelUp"),
-    READ_RULES_REWARDS("ReadRulesRewards"),
     ROLE_IS_TOGGLE("RoleIsToggle"),
     SELF_DESTRUCT_LEVEL_UPS("SelfDestructLevelUps"),
     SHITPOST_FILTERING("ShitpostFiltering"),
@@ -58,17 +62,17 @@ public enum SAILType {
     USE_TIME_STAMPS("UseTimeStamps"),
     VOTING("Voting"),
     XP_DECAY("XpDecay"),
-    XP_GAIN("XpGain");
+    XP_GAIN("XpGain"),
+    CHECK_NEW_USERS("CheckNewUsers"),
+    SEND_JOIN_MESSAGES("SendJoinMessages"),
+    BAN_LOGGING("BanLogging"),
+    KICK_LOGGING("KickLogging"),
+    ADMIN_CC("AdminCC");
 
     private String name;
-    
+
     SAILType(String name) {
         this.name = name;
-    }
-    
-    @Override
-    public String toString() {
-        return name;
     }
 
     public static SAILType get(String type) {
@@ -78,5 +82,10 @@ public enum SAILType {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

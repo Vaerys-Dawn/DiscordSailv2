@@ -1,31 +1,32 @@
 package com.github.vaerys.commands.dmCommands;
 
-import java.util.List;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.help.Info;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.main.Globals;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
+import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.commands.help.Help;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.DMCommand;
+
+import java.util.List;
 
 /**
  * Created by Vaerys on 05/02/2017.
  */
 public class InfoDM extends DMCommand {
+
     @Override
     public String execute(String args, CommandObject command) {
         List<Command> commands = command.guild.getAllCommands(command);
         if (command.user.longID == command.client.creator.longID) {
-            commands.addAll(Globals.getCreatorCommands(true));
+            commands.addAll(CommandList.getCreatorCommands(true));
         }
 
         String error = "> Could not find information on any commands named **" + args + "**.";
         for (Command c : commands) {
             for (String s : c.names) {
                 if (args.equalsIgnoreCase(s)) {
-                    // if (!Utility.testForPerms(c.perms(), command.user.get(), command.guild.get())) {
+                    // if (!Utility.testForPerms(c.perms(), command.user.getAllToggles(), command.guild.getAllToggles())) {
                     // return error;
                     // }
                     RequestHandler.sendEmbedMessage("", c.getCommandInfo(command), command.channel.get());
@@ -35,7 +36,7 @@ public class InfoDM extends DMCommand {
 
         }
         return error;
-        // List<Command> commands = Utility.getCommandsByType(Globals.getAllCommands(), command, TYPE_DM,
+        // List<Command> commands = Utility.getCommandsByType(Globals.getAll(), command, TYPE_DM,
         // true);
         //
         // for (Command c : commands) {
@@ -66,7 +67,7 @@ public class InfoDM extends DMCommand {
         // aliasBuilder.append(".\n");
         // infoEmbed.appendField("Aliases:", aliasBuilder.toString(), false);
         // }
-        // Utility.sendEmbedMessage("", infoEmbed, command.channel.get());
+        // Utility.sendEmbedMessage("", infoEmbed, command.channel.getAllToggles());
         // return "";
         // }
         // }
@@ -74,11 +75,9 @@ public class InfoDM extends DMCommand {
         // return "> Command with the name " + args + " not found.";
     }
 
-    protected static final String[] NAMES = new Info().names;
-
     @Override
     protected String[] names() {
-        return NAMES;
+        return new Help().names;
     }
 
     @Override
@@ -86,32 +85,19 @@ public class InfoDM extends DMCommand {
         return "Tells you information about DM commands.";
     }
 
-    protected static final String USAGE = "[Command Name]";
-
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Command Name]";
     }
-
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
 
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
-
-    protected static final ChannelSetting CHANNEL_SETTING = null;
-    @Override
-    protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
-    }
-
-    protected static final boolean REQUIRES_ARGS = true;
 
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
     @Override

@@ -1,17 +1,19 @@
 package com.github.vaerys.commands.servers;
 
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.templates.Command;
+import sx.blah.discord.handle.obj.Permissions;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 31/01/2017.
  */
 public class AddServer extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<String> splitArgs = new ArrayList<>(Arrays.asList(args.split(" ")));
@@ -25,10 +27,9 @@ public class AddServer extends Command {
         return command.guild.servers.addServer(command.user.longID, splitArgs.get(0), splitArgs.get(1), port);
     }
 
-    protected static final String[] NAMES = new String[]{"AddServer"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"AddServer"};
     }
 
     @Override
@@ -36,40 +37,34 @@ public class AddServer extends Command {
         return "Adds a server to the guild's server list.";
     }
 
-    protected static final String USAGE = "[Server Name] [IP] (Port)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Server Name] [IP] (Port)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.SERVERS;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.SERVERS;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.SERVERS;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.SERVERS;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

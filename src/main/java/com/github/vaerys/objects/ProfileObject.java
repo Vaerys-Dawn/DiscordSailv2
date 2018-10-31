@@ -1,20 +1,19 @@
 package com.github.vaerys.objects;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.main.Constants;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.main.Client;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.pogos.GuildConfig;
+import sx.blah.discord.api.IDiscordClient;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.vaerys.enums.UserSetting.DONT_DECAY;
@@ -25,16 +24,21 @@ import static com.github.vaerys.enums.UserSetting.DONT_DECAY;
 public class ProfileObject {
     private static final String defaultQuote = "This person doesn't seem to have much to say for themselves.";
     private static final String defaultGender = "Unknown";
-
+    public long lastTalked = -1;
     long userID;
     long xp = 0;
-    long currentLevel = -1;
-    String gender = "Unknown";
+    long currentLevel = 0;
+    String gender = defaultGender;
     String quote = defaultQuote;
     ArrayList<UserSetting> settings = new ArrayList<>();
     ArrayList<UserLinkObject> links = new ArrayList<>();
     public List<ModNoteObject> modNotes;
-    public long lastTalked = -1;
+
+    public ProfileObject(long userID) {
+        this.userID = userID;
+        if (links == null) links = new ArrayList<>();
+        if (settings == null) settings = new ArrayList<>();
+    }
 
     public String getQuote() {
         if (quote == null) {
@@ -58,12 +62,6 @@ public class ProfileObject {
         this.gender = gender;
     }
 
-    public ProfileObject(long userID) {
-        this.userID = userID;
-        if (links == null) links = new ArrayList<>();
-        if (settings == null) settings = new ArrayList<>();
-    }
-
     public long getUserID() {
         return userID;
     }
@@ -72,16 +70,24 @@ public class ProfileObject {
         xp += config.xpRate * config.xpModifier;
     }
 
-    public void addXP(long xp, GuildConfig config) {
-        this.xp += config.xpModifier * xp;
+    public void addXP(long pixels, GuildConfig config) {
+        this.xp += config.xpModifier * pixels;
+        if (xp > Constants.PIXELS_CAP) {
+            this.xp = Constants.PIXELS_CAP;
+        }
+    }
+
+    public void removePixels(long pixels, GuildConfig config) {
+        this.xp -= config.xpModifier * pixels;
+        if (xp < 0) {
+            this.xp = 0;
+        }
     }
 
     public void setXp(long xp, boolean levelUp) {
-        if (xp > Constants.PIXELS_CAP) throw new IllegalArgumentException("argument out of valid range");
         this.xp = xp;
-
         if (levelUp) {
-            this.currentLevel = XpHandler.xpToLevel(xp);
+            this.currentLevel = PixelHandler.xpToLevel(xp);
         }
     }
 
@@ -100,6 +106,10 @@ public class ProfileObject {
         return settings;
     }
 
+    public void setSettings(ArrayList<UserSetting> settings) {
+        this.settings = settings;
+    }
+
     public ArrayList<UserLinkObject> getLinks() {
         return links;
     }
@@ -114,12 +124,20 @@ public class ProfileObject {
         return lastTalked;
     }
 
+    public void setLastTalked(long lastTalked) {
+        this.lastTalked = lastTalked;
+    }
+
     public long getCurrentLevel() {
         return currentLevel;
     }
 
     public void setCurrentLevel(long currentLevel) {
         this.currentLevel = currentLevel;
+    }
+
+    public void levelUp() {
+        currentLevel = PixelHandler.xpToLevel(xp);
     }
 
     public UserSetting getLevelState() {
@@ -129,10 +147,6 @@ public class ProfileObject {
             }
         }
         return null;
-    }
-
-    public void setLastTalked(long lastTalked) {
-        this.lastTalked = lastTalked;
     }
 
     public void removeLevelFloor() {
@@ -146,7 +160,7 @@ public class ProfileObject {
     }
 
     public UserObject getUser(GuildObject content) {
-        return new UserObject(content.get().getUserByID(userID), content);
+        return new UserObject(userID, content);
     }
 
     public boolean isEmpty() {
@@ -181,11 +195,39 @@ public class ProfileObject {
         modNotes.add(new ModNoteObject(contents, command.client.bot.longID, command.message.getTimestamp().toEpochSecond(), isStrike));
     }
 
+    public void addSailModNote(String contents, long timeStamp, boolean isStrike) {
+        if (modNotes == null) modNotes = new LinkedList<>();
+        IDiscordClient client = Client.getClient();
+        modNotes.add(new ModNoteObject(contents, client.getOurUser().getLongID(), timeStamp, isStrike));
+    }
+
     public void addSailModNote(String contents, CommandObject command) {
         addSailModNote(contents, command, false);
     }
 
-    public void setSettings(ArrayList<UserSetting> settings) {
-        this.settings = settings;
+    public String getDefaultAvatarURL() {
+        return String.format("https://cdn.discordapp.com/embed/avatars/%d.png", new Random(userID).nextInt(5));
     }
+
+
+    public void toggleSetting(UserSetting setting) {
+        if (!settings.remove(setting)) {
+            settings.add(setting);
+        }
+    }
+
+    public String toggleSetting(UserSetting setting, String remove, String add) {
+        if (settings.remove(setting)) {
+            return remove;
+        } else {
+            settings.add(setting);
+            return add;
+        }
+    }
+
+    public boolean showRank(GuildObject guild) {
+        return PixelHandler.rank(guild.users, guild.get(), userID) != -1;
+    }
+
+
 }

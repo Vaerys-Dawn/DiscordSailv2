@@ -1,20 +1,12 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.guildtoggles.toggles.AdminLogging;
-import com.github.vaerys.guildtoggles.toggles.ChannelLogging;
-import com.github.vaerys.guildtoggles.toggles.DeleteLogging;
-import com.github.vaerys.guildtoggles.toggles.DontLogBot;
-import com.github.vaerys.guildtoggles.toggles.EditLogging;
-import com.github.vaerys.guildtoggles.toggles.ExtendEditLog;
-import com.github.vaerys.guildtoggles.toggles.GeneralLogging;
-import com.github.vaerys.guildtoggles.toggles.JoinLeaveLogging;
-import com.github.vaerys.guildtoggles.toggles.UseTimeStamps;
-import com.github.vaerys.guildtoggles.toggles.UserRoleLogging;
-import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.GuildModule;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleList;
+import com.github.vaerys.guildtoggles.toggles.*;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildModule;
 
 public class ModuleLogging extends GuildModule {
 
@@ -29,7 +21,7 @@ public class ModuleLogging extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleLogging;
     }
 
@@ -45,16 +37,17 @@ public class ModuleLogging extends GuildModule {
 
     @Override
     public void setup() {
-        settings.add(new AdminLogging());
-        settings.add(new GeneralLogging());
-        settings.add(new JoinLeaveLogging());
-        settings.add(new ChannelLogging());
-        settings.add(new DeleteLogging());
-        settings.add(new EditLogging());
-        settings.add(new DontLogBot());
-        settings.add(new UserRoleLogging());
-        settings.add(new UseTimeStamps());
-        settings.add(new ExtendEditLog());
+        settings.add(ToggleList.getSetting(SAILType.ADMIN_LOGGING));
+        settings.add(ToggleList.getSetting(SAILType.GENERAL_LOGGING));
+        settings.add(ToggleList.getSetting(SAILType.JOIN_LEAVE_LOGGING));
+        settings.add(ToggleList.getSetting(SAILType.CHANNEL_LOGGING));
+        settings.add(ToggleList.getSetting(SAILType.DELETE_LOGGING));
+        settings.add(ToggleList.getSetting(SAILType.EDIT_LOGGING));
+        settings.add(ToggleList.getSetting(SAILType.DONT_LOG_BOT));
+        settings.add(ToggleList.getSetting(SAILType.USER_ROLE_LOGGING));
+        settings.add(ToggleList.getSetting(SAILType.USE_TIME_STAMPS));
+        settings.add(ToggleList.getSetting(SAILType.EXTEND_EDIT_LOG));
+        settings.add(ToggleList.getSetting(SAILType.CHECK_NEW_USERS));
         channels.add(ChannelSetting.ADMIN_LOG);
         channels.add(ChannelSetting.SERVER_LOG);
         channels.add(ChannelSetting.DONT_LOG);
@@ -63,5 +56,10 @@ public class ModuleLogging extends GuildModule {
     @Override
     public String stats(CommandObject object) {
         return null;
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Handles various additional logging features.";
     }
 }

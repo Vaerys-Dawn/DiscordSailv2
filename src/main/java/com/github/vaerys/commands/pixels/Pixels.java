@@ -1,24 +1,26 @@
 package com.github.vaerys.commands.pixels;
 
-import java.text.NumberFormat;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.main.Constants;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.text.NumberFormat;
 
 /**
  * Created by Vaerys on 01/07/2017.
  */
 public class Pixels extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder();
@@ -42,13 +44,13 @@ public class Pixels extends Command {
 
         String rankTitle = "Rank: ";
         String rankTotal;
-        if (XpHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) != -1 && profile.getXP() != 0) {
-            rankTotal = XpHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) + "/" + XpHandler.totalRanked(command);
+        if (PixelHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) != -1 && profile.getXP() != 0) {
+            rankTotal = PixelHandler.rank(command.guild.users, command.guild.get(), profile.getUserID()) + "/" + PixelHandler.totalRanked(command);
         } else {
             rankTotal = "N/a";
         }
-        long xpForNext = XpHandler.levelToXP(profile.getCurrentLevel() + 1);
-        long xpTillNext = XpHandler.totalXPForLevel(profile.getCurrentLevel() + 1) - profile.getXP();
+        long xpForNext = PixelHandler.levelToXP(profile.getCurrentLevel() + 1);
+        long xpTillNext = PixelHandler.totalXPForLevel(profile.getCurrentLevel() + 1) - profile.getXP();
         long xpProgress = xpForNext - xpTillNext;
         long percentToLvl = (xpProgress * 100) / xpForNext;
         StringBuilder xpBar = new StringBuilder("-------------------");
@@ -59,9 +61,9 @@ public class Pixels extends Command {
         if (pos > xpBar.length()) {
             pos = xpBar.length();
         }
-        if (user.isDecaying(command.guild)){
+        if (user.isDecaying(command.guild)) {
             xpBar.replace(pos, pos, "**<**");
-        }else {
+        } else {
             xpBar.replace(pos, pos, "**>**");
         }
         String levelTotal = "**" + profile.getCurrentLevel() + "** [" + xpBar.toString() + "] **" + (profile.getCurrentLevel() + 1) + "**";
@@ -89,10 +91,9 @@ public class Pixels extends Command {
 
     }
 
-    protected static final String[] NAMES = new String[]{"Pixels"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Pixels"};
     }
 
     @Override
@@ -100,40 +101,34 @@ public class Pixels extends Command {
         return "Shows you your current Pixel count and rank.";
     }
 
-    protected static final String USAGE = "(@User)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(@User)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.PIXEL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.PIXELS;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.PIXELS;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

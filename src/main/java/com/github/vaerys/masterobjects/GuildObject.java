@@ -1,14 +1,12 @@
 package com.github.vaerys.masterobjects;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.commands.general.NewDailyMessage;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.FilePaths;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleList;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -16,30 +14,27 @@ import com.github.vaerys.objects.ChannelSettingObject;
 import com.github.vaerys.objects.GuildLogObject;
 import com.github.vaerys.objects.LogObject;
 import com.github.vaerys.objects.UserRateObject;
-import com.github.vaerys.pogos.ChannelData;
-import com.github.vaerys.pogos.Characters;
-import com.github.vaerys.pogos.Competition;
-import com.github.vaerys.pogos.CustomCommands;
-import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.pogos.GuildLog;
-import com.github.vaerys.pogos.GuildUsers;
-import com.github.vaerys.pogos.Servers;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.FileFactory;
+import com.github.vaerys.templates.GlobalFile;
 import com.github.vaerys.templates.GuildToggle;
-import com.github.vaerys.enums.SAILType;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IEmoji;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.IVoiceChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.obj.*;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.stream.Collectors;
+
+/**
+ * Wrapper for the Guild API object. Also contains all bot data related to said Guild.
+ */
 public class GuildObject {
+    private final static Logger logger = LoggerFactory.getLogger(GuildObject.class);
     public ClientObject client;
-    private IGuild object;
     public long longID;
     public GuildConfig config;
     public CustomCommands customCommands;
@@ -49,29 +44,30 @@ public class GuildObject {
     public GuildUsers users;
     public ChannelData channelData;
     public GuildLog guildLog;
-    public List<GuildFile> guildFiles;
+    public AdminCCs adminCCs;
+    public List<GlobalFile> guildFiles;
     public List<Command> commands;
     public List<GuildToggle> toggles;
-    public ChannelSetting[] channelSettings;
+    public List<ChannelSetting> channelSettings;
     public List<SAILType> commandTypes;
+    private IGuild object;
     private List<UserRateObject> rateLimiting = new ArrayList<>();
     private List<Long> spokenUsers = new ArrayList<>();
     private List<GuildToggle> toRemove = new ArrayList<>();
 
-    private final static Logger logger = LoggerFactory.getLogger(GuildObject.class);
-
     public GuildObject(IGuild object) {
         this.object = object;
         this.longID = object.getLongID();
-        this.config = (GuildConfig) GuildConfig.create(GuildConfig.FILE_PATH, longID, new GuildConfig());
-        this.customCommands = (CustomCommands) CustomCommands.create(CustomCommands.FILE_PATH, longID, new CustomCommands());
-        this.servers = (Servers) Servers.create(Servers.FILE_PATH, longID, new Servers());
-        this.characters = (Characters) Characters.create(Characters.FILE_PATH, longID, new Characters());
-        this.competition = (Competition) Competition.create(Competition.FILE_PATH, longID, new Competition());
-        this.users = (GuildUsers) GuildUsers.create(GuildUsers.FILE_PATH, longID, new GuildUsers());
-        this.channelData = (ChannelData) ChannelData.create(ChannelData.FILE_PATH, longID, new ChannelData());
-        this.guildLog = (GuildLog) GuildLog.create(GuildLog.FILE_PATH, longID, new GuildLog());
-        this.guildFiles = new ArrayList<GuildFile>() {{
+        this.config = FileFactory.create(longID, FilePaths.GUILD_CONFIG, GuildConfig.class);
+        this.customCommands = FileFactory.create(longID, FilePaths.CUSTOM_COMMANDS, CustomCommands.class);
+        this.servers = FileFactory.create(longID, FilePaths.SERVERS, Servers.class);
+        this.characters = FileFactory.create(longID, FilePaths.CHARACTERS, Characters.class);
+        this.competition = FileFactory.create(longID, FilePaths.COMPETITION, Competition.class);
+        this.users = FileFactory.create(longID, FilePaths.GUILD_USERS, GuildUsers.class);
+        this.channelData = FileFactory.create(longID, FilePaths.CHANNEL_DATA, ChannelData.class);
+        this.guildLog = FileFactory.create(longID, FilePaths.GUILD_LOG, GuildLog.class);
+        this.adminCCs = FileFactory.create(longID, FilePaths.ADMIN_CCS, AdminCCs.class);
+        this.guildFiles = new ArrayList<GlobalFile>() {{
             add(config);
             add(customCommands);
             add(servers);
@@ -80,10 +76,27 @@ public class GuildObject {
             add(users);
             add(channelData);
             add(guildLog);
+            add(adminCCs);
         }};
         customCommands.initCustomCommands(get());
-        this.client = new ClientObject(object.getClient(), this);
+        this.client = new ClientObject(this);
         loadCommandData();
+    }
+
+    public GuildObject() {
+        this.client = new ClientObject(this);
+        this.object = null;
+        this.longID = -1;
+        this.config = new GuildConfig();
+        this.customCommands = new CustomCommands();
+        this.servers = new Servers();
+        this.characters = new Characters();
+        this.competition = new Competition();
+        this.users = new GuildUsers();
+        this.channelData = new ChannelData();
+        this.guildFiles = new ArrayList<>();
+        this.commands = new ArrayList<>(CommandList.getCommands(true));
+        this.object = null;
     }
 
     public void sendDebugLog(CommandObject command, String type, String name, String contents) {
@@ -97,29 +110,12 @@ public class GuildObject {
         logger.trace(output);
     }
 
-
     public void loadCommandData() {
-        this.commands = Globals.getCommands(false);
-        this.toggles = Globals.getGuildToggles();
-        this.channelSettings = Globals.getChannelSettings();
-        this.commandTypes = new ArrayList<>(Arrays.asList(Globals.getCommandTypes()));
+        this.commands = new ArrayList<>(CommandList.getCommands(false));
+        this.toggles = new ArrayList<>(ToggleList.getAllToggles());
+        this.channelSettings = new ArrayList<>(Globals.getChannelSettings());
+        this.commandTypes = new ArrayList<>(Globals.getCommandTypes());
         checkToggles();
-    }
-
-    public GuildObject() {
-        this.client = new ClientObject(Globals.getClient(), this);
-        this.object = null;
-        this.longID = -1;
-        this.config = new GuildConfig();
-        this.customCommands = new CustomCommands();
-        this.servers = new Servers();
-        this.characters = new Characters();
-        this.competition = new Competition();
-        this.users = new GuildUsers();
-        this.channelData = new ChannelData();
-        this.guildFiles = new ArrayList<>();
-        this.commands = new ArrayList<>();
-        this.commands = new ArrayList<>(Globals.getCommands(true));
     }
 
     public IGuild get() {
@@ -129,7 +125,7 @@ public class GuildObject {
     private void checkToggles() {
         toRemove = new ArrayList<>();
         for (GuildToggle g : toggles) {
-            if (!g.get(config)) {
+            if (!g.enabled(config)) {
                 g.execute(this);
             }
         }
@@ -138,7 +134,7 @@ public class GuildObject {
             ListIterator iterator = toggles.listIterator();
             while (iterator.hasNext()) {
                 GuildToggle toggle = (GuildToggle) iterator.next();
-                if (toggle.name() ==g.name()) {
+                if (toggle.name() == g.name()) {
                     if (g.isModule()) {
                         logger.trace("Module: " + g.name() + " removed.");
                     } else {
@@ -181,18 +177,21 @@ public class GuildObject {
 
     /**
      * Removes a channel setting from the specified channel
+     *
      * @param channel
      */
-    public void removeChannelSetting(String channel) {
+    public void removeChannelSetting(ChannelSetting channel) {
+        channelSettings.remove(ChannelSetting.FROM_DM);
         for (ChannelSetting s : channelSettings) {
-            if (s.toString().equals(channel)) {
+            if (s == channel) {
+                channelSettings.remove(s);
                 logger.trace("Channel Setting: " + s.toString() + " removed.");
+                break;
             }
         }
     }
 
     /**
-     * 
      * @param names
      */
     public void removeCommand(String[] names) {
@@ -226,7 +225,7 @@ public class GuildObject {
         rateLimiting = new ArrayList<>();
     }
 
-    public boolean rateLimit(long userID) {
+    public boolean rateLimit(long userID, IChannel channel, long timeStamp) {
         int max = config.messageLimit;
         if (max == -1) {
             return false;
@@ -234,7 +233,7 @@ public class GuildObject {
         boolean isfound = false;
         for (UserRateObject r : rateLimiting) {
             if (r.getID() == userID) {
-                r.counterUp();
+                r.counterUp(channel, timeStamp);
                 isfound = true;
                 if (r.counter > max) {
                     return true;
@@ -242,7 +241,7 @@ public class GuildObject {
             }
         }
         if (!isfound) {
-            rateLimiting.add(new UserRateObject(userID));
+            rateLimiting.add(new UserRateObject(userID, channel, timeStamp));
         }
         return false;
     }
@@ -272,7 +271,7 @@ public class GuildObject {
     public List<Command> getAllCommands(CommandObject command) {
         List<Command> allCommands = new ArrayList<>(commands);
         if (command.user.get().equals(command.client.creator)) {
-            allCommands.addAll(Globals.getALLCreatorCommands());
+            allCommands.addAll(CommandList.getCreatorCommands());
         }
         return allCommands;
     }
@@ -314,7 +313,7 @@ public class GuildObject {
     }
 
     public void handleWelcome(CommandObject command) {
-        if (config.welcomeMessage) {
+        if (config.initialMessage) {
             return;
         }
         if (command.guild.get() == null || command.channel == null) {
@@ -324,9 +323,10 @@ public class GuildObject {
         if (general != null && command.channel.longID != general.getLongID()) {
             return;
         }
+        if (!GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER)) return;
         IMessage message = RequestHandler.sendMessage(Constants.getWelcomeMessage(command), command.channel.get()).get();
         if (message != null) {
-            command.guild.config.welcomeMessage = true;
+            command.guild.config.initialMessage = true;
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(5 * 60 * 1000);
@@ -383,5 +383,31 @@ public class GuildObject {
 
     public IRole getTopTenRole() {
         return object.getRoleByID(config.topTenRoleID);
+    }
+
+    public List<IRole> getCosmeticRoles() {
+        return config.getCosmeticRoleIDs().stream().map(id -> object.getRoleByID(id)).collect(Collectors.toList());
+    }
+
+    public List<IRole> getModifierRoles() {
+        return config.getModifierRoleIDs().stream().map(id -> object.getRoleByID(id)).collect(Collectors.toList());
+    }
+
+    public IRole getRuleCodeRole() {
+        return object.getRoleByID(config.ruleCodeRewardID);
+    }
+
+    public boolean channelHasSetting(ChannelSetting setting, long channelID) {
+        ChannelSettingObject settings = channelData.getChannelSetting(setting);
+        if (settings == null) return false;
+        return settings.getChannelIDs().contains(channelID);
+    }
+
+    public boolean channelHasSetting(ChannelSetting setting, IChannel channel) {
+        return channelHasSetting(setting, channel.getLongID());
+    }
+
+    public boolean channelHasSetting(ChannelSetting setting, ChannelObject channel) {
+        return channelHasSetting(setting, channel.longID);
     }
 }

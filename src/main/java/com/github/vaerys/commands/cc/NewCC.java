@@ -1,26 +1,39 @@
 package com.github.vaerys.commands.cc;
 
-import java.util.List;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.commands.admin.Test;
+import com.github.vaerys.commands.creator.directmessages.Echo;
+import com.github.vaerys.commands.general.Hello;
+import com.github.vaerys.commands.general.Patreon;
+import com.github.vaerys.commands.help.Ping;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Vaerys on 01/02/2017.
  */
 public class NewCC extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
-            return "> You have been denied the creation of custom commands.";
+            return "> " + command.user.mention() + ", You have been denied the creation of custom commands.";
         }
         if (command.guild.getChannelsByType(ChannelSetting.CC_DENIED).contains(command.channel.get()))
             return "> This Channel has CCs Denied, You cannot create ccs here.";
@@ -38,8 +51,14 @@ public class NewCC extends Command {
         if (object.getSettings().contains(UserSetting.AUTO_SHITPOST)) {
             isShitpost = true;
         }
+
         String nameCC = splitFirst.getFirstWord();
         String argsCC = splitFirst.getRest();
+
+        if (handleNameFilter(command, nameCC)) {
+            return "> Custom Commands cannot have the same name as built-in commands.";
+        }
+
         if ((argsCC == null || argsCC.isEmpty()) && command.message.get().getAttachments().size() == 0) {
             return "> Custom command contents cannot be blank.";
         }
@@ -62,58 +81,88 @@ public class NewCC extends Command {
             argsCC.replace("<shitpost>", "");
             isShitpost = true;
         }
-        if (argsCC.contains("<lock>") && Utility.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+        if (argsCC.contains("<lock>") && GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
             argsCC.replace("<lock>", "");
             isLocked = true;
         }
         return command.guild.customCommands.addCommand(isLocked, nameCC, argsCC, isShitpost, command);
     }
 
-    protected static final String[] NAMES = new String[]{"NewCC", "CCNew"};
+    private boolean handleNameFilter(CommandObject command, String nameCC) {
+        List<Command> exceptions = new ArrayList<Command>() {{
+            add(Command.get(Test.class));
+            add(Command.get(Hello.class));
+            add(Command.get(Patreon.class));
+            add(Command.get(Echo.class));
+            add(Command.get(Ping.class));
+            addAll(CommandList.getCommandsByType(SAILType.SLASH));
+        }};
+        // ccs cannot have names that match existing commands:
+        List<Command> toTest = new ArrayList<>(command.guild.commands);
+        toTest.removeAll(exceptions);
+
+        for (Command c : toTest) {
+
+            // get all commands names.
+            List<String> names = new ArrayList<>(Arrays.asList(c.names));
+            for (SubCommandObject sc : c.subCommands) {
+                names.addAll(Arrays.asList(sc.getNames()));
+            }
+
+            // convert them to lowercase.
+            ListIterator<String> li = names.listIterator();
+            while (li.hasNext()) {
+                li.set(li.next().toLowerCase());
+            }
+
+            // do check
+            if (names.contains(nameCC.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"NewCC", "CCNew"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Creates a Custom Command.";
+        return "Creates a Custom Command. (Max Command Name length: 50 chars)\n" +
+                "\n" +
+                "Commands are created on a per server basis.";
     }
 
-    protected static final String USAGE = "[Command Name] [Contents/Image]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Command Name] [Contents/Image]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CC;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.MANAGE_CC;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.MANAGE_CC;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

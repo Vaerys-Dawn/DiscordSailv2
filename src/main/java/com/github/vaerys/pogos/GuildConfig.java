@@ -1,13 +1,14 @@
 package com.github.vaerys.pogos;
 
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.SetupHandler;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.OffenderObject;
 import com.github.vaerys.objects.RewardRoleObject;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GlobalFile;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
@@ -19,13 +20,14 @@ import java.util.stream.Collectors;
 /**
  * Created by Vaerys on 03/08/2016.
  */
-public class GuildConfig extends GuildFile {
+public class GuildConfig extends GlobalFile {
     public static final String FILE_PATH = "Guild_Config.json";
-    private double fileVersion = 1.2;
-    String prefixCommand = Globals.defaultPrefixCommand;
-    String prefixCC = Globals.defaultPrefixCC;
-    String guildName = "";
-    long guildID = -1;
+    private double fileVersion = 1.4;
+    //setup vars
+    public SetupHandler.SetupStage setupStage = SetupHandler.SetupStage.SETUP_UNSET;
+    public long setupUser = -1;
+    //initial welcome message
+    public boolean initialMessage = false;
     //toggles
     //--Auto Tasks
     public boolean dailyMessage = false;
@@ -33,16 +35,18 @@ public class GuildConfig extends GuildFile {
     public boolean autoArtPinning = false;
     public boolean xpDecay = false;
     public boolean xpGain = false;
-    public boolean joinsServerMessages = false;
+    public boolean welcomeMessages = false;
     public boolean selfDestructLevelUps = true;
     public boolean reactToLevelUp = false;
     public boolean likeArt = false;
-    public boolean welcomeMessage = false;
+    public boolean sendJoinMessages = true;
     //--Logging
     public boolean generalLogging = true;
     public boolean adminLogging = true;
     public boolean deleteLogging = true;
     public boolean joinLeaveLogging = true;
+    public boolean kickLogging = true;
+    public boolean banLogging = true;
     public boolean userRoleLogging = false;
     public boolean editLogging = false;
     public boolean extendEditLog = false;
@@ -61,6 +65,7 @@ public class GuildConfig extends GuildFile {
     public boolean userInfoShowsDate = false;
     public boolean debugMode = true;
     public boolean readRuleReward = false;
+    public boolean checkNewUsers = false;
     //--Competition
     public boolean compEntries = false;
     public boolean compVoting = false;
@@ -75,44 +80,46 @@ public class GuildConfig extends GuildFile {
     public boolean moduleGroups = false;
     public boolean modulePixels = false;
     public boolean moduleLogging = false;
-
+    public boolean moduleJoinMessages = false;
+    public boolean moduleAdminCC = false;
     public int maxMentionLimit = 8;
     public int messageLimit = 10;
     public int xpRate = 20;
     public float xpModifier = 1;
-
     public long xpDeniedRoleID = -1;
     public long topTenRoleID = -1;
-    long roleToMentionID = -1;
-    long mutedRoleID = -1;
     public int pinLimit = 25;
-
     public UserSetting defaultLevelMode = UserSetting.SEND_LVLUP_RANK_CHANNEL;
-
-
     public String levelUpReaction = "null";
     public String levelUpMessage = "Ding. Gratz on level <level> <user>.";
+    public long ruleCodeRewardID = -1;
+    String prefixCommand = Globals.defaultPrefixCommand;
+    String prefixCC = Globals.defaultPrefixCC;
+    private String prefixAdminCC = Globals.defaultPrefixAdminCC;
+    String guildName = "";
+    long guildID = -1;
+    long roleToMentionID = -1;
+    long mutedRoleID = -1;
+    long inviteAllowedID = -1;
+    ArrayList<Long> cosmeticRoleIDs = new ArrayList<>();
+    ArrayList<Long> modifierRoleIDs = new ArrayList<>();
+//    ArrayList<Long> trustedRoleIDs = new ArrayList<>();
+
+    // TODO: 04/10/2016 let the mention limit be customisable.
+    ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
+    ArrayList<OffenderObject> offenders = new ArrayList<>();
     private String joinMessage = "> Welcome to the <server> server <user>.";
     private DailyMessage lastDailyMessage = null;
     private ArrayList<String> xpDeniedPrefixes = new ArrayList<>();
-
-    // TODO: 04/10/2016 let the mention limit be customisable.
-
-    ArrayList<Long> cosmeticRoleIDs = new ArrayList<>();
-    ArrayList<Long> modifierRoleIDs = new ArrayList<>();
-    ArrayList<Long> trustedRoleIDs = new ArrayList<>();
-    ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
-    ArrayList<OffenderObject> offenders = new ArrayList<>();
     private String ruleCode = null;
 
 
+    public DailyMessage getLastDailyMessage() {
+        return lastDailyMessage;
+    }
 
     public void setLastDailyMessage(DailyMessage lastDailyMessage) {
         this.lastDailyMessage = lastDailyMessage;
-    }
-
-    public DailyMessage getLastDailyMessage() {
-        return lastDailyMessage;
     }
 
     public ArrayList<RewardRoleObject> getRewardRoles() {
@@ -135,15 +142,17 @@ public class GuildConfig extends GuildFile {
         this.prefixCC = prefixCC;
     }
 
-//    public void addChannelSetting(String type, long id) {
-//        channelSettings.add(new ChannelSettingObject(type, id));
-//    }
+    public String getPrefixAdminCC() {
+        return prefixAdminCC;
+    }
+
+    public void setPrefixAdminCC(String prefixAdminCC) {
+        this.prefixAdminCC = prefixAdminCC;
+    }
 
     public void setGuildName(String guildName) {
         this.guildName = guildName;
     }
-
-
 
     public void updateVariables(IGuild guild) {
         //update Guild Name
@@ -154,14 +163,14 @@ public class GuildConfig extends GuildFile {
         validateRoles();
     }
 
-    public void setRoleToMentionID(long roleID) {
-        validateRoles();
-        roleToMentionID = roleID;
-    }
-
     public long getRoleToMentionID() {
         validateRoles();
         return roleToMentionID;
+    }
+
+    public void setRoleToMentionID(long roleID) {
+        validateRoles();
+        roleToMentionID = roleID;
     }
 
     public void validateRoles() {
@@ -183,12 +192,9 @@ public class GuildConfig extends GuildFile {
                 iterator.remove();
             }
         }
-        iterator = trustedRoleIDs.listIterator();
-        while (iterator.hasNext()) {
-            IRole role = guild.getRoleByID((Long) iterator.next());
-            if (role == null) {
-                iterator.remove();
-            }
+        IRole inviteAllowedRole = guild.getRoleByID(inviteAllowedID);
+        if (inviteAllowedRole == null) {
+            inviteAllowedID = -1;
         }
         IRole mutedRole = guild.getRoleByID(mutedRoleID);
         if (mutedRole == null) {
@@ -220,20 +226,12 @@ public class GuildConfig extends GuildFile {
 
     public boolean testIsTrusted(IUser author, IGuild guild) {
         validateRoles();
-        if (trustedRoleIDs.size() == 0) {
+        IRole inviteAllowed = guild.getRoleByID(inviteAllowedID);
+        if (inviteAllowed == null) {
             return true;
         } else {
-            for (IRole r : author.getRolesForGuild(guild)) {
-                if (isRoleTrusted(r.getLongID())) {
-                    return true;
-                }
-            }
-            return false;
+            return author.getRolesForGuild(guild).contains(inviteAllowed);
         }
-    }
-
-    public void setMaxMentionLimit(int maxMentionLimit) {
-        this.maxMentionLimit = maxMentionLimit;
     }
 
     public void addOffender(OffenderObject offenderObject) {
@@ -254,19 +252,19 @@ public class GuildConfig extends GuildFile {
         addOffender(new OffenderObject(userID));
     }
 
-    public void setMutedRoleID(long mutedRole) {
-        validateRoles();
-        this.mutedRoleID = mutedRole;
-    }
-
     public long getMutedRoleID() {
         validateRoles();
         return mutedRoleID;
     }
 
-    public ArrayList<Long> getTrustedRoleIDs() {
+    public void setMutedRoleID(long mutedRole) {
         validateRoles();
-        return trustedRoleIDs;
+        this.mutedRoleID = mutedRole;
+    }
+
+    public long getInviteAllowedID() {
+        validateRoles();
+        return inviteAllowedID;
     }
 
     public boolean isRoleCosmetic(long id) {
@@ -279,9 +277,9 @@ public class GuildConfig extends GuildFile {
         return modifierRoleIDs.contains(id);
     }
 
-    public boolean isRoleTrusted(long id) {
+    public boolean isRoleInviteAllowed(long id) {
         validateRoles();
-        return trustedRoleIDs.contains(id);
+        return inviteAllowedID == id;
     }
 
     public boolean isRoleReward(long id) {
@@ -295,6 +293,10 @@ public class GuildConfig extends GuildFile {
 
     public int getMaxMentionLimit() {
         return maxMentionLimit;
+    }
+
+    public void setMaxMentionLimit(int maxMentionLimit) {
+        this.maxMentionLimit = maxMentionLimit;
     }
 
     public void setRateLimit(int rateLimit) {
@@ -453,4 +455,10 @@ public class GuildConfig extends GuildFile {
     public void setRuleCode(String ruleCode) {
         this.ruleCode = ruleCode;
     }
+
+    public void setInviteAllowed(long inviteAllowed) {
+        this.inviteAllowedID = inviteAllowed;
+    }
+
+
 }

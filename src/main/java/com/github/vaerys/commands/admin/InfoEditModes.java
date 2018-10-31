@@ -1,10 +1,11 @@
 package com.github.vaerys.commands.admin;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IMessage;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 26/06/2017.
@@ -128,6 +130,9 @@ public class InfoEditModes {
     public static String getInfoFile(CommandObject command) {
         String filePath = Utility.getFilePath(command.guild.longID, Constants.FILE_INFO);
         File file = new File(filePath);
+        if (FileHandler.readFromFile(filePath).isEmpty()){
+            FileHandler.writeToFile(FileHandler.readFromFile(Constants.INFO_TEMPLATE), filePath);
+        }
         if (file.exists()) {
             RequestHandler.sendFile("> Here is your **" + Constants.FILE_INFO + "** file.", file, command.channel.get());
         } else {

@@ -1,60 +1,60 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.commands.admin.ChannelHere;
 import com.github.vaerys.commands.admin.Module;
 import com.github.vaerys.commands.admin.Toggle;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 22/02/2017.
  */
 public class StartUpGuide extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withAuthorName("Start Up Guide.");
         builder.withTitle("Helpful Commands.");
-        String desc = "**" + new Help().getUsage(command) + "**\n" +
+        String desc = "**" + new Commands().getUsage(command) + "**\n" +
                 "Lists all commands.\n**" +
-                new Info().getUsage(command) + "**\n" +
+                get(Help.class).getUsage(command) + "**\n" +
                 "Gives you information about a command.\n**" +
-                new Module().getUsage(command) + "**\n" +
+                get(Module.class).getUsage(command) + "**\n" +
                 "Lists all available modules and allows you to toggle them.\n**" +
-                new HelpModules().getUsage(command) + "**\n" +
+                get(HelpModules.class).getUsage(command) + "**\n" +
                 "Gives you information about a module.\n**" +
-                new Toggle().getUsage(command) + "**\n" +
+                get(Toggle.class).getUsage(command) + "**\n" +
                 "Lists all available settings and allows you to toggle them.\n**" +
-                new HelpSettings().getUsage(command) + "**\n" +
+                get(HelpSettings.class).getUsage(command) + "**\n" +
                 "Gives you information about a setting.\n**" +
-                new ChannelHere().getUsage(command) + "**\n" +
+                get(ChannelHere.class).getUsage(command) + "**\n" +
                 "Lists all available channel settings/types and allows you to toggle them.\n**" +
-                new HelpChannel().getUsage(command) + "**\n" +
+                get(HelpChannel.class).getUsage(command) + "**\n" +
                 "Gives you information about a channel setting/type.\n**" +
-                new ListTags().getUsage(command) + "**\n" +
+                get(ListTags.class).getUsage(command) + "**\n" +
                 "Lists all tags available for use in customCommand, Info, Daily and LevelUp messages.\n**" +
-                new HelpTags().getUsage(command) + "**\n" +
+                get(HelpTags.class).getUsage(command) + "**\n" +
                 "Gives you information about a tag.\n**" +
-                new GetGuildInfo().getUsage(command) + "**\n" +
+                get(GetGuildInfo.class).getUsage(command) + "**\n" +
                 "Gives you information about this server's setup.\n**" +
-                new BotInfo().getUsage(command) + "**\n" +
+                get(BotInfo.class).getUsage(command) + "**\n" +
                 "Gives you information about this bot.\n**" +
-                new BotHelp().getUsage(command) + "**\n" +
+                get(BotHelp.class).getUsage(command) + "**\n" +
                 "Gives you information about various bot features.";
         builder.withDesc(desc);
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"StartUpGuide"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"StartUpGuide"};
     }
 
     @Override
@@ -62,41 +62,34 @@ public class StartUpGuide extends Command {
         return "Posts a link to the Bot's Startup Guide on its wiki.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

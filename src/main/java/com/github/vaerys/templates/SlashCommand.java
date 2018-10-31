@@ -1,61 +1,60 @@
 package com.github.vaerys.templates;
 
-import java.util.Arrays;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.Arrays;
 
 /**
  * Created by Vaerys on 13/03/2017.
  */
 public abstract class SlashCommand extends Command {
 
+    @Override
     public String description(CommandObject command) {
         return "Returns with " + execute(null, null) + ".";
     }
 
+    @Override
     public String usage() {
         return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.SLASH;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.SLASH;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
-    
-    protected static final boolean DO_ADMIN_LOGGING = false;
+
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override
     public void init() {
 
     }
+
     @Override
     public String getCommand(CommandObject command) {
         return "/" + names[0];
@@ -113,5 +112,15 @@ public abstract class SlashCommand extends Command {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean isName(String args, CommandObject command) {
+        for (String s : names) {
+            if (s.equalsIgnoreCase(args) || args.equalsIgnoreCase("/" + s)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

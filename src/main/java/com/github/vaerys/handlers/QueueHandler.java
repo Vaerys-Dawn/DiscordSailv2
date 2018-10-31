@@ -1,13 +1,13 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.QueueObject;
-import com.github.vaerys.objects.XEmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;
@@ -25,8 +25,8 @@ public class QueueHandler {
     private static String uIDString = "UID";
 
     public static void addToQueue(CommandObject object, String content, DayOfWeek dayOfWeek, String type) {
-        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
-        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
         IChannel channel = object.client.get().getChannelByID(Globals.queueChannelID);
 
         if (channel != null) {
@@ -65,9 +65,7 @@ public class QueueHandler {
             QueueObject object = (QueueObject) iterator.next();
             IMessage item = queueChannel.getMessageByID(object.getMessageId());
             if (item == null) {
-                item = RequestBuffer.request(() -> {
-                    return queueChannel.fetchMessage(object.getMessageId());
-                }).get();
+                item = RequestBuffer.request(() -> queueChannel.fetchMessage(object.getMessageId())).get();
             }
             if (item == null) {
                 iterator.remove();
@@ -79,10 +77,10 @@ public class QueueHandler {
 
 
     public static void reactionAdded(CommandObject object, IReaction reaction) {
-        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_APPROVE);
-        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_DISAPPROVE);
-        ReactionEmoji ok = Utility.getReaction("white_check_mark");
-        ReactionEmoji no = Utility.getReaction(Constants.EMOJI_REMOVE_PIN);
+        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
+        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
+        ReactionEmoji ok = Utility.getReaction(Constants.EMOJI_ALLOW);
+        ReactionEmoji no = Utility.getReaction(Constants.EMOJI_DENY);
         ArrayList<QueueObject> queuedMessages = Globals.getDailyMessages().getQueue();
         IMessage message = object.message.get();
         IUser owner = object.client.creator.get();
@@ -110,14 +108,14 @@ public class QueueHandler {
 
         for (QueueObject q : queuedMessages) {
             if (q.getMessageId() == message.getLongID()) {
-                //get the embed
+                //getAllToggles the embed
                 IEmbed embed = message.getEmbeds().get(0);
                 RequestBuffer.request(() -> message.removeAllReactions()).get();
                 switch (q.getType()) {
                     //do if daily request
                     case Constants.QUEUE_DAILY:
                         try {
-                            //get the data
+                            //getAllToggles the data
                             long userID = Long.parseLong(embed.getFooter().getText());
                             long uID = -1;
                             DayOfWeek day = null;

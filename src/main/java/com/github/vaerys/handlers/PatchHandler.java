@@ -1,11 +1,13 @@
 package com.github.vaerys.handlers;
 
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.FilePaths;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.PatchObject;
 import com.github.vaerys.pogos.*;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.templates.FileFactory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -46,10 +48,12 @@ public class PatchHandler {
 
         //1.3 fixes
         sanitizer(guild);
-        UpdateChannelTypesForCodeConventions(guild);
+        updateChannelTypesForCodeConventions(guild);
+        refactorTrustedToInviteAllowed(guild);
 
         //1.4 fixes
         removeNullPrefix(guild);
+        renameToggles(guild);
     }
 
 
@@ -79,6 +83,34 @@ public class PatchHandler {
         FileHandler.writeToJson(patch.getPath(), patch.getObject());
     }
 
+    private static void renameToggles(IGuild guild) {
+        PatchObject patch = getJsonConfig(guild, GuildConfig.FILE_PATH, 1.4, "RenameToggles");
+        if (patch == null) return;
+        boolean welcome = patch.getObject().get("joinsServerMessages").getAsBoolean();
+        boolean initial = patch.getObject().get("welcomeMessage").getAsBoolean();
+
+        patch.getObject().remove("joinsServerMessages");
+        patch.getObject().remove("welcomeMessage");
+
+        patch.getObject().addProperty("welcomeMessages", welcome);
+        patch.getObject().addProperty("initialMessage", initial);
+        finalizePatch(patch);
+    }
+
+    private static void refactorTrustedToInviteAllowed(IGuild guild) {
+        PatchObject patch = getJsonConfig(guild, GuildConfig.FILE_PATH,
+                1.3, "Refactor_Trusted_To_Invite_Allowed");
+        if (patch == null) return;
+
+        JsonArray array = patch.getObject().get("trustedRoleIDs").getAsJsonArray();
+        patch.getObject().remove("trustedRoleIDs");
+        if (array.size() != 0) {
+            patch.getObject().addProperty("inviteAllowedID", array.get(0).getAsLong());
+        }
+
+        finalizePatch(patch);
+    }
+
     private static void changeChannelSettingsToEnum(IGuild guild) {
         PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
                 1.2, "Change_ChannelSettings_To_Enum");
@@ -99,8 +131,8 @@ public class PatchHandler {
         }
         finalizePatch(json);
     }
-    
-    private static void UpdateChannelTypesForCodeConventions(IGuild guild) {
+
+    private static void updateChannelTypesForCodeConventions(IGuild guild) {
         PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
                 1.3, "");
         if (json == null) return;
@@ -109,7 +141,7 @@ public class PatchHandler {
         for (int i = 0; i < channelSettings.size(); i++) {
             JsonObject object = channelSettings.get(i).getAsJsonObject();
             String type = object.get("type").getAsString();
-            switch(type) {
+            switch (type) {
                 case "CHANNEL_CC":
                     object.addProperty("type", ChannelSetting.CC_INFO.name());
                     break;
@@ -151,7 +183,7 @@ public class PatchHandler {
         if (checkPatch(1.2, guild, "Update_Notes_To_Strikes", json)) return;
 
         // patch
-        GuildUsers guildUsers = (GuildUsers) GuildUsers.create(GuildUsers.FILE_PATH, guild.getLongID(), new GuildUsers());
+        GuildUsers guildUsers = FileFactory.create(guild.getLongID(), FilePaths.GUILD_USERS, GuildUsers.class);
         guildUsers.profiles.forEach(object -> {
             if (object.modNotes == null) return;
 
@@ -177,7 +209,7 @@ public class PatchHandler {
         JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.5, guild, "Remove_Null_Prefixes_CustomCommands", json)) return;
 
-        CustomCommands commands = (CustomCommands) CustomCommands.create(CustomCommands.FILE_PATH, guild.getLongID(), new CustomCommands());
+        CustomCommands commands = FileFactory.create(guild.getLongID(), FilePaths.CUSTOM_COMMANDS, CustomCommands.class);
         commands.getCommandList().forEach(object -> {
             String contents = object.getContents(false);
             if (contents.startsWith("null")) {
@@ -197,7 +229,7 @@ public class PatchHandler {
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.2, null, "Fix_Multiple_Daily_Messages", json)) return;
-        DailyMessages messages = (DailyMessages) DailyMessages.create(DailyMessages.FILE_PATH, new DailyMessages());
+        DailyMessages messages = FileFactory.create(FilePaths.DAILY_MESSAGES, DailyMessages.class);
         ArrayList<DailyMessage> dailyMessages = new ArrayList<>();
 
         for (DailyMessage message : messages.getMessages()) {

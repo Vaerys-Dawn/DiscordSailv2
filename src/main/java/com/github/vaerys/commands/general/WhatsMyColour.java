@@ -1,14 +1,15 @@
 package com.github.vaerys.commands.general;
 
-import java.awt.Color;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.XEmbedBuilder;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.awt.*;
 
 public class WhatsMyColour extends Command {
 
@@ -23,7 +24,7 @@ public class WhatsMyColour extends Command {
         Color color = user.getRandomColour();
         XEmbedBuilder builder = new XEmbedBuilder(color);
         String desc = notAuthor ? "**" + user.displayName + "'s** " : "Your ";
-        if (isSubtype(command, names[2]) || isSubtype(command, names[3])) {
+        if (isAlias(command, names[2]) || isAlias(command, names[3])) {
             desc += "color is : ";
         } else {
             desc += "colour is : ";
@@ -34,10 +35,9 @@ public class WhatsMyColour extends Command {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"WhatsMyColour", "MyColour", "WhatsMyColor", "MyColor"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"WhatsMyColour", "MyColour", "WhatsMyColor", "MyColor"};
     }
 
     @Override
@@ -47,41 +47,34 @@ public class WhatsMyColour extends Command {
                 "Sail grabs 3 random numbers using your user ID for the seed and then converts it into a colour.\n";
     }
 
-    protected static final String USAGE = "(@User)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(@User)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.GENERAL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

@@ -1,11 +1,13 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.admin.Mute;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.templates.GuildModule;
+import com.github.vaerys.commands.admin.PropMutePerms;
+import com.github.vaerys.commands.modtools.Mute;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.templates.GuildModule;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -25,7 +27,7 @@ public class ModuleModMuting extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.moduleModMute;
     }
 
@@ -36,21 +38,30 @@ public class ModuleModMuting extends GuildModule {
 
     @Override
     public String desc(CommandObject command) {
-        return "This module enables the **" + new Mute().getCommand(command) + "** command";
+        return "This module enables the **" +
+                Command.get(Mute.class).getCommand(command) +
+                "** and **" + Command.get(PropMutePerms.class).getCommand(command) +
+                "** commands";
     }
 
     @Override
     public void setup() {
-        commands.add(new Mute());
+        commands.add(Command.get(Mute.class));
+        commands.add(Command.get(PropMutePerms.class));
     }
 
     @Override
     public String stats(CommandObject object) {
-        if (!Utility.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
+        if (!GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
         IRole muteRole = object.guild.getRoleByID(object.guild.config.getMutedRoleID());
         if (muteRole != null) {
             return "**Mute Role:** " + muteRole.getName();
         }
         return null;
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return desc(command);
     }
 }

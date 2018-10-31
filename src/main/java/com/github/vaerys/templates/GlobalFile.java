@@ -13,30 +13,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class GlobalFile {
+
     public static final String storageDir = Constants.DIRECTORY_STORAGE;
     public static final String backupDir = Constants.DIRECTORY_BACKUPS;
+    final static Logger logger = LoggerFactory.getLogger(GlobalFile.class);
     public transient String path;
     public transient String backupPath;
-
-    final static Logger logger = LoggerFactory.getLogger(GlobalFile.class);
-
-    public static Object create(String newPath, GlobalFile object) {
-        String path = storageDir + newPath;
-        if (!FileHandler.exists(path)) {
-            FileHandler.writeToJson(path, object);
-        } else {
-            object = (GlobalFile) FileHandler.readFromJson(path, object.getClass());
-        }
-        if (object == null) {
-            try {
-                throw new IOException("File is corrupt: " + path);
-            } catch (IOException e) {
-                Utility.sendStack(e);
-            }
-        }
-        object.setPath(newPath);
-        return object;
-    }
 
     public void flushFile() {
         FileHandler.writeToJson(path, this);

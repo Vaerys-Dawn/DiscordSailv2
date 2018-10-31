@@ -1,14 +1,14 @@
 package com.github.vaerys.commands.pixels;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -16,12 +16,12 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 
 /**
- * @deprecated
- * Implementation of EditXP makes this redundant.
+ * @deprecated Implementation of EditXP makes this redundant.
  * Please use EditXP [user] "=" [amount] instead.
  */
 @Deprecated
 public class SetXp extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject xpArgs = new SplitFirstObject(args);
@@ -35,7 +35,7 @@ public class SetXp extends Command {
             if (userObject != null) {
                 userObject.setXp(xp);
                 userObject.removeLevelFloor();
-                XpHandler.checkUsersRoles(user.longID, command.guild);
+                GuildHandler.checkUsersRoles(user.longID, command.guild);
                 return "> " + user.displayName + "'s Pixels is now set to: **" + xp + "**";
             } else {
                 return "> User does not have a profile.";
@@ -45,10 +45,9 @@ public class SetXp extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"SetPixels", "SetXP"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"SetPixels", "SetXP"};
     }
 
     @Override
@@ -56,41 +55,34 @@ public class SetXp extends Command {
         return "Allows you to set the xp of a user.";
     }
 
-    protected static final String USAGE = "[@User] [Pixels]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[@User] [Pixels]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.PIXEL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_SERVER};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_SERVER};
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

@@ -2,14 +2,12 @@ package com.github.vaerys.main;
 
 import com.github.kennedyoliveira.pastebin4j.AccountCredentials;
 import com.github.kennedyoliveira.pastebin4j.PasteBin;
-import com.github.vaerys.commands.CommandInit;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.objects.EventAvatar;
-import com.github.vaerys.objects.PatreonAPI;
+import com.github.vaerys.utilobjects.PatreonAPI;
 import com.github.vaerys.objects.TimedEvent;
-import com.github.vaerys.templates.Command;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
@@ -82,7 +80,7 @@ public class Client {
     }
 
 //    public static ImgurAPI initImgur(List<String> imgurToken) throws IndexOutOfBoundsException {
-//        imgurAPI = new ImgurAPI(imgurToken.get(0), imgurToken.get(1));
+//        imgurAPI = new ImgurAPI(imgurToken.getAllToggles(0), imgurToken.getAllToggles(1));
 //        logger.info("Imgur Account Linked.");
 //        return imgurAPI;
 //    }
@@ -98,7 +96,9 @@ public class Client {
 
     public static void checkPatrons() {
         if (!checkPatreonIsValid()) return;
-        List<Long> patronIDs = new ArrayList<>();
+        List<Long> patronIDs = new ArrayList<Long>(){{
+            add(153159020528533505L);
+        }};
         try {
             if (patreonApi == null) return;
             List<Campaign> campaigns = patreonApi.fetchCampaigns().get();
@@ -131,7 +131,7 @@ public class Client {
         } catch (IOException e) {
             if (token.size() == 4) {
                 logger.info("Token Invalid attempting to collect new token.");
-                refreshPatreonToken(token.get(1), token.get(2), token.get(3), token);
+                refreshPatreonToken(token.get(1), token.get(2), token.get(3));
             }
         }
         try {
@@ -173,7 +173,7 @@ public class Client {
     }
 
 
-    public static void refreshPatreonToken(String clientID, String clientSecret, String refreshToken, List<String> contents) {
+    public static void refreshPatreonToken(String clientID, String clientSecret, String refreshToken) {
         try {
             patreonOAuth = new PatreonOAuth(clientID, clientSecret, "");
             PatreonOAuth.TokensResponse refresh = patreonOAuth.refreshTokens(refreshToken);

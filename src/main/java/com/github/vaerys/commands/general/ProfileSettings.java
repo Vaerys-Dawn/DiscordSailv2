@@ -1,32 +1,38 @@
 package com.github.vaerys.commands.general;
 
-import java.util.List;
-import java.util.ListIterator;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Constants;
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.main.Constants;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.templates.Command;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
 
 /**
  * Created by Vaerys on 02/07/2017.
  */
 public class ProfileSettings extends Command {
 
+    private static void removeLevelSettings(ProfileObject user) {
+        for (int i = 0; i < user.getSettings().size(); i++) {
+            if (Constants.levelUpStates.contains(user.getSettings().get(i))) {
+                user.getSettings().remove(i);
+            }
+        }
+    }
 
     @Override
     public String execute(String args, CommandObject command) {
         String message = "> Your Level messages will now be sent to ";
-        ProfileObject userObject = command.guild.users.getUserByID(command.user.longID);
+        ProfileObject profile = command.guild.users.getUserByID(command.user.longID);
         StringBuilder builder = new StringBuilder();
         boolean pixels = command.guild.config.modulePixels;
         boolean levelChannel = command.guild.getChannelsByType(ChannelSetting.LEVEL_UP).size() != 0;
-        String error = getSettings(command) + "\n" + Utility.getCommandInfo(this, command);
+        String error = getSettings(command) + "\n" + missingArgs(command);
 
         for (String s : args.split(" ")) {
             UserSetting toTest = UserSetting.get(s);
@@ -36,40 +42,40 @@ public class ProfileSettings extends Command {
             if (pixels && levelChannel && toTest == UserSetting.SEND_LVLUP_RANK_CHANNEL) {
                 IChannel levelUp = command.guild.getChannelByType(ChannelSetting.LEVEL_UP);
                 if (levelUp != null) {
-                    removeLevelSettings(userObject);
-                    userObject.getSettings().add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
+                    removeLevelSettings(profile);
+                    profile.getSettings().add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
                     builder.append(message + levelUp.mention() + ".");
                 } else {
-                    removeLevelSettings(userObject);
-                    userObject.getSettings().add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
+                    removeLevelSettings(profile);
+                    profile.getSettings().add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
                     builder.append(message + "the current channel.");
                 }
             } else if (pixels && toTest == UserSetting.SEND_LVLUP_CURRENT_CHANNEL) {
-                removeLevelSettings(userObject);
-                userObject.getSettings().add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
+                removeLevelSettings(profile);
+                profile.getSettings().add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
                 builder.append(message + "the current channel.");
             } else if (pixels && toTest == UserSetting.SEND_LVLUP_DMS) {
-                removeLevelSettings(userObject);
-                userObject.getSettings().add(UserSetting.SEND_LVLUP_DMS);
+                removeLevelSettings(profile);
+                profile.getSettings().add(UserSetting.SEND_LVLUP_DMS);
                 builder.append(message + "your Direct messages.");
             } else if (pixels && toTest == UserSetting.DONT_SEND_LVLUP) {
-                removeLevelSettings(userObject);
-                userObject.getSettings().add(UserSetting.DONT_SEND_LVLUP);
+                removeLevelSettings(profile);
+                profile.getSettings().add(UserSetting.DONT_SEND_LVLUP);
                 builder.append("> You will no longer see any level up messages.");
             } else if (pixels && toTest == UserSetting.NO_XP_GAIN) {
-                builder.append(toggleSetting(userObject, UserSetting.NO_XP_GAIN,
+                builder.append(profile.toggleSetting(UserSetting.NO_XP_GAIN,
                         "> You will now gain Xp again.",
                         "> You will no longer gain XP"));
             } else if (pixels && toTest == UserSetting.HIDE_RANK) {
-                builder.append(toggleSetting(userObject, UserSetting.HIDE_RANK,
+                builder.append(profile.toggleSetting(UserSetting.HIDE_RANK,
                         "> Your rank is now visible.",
                         "> Your rank is now hidden."));
             } else if (pixels && toTest == UserSetting.NO_LEVEL_UP_REACTIONS) {
-                builder.append(toggleSetting(userObject, UserSetting.NO_LEVEL_UP_REACTIONS,
+                builder.append(profile.toggleSetting(UserSetting.NO_LEVEL_UP_REACTIONS,
                         "> You will now get reactions added to the message that leveled you up.",
                         "> You will no longer get reactions added to the message that leveled you up."));
             } else if (toTest == UserSetting.PRIVATE_PROFILE) {
-                builder.append(toggleSetting(userObject, UserSetting.PRIVATE_PROFILE,
+                builder.append(profile.toggleSetting(UserSetting.PRIVATE_PROFILE,
                         "> Your profile is now public.",
                         "> Your profile is now private."));
             } else {
@@ -113,34 +119,9 @@ public class ProfileSettings extends Command {
         return builder.toString();
     }
 
-    private String toggleSetting(ProfileObject user, UserSetting setting, String remove, String add) {
-        if (user.getSettings().contains(setting)) {
-            ListIterator iterator = user.getSettings().listIterator();
-            while (iterator.hasNext()) {
-                UserSetting s = (UserSetting) iterator.next();
-                if (s == setting) {
-                    iterator.remove();
-                }
-            }
-            return remove;
-        } else {
-            user.getSettings().add(setting);
-            return add;
-        }
-    }
-
-    private static void removeLevelSettings(ProfileObject user) {
-        for (int i = 0; i < user.getSettings().size(); i++) {
-            if (Constants.levelUpStates.contains(user.getSettings().get(i))) {
-                user.getSettings().remove(i);
-            }
-        }
-    }
-
-    protected static final String[] NAMES = new String[]{"ProfileSettings", "PixelSettings"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"ProfileSettings", "PixelSettings"};
     }
 
     @Override
@@ -148,40 +129,34 @@ public class ProfileSettings extends Command {
         return "Allows you to set where your level up messages will be sent.\n" + getSettings(command);
     }
 
-    protected static final String USAGE = "(Setting...)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(Setting...)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.GENERAL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

@@ -1,16 +1,17 @@
 package com.github.vaerys.commands.pixels;
 
-import java.util.List;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.List;
 
 /**
  * Created by Vaerys on 04/07/2017.
@@ -26,7 +27,7 @@ public class ManagePixelRoles extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        if (args.equalsIgnoreCase("list")){
+        if (args.equalsIgnoreCase("list")) {
             XEmbedBuilder builder = new XEmbedBuilder(command);
             builder.withTitle("Pixel Roles");
             IRole xpDenied = command.guild.getXPDeniedRole();
@@ -54,7 +55,7 @@ public class ManagePixelRoles extends Command {
             return null;
         }
         SplitFirstObject mode = new SplitFirstObject(args);
-        IRole role = Utility.getRoleFromName(mode.getRest(), command.guild.get());
+        IRole role = GuildHandler.getRoleFromName(mode.getRest(), command.guild.get());
         if (role == null) {
             return "> **" + mode.getRest() + "** is not a valid Role name.";
         }
@@ -115,15 +116,14 @@ public class ManagePixelRoles extends Command {
                     return "> **" + role.getName() + "** is not a valid Pixel role.";
                 default:
                     return "> Invalid Mode.\n" + modes +
-                            Utility.getCommandInfo(this, command);
+                            missingArgs(command);
             }
         }
     }
 
-    protected static final String[] NAMES = new String[]{"ManagePixelRoles", "PixelRoles"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"ManagePixelRoles", "PixelRoles"};
     }
 
     @Override
@@ -131,41 +131,34 @@ public class ManagePixelRoles extends Command {
         return "Allows for the editing of pixel roles such as reward roles, the xp denied role and the top ten role.\n" + modes;
     }
 
-    protected static final String USAGE = "[Number/Mode] [RoleName]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Number/Mode] [RoleName]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.PIXEL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_ROLES};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_ROLES};
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

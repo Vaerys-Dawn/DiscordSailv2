@@ -1,16 +1,18 @@
 package com.github.vaerys.templates;
 
+import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleList;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import com.github.vaerys.pogos.GuildConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.pogos.GuildConfig;
 
 /**
  * Created by Vaerys on 20/02/2017.
@@ -22,17 +24,13 @@ public abstract class GuildToggle {
     public List<GuildSetting> settings = new ArrayList<>();
     public List<ChannelSetting> channels = new ArrayList<>();
 
-    public GuildToggle() {
-        setup();
-    }
-
     public void execute(GuildObject guild) {
         guild.removeCommandsByType(affectsType);
         for (Command c : commands) {
             guild.removeCommand(c.names);
         }
         for (ChannelSetting c : channels) {
-            guild.removeChannelSetting(c.toString());
+            guild.removeChannelSetting(c);
         }
         for (GuildSetting s : settings) {
             guild.removeToggle(s.name());
@@ -55,12 +53,12 @@ public abstract class GuildToggle {
         }
         builder.withDesc(fullDesc);
         List<String> commandNames = commands.stream().map(command1 -> command1.getCommand(command)).collect(Collectors.toList());
-        commandNames.addAll(Globals.getAllCommands().stream()
+        commandNames.addAll(CommandList.getAll().stream()
                 .filter(command1 -> command1.type() == affectsType)
                 .map(command1 -> command1.getCommand(command)).collect(Collectors.toList()));
         commandNames = commandNames.stream().distinct().collect(Collectors.toList());
         List<SAILType> settingNames = settings.stream().map(guildSetting -> guildSetting.name()).collect(Collectors.toList());
-        List<ChannelSetting> channelNames = channels.stream().map(channelSetting -> channelSetting).collect(Collectors.toList());
+        List<ChannelSetting> channelNames = channels.stream().collect(Collectors.toList());
 
         if (commandNames.size() != 0) {
             builder.appendField("Commands:", "```\n" + Utility.listFormatter(commandNames, true) + Command.spacer + "```", true);
@@ -77,7 +75,7 @@ public abstract class GuildToggle {
         StringBuilder footer = new StringBuilder();
         if (isModule()) footer.append("Module ");
         else footer.append("Setting ");
-        if (get(command.guild.config)) footer.append("Enabled.");
+        if (enabled(command.guild.config)) footer.append("Enabled.");
         else footer.append("Disabled.");
         builder.withFooterText(footer.toString());
         return builder;
@@ -109,17 +107,23 @@ public abstract class GuildToggle {
 
     public abstract boolean toggle(GuildConfig config);
 
-    public abstract boolean get(GuildConfig config);
+    public abstract boolean enabled(GuildConfig config);
 
     public abstract boolean getDefault();
 
     public abstract String desc(CommandObject command);
 
+    public abstract String shortDesc(CommandObject command);
+
     public abstract void setup();
 
     public abstract boolean isModule();
 
-    public abstract String stats(CommandObject object);
+    public abstract String stats(CommandObject command);
 
     public abstract boolean statsOnInfo();
+
+    public static GuildToggle get(Class obj){
+        return ToggleList.getToggle(obj);
+    }
 }

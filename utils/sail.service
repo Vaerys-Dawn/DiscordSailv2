@@ -1,0 +1,14 @@
+[Unit]
+Description=SAIL
+After=network.target
+
+[Service]
+Type=simple
+User=sail
+Group=sail
+WorkingDirectory=/home/sail/
+ExecStart=/usr/bin/java -jar DiscordSAILv2.jar
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

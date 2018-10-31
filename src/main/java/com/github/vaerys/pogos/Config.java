@@ -15,9 +15,10 @@ public class Config extends GlobalFile {
     private double fileVersion = 1.1;
     public boolean resetToDefault = false;
     public String botName = "S.A.I.L";
-    public long creatorID = 153159020528533505L;
+    public long creatorID = 0;
     public String defaultPrefixCommand = "$";
     public String defaultPrefixCC = "$$";
+    public String defaultPrefixAdminCC = "$!";
     public String defaultAvatarFile = "Avatar.png";
     public boolean doDailyAvatars = false;
     public String dailyAvatarName = "Avatar_For_#day#.png";
@@ -33,7 +34,7 @@ public class Config extends GlobalFile {
     public ArrayList<DailyMessage> dailyMessages = new ArrayList<>();
     public ArrayList<RandomStatusObject> randomStatuses = new ArrayList<RandomStatusObject>() {{
         add(new RandomStatusObject("Starbound", 10));
-        add(new RandomStatusObject("WarGroove", 5));
+        add(new RandomStatusObject("Wargroove", 5));
         add(new RandomStatusObject("Stardew Valley", 1));
         add(new RandomStatusObject("Pocket Rumble", 1));
         add(new RandomStatusObject("The Siege and the SandFox", 1));
@@ -50,6 +51,7 @@ public class Config extends GlobalFile {
     public static Config check(Config config) {
         if (config.resetToDefault) {
             config = new Config();
+            config.setPath(FILE_PATH);
         }
         if (config.dailyMessages.size() != 7) {
             config.dailyMessages = Constants.defaultDailyMessages(config.creatorID);

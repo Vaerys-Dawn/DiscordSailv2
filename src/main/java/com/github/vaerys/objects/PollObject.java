@@ -2,6 +2,7 @@ package com.github.vaerys.objects;
 
 import com.github.vaerys.commands.competition.EnterVote;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.Command;
 
 import java.util.ArrayList;
 
@@ -23,12 +24,12 @@ public class PollObject {
         this.pollTopic = pollTopic;
     }
 
-    public String addOption(String option){
-        if (open){
-            return "> cannot add option as poll is open.";
+    public String addOption(String option) {
+        if (open) {
+            return "> Cannot add option as poll is open.";
         }
-        for (String s: options){
-            if (option.equalsIgnoreCase(s)){
+        for (String s : options) {
+            if (option.equalsIgnoreCase(s)) {
                 return "> Option already added.";
             }
         }
@@ -36,30 +37,30 @@ public class PollObject {
         return "> Option added.";
     }
 
-    public String toggleOpen(GuildConfig config){
+    public String toggleOpen(GuildConfig config) {
         open = !open;
-        if (!open){
-            if (votes.size() > 0){
+        if (!open) {
+            if (votes.size() > 0) {
                 // TODO: 28/03/2017 post results. then clear list.
             }
             return "> Poll voting closed.";
-        }else {
+        } else {
             return "> Poll voting Open, you can vote in this poll by running\n`" + config.getPrefixCommand() +
-                    new EnterVote().names[0] + " " + pollName + " [Vote]";
+                    Command.get(EnterVote.class).names[0] + " " + pollName + " [Vote]";
         }
     }
 
-    public String toggleMultiVote(){
+    public String toggleMultiVote() {
         multiVotes = !multiVotes;
-        if (!multiVotes){
+        if (!multiVotes) {
             return "> allowing of multiple votes has been disabled.";
-        }else {
+        } else {
             return "> allowing of multiple votes has been enabled.";
         }
     }
 
-    public String vote(String votes){
-        if (multiVotes){
+    public String vote(String votes) {
+        if (multiVotes) {
 
         }
         return "> null.";

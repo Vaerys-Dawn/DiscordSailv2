@@ -1,15 +1,16 @@
 package com.github.vaerys.commands.cc;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CCommandObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -17,20 +18,22 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 public class EditCC extends Command {
 
-    private static String modes = "**Modes: **\n" +
-            "> Replace\n" +
-            "> ToEmbed\n" +
-            "> DelCall\n" +
-            "> AddSearch\n";
     private static String adminModes = "**Admin Modes:**\n" +
             "> Shitpost\n" +
             "> Lock\n";
+    private static final SubCommandObject SUB_1 = new SubCommandObject(
+            new String[]{"EditCC"},
+            "[Command Name] (Mode)",
+            "allows editing of other user's commands or editing toggles.\n" + adminModes,
+            SAILType.MOD_TOOLS,
+            new Permissions[]{Permissions.MANAGE_MESSAGES}
+    );
 
     @Override
     public String execute(String args, CommandObject command) {
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
-            return "> You have been denied the modification of custom commands.";
+            return "> " + command.user.mention() + ", You have been denied the modification of custom commands.";
         }
         SplitFirstObject getName = new SplitFirstObject(args);
         String rest = getName.getRest();
@@ -55,14 +58,11 @@ public class EditCC extends Command {
         if (customCommand == null) {
             return "> Command Not found.";
         }
-        boolean canBypass = Utility.testForPerms(command, Permissions.MANAGE_MESSAGES);
+        boolean canBypass = GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES);
         boolean isAuthor = command.user.longID == customCommand.getUserID();
         //test if can edit
         if ((customCommand.isLocked() && !canBypass) || (!canBypass && !isAuthor)) {
             return "> You do not have permission to edit this command.";
-        }
-        if (command.guild.customCommands.checkblackList(args) != null) {
-            return command.guild.customCommands.checkblackList(args);
         }
         if (customCommand.isLocked() && !canBypass) {
             return "> This command is locked and cannot be edited.";
@@ -82,7 +82,9 @@ public class EditCC extends Command {
             case "lock":
                 return CCEditModes.lock(customCommand, command, command.user.get(), command.guild.get());
             case "addsearch":
-                return CCEditModes.addReplaceTag(customCommand, content);
+                return CCEditModes.addSearchTag(customCommand, content);
+            case "removesearch":
+                return CCEditModes.removeSearchTag(customCommand, content);
             default:
                 if (content == null || content.isEmpty()) {
                     return CCEditModes.replace(customCommand, mode, command);
@@ -92,62 +94,53 @@ public class EditCC extends Command {
         }
     }
 
-
-    protected static final String[] NAMES = new String[]{"EditCC"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"EditCC"};
     }
 
     @Override
     public String description(CommandObject command) {
+        String modes = "**Modes: **\n" +
+                "> Replace\n" +
+                "> ToEmbed\n" +
+                "> DelCall\n" +
+                "> AddSearch\n" +
+                "> RemoveSearch\n";
         return "Allows you to edit a custom command.\n" + modes +
                 "**[Custom Command Guide](https://github.com/Vaerys-Dawn/DiscordSailv2/wiki/Custom-Command-Guide)**";
     }
 
-    protected static final String USAGE = "[Command Name] (Mode) [New Contents/Image]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Command Name] (Mode) [New Contents/Image]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CC;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CC;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.MANAGE_CC;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.MANAGE_CC;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
-    protected static final SubCommandObject SUB_1 = new SubCommandObject(
-        NAMES,
-        "[Command Name] (Mode)",
-        "allows editing of other user's commands or editing toggles.\n" + adminModes,
-        SAILType.ADMIN,
-        new Permissions[]{Permissions.MANAGE_MESSAGES}
-    );
     @Override
     public void init() {
         subCommands.add(SUB_1);

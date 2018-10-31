@@ -1,28 +1,32 @@
 package com.github.vaerys.templates;
 
+import com.github.vaerys.enums.TagType;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.objects.AdminCCObject;
+import com.github.vaerys.objects.ReplaceObject;
+import com.github.vaerys.tags.TagList;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-
-import com.github.vaerys.enums.TagType;
-import org.apache.commons.lang3.StringUtils;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.XEmbedBuilder;
 
 public abstract class TagObject {
 
-    private final int priority;
-    public final String name;
-    public final String prefix;
-    public final String suffix;
+    public String name;
+    public String prefix;
+    public String suffix;
     public final String splitter;
     public final String desc;
     public final String usage;
-    public final String error;
+    public String error;
     public final int requiredArgs;
+    private final int priority;
     List<TagType> types = new ArrayList<>();
-
+    public String group = "((.|\n)+?)";
 
     public TagObject(int priority, TagType... types) {
         this.priority = priority;
@@ -77,22 +81,13 @@ public abstract class TagObject {
         }
     }
 
-    public List<String> getSpliContents(String from) {
-        String contents = contents(from);
-        if (contents != null) {
-            return Arrays.asList(contents.split(splitter));
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
-    public List<String> getSplit(String args) {
-        String toSplit = contents(args);
+    public List<String> getSplit(String from) {
+        String toSplit = contents(from);
         String[] isSplit = toSplit.split(splitter);
         if (isSplit.length == 0) {
             return new ArrayList<>();
         }
-        return Arrays.asList(toSplit.split(splitter));
+        return new ArrayList<>(Arrays.asList(isSplit));
     }
 
     public String removeFirst(String from, String args) {
@@ -164,12 +159,31 @@ public abstract class TagObject {
         if (from == null) from = "";
         while (cont(from)) {
             int absoluteArgs = Math.abs(requiredArgs);
-            if (requiredArgs == 0) {
+            if (requiredArgs == 0 ||
+                    requiredArgs < 0 && getSplit(from).size() >= absoluteArgs ||
+                    requiredArgs == getSplit(from).size()) {
                 from = execute(from, command, args);
-            } else if (requiredArgs < 0 && getSplit(from).size() >= absoluteArgs) {
-                from = execute(from, command, args);
-            } else if (requiredArgs == getSplit(from).size()) {
-                from = execute(from, command, args);
+            } else {
+                from = replaceFirstTag(from, error);
+            }
+            if (from == null) from = "";
+        }
+        return from;
+    }
+
+    public String handleTag(String from, CommandObject command, String args, AdminCCObject cc) {
+        if (from == null) from = "";
+        while (cont(from)) {
+            int absoluteArgs = Math.abs(requiredArgs);
+            if (requiredArgs == 0 ||
+                    requiredArgs < 0 && getSplit(from).size() >= absoluteArgs ||
+                    requiredArgs == getSplit(from).size()) {
+                if (this instanceof TagAdminSubTagObject) {
+                    TagAdminSubTagObject specialObject = (TagAdminSubTagObject) this;
+                    from = specialObject.execute(from, command, args, cc);
+                } else {
+                    from = execute(from, command, args);
+                }
             } else {
                 from = replaceFirstTag(from, error);
             }
@@ -190,7 +204,7 @@ public abstract class TagObject {
         } else if (requiredArgs != 0) {
             descContents.append("\n**Usage:** " + "`" + prefix + usage + suffix + "`");
         } else {
-            descContents.append("\n**Usage:** `" + name + "`");
+            descContents.append("\n**Usage:** `" + prefix + "`");
         }
         descContents.append("\n\n**Types:** " + Utility.listEnumFormatter(types, true));
         builder.withDesc(descContents.toString());
@@ -219,8 +233,16 @@ public abstract class TagObject {
             return null;
         }
     }
-  
+
     public List<TagType> getTypes() {
         return types;
+    }
+
+    public static TagObject get(Class obj) {
+        return TagList.getTag(obj);
+    }
+
+    public String prepReplace(String withThis) {
+        return withThis.replace("$", "\\$");
     }
 }

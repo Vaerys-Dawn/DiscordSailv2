@@ -1,10 +1,11 @@
 package com.github.vaerys.objects;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 
 import java.text.DateFormatSymbols;
 import java.time.DayOfWeek;
@@ -27,16 +28,16 @@ public class TimedEvent {
     List<DailyMessage> messages = new ArrayList<>();
     List<EventAvatar> avatars = new ArrayList<>();
 
+    public TimedEvent(String eventName) {
+        this.eventName = eventName;
+    }
+
     public String getHelloMessage() {
         return helloMessage;
     }
 
     public void setHelloMessage(String helloMessage) {
         this.helloMessage = helloMessage;
-    }
-
-    public TimedEvent(String eventName) {
-        this.eventName = eventName;
     }
 
     public void setDoAvatars(boolean doAvatars) {
@@ -130,7 +131,7 @@ public class TimedEvent {
 
     public boolean isEventActive() {
         if (!isValid()) return false;
-        //get instance
+        //getAllToggles instance
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         now.plusMinutes(30);
         ZonedDateTime start = now.withMonth(startMonth).withDayOfMonth(startDay);

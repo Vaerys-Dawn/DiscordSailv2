@@ -4,6 +4,7 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.objects.BlackListObject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public class BlackLists {
     ArrayList<BlackListObject> blackListObjects = new ArrayList<>();
 
     public List<BlackListObject> getBlackListObjects() {
-        blackListObjects.sort((o1,o2) -> o1.getType().compareTo(o2.getType()));
+        blackListObjects.sort(Comparator.comparing(BlackListObject::getType));
         return blackListObjects;
     }
 
@@ -44,7 +45,6 @@ public class BlackLists {
         List<BlackListObject> list = blackListObjects.stream().filter(b -> b.getType().equalsIgnoreCase(Constants.BL_SERVER)).collect(Collectors.toList());
         return list;
     }
-
 
 
 }

@@ -1,26 +1,31 @@
 package com.github.vaerys.masterobjects;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Client;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.*;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;
 import sx.blah.discord.util.cache.LongMap;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+/**
+ * Wrapper for the User API object. Contains All bot information linked to that user for the Guild assigned to it.
+ */
 
 public class UserObject {
     public ClientObject client;
-    IUser object;
     public long longID;
     public String name;
     public String displayName;
@@ -33,17 +38,18 @@ public class UserObject {
     public List<DailyMessage> dailyMessages;
     public String notAllowed;
     public boolean isPatron;
+    IUser object;
 
 
     public UserObject(IUser object, GuildObject guild) {
         if (object == null) return;
-        this.client = new ClientObject(object.getClient(), guild);
+        this.client = new ClientObject(guild);
         init(object, guild, false);
     }
 
     public UserObject(IUser object, GuildObject guild, boolean light) {
         if (object == null) return;
-        this.client = new ClientObject(object.getClient(), guild);
+        this.client = new ClientObject(guild);
         init(object, guild, light);
     }
 
@@ -52,8 +58,38 @@ public class UserObject {
         init(object, guild, false);
     }
 
+    public UserObject(long id, GuildObject content) {
+        this.client = content.client;
+        IUser user = content.getUserByID(id);
+        if (user == null) user = Client.getClient().getUserByID(id);
+        if (user == null) {
+            initNull(id);
+            return;
+        }
+        init(user, content, true);
+    }
+
+    private void initNull(long id) {
+        longID = id;
+        object = null;
+        name = longID + "";
+        displayName = longID + "";
+        username = longID + "";
+        color = Color.gray;
+        roles = new LinkedList<>();
+        customCommands = new ArrayList<>();
+        characters = new ArrayList<>();
+        servers = new ArrayList<>();
+        dailyMessages = new ArrayList<>();
+        notAllowed = "> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
+        isPatron = Globals.getPatrons().contains(longID);
+    }
+
     private void init(IUser object, GuildObject guild, boolean light) {
-        if (object == null) return;
+        if (object == null) {
+            initNull(-1);
+            return;
+        }
         this.object = object;
         this.longID = object.getLongID();
         this.name = object.getName();
@@ -61,7 +97,7 @@ public class UserObject {
         if (guild != null && guild.get() != null) {
             this.displayName = object.getDisplayName(guild.get());
             this.roles = object.getRolesForGuild(guild.get());
-            this.color = Utility.getUsersColour(get(), guild.get());
+            this.color = GuildHandler.getUsersColour(get(), guild.get());
             if (!light) {
                 customCommands = guild.customCommands.getCommandList().stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
                 characters = guild.characters.getCharacters(guild.get()).stream().filter(c -> c.getUserID() == longID).collect(Collectors.toList());
@@ -82,8 +118,32 @@ public class UserObject {
             servers = new ArrayList<>();
             dailyMessages = new ArrayList<>();
         }
+        escapeMentions(guild);
         notAllowed = "> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
         isPatron = Globals.getPatrons().contains(longID);
+    }
+
+    private void escapeMentions(GuildObject guild) {
+        Pattern pattern = Pattern.compile("(?i)@(everyone|here)");
+        Matcher nameMatcher = pattern.matcher(name);
+        Matcher displayMatcher = pattern.matcher(displayName);
+
+        if (nameMatcher.find() || displayMatcher.find()) {
+            name = name.replace("@", "@" + Command.spacer);
+            displayName = displayName.replace("@", "@" + Command.spacer);
+            username = username.replace("@", "@" + Command.spacer);
+        }
+//        while (nameMatcher.find()) {
+//            String beginning = name.substring(0, nameMatcher.start());
+//            String end = name.substring(nameMatcher.start(), name.length());
+//            name = beginning + Command.spacer + end;
+//            username = name + "#" + object.getDiscriminator();
+//        }
+//        while (displayMatcher.find()) {
+//            String beginning = displayName.substring(0, displayMatcher.start() + 1);
+//            String end = displayName.substring(displayMatcher.start() + 1, displayName.length());
+//            displayName = beginning + Command.spacer + end;
+//        }
     }
 
     public UserObject loadExtraData(GuildObject guild) {
@@ -129,7 +189,7 @@ public class UserObject {
 
     public ProfileObject getProfile(GuildObject guild) {
         ProfileObject profile = guild.users.getUserByID(longID);
-        if (profile == null && object.isBot()) {
+        if (profile == null && (object != null && !object.isBot())) {
             profile = guild.users.addUser(longID);
         }
         if (profile != null && profile.getSettings() != null && profile.getSettings().size() != 0) {
@@ -151,7 +211,7 @@ public class UserObject {
     }
 
     public boolean showRank(GuildObject guild) {
-        return XpHandler.rank(guild.users, guild.get(), longID) != -1;
+        return PixelHandler.rank(guild.users, guild.get(), longID) != -1;
     }
 
 
@@ -198,7 +258,7 @@ public class UserObject {
     }
 
     public int getRewardValue(CommandObject command) {
-        return XpHandler.getRewardCount(command.guild, longID);
+        return PixelHandler.getRewardCount(command.guild, longID);
     }
 
     public List<IRole> getCosmeticRoles(CommandObject command) {
@@ -207,5 +267,9 @@ public class UserObject {
 
     public EnumSet<Permissions> getPermissions(GuildObject guild) {
         return object.getPermissionsForGuild(guild.get());
+    }
+
+    public boolean checkIsCreator() {
+        return longID == client.creator.longID;
     }
 }

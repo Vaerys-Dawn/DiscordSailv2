@@ -1,20 +1,21 @@
 package com.github.vaerys.commands.pixels;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class Rank extends Command {
 
@@ -50,7 +51,7 @@ public class Rank extends Command {
         //sort profiles by Xp in ascending order (lowest Xp to highest XP).
         Utility.sortUserObjects(users, true);
         //test to see if said user actually has rank stats.
-        if (XpHandler.rank(command.guild.users, command.guild.get(), user.longID) == -1) {
+        if (PixelHandler.rank(command.guild.users, command.guild.get(), user.longID) == -1) {
             return error;
         }
         //build the Array of stats
@@ -65,7 +66,7 @@ public class Rank extends Command {
                 int posBottom = 0;
                 //add profiles above
                 while (addedTop < 3 && i + posTop < users.size()) {
-                    if (user.longID != users.get(i + posTop).getUserID() && XpHandler.rank(command.guild.users, command.guild.get(), users.get(i + posTop).getUserID()) != -1) {
+                    if (user.longID != users.get(i + posTop).getUserID() && PixelHandler.rank(command.guild.users, command.guild.get(), users.get(i + posTop).getUserID()) != -1) {
                         addedTop++;
                         ranks.add(users.get(i + posTop));
                     }
@@ -75,7 +76,7 @@ public class Rank extends Command {
                 ranks.add(users.get(i));
                 //add user below
                 while (addedBottom < 3 && i + posBottom > 0) {
-                    if (user.longID != users.get(i + posBottom).getUserID() && XpHandler.rank(command.guild.users, command.guild.get(), users.get(i + posBottom).getUserID()) != -1) {
+                    if (user.longID != users.get(i + posBottom).getUserID() && PixelHandler.rank(command.guild.users, command.guild.get(), users.get(i + posBottom).getUserID()) != -1) {
                         addedBottom++;
                         ranks.add(users.get(i + posBottom));
                     }
@@ -86,7 +87,7 @@ public class Rank extends Command {
                 //format rank stats
                 for (ProfileObject r : ranks) {
                     IUser ranked = command.guild.getUserByID(r.getUserID());
-                    String rankPos = "**" + XpHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
+                    String rankPos = "**" + PixelHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
                     String toFormat = ranked.getDisplayName(command.guild.get())
                             + "\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`";
                     if (r.getUserID() == user.longID) {
@@ -105,10 +106,9 @@ public class Rank extends Command {
         return error;
     }
 
-    protected static final String[] NAMES = new String[]{"Rank"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Rank"};
     }
 
     @Override
@@ -116,40 +116,34 @@ public class Rank extends Command {
         return "Gives you some information about your rank";
     }
 
-    protected static final String USAGE = "(@User)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(@User)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.PIXEL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.PIXELS;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.PIXELS;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

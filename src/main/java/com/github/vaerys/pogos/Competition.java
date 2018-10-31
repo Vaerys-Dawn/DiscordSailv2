@@ -3,7 +3,7 @@ package com.github.vaerys.pogos;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.CompObject;
 import com.github.vaerys.objects.PollObject;
-import com.github.vaerys.templates.GuildFile;
+import com.github.vaerys.templates.GlobalFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Vaerys on 29/08/2016.
  */
-public class Competition extends GuildFile {
+public class Competition extends GlobalFile {
     public static final String FILE_PATH = "Competition.json";
     private double fileVersion = 1.0;
     ArrayList<CompObject> entries = new ArrayList<>();

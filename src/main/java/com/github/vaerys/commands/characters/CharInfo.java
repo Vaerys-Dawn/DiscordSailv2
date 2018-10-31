@@ -1,22 +1,25 @@
 package com.github.vaerys.commands.characters;
 
-import java.util.ArrayList;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CharacterObject;
-import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 26/02/2017.
  */
 public class CharInfo extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         for (CharacterObject object : command.guild.characters.getCharacters(command.guild.get())) {
@@ -25,7 +28,11 @@ public class CharInfo extends Command {
                 builder.withTitle(object.getNickname());
 
                 IUser user = command.guild.getUserByID(object.getUserID());
-                builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
+                if (user == null) {
+                    builder.withFooterText("Author: No longer on this server | Character ID: " + object.getName());
+                } else {
+                    builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
+                }
 
                 ArrayList<IRole> roles = new ArrayList<>();
                 ArrayList<String> roleNames = new ArrayList<>();
@@ -36,12 +43,23 @@ public class CharInfo extends Command {
                     }
                 }
                 if (roles.size() != 0) {
-                    builder.withColor(Utility.getUsersColour(roles, command.guild.get()));
+                    builder.withColor(GuildHandler.getUsersColour(roles));
+                } else {
+                    builder.withColor(GuildHandler.getUsersColour(user, command.guild.get()));
                 }
 
                 StringBuilder description = new StringBuilder();
                 description.append("**Age:** " + object.getAge());
                 description.append("\n**Gender:** " + object.getGender());
+                if (object.getHeight() != null || object.getWeight() != null) {
+                    description.append("\n");
+                    if (object.getHeight() != null) {
+                        description.append("**Height:** " + object.getHeight() + indent);
+                    }
+                    if (object.getWeight() != null) {
+                        description.append("**Weight:** " + object.getWeight());
+                    }
+                }
                 if (roleNames.size() != 0) {
                     if (command.guild.characters.getRolePrefix() != null && !command.guild.characters.getRolePrefix().isEmpty()) {
                         description.append("\n" + command.guild.characters.getRolePrefix() + " " + Utility.listFormatter(roleNames, true));
@@ -67,10 +85,9 @@ public class CharInfo extends Command {
         return "> Character with that name not found.";
     }
 
-    protected static final String[] NAMES = new String[]{"CharInfo", "InfoChar"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"CharInfo", "InfoChar"};
     }
 
     @Override
@@ -78,40 +95,34 @@ public class CharInfo extends Command {
         return "Gives Information about a certain character.";
     }
 
-    protected static final String USAGE = "[Character ID]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Character ID]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CHARACTER;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CHARACTER;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.CHARACTER;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.CHARACTER;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

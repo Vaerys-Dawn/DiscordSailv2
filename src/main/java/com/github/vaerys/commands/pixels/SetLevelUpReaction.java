@@ -1,10 +1,10 @@
 package com.github.vaerys.commands.pixels;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.objects.SplitFirstObject;
+import com.github.vaerys.templates.Command;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 import sx.blah.discord.handle.obj.IEmoji;
@@ -36,10 +36,9 @@ public class SetLevelUpReaction extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"SetLevelUpReaction"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"SetLevelUpReaction"};
     }
 
     @Override
@@ -47,41 +46,34 @@ public class SetLevelUpReaction extends Command {
         return "Sets the Reaction that the bot will post to the message a user sent to level up.";
     }
 
-    protected static final String USAGE = "[Emoji]/Remove";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Emoji]/Remove";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.PIXEL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.PIXEL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[]{Permissions.MANAGE_EMOJIS};
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[]{Permissions.MANAGE_EMOJIS};
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

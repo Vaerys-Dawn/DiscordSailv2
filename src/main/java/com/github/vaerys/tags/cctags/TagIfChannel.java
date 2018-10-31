@@ -1,11 +1,12 @@
 package com.github.vaerys.tags.cctags;
 
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.enums.TagType;
+import com.github.vaerys.templates.TagObject;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringUtils;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
 
 public class TagIfChannel extends TagObject {
 
@@ -15,7 +16,7 @@ public class TagIfChannel extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        List<String> splitContents = getSpliContents(from);
+        List<String> splitContents = getSplit(from);
         if (!Pattern.compile("<#[0-9]*>").matcher(splitContents.get(0)).matches()) {
             return replaceFirstTag(from, error);
         } else {

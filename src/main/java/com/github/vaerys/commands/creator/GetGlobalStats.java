@@ -1,29 +1,32 @@
 package com.github.vaerys.commands.creator;
 
-import java.util.ArrayList;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.ToggleStatsObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
 
 /**
  * Created by Vaerys on 25/02/2017.
  */
 public class GetGlobalStats extends Command {
+
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<ToggleStatsObject> toggleStats = new ArrayList<>();
         ArrayList<String> outToggles = new ArrayList<>();
         ArrayList<String> outModules = new ArrayList<>();
 //        ArrayList<ChannelStatsObject> channelStats = new ArrayList<>();
-        for (GuildToggle g : Globals.getGuildToggles()) {
+        for (GuildToggle g : ToggleList.getAllToggles()) {
             toggleStats.add(new ToggleStatsObject(g.name().toString(), g.isModule()));
         }
 //        for (ChannelSetting c : Globals.getChannelSettings()) {
@@ -38,7 +41,7 @@ public class GetGlobalStats extends Command {
                     if (t.name().toString().equalsIgnoreCase(s.getToggle())) {
                         if (t.isModule()) {
                             s.addOne();
-                        } else if (t.get(object.guild.config) != t.getDefault()) {
+                        } else if (t.enabled(object.guild.config) != t.getDefault()) {
                             s.addOne();
                         }
                     }
@@ -47,7 +50,7 @@ public class GetGlobalStats extends Command {
             //re enable to find channel stats
 //            for (ChannelStatsObject s : channelStats) {
 //                for (IChannel c : command.guild.getChannels()) {
-//                    ArrayList<String> channelIDs = command.guildConfig.getChannelIDsByType(s.getName());
+//                    ArrayList<String> channelIDs = command.guildConfig.getChannelIDsByType(s.getNames());
 //                    if (channelIDs != null) {
 //                        s.addCounts(channelIDs.size());
 //                    }
@@ -112,13 +115,13 @@ public class GetGlobalStats extends Command {
 //                totalGlobalUsers++;
 //                totalUsers++;
 //            }
-//            builder.append("**Guild: " + guild.getName() + "**");
+//            builder.append("**Guild: " + guild.getNames() + "**");
 //            IUser topIUser = command.client.getUserByID(topUser);
 //            IUser bottomIUser = command.client.getUserByID(bottomUser);
 //            if (topIUser != null && bottomIUser != null) {
-//                builder.append("\nTop User = @" + command.client.getUserByID(topUser).getName() + "#" + command.client.getUserByID(topUser).getDiscriminator());
+//                builder.append("\nTop User = @" + command.client.getUserByID(topUser).getNames() + "#" + command.client.getUserByID(topUser).getDiscriminator());
 //                builder.append(" With Total Messages " + topGuild);
-//                builder.append("\nBottom User = @" + command.client.getUserByID(bottomUser).getName() + "#" + command.client.getUserByID(bottomUser).getDiscriminator());
+//                builder.append("\nBottom User = @" + command.client.getUserByID(bottomUser).getNames() + "#" + command.client.getUserByID(bottomUser).getDiscriminator());
 //                builder.append(" With Total Messages " + bottomGuild);
 //                builder.append("\nGuild Avg = " + totalMessageAvg / totalUsers);
 //                builder.append("\nTotal Guild Messages = " + totalMessage);
@@ -138,10 +141,9 @@ public class GetGlobalStats extends Command {
 //        return null;
     }
 
-    protected static final String[] NAMES = new String[]{"GetGlobalStats"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"GetGlobalStats"};
     }
 
     @Override
@@ -149,40 +151,34 @@ public class GetGlobalStats extends Command {
         return "Sends the owner captured message counters.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CREATOR;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CREATOR;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

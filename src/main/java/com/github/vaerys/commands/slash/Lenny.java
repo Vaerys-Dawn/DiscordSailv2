@@ -1,6 +1,6 @@
 package com.github.vaerys.commands.slash;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.SlashCommand;
 
 /**
@@ -13,14 +13,8 @@ public class Lenny extends SlashCommand {
         return "( ͡° ͜ʖ ͡°)";
     }
 
-    protected static final String[] NAMES = new String[]{"Lenny"};
     @Override
     protected String[] names() {
-        return NAMES;
-    }
-
-    @Override
-    public void init() {
-
+        return new String[]{"Lenny"};
     }
 }

@@ -1,35 +1,41 @@
 package com.github.vaerys.commands.help;
 
-import java.util.List;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.AutoBlocker;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.List;
 
 /**
  * Created by Vaerys on 30/01/2017.
  */
 public class Report extends Command {
 
-    @Override
-    public String execute(String args, CommandObject command) {
-        return report(args, command, false);
-    }
+    private static List<AutoBlocker> lastUsers = new ArrayList<>(5);
 
     public static String report(String args, CommandObject command, boolean isSilent) {
         List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.ADMIN);
         if (channels.size() != 0) {
             IChannel channel = channels.get(0);
             SplitFirstObject split = new SplitFirstObject(args);
-            UserObject reported = Utility.getUser(command, split.getFirstWord(), false,false);
+            UserObject reported = Utility.getUser(command, split.getFirstWord(), false, false);
+
+            addUser(command);
+            if (command.user.isBlockedFromDms()) {
+                return "> " + command.user.mention() + ", You have been blocked, you can no longer send any more report requests.";
+            }
             if (reported == null) {
                 return "> Cannot send report. Could not find user.";
             }
@@ -67,10 +73,31 @@ public class Report extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"Report"};
+    private static void addUser(CommandObject command) {
+        AutoBlocker blocker = null;
+        for (AutoBlocker a : lastUsers) {
+            if (a.getUserID() == command.user.longID) {
+                a.addCount(command.message.get().getTimestamp());
+            }
+        }
+        if (blocker == null) lastUsers.add(new AutoBlocker(command));
+        try {
+            while (lastUsers.size() > 5) {
+                lastUsers.remove(0);
+            }
+        } catch (ConcurrentModificationException e) {
+            return;
+        }
+    }
+
+    @Override
+    public String execute(String args, CommandObject command) {
+        return report(args, command, false);
+    }
+
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Report"};
     }
 
     @Override
@@ -78,41 +105,34 @@ public class Report extends Command {
         return "Can be used to send a user report to the server staff.";
     }
 
-    protected static final String USAGE = "[@User] [Reason]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[@User] [Reason]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = true;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return true;
     }
 
     @Override

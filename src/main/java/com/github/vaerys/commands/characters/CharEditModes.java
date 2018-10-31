@@ -1,12 +1,15 @@
 package com.github.vaerys.commands.characters;
 
-import com.github.vaerys.commands.CommandObject;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CharacterObject;
 import org.apache.commons.lang3.StringUtils;
+import sx.blah.discord.handle.obj.IRole;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 04/04/2017.
@@ -46,6 +49,34 @@ public class CharEditModes {
         }
     }
 
+    public static String height(String args, CharacterObject character, CommandObject command) {
+        long maxChars = 20;
+        if (command.user.isPatron) maxChars += maxChars;
+        if (args.length() > maxChars) {
+            long overDraw = args.length() - maxChars;
+            return "> Character height Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+        } else if (args.contains("\n")) {
+            return "> Character height cannot contain newlines.";
+        } else {
+            character.setHeight(args);
+            return "> Height Updated";
+        }
+    }
+
+    public static String weight(String args, CharacterObject character, CommandObject command) {
+        long maxChars = 20;
+        if (command.user.isPatron) maxChars += maxChars;
+        if (args.length() > maxChars) {
+            long overDraw = args.length() - maxChars;
+            return "> Character weight Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+        } else if (args.contains("\n")) {
+            return "> Character weight cannot contain newlines.";
+        } else {
+            character.setWeight(args);
+            return "> Weight Updated";
+        }
+    }
+
     public static String avatar(String args, CharacterObject character, CommandObject command) {
         if (args.contains(" ") || args.contains("\n")) {
             return "> Image URL specified is invalid.";
@@ -64,14 +95,18 @@ public class CharEditModes {
     }
 
     public static String desc(String args, CharacterObject character, CommandObject command) {
-        long maxChars = 300;
-        if (command.user.isPatron) maxChars += maxChars;
+        long maxChars = 450;
+        long maxNewlines = 5;
+        if (command.user.isPatron) {
+            maxChars += maxChars;
+            maxNewlines += maxNewlines;
+        }
         long newlineCount = StringUtils.countMatches(args, "\n");
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
             return "> Character Description must be under " + maxChars + " characters. " + getOverDraw(overDraw);
-        } else if (newlineCount > 5) {
-            long overdraw = newlineCount - 5;
+        } else if (newlineCount > maxNewlines) {
+            long overdraw = newlineCount - maxNewlines;
             return "> Character Description has too many Newline characters (over by " + overdraw + " newlines)";
         } else {
             character.setShortBio(args);
@@ -91,5 +126,22 @@ public class CharEditModes {
         } catch (MalformedURLException e) {
             return "> Specified URL is invalid.";
         }
+    }
+
+    public static String name(String args, CharacterObject character) {
+        if (args.length() > 32 || args.length() < 2) {
+            return "> Character Name must between 2 and 32 chars.";
+        }
+        if (args.contains("\n")) {
+            return "> Character cannot contain newlines.";
+        }
+        character.setNickname(args);
+        return "> Character Name Updated.";
+    }
+
+    public static String roles(CommandObject command, CharacterObject c) {
+        List<IRole> cosmetics = command.user.roles.stream().filter(r -> command.guild.config.isRoleCosmetic(r.getLongID())).collect(Collectors.toList());
+        c.update(c.getName(), cosmetics);
+        return "> Character Roles Updated.";
     }
 }

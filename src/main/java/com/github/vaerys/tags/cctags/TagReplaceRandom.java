@@ -1,11 +1,12 @@
 package com.github.vaerys.tags.cctags;
 
-import java.util.List;
-import java.util.Random;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.objects.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
-import com.github.vaerys.enums.TagType;
+
+import java.util.List;
+import java.util.Random;
 
 public class TagReplaceRandom extends TagReplaceObject {
 
@@ -14,7 +15,7 @@ public class TagReplaceRandom extends TagReplaceObject {
     }
 
     @Override
-    public String execute(String from, CommandObject command, String args) {
+    public String execute(String from, CommandObject command, String args, List<ReplaceObject> toReplace) {
         List<String> splitArgs = getSplit(from);
         Random random = new Random();
         int randomNum = random.nextInt(splitArgs.size() - 1);

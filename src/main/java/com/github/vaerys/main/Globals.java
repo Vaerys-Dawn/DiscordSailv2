@@ -1,19 +1,12 @@
 package com.github.vaerys.main;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Properties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.github.vaerys.commands.CommandInit;
-import com.github.vaerys.guildtoggles.ToggleInit;
+import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.FilePaths;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.DailyMessage;
 import com.github.vaerys.objects.LogObject;
@@ -24,25 +17,31 @@ import com.github.vaerys.pogos.DailyMessages;
 import com.github.vaerys.pogos.Events;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.tags.TagList;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
-import com.github.vaerys.templates.GuildFile;
-import com.github.vaerys.templates.GuildToggle;
-import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.templates.SlashCommand;
-import com.github.vaerys.templates.TagObject;
+import com.github.vaerys.templates.FileFactory;
+import com.github.vaerys.templates.GlobalFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.RequestBuffer;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.DayOfWeek;
+import java.util.*;
 
 /**
  * Created by Vaerys on 14/08/2016.
  */
 public class Globals {
 
+    final static Logger logger = LoggerFactory.getLogger(Globals.class);
     public static String botName = null;
     public static long creatorID = -1;
     public static String defaultPrefixCommand = null;
     public static String defaultPrefixCC = null;
+    public static String defaultPrefixAdminCC = null;
     public static String defaultAvatarFile = null;
     public static boolean doDailyAvatars = false;
     public static boolean doRandomGames = false;
@@ -54,36 +53,28 @@ public class Globals {
     public static int avgMessagesPerDay = 20;
     public static boolean isReady = false;
     public static String version;
+    public static String d4jVersion;
     public static long consoleMessageCID = -1;
     public static ArrayList<DailyMessage> configDailyMessages = new ArrayList<>();
     public static IDiscordClient client;
     public static boolean showSaveWarning = false;
     public static boolean shuttingDown = false;
     public static boolean savingFiles = false;
-    private static List<GuildObject> guilds = new LinkedList<>();
-    public static List<Command> commands = new LinkedList<>();
-    //private static List<String> commandTypes = new LinkedList<>();
-    private static ChannelSetting[] channelSettings;
-    private static List<GuildToggle> guildToggles = new LinkedList<>();
-    private static List<SlashCommand> slashCommands = new LinkedList<>();
-    private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
-    private static List<LogObject> allLogs = new LinkedList<>();
-    private static List<TagObject> tags = new LinkedList<>();
-    private static List<String> blacklistedURls;
-
-
-    final static Logger logger = LoggerFactory.getLogger(Globals.class);
-    private static GlobalData globalData;
-    private static DailyMessages dailyMessages;
     public static int baseXPModifier;
     public static int xpForLevelOne;
     public static long lastDmUserID = -1;
-    private static ArrayList<Command> creatorCommands = new ArrayList<>();
-    private static List<Long> patrons = new ArrayList<>();
     public static int maxReminderSlots = 5;
+    public static String errorStack = null;
+    private static List<GuildObject> guilds = new LinkedList<>();
+    private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
+    private static List<LogObject> allLogs = new LinkedList<>();
+    private static List<String> blacklistedURls;
+    private static GlobalData globalData;
+    private static DailyMessages dailyMessages;
+    private static List<Long> patrons = new ArrayList<>();
     private static Events events;
     private static String currentEvent = null;
-    public static String errorStack = null;
+    public static long lastRateLimitReset = System.currentTimeMillis();
 
 
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
@@ -95,6 +86,7 @@ public class Globals {
         creatorID = config.creatorID;
         defaultPrefixCommand = config.defaultPrefixCommand;
         defaultPrefixCC = config.defaultPrefixCC;
+        defaultPrefixAdminCC = config.defaultPrefixAdminCC;
         defaultAvatarFile = config.defaultAvatarFile;
         doDailyAvatars = config.doDailyAvatars;
         dailyAvatarName = config.dailyAvatarName;
@@ -110,56 +102,31 @@ public class Globals {
         randomStatuses = config.randomStatuses;
         queueChannelID = config.queueChannelID;
         blacklistedURls = FileHandler.readFromFile("website.blacklist");
-        dailyMessages = (DailyMessages) DailyMessages.create(DailyMessages.FILE_PATH, new DailyMessages());
-        events = (Events) Events.create(Events.FILE_PATH, new Events());
+        dailyMessages = FileFactory.create(FilePaths.DAILY_MESSAGES, DailyMessages.class);
+        events = FileFactory.create(FilePaths.EVENTS, Events.class);
         updateEvent();
         initCommands();
     }
 
     private static void initCommands() {
-        // Load Commands
-        commands = CommandInit.get();
-        // Load DM Commands
-
-
         // Load Guild Toggles
-        guildToggles = ToggleInit.get();
 
-        channelSettings = ChannelSetting.values();
-
-        creatorCommands = CommandInit.getCreatorCommands();
-
-        TagList.init();
+        SetupHandler.getStages();
 
         // validate commands
         if (errorStack != null) {
             logger.error("\n>> Begin Error Report <<\n" + errorStack + ">> End Error Report <<");
-            System.exit(Constants.EXITCODE_CONF_ERROR);
+            System.exit(Constants.EXITCODE_STOP);
         }
 
-
-
-        // Init Command Types.
-        // for (Command c : commands) {
-        // boolean typeFound = false;
-        // for (String s : commandTypes) {
-        // if (c.type.equals(s)) {
-        // typeFound = true;
-        // }
-        // }
-        // if (!typeFound) {
-        // commandTypes.add(c.type());
-        // }
-        // }
-        //Collections.sort(commandTypes);
-
-
-        logger.info(commands.size() + " Commands Loaded.");
-        logger.info(creatorCommands.size() + " Creator Commands Loaded.");
-        //logger.info(commandTypes.size() + " Command Types Loaded.");
-        logger.info(channelSettings.length + " Channel Types Loaded.");
-        logger.info(guildToggles.size() + " Guild Toggles Loaded.");
-        logger.info(TagList.get().size() + " Tags Loaded.");
+        logger.info(CommandList.getAllCommands(true).size() + " Commands Loaded.");
+        logger.info(CommandList.getAllCreatorCommands(true).size() + " Creator Commands Loaded.");
+        logger.info(CommandList.getSetupCommands(true).size() + " Setup Commands Loaded.");
+        logger.info(SAILType.values().length + " SAIL Types Loaded.");
+        logger.info(ChannelSetting.values().length + " Channel Types Loaded.");
+        logger.info(ToggleList.getSettings(true).size() + " Guild Settings Loaded.");
+        logger.info(ToggleList.getModules(true).size() + " Guild Modules Loaded.");
+        logger.info(TagList.get(true).size() + " Tags Loaded.");
     }
 
     public static void validateConfig() throws IllegalArgumentException {
@@ -216,6 +183,19 @@ public class Globals {
             logger.error("\nError:" + "   > creatorID is invalid.");
             return false;
         }
+        // check if the creator is a thinger in guilds?
+        if (Client.getClient().getGuilds().size() == 0) {
+            logger.warn("No guilds to connect to. Will idle for connections.");
+        } else {
+            IUser user = RequestBuffer.request(() -> {
+                return Client.getClient().getUserByID(creatorID);
+            }).get();
+            if (user == null) {
+                // hecc
+                logger.error("Could not find creator in any connected guilds. Make sure you are using the right user ID in " + Constants.FILE_CONFIG);
+                return false;
+            }
+        }
         return true;
     }
 
@@ -234,6 +214,7 @@ public class Globals {
             final Properties properties = new Properties();
             properties.load(Main.class.getClassLoader().getResourceAsStream("project.properties"));
             version = properties.getProperty("version");
+            d4jVersion = properties.getProperty("discord4jVersion");
             logger.info("Bot version : " + version);
         } catch (IOException e) {
             Utility.sendStack(e);
@@ -273,7 +254,7 @@ public class Globals {
             globalData.flushFile();
         // guild files
         for (GuildObject g : guilds) {
-            for (GuildFile file : g.guildFiles) {
+            for (GlobalFile file : g.guildFiles) {
                 file.flushFile();
             }
         }
@@ -295,7 +276,7 @@ public class Globals {
             globalData.backUp();
         // guild files
         for (GuildObject g : guilds) {
-            for (GuildFile file : g.guildFiles) {
+            for (GlobalFile file : g.guildFiles) {
                 file.backUp();
             }
         }
@@ -313,26 +294,6 @@ public class Globals {
         }
     }
 
-    public static List<Command> getCommands(boolean isDm) {
-        List<Command> getCommands = new ArrayList<>();
-        for (Command c : commands) {
-            if (isDm) {
-                if (c.channel != null && c.channel == ChannelSetting.FROM_DM)
-                    getCommands.add(c);
-            } else {
-                if (c.channel == null || c.channel != ChannelSetting.FROM_DM)
-                    getCommands.add(c);
-            }
-        }
-        return getCommands;
-    }
-
-    public static List<Command> getAllCommands() {
-        List<Command> allCommands = new ArrayList<>(commands);
-        allCommands.addAll(creatorCommands);
-        return allCommands;
-    }
-
     public static GlobalData getGlobalData() {
         if (globalData != null) {
             return globalData;
@@ -341,24 +302,12 @@ public class Globals {
         }
     }
 
-    // public static List<Command> getCommandsDM() {
-    // return commandsDM;
-    // }
-
-    public static SAILType[] getCommandTypes() {
-        return SAILType.values();
+    public static List<SAILType> getCommandTypes() {
+        return Arrays.asList(SAILType.values());
     }
 
-    public static ChannelSetting[] getChannelSettings() {
-        return channelSettings;
-    }
-
-    public static List<GuildToggle> getGuildToggles() {
-        return guildToggles;
-    }
-
-    public static List<SlashCommand> getSlashCommands() {
-        return slashCommands;
+    public static List<ChannelSetting> getChannelSettings() {
+        return Arrays.asList(ChannelSetting.values());
     }
 
     public static List<RandomStatusObject> getRandomStatuses() {
@@ -373,34 +322,12 @@ public class Globals {
         return dailyMessages;
     }
 
-    public static List<Command> getCreatorCommands(boolean isDm) {
-        List<Command> getCommands = new ArrayList<>();
-        for (Command c : creatorCommands) {
-            if (isDm) {
-                if (c.channel != null && c.channel != ChannelSetting.FROM_DM)
-                    getCommands.add(c);
-            } else {
-                if (c.channel == null || c.channel != ChannelSetting.FROM_DM)
-                    getCommands.add(c);
-            }
-        }
-        return getCommands;
-    }
-
-    public static List<Command> getALLCreatorCommands() {
-        return creatorCommands;
-    }
-
-    public static List<TagObject> getTags() {
-        return tags;
+    public static List<Long> getPatrons() {
+        return patrons;
     }
 
     public static void setPatrons(List<Long> patrons) {
         Globals.patrons = patrons;
-    }
-
-    public static List<Long> getPatrons() {
-        return patrons;
     }
 
     public static List<TimedEvent> getEvents() {

@@ -1,12 +1,12 @@
 package com.github.vaerys.commands.characters;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.CharacterObject;
 import com.github.vaerys.objects.SplitFirstObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -17,8 +17,12 @@ public class EditChar extends Command {
     String modes = "**Modes:**\n" +
             "> Age - `Max Chars: 20`\n" +
             "> Gender - `Max Chars: 20`\n" +
+            "> Height - `Max Chars: 20`\n" +
+            "> Weight - `Max Chars: 20`\n" +
+            "> Name - `Min Chars 2, Max chars 32`\n" +
+            "> Roles - `Uses your current Cosmetic roles.`\n" +
             "> Avatar - `Needs Valid Image URL or Image`\n" +
-            "> Bio - `Max Chars: 300`\n" +
+            "> Bio - `Max Chars: 450`\n" +
             "> LongDesc - `Needs Valid URL`";
 
     @Override
@@ -30,7 +34,7 @@ public class EditChar extends Command {
         SplitFirstObject mode = new SplitFirstObject(charName.getRest());
         for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
             if (c.getName().equalsIgnoreCase(charName.getFirstWord())) {
-                if (c.getUserID() == command.user.longID || Utility.canBypass(command.user.get(), command.guild.get())) {
+                if (c.getUserID() == command.user.longID || GuildHandler.canBypass(command.user.get(), command.guild.get())) {
                     String rest = mode.getRest();
                     if (rest == null) {
                         rest = "";
@@ -47,6 +51,14 @@ public class EditChar extends Command {
                             return CharEditModes.desc(rest, c, command);
                         case "longdesc":
                             return CharEditModes.longDesc(rest, c);
+                        case "weight":
+                            return CharEditModes.weight(rest, c, command);
+                        case "height":
+                            return CharEditModes.height(rest, c, command);
+                        case "name":
+                            return CharEditModes.name(rest, c);
+                        case "roles":
+                            return CharEditModes.roles(command, c);
                         default:
                             return "> Mode not Valid.";
                     }
@@ -58,10 +70,9 @@ public class EditChar extends Command {
         return "> Char with that name not found.";
     }
 
-    protected static final String[] NAMES = new String[]{"EditChar"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"EditChar"};
     }
 
     @Override
@@ -69,40 +80,34 @@ public class EditChar extends Command {
         return "Allows the User to edit their Character.\n" + modes;
     }
 
-    protected static final String USAGE = "[Character ID] [Mode] [Args]";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Character ID] [Mode] [Args]";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.CHARACTER;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.CHARACTER;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.CHARACTER;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.CHARACTER;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

@@ -1,29 +1,40 @@
 package com.github.vaerys.commands.general;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.ProfileObject;
 import com.github.vaerys.objects.SplitFirstObject;
 import com.github.vaerys.objects.SubCommandObject;
 import com.github.vaerys.objects.UserLinkObject;
-import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.Permissions;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by Vaerys on 17/06/2017.
  */
 public class EditLinks extends Command {
+
+    protected static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
+            new String[]{"EditLinks", "NewLink"},
+            "[@User] [Link Name] (Link)",
+            "Allows the modification of user links.",
+            SAILType.MOD_TOOLS,
+            Permissions.MANAGE_MESSAGES
+    );
+
     @Override
     public String execute(String args, CommandObject command) {
         UserObject user = command.user;
         SplitFirstObject userCall = new SplitFirstObject(args);
         boolean adminEdit = false;
-        if (Utility.testForPerms(command, ADMIN_EDIT.getPermissions()) || Utility.canBypass(command.user.get(), command.guild.get())) {
+        if (GuildHandler.testForPerms(command, ADMIN_EDIT.getPermissions()) || GuildHandler.canBypass(command.user.get(), command.guild.get())) {
             user = Utility.getUser(command, userCall.getFirstWord(), false);
             if (user != null && userCall.getRest() != null && user.getProfile(command.guild) != null) {
                 adminEdit = true;
@@ -70,6 +81,9 @@ public class EditLinks extends Command {
             if (linkName.getFirstWord().length() > 15) {
                 return "> Link Name too long. (Max 15 chars)";
             }
+            if (linkName.getFirstWord().contains("\n")){
+                return "> Link Name cannot contain Newlines.";
+            }
             if (Utility.checkURL(linkName.getRest())) {
                 try {
                     new URL(linkName.getRest());
@@ -88,10 +102,9 @@ public class EditLinks extends Command {
         }
     }
 
-    protected static final String[] NAMES = new String[]{"EditLinks", "NewLink"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"EditLinks", "NewLink"};
     }
 
     @Override
@@ -99,49 +112,36 @@ public class EditLinks extends Command {
         return "Allows uses to manage the links attached to their profile. Max 5 links per user (10 if user is a patron).";
     }
 
-    protected static final String USAGE = "[Link Name] (Link)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "[Link Name] (Link)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
+        return SAILType.GENERAL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = ChannelSetting.BOT_COMMANDS;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.PROFILES;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = true;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return true;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
-    protected static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
-        NAMES,
-        "[@User] [Link Name] (Link)",
-        "Allows the modification of user links.",
-        SAILType.ADMIN,
-        Permissions.MANAGE_MESSAGES
-    );
     @Override
     public void init() {
         subCommands.add(ADMIN_EDIT);

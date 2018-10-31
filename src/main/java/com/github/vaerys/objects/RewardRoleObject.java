@@ -1,7 +1,9 @@
 package com.github.vaerys.objects;
 
-import com.github.vaerys.handlers.XpHandler;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.masterobjects.GuildObject;
+import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 
 /**
@@ -33,10 +35,22 @@ public class RewardRoleObject {
     }
 
     public long getXp() {
-        return XpHandler.totalXPForLevel(level);
+        return PixelHandler.totalXPForLevel(level);
     }
 
     public IRole get(GuildObject guild) {
         return guild.getRoleByID(roleID);
+    }
+
+    public IRole getRole(CommandObject object) {
+        return object.guild.getRoleByID(roleID);
+    }
+
+    public IRole getRole(GuildObject object) {
+        return object.getRoleByID(roleID);
+    }
+
+    public IRole getRole(IGuild object) {
+        return object.getRoleByID(roleID);
     }
 }

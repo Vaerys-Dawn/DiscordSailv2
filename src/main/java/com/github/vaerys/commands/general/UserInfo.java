@@ -1,26 +1,28 @@
 package com.github.vaerys.commands.general;
 
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.ProfileObject;
+import com.github.vaerys.templates.Command;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.handle.obj.StatusType;
+
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.handlers.XpHandler;
-import com.github.vaerys.main.Constants;
-import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.ProfileObject;
-import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.handle.obj.StatusType;
 
 /**
  * Created by Vaerys on 27/02/2017.
@@ -48,7 +50,8 @@ public class UserInfo extends Command {
         } else if (profile == null) {
             return "> Could not get a profile for " + user.displayName + ".";
         }
-        if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
+        if (!GuildHandler.testForPerms(command, Permissions.ADMINISTRATOR) &&
+                (user.isPrivateProfile(command.guild) && user.longID != command.user.longID)) {
             return "> " + user.displayName + " has set their profile to private.";
         }
 
@@ -90,7 +93,6 @@ public class UserInfo extends Command {
         StringBuilder footer = new StringBuilder();
         if (profile.getSettings().contains(UserSetting.READ_RULES) && command.guild.config.readRuleReward) {
             builder.withFooterIcon(Constants.STICKER_STAR_URL);
-//            builder.withFooterIcon("https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/120/glowing-star_1f31f.png");
         }
         if (command.guild.config.userInfoShowsDate) {
             builder.withTimestamp(user.get().getCreationDate());
@@ -113,19 +115,24 @@ public class UserInfo extends Command {
         if (showCC && !showLevel) {
             desc.append("\n**Custom Commands: **" + command.guild.customCommands.getUserCommandCount(user, command.guild));
         } else if (showLevel && !showCC) {
-            desc.append("\n**Level: **" + XpHandler.xpToLevel(profile.getXP()));
+            desc.append("\n**Level: **" + PixelHandler.xpToLevel(profile.getXP()));
         } else if (showLevel && showCC) {
             desc.append("\n**Custom Commands: **" + command.guild.customCommands.getUserCommandCount(user, command.guild) +
-                    indent + indent + indent + "**Level: **" + XpHandler.xpToLevel(profile.getXP()));
+                    indent + indent + indent + "**Level: **" + PixelHandler.xpToLevel(profile.getXP()));
         }
 
         desc.append("\n**Roles: **" + Utility.listFormatter(roleNames, true));
         desc.append("\n\n*" + profile.getQuote() + "*");
         desc.append("\n" + Utility.listFormatter(links, true));
 
-        if (user.isPatron) {
+        //Author Icon
+        if (user.longID == 153159020528533505L) {
+            builder.withAuthorIcon(Constants.DEV_IMAGE_URL);
+            builder.withAuthorUrl(Constants.LINK_GITHUB);
+        } else if (user.isPatron) {
             builder.withAuthorIcon(Constants.PATREON_ICON_URL);
         }
+
 
         builder.withDesc(desc.toString());
 //        builder.withFooterText("User ID: " + profile.getUserID());
@@ -139,10 +146,9 @@ public class UserInfo extends Command {
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"Profile", "UserInfo", "Me"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Profile", "UserInfo", "Me"};
     }
 
     @Override
@@ -150,41 +156,34 @@ public class UserInfo extends Command {
         return "Lets you see some information about yourself or another user.";
     }
 
-    protected static final String USAGE = "(@user)";
     @Override
     protected String usage() {
-        return USAGE;
+        return "(@user)";
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.GENERAL;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.GENERAL;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return ChannelSetting.PROFILES;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.github.vaerys.tags.infotags;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.templates.TagObject;
-import com.github.vaerys.enums.TagType;
 import sx.blah.discord.handle.obj.IUser;
 
 public class TagDisplayName extends TagObject {

@@ -1,9 +1,9 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildSetting;
-import com.github.vaerys.enums.SAILType;
 
 public class UserInfoShowsDate extends GuildSetting {
     @Override
@@ -17,13 +17,18 @@ public class UserInfoShowsDate extends GuildSetting {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.userInfoShowsDate;
     }
 
     @Override
     public boolean getDefault() {
         return new GuildConfig().userInfoShowsDate;
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Show full date on user profile instead of time since created.";
     }
 
     @Override

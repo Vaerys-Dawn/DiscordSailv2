@@ -1,20 +1,18 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.commands.CommandObject;
-import com.github.vaerys.commands.admin.DenyXpPrefix;
 import com.github.vaerys.commands.help.GetGuildInfo;
+import com.github.vaerys.commands.pixels.DenyXpPrefix;
 import com.github.vaerys.commands.pixels.PixelHelp;
-import com.github.vaerys.guildtoggles.toggles.LikeArt;
-import com.github.vaerys.guildtoggles.toggles.ReactToLevelUp;
-import com.github.vaerys.guildtoggles.toggles.SelfDestructLevelUps;
-import com.github.vaerys.guildtoggles.toggles.XpDecay;
-import com.github.vaerys.guildtoggles.toggles.XpGain;
-import com.github.vaerys.main.Utility;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.guildtoggles.ToggleList;
+import com.github.vaerys.guildtoggles.toggles.*;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.RewardRoleObject;
 import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -34,7 +32,7 @@ public class ModulePixels extends GuildModule {
     }
 
     @Override
-    public boolean get(GuildConfig config) {
+    public boolean enabled(GuildConfig config) {
         return config.modulePixels;
     }
 
@@ -62,38 +60,38 @@ public class ModulePixels extends GuildModule {
 
     @Override
     public void setup() {
-        commands.add(new DenyXpPrefix());
-        
+        commands.add(Command.get(DenyXpPrefix.class));
+
         channels.add(ChannelSetting.LEVEL_UP);
         channels.add(ChannelSetting.PIXELS);
         channels.add(ChannelSetting.LEVEL_UP_DENIED);
         channels.add(ChannelSetting.XP_DENIED);
-        
-        settings.add(new XpDecay());
-        settings.add(new XpGain());
-        settings.add(new SelfDestructLevelUps());
-        settings.add(new ReactToLevelUp());
-        settings.add(new LikeArt());
+
+        settings.add(ToggleList.getSetting(SAILType.XP_DECAY));
+        settings.add(ToggleList.getSetting(SAILType.XP_GAIN));
+        settings.add(ToggleList.getSetting(SAILType.SELF_DESTRUCT_LEVEL_UPS));
+        settings.add(ToggleList.getSetting(SAILType.REACT_TO_LEVEL_UP));
+        settings.add(ToggleList.getSetting(SAILType.LIKE_ART));
     }
 
     @Override
-    public String stats(CommandObject object) {
-        boolean hasManageServer = Utility.testForPerms(object, Permissions.MANAGE_SERVER);
+    public String stats(CommandObject command) {
+        boolean hasManageServer = GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER);
         StringBuilder builder = new StringBuilder();
-        builder.append("**Pixels Per Message: ** " + object.guild.config.xpRate);
-        builder.append("\n**Pixel Modifier:** " + object.guild.config.xpModifier);
+        builder.append("**Pixels Per Message: ** " + command.guild.config.xpRate);
+        builder.append("\n**Pixel Modifier:** " + command.guild.config.xpModifier);
         if (hasManageServer) {
-            IRole topTen = object.guild.getRoleByID(object.guild.config.topTenRoleID);
-            IRole xpDenied = object.guild.getRoleByID(object.guild.config.xpDeniedRoleID);
+            IRole topTen = command.guild.getRoleByID(command.guild.config.topTenRoleID);
+            IRole xpDenied = command.guild.getRoleByID(command.guild.config.xpDeniedRoleID);
             if (topTen != null)
                 builder.append("\n**Top Ten Role:** " + topTen.getName());
             if (xpDenied != null)
                 builder.append("\n**Xp Denied Role:** " + xpDenied.getName());
         }
-        if (object.guild.config.getRewardRoles().size() != 0) {
+        if (command.guild.config.getRewardRoles().size() != 0) {
             builder.append("\n\n**[REWARD ROLES]**");
-            for (RewardRoleObject r : object.guild.config.getRewardRoles()) {
-                IRole role = object.guild.getRoleByID(r.getRoleID());
+            for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
+                IRole role = command.guild.getRoleByID(r.getRoleID());
                 if (role != null) {
                     builder.append("\n**" + role.getName() + "** - Lvl " + r.getLevel());
                 }
@@ -105,5 +103,10 @@ public class ModulePixels extends GuildModule {
     @Override
     public boolean statsOnInfo() {
         return false;
+    }
+
+    @Override
+    public String shortDesc(CommandObject command) {
+        return "Allows users to get EXP, as \"pixels\" for server activity.";
     }
 }

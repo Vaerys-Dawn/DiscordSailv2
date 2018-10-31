@@ -1,13 +1,13 @@
 package com.github.vaerys.commands.help;
 
 
-import com.github.vaerys.commands.CommandObject;
+import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.objects.XEmbedBuilder;
-import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.enums.SAILType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -30,15 +30,14 @@ public class BotInfo extends Command {
         response.append("**@").append(c0bra.getName()).append("#").append(c0bra.getDiscriminator()).append("**.");
         builder.withDesc(response.toString());
         builder.withThumbnail(command.client.bot.getAvatarURL());
-        builder.withFooterText("Bot Version: " + Globals.version);
+        builder.withFooterText("Bot Version: " + Globals.version + " | D4J Version: " + Globals.d4jVersion);
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
 
-    protected static final String[] NAMES = new String[]{"Info","BotInfo"};
     @Override
     protected String[] names() {
-        return NAMES;
+        return new String[]{"Info", "BotInfo"};
     }
 
     @Override
@@ -46,41 +45,34 @@ public class BotInfo extends Command {
         return "Gives Information about the bot.";
     }
 
-    protected static final String USAGE = null;
     @Override
     protected String usage() {
-        return USAGE;
+        return null;
     }
 
-    protected static final SAILType COMMAND_TYPE = SAILType.HELP;
     @Override
     protected SAILType type() {
-        return COMMAND_TYPE;
-
+        return SAILType.HELP;
     }
 
-    protected static final ChannelSetting CHANNEL_SETTING = null;
     @Override
     protected ChannelSetting channel() {
-        return CHANNEL_SETTING;
+        return null;
     }
 
-    protected static final Permissions[] PERMISSIONS = new Permissions[0];
     @Override
     protected Permissions[] perms() {
-        return PERMISSIONS;
+        return new Permissions[0];
     }
 
-    protected static final boolean REQUIRES_ARGS = false;
     @Override
     protected boolean requiresArgs() {
-        return REQUIRES_ARGS;
+        return false;
     }
 
-    protected static final boolean DO_ADMIN_LOGGING = false;
     @Override
     protected boolean doAdminLogging() {
-        return DO_ADMIN_LOGGING;
+        return false;
     }
 
     @Override
