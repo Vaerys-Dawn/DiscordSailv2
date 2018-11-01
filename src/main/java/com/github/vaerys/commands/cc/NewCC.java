@@ -56,7 +56,7 @@ public class NewCC extends Command {
             return "> Custom Commands cannot have the same name as built-in commands.";
         }
 
-        if (!Pattern.matches("[\\p{Alnum}\\p{Punct}&&[^#@$*_\\\\/`]]+", nameCC)) {
+        if (!Pattern.matches("[\\p{Alnum}\\p{Punct}&&[^#@$*\\\\/`]]+", nameCC)) {
             return "> Custom Command names cannot contain special characters.";
         }
 
