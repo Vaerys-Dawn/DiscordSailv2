@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.regex.Pattern;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -55,8 +56,8 @@ public class NewCC extends Command {
             return "> Custom Commands cannot have the same name as built-in commands.";
         }
 
-        if (nameCC.contains("```")) {
-            return "> Custom Command names cannot contain code blocks";
+        if (!Pattern.matches("[\\p{Alnum}\\p{Punct}&&[^#@$*_\\\\/`]]+", nameCC)) {
+            return "> Custom Command names cannot contain special characters.";
         }
 
         if ((argsCC == null || argsCC.isEmpty()) && command.message.get().getAttachments().size() == 0) {
