@@ -64,7 +64,7 @@ public class UserInfo extends Command {
         builder.withThumbnail(user.avatarURL);
 
         //set author Icon
-        if (user.longID == 153159020528533505L) {
+        if (user.longID == 153159020528533505L || user.longID == 175442602508812288L) {
             builder.withAuthorIcon(Constants.DEV_IMAGE_URL);
             builder.withAuthorUrl(Constants.LINK_GITHUB);
         } else if (user.isPatron) builder.withAuthorIcon(Constants.PATREON_ICON_URL);
