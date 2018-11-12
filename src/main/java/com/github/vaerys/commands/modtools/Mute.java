@@ -34,12 +34,15 @@ public class Mute extends Command {
         SplitFirstObject userCall = new SplitFirstObject(args);
         IRole mutedRole = command.guild.getMutedRole();
         UserObject mutedUser = Utility.getUser(command, userCall.getFirstWord(), false, false);
+
         StringHandler response = new StringHandler("> %s %s.");
         StringHandler responseAdmin = new StringHandler("> %s %s by %s in %s with reason `%s`.");
         StringHandler modNote = new StringHandler("> %s by **%s**. Reason: `%s`. Time: %s. Channel: %s.");
+
         boolean isMute = !UN_MUTE.isSubCommand(command);
         String mode = isMute ? "**Muted**" : "**UnMuted**";
         StringHandler reason = new StringHandler(userCall.getRest());
+
         long timeSecs = Utility.getRepeatTimeValue(reason);
         if (reason.isEmpty()) reason.setContent("No reason given");
         StringHandler timeValue = new StringHandler("was %s", mode);
@@ -68,7 +71,7 @@ public class Mute extends Command {
         }
 
         // mute/un-mute user
-        if (!isMute && timeSecs == -1) {
+        if (!isMute && timeSecs <= 0) {
             command.guild.users.unMuteUser(mutedUser, command.guild);
         } else {
             command.guild.users.muteUser(mutedUser, command.guild, timeSecs);
