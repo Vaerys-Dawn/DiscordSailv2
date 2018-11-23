@@ -438,6 +438,7 @@ public class RequestHandler {
         IGuild guild = Globals.getClient().getGuildByID(guildID);
         IRole mutedRole = Globals.client.getRoleByID(content.config.getMutedRoleID());
 
+        if (user == null) return RequestBuffer.request(() -> true);
         List<IRole> newRoles = user.getRolesForGuild(guild);
         //roles for logging
         List<IRole> oldRoles = new ArrayList<>(newRoles);
