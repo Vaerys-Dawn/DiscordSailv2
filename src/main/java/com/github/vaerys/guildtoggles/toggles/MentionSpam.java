@@ -37,7 +37,8 @@ public class MentionSpam extends GuildSetting {
 
     @Override
     public String desc(CommandObject command) {
-        return "Enables the mention spam prevention feature, any message with 8 or more mentions will be automatically deleted.";
+        return "Enables the mention spam prevention feature, any message with 8 or more mentions will be automatically deleted.\n" +
+                "If the staff role is set up it will also ping that role.";
     }
 
     @Override

@@ -7,7 +7,6 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.GlobalFile;
-import com.sun.istack.internal.Nullable;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
@@ -49,7 +48,6 @@ public class GuildUsers extends GlobalFile {
         return mutedUsers;
     }
 
-    @Nullable
     public MutedUserObject getMutedUser(long userID) {
         for (MutedUserObject m : mutedUsers) {
             if (m.getID() == userID) return m;

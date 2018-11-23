@@ -166,9 +166,13 @@ public class ArtHandler {
 
     private static boolean checkMessage(CommandObject command) {
         for (String s : command.message.get().getContent().split("( |\n)")) {
-            if (Utility.isImageLink(s) || isHostingWebsite(s)) return true;
+            if (Utility.isImageLink(s) || isSoundFile(s) || isHostingWebsite(s)) return true;
         }
         return false;
+    }
+
+    private static boolean isSoundFile(String s) {
+        return s.matches("(?i).*(.mp3|.wav|.ogg)");
     }
 
     private static void checkList(CommandObject command) {

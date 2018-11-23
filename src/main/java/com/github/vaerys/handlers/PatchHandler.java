@@ -4,13 +4,14 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.FilePaths;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.objects.botlevel.PatchObject;
+import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.FileFactory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
@@ -54,6 +55,9 @@ public class PatchHandler {
         //1.4 fixes
         removeNullPrefix(guild);
         renameToggles(guild);
+
+        //info patches
+        removeChannelTag(guild);
     }
 
 
@@ -81,6 +85,22 @@ public class PatchHandler {
     private static void finalizePatch(PatchObject patch) {
         newPatchID(patch.getPatchID(), patch.getObject());
         FileHandler.writeToJson(patch.getPath(), patch.getObject());
+    }
+
+    private static void removeChannelTag(IGuild guild) {
+        String path = Utility.getFilePath(guild.getLongID(), Constants.FILE_INFO);
+        if (!FileHandler.exists(path)) return;
+        String infoContents = String.join("\n", FileHandler.readFromFile(path));
+        if (!infoContents.contains("<channel>{")) return;
+        else logger.info("Running Info Patch: remove <channel> tag for guild with id: " + guild.getLongID());
+        for (String id = getChannelID(infoContents); id != null; id = getChannelID(infoContents)) {
+            infoContents = infoContents.replace(String.format("<channel>{%s}", id), String.format("<#%s>", id));
+        }
+        FileHandler.writeToFile(path, infoContents, true);
+    }
+
+    private static String getChannelID (String input){
+        return StringUtils.substringBetween(input, "<channel>{", "}");
     }
 
     private static void renameToggles(IGuild guild) {

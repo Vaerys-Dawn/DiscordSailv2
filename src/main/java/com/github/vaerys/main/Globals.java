@@ -49,7 +49,7 @@ public class Globals {
     public static String playing = null;
     public static long queueChannelID = -1;
     public static int argsMax = 0;
-    public static int maxWarnings = 0;
+    public static int maxWarnings = 3;
     public static int avgMessagesPerDay = 20;
     public static boolean isReady = false;
     public static String version;

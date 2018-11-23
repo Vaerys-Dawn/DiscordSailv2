@@ -18,7 +18,11 @@ public class CharAvatar extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(charObject.getNickname());
         IUser user = command.guild.getUserByID(charObject.getUserID());
-        builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + charObject.getName());
+        if (user == null) {
+            builder.withFooterText("Author: No longer on this server | Character ID: " + charObject.getName());
+        } else {
+            builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + charObject.getName());
+        }
         command.guild.characters.validateRoles(command.guild.get());
         if (charObject.getRoleIDs().size() != 0) {
             builder.withColor(charObject.getColor(command.guild));

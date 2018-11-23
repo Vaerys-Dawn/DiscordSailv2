@@ -13,7 +13,6 @@ import com.github.vaerys.utilobjects.XEmbedBuilder;
 import sx.blah.discord.api.internal.DiscordUtils;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;
-import sx.blah.discord.util.cache.LongMap;
 
 import java.awt.*;
 import java.time.Instant;
@@ -157,32 +156,8 @@ public class UserObject {
     }
 
     public List<IChannel> getVisibleChannels(List<IChannel> channels) {
-        List<IChannel> newSet = new ArrayList<>();
-        for (IChannel c : channels) {
-            boolean hasSend = false;
-            boolean hasRead = false;
-            boolean everOverride = false;
-            c.getModifiedPermissions(object);
-            LongMap<PermissionOverride> overrides = c.getRoleOverrides();
-            EnumSet<Permissions> everyoneOverride = c.getModifiedPermissions(c.getGuild().getEveryoneRole());
-
-            for (IRole r : roles) {
-                PermissionOverride override = overrides.get(r.getLongID());
-                if (override != null && !r.isEveryoneRole()) {
-                    if (override.allow().contains(Permissions.READ_MESSAGES)) hasRead = true;
-                    if (override.allow().contains(Permissions.SEND_MESSAGES)) hasSend = true;
-                }
-            }
-            if (everyoneOverride.contains(Permissions.READ_MESSAGES)) {
-                if (everyoneOverride.contains(Permissions.SEND_MESSAGES) || hasSend) {
-                    everOverride = true;
-                }
-            }
-            if ((hasRead && hasSend) || everOverride) {
-                newSet.add(c);
-            }
-        }
-        return newSet;
+        List<Permissions> neededPerms = Arrays.asList(Permissions.SEND_MESSAGES, Permissions.READ_MESSAGES);
+        return channels.stream().filter(c -> c.getModifiedPermissions(object).containsAll(neededPerms)).collect(Collectors.toList());
     }
 
     public IUser get() {
