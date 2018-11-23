@@ -202,3 +202,4 @@ wiki/
 ### Build Artifacts ###
 !target/JavaDiscordSAILv2.jar
 easySquish.bat
+/target/
