@@ -94,6 +94,13 @@ public class RequestHandler {
             String checkedMessage = message;
             if (builder == null) throw new IllegalArgumentException("Embed builder must never be null.");
             if (checkedMessage == null) checkedMessage = "";
+            if (checkedMessage.length() > 2000) {
+                StringHandler error = new StringHandler("> Could not send message, Too large. ")
+                        .append("Please contact my developer by sending me a **Direct Message** with the **Command Name** that caused this message.");
+                sendMessage(error.toString(), channel);
+                sendError("Could not send message, Too Large.", message, channel);
+                return null;
+            }
             EmbedObject embed = builder.build();
             try {
                 return channel.sendMessage(checkedMessage, embed);
