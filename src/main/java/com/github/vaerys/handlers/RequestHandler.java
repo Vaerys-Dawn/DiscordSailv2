@@ -5,6 +5,7 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.*;
+import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.utils.WebHookObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.google.gson.Gson;
@@ -438,7 +439,6 @@ public class RequestHandler {
         });
     }
 
-
     public static RequestBuffer.RequestFuture<Boolean> muteUser(long guildID, long userID, boolean isMuting) {
         GuildObject content = Globals.getGuildContent(guildID);
         IUser user = Globals.getClient().getUserByID(userID);
@@ -453,14 +453,13 @@ public class RequestHandler {
         if (mutedRole == null) return RequestBuffer.request(() -> true);
 
         if (isMuting) {
-            if (content.config.muteRemovesRoles) {
-                content.users.getMutedUser(userID).setRoles(newRoles);
-                newRoles.clear();
-            }
+            if (content.config.muteRemovesRoles) newRoles.clear();
             newRoles.add(mutedRole);
         } else {
+            MutedUserObject mutedUser = content.users.getMutedUser(userID);
+            if (mutedUser != null) newRoles.addAll(mutedUser.getRoles(guild));
             newRoles.remove(mutedRole);
-            newRoles.addAll(content.users.getMutedUser(userID).getRoles(guild));
+            content.users.mutedUsers.removeIf(m -> m.getID() == userID);
         }
         RequestBuffer.RequestFuture<Boolean> passed = roleManagement(user, guild, newRoles);
         Globals.getClient().getDispatcher().dispatch(new UserRoleUpdateEvent(guild, user, oldRoles, newRoles));

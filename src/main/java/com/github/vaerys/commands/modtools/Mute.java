@@ -47,6 +47,7 @@ public class Mute extends Command {
         if (reason.isEmpty()) reason.setContent("No reason given");
         StringHandler timeValue = new StringHandler("was %s", mode);
         String formattedTime = "Permanent";
+
         if (timeSecs >= 0) {
             formattedTime = Utility.formatTime(timeSecs, true);
             timeValue.setContent(isMute ? "was %s for %s" : "will be %s in %s");

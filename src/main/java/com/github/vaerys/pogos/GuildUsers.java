@@ -7,9 +7,11 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.GlobalFile;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vaerys on 03/02/2017.
@@ -22,26 +24,6 @@ public class GuildUsers extends GlobalFile {
 
     public ArrayList<ProfileObject> getProfiles() {
         return profiles;
-    }
-
-    public boolean muteUser(long userID, long guildID, long time) {
-        boolean found = false;
-        for (MutedUserObject c : mutedUsers) {
-            if (c.getID() == userID) {
-                c.setRemainderSecs(time);
-                found = true;
-            }
-        }
-        if (!found) {
-            mutedUsers.add(new MutedUserObject(userID, time));
-        }
-        return RequestHandler.muteUser(guildID, userID, true).get();
-    }
-
-    public boolean unMuteUser(long userID, long guildID) {
-        boolean result = RequestHandler.muteUser(guildID, userID, false).get();
-        mutedUsers.removeIf(m -> m.getID() == userID);
-        return result;
     }
 
     public ArrayList<MutedUserObject> getMutedUsers() {
@@ -80,8 +62,31 @@ public class GuildUsers extends GlobalFile {
         return false;
     }
 
+    public boolean muteUser(long userID, long guildID, long time, List<IRole> roles) {
+        boolean found = false;
+        for (MutedUserObject c : mutedUsers) {
+            if (c.getID() == userID) {
+                c.setRemainderSecs(time);
+                found = true;
+            }
+        }
+        if (!found) {
+            mutedUsers.add(new MutedUserObject(userID, time, roles));
+        }
+        return RequestHandler.muteUser(guildID, userID, true).get();
+    }
+
     public boolean muteUser(UserObject user, GuildObject guild, long timeSecs) {
-        return muteUser(user.longID, guild.longID, timeSecs);
+        return muteUser(user.longID, guild.longID, timeSecs, user.roles);
+    }
+
+    public void muteUser(CommandObject command, int duration) {
+        muteUser(command.user.longID, command.guild.longID, duration, command.user.roles);
+    }
+
+    public boolean unMuteUser(long userID, long guildID) {
+        boolean result = RequestHandler.muteUser(guildID, userID, false).get();
+        return result;
     }
 
     public boolean unMuteUser(UserObject user, GuildObject guild) {
@@ -93,9 +98,5 @@ public class GuildUsers extends GlobalFile {
             if (u.getID() == user.getLongID()) return true;
         }
         return false;
-    }
-
-    public void muteUser(CommandObject command, int duration) {
-        muteUser(command.user.longID, command.guild.longID, duration);
     }
 }
