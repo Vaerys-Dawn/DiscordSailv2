@@ -232,6 +232,7 @@ public class CommandList {
         add(new WhoIsThis());
         add(new UnBlacklistUser());
         add(new BlacklistUser());
+        add(new LeaveGuild());
 
         //DM Creator Commands
         add(new BlockUser());
