@@ -198,8 +198,3 @@ CC templates/
 Storage/
 wiki/
 /modules/
-
-### Build Artifacts ###
-!target/JavaDiscordSAILv2.jar
-easySquish.bat
-/target/
