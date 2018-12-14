@@ -9,7 +9,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.RewardRoleObject;
-import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.deprecated.BlackListObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;

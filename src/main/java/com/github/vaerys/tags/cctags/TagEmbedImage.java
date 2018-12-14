@@ -43,6 +43,9 @@ public class TagEmbedImage extends TagObject {
     }
 
     @Override
+    public long timeout() { return 10000; }
+
+    @Override
     public int argsRequired() {
         return 1;
     }

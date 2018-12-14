@@ -50,6 +50,12 @@ public abstract class TagObject {
 
     protected abstract String desc();
 
+    /**
+     * Allows allotting a specific amount of time for this {@link TagObject} to run.
+     * @return The timeout allotment for the tag, in milliseconds. Use -1 to specify that this tag has no capped runtime.
+     */
+    public long timeout() { return -1; }
+
     protected boolean isPassive() {
         return false;
     }

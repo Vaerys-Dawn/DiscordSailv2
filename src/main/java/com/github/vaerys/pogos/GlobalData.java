@@ -1,7 +1,7 @@
 package com.github.vaerys.pogos;
 
 
-import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.deprecated.BlackListObject;
 import com.github.vaerys.objects.userlevel.ReminderObject;
 import com.github.vaerys.templates.GlobalFile;
 

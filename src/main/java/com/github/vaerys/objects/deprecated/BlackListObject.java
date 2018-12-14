@@ -1,4 +1,4 @@
-package com.github.vaerys.objects.depreciated;
+package com.github.vaerys.objects.deprecated;
 
 import com.github.vaerys.main.Constants;
 
@@ -7,6 +7,8 @@ import java.time.Instant;
 /**
  * Created by Vaerys on 27/08/2016.
  */
+// TODO: Remove leftover usages of deprecated object!
+@Deprecated
 public class BlackListObject {
     private String name;
     private String phrase;

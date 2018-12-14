@@ -14,6 +14,7 @@ import sx.blah.discord.util.RequestBuffer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -28,7 +29,7 @@ public class MessageHandler {
     private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
 
-    public MessageHandler(String args, CommandObject command, boolean isPrivate) {
+    public MessageHandler(String args, CommandObject command, boolean isPrivate) throws InterruptedException, ExecutionException {
         if (!isPrivate) {
             if (SpamHandler.checkForInvites(command)) return;
             if (SpamHandler.checkMentionCount(command)) return;

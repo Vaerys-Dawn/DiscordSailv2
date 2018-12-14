@@ -4,8 +4,10 @@ import com.github.vaerys.enums.TagType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
+import com.github.vaerys.utilobjects.InterruptibleCharSequence;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class TagRegex extends TagReplaceObject {
 
@@ -52,9 +54,9 @@ public class TagRegex extends TagReplaceObject {
     public String replaceMode(String from, List<ReplaceObject> toReplace) {
         for (ReplaceObject t : toReplace) {
             try {
-                from = from.replaceAll(t.getFrom(), t.getTo());
+                from = Pattern.compile(t.getFrom()).matcher(new InterruptibleCharSequence(from)).replaceAll(t.getTo());
             } catch (IllegalArgumentException e) {
-                from = from.replaceAll(t.getFrom(), prepReplace(t.getTo()));
+                from = Pattern.compile(t.getFrom()).matcher(new InterruptibleCharSequence(from)).replaceAll(prepReplace(t.getTo()));
             }
         }
         return from;

@@ -20,6 +20,9 @@ public abstract class TagReplaceObject extends TagObject {
         return from;
     }
 
+    @Override
+    public long timeout() { return 5000; }
+
     public abstract String execute(String from, CommandObject command, String args, List<ReplaceObject> toReplace);
 
     public TagReplaceObject(int priority, TagType... types) {

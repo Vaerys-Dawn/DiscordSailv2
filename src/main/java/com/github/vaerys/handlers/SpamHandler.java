@@ -10,7 +10,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.OffenderObject;
 import com.github.vaerys.objects.adminlevel.UserRateObject;
-import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.deprecated.BlackListObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.pogos.GuildConfig;

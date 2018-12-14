@@ -10,7 +10,7 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.adminlevel.UserRateObject;
 import com.github.vaerys.objects.botlevel.RandomStatusObject;
-import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.deprecated.BlackListObject;
 import com.github.vaerys.objects.events.TimedEvent;
 import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.objects.userlevel.ProfileObject;

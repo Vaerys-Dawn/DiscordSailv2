@@ -1,7 +1,7 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.deprecated.BlackListObject;
 
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -21,9 +21,7 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Created by Vaerys on 27/08/2016.
@@ -32,9 +30,10 @@ public class CCHandler {
 
     private final static Logger logger = LoggerFactory.getLogger(CCHandler.class);
 
-    private final static ScheduledExecutorService deleter = Executors.newScheduledThreadPool(50);
+    private final static ScheduledExecutorService deleter = Executors.newScheduledThreadPool(5);
+    private final static ExecutorService tagService = Executors.newSingleThreadExecutor();
 
-    public static void handleAdminCC(String args, CommandObject command) {
+    public static void handleAdminCC(String args, CommandObject command) throws InterruptedException, ExecutionException {
 
         SplitFirstObject commandName = new SplitFirstObject(args);
         AdminCCObject cc = command.guild.adminCCs.getCommand(commandName.getFirstWord(), command);
@@ -85,7 +84,19 @@ public class CCHandler {
 ////                RequestHandler.sendMessage(String.format("A stack overflow error occurred within one of the **%s** tags.\n\n**Tag Details:**```\n%s```", t.name, fullTag), command);
 ////                return;
                 FileHandler.writeToFile(Constants.DIRECTORY_STORAGE + "Error.txt", contents, true);
-                contents = t.handleTag(contents, command, ccArgs, cc);
+                String in = contents;
+                String arg = ccArgs;
+                Future<String> result = tagService.submit(() -> t.handleTag(in, command, arg));
+                try {
+                    if (t.timeout() != -1) {
+                        contents = result.get(t.timeout(), TimeUnit.MILLISECONDS);
+                    } else {
+                        contents = result.get();
+                    }
+                } catch (TimeoutException e) {
+                    contents = "#ERROR#:<" + t.tagName() + ":TIMEOUT>";
+                    break;
+                }
                 if (contents == null) return;
             } catch (StackOverflowError e) {
                 System.out.println("Error caught");
@@ -112,7 +123,7 @@ public class CCHandler {
         RequestHandler.sendMessage(contents, command.channel.get());
     }
 
-    public static void handleCommand(String args, CommandObject command) {
+    public static void handleCommand(String args, CommandObject command) throws InterruptedException, ExecutionException {
         //cc lockout handling
 
 
@@ -152,8 +163,22 @@ public class CCHandler {
         }
 
         //tag handling
+
         for (TagObject t : TagList.getType(TagType.CC)) {
-            contents = t.handleTag(contents, command, ccArgs);
+            String in = contents;
+            String arg = ccArgs;
+            Future<String> result = tagService.submit(() -> t.handleTag(in, command, arg));
+            try {
+                if (t.timeout() != -1) {
+                    contents = result.get(t.timeout(), TimeUnit.MILLISECONDS);
+                } else {
+                    contents = result.get();
+                }
+            } catch (TimeoutException e) {
+                result.cancel(true);
+                contents = "#ERROR#:<" + t.tagName() + ":TIMEOUT>";
+                break;
+            }
             if (contents == null) return;
         }
 

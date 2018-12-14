@@ -3,7 +3,7 @@ package com.github.vaerys.pogos;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.objects.depreciated.BlackListObject;
+import com.github.vaerys.objects.deprecated.BlackListObject;
 import com.github.vaerys.objects.userlevel.ServerObject;
 import com.github.vaerys.templates.GlobalFile;
 import org.apache.commons.lang3.StringUtils;
