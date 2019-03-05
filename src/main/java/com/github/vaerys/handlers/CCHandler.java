@@ -177,6 +177,7 @@ public class CCHandler {
             } catch (TimeoutException e) {
                 result.cancel(true);
                 contents = "#ERROR#:<" + t.tagName() + ":TIMEOUT>";
+                logger.error("command execution timed out: {} ({}ms) {}", t.tagName(), t.timeout(), arg);
                 break;
             }
             if (contents == null) return;
