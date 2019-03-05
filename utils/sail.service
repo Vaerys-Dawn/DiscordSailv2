@@ -9,6 +9,7 @@ Group=sail
 WorkingDirectory=/home/sail/
 ExecStart=/usr/bin/java -jar DiscordSAILv2.jar
 Restart=on-failure
+TimeoutStopSec=5
 
 [Install]
 WantedBy=multi-user.target
