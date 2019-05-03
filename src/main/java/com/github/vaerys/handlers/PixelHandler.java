@@ -393,11 +393,15 @@ public class PixelHandler {
     public static long levelToXP(long level) {
         long nextLvl = level + 1;
         long xp = (((nextLvl) * 20) + (level * level) * 4 + 40);
-        if ((xp + "").endsWith("4")) {
-            xp += 16;
-        } else if ((xp + "").endsWith("6")) {
-            xp += 4;
+        if (xp % 20 != 0) {
+            // "add" the difference to the XP to make it a multiple of 20.
+            xp -= 20 - (xp % 20);
         }
+        //if ((xp + "").endsWith("4")) {
+        //    xp += 16;
+        //} else if ((xp + "").endsWith("6")) {
+        //    xp += 4;
+        //}
         return xp;
     }
 
