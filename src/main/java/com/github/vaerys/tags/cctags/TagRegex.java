@@ -4,7 +4,6 @@ import com.github.vaerys.enums.TagType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
-import com.sun.org.apache.regexp.internal.RE;
 
 import java.util.List;
 import java.util.regex.Pattern;
