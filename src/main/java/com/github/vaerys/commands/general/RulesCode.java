@@ -20,7 +20,8 @@ public class RulesCode extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        List<IChannel> botCommands = command.guild.getChannelsByType(ChannelSetting.BOT_COMMANDS);
+        command.message.delete();
+        List<IChannel> botCommands = command.user.getVisibleChannels(command.guild.getChannelsByType(ChannelSetting.BOT_COMMANDS));
         if (!botCommands.isEmpty() && !botCommands.contains(command.channel.get())
                 && !GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
             return Utility.getChannelMessage(botCommands);
@@ -28,7 +29,6 @@ public class RulesCode extends Command {
         if (command.guild.config.getRuleCode() == null) {
             return "> no rule code exists try again later.";
         }
-        command.message.delete();
         ProfileObject profile = command.user.getProfile(command.guild);
         if (profile == null)
             return "> **" + command.user.displayName + "** An error occurred, You do not have a profile yet. please dm me this error as this should never happen.";

@@ -32,22 +32,22 @@ public class PurgeBannedData extends Command {
             userId = Long.parseLong(args);
             userStringID = args;
             if (userStringID.equalsIgnoreCase(Globals.creatorID + "")) {
-                return "> You cannot purge the bot owner's data, if you have found an error in their data please DM me with the details.";
+                return "\\> You cannot purge the bot owner's data, if you have found an error in their data please DM me with the details.";
             }
             if (userId == command.guild.getOwnerID()) {
-                return "> You cannot purge the servers owner's data, if you have found an error in their data please DM me with the details.";
+                return "\\> You cannot purge the servers owner's data, if you have found an error in their data please DM me with the details.";
             }
             IUser toTest = command.guild.getUserByID(userId);
             if (toTest != null) {
                 if (toTest.getPermissionsForGuild(command.guild.get()).contains(Permissions.ADMINISTRATOR)) {
-                    return "> You cannot purge a user with the administrator permission, if you have found an error in their data please DM me with the details.";
+                    return "\\> You cannot purge a user with the administrator permission, if you have found an error in their data please DM me with the details.";
                 }
             }
         } catch (NumberFormatException e) {
             //do nothing
         }
         if (!command.client.bot.get().getPermissionsForGuild(command.guild.get()).contains(Permissions.BAN)) {
-            return "> I cant purge the data of banned user unless I get the **Ban Members** permission.\n" +
+            return "\\> I cant purge the data of banned user unless I get the **Ban Members** permission.\n" +
                     "Feel free to remove the permission after you purge the data as I will no longer need it.";
         }
         if (userId != -1 && userStringID != null) {
@@ -57,10 +57,10 @@ public class PurgeBannedData extends Command {
                 purgeData(user.getLongID(), command, purgedData);
             }
         }
-        String response = "> Purged Profiles: **" + purgedData[0] + "**." +
-                "\n> Purged CCs: **" + purgedData[1] + "**." +
-                "\n> Purged Characters: **" + purgedData[2] + "**." +
-                "\n> Purged Server Listings: **" + purgedData[3] + "**." +
+        String response = "\\> Purged Profiles: **" + purgedData[0] + "**." +
+                "\\> Purged CCs: **" + purgedData[1] + "**." +
+                "\n\\> Purged Characters: **" + purgedData[2] + "**." +
+                "\n\\> Purged Server Listings: **" + purgedData[3] + "**." +
                 "\n\nYou are now free to remove my **Ban Members** Permission as I no longer need it.";
 
         return response;

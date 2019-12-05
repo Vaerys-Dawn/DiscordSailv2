@@ -136,6 +136,8 @@ public class SpamHandler {
         //make sure that the rate limiting should actually happen
         if (!command.guild.config.rateLimiting) return false;
         if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
+        if (command.channel.settings.contains(ChannelSetting.MUTE_APPEALS)) return false;
+        if (command.guild.users.isUserMuted(command.user.get())) return false;
 
         //ignore spam in tagged channels
         List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);

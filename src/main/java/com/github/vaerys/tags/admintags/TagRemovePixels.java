@@ -16,7 +16,7 @@ public class TagRemovePixels extends TagAdminSubTagObject {
     @Override
     public String execute(String from, CommandObject command, String args, AdminCCObject cc) {
         String subTag = getSubTag(from);
-        if (!command.guild.config.modulePixels && !command.guild.config.xpGain) {
+        if (!command.guild.config.modulePixels) {
             return replaceAllTag(from, ERROR_PIXELS_DISABLED);
         }
 

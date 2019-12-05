@@ -79,7 +79,7 @@ public class Mute extends Command {
         }
 
         // add mod note
-        if (isMute) {
+        if (isMute || reason.length() != 0) {
             boolean isStrike = false;
             if (Pattern.compile("(^⚠ | ⚠|⚠)").matcher(reason.toString()).find()) {
                 reason.replaceRegex("(^⚠ | ⚠|⚠)", "");

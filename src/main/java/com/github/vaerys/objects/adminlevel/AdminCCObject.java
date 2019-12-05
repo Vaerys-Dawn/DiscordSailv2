@@ -11,7 +11,9 @@ import java.util.ListIterator;
 import java.util.regex.Pattern;
 
 public class AdminCCObject {
-
+    /**
+     * key -> <userID, key, timestamp>
+     */
     private transient List<TriVar<Long, String, Long>> keysToCull = new LinkedList<>();
 
     String name;

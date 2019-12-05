@@ -485,6 +485,7 @@ public class PixelHandler {
         }
         List<RewardRoleObject> userRewards = object.config.getAllRewards(userObject.getCurrentLevel());
         List<RewardRoleObject> allRewards = object.config.getRewardRoles();
+        if (allRewards.size() == 0) return 4;
         if (userRewards.size() == 0) {
             return 0;
         } else {
@@ -537,7 +538,7 @@ public class PixelHandler {
 //            }
 //            decay = (long) temp;
 //            //half decay if you turn you xp gain off but only if it is voluntary
-//            if (u.getSettings().contains(UserSetting.NO_XP_GAIN)) {
+//            if (u.getEnabledSettings().contains(UserSetting.NO_XP_GAIN)) {
 //                decay = decay / 2;
 //            }
 //            if (XpHandler.getRewardCount(content, u.getUserID()) != 0) {
@@ -556,8 +557,8 @@ public class PixelHandler {
 //                            u.setXp(rewardFloor);
 //                        }
 //                        //if user is at level floor add setting.
-//                        if (u.getXP() == rewardFloor && !u.getSettings().contains(HIT_LEVEL_FLOOR)) {
-//                            u.getSettings().add(HIT_LEVEL_FLOOR);
+//                        if (u.getXP() == rewardFloor && !u.getEnabledSettings().contains(HIT_LEVEL_FLOOR)) {
+//                            u.getEnabledSettings().add(HIT_LEVEL_FLOOR);
 //                        }
 //                    }
 //                    //if your days away is a multiple of 30 you should be checked if you are at the
@@ -598,13 +599,13 @@ public class PixelHandler {
 //            //adds a special message if a reward is added.
 //            for (RewardRoleObject r : object.guild.config.getRewardRoles()) {
 //                if (r.getLevel() == user.getCurrentLevel()) {
-//                    if (user.getSettings().contains(DENY_AUTO_ROLE)) {
+//                    if (user.getEnabledSettings().contains(DENY_AUTO_ROLE)) {
 //                        break;
 //                    }
-//                    if (user.getSettings().contains(HIT_LEVEL_FLOOR)) {
-//                        for (int i = 0; i < user.getSettings().size(); i++) {
-//                            if (user.getSettings().get(i) == HIT_LEVEL_FLOOR) {
-//                                user.getSettings().remove(i);
+//                    if (user.getEnabledSettings().contains(HIT_LEVEL_FLOOR)) {
+//                        for (int i = 0; i < user.getEnabledSettings().size(); i++) {
+//                            if (user.getEnabledSettings().get(i) == HIT_LEVEL_FLOOR) {
+//                                user.getEnabledSettings().remove(i);
 //                            }
 //                        }
 //                        levelUpMessage = "Welcome Back.\n" + levelUpMessage + "\nYour **@" + object.guild.getRoleByID(r.getRoleID()).getName() + "** role has been returned to you.";
@@ -699,7 +700,7 @@ public class PixelHandler {
 //    private static void reactTolevelUp(CommandObject object) {
 //        if (object.guild.config.reactToLevelUp) {
 //            ProfileObject user = object.guild.users.getUserByID(object.user.longID);
-//            if (user != null && user.getSettings().contains(UserSetting.NO_LEVEL_UP_REACTIONS)) {
+//            if (user != null && user.getEnabledSettings().contains(UserSetting.NO_LEVEL_UP_REACTIONS)) {
 //                return;
 //            }
 //            IEmoji customEmoji = null;

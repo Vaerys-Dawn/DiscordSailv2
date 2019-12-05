@@ -15,6 +15,7 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // TODO: 31/08/2016 Add the ability to search for a custom command based on name, getContents, or ShitPost (use separate commands) -- partially complete.
 // name:[name] shitpost getContents:[getContents]

@@ -158,6 +158,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onReactionAddEvent(ReactionAddEvent event) {
+        Globals.reactionCount++;
         if (event.getUser().isBot()) {
             return;
         }
@@ -167,6 +168,7 @@ public class AnnotationListener {
         ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
         ReactionEmoji heart = Utility.getReaction(Constants.EMOJI_LIKE_PIN);
         ReactionEmoji remove = Utility.getReaction(Constants.EMOJI_REMOVE_PIN);
+        ReactionEmoji gift = Utility.getReaction("gift");
         ReactionEmoji emoji = event.getReaction().getEmoji();
 
         if (emoji == null) return;
@@ -196,6 +198,9 @@ public class AnnotationListener {
             //if is hear and is pinned then give xp
             if (emoji.equals(heart))
                 ArtHandler.pinLiked(object, pinner, owner);
+            //give a gift
+            if (emoji.equals(gift))
+                Globals.getGlobalData().giveGift(message.getLongID(), pinner, object.guild);
             //do only within Direct messages
         } else if (event.getChannel().isPrivate() && emoji.isUnicode()) {
             //if anyone uses x
@@ -229,7 +234,7 @@ public class AnnotationListener {
         if (content.config.moduleJoinMessages && content.config.sendJoinMessages) {
             JoinHandler.customJoinMessages(content, event.getUser());
         }
-        GuildHandler.checkUsersRoles(user.longID,content);
+        GuildHandler.checkUsersRoles(user.longID, content);
         JoinHandler.autoReMute(event, content, user);
         if (!content.config.moduleLogging) return;
         LoggingHandler.doJoinLeaveLog(event, true);

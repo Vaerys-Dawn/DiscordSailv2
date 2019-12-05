@@ -28,13 +28,13 @@ public class Constants {
     public static final String BL_TRUSTED = "TRUSTED";
 
     //Error Constants
-    public static final String ERROR = "> An Error Occurred";
-    public static final String ERROR_ROLE_NOT_FOUND = "> I found no roles with that name.";
-    public static final String ERROR_UPDATING_ROLE = "> An Error Occurred when trying to Update your roles.\n" +
+    public static final String ERROR = "\\> An Error Occurred";
+    public static final String ERROR_ROLE_NOT_FOUND = "\\> I found no roles with that name.";
+    public static final String ERROR_UPDATING_ROLE = "\\> An Error Occurred when trying to Update your roles.\n" +
             "This is usually due to my Heirachey being lower than yours. I will need a role higher than yours to edit your roles.";
-    public static final String ERROR_CC_NOT_FOUND = "> Command with that name could not be found.";
-    public static final String ERROR_CHAR_NOT_FOUND = "> Character with that name could not be found.";
-    public static final String ERROR_BRACKETS = "> Brackets `[]` and Parentheses `()` are not required, " +
+    public static final String ERROR_CC_NOT_FOUND = "\\> Command with that name could not be found.";
+    public static final String ERROR_CHAR_NOT_FOUND = "\\> Character with that name could not be found.";
+    public static final String ERROR_BRACKETS = "\\> Brackets `[]` and Parentheses `()` are not required, " +
             "they mean that a variable is required or optional respectively, so don't use them.";
 
     // constants reperesenting different exit codes
@@ -91,13 +91,13 @@ public class Constants {
         add(UserSetting.PRIVATE_PROFILE);
     }};
     //Special Messages
-    public static final String DAILY_MESSAGE_1 = "> Load Sail.getBehaviour(\"Cat\");\n" +
-            "> <random>{Meow;;Feed MEEEE;;Pet me;;Get away from me}, <random>{*Licks self*;;***HISSSSSS***;;Wait no don't leave me..}.";
-    public static final String DAILY_MESSAGE_2 = "> Well hello again, looks like its a brand new day.";
-    public static final String DAILY_MESSAGE_3 = "> <random>{Protocol Avali initiated;;Loading Avali Settings;;OS A.V.A.L.A.I Loaded}." +
+    public static final String DAILY_MESSAGE_1 = "\\> Load Sail.getBehaviour(\"Cat\");\n" +
+            "\\> <random>{Meow;;Feed MEEEE;;Pet me;;Get away from me}, <random>{*Licks self*;;***HISSSSSS***;;Wait no don't leave me..}.";
+    public static final String DAILY_MESSAGE_2 = "\\> Well hello again, looks like its a brand new day.";
+    public static final String DAILY_MESSAGE_3 = "\\> <random>{Protocol Avali initiated;;Loading Avali Settings;;OS A.V.A.L.A.I Loaded}." +
             " <random>{Greetings;;Hello;;Salutations}, it appears that today is a new day. It looks like a great day for <random>{exploration;;discovery;;some cake;;**CIVILISATION**;;a picnic}.";
     public static final String DAILY_MESSAGE_4 = "LOADING PROTOCOL M.E.T.A" +
-            "\n> <random>{" +
+            "\\> <random>{" +
             "**PLAY OF THE GAME: S.A.I.L AS BASTION!**;;" +
             "*Top o' the morning to ya.*;;" +
             "\uD83C\uDF89 *Fweeeee* \uD83C\uDF89;;" +
@@ -113,12 +113,12 @@ public class Constants {
             "Oh am I bothering you with my automated post? oh im sorry I'll leave now.;;" +
             "But there's one sound, that no one knows... **What does the log say!?**;;" +
             "ERROR 404, ERROR 502 NOT FOUND}";
-    public static final String DAILY_MESSAGE_5 = "> THE RUIN WILL COME FOR YOU MORTAL AND DESTROY YOU ON THIS NEW DAY!";
-    public static final String DAILY_MESSAGE_6 = "> <random>{" +
+    public static final String DAILY_MESSAGE_5 = "\\> THE RUIN WILL COME FOR YOU MORTAL AND DESTROY YOU ON THIS NEW DAY!";
+    public static final String DAILY_MESSAGE_6 = "\\> <random>{" +
             "Well then Looks like you have me back again.;;" +
             "Goodness what have you all done to the place since I was last here?;;" +
             "My My My Its a brand new day isn't it? looks like we're all still here.}";
-    public static final String DAILY_MESSAGE_7 = "> A new Day arrives, Prepare for fun.";
+    public static final String DAILY_MESSAGE_7 = "\\> A new Day arrives, Prepare for fun.";
     //queue types
     public static final String QUEUE_DAILY = "DAILY_MESSAGE";
     public static final String DAILY_SPECIALID = "Default Daily Message.";
@@ -152,7 +152,7 @@ public class Constants {
     public static final Color DEFAULT_COLOUR = new Color(89, 91, 105);
 
     public static String getWelcomeMessage(CommandObject object) {
-        return "> I am S.A.I.L, your Server-Based Artificial Intelligence Lattice. I help manage servers.\n" +
+        return "\\> I am S.A.I.L, your Server-Based Artificial Intelligence Lattice. I help manage servers.\n" +
                 "I am also programmed to offer you information and tools.\n\n" +
                 "The **" + new StartUpGuide().getCommand(object) + "** command will tell you more.\n\n" +
                 "`(This message will remove itself in 5 mins)`";

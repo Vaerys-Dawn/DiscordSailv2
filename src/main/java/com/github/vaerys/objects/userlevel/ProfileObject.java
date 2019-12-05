@@ -76,11 +76,15 @@ public class ProfileObject {
         xp += config.xpRate * config.xpModifier;
     }
 
-    public void addXP(long pixels, GuildConfig config) {
-        this.xp += config.xpModifier * pixels;
+    public void addXP(long pixels, GuildConfig config, boolean doModifier) {
+        this.xp += (doModifier ? config.xpModifier : 1) * pixels;
         if (xp > Constants.PIXELS_CAP) {
             this.xp = Constants.PIXELS_CAP;
         }
+    }
+
+    public void addXP(long pixels, GuildConfig config) {
+        addXP(pixels, config, true);
     }
 
     public void removePixels(long pixels, GuildConfig config) {

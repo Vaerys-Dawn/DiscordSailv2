@@ -96,12 +96,15 @@ public enum ChannelSetting {
      * Creates a channel setting class
      *
      * @param name
-     * @param isSetting
+     * @param isNotUnique defines if is allowed to have multiples of this ChannelSetting per server.
      * @param desc
+     *
+     *  TODO: 2019/OCT/31 When converting to V3 convert isNotUnique to isUnique (flip the value from false to true vis versa) @c0bra5
+     *  TODO: 2019/OCT/31 Add Index Val to constructor to prevent reordering issues.
      */
-    private ChannelSetting(String name, boolean isSetting, String desc) {
+    ChannelSetting(String name, boolean isNotUnique, String desc) {
         this.name = name;
-        this.isSetting = isSetting;
+        this.isSetting = isNotUnique;
         this.desc = desc;
     }
 

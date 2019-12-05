@@ -2,6 +2,7 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.main.Client;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
@@ -277,10 +278,15 @@ public class TimerHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                IUser user = Client.getClient().getUserByID(object.getUserID());
                 IChannel channel = Client.getClient().getChannelByID(object.getChannelID());
                 // sanitize channel
                 if (channel == null) {
-                    channel = Client.getClient().getUserByID(object.getUserID()).getOrCreatePMChannel();
+                    channel = user.getOrCreatePMChannel();
+                } else if (!channel.isPrivate()) {
+                    if (channel.getGuild().getUserByID(object.getUserID()) == null) {
+                        channel = user.getOrCreatePMChannel();
+                    }
                 }
                 IMessage message = RequestHandler.sendMessage(object.getMessage(), channel).get();
 
@@ -405,6 +411,8 @@ public class TimerHandler {
 
                     checkKeepAlive();
 
+                    logger.info("Reaction Counter: " + Globals.reactionCount);
+
                     reminderHandler(now);
 
                     botStatsHandler();
@@ -473,6 +481,17 @@ public class TimerHandler {
             avgCpu += i;
         }
         avgCpu /= cpuUsage.size();
+
+        if (avgCpu > 0.9) {
+            logger.info("Total active threads: " + Thread.activeCount() + "\tCPU Usage: " + nf.format(avgCpu * 100) + "%");
+            logger.info(memString.toString());
+            logger.error("CPU USAGE LIMIT REACHED RESTARTING.");
+            Utility.sendStack(new Exception("CPU overloaded - Dumping logs of last 25 actions"), 25);
+            RequestHandler.sendCreatorDm("\\> CPU USAGE LIMIT REACHED, AUTO RESTARTING...").get();
+            Globals.getClient().logout();
+            System.exit(Constants.EXITCODE_RESTART);
+        }
+
         //Sending isAlive Check.
         if (Globals.showSaveWarning) {
             logger.info("Total active threads: " + Thread.activeCount() + "\tCPU Usage: " + nf.format(avgCpu * 100) + "%");
@@ -483,6 +502,7 @@ public class TimerHandler {
             logger.debug(memString.toString());
             logger.debug("Backup in 5 seconds do not restart.");
         }
+
     }
 
     private static void reminderHandler(ZonedDateTime now) {

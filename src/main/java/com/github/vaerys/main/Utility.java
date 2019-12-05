@@ -663,13 +663,18 @@ public class Utility {
 
 
     public static void sendStack(Exception e) {
+        sendStack(e, 5);
+    }
+
+    public static void sendStack(Exception e, int count) {
         StringHandler s = new StringHandler(ExceptionUtils.getStackTrace(e));
         s.setContent(s.substring(0, s.length() - 2));
         if (!s.toString().endsWith(")")) {
             s.append(")");
         }
+        if (count > 25) count = 25;
         StringHandler builder = new StringHandler();
-        builder.addViaJoin(Globals.getAllLogs(), "\n");
+        builder.addViaJoin(Globals.getAllLogs().subList(0, count), "\n");
         logger.error(s.toString() + "\n>> LAST " + Globals.getAllLogs().size() + " DEBUG LOGS<<\n" + builder.toString());
     }
 

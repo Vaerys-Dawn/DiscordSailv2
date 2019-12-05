@@ -3,6 +3,7 @@ package com.github.vaerys.commands.admin;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.objects.utils.WebHookObject;
@@ -26,10 +27,10 @@ public class Test extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+        StringHandler out = new StringHandler(args);
 
-//        command.guild.characters.addDungeonChar("test");
-
-        throw new DiscordException("TestException");
+        return out.toString();
+//        throw new DiscordException("TestException");
     }
 
     @Override

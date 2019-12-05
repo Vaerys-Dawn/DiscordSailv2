@@ -31,7 +31,9 @@ import java.util.stream.Collectors;
  * Wrapper for the Guild API object. Also contains all bot data related to said Guild.
  */
 public class GuildObject {
+
     private final static Logger logger = LoggerFactory.getLogger(GuildObject.class);
+
     public ClientObject client;
     public long longID;
     public GuildConfig config;
@@ -45,7 +47,7 @@ public class GuildObject {
     public AdminCCs adminCCs;
     public List<GlobalFile> guildFiles;
     public List<Command> commands;
-    public List<GuildToggle> toggles;
+    private List<GuildToggle> toggles;
     public List<ChannelSetting> channelSettings;
     public List<SAILType> commandTypes;
     private IGuild object;
@@ -356,7 +358,6 @@ public class GuildObject {
         return object.getRoleByID(config.getMutedRoleID());
     }
 
-
     public IRole getXPDeniedRole() {
         return object.getRoleByID(config.getMutedRoleID());
     }
@@ -408,7 +409,9 @@ public class GuildObject {
 
     public UserRateObject rateLimit(CommandObject command) {
         UserRateObject rateObject = null;
-        for (UserRateObject r : rateUsers) {
+        ListIterator iterator = rateUsers.listIterator();
+        while (iterator.hasNext()) {
+            UserRateObject r = (UserRateObject) iterator.next();
             if (r.getUserID() == command.user.longID) {
                 rateObject = r;
                 rateObject.addMessage(command);
@@ -421,7 +424,7 @@ public class GuildObject {
         return rateObject;
     }
 
-    public List<GuildToggle> getSettings() {
+    public List<GuildToggle> getEnabledSettings() {
         List<SAILType> settings = new LinkedList<>();
         for (GuildToggle toggle : toggles) {
             if (toggle.isModule() && toggle.enabled(config)) settings.addAll(toggle.settings);
@@ -430,10 +433,22 @@ public class GuildObject {
     }
 
     public GuildToggle getSetting(SAILType type) {
-        List<GuildToggle> settings = getSettings();
+        List<GuildToggle> settings = getEnabledSettings();
         for (GuildToggle setting : settings) {
             if (setting.name() == type) return setting;
         }
         return null;
+    }
+
+    public List<GuildToggle> getModules() {
+        return toggles.stream().filter(t -> t.isModule() && !t.equals(SAILType.DEFAULT)).collect(Collectors.toList());
+    }
+
+    public List<GuildToggle> getSettings() {
+        return toggles.stream().filter(t -> !t.isModule()).collect(Collectors.toList());
+    }
+
+    public List<GuildToggle> getToggles() {
+        return toggles.stream().filter(t -> t.name() != SAILType.DEFAULT).collect(Collectors.toList());
     }
 }

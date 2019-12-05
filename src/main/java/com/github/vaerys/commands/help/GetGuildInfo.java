@@ -126,7 +126,7 @@ public class GetGuildInfo extends Command {
             List<SAILType> disabledModules = new LinkedList<>();
             List<SAILType> enabledSettings = new LinkedList<>();
             List<SAILType> disabledSettings = new LinkedList<>();
-            for (GuildToggle t : command.guild.toggles) {
+            for (GuildToggle t : command.guild.getToggles()) {
                 if (t.isModule()) {
                     if (t.enabled(command.guild.config)) enabledModules.add(t.name());
                     else disabledModules.add(t.name());
@@ -170,17 +170,17 @@ public class GetGuildInfo extends Command {
 
         //module builders.
         XEmbedBuilder moduleStats = new XEmbedBuilder(command);
-        List<GuildToggle> guildmodules = new ArrayList(command.guild.toggles);
+        List<GuildToggle> guildModules = new ArrayList(command.guild.getModules());
         GuildToggle roleModule = null;
-        for (GuildToggle t : guildmodules) {
+        for (GuildToggle t : guildModules) {
             if (t.name() == new ModuleRoles().name()) {
                 roleModule = t;
             }
         }
-        int index = guildmodules.indexOf(roleModule);
-        guildmodules.remove(index);
-        guildmodules.add(0, roleModule);
-        for (GuildToggle toggle : guildmodules) {
+        int index = guildModules.indexOf(roleModule);
+        guildModules.remove(index);
+        guildModules.add(0, roleModule);
+        for (GuildToggle toggle : guildModules) {
             if (toggle.isModule() && toggle.enabled(command.guild.config)) {
                 String stats = toggle.stats(command);
                 if (stats != null) {

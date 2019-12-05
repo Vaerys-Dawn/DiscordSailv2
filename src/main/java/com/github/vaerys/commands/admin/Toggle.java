@@ -34,31 +34,26 @@ public class Toggle extends Command {
 
         StringHandler desc = new StringHandler();
         if (!args.isEmpty()) {
-            GuildToggle toggle;
-            SAILType setting = SAILType.get(args);
-            if (isModule) {
-                toggle = ToggleList.getGuildToggle(args, isModule);
-            } else {
-                toggle = command.guild.getSetting(setting);
-            }
-            if (toggle == null && setting != null && ToggleList.getSetting(setting) != null) {
-                GuildToggle module = ToggleList.getModuleFromSetting(setting);
-                desc.appendFormatted("> Could not toggle Setting **%s**, Module **%s** is disabled.\n\n", args, module.name());
-            } else if (toggle == null) {
+            GuildToggle toggle = ToggleList.getGuildToggle(args, isModule);
+            if (toggle == null) {
                 if (isModule) {
                     desc.append("> Could not find Module **" + args + "**.\n\n");
                 } else {
                     desc.append("> Could not find Setting **" + args + "**.\n\n");
                 }
             } else {
-                toggle.toggle(command.guild.config);
-                command.guild.loadCommandData();
-
-                String mode = toggle.enabled(command.guild.config) ? "enabled" : "disabled";
-                String type = toggle.isModule() ? "module" : "setting";
-                String helpCommand = toggle.isModule() ? modules.getUsage(command) : settings.getUsage(command);
-                return "> **" + toggle.name() + "** is now **" + mode + "**.\n\n" +
-                        "To see more info about what this " + type + " " + mode + " you can run **" + helpCommand + "**.";
+                GuildToggle module = ToggleList.getModuleFromSetting(toggle.name());
+                if (module != null && !module.enabled(command.guild.config)) {
+                    desc.appendFormatted("> Could not toggle Setting **%s**, Module **%s** is disabled.\n\n", args, module.name());
+                } else {
+                    toggle.toggle(command.guild.config);
+                    command.guild.loadCommandData();
+                    String mode = toggle.enabled(command.guild.config) ? "enabled" : "disabled";
+                    String type = toggle.isModule() ? "module" : "setting";
+                    String helpCommand = toggle.isModule() ? modules.getUsage(command) : settings.getUsage(command);
+                    return "> **" + toggle.name() + "** is now **" + mode + "**.\n\n" +
+                            "To see more info about what this " + type + " " + mode + " you can run **" + helpCommand + "**.";
+                }
             }
         }
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
@@ -68,7 +63,7 @@ public class Toggle extends Command {
 
         List<SAILType> typesActive = new LinkedList<>();
         List<SAILType> typesDeactivated = new LinkedList<>();
-        for (GuildToggle t : command.guild.toggles) {
+        for (GuildToggle t : command.guild.getToggles()) {
             if (t.isModule() == isModule) {
                 if (t.enabled(command.guild.config)) typesActive.add(t.name());
                 else typesDeactivated.add(t.name());

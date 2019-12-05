@@ -30,7 +30,9 @@ public enum UserSetting {
     //bot assigned
     HIT_LEVEL_FLOOR("HitLevelFloor"),//added when the user reaches the xp floor of a reward, used to welcome
     // profiles back when the level up again
-    READ_RULES("ReadRules"); // user has correctly guessed the guild's rulecode
+    READ_RULES("ReadRules"), // user has correctly guessed the guild's rulecode
+
+    JOIN_WHILE_NEW("JoinedWhileNew"); // added to users with creation time less than 5 hours.
 
 
     private final String text;

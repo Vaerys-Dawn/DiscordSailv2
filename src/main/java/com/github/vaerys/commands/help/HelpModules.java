@@ -23,7 +23,7 @@ public class HelpModules extends Command {
     }
 
     public XEmbedBuilder getInfo(boolean isModule, String args, CommandObject command) {
-        for (GuildToggle t : command.guild.toggles) {
+        for (GuildToggle t : command.guild.getToggles()) {
             if (t.isModule() == isModule && t.name().toString().equalsIgnoreCase(args)) {
                 return t.info(command);
             }

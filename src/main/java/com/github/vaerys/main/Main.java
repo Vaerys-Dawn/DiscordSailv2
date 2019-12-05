@@ -123,7 +123,7 @@ public class Main {
 
             Globals.validateConfig();
             if (Globals.errorStack != null) {
-                logger.error(">\n> Begin Config Error Report <<\n" +
+                logger.error(">\\> Begin Config Error Report <<\n" +
                         "at " + Constants.DIRECTORY_STORAGE + Constants.FILE_CONFIG +
                         "\n" + Globals.errorStack + ">> End Error Report <<");
                 System.exit(Constants.EXITCODE_STOP);

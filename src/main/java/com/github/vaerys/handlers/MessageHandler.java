@@ -36,6 +36,7 @@ public class MessageHandler {
             if (SpamHandler.rateLimiting(command)) return;
             if (SpamHandler.catchWalls(command)) return;
             if (checkMuteAppeals(command)) return;
+            if (checkForSpammer(command)) return;
             // check for role mentions:
             if (!GuildHandler.testForPerms(command, command.channel.get(), Permissions.MENTION_EVERYONE)) {
                 // sanitize @everyone and @here mentions.
@@ -70,6 +71,18 @@ public class MessageHandler {
         if (isPrivate) {
             new DMHandler(command);
         }
+    }
+
+    private boolean checkForSpammer(CommandObject command) {
+        boolean found = command.message.getContent().matches(".*http.*QYHhZv.*");
+        if (!found) return false;
+        logger.info(String.format("Handling spammer removal for guild with id: %d, in channel %d", command.guild.longID, command.channel.longID));
+        if (command.guild.getMutedRole() != null) {
+            if (command.guild.users.isUserMuted(command.user.get())) return true;
+            command.guild.users.muteUser(command, -1);
+        }
+        command.message.delete();
+        return true;
     }
 
     private boolean checkMuteAppeals(CommandObject command) {

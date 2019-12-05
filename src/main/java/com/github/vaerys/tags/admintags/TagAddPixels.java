@@ -16,7 +16,7 @@ public class TagAddPixels extends TagAdminSubTagObject {
     @Override
     public String execute(String from, CommandObject command, String args, AdminCCObject cc) {
         String subTag = getSubTag(from);
-        if (!command.guild.config.modulePixels && !command.guild.config.xpGain) {
+        if (!command.guild.config.modulePixels) {
             return replaceAllTag(from, ERROR_PIXELS_DISABLED);
         }
 
@@ -33,7 +33,7 @@ public class TagAddPixels extends TagAdminSubTagObject {
                         profile.getSettings().contains(UserSetting.NO_XP_GAIN)) {
                     pixels = 0;
                 } else {
-                    profile.addXP(pixels, command.guild.config);
+                    profile.addXP(pixels, command.guild.config, false);
                 }
                 from = replaceFirstTag(from, "You have been granted " + pixels + " pixels");
                 from = removeAllTag(from);

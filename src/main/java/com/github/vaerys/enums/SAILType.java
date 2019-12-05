@@ -33,6 +33,7 @@ public enum SAILType {
     MOD_MUTE("ModMute"),
     READ_RULES_REWARDS("RuleCode"),
     ADMIN_CC("AdminCC"),
+    DEFAULT("Default"),
 
     //Toggle types
     ADMIN_LOGGING("AdminLogging"),

@@ -7,8 +7,8 @@ import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.botlevel.ToggleStatsObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
 import sx.blah.discord.handle.obj.Permissions;
@@ -37,7 +37,7 @@ public class GetGlobalStats extends Command {
         for (GuildObject g : Globals.getGuilds()) {
             CommandObject object = command.setGuild(g.get());
             for (ToggleStatsObject s : toggleStats) {
-                for (GuildToggle t : object.guild.toggles) {
+                for (GuildToggle t : object.guild.getToggles()) {
                     if (t.name().toString().equalsIgnoreCase(s.getToggle())) {
                         if (t.isModule()) {
                             s.addOne();

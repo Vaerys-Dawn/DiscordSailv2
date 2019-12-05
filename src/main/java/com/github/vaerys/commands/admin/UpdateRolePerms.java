@@ -74,7 +74,7 @@ public class UpdateRolePerms extends Command {
 
     @Override
     protected Permissions[] perms() {
-        return new Permissions[]{Permissions.ADMINISTRATOR};
+        return new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_SERVER};
     }
 
     @Override

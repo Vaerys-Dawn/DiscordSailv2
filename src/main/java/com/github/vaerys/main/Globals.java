@@ -65,6 +65,7 @@ public class Globals {
     public static long lastDmUserID = -1;
     public static int maxReminderSlots = 5;
     public static String errorStack = null;
+    public static long reactionCount = 0;
     private static List<GuildObject> guilds = new LinkedList<>();
     private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
     private static List<LogObject> allLogs = new LinkedList<>();
@@ -383,7 +384,7 @@ public class Globals {
 
     public static void addToLog(LogObject object) {
         allLogs.add(object);
-        if (allLogs.size() > 5)
+        if (allLogs.size() > 25)
             allLogs.remove(0);
     }
 

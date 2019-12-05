@@ -219,7 +219,6 @@ public class CommandList {
 
     private static final List<Command> creatorCommands = new ArrayList<Command>() {{
         //Creator Commands
-        ArrayList<Command> commands = new ArrayList<>();
         add(new Shutdown());
         add(new Sudo());
         add(new UpdateAvatar());
@@ -246,6 +245,7 @@ public class CommandList {
         add(new PatreonToken());
         add(new UnBlockUser());
         add(new BotStats());
+        add(new Present());
     }};
 
     private static final List<Command> setupCommands = new ArrayList<Command>() {{

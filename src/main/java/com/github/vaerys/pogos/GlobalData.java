@@ -1,6 +1,8 @@
 package com.github.vaerys.pogos;
 
 
+import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.depreciated.BlackListObject;
 import com.github.vaerys.objects.userlevel.ReminderObject;
 import com.github.vaerys.templates.GlobalFile;
@@ -19,6 +21,8 @@ public class GlobalData extends GlobalFile {
     ArrayList<Long> blockedFromDMS = new ArrayList<>();
     List<BlackListObject.BlacklistedUserObject> blacklistedUsers = new ArrayList<>();
     ArrayList<ReminderObject> reminders = new ArrayList<>();
+    private long presentID = -1;
+    List<Long> giftsGiven = new ArrayList<>();
 
     public List<BlackListObject.BlacklistedUserObject> getBlacklistedUsers() {
         return blacklistedUsers;
@@ -61,7 +65,7 @@ public class GlobalData extends GlobalFile {
     }
 
     public List<ReminderObject> getRemindersUser(long userID) {
-        return reminders.stream().filter(r-> r.getUserID() == userID).collect(Collectors.toList());
+        return reminders.stream().filter(r -> r.getUserID() == userID).collect(Collectors.toList());
     }
 
     public void addReminder(ReminderObject object) {
@@ -83,5 +87,16 @@ public class GlobalData extends GlobalFile {
                 return;
             }
         }
+    }
+
+    public void setPresentId(long longID) {
+        presentID = longID;
+    }
+
+    public void giveGift(long messageID, UserObject pinner, GuildObject guild) {
+        if (messageID != presentID) return;
+        if (giftsGiven.contains(pinner.longID)) return;
+        pinner.getProfile(guild).addXP(1000, guild.config);
+        giftsGiven.add(pinner.longID);
     }
 }

@@ -75,6 +75,7 @@ public class ToggleList {
         add(new ModuleLogging());
         add(new ModuleJoinMessages());
         add(new ModuleAdminCC());
+        add(new ModuleDefault());
     }};
 
     public static List<GuildToggle> getAllToggles(boolean validate) {
@@ -105,7 +106,7 @@ public class ToggleList {
 
     public static GuildToggle getGuildToggle(String args, boolean isModule) {
         for (GuildToggle t : getToggles(isModule)) {
-            if (SAILType.get(args) == t.name()) {
+            if (SAILType.get(args) == t.name() && t.name() != SAILType.DEFAULT) {
                 return t;
             }
         }
@@ -135,7 +136,7 @@ public class ToggleList {
 
     public static GuildModule getModule(SAILType obj) {
         for (GuildModule c : guildModules) {
-            if (c.name() == obj) {
+            if (c.name() == obj && obj != SAILType.DEFAULT) {
                 return c;
             }
         }
@@ -190,6 +191,7 @@ public class ToggleList {
 
     public static GuildToggle getModuleFromSetting(SAILType setting) {
         for (GuildToggle m : guildModules) {
+            if (m.name() == setting) return null;
             if (m.settings.contains(setting)) return m;
         }
         return null;

@@ -1,12 +1,14 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.JoinMessage;
 import com.github.vaerys.objects.adminlevel.MutedUserObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
 import sx.blah.discord.handle.obj.IChannel;
@@ -47,6 +49,8 @@ public class JoinHandler {
             RequestHandler.roleManagement(user, content, content.config.getMutedRoleID(), true);
         }
         if ((5 * 60 * 60 * 1000) > difference) {
+            ProfileObject profileObject = user.addProfile(content);
+            profileObject.getSettings().add(UserSetting.JOIN_WHILE_NEW);
             IChannel admin = content.getChannelByType(ChannelSetting.ADMIN_LOG);
             if (admin == null) {
                 admin = event.getGuild().getDefaultChannel();

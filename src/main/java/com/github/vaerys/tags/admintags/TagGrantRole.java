@@ -20,7 +20,7 @@ public class TagGrantRole extends TagAdminSubTagObject {
         IRole role = GuildHandler.getRoleFromName(getSubTag(from), command.guild.get());
         if (role == null) {
             return replaceFirstTag(from, error);
-        } else if (!Utility.testUserHierarchy(command.client.bot, command.user, command.guild)) {
+        } else if (!Utility.testUserHierarchy(command.client.bot.get(), role, command.guild.get())) {
             return removeAllTag(from);
         } else {
             RequestHandler.roleManagement(command, role, true);
