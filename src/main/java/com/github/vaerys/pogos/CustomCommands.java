@@ -54,19 +54,19 @@ public class CustomCommands extends GlobalFile {
         int counter = 0;
         int limitCCs;
         if (commandName.length() > 50) {
-            return "> Command name too long.";
+            return "\\> Command name too long.";
         }
         if (commandName.isEmpty()) {
-            return "> Command name cannot be empty.";
+            return "\\> Command name cannot be empty.";
         }
         if (StringUtils.countMatches(commandContents, "<embedImage>{") > 1) {
-            return "> Custom Commands Cannot have multiple <embedImage> tags";
+            return "\\> Custom Commands Cannot have multiple <embedImage> tags";
         }
         limitCCs = maxCCs(object.user, object.guild);
 
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(commandName)) {
-                return "> Command name already in use.";
+                return "\\> Command name already in use.";
             }
             if (c.getUserID() == object.user.longID) {
                 counter++;
@@ -75,7 +75,7 @@ public class CustomCommands extends GlobalFile {
         if (counter < limitCCs) {
             commands.add(new CCommandObject(isLocked, object.user.longID, commandName, commandContents, isShitPost));
             long remaining = limitCCs - counter - 1;
-            String response = "> Command Added, you have ";
+            String response = "\\> Command Added, you have ";
             if (remaining > 1) {
                 response += remaining + " custom command slots left.\n";
             } else {
@@ -85,7 +85,7 @@ public class CustomCommands extends GlobalFile {
             return response;
 
         } else {
-            return "> You have run out of custom command slots. you can make room by deleting or editing old custom commands.";
+            return "\\> You have run out of custom command slots. you can make room by deleting or editing old custom commands.";
         }
     }
 
@@ -155,13 +155,13 @@ public class CustomCommands extends GlobalFile {
                 }
                 if (author.getLongID() == c.getUserID() || canBypass) {
                     if (c.isLocked() && Globals.client.getOurUser().getLongID() != author.getLongID()) {
-                        return "> This command is locked and must be unlocked to be deleted.";
+                        return "\\> This command is locked and must be unlocked to be deleted.";
                     } else {
                         commands.remove(i);
-                        return "> Command Deleted.";
+                        return "\\> Command Deleted.";
                     }
                 } else {
-                    return "> You do not have permission to delete that command.";
+                    return "\\> You do not have permission to delete that command.";
                 }
             }
             i++;

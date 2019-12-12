@@ -18,14 +18,14 @@ public class UnBlacklistUser extends Command {
 
         // Attempt to get an IUser so we know our thing is real.
         UserObject user = Utility.getUser(command, args, false);
-        if (user == null) return "> Could not find user.";
+        if (user == null) return "\\> Could not find user.";
 
         GlobalData globalData = Globals.getGlobalData();
         if (globalData == null) throw new NullPointerException("GlobalData not loaded yet!");
         if (globalData.getBlacklistedUsers().removeIf(o -> o.getUserID() == user.longID)) {
-            return "> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** un-blacklisted.";
+            return "\\> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** un-blacklisted.";
         }
-        return "> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** could not be removed from blacklist or is not blacklisted.";
+        return "\\> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** could not be removed from blacklist or is not blacklisted.";
     }
 
     @Override

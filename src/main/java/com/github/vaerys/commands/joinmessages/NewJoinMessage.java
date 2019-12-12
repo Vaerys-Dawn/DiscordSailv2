@@ -18,17 +18,17 @@ public class NewJoinMessage extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         List<JoinMessage> messages = command.guild.channelData.getJoinMessages();
-        if (!args.contains("<user>")) return "> Could not find <user> Tag";
+        if (!args.contains("<user>")) return "\\> Could not find <user> Tag";
         for (JoinMessage m : messages) {
             if (m.getContent().equals(args)) {
-                return "> New Join Message Contents matches another Custom Join Message's contents, cannot have duplicate messages.";
+                return "\\> New Join Message Contents matches another Custom Join Message's contents, cannot have duplicate messages.";
             }
         }
         if (StringUtils.containsIgnoreCase(args, "@everyone") || StringUtils.containsIgnoreCase(args, "@here")) {
-            return "> You cannot put everyone or here mentions in join messages.";
+            return "\\> You cannot put everyone or here mentions in join messages.";
         }
         messages.add(new JoinMessage(command.user.longID, args));
-        return "> New Custom Join Message added at index " + command.guild.channelData.getJoinMessages().size() + ".";
+        return "\\> New Custom Join Message added at index " + command.guild.channelData.getJoinMessages().size() + ".";
     }
 
     @Override

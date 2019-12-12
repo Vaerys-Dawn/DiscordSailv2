@@ -51,16 +51,16 @@ public class EditLinks extends Command {
         }
         ProfileObject userObject = user.getProfile(command.guild);
         if (userObject == null) {
-            return "> " + user.displayName + " Has not Spoken yet thus they have nothing to edit.";
+            return "\\> " + user.displayName + " Has not Spoken yet thus they have nothing to edit.";
         }
         userObject.setLinks();
         for (UserLinkObject link : userObject.getLinks()) {
             if (link.getName().equalsIgnoreCase(linkName.getFirstWord())) {
                 userObject.getLinks().remove(link);
                 if (adminEdit) {
-                    return "> " + user.displayName + "'s Link was removed.";
+                    return "\\> " + user.displayName + "'s Link was removed.";
                 } else {
-                    return "> Link removed.";
+                    return "\\> Link removed.";
                 }
             }
         }
@@ -69,35 +69,35 @@ public class EditLinks extends Command {
             maxLinks += 5;
         }
         if (linkName.getRest() == null) {
-            return "> Cannot add link, Must specify a URL.";
+            return "\\> Cannot add link, Must specify a URL.";
         } else {
             if (userObject.getLinks().size() >= maxLinks) {
                 if (adminEdit) {
-                    return "> " + user.displayName + " already has " + maxLinks + " links, a link must be removed to add a new one.";
+                    return "\\> " + user.displayName + " already has " + maxLinks + " links, a link must be removed to add a new one.";
                 } else {
-                    return "> You already have " + maxLinks + " links, you must remove one to add a new one.";
+                    return "\\> You already have " + maxLinks + " links, you must remove one to add a new one.";
                 }
             }
             if (linkName.getFirstWord().length() > 15) {
-                return "> Link Name too long. (Max 15 chars)";
+                return "\\> Link Name too long. (Max 15 chars)";
             }
             if (linkName.getFirstWord().contains("\n")){
-                return "> Link Name cannot contain Newlines.";
+                return "\\> Link Name cannot contain Newlines.";
             }
             if (Utility.checkURL(linkName.getRest())) {
                 try {
                     new URL(linkName.getRest());
                     userObject.getLinks().add(new UserLinkObject(linkName.getFirstWord(), linkName.getRest()));
                     if (adminEdit) {
-                        return "> New link added for " + user.displayName + ".";
+                        return "\\> New link added for " + user.displayName + ".";
                     } else {
-                        return "> New link added.";
+                        return "\\> New link added.";
                     }
                 } catch (MalformedURLException e) {
-                    return "> Cannot add link, Invalid URL.";
+                    return "\\> Cannot add link, Invalid URL.";
                 }
             } else {
-                return "> Cannot add link, Invalid URL.";
+                return "\\> Cannot add link, Invalid URL.";
             }
         }
     }

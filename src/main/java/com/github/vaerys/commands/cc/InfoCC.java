@@ -24,7 +24,7 @@ public class InfoCC extends Command {
         }
         StringBuilder builder = new StringBuilder();
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
-        String title = "> Here is the information for command: **" + customCommand.getName() + "**\n";
+        String title = "\\> Here is the information for command: **" + customCommand.getName() + "**\n";
         UserObject createdBy = UserObject.getNewUserObject(customCommand.getUserID(), command.guild);
         builder.append("Creator: **@" + createdBy.username + "**\n");
         builder.append("Time Run: **" + customCommand.getTimesRun() + "**\n");

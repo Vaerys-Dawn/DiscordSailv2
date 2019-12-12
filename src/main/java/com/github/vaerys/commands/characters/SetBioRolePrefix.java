@@ -15,13 +15,13 @@ public class SetBioRolePrefix extends Command {
     public String execute(String args, CommandObject command) {
         if (args == null || args.isEmpty()) {
             command.guild.characters.setRolePrefix("");
-            return "> Role Prefix Removed.";
+            return "\\> Role Prefix Removed.";
         }
         if (args.length() < 20) {
             command.guild.characters.setRolePrefix(args);
-            return "> Role Prefix Updated.";
+            return "\\> Role Prefix Updated.";
         } else {
-            return "> Role Prefix is too long.";
+            return "\\> Role Prefix is too long.";
         }
     }
 

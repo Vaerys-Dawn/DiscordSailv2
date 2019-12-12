@@ -23,7 +23,7 @@ public class CheckPixelRoles extends Command {
         }
         GuildHandler.checkTopTen(command.guild);
         RequestHandler.deleteMessage(working);
-        return "> Done.";
+        return "\\> Done.";
     }
 
     @Override

@@ -53,7 +53,7 @@ public class PixelHelp extends Command {
                         if (reward == null) {
                             break;
                         }
-                        builder.append("\n> **" + reward.getName() + "** -> Level: **" + r.getLevel() + "**");
+                        builder.append("\n\\> **" + reward.getName() + "** -> Level: **" + r.getLevel() + "**");
                     }
                     embed.appendField("Reward Roles:", builder.toString(), true);
                 }
@@ -76,13 +76,13 @@ public class PixelHelp extends Command {
         List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.XP_DENIED);
         List<String> channelMentions = Utility.getChannelMentions(channels);
         String rules = "**The rules for gaining pixels are:**\n" +
-                "> Cannot gain pixels if the message contains less than 10 chars.\n" +
-                "> When submitting an image, ignore the rule above.\n" +
-                "> Cannot gain pixels if the message starts with a command prefix.\n" +
-                "> Cannot gain pixels if your profile has NoXp or XpDenied on it.\n";
+                "\\> Cannot gain pixels if the message contains less than 10 chars.\n" +
+                "\\> When submitting an image, ignore the rule above.\n" +
+                "\\> Cannot gain pixels if the message starts with a command prefix.\n" +
+                "\\> Cannot gain pixels if your profile has NoXp or XpDenied on it.\n";
         if (channelMentions.size() != 0)
-            rules += "> Cannot gain pixels in any of these channels: \n**>> " + Utility.listFormatter(channelMentions, true) + " <<**\n";
-        rules += "> You can only gain one chunk of pixels a minute.\n\n";
+            rules += "\\> Cannot gain pixels in any of these channels: \n**>> " + Utility.listFormatter(channelMentions, true) + " <<**\n";
+        rules += "\\> You can only gain one chunk of pixels a minute.\n\n";
         return rules;
     }
 

@@ -18,14 +18,14 @@ public class SetTrustedRoles extends Command {
     public String execute(String args, CommandObject command) {
         if (args.equalsIgnoreCase("Remove")) {
             command.guild.config.setRoleToMentionID(-1);
-            return "> Invite Allowed Role Removed.";
+            return "\\> Invite Allowed Role Removed.";
         }
         IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) {
             return Constants.ERROR_ROLE_NOT_FOUND;
         } else {
             command.guild.config.setInviteAllowed(role.getLongID());
-            return "> The role **" + role.getName() + "** Is now set as the invite allowed role.";
+            return "\\> The role **" + role.getName() + "** Is now set as the invite allowed role.";
         }
     }
 

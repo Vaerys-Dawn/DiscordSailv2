@@ -19,11 +19,11 @@ import java.util.List;
 public class ManagePixelRoles extends Command {
 
     private static String modes = "**Modes**\n" +
-            "> Any positive number up to 256\n" +
-            "> xpDenied\n" +
-            "> topTen\n" +
-            "> Remove\n" +
-            "> List\n";
+            "\\> Any positive number up to 256\n" +
+            "\\> xpDenied\n" +
+            "\\> topTen\n" +
+            "\\> Remove\n" +
+            "\\> List\n";
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -34,7 +34,7 @@ public class ManagePixelRoles extends Command {
             IRole topTen = command.guild.getTopTenRole();
             List<RewardRoleObject> rewardRoles = command.guild.config.getRewardRoles();
             if (xpDenied == null && topTen == null && rewardRoles.size() == 0) {
-                return "> No roles are set up.\n" + missingArgs(command);
+                return "\\> No roles are set up.\n" + missingArgs(command);
             }
             String desc = "";
             if (rewardRoles.size() != 0) {
@@ -57,65 +57,65 @@ public class ManagePixelRoles extends Command {
         SplitFirstObject mode = new SplitFirstObject(args);
         IRole role = GuildHandler.getRoleFromName(mode.getRest(), command.guild.get());
         if (role == null) {
-            return "> **" + mode.getRest() + "** is not a valid Role name.";
+            return "\\> **" + mode.getRest() + "** is not a valid Role name.";
         }
         try {
             long level = Long.parseLong(mode.getFirstWord());
             if (level > 256 || level <= 0) {
-                return "> Level must be between 1-256.";
+                return "\\> Level must be between 1-256.";
             }
             for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
                 if (r.getLevel() == level) {
-                    return "> That level already has a reward set.";
+                    return "\\> That level already has a reward set.";
                 }
                 if (r.getRoleID() == role.getLongID()) {
                     r.setLevel(level);
-                    return "> Level to obtain **" + role.getName() + "** is now set to level **" + level + "**.";
+                    return "\\> Level to obtain **" + role.getName() + "** is now set to level **" + level + "**.";
                 }
             }
             command.guild.config.getRewardRoles().add(new RewardRoleObject(role.getLongID(), level));
-            return "> The role **" + role.getName() + "** will now be awarded at level **" + level + "**.";
+            return "\\> The role **" + role.getName() + "** will now be awarded at level **" + level + "**.";
         } catch (NumberFormatException e) {
             switch (mode.getFirstWord().toLowerCase()) {
                 case "xpdenied":
                     for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
                         if (r.getRoleID() == role.getLongID()) {
-                            return "> **" + role.getName() + "** is already set as a reward role.";
+                            return "\\> **" + role.getName() + "** is already set as a reward role.";
                         }
                     }
                     if (role.getLongID() == command.guild.config.topTenRoleID) {
-                        return "> **" + role.getName() + "** is already set as the server's TopTen role.";
+                        return "\\> **" + role.getName() + "** is already set as the server's TopTen role.";
                     }
                     command.guild.config.xpDeniedRoleID = role.getLongID();
-                    return "> **" + role.getName() + "** is now the server's XpDenied role.";
+                    return "\\> **" + role.getName() + "** is now the server's XpDenied role.";
                 case "topten":
                     for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
                         if (r.getRoleID() == role.getLongID()) {
-                            return "> **" + role.getName() + "** is already set as a reward role.";
+                            return "\\> **" + role.getName() + "** is already set as a reward role.";
                         }
                     }
                     if (role.getLongID() == command.guild.config.xpDeniedRoleID) {
-                        return "> **" + role.getName() + "** is already set as the server's xpDenied role.";
+                        return "\\> **" + role.getName() + "** is already set as the server's xpDenied role.";
                     }
                     command.guild.config.topTenRoleID = role.getLongID();
-                    return "> **" + role.getName() + "** is now the server's TopTen role.";
+                    return "\\> **" + role.getName() + "** is now the server's TopTen role.";
                 case "remove":
                     if (role.getLongID() == command.guild.config.xpDeniedRoleID) {
                         command.guild.config.xpDeniedRoleID = -1;
-                        return "> **" + role.getName() + "** is no longer the server's xpDenied role.";
+                        return "\\> **" + role.getName() + "** is no longer the server's xpDenied role.";
                     } else if (role.getLongID() == command.guild.config.topTenRoleID) {
                         command.guild.config.topTenRoleID = -1;
-                        return "> **" + role.getName() + "** is no longer the server's Top Ten role.";
+                        return "\\> **" + role.getName() + "** is no longer the server's Top Ten role.";
                     }
                     for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
                         if (r.getRoleID() == role.getLongID()) {
                             command.guild.config.getRewardRoles().remove(r);
-                            return "> **" + role.getName() + "** is no longer set as a reward role.";
+                            return "\\> **" + role.getName() + "** is no longer set as a reward role.";
                         }
                     }
-                    return "> **" + role.getName() + "** is not a valid Pixel role.";
+                    return "\\> **" + role.getName() + "** is not a valid Pixel role.";
                 default:
-                    return "> Invalid Mode.\n" + modes +
+                    return "\\> Invalid Mode.\n" + modes +
                             missingArgs(command);
             }
         }

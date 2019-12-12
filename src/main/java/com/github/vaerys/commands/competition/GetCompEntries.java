@@ -21,7 +21,7 @@ public class GetCompEntries extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.competition.getEntries().size() == 0) {
-            return "> No entries were found.";
+            return "\\> No entries were found.";
         }
         List<CompObject> compObjects = command.guild.competition.getEntries();
         for (int i = 0; i < compObjects.size(); i++) {

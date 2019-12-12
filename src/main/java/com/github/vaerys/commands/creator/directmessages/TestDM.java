@@ -46,7 +46,7 @@ public class TestDM extends DMCommand {
 //                RequestHandler.sendMessage(response, command.channel).get();
 //            }
 //        }
-        return "> Nothing to test right now.";
+        return "\\> Nothing to test right now.";
     }
 
     @Override

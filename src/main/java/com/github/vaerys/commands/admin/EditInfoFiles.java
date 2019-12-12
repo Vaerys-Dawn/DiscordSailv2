@@ -18,11 +18,11 @@ public class EditInfoFiles extends Command {
 
     String modes =
             "**Modes:**\n" +
-                    "> uploadImage - `Requires image file.`\n" +
-                    "> removeImage - `Requires file name.`\n" +
-                    "> listFiles/listImages - `Lists the server's image files.`\n" +
-                    "> uploadInfo - `Requires \"" + Constants.FILE_INFO + "\" file.`\n" +
-                    "> getInfoFile - `Post the server's Info.txt.`";
+                    "\\> uploadImage - `Requires image file.`\n" +
+                    "\\> removeImage - `Requires file name.`\n" +
+                    "\\> listFiles/listImages - `Lists the server's image files.`\n" +
+                    "\\> uploadInfo - `Requires \"" + Constants.FILE_INFO + "\" file.`\n" +
+                    "\\> getInfoFile - `Post the server's Info.txt.`";
 
     @Override
     public String execute(String args, CommandObject command) {

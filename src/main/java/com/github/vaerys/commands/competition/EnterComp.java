@@ -38,14 +38,14 @@ public class EnterComp extends Command {
                 fileName = author.getName() + "'s Entry";
                 fileUrl = args;
             } else {
-                return "> Missing a File or Image link to enter into the competition.";
+                return "\\> Missing a File or Image link to enter into the competition.";
             }
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy - HH:mm:ss");
             Calendar cal = Calendar.getInstance();
             command.guild.competition.newEntry(new CompObject(author.getDisplayName(command.guild.get()), author.getLongID(), fileName, fileUrl, dateFormat.format(cal.getTime())));
-            return "> Thank you " + author.getDisplayName(command.guild.get()) + " For entering the Competition.";
+            return "\\> Thank you " + author.getDisplayName(command.guild.get()) + " For entering the Competition.";
         } else {
-            return "> Competition Entries are closed.";
+            return "\\> Competition Entries are closed.";
         }
     }
 

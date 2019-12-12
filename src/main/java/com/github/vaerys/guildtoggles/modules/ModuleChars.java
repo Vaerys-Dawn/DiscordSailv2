@@ -38,9 +38,9 @@ public class ModuleChars extends GuildModule {
     @Override
     public String desc(CommandObject command) {
         return "This module allows users to create and use character profiles.\n" +
-                "> This module is primarily role play based.\n" +
-                "> Character profiles store the role and nickname when created or updated.\n" +
-                "> Users can also assign extra information to each character.";
+                "\\> This module is primarily role play based.\n" +
+                "\\> Character profiles store the role and nickname when created or updated.\n" +
+                "\\> Users can also assign extra information to each character.";
     }
 
     @Override

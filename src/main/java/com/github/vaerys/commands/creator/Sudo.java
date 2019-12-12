@@ -19,15 +19,15 @@ public class Sudo extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        if (!command.guild.config.debugMode) return "> Debug mode is disabled. No Sudo for you.";
+        if (!command.guild.config.debugMode) return "\\> Debug mode is disabled. No Sudo for you.";
         SplitFirstObject sudo = new SplitFirstObject(args);
         UserObject user = Utility.getUser(command, sudo.getFirstWord(), false, false);
         if (user == null) {
-            return "> Could not find user.";
+            return "\\> Could not find user.";
         }
         command.setAuthor(user.get());
         if (sudo.getRest() == null) {
-            return "> You need to specify some arguments.";
+            return "\\> You need to specify some arguments.";
         }
         try {
             new MessageHandler(sudo.getRest(), command, false);
@@ -40,7 +40,7 @@ public class Sudo extends Command {
                 }
             }
             StringBuilder builder = new StringBuilder();
-            builder.append("> I caught an Error, Please send this Error message and the message that caused this error " +
+            builder.append("\\> I caught an Error, Please send this Error message and the message that caused this error " +
                     "to my **Direct Messages** so my developer can look at it and try to solve the issue.\n```\n");
             builder.append(e.getClass().getName());
             builder.append(": " + e.getMessage());

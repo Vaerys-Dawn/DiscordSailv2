@@ -15,7 +15,7 @@ public class Hello extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        String message = "> Hello <user>.";
+        String message = "\\> Hello <user>.";
         TimedEvent event = Globals.getCurrentEvent();
         if (event != null && event.getHelloMessage() != null) message = event.getHelloMessage();
         if (command.user.longID == 153159020528533505L) {

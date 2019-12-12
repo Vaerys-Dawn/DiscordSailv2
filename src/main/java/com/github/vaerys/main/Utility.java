@@ -925,11 +925,11 @@ public class Utility {
     public static String getChannelMessage(List<IChannel> channels) {
         List<String> channelMentions = Utility.getChannelMentions(channels);
         if (channels.size() == 0) {
-            return "> You do not have access to any channels that you are able to run this command in.";
+            return "\\> You do not have access to any channels that you are able to run this command in.";
         } else if (channels.size() == 1) {
-            return "> Command must be performed in: " + channelMentions.get(0);
+            return "\\> Command must be performed in: " + channelMentions.get(0);
         } else {
-            return "> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true);
+            return "\\> Command must be performed in any of the following channels: \n" + Utility.listFormatter(channelMentions, true);
         }
     }
 

@@ -35,9 +35,9 @@ public class Mute extends Command {
         IRole mutedRole = command.guild.getMutedRole();
         UserObject mutedUser = Utility.getUser(command, userCall.getFirstWord(), false, false);
 
-        StringHandler response = new StringHandler("> %s %s.");
-        StringHandler responseAdmin = new StringHandler("> %s %s by %s in %s with reason `%s`.");
-        StringHandler modNote = new StringHandler("> %s by **%s**. Reason: `%s`. Time: %s. Channel: %s.");
+        StringHandler response = new StringHandler("\\> %s %s.");
+        StringHandler responseAdmin = new StringHandler("\\> %s %s by %s in %s with reason `%s`.");
+        StringHandler modNote = new StringHandler("\\> %s by **%s**. Reason: `%s`. Time: %s. Channel: %s.");
 
         boolean isMute = !UN_MUTE.isSubCommand(command);
         String mode = isMute ? "**Muted**" : "**UnMuted**";
@@ -56,19 +56,19 @@ public class Mute extends Command {
         IChannel adminChannel = command.guild.getChannelByType(ChannelSetting.ADMIN);
 
         // check for user and muted role
-        if (mutedUser == null || mutedUser.get() == null) return "> Could not find user";
+        if (mutedUser == null || mutedUser.get() == null) return "\\> Could not find user";
         if (mutedUser.getProfile(command.guild) == null) mutedUser.addProfile(command.guild);
-        if (mutedRole == null) return "> Muted role is not configured.";
+        if (mutedRole == null) return "\\> Muted role is not configured.";
 
         // check hierarchy
-        if (mutedUser.longID == command.user.longID && isMute) return "> Don't try to mute yourself you numpty.";
+        if (mutedUser.longID == command.user.longID && isMute) return "\\> Don't try to mute yourself you numpty.";
         if (!Utility.testUserHierarchy(command.client.bot.get(), mutedRole, command.guild.get()))
-            return String.format("> Cannot %s %s. The **%s** role has a higher hierarchy than me.", mode, mutedUser.displayName, mutedRole.getName());
+            return String.format("\\> Cannot %s %s. The **%s** role has a higher hierarchy than me.", mode, mutedUser.displayName, mutedRole.getName());
         if (!Utility.testUserHierarchy(command.user.get(), mutedUser.get(), command.guild.get(), false))
-            return String.format("> Cannot %s %s. User hierarchy higher than yours.", mode, mutedUser.displayName);
+            return String.format("\\> Cannot %s %s. User hierarchy higher than yours.", mode, mutedUser.displayName);
 
         if (!isMute && !mutedUser.roles.contains(mutedRole) && !command.guild.users.isUserMuted(mutedUser.get())) {
-            return String.format("> %s is not muted.", mutedUser.displayName);
+            return String.format("\\> %s is not muted.", mutedUser.displayName);
         }
 
         // mute/un-mute user

@@ -228,7 +228,7 @@ public class GetGuildInfo extends Command {
         }
         RequestHandler.sendEmbedMessage("", moduleStats, channel).get();
 
-        return "> Info sent to Dms.";
+        return "\\> Info sent to Dms.";
     }
 
     @Override

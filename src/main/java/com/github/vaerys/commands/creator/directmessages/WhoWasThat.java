@@ -32,7 +32,7 @@ public class WhoWasThat extends Command {
             user = new GlobalUserObject(Globals.lastDmUserID);
         }
         if (user.get() == null) {
-            return "> No user found.";
+            return "\\> No user found.";
         }
         XEmbedBuilder embed = new XEmbedBuilder(command);
         embed.withAuthorName("@" + user.username);

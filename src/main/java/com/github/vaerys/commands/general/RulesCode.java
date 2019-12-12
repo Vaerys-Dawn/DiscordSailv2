@@ -27,18 +27,18 @@ public class RulesCode extends Command {
             return Utility.getChannelMessage(botCommands);
         }
         if (command.guild.config.getRuleCode() == null) {
-            return "> no rule code exists try again later.";
+            return "\\> no rule code exists try again later.";
         }
         ProfileObject profile = command.user.getProfile(command.guild);
         if (profile == null)
-            return "> **" + command.user.displayName + "** An error occurred, You do not have a profile yet. please dm me this error as this should never happen.";
+            return "\\> **" + command.user.displayName + "** An error occurred, You do not have a profile yet. please dm me this error as this should never happen.";
         if (profile.getSettings().contains(UserSetting.READ_RULES)) {
             GuildHandler.checkUsersRoles(command.user.longID, command.guild);
-            return "> **" + command.user.displayName + "** You have already guessed the code correctly.";
+            return "\\> **" + command.user.displayName + "** You have already guessed the code correctly.";
         }
         if (args.equalsIgnoreCase(command.guild.config.getRuleCode())) {
             profile.getSettings().add(UserSetting.READ_RULES);
-            String response = "> Congratulations you have guessed the Rule Code correctly, A Star";
+            String response = "\\> Congratulations you have guessed the Rule Code correctly, A Star";
             if (command.guild.config.xpGain) {
                 response += " and " + (int) (200 * command.guild.config.xpModifier) + " Pixels have been added to your profile.";
                 profile.addXP(200, command.guild.config);
@@ -57,15 +57,15 @@ public class RulesCode extends Command {
         int diff = (command.guild.config.getRuleCode().length() / 4);
         if (diff < 2) diff += 2;
         if (!Pattern.compile("\\[(.|\n)*]").matcher(command.guild.config.getRuleCode()).matches() && Pattern.compile("\\[(.|\n)*]").matcher(args).matches()) {
-            command.user.sendDm("> That was not the right code, please try again.\n" +
+            command.user.sendDm("\\> That was not the right code, please try again.\n" +
                     "The brackets are not part of the code.");
         } else if ((Math.abs(command.guild.config.getRuleCode().length() - args.length()) <= diff) &&
                 (StringUtils.containsIgnoreCase(command.guild.config.getRuleCode(), args) ||
                         (StringUtils.containsIgnoreCase(args, command.guild.config.getRuleCode())))) {
-            command.user.sendDm("> That was not the code, but you were getting close.");
+            command.user.sendDm("\\> That was not the code, but you were getting close.");
             return null;
         } else {
-            command.user.sendDm("> That was not the right code, please try again.\n");
+            command.user.sendDm("\\> That was not the right code, please try again.\n");
         }
         return null;
     }

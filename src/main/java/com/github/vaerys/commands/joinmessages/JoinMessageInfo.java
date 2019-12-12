@@ -20,11 +20,11 @@ public class JoinMessageInfo extends Command {
         try {
             index = Integer.parseInt(args);
         } catch (NumberFormatException e) {
-            return "> Not a valid number.";
+            return "\\> Not a valid number.";
         }
         index--;
         if (index < 0 || index >= messages.size()) {
-            return "> Could not find message.";
+            return "\\> Could not find message.";
         }
         JoinMessage message = messages.get(index);
         builder.withTitle("Message #" + (index + 1));

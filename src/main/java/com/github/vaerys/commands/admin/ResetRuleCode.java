@@ -26,7 +26,7 @@ public class ResetRuleCode extends Command {
             GuildHandler.checkUsersRoles(u.getLongID(), command.guild);
         }
         RequestHandler.deleteMessage(working);
-        return "Done. The Rule code tag has been removed off all profiles.";
+        return "\\> Done. The Rule code tag has been removed off all profiles.";
     }
 
     @Override

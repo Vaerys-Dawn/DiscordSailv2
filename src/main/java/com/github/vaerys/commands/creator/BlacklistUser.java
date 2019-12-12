@@ -17,17 +17,17 @@ public class BlacklistUser extends Command {
 
         // cast args to IUser to make sure there's no funny business.
         UserObject user = Utility.getUser(command, args, false);
-        if (user == null) return "> User does not exist.";
+        if (user == null) return "\\> User does not exist.";
 
-        if (command.user.longID == user.longID) return "> Why are you trying to blacklist yourself?";
+        if (command.user.longID == user.longID) return "\\> Why are you trying to blacklist yourself?";
 
         GlobalData globalData = Globals.getGlobalData();
         if (globalData == null) throw new NullPointerException("GlobalData not loaded!");
 
         if (globalData.blacklistUser(user.longID, 5) != null)
-            return "> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** blacklisted.";
+            return "\\> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** blacklisted.";
 
-        return "> Failed to blacklist user.";
+        return "\\> Failed to blacklist user.";
     }
 
     @Override

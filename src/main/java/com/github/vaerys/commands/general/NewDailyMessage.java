@@ -31,18 +31,18 @@ public class NewDailyMessage extends Command {
             DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.getFirstWord().toUpperCase());
             addUser(command);
             if (command.user.isBlockedFromDms()) {
-                return "> You have been blocked. You cannot send daily message requests.";
+                return "\\> You have been blocked. You cannot send daily message requests.";
             }
             if (day.getRest() != null) {
                 IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
                 QueueHandler.addToQueue(command, day.getRest(), dayOfWeek, Constants.QUEUE_DAILY);
                 RequestHandler.deleteMessage(working);
-                return "> Request Sent.";
+                return "\\> Request Sent.";
             } else {
                 return missingArgs(command);
             }
         } catch (IllegalArgumentException e) {
-            return "> Not a valid Day of the week.";
+            return "\\> Not a valid Day of the week.";
         }
     }
 

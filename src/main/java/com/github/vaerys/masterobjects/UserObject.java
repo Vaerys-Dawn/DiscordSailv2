@@ -99,7 +99,7 @@ public class UserObject {
         if (guild != null) {
             loadExtraData(guild);
         }
-        notAllowed = "> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
+        notAllowed = "\\> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
         isPatron = Globals.getPatrons().contains(longID);
         isBot = false;
         avatarURL = Utility.getDefaultAvatarURL(longID);
@@ -131,7 +131,7 @@ public class UserObject {
             this.color = Color.white;
         }
         escapeMentions();
-        notAllowed = "> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
+        notAllowed = "\\> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
         isPatron = Globals.getPatrons().contains(longID);
     }
 

@@ -13,16 +13,16 @@ public class SetRuleCodeReward extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
-        if (role == null) return "> Not a valid Role name.";
+        if (role == null) return "\\> Not a valid Role name.";
         if (command.guild.config.ruleCodeRewardID != -1) {
             if (args.equalsIgnoreCase("remove")) {
                 command.guild.config.ruleCodeRewardID = -1;
-                return "> RuleCode Reward removed.";
+                return "\\> RuleCode Reward removed.";
             }
-            return "> You already have a RuleCode Reward set.";
+            return "\\> You already have a RuleCode Reward set.";
         }
         command.guild.config.ruleCodeRewardID = role.getLongID();
-        return "> **" + role.getName() + "** Is now the RuleCode Reward.";
+        return "\\> **" + role.getName() + "** Is now the RuleCode Reward.";
     }
 
     @Override

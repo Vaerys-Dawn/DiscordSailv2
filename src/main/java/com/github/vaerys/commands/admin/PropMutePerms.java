@@ -19,15 +19,15 @@ public class PropMutePerms extends Command {
         // check if bot has perms
         EnumSet<Permissions> botPerms = command.client.bot.getPermissions(command.guild);
         if (!botPerms.contains(Permissions.MANAGE_CHANNELS)) {
-            return "> I do not have permission to run this command. I need to have **Manage Channels**.\n" +
+            return "\\> I do not have permission to run this command. I need to have **Manage Channels**.\n" +
                     "Feel free to remove the permission after I am done as I will no longer need it.";
         }
         // get current channel's "Muted" role perms
         IRole mutedRole = command.guild.getMutedRole();
-        if (mutedRole == null) return "> No muted role set.";
+        if (mutedRole == null) return "\\> No muted role set.";
         LongMap<PermissionOverride> roleOverrides = command.channel.get().getRoleOverrides();
         if (!roleOverrides.containsKey(mutedRole.getLongID()))
-            return "> No modified permissions for " + mutedRole.getName() + " in this channel.";
+            return "\\> No modified permissions for " + mutedRole.getName() + " in this channel.";
 
         IMessage workingMsg = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
 
@@ -39,7 +39,7 @@ public class PropMutePerms extends Command {
             // remove old permissions, then add our stored set.
             if (!channel.getModifiedPermissions(command.client.bot.get()).contains(Permissions.MANAGE_PERMISSIONS)) {
                 if (extraComments.isEmpty()) {
-                    extraComments.append("> Could not apply the permissions to the following channels:");
+                    extraComments.append("\\> Could not apply the permissions to the following channels:");
                 }
                 extraComments.append("\n" + channel.mention());
             } else {
@@ -50,7 +50,7 @@ public class PropMutePerms extends Command {
         }
 
         RequestHandler.deleteMessage(workingMsg);
-        return "> Set permissions for " + counter + " channels to:\n**Allow**:" + mutedPermissions.allow().toString() +
+        return "\\> Set permissions for " + counter + " channels to:\n**Allow**:" + mutedPermissions.allow().toString() +
                 "\n**Deny**:" + mutedPermissions.deny().toString() +
                 (extraComments.isEmpty() ? "" : "\n" + extraComments) +
                 "\n\nYou are now free to remove my **Manage Channels** Permission as I no longer need it.";

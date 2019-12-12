@@ -26,15 +26,15 @@ public class PollObject {
 
     public String addOption(String option) {
         if (open) {
-            return "> Cannot add option as poll is open.";
+            return "\\> Cannot add option as poll is open.";
         }
         for (String s : options) {
             if (option.equalsIgnoreCase(s)) {
-                return "> Option already added.";
+                return "\\> Option already added.";
             }
         }
         options.add(option);
-        return "> Option added.";
+        return "\\> Option added.";
     }
 
     public String toggleOpen(GuildConfig config) {
@@ -43,9 +43,9 @@ public class PollObject {
             if (votes.size() > 0) {
                 // TODO: 28/03/2017 post results. then clear list.
             }
-            return "> Poll voting closed.";
+            return "\\> Poll voting closed.";
         } else {
-            return "> Poll voting Open, you can vote in this poll by running\n`" + config.getPrefixCommand() +
+            return "\\> Poll voting Open, you can vote in this poll by running\n`" + config.getPrefixCommand() +
                     Command.get(EnterVote.class).names[0] + " " + pollName + " [Vote]";
         }
     }
@@ -53,9 +53,9 @@ public class PollObject {
     public String toggleMultiVote() {
         multiVotes = !multiVotes;
         if (!multiVotes) {
-            return "> allowing of multiple votes has been disabled.";
+            return "\\> allowing of multiple votes has been disabled.";
         } else {
-            return "> allowing of multiple votes has been enabled.";
+            return "\\> allowing of multiple votes has been enabled.";
         }
     }
 
@@ -63,6 +63,6 @@ public class PollObject {
         if (multiVotes) {
 
         }
-        return "> null.";
+        return "\\> null.";
     }
 }

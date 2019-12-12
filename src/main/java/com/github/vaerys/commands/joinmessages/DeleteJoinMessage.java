@@ -17,14 +17,14 @@ public class DeleteJoinMessage extends Command {
         try {
             index = Integer.parseInt(args);
         } catch (NumberFormatException e) {
-            return "> Not a valid number.";
+            return "\\> Not a valid number.";
         }
         index--;
         if (index < 0 || index >= messages.size()) {
-            return "> Could not find message.";
+            return "\\> Could not find message.";
         }
         messages.remove(index);
-        return "> Message removed.";
+        return "\\> Message removed.";
     }
 
     @Override

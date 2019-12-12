@@ -53,7 +53,7 @@ public class UserSettings extends Command {
         SplitFirstObject split = new SplitFirstObject(args);
         UserObject user = Utility.getUser(command, split.getFirstWord(), false);
         if (user == null) {
-            return "> Could not find user.";
+            return "\\> Could not find user.";
         }
         ProfileObject profile = user.getProfile(command.guild);
         if (profile != null) {
@@ -61,7 +61,7 @@ public class UserSettings extends Command {
                 return sendList("", profile, command, user, false);
             }
             UserSetting toTest = UserSetting.get(split.getRest());
-            if (toTest == null) return "> Not a valid user setting.\n" + settings(command);
+            if (toTest == null) return "\\> Not a valid user setting.\n" + settings(command);
             if (command.guild.config.modulePixels) {
                 switch (toTest) {
                     case DENIED_XP:

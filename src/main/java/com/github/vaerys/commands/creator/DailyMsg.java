@@ -21,10 +21,10 @@ import java.util.ListIterator;
 
 public class DailyMsg extends Command {
 
-    String modes = "> Edit - `args = new Contents`\n" +
-            "> Delete\n" +
-            "> MoveDay\n" +
-            "> Info - `Default`\n";
+    String modes = "\\> Edit - `args = new Contents`\n" +
+            "\\> Delete\n" +
+            "\\> MoveDay\n" +
+            "\\> Info - `Default`\n";
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -38,7 +38,7 @@ public class DailyMsg extends Command {
                 }
             }
             if (messageObject == null) {
-                return "> Could not find daily message with that UID.";
+                return "\\> Could not find daily message with that UID.";
             }
             SplitFirstObject mode = null;
             String totest;
@@ -51,10 +51,10 @@ public class DailyMsg extends Command {
             switch (totest.toLowerCase()) {
                 case "edit":
                     if (mode.getRest() == null) {
-                        return "> Missing args";
+                        return "\\> Missing args";
                     }
                     messageObject.setContents(mode.getRest());
-                    return "> Daily Message contents updated";
+                    return "\\> Daily Message contents updated";
                 case "delete":
                     ListIterator iterator = Globals.getDailyMessages().getMessages().listIterator();
                     while (iterator.hasNext()) {
@@ -63,7 +63,7 @@ public class DailyMsg extends Command {
                             iterator.remove();
                         }
                     }
-                    return "> Daily Message Deleted";
+                    return "\\> Daily Message Deleted";
                 case "moveday":
                     if (mode.getRest() == null) {
                         return "> Missing args";
@@ -72,9 +72,9 @@ public class DailyMsg extends Command {
                     try {
                         DayOfWeek dayOfWeek = DayOfWeek.valueOf(day);
                         messageObject.setDay(dayOfWeek);
-                        return "> Moved message to " + dayOfWeek + ".";
+                        return "\\> Moved message to " + dayOfWeek + ".";
                     } catch (IllegalArgumentException e) {
-                        return "> Not a valid day of the week.";
+                        return "\\> Not a valid day of the week.";
                     }
                 case "info":
                     RequestHandler.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
@@ -84,7 +84,7 @@ public class DailyMsg extends Command {
                     return null;
             }
         } catch (NumberFormatException e) {
-            return "> Invalid UID.";
+            return "\\> Invalid UID.";
         }
     }
 
@@ -101,7 +101,7 @@ public class DailyMsg extends Command {
         if (contents.matches("^(> |\\*> |\\*\\*> |\\*\\*\\*> |_> |__> |`> |```> ).*$") || contents.startsWith("> ")) {
             embedBuilder.withDesc(contents);
         } else {
-            embedBuilder.withDesc("> " + contents);
+            embedBuilder.withDesc("\\> " + contents);
         }
         String formattedFooter;
         if (messageObject.getUID() != -1) {

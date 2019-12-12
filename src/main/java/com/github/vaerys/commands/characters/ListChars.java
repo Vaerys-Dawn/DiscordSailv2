@@ -23,28 +23,28 @@ public class ListChars extends Command {
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         UserObject user = command.user;
-        String title = "> Here are all of your characters.";
+        String title = "\\> Here are all of your characters.";
         //get user
         if (args != null && !args.isEmpty()) {
             user = Utility.getUser(command, args, true);
             if (user == null) {
-                return "> Could not find user.";
+                return "\\> Could not find user.";
             }
             if (user.longID != command.user.longID) {
-                title = "> Here are all of @" + user.displayName + "'s Characters.";
+                title = "\\> Here are all of @" + user.displayName + "'s Characters.";
             }
         }
         //check private
         if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
-            return "> User has set their profile to private.";
+            return "\\> User has set their profile to private.";
         }
         //generate list
         List<String> list = user.characters.stream().map(c -> c.getName()).collect(Collectors.toList());
         //give message if empty
         if (list.size() == 0) {
             return user.longID == command.user.longID ?
-                    "> You do not have any characters yet. Create one with **" + new UpdateChar().getUsage(command) + "**." :
-                    "> User does not have any characters yet.";
+                    "\\> You do not have any characters yet. Create one with **" + new UpdateChar().getUsage(command) + "**." :
+                    "\\> User does not have any characters yet.";
         }
         //build embed data
         builder.withTitle(title);
@@ -53,7 +53,7 @@ public class ListChars extends Command {
         //send private char list
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
-            return "> Char list sent to your Direct messages.";
+            return "\\> Char list sent to your Direct messages.";
         }
         //send regular
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());

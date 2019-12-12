@@ -20,7 +20,7 @@ public class Help extends Command {
     public String execute(String args, CommandObject command) {
 
         if (args == null || args.isEmpty()) {
-            return "> If you are after a list of commands please run **" + new Commands().getUsage(command) + "** instead.\n\n" +
+            return "\\> If you are after a list of commands please run **" + new Commands().getUsage(command) + "** instead.\n\n" +
                     missingArgs(command);
         }
 
@@ -36,10 +36,10 @@ public class Help extends Command {
             }
         }
 
-        if (foundCommand == null) return "> Could not find information on any commands named **" + args + "**.";
+        if (foundCommand == null) return "\\> Could not find information on any commands named **" + args + "**.";
 
         if (!GuildHandler.testForPerms(command, foundCommand.perms))
-            return "> I'm sorry but you do not have permission to view the information for the **" + foundCommand.getCommand(command) + "** command.";
+            return "\\> I'm sorry but you do not have permission to view the information for the **" + foundCommand.getCommand(command) + "** command.";
 
         RequestHandler.sendEmbedMessage("", foundCommand.getCommandInfo(command), command.channel.get());
         return "";

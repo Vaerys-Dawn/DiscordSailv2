@@ -22,7 +22,7 @@ public class EditServerIP extends Command {
             port = splitArgs.get(2);
         }
         if (splitArgs.size() < 2) {
-            return "> Cannot edit server IP, missing arguments.";
+            return "\\> Cannot edit server IP, missing arguments.";
         }
         return command.guild.servers.editIP(command.user.longID, splitArgs.get(0), splitArgs.get(1), port, command.guild.get());
     }

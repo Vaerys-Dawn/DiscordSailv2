@@ -87,7 +87,7 @@ public class JoinHandler {
             if (u.getID() == event.getUser().getLongID()) {
                 IChannel admin = content.getChannelByType(ChannelSetting.ADMIN);
                 if (admin != null) {
-                    RequestHandler.sendMessage("> Looks like " + user.mention() + " has returned, I have muted them again for you.", admin);
+                    RequestHandler.sendMessage("\\> Looks like " + user.mention() + " has returned, I have muted them again for you.", admin);
                 }
                 RequestHandler.roleManagement(user, content, content.config.getMutedRoleID(), true);
             }

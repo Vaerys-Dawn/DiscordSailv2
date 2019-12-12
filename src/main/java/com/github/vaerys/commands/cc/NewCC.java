@@ -34,10 +34,10 @@ public class NewCC extends Command {
     public String execute(String args, CommandObject command) {
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
-            return "> " + command.user.mention() + ", You have been denied the creation of custom commands.";
+            return "\\> " + command.user.mention() + ", You have been denied the creation of custom commands.";
         }
         if (command.guild.getChannelsByType(ChannelSetting.CC_DENIED).contains(command.channel.get()))
-            return "> This Channel has CCs Denied, You cannot create ccs here.";
+            return "\\> This Channel has CCs Denied, You cannot create ccs here.";
         boolean isShitpost;
         boolean isLocked = false;
         SplitFirstObject splitFirst = new SplitFirstObject(args);
@@ -53,15 +53,15 @@ public class NewCC extends Command {
         String argsCC = splitFirst.getRest();
 
         if (handleNameFilter(command, nameCC)) {
-            return "> Custom Commands cannot have the same name as built-in commands.";
+            return "\\> Custom Commands cannot have the same name as built-in commands.";
         }
 
         if (!Pattern.matches("[\\p{Alnum}\\p{Punct}&&[^#@$*\\\\/`]]+", nameCC)) {
-            return "> Custom Command names cannot contain special characters.";
+            return "\\> Custom Command names cannot contain special characters.";
         }
 
         if ((argsCC == null || argsCC.isEmpty()) && command.message.get().getAttachments().size() == 0) {
-            return "> Custom command contents cannot be blank.";
+            return "\\> Custom command contents cannot be blank.";
         }
         if (command.message.get().getAttachments().size() != 0) {
             String testLink = command.message.get().getAttachments().get(0).getUrl();
@@ -72,11 +72,11 @@ public class NewCC extends Command {
                     argsCC += "<embedImage>{" + testLink + "}";
                 }
             } else {
-                return "> Custom command attachment must be a valid Image.";
+                return "\\> Custom command attachment must be a valid Image.";
             }
         }
         if (nameCC.contains("\n")) {
-            return "> Command name cannot contain Newlines.";
+            return "\\> Command name cannot contain Newlines.";
         }
         if (argsCC.contains("<shitpost>")) {
             argsCC.replace("<shitpost>", "");

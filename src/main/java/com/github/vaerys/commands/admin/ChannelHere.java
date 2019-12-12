@@ -26,13 +26,13 @@ public class ChannelHere extends Command {
         if (!args.isEmpty()) {
             ChannelSetting setting = ChannelSetting.get(args);
             if (setting == null) {
-                desc = "> Could not find channel type \"" + args + "\"\n";
+                desc = "\\> Could not find channel type \"" + args + "\"\n";
             } else {
                 return setting.toggleSetting(command);
             }
         }
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
-        String title = "> Here are all of the channel Types and Settings:";
+        String title = "\\> Here are all of the channel Types and Settings:";
 
         List<ChannelSetting> channelSettings = command.guild.channelSettings;
         List<String> types = channelSettings.stream().filter(channelSetting -> !channelSetting.isSetting()).map(ChannelSetting::toString).collect(Collectors.toList());

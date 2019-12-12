@@ -296,7 +296,7 @@ public class PixelHandler {
         }
 
         if (user.getCurrentLevel() == 1) {
-            levelUpMessage.appendFormatted("\n\n> If you want to change where these messages are sent or want" +
+            levelUpMessage.appendFormatted("\n\n\\> If you want to change where these messages are sent or want" +
                     " to remove them completely you can change that with `%s`.", Command.get(ProfileSettings.class).getUsage(object));
         }
 
@@ -374,7 +374,7 @@ public class PixelHandler {
     private static void sendReactionError(CommandObject object) {
         IChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
         if (adminChannel == null) adminChannel = object.channel.get();
-        RequestHandler.sendMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
+        RequestHandler.sendMessage("\\> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
         return;
     }
 

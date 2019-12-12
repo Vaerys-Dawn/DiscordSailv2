@@ -17,13 +17,13 @@ public class LevelUpMessage extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (args.length() > 100) {
-            return "> Message to long.";
+            return "\\> Message to long.";
         } else {
             if (!args.contains("<level>") || !args.contains("<user>")) {
-                return "> Missing <level> and/or <user> tags.";
+                return "\\> Missing <level> and/or <user> tags.";
             }
             command.guild.config.setLevelUpMessage(args);
-            return "> New Level Up message set.";
+            return "\\> New Level Up message set.";
         }
     }
 

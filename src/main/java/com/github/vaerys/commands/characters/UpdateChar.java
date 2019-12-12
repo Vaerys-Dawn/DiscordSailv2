@@ -35,32 +35,35 @@ public class UpdateChar extends Command {
         String cosmeticString = command.guild.config.moduleRoles ? " and cosmetic roles" : "";
         if (selectedChar != null) {
             if (selectedChar.getUserID() != command.user.longID) {
-                return "> That is not your character you cannot update it.";
+                return "\\> That is not your character you cannot update it.";
             }
             if (selectedChar.getNickname().equals(command.user.displayName)
                     && selectedChar.getRoleIDs().containsAll(cosmeticRoleIDs)) {
-                return "> You haven't updated your details since the last time this character was updated.\n" +
+                return "\\> You haven't updated your details since the last time this character was updated.\n" +
                         "Characters use your nickname " + cosmeticString + " to use as data.";
             }
             selectedChar.update(command.user.displayName, cosmeticRoles);
-            String response = "> Your character has been updated using your nickname" + cosmeticString + ".";
+            String response = "\\> Your character has been updated using your nickname" + cosmeticString + ".";
             if (!UPDATE_CHAR.isSubCommand(command)) {
                 response += "\nIf you were attempting to create a new character and not edit this character you need to specify a different character ID.";
             }
             return response;
         } else {
+            if (charName.length() > 20) {
+                return "\\> The CharID you have chosen is too long. (max 20 chars)";
+            }
             int maxChars = command.guild.characters.maxCharsForUser(command);
             int rewardCount = command.user.getRewardValue(command);
             if (userChars.size() == maxChars) {
                 if (command.guild.config.modulePixels && command.guild.config.xpGain && rewardCount != 4) {
-                    return "> You have reached the maximum allowed characters for your level," +
+                    return "\\> You have reached the maximum allowed characters for your level," +
                             " you will have to either rank up or delete an old character to make room.";
                 }
-                return "> You have reached the maximum allowed characters. You will have to delete an old character to make room.";
+                return "\\> You have reached the maximum allowed characters. You will have to delete an old character to make room.";
             }
             command.guild.characters.addChar(charName, cosmeticRoles, command.user);
             int remainingSlots = (maxChars - userChars.size() - 1);
-            String response = "> New Character Created using your nickname " + cosmeticString + " to fill in data." +
+            String response = "\\> New Character Created using your nickname " + cosmeticString + " to fill in data." +
                     "\n(" + remainingSlots + " Character slot";
             if (remainingSlots != 1) response += "s";
             response += " remaining)";

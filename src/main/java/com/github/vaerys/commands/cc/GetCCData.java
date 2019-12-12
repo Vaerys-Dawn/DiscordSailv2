@@ -18,7 +18,7 @@ public class GetCCData extends Command {
     public String execute(String args, CommandObject command) {
         CCommandObject cc = command.guild.customCommands.getCommand(args);
 
-        if (cc == null) return "> Custom command " + args + " could not be found.";
+        if (cc == null) return "\\> Custom command " + args + " could not be found.";
 
         StringBuilder content = new StringBuilder("Command Name: \"" + cc.getName() + "\"");
         IUser createdBy = command.guild.getUserByID(cc.getUserID());
@@ -30,7 +30,7 @@ public class GetCCData extends Command {
         content.append("\nTimes run: \"" + cc.getTimesRun() + "\"");
         content.append("\nContents: \"" + cc.getContents(false) + "\"");
         String fileName = String.format("%s.txt",cc.getName());
-        RequestHandler.sendFile("> Here is the raw data for Custom Command: **" + cc.getName() + "**", content.toString(), fileName, command.channel.get()).get();
+        RequestHandler.sendFile("\\> Here is the raw data for Custom Command: **" + cc.getName() + "**", content.toString(), fileName, command.channel.get()).get();
         return "";
     }
 

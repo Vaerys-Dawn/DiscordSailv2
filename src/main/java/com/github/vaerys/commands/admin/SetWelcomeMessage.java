@@ -14,7 +14,7 @@ public class SetWelcomeMessage extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         command.guild.config.setJoinMessage(args);
-        return "> New Join Message set.";
+        return "\\> New Join Message set.";
     }
 
     @Override

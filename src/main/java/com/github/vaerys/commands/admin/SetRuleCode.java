@@ -13,10 +13,10 @@ public class SetRuleCode extends Command {
         command.message.delete();
         if (args.equalsIgnoreCase("remove")) {
             command.guild.config.setRuleCode(null);
-            return "> Rule Code removed.";
+            return "\\> Rule Code removed.";
         } else {
             command.guild.config.setRuleCode(args);
-            return "> Rule Code Added.";
+            return "\\> Rule Code Added.";
         }
     }
 

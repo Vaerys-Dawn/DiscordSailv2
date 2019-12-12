@@ -15,7 +15,7 @@ public class SetPlayingStatus extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         RequestHandler.changePresence(args);
-        return "> Status set to: " + args;
+        return "\\> Status set to: " + args;
     }
 
     @Override

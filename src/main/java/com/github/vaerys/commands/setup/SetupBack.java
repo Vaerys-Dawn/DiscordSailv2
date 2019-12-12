@@ -11,20 +11,20 @@ public class SetupBack extends SetupCommand {
     @Override
     public String execute(String args, CommandObject command) {
         GuildConfig config = command.guild.config;
-        if (!SetupHandler.isRunningSetup(command.guild)) return "> You aren't running setup you nincompoop.";
+        if (!SetupHandler.isRunningSetup(command.guild)) return "\\> You aren't running setup you nincompoop.";
 
         // check if out of bounds.
         try {
             SetupStage prevStage = SetupStage.getPrevStage(command.guild.config.setupStage);
             if (prevStage == SetupStage.SETUP_MODULES && command.guild.config.setupStage == SetupStage.SETUP_MODULES) {
-                return "> You are already *on* the first step you pillock";
+                return "\\> You are already *on* the first step you pillock";
             }
             SetupHandler.setSetupStage(command, prevStage);
-            return "> Going back a step.";
+            return "\\> Going back a step.";
         } catch (ArrayIndexOutOfBoundsException e) {
             // stop them from actually breaking shit...
             config.setupStage = SetupStage.SETUP_UNSET;
-            return "> `ERROR: ArrayIndexOutOfBoundsException`... *cough*\n" +
+            return "\\> `ERROR: ArrayIndexOutOfBoundsException`... *cough*\n" +
                     "You broke it. Now I have to cancel the setup because of you. This shouldn't have even been possible. *angry bot noises*";
         }
     }

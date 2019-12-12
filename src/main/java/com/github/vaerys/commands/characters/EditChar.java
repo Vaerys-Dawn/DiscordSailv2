@@ -29,7 +29,7 @@ public class EditChar extends Command {
     public String execute(String args, CommandObject command) {
         SplitFirstObject charName = new SplitFirstObject(args);
         if (charName.getRest() == null || charName.getRest().isEmpty()) {
-            return "> Mode Not Specified";
+            return "\\> Mode Not Specified";
         }
         SplitFirstObject mode = new SplitFirstObject(charName.getRest());
         for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
@@ -60,14 +60,14 @@ public class EditChar extends Command {
                         case "roles":
                             return CharEditModes.roles(command, c);
                         default:
-                            return "> Mode not Valid.";
+                            return "\\> Mode not Valid.";
                     }
                 } else {
                     return command.user.notAllowed;
                 }
             }
         }
-        return "> Char with that name not found.";
+        return "\\> Char with that name not found.";
     }
 
     @Override

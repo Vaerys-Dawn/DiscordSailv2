@@ -29,7 +29,7 @@ public class UserInfo extends Command {
         UserObject user;
         if (args == null || args.isEmpty()) user = command.user;
         else user = Utility.getUser(command, args, true);
-        if (user == null) return "> Could not find user.";
+        if (user == null) return "\\> Could not find user.";
 
         ProfileObject profile = user.getProfile(command.guild);
 
@@ -38,13 +38,13 @@ public class UserInfo extends Command {
             profile = new ProfileObject(user.longID);
             command.guild.users.addUser(profile);
         } else if (profile == null) {
-            return "> Could not get a profile for " + user.displayName + ".";
+            return "\\> Could not get a profile for " + user.displayName + ".";
         }
 
         //private profile check
         if (!GuildHandler.testForPerms(command, Permissions.ADMINISTRATOR) &&
                 (user.isPrivateProfile(command.guild) && user.longID != command.user.longID)) {
-            return "> " + user.displayName + " has set their profile to private.";
+            return "\\> " + user.displayName + " has set their profile to private.";
         }
 
         //start of the profile builder.
@@ -114,7 +114,7 @@ public class UserInfo extends Command {
         //sends Message
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
-            return "> Profile sent to your Direct messages.";
+            return "\\> Profile sent to your Direct messages.";
         }
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;

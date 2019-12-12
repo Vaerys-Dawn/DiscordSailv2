@@ -16,15 +16,15 @@ public class SetRateLimit extends Command {
         try {
             int max = Integer.parseInt(args);
             if (max <= 0) {
-                return "> Rate Limit must be larger than 0";
+                return "\\> Rate Limit must be larger than 0";
             } else if (max > 10) {
-                return "> That would be stopped by Discord's Rate Limit.";
+                return "\\> That would be stopped by Discord's Rate Limit.";
             } else {
                 command.guild.config.setRateLimit(max);
-                return "> Guild Rate limit set to **" + max + "** messages per user every 10 seconds.";
+                return "\\> Guild Rate limit set to **" + max + "** messages per user every 10 seconds.";
             }
         } catch (NumberFormatException e) {
-            return "> You need to specify a number.";
+            return "\\> You need to specify a number.";
         }
     }
 

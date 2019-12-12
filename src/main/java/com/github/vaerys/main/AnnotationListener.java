@@ -96,7 +96,7 @@ public class AnnotationListener {
                 }
             }
             StringBuilder builder = new StringBuilder();
-            builder.append("> I caught an Error, Please send this Error message and the message that caused this error " +
+            builder.append("\\> I caught an Error, Please send this Error message and the message that caused this error " +
                     "to my **Direct Messages** so my developer can look at it and try to solve the issue.\n```\n");
             builder.append(e.getClass().getName());
             builder.append(": " + e.getMessage());

@@ -115,7 +115,7 @@ public class TimerHandler {
                 IUser creator = Client.getClient().getUserByID(Globals.creatorID);
                 if (creator == null) return;
                 UserObject creatorUser = new UserObject(creator, null);
-                creatorUser.sendDm("> screenlog.0 got too big, potential log spam, archived log to prevent loss of usage.");
+                creatorUser.sendDm("\\> screenlog.0 got too big, potential log spam, archived log to prevent loss of usage.");
                 file.renameTo(new File("screenlog.closed"));
             }
         }
@@ -334,8 +334,8 @@ public class TimerHandler {
             //ignore non muted users
             if (!u.isMuted()) continue;
             //set up messages
-            String adminFormat = "> %s was muted for breaking the guild's rate limit (%d Over Limit) in %s.";
-            String modNoteFormat = "> Muted by Rate Limiter, %d Over Limit. Channel%s: %s.";
+            String adminFormat = "\\> %s was muted for breaking the guild's rate limit (%d Over Limit) in %s.";
+            String modNoteFormat = "\\> Muted by Rate Limiter, %d Over Limit. Channel%s: %s.";
             //get channels
             List<IChannel> channels = u.getChannels(guild);
             //get admin channel
@@ -351,7 +351,7 @@ public class TimerHandler {
             guild.sendDebugLog(offender, admin, "RATE_LIMITING", "MUTE", rate + " over limit.");
             //logging
             if (guild.config.deleteLogging) {
-                LoggingHandler.sendLog("> **@" + offender.getName() + "#" + offender.getDiscriminator() + "** was muted for breaking rate limit.", guild, true);
+                LoggingHandler.sendLog("\\> **@" + offender.getName() + "#" + offender.getDiscriminator() + "** was muted for breaking rate limit.", guild, true);
             }
             //send messages
             profile.addSailModNote(String.format(modNoteFormat, rate, channels.size() > 1 ? "s" : "", formattedChannels), u.getTimeStamp(), false);

@@ -50,11 +50,11 @@ public class ModifierRoles extends Command {
             }
 
             if (role == null) role = GuildHandler.getRoleFromName(subArgs, command.guild.get());
-            if (role == null) return "> **" + subArgs + "** is not a valid Role Name.";
+            if (role == null) return "\\> **" + subArgs + "** is not a valid Role Name.";
 
             //tests to see if the bot is allowed to mess with a role.
             if (!Utility.testUserHierarchy(command.client.bot.get(), role, command.guild.get())) {
-                return "> I do not have permission to modify the **" + role.getName() + "** role.";
+                return "\\> I do not have permission to modify the **" + role.getName() + "** role.";
             }
             //test the user's hierarchy to make sure that the are allowed to mess with that role.
             if (Utility.testUserHierarchy(command.user.get(), role, command.guild.get())) {
@@ -62,10 +62,10 @@ public class ModifierRoles extends Command {
                 if (isAdding) {
                     //check for the role and add if its not a Modifier role.
                     if (command.guild.config.isRoleModifier(role.getLongID())) {
-                        return "> The **" + role.getName() + "** role is already listed as a modifier role.";
+                        return "\\> The **" + role.getName() + "** role is already listed as a modifier role.";
                     } else {
                         command.guild.config.getModifierRoleIDs().add(role.getLongID());
-                        return "> The **" + role.getName() + "** role was added to the modifier role list.";
+                        return "\\> The **" + role.getName() + "** role was added to the modifier role list.";
                     }
                     //do if modifier is false
                 } else {
@@ -78,13 +78,13 @@ public class ModifierRoles extends Command {
                                 iterator.remove();
                             }
                         }
-                        return "> The **" + role.getName() + "** role was removed from the modifier role list.";
+                        return "\\> The **" + role.getName() + "** role was removed from the modifier role list.";
                     } else {
-                        return "> The **" + role.getName() + "** role is not listed as a modifier role.";
+                        return "\\> The **" + role.getName() + "** role is not listed as a modifier role.";
                     }
                 }
             } else {
-                return "> You do not have permission to modify the **" + role.getName() + "** role.";
+                return "\\> You do not have permission to modify the **" + role.getName() + "** role.";
             }
             //do user role modification
         } else {
@@ -98,18 +98,18 @@ public class ModifierRoles extends Command {
             List<IRole> userRoles = command.user.roles;
             String response;
             if (role == null) {
-                RequestHandler.sendEmbedMessage("> **" + args + "** is not a valid Role Name.", ListModifs.getList(command), command.channel.get());
+                RequestHandler.sendEmbedMessage("\\> **" + args + "** is not a valid Role Name.", ListModifs.getList(command), command.channel.get());
                 return null;
             } else {
                 if (command.guild.config.isRoleModifier(role.getLongID())) {
                     //if user has role remove it
                     if (userRoles.contains(role)) {
                         userRoles.remove(role);
-                        response = "> You have had the **" + role.getName() + "** role removed.";
+                        response = "\\> You have had the **" + role.getName() + "** role removed.";
                         //else add it
                     } else {
                         userRoles.add(role);
-                        response = "> You have been granted the **" + role.getName() + "** role.";
+                        response = "\\> You have been granted the **" + role.getName() + "** role.";
                     }
                     //push changes
                     if (RequestHandler.roleManagement(command.user.get(), command.guild.get(), userRoles).get()) {
@@ -118,7 +118,7 @@ public class ModifierRoles extends Command {
                         return Constants.ERROR_UPDATING_ROLE;
                     }
                 } else {
-                    RequestHandler.sendEmbedMessage("> The **" + role.getName() + "** role is not listed as a modifier role.", ListModifs.getList(command), command.channel.get());
+                    RequestHandler.sendEmbedMessage("\\> The **" + role.getName() + "** role is not listed as a modifier role.", ListModifs.getList(command), command.channel.get());
                     return null;
                 }
             }

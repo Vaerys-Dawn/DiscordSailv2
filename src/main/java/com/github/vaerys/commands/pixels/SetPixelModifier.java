@@ -16,15 +16,15 @@ public class SetPixelModifier extends Command {
         try {
             float multiplier = Float.parseFloat(args);
             if (multiplier <= 0) {
-                return "> must be a positive number";
+                return "\\> must be a positive number";
             }
             if (multiplier > 5) {
-                return "> Cannot set a multiplier over 5x";
+                return "\\> Cannot set a multiplier over 5x";
             }
             command.guild.config.xpModifier = multiplier;
-            return "> Pixel Multiplier is now set to **x" + multiplier + "**.";
+            return "\\> Pixel Multiplier is now set to **x" + multiplier + "**.";
         } catch (NumberFormatException e) {
-            return "> Not a valid Number.";
+            return "\\> Not a valid Number.";
         }
     }
 

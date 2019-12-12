@@ -37,21 +37,21 @@ public class Toggle extends Command {
             GuildToggle toggle = ToggleList.getGuildToggle(args, isModule);
             if (toggle == null) {
                 if (isModule) {
-                    desc.append("> Could not find Module **" + args + "**.\n\n");
+                    desc.append("\\> Could not find Module **" + args + "**.\n\n");
                 } else {
-                    desc.append("> Could not find Setting **" + args + "**.\n\n");
+                    desc.append("\\> Could not find Setting **" + args + "**.\n\n");
                 }
             } else {
                 GuildToggle module = ToggleList.getModuleFromSetting(toggle.name());
                 if (module != null && !module.enabled(command.guild.config)) {
-                    desc.appendFormatted("> Could not toggle Setting **%s**, Module **%s** is disabled.\n\n", args, module.name());
+                    desc.appendFormatted("\\> Could not toggle Setting **%s**, Module **%s** is disabled.\n\n", args, module.name());
                 } else {
                     toggle.toggle(command.guild.config);
                     command.guild.loadCommandData();
                     String mode = toggle.enabled(command.guild.config) ? "enabled" : "disabled";
                     String type = toggle.isModule() ? "module" : "setting";
                     String helpCommand = toggle.isModule() ? modules.getUsage(command) : settings.getUsage(command);
-                    return "> **" + toggle.name() + "** is now **" + mode + "**.\n\n" +
+                    return "\\> **" + toggle.name() + "** is now **" + mode + "**.\n\n" +
                             "To see more info about what this " + type + " " + mode + " you can run **" + helpCommand + "**.";
                 }
             }
@@ -59,7 +59,7 @@ public class Toggle extends Command {
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String modifier = isModule ? "Module" : "Setting";
         String title;
-        title = "> Here are all of the available " + modifier + "s:\n";
+        title = "\\> Here are all of the available " + modifier + "s:\n";
 
         List<SAILType> typesActive = new LinkedList<>();
         List<SAILType> typesDeactivated = new LinkedList<>();

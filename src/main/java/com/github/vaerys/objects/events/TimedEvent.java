@@ -153,14 +153,14 @@ public class TimedEvent {
         }
         if (!found) avatars.add(new EventAvatar(day, url));
         doAvatars = true;
-        if (day == null) return "> Default Avatar Set.";
-        return "> " + day + " Avatar Created.";
+        if (day == null) return "\\> Default Avatar Set.";
+        return "\\> " + day + " Avatar Created.";
     }
 
     public String clearAvatars() {
         avatars = new ArrayList<>();
         doAvatars = false;
-        return "> All avatars cleared.";
+        return "\\> All avatars cleared.";
     }
 
     public String removeAvatar(DayOfWeek day) {
@@ -168,12 +168,12 @@ public class TimedEvent {
             if (a.day == day) {
                 avatars.remove(a);
                 if (day == null) {
-                    return "> Default Avatar removed.";
+                    return "\\> Default Avatar removed.";
                 }
-                return "> " + day + " Avatar Removed.";
+                return "\\> " + day + " Avatar Removed.";
             }
         }
-        return "> Could not remove avatar.";
+        return "\\> Could not remove avatar.";
     }
 
     public String getInfo(CommandObject command) {

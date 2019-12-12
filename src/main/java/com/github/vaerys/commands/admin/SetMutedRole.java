@@ -18,14 +18,14 @@ public class SetMutedRole extends Command {
     public String execute(String args, CommandObject command) {
         if (args.equalsIgnoreCase("Remove")) {
             command.guild.config.setRoleToMentionID(-1);
-            return "> Muted Role Removed.";
+            return "\\> Muted Role Removed.";
         }
         IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) {
             return Constants.ERROR_ROLE_NOT_FOUND;
         } else {
             command.guild.config.setMutedRoleID(role.getLongID());
-            return "> The role **" + role.getName() + "** is now set as the mute role.";
+            return "\\> The role **" + role.getName() + "** is now set as the mute role.";
         }
     }
 

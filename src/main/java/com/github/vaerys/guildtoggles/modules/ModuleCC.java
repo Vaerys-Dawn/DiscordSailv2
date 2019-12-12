@@ -38,9 +38,9 @@ public class ModuleCC extends GuildModule {
     @Override
     public String desc(CommandObject command) {
         return "This module allows users to create custom commands.\n" +
-                "> Custom commands use the **" + command.guild.config.getPrefixCC() + "** command prefix.\n" +
-                "> Custom commands are completely user created and they can use the tag system to change how they work.\n" +
-                "> For information about the tag system you can run the **" + Command.get(HelpTags.class).getCommand(command) + "** command.";
+                "\\> Custom commands use the **" + command.guild.config.getPrefixCC() + "** command prefix.\n" +
+                "\\> Custom commands are completely user created and they can use the tag system to change how they work.\n" +
+                "\\> For information about the tag system you can run the **" + Command.get(HelpTags.class).getCommand(command) + "** command.";
     }
 
     @Override

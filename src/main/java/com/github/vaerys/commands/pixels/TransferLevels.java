@@ -24,10 +24,10 @@ public class TransferLevels extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.config.xpGain) {
-            return "> Cannot transfer levels, xp gain enabled.";
+            return "\\> Cannot transfer levels, xp gain enabled.";
         }
         if (command.guild.config.getRewardRoles().size() == 0) {
-            return "> No rewards available to grant. cannot transfer levels";
+            return "\\> No rewards available to grant. cannot transfer levels";
         }
         IMessage message = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
 
@@ -53,7 +53,7 @@ public class TransferLevels extends Command {
         }
         RequestHandler.deleteMessage(message);
         command.guild.config.xpGain = true;
-        return "> Transfer Complete.";
+        return "\\> Transfer Complete.";
     }
 
     @Override

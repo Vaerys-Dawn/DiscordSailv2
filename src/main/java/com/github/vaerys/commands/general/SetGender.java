@@ -32,7 +32,7 @@ public class SetGender extends Command {
         if (ADMIN_EDIT.isSubCommand(command)) {
             SplitFirstObject userCall = new SplitFirstObject(quote);
             user = Utility.getUser(command, userCall.getFirstWord(), false, true);
-            if (user == null) return "> Could not find user.";
+            if (user == null) return "\\> Could not find user.";
             quote = userCall.getRest();
             adminEdit = true;
         }
@@ -43,22 +43,22 @@ public class SetGender extends Command {
         ProfileObject u = user.getProfile(command.guild);
 
         quote = Utility.removeFun(quote);
-        if (quote == null || quote.isEmpty()) return "> You can't have an empty gender.";
+        if (quote == null || quote.isEmpty()) return "\\> You can't have an empty gender.";
         if (adminEdit) {
             if (u == null){
                 u = command.guild.users.addUser(user.longID);
             }
             if (quote.length() > maxLength) {
-                return "> Gender's Length is too long...\n(Must be under " + maxLength + " chars)";
+                return "\\> Gender's Length is too long...\n(Must be under " + maxLength + " chars)";
             }
             u.setGender(quote);
-            return "> " + user.displayName + "'s Gender Edited";
+            return "\\> " + user.displayName + "'s Gender Edited";
         } else {
             if (quote.length() > maxLength) {
-                return "> Your Gender's Length is too long...\n(Must be under " + maxLength + " chars)";
+                return "\\> Your Gender's Length is too long...\n(Must be under " + maxLength + " chars)";
             }
             u.setGender(quote);
-            return "> Gender Edited";
+            return "\\> Gender Edited";
         }
 
     }

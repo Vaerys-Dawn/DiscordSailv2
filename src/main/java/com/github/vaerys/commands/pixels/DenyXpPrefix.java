@@ -15,26 +15,26 @@ public class DenyXpPrefix extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (args.equalsIgnoreCase("list")) {
-            return "> Here are all of the prefixes that are registered.\n```" + Utility.listFormatter(command.guild.config.getXpDeniedPrefixes(), true) + "```";
+            return "\\> Here are all of the prefixes that are registered.\n```" + Utility.listFormatter(command.guild.config.getXpDeniedPrefixes(), true) + "```";
         }
         boolean isAlphanumeric = args.matches("[A-Za-z0-9]+");
         if (args.length() > 5) {
-            return "> Prefix cannot be longer than 5 chars.";
+            return "\\> Prefix cannot be longer than 5 chars.";
         }
         if (args.contains("\n")) {
-            return "> Prefix cannot contain newlines.";
+            return "\\> Prefix cannot contain newlines.";
         }
         if (args.contains(" ")) {
-            return "> Prefix cannot contain spaces";
+            return "\\> Prefix cannot contain spaces";
         }
         if (isAlphanumeric) {
-            return "> Prefix cannot be alphanumeric.";
+            return "\\> Prefix cannot be alphanumeric.";
         }
         if (args.startsWith("#")) {
-            return "> Prefix cannot start with a `#`.";
+            return "\\> Prefix cannot start with a `#`.";
         }
         if (args.startsWith("@")) {
-            return "> Prefix cannot start with a `@`.";
+            return "\\> Prefix cannot start with a `@`.";
         }
         ArrayList<String> prefixes = command.guild.config.getXpDeniedPrefixes();
         ListIterator<String> iterator = prefixes.listIterator();
@@ -42,11 +42,11 @@ public class DenyXpPrefix extends Command {
             String prefix = (String) iterator.next();
             if (prefix.equals(args)) {
                 iterator.remove();
-                return "> Removed the **" + prefix + "** prefix from the xp denied prefixes.";
+                return "\\> Removed the **" + prefix + "** prefix from the xp denied prefixes.";
             }
         }
         prefixes.add(args);
-        return "> Added the **" + args + "** prefix to the list of xp denied prefixes.";
+        return "\\> Added the **" + args + "** prefix to the list of xp denied prefixes.";
     }
 
     @Override

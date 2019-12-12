@@ -19,13 +19,13 @@ public class UpdateInfo extends Command {
     public String execute(String args, CommandObject command) {
         List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.INFO);
         if (channels.size() == 0) {
-            return "> No Info channel set up yet, you need to set one up in order to run this command.\n" + missingArgs(command);
+            return "\\> No Info channel set up yet, you need to set one up in order to run this command.\n" + missingArgs(command);
         }
         if (channels.get(0).getLongID() == command.channel.longID) {
             new InfoHandler(command);
             return null;
         } else {
-            return "> Command must be performed in " + channels.get(0).mention() + ".";
+            return "\\> Command must be performed in " + channels.get(0).mention() + ".";
         }
     }
 

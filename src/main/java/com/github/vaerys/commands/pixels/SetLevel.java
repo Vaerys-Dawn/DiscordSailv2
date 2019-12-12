@@ -23,26 +23,26 @@ public class SetLevel extends Command {
         SplitFirstObject xpArgs = new SplitFirstObject(args);
         UserObject user = Utility.getUser(command, xpArgs.getFirstWord(), false);
         if (user == null) {
-            return "> Could not find user.";
+            return "\\> Could not find user.";
         }
         try {
             long level = Long.parseLong(xpArgs.getRest());
             if (level > Constants.LEVEL_CAP)
-                return "> No... " + level + " Is way too many levels. Im not setting your level that high.";
+                return "\\> No... " + level + " Is way too many levels. Im not setting your level that high.";
             long xp = PixelHandler.totalXPForLevel(level);
             ProfileObject userObject = user.getProfile(command.guild);
             if (userObject == null) {
-                return "> User does not have a profile.";
+                return "\\> User does not have a profile.";
             }
             if (Utility.testUserHierarchy(user, command.user, command.guild)) {
-                return "> You do not have permission to edit " + user.displayName + "'s pixels.";
+                return "\\> You do not have permission to edit " + user.displayName + "'s pixels.";
             }
             userObject.setXp(xp);
             userObject.removeLevelFloor();
             GuildHandler.checkUsersRoles(user.longID, command.guild);
-            return "> " + user.displayName + "'s Level is now set to: **" + level + "**";
+            return "\\> " + user.displayName + "'s Level is now set to: **" + level + "**";
         } catch (NumberFormatException e) {
-            return "> Invalid number";
+            return "\\> Invalid number";
         }
     }
 

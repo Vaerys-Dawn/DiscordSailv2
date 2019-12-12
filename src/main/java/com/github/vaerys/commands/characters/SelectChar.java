@@ -39,9 +39,9 @@ public class SelectChar extends Command {
                     }
                     RequestHandler.roleManagement(command.user.get(), command.guild.get(), userRoles);
                     RequestHandler.updateUserNickName(command.user.get(), command.guild.get(), c.getNickname());
-                    return "> Character " + c.getNickname() + " Loaded.";
+                    return "\\> Character " + c.getNickname() + " Loaded.";
                 } else {
-                    return "> " + c.getName() + " is not your character.";
+                    return "\\> " + c.getName() + " is not your character.";
                 }
             }
         }

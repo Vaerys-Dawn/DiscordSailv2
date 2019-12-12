@@ -41,9 +41,9 @@ public class Characters extends GlobalFile {
             if (c.getName().equalsIgnoreCase(character)) {
                 if (author.getLongID() == c.getUserID() || bypass) {
                     characters.remove(c);
-                    return "> Character Deleted.";
+                    return "\\> Character Deleted.";
                 } else {
-                    return "> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.";
+                    return "\\> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.";
                 }
             }
         }

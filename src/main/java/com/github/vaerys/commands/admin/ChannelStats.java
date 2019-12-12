@@ -38,14 +38,14 @@ public class ChannelStats extends Command {
                         return null;
                     } else {
                         if (s.isSetting()) {
-                            return "> Could not find any channels with the **" + s.toString() + "** setting enabled.";
+                            return "\\> Could not find any channels with the **" + s.toString() + "** setting enabled.";
                         } else {
-                            return "> Could not find a channel with the **" + s.toString() + "** type enabled.";
+                            return "\\> Could not find a channel with the **" + s.toString() + "** type enabled.";
                         }
                     }
                 }
             }
-            return "> Could not any channel settings with that name.";
+            return "\\> Could not any channel settings with that name.";
         }
 
         for (ChannelSettingObject c : command.guild.channelData.getChannelSettings()) {
@@ -63,7 +63,7 @@ public class ChannelStats extends Command {
         }
 
         if (channelSettings.size() == 0 && channelTypes.size() == 0) {
-            return "> I found nothing of value.";
+            return "\\> I found nothing of value.";
         }
         if (channelTypes.size() != 0) {
             builder.appendField("Types:", Utility.listFormatter(channelTypes, true), false);

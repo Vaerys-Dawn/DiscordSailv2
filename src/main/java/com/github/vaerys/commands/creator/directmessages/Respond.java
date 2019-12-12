@@ -17,10 +17,10 @@ public class Respond extends DMCommand {
 
     public static String sendDM(String args, CommandObject command, IUser recipient, String prefix) {
         if (recipient == null) {
-            return "> Could Not Send Response, UserID is invalid.";
+            return "\\> Could Not Send Response, UserID is invalid.";
         }
         if (args == null) {
-            return "> Could Not Send Response, Contents cannot be empty.";
+            return "\\> Could Not Send Response, Contents cannot be empty.";
         }
         IChannel channel = recipient.getOrCreatePMChannel();
         if (command.message.getAttachments().size() != 0) {
@@ -29,9 +29,9 @@ public class Respond extends DMCommand {
             }
         }
         if (RequestHandler.sendMessage(prefix + args, channel).get() == null) {
-            return "> An Error occurred while attempting to run this command.";
+            return "\\> An Error occurred while attempting to run this command.";
         } else {
-            return "> Message Sent.";
+            return "\\> Message Sent.";
         }
     }
 

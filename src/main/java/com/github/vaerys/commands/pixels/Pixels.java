@@ -26,14 +26,14 @@ public class Pixels extends Command {
         UserObject user = command.user;
         if (!args.isEmpty()) {
             user = Utility.getUser(command, args, true);
-            if (user == null) return "> Could not find user.";
+            if (user == null) return "\\> Could not find user.";
         }
         ProfileObject profile = user.getProfile(command.guild);
         if (profile == null) {
-            return String.format("> %s does not have a profile yet.", user.displayName);
+            return String.format("\\> %s does not have a profile yet.", user.displayName);
         }
         if (user.isPrivateProfile(command.guild) && !user.equals(command.user)) {
-            return String.format("> %s has set their profile to private.", user.displayName);
+            return String.format("\\> %s has set their profile to private.", user.displayName);
         }
         //init vars
 
@@ -75,7 +75,7 @@ public class Pixels extends Command {
         }
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
-            return "> Pixels sent to your Direct messages.";
+            return "\\> Pixels sent to your Direct messages.";
         }
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;

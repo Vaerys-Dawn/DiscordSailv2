@@ -20,10 +20,10 @@ public class UnBlockUser extends DMCommand {
             long id = (long) iterator.next();
             if (id == userID) {
                 iterator.remove();
-                return "> User Unblocked";
+                return "\\> User Unblocked";
             }
         }
-        return "> Could not find user or invalid ID.";
+        return "\\> Could not find user or invalid ID.";
     }
 
     @Override

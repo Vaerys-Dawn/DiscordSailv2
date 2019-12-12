@@ -56,7 +56,7 @@ public class SpamHandler {
                 if (offenceCount > 2) {
                     if (command.guild.config.muteRepeatOffenders) {
                         command.guild.users.muteUser(command, -1);
-                        command.user.sendDm("You were muted for spamming.");
+                        command.user.sendDm("\\> You were muted for spamming.");
                         command.guild.sendDebugLog(command, "CATCH_SPAM_WALLS", "MUTE", offenceCount + " Offences");
                         IChannel admin = command.guild.getChannelByType(ChannelSetting.ADMIN);
                         String report = command.user.mention() + " was muted for spamming";
@@ -70,7 +70,7 @@ public class SpamHandler {
                         return true;
                     }
                 }
-                command.user.sendDm("Your message was deleted because it was considered spam.");
+                command.user.sendDm("\\> Your message was deleted because it was considered spam.");
                 return true;
             }
         }
@@ -104,7 +104,7 @@ public class SpamHandler {
                         offenderFound = true;
                         i++;
                         if (o.getCount() >= Globals.maxWarnings) {
-                            String report = "> %s has been muted for repeat offences of spamming mentions.";
+                            String report = "\\> %s has been muted for repeat offences of spamming mentions.";
                             command.guild.users.muteUser(command, -1);
                             command.guild.sendDebugLog(command, "STOP_MASS_MENTIONS", "MUTE", o.getCount() + " Offences");
                             // add strike in modnote
@@ -117,7 +117,7 @@ public class SpamHandler {
                 if (!offenderFound) {
                     guildconfig.addOffender(new OffenderObject(author.getLongID()));
                 }
-                String response = "> <mentionAdmin>, " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message in " + command.channel.mention + ".";
+                String response = "\\> <mentionAdmin>, " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message in " + command.channel.mention + ".";
                 IRole roleToMention = command.guild.getRoleByID(guildconfig.getRoleToMentionID());
                 if (roleToMention != null) {
                     response = response.replaceAll("<mentionAdmin>", roleToMention.mention());
@@ -149,7 +149,7 @@ public class SpamHandler {
         //Force Reset rate limiter if things go wrong
         if (Globals.lastRateLimitReset + 20 * 1000 < System.currentTimeMillis()) {
             command.guild.resetRateLimit();
-            RequestHandler.sendMessage("> Forced Rate Limit Reset. **Guild ID:** " + command.guild.longID +
+            RequestHandler.sendMessage("\\> Forced Rate Limit Reset. **Guild ID:** " + command.guild.longID +
                     ", **Guild Name:** " + command.guild.get().getName(), command.client.creator.getDmChannel());
         }
 
@@ -160,8 +160,8 @@ public class SpamHandler {
         logDelete(command, "RATE_LIMITING", "MESSAGE_DELETED");
         command.message.delete();
 
-        String rateLimitFormat = "> Whoa there, You're typing too fast! You're breaking %s's Rate limit. (%d messages every 10 seconds)";
-        String muteFormat = "> Time to chill! You have been muted for 5 minutes for breaking %s's Rate limit. (%d messages every 10 seconds)";
+        String rateLimitFormat = "\\> Whoa there, You're typing too fast! You're breaking %s's Rate limit. (%d messages every 10 seconds)";
+        String muteFormat = "\\> Time to chill! You have been muted for 5 minutes for breaking %s's Rate limit. (%d messages every 10 seconds)";
         String guildName = command.guild.get().getName();
         int messageLimit = command.guild.config.messageLimit;
 
@@ -231,9 +231,9 @@ public class SpamHandler {
         if (inviteFound && shouldDelete) {
             String response;
             if (userSettingDenied) {
-                response = "> " + command.user.mention() + ", you do not have permission to post Instant Invites.";
+                response = "\\> " + command.user.mention() + ", you do not have permission to post Instant Invites.";
             } else {
-                response = "> " + command.user.mention() + ", please do not post Instant Invites.";
+                response = "\\> " + command.user.mention() + ", please do not post Instant Invites.";
             }
             RequestHandler.deleteMessage(message);
             command.guild.sendDebugLog(command, "INVITE_REMOVAL", "REMOVED", message.getContent());
@@ -293,10 +293,10 @@ public class SpamHandler {
                     long diffTime = blUser.getEndTime() - Instant.now().toEpochMilli();
 
                     if (blUser.getCounter() >= 5) {
-                        RequestHandler.sendMessage("> OKAY, ENOUGH " + user.mention() + ". You've been permanently blacklisted from using commands.", command.channel);
-                        RequestHandler.sendCreatorDm(String.format("> @%s(%d) was blacklisted from using commands", user.username, user.longID));
+                        RequestHandler.sendMessage("\\> OKAY, ENOUGH " + user.mention() + ". You've been permanently blacklisted from using commands.", command.channel);
+                        RequestHandler.sendCreatorDm(String.format("\\> @%s(%d) was blacklisted from using commands", user.username, user.longID));
                     } else {
-                        RequestHandler.sendMessage("> You're using commands too much " + user.mention() +
+                        RequestHandler.sendMessage("\\> You're using commands too much " + user.mention() +
                                 ". Take a chill pill, and try again in " + Utility.formatTime(diffTime / 1000, true), command.channel);
                     }
 

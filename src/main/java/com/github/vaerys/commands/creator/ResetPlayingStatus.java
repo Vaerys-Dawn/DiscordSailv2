@@ -16,7 +16,7 @@ public class ResetPlayingStatus extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         RequestHandler.changePresence(Globals.playing);
-        return "> Status reset.";
+        return "\\> Status reset.";
     }
 
     @Override

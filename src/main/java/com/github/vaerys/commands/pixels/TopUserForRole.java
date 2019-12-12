@@ -35,13 +35,13 @@ public class TopUserForRole extends Command {
                 index = Integer.parseInt(new SplitFirstObject(args).getFirstWord());
             } catch (NumberFormatException e) {
                 // not a valid number, can't find role, bork.
-                return "> Invalid Role";
+                return "\\> Invalid Role";
             }
             // remove index from string, try to get role again.
             args = new SplitFirstObject(args).getRest();
 
             role = GuildHandler.getRoleFromName(args, command.guild.get());
-            if (role == null) return "> Invalid Role.";
+            if (role == null) return "\\> Invalid Role.";
         }
 
         IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
@@ -50,7 +50,7 @@ public class TopUserForRole extends Command {
         List<Long> userIDs = command.guild.get().getUsersByRole(role).stream().map(IUser::getLongID).collect(Collectors.toList());
         if (userIDs.isEmpty()) {
             RequestHandler.deleteMessage(working);
-            return "> Could not find any users with that role!";
+            return "\\> Could not find any users with that role!";
         }
 
         userIDs.removeIf(f -> PixelHandler.rank(command.guild.users, command.guild.get(), f) == -1);
@@ -60,11 +60,11 @@ public class TopUserForRole extends Command {
             long rank2 = PixelHandler.rank(command.guild.users, command.guild.get(), o2);
             return Long.compare(rank1, rank2);
         });
-        if (userIDs.size() == 0) return "> Could not find any ranked users with that role.";
+        if (userIDs.size() == 0) return "\\> Could not find any ranked users with that role.";
 
         if (index > userIDs.size()) {
             RequestHandler.deleteMessage(working);
-            return "> There's only " + userIDs.size() + (userIDs.size() == 1 ? " user" : " users") + " with that role.";
+            return "\\> There's only " + userIDs.size() + (userIDs.size() == 1 ? " user" : " users") + " with that role.";
         }
 
         if (index == 1) {
@@ -79,7 +79,7 @@ public class TopUserForRole extends Command {
 
         NumberFormat nf = NumberFormat.getInstance();
         RequestHandler.deleteMessage(working);
-        return "> @" + topUser.username + ", **Pixels:** " + nf.format(topUserProfile.getXP()) +
+        return "\\> @" + topUser.username + ", **Pixels:** " + nf.format(topUserProfile.getXP()) +
                 ", **Level:** " + topUserProfile.getCurrentLevel() +
                 ", **User ID:** " + topUser.longID;
 

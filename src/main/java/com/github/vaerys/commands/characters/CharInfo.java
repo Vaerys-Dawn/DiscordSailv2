@@ -74,7 +74,7 @@ public class CharInfo extends Command {
                 builder.withDesc(description.toString());
                 if (object.getAvatarURL() != null && !object.getAvatarURL().isEmpty()) {
                     if (object.getAvatarURL().contains("\n") || object.getAvatarURL().contains(" ")) {
-                        return "> An Error Occurred. Avatar url needs to be reset.";
+                        return "\\> An Error Occurred. Avatar url needs to be reset.";
                     }
                     builder.withThumbnail(object.getAvatarURL());
                 }
@@ -82,7 +82,7 @@ public class CharInfo extends Command {
                 return null;
             }
         }
-        return "> Character with that name not found.";
+        return "\\> Character with that name not found.";
     }
 
     @Override

@@ -54,7 +54,7 @@ public class RequestHandler {
             if (message == null || message.isEmpty()) return null;
             if (channel == null) return null;
             if (message.length() > 2000) {
-                StringHandler error = new StringHandler("> Could not send message, Too large. ")
+                StringHandler error = new StringHandler("\\> Could not send message, Too large. ")
                         .append("Please contact my developer by sending me a **Direct Message** with the **Command Name** that caused this message.");
                 sendMessage(error.toString(), channel);
                 sendError("Could not send message, Too Large.", message, channel);
@@ -96,7 +96,7 @@ public class RequestHandler {
             if (builder == null) throw new IllegalArgumentException("Embed builder must never be null.");
             if (checkedMessage == null) checkedMessage = "";
             if (checkedMessage.length() > 2000) {
-                StringHandler error = new StringHandler("> Could not send message, Too large. ")
+                StringHandler error = new StringHandler("\\> Could not send message, Too large. ")
                         .append("Please contact my developer by sending me a **Direct Message** with the **Command Name** that caused this message.");
                 sendMessage(error.toString(), channel);
                 sendError("Could not send message, Too Large.", message, channel);
@@ -159,7 +159,7 @@ public class RequestHandler {
                 String debugMessage;
                 if (checkedMessage.isEmpty()) debugMessage = "FILE";
                 else debugMessage = checkedMessage + "\nFILE";
-                sendMessage("> Could not send File, missing permissions.", channel);
+                sendMessage("\\> Could not send File, missing permissions.", channel);
                 missingPermissions(debugMessage, channel);
                 return null;
             } catch (FileNotFoundException e) {
@@ -182,7 +182,7 @@ public class RequestHandler {
                 String debugMessage;
                 if (checkedMessage.isEmpty()) debugMessage = "FILE";
                 else debugMessage = checkedMessage + "\nFILE";
-                sendMessage("> Could not send File, missing permissions.", channel);
+                sendMessage("\\> Could not send File, missing permissions.", channel);
                 missingPermissions(debugMessage, channel);
                 return null;
             } catch (IOException e) {

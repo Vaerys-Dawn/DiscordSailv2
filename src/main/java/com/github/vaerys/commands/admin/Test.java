@@ -23,7 +23,7 @@ public class Test extends Command {
             "nothing",
             SAILType.MOD_TOOLS
     );
-    String nothing = "> You didn't see anything.";
+    String nothing = "\\> You didn't see anything.";
 
     @Override
     public String execute(String args, CommandObject command) {

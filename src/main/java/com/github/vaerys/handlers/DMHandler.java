@@ -52,7 +52,7 @@ public class DMHandler {
 
         sendMessage(command, ownerDm);
 
-        RequestHandler.sendMessage("> Thank you for your message.", channel);
+        RequestHandler.sendMessage("\\> Thank you for your message.", channel);
 
 //            if (command.)
 //
@@ -106,7 +106,7 @@ public class DMHandler {
 
     private boolean blockedUserHandler(CommandObject command) {
         if (command.user.isBlockedFromDms()) {
-            command.user.sendDm("> You have been blocked from sending DMs to S.A.I.L by the Bot Creator.");
+            command.user.sendDm("\\> You have been blocked from sending DMs to S.A.I.L by the Bot Creator.");
             return true;
         }
         return false;
@@ -116,35 +116,35 @@ public class DMHandler {
         long count = getCount(command.user.longID);
         if (count == 7) {
             sendMessage(command, ownerDm);
-            command.user.sendDm("> Hey. Could you slow down with the dms? My creator doesn't need you spamming her.");
+            command.user.sendDm("\\> Hey. Could you slow down with the dms? My creator doesn't need you spamming her.");
             return true;
         }
         if (count == 8) {
             sendMessage(command, ownerDm);
-            command.user.sendDm("> **Hey!**");
+            command.user.sendDm("\\> **Hey!**");
             return true;
         }
         if (count == 9) {
             sendMessage(command, ownerDm);
-            command.user.sendDm("> **Hey! Stop that!**");
+            command.user.sendDm("\\> **Hey! Stop that!**");
             return true;
         }
         if (count == 10) {
             sendMessage(command, ownerDm);
-            command.user.sendDm("> **I'm going to block you if you don't stop...**");
+            command.user.sendDm("\\> **I'm going to block you if you don't stop...**");
             return true;
         }
         if (count > 10) {
             sendMessage(command, ownerDm);
-            command.user.sendDm("> **I warned you...**");
+            command.user.sendDm("\\> **I warned you...**");
             Globals.getGlobalData().getBlockedFromDMS().add(command.user.longID);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 Utility.sendStack(e);
             }
-            command.user.sendDm("> You were blocked.");
-            RequestHandler.sendMessage("> I blocked " + command.user.username + " for spamming you.", ownerDm);
+            command.user.sendDm("\\> You were blocked.");
+            RequestHandler.sendMessage("\\> I blocked " + command.user.username + " for spamming you.", ownerDm);
             return true;
         }
         return false;
@@ -173,7 +173,7 @@ public class DMHandler {
         prefixes = prefixes.stream().distinct().collect(Collectors.toList());
         for (String p : prefixes) {
             if (command.message.getContent().startsWith(p)) {
-                command.user.sendDm("> Hey there, looks like you're trying to use a command only available on a guild. unfortunately I can't run guild only commands in my Direct messages.");
+                command.user.sendDm("\\> Hey there, looks like you're trying to use a command only available on a guild. unfortunately I can't run guild only commands in my Direct messages.");
                 return true;
             }
         }
@@ -182,7 +182,7 @@ public class DMHandler {
 
     private boolean inviteCatcher(CommandObject command) {
         if (Pattern.compile("(?i)(discord\\.gg/|discordapp\\.com/Invite/)").matcher(command.message.getContent()).find()) {
-            command.user.sendDm("> Hey it looks like you are trying to send me a Invite link to a server. If you want me to " +
+            command.user.sendDm("\\> Hey it looks like you are trying to send me a Invite link to a server. If you want me to " +
                     "join your server please send a request to the Support server found in my info command.\n" +
                     "Note: My Creator may be busy or asleep when you send the request so please be polite, " +
                     "I am still an invite only bot that still requires developer help to set up to keep that in mind.");
@@ -192,33 +192,33 @@ public class DMHandler {
     }
 
     private boolean smartAssBlocker(CommandObject command, IChannel ownerDm) {
-        String step1 = "> Thank you for your message.";
-        String step2 = "> That's what I just said, you don't have to repeat it.";
-        String step3 = "> Okay, do you like repeating the things bots say?";
-        String step4 = "> Alright this was funny to begin with but now its gotten too far. next time you do that, im going to block you.";
-        String step5 = "> I warned you...";
-        if (command.message.getContent().equalsIgnoreCase(step1)) {
-            command.user.sendDm(step2);
+        String step1 = "Thank you for your message.";
+        String step2 = "That's what I just said, you don't have to repeat it.";
+        String step3 = "Okay, do you like repeating the things bots say?";
+        String step4 = "Alright this was funny to begin with but now its gotten too far. next time you do that, im going to block you.";
+        String step5 = "I warned you...";
+        if (command.message.getContent().toLowerCase().contains(step1.toLowerCase())) {
+            command.user.sendDm("\\> " + step2);
             return true;
         }
-        if (command.message.getContent().equalsIgnoreCase(step2)) {
-            command.user.sendDm(step3);
+        if (command.message.getContent().toLowerCase().contains(step2.toLowerCase())) {
+            command.user.sendDm("\\> " + step3);
             return true;
         }
-        if (command.message.getContent().equalsIgnoreCase(step3)) {
-            command.user.sendDm(step4);
+        if (command.message.getContent().toLowerCase().contains(step3.toLowerCase())) {
+            command.user.sendDm("\\> " + step4);
             return true;
         }
-        if (command.message.getContent().equalsIgnoreCase(step4)) {
-            command.user.sendDm(step5);
+        if (command.message.getContent().toLowerCase().contains(step4.toLowerCase())) {
+            command.user.sendDm("\\> " + step5);
             Globals.getGlobalData().getBlockedFromDMS().add(command.user.longID);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 Utility.sendStack(e);
             }
-            command.user.sendDm("> You were blocked.");
-            RequestHandler.sendMessage("> " + command.user.username + " was blocked for being a smart ass.", ownerDm);
+            command.user.sendDm("\\> You were blocked.");
+            RequestHandler.sendMessage("\\> " + command.user.username + " was blocked for being a smart ass.", ownerDm);
             return true;
         }
         return false;

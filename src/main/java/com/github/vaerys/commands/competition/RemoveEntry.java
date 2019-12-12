@@ -14,11 +14,11 @@ public class RemoveEntry extends Command {
         try {
             int entry = Integer.parseInt(args) - 1;
             CompObject didRemove = command.guild.competition.getEntries().remove(entry);
-            return "> Removed entry " + (entry + 1) + "\n<" + didRemove.getFileUrl() + ">";
+            return "\\> Removed entry " + (entry + 1) + "\n<" + didRemove.getFileUrl() + ">";
         } catch (NumberFormatException e) {
-            return "> Needs a valid number";
+            return "\\> Needs a valid number";
         } catch (IndexOutOfBoundsException e) {
-            return "> Could not find entry";
+            return "\\> Could not find entry";
         }
     }
 

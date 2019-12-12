@@ -94,7 +94,7 @@ public class GuildConfig extends GlobalFile {
     public int pinLimit = 25;
     public UserSetting defaultLevelMode = UserSetting.SEND_LVLUP_RANK_CHANNEL;
     public String levelUpReaction = "null";
-    public String levelUpMessage = "Ding. Gratz on level <level> <user>.";
+    public String levelUpMessage = "\\> Ding. Gratz on level <level> <user>.";
     public long ruleCodeRewardID = -1;
     String prefixCommand = Globals.defaultPrefixCommand;
     String prefixCC = Globals.defaultPrefixCC;
@@ -111,7 +111,7 @@ public class GuildConfig extends GlobalFile {
     // TODO: 04/10/2016 let the mention limit be customisable.
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     ArrayList<OffenderObject> offenders = new ArrayList<>();
-    private String joinMessage = "> Welcome to the <server> server <user>.";
+    private String joinMessage = "\\> Welcome to the <server> server <user>.";
     private DailyMessage lastDailyMessage = null;
     private ArrayList<String> xpDeniedPrefixes = new ArrayList<>();
     private String ruleCode = null;

@@ -18,7 +18,7 @@ public class EditServerName extends Command {
     public String execute(String args, CommandObject command) {
         ArrayList<String> splitArgs = new ArrayList<>(Arrays.asList(args.split(" ")));
         if (splitArgs.size() < 2) {
-            return "> Cannot Edit Server Name as no new name was specified.";
+            return "\\> Cannot Edit Server Name as no new name was specified.";
         }
         return command.guild.servers.editServerName(command.user.longID, splitArgs.get(0), splitArgs.get(1), command.guild.get());
     }

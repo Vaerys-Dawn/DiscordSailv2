@@ -13,12 +13,12 @@ public class SetPinLimit extends Command {
         try {
             int newMax = Integer.parseInt(args);
             if (newMax < 1 || newMax > 50) {
-                return "> Number must be between 1 and 50 inclusive.";
+                return "\\> Number must be between 1 and 50 inclusive.";
             }
             command.guild.config.setPinLimit(newMax);
-            return "> Pin Limit updated.";
+            return "\\> Pin Limit updated.";
         } catch (NumberFormatException e) {
-            return "> Not a valid number.";
+            return "\\> Not a valid number.";
         }
     }
 

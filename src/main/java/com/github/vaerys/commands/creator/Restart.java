@@ -18,7 +18,7 @@ public class Restart extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        RequestHandler.sendMessage("> Restarting.", command.channel.get());
+        RequestHandler.sendMessage("\\> Restarting.", command.channel.get());
         Utility.sendGlobalAdminLogging(this, args, command);
         try {
             Thread.sleep(4000);

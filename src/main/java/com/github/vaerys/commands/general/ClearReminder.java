@@ -23,12 +23,12 @@ public class ClearReminder extends Command {
         }
         if (object != null) {
             if (object.isSent()) {
-                return "> Cannot clear reminder, reminder about to be sent.";
+                return "\\> Cannot clear reminder, reminder about to be sent.";
             }
             Globals.getGlobalData().removeReminder(object);
-            return "> Reminder cleared";
+            return "\\> Reminder cleared";
         } else {
-            return "> You have no reminders set";
+            return "\\> You have no reminders set";
         }
     }
 

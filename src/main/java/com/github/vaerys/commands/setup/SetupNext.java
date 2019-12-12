@@ -11,7 +11,7 @@ public class SetupNext extends SetupCommand {
     @Override
     public String execute(String args, CommandObject command) {
         GuildConfig config = command.guild.config;
-        if (!SetupHandler.isRunningSetup(command.guild)) return "> You aren't running setup you nincompoop.";
+        if (!SetupHandler.isRunningSetup(command.guild)) return "\\> You aren't running setup you nincompoop.";
 
         // check if out of bounds.
         try {
@@ -19,14 +19,14 @@ public class SetupNext extends SetupCommand {
             SetupStage next = SetupStage.values()[config.setupStage.ordinal() + 1];
             if (next == SetupStage.SETUP_COMPLETE) {
                 config.setupStage = SetupStage.SETUP_COMPLETE;
-                return "> Congratulations! You're all done. Everything should be perfectly set up just the way you want it.";
+                return "\\> Congratulations! You're all done. Everything should be perfectly set up just the way you want it.";
             }
             // move to next stage
             SetupHandler.setSetupStage(command, next);
         } catch (ArrayIndexOutOfBoundsException e) {
             // stop them from actually breaking shit...
             config.setupStage = SetupStage.SETUP_COMPLETE;
-            return "> Congratulations! You're all done. Everything should be perfectly set up just the way you want it.";
+            return "\\> Congratulations! You're all done. Everything should be perfectly set up just the way you want it.";
         }
 
         // "log" step change.

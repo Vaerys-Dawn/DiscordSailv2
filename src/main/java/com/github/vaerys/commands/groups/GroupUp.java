@@ -31,7 +31,7 @@ public class GroupUp extends Command {
         for (GroupUpObject g : list) {
             if (command.user.longID == g.getUserID()) {
                 list.remove(g);
-                return "> You have been removed from the list.";
+                return "\\> You have been removed from the list.";
             }
         }
         list.add(new GroupUpObject(presence, command.user.longID));
@@ -65,7 +65,7 @@ public class GroupUp extends Command {
             }
         }
 
-        return "**> You have been added to the GroupUp list.**\n\n" + "Here are the others currently waiting:\n" +
+        return "**\\> You have been added to the GroupUp list.**\n\n" + "Here are the others currently waiting:\n" +
                 Utility.listFormatter(completeList, false) + "\n*To opt out simply run this command again*\n" +
 
                 missingArgs(command);

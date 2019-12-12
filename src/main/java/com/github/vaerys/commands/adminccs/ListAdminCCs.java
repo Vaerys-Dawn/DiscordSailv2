@@ -17,9 +17,9 @@ public class ListAdminCCs extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         List<AdminCCObject> adminCCs = command.guild.adminCCs.getCommands();
-        if (adminCCs.size() == 0) return "> There currently are no Admin Custom Commands right now, come back later.";
+        if (adminCCs.size() == 0) return "\\> There currently are no Admin Custom Commands right now, come back later.";
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle("> Here are all of the available Admin Custom Commands.");
+        builder.withTitle("\\> Here are all of the available Admin Custom Commands.");
         List<String> commandNames = adminCCs.stream().map(c -> c.getName(command)).collect(Collectors.toList());
         builder.withDesc("```\n" + Utility.listFormatter(commandNames, true) + "```");
         builder.send(command);

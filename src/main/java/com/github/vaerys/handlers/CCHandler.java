@@ -48,13 +48,13 @@ public class CCHandler {
 
         List<IChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
         if (ccDenied.contains(command.channel.get())) {
-            RequestHandler.sendMessage("> Custom Command usage has been disabled for this channel.", command.channel);
+            RequestHandler.sendMessage("\\> Custom Command usage has been disabled for this channel.", command.channel);
             return;
         }
 
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
-            RequestHandler.sendMessage("> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
+            RequestHandler.sendMessage("\\> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
             return;
         }
 
@@ -128,13 +128,13 @@ public class CCHandler {
 
         List<IChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
         if (ccDenied.contains(command.channel.get())) {
-            RequestHandler.sendMessage("> Custom Command usage has been disabled for this channel.", command.channel);
+            RequestHandler.sendMessage("\\> Custom Command usage has been disabled for this channel.", command.channel);
             return;
         }
 
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
-            RequestHandler.sendMessage("> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
+            RequestHandler.sendMessage("\\> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
             return;
         }
 

@@ -20,14 +20,14 @@ public class GetAvatar extends Command {
         if (user != null) {
             String message = user.displayName + ":\n" + user.get().getAvatarURL();
             if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
-                return "> User has set their profile to private.";
+                return "\\> User has set their profile to private.";
             } else if (user.isPrivateProfile(command.guild) && user.longID == command.user.longID) {
                 RequestHandler.sendMessage(message, user.get().getOrCreatePMChannel());
-                return "> Avatar sent to your direct messages.";
+                return "\\> Avatar sent to your direct messages.";
             }
             return message;
         } else {
-            return "> Could not find user.";
+            return "\\> Could not find user.";
         }
     }
 

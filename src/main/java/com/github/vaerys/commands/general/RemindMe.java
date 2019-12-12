@@ -23,14 +23,14 @@ public class RemindMe extends Command {
         StringHandler contents = new StringHandler(args);
         long timeSecs = Utility.getRepeatTimeValue(contents);
         if (timeSecs == -1) {
-            return "> Could not find a valid time value.\n" +
+            return "\\> Could not find a valid time value.\n" +
                     missingArgs(command);
         }
         if (timeSecs < 30) {
-            return "> You can't set a reminder for less than 30 seconds.";
+            return "\\> You can't set a reminder for less than 30 seconds.";
         }
         if (timeSecs > 60 * 24 * 365 * 60) {
-            return "> What are you doing... that reminder is set for over a year from now... you cant do that.";
+            return "\\> What are you doing... that reminder is set for over a year from now... you cant do that.";
         }
 
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
@@ -43,11 +43,11 @@ public class RemindMe extends Command {
         String timeValue = Utility.formatTime(timeSecs, true);
         switch (response) {
             case "MAX":
-                return "> You can only have " + maxSlots + " reminders.";
+                return "\\> You can only have " + maxSlots + " reminders.";
             case "INTERRUPTS":
-                return "> Reminders cannot be within 5 minutes of each other.";
+                return "\\> Reminders cannot be within 5 minutes of each other.";
             default:
-                return "> Reminder set for " + timeValue + " from now.";
+                return "\\> Reminder set for " + timeValue + " from now.";
         }
     }
 
@@ -60,11 +60,11 @@ public class RemindMe extends Command {
     public String description(CommandObject command) {
         return "Sets a Reminder for yourself, Limit 5 per user (10 for patrons).\n" +
                 "**Time**:\n" +
-                "> [Num]d - `Days`\n" +
-                "> [Num]h - `Hours`\n" +
-                "> [Num]m - `Minutes`\n" +
-                "> [Num]s - `Seconds`\n" +
-                "> Defaults to minutes if no suffix is applied.";
+                "\\> [Num]d - `Days`\n" +
+                "\\> [Num]h - `Hours`\n" +
+                "\\> [Num]m - `Minutes`\n" +
+                "\\> [Num]s - `Seconds`\n" +
+                "\\> Defaults to minutes if no suffix is applied.";
     }
 
     @Override

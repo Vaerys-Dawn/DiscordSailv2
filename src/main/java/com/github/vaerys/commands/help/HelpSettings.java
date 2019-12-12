@@ -14,7 +14,7 @@ public class HelpSettings extends Command {
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new HelpModules().getInfo(false, args, command);
         if (builder == null) {
-            return "> Could not find any settings named **" + args + "**.";
+            return "\\> Could not find any settings named **" + args + "**.";
         } else {
             RequestHandler.sendEmbedMessage("", builder, command.channel.get());
             return null;

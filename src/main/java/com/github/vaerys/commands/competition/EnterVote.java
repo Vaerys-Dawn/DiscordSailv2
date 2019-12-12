@@ -16,7 +16,7 @@ public class EnterVote extends Command {
         if (command.guild.config.compVoting) {
             return command.guild.competition.addVote(command.user.longID, args);
         } else {
-            return "> Competition Voting is closed.";
+            return "\\> Competition Voting is closed.";
         }
     }
 

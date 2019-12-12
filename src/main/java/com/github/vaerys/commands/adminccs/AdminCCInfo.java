@@ -22,7 +22,7 @@ public class AdminCCInfo extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         AdminCCObject cc = command.guild.adminCCs.getCommand(args);
-        if (cc == null) return "> Could not find Admin Custom Command.";
+        if (cc == null) return "\\> Could not find Admin Custom Command.";
 
         //get keys and their counts
         List<TriVar<Long, String, Long>> keys = cc.getPathKeys();
@@ -37,7 +37,7 @@ public class AdminCCInfo extends Command {
         }
 
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle(String.format("> Here is the information for the Admin Custom Command: %s", cc.getName()));
+        builder.withTitle(String.format("\\> Here is the information for the Admin Custom Command: %s", cc.getName()));
         UserObject creator = UserObject.getNewUserObject(cc.getCreatorID(), command.guild);
         StringHandler desc = new StringHandler("Creator: **@%s**\nTimes Run: **%d**\nSlots Used: **%d**", creator.username, cc.getTimesRun(), cc.getSlots(), cc.getPathKeys().size());
         if (cc.hasLimitTry()) {

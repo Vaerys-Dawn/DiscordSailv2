@@ -122,12 +122,12 @@ public class ArtHandler {
 
             String response;
             if (command.guild.config.autoArtPinning && reacted.longID == command.client.bot.longID) {
-                response = "> I have pinned **" + owner.displayName + "'s** art.";
+                response = "\\> I have pinned **" + owner.displayName + "'s** art.";
             } else {
                 if (owner.longID == reacted.longID) {
-                    response = "> **" + reacted.displayName + "** Has pinned their";
+                    response = "\\> **" + reacted.displayName + "** Has pinned their";
                 } else {
-                    response = "> **" + reacted.displayName + "** Has pinned **" + owner.displayName + "'s**";
+                    response = "\\> **" + reacted.displayName + "** Has pinned **" + owner.displayName + "'s**";
                 }
                 response += " art by reacting with the \uD83D\uDCCC emoji.";
             }

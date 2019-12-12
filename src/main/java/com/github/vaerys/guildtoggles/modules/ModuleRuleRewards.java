@@ -39,9 +39,9 @@ public class ModuleRuleRewards extends GuildModule {
     @Override
     public String desc(CommandObject command) {
         return "Allows users to guess a special code to receive special rewards.\n" +
-                "> A star on their profile.\n" +
-                "> " + (long) (200 * command.guild.config.xpModifier) + " Pixels if Pixels are enabled.\n" +
-                "> A Special Role if set up with **" + new SetRuleCodeReward().getUsage(command) + "**.";
+                "\\> A star on their profile.\n" +
+                "\\> " + (long) (200 * command.guild.config.xpModifier) + " Pixels if Pixels are enabled.\n" +
+                "\\> A Special Role if set up with **" + new SetRuleCodeReward().getUsage(command) + "**.";
     }
 
     @Override

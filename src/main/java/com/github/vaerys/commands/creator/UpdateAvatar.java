@@ -15,7 +15,7 @@ public class UpdateAvatar extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         Client.handleAvatars();
-        return "> Avatar Updated.";
+        return "\\> Avatar Updated.";
     }
 
     @Override

@@ -34,7 +34,7 @@ public class Competition extends GlobalFile {
 
     public String addVote(long voterID, String vote) {
         if (voterID == 137281607638843392L && vote.startsWith("-")) {
-            return "> Ha ha very funny dark, not this time.";
+            return "\\> Ha ha very funny dark, not this time.";
         }
         boolean userFound = false;
         int position = -1;
@@ -53,16 +53,16 @@ public class Competition extends GlobalFile {
             userVotes.add(Long.toUnsignedString(voterID));
         }
         if (userVotes.size() == voteLimit + 1) {
-            return "> You have already used up all of your votes.";
+            return "\\> You have already used up all of your votes.";
         }
         try {
             int voteNumber = Integer.parseInt(vote);
             if (voteNumber > entries.size() || voteNumber < 1) {
-                return "> Your vote was not counted because it was not a valid entry number.";
+                return "\\> Your vote was not counted because it was not a valid entry number.";
             }
             userVotes.add(vote);
         } catch (NumberFormatException e) {
-            return "> Your vote was not counted because it wasn't a number.";
+            return "\\> Your vote was not counted because it wasn't a number.";
         }
 
         StringBuilder finalVotes = new StringBuilder();
@@ -75,7 +75,7 @@ public class Competition extends GlobalFile {
         } else {
             voting.add(finalVotes.toString());
         }
-        return "> Thank you for voting.";
+        return "\\> Thank you for voting.";
     }
 
     public void purgeVotes() {

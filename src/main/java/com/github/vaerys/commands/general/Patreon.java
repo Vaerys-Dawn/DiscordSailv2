@@ -10,7 +10,7 @@ public class Patreon extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return "> https://www.patreon.com/DawnFelstar";
+        return "\\> https://www.patreon.com/DawnFelstar";
     }
 
     @Override

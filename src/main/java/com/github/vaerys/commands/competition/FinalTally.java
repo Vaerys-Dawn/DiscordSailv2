@@ -16,7 +16,7 @@ public class FinalTally extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         StringBuilder builder = new StringBuilder();
-        builder.append("> tally being performed.\n");
+        builder.append("\\> tally being performed.\n");
         ArrayList<String> votes = command.guild.competition.getVotes();
         int[] tally = new int[command.guild.competition.getEntries().size()];
         for (int i = 0; i < tally.length; i++) {

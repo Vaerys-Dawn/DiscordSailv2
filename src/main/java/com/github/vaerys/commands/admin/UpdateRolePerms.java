@@ -44,7 +44,7 @@ public class UpdateRolePerms extends Command {
             permList.add(p.toString());
         }
         RequestHandler.deleteMessage(workingMsg);
-        return "> Cosmetic Roles Perms set to : " + Utility.listFormatter(permList, true);
+        return "\\> Cosmetic Roles Perms set to : " + Utility.listFormatter(permList, true);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class PruneEmptyProfiles extends Command {
                 profileCount++;
             }
         }
-        return "> " + NumberFormat.getInstance().format(profileCount) + " empty profiles pruned.";
+        return "\\> " + NumberFormat.getInstance().format(profileCount) + " empty profiles pruned.";
     }
 
     @Override

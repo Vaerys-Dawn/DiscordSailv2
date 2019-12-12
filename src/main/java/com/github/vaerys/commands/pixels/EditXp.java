@@ -46,9 +46,9 @@ public class EditXp extends Command {
         boolean xpChanged = false;
 
         UserObject user = Utility.getUser(command, splitArgs[0], false);
-        if (user == null) return "> Could not find user.";
+        if (user == null) return "\\> Could not find user.";
         if (Utility.testUserHierarchy(user, command.user, command.guild)) {
-            return "> You do not have permission to edit " + user.displayName + "'s pixels.";
+            return "\\> You do not have permission to edit " + user.displayName + "'s pixels.";
         }
 
         long pixelAmount;
@@ -62,14 +62,14 @@ public class EditXp extends Command {
             }
         } catch (NumberFormatException e) {
             String value = isSubType(command) ? splitArgs[1] : splitArgs[2];
-            return "> **" + value + "** Not a valid Number.";
+            return "\\> **" + value + "** Not a valid Number.";
         }
-        if (pixelAmount < 0) return "> I don't know what negative pixels are. What are you trying to do?";
+        if (pixelAmount < 0) return "\\> I don't know what negative pixels are. What are you trying to do?";
         if (pixelAmount > Constants.PIXELS_CAP)
-            return "> That's too many pixels for me to be working with. (Max: " + Constants.PIXELS_CAP + ")";
+            return "\\> That's too many pixels for me to be working with. (Max: " + Constants.PIXELS_CAP + ")";
 
         ProfileObject profile = user.getProfile(command.guild);
-        if (profile == null) return "> " + user.displayName + " doesn't have a profile yet.";
+        if (profile == null) return "\\> " + user.displayName + " doesn't have a profile yet.";
 
         String out;
         if (SET_XP.isSubCommand(command)) {
@@ -101,7 +101,7 @@ public class EditXp extends Command {
                     xpChanged = true;
                     break;
                 default:
-                    out = "> Invalid modifier. Valid modifiers are **[+/-/=]** or **add/sub/set**";
+                    out = "\\> Invalid modifier. Valid modifiers are **[+/-/=]** or **add/sub/set**";
                     break;
             }
         }
@@ -119,14 +119,14 @@ public class EditXp extends Command {
         //pixels should never go over the pixel cap.
         if (profile.getXP() > Constants.PIXELS_CAP) {
             profile.setXp(Constants.PIXELS_CAP);
-            return "> Added **" + diff + "** pixels to **" + user.displayName + "**. They are now at the Pixel cap.";
+            return "\\> Added **" + diff + "** pixels to **" + user.displayName + "**. They are now at the Pixel cap.";
         }
-        return "> Added **" + pixelAmount + "** pixels to **" + user.displayName + "**.";
+        return "\\> Added **" + pixelAmount + "** pixels to **" + user.displayName + "**.";
     }
 
     private String setXp(ProfileObject profile, long pixelAmount, UserObject user) {
         profile.setXp(pixelAmount);
-        return "> Set Pixels to **" + pixelAmount + "** for user **" + user.displayName + "**.";
+        return "\\> Set Pixels to **" + pixelAmount + "** for user **" + user.displayName + "**.";
     }
 
     private String delXp(ProfileObject profile, long pixelAmount, UserObject user) {
@@ -135,7 +135,7 @@ public class EditXp extends Command {
         if (profile.getXP() < 0) {
             long diff = pixelAmount + profile.getXP();
             profile.setXp(0);
-            return "> Removed **" + diff + "** Pixels from **" + user.displayName + "**. They no longer have any pixels.";
+            return "\\> Removed **" + diff + "** Pixels from **" + user.displayName + "**. They no longer have any pixels.";
         }
         return "> Removed **" + pixelAmount + "** pixels from **" + user.displayName + "**.";
     }
@@ -164,9 +164,9 @@ public class EditXp extends Command {
     @Override
     public String description(CommandObject command) {
         String modifiers = "\n**Modifiers**:\n" +
-                "> +/add - `Add [Pixels] pixels.`\n" +
-                "> -/sub - `Remove [Pixels] pixels.`\n" +
-                "> =/set - `Set pixels to [Pixels].`\n";
+                "\\> +/add - `Add [Pixels] pixels.`\n" +
+                "\\> -/sub - `Remove [Pixels] pixels.`\n" +
+                "\\> =/set - `Set pixels to [Pixels].`\n";
         return "Allows you to add or remove pixels from a user." + modifiers;
     }
 

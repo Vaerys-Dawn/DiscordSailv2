@@ -17,7 +17,7 @@ public class WeightedFinalTally extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (!command.guild.config.modulePixels)
-            return "> Weighted final tally should only be used if the pixel module is enabled, please use **"
+            return "\\> Weighted final tally should only be used if the pixel module is enabled, please use **"
                     + get(FinalTally.class).getUsage(command) + "** instead.";
         Map<Long, Long> entryVotes = new HashMap<>();
         long totalEntries = 0;
@@ -48,7 +48,7 @@ public class WeightedFinalTally extends Command {
             }
         }
         builder.append("**Total Weighted Votes\n**");
-        entryVotes.forEach((k, v) -> builder.append("> Entry " + k + ": " + v + " Votes.\n"));
+        entryVotes.forEach((k, v) -> builder.append("\\> Entry " + k + ": " + v + " Votes.\n"));
         builder.append("Total votes: " + totalVotes + ".\n");
         builder.append("Total Entries: " + totalEntries + ".");
         return builder.toString();

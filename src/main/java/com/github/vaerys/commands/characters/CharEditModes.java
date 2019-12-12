@@ -26,12 +26,12 @@ public class CharEditModes {
         if (command.user.isPatron) maxChars += maxChars;
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
-            return "> Character age length must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+            return "\\> Character age length must be under " + maxChars + " characters. " + getOverDraw(overDraw);
         } else if (args.contains("\n")) {
-            return "> Character age cannot contain newlines.";
+            return "\\> Character age cannot contain newlines.";
         } else {
             character.setAge(args);
-            return "> Age Updated";
+            return "\\> Age Updated";
         }
     }
 
@@ -40,12 +40,12 @@ public class CharEditModes {
         if (command.user.isPatron) maxChars += maxChars;
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
-            return "> Gender Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+            return "\\> Gender Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
         } else if (args.contains("\n")) {
-            return "> Character gender cannot contain newlines.";
+            return "\\> Character gender cannot contain newlines.";
         } else {
             character.setGender(args);
-            return "> Gender Updated";
+            return "\\> Gender Updated";
         }
     }
 
@@ -54,12 +54,12 @@ public class CharEditModes {
         if (command.user.isPatron) maxChars += maxChars;
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
-            return "> Character height Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+            return "\\> Character height Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
         } else if (args.contains("\n")) {
-            return "> Character height cannot contain newlines.";
+            return "\\> Character height cannot contain newlines.";
         } else {
             character.setHeight(args);
-            return "> Height Updated";
+            return "\\> Height Updated";
         }
     }
 
@@ -68,19 +68,20 @@ public class CharEditModes {
         if (command.user.isPatron) maxChars += maxChars;
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
-            return "> Character weight Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+            return "\\> Character weight Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
         } else if (args.contains("\n")) {
-            return "> Character weight cannot contain newlines.";
+            return "\\> Character weight cannot contain newlines.";
         } else {
             character.setWeight(args);
-            return "> Weight Updated";
+            return "\\> Weight Updated";
         }
     }
 
     public static String avatar(String args, CharacterObject character, CommandObject command) {
         if (args.contains(" ") || args.contains("\n")) {
-            return "> Image URL specified is invalid.";
+            return "\\> Image URL specified is invalid.";
         }
+        if (args.length() > 128) return "\\> The URL you have used is too long, please use a shorter link. (Max 128 chars)";
         if (args == null || args.isEmpty()) {
             if (command.message.getAttachments().size() != 0) {
                 args = command.message.getAttachments().get(0).getUrl();
@@ -88,9 +89,9 @@ public class CharEditModes {
         }
         if (Utility.isImageLink(args)) {
             character.setAvatarURL(args);
-            return "> Character Avatar Updated.";
+            return "\\> Character Avatar Updated.";
         } else {
-            return "> Image URL specified is invalid.";
+            return "\\> Image URL specified is invalid.";
         }
     }
 
@@ -104,13 +105,13 @@ public class CharEditModes {
         long newlineCount = StringUtils.countMatches(args, "\n");
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
-            return "> Character Description must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+            return "\\> Character Description must be under " + maxChars + " characters. " + getOverDraw(overDraw);
         } else if (newlineCount > maxNewlines) {
             long overdraw = newlineCount - maxNewlines;
-            return "> Character Description has too many Newline characters (over by " + overdraw + " newlines)";
+            return "\\> Character Description has too many Newline characters (over by " + overdraw + " newlines)";
         } else {
             character.setShortBio(args);
-            return "> Description Updated.";
+            return "\\> Description Updated.";
         }
     }
 
@@ -119,29 +120,29 @@ public class CharEditModes {
             new URL(args);
             if (Utility.checkURL(args)) {
                 character.setLongBioURL(args);
-                return "> Long Desc Link updated.";
+                return "\\> Long Desc Link updated.";
             } else {
-                return "> Specified URL is invalid.";
+                return "\\> Specified URL is invalid.";
             }
         } catch (MalformedURLException e) {
-            return "> Specified URL is invalid.";
+            return "\\> Specified URL is invalid.";
         }
     }
 
     public static String name(String args, CharacterObject character) {
         if (args.length() > 32 || args.length() < 2) {
-            return "> Character Name must between 2 and 32 chars.";
+            return "\\> Character Name must between 2 and 32 chars.";
         }
         if (args.contains("\n")) {
-            return "> Character cannot contain newlines.";
+            return "\\> Character cannot contain newlines.";
         }
         character.setNickname(args);
-        return "> Character Name Updated.";
+        return "\\> Character Name Updated.";
     }
 
     public static String roles(CommandObject command, CharacterObject c) {
         List<IRole> cosmetics = command.user.roles.stream().filter(r -> command.guild.config.isRoleCosmetic(r.getLongID())).collect(Collectors.toList());
         c.update(c.getName(), cosmetics);
-        return "> Character Roles Updated.";
+        return "\\> Character Roles Updated.";
     }
 }

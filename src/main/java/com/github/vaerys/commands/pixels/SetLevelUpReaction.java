@@ -20,19 +20,19 @@ public class SetLevelUpReaction extends Command {
         IEmoji customEmoji = null;
         if (args.equalsIgnoreCase("Remove")) {
             command.guild.config.levelUpReaction = "null";
-            return "> Level Up reaction was removed.";
+            return "\\> Level Up reaction was removed.";
         }
         if (messageTokenizer.hasNextEmoji()) {
             customEmoji = messageTokenizer.nextEmoji().getEmoji();
         }
         if (emoji == null && customEmoji == null) {
-            return "> Not a valid Emoji.";
+            return "\\> Not a valid Emoji.";
         } else if (emoji != null) {
             command.guild.config.levelUpReaction = emoji.getUnicode();
-            return "> The message a user sent to level up will now be reacted with " + emoji.getUnicode() + ".";
+            return "\\> The message a user sent to level up will now be reacted with " + emoji.getUnicode() + ".";
         } else {
             command.guild.config.levelUpReaction = customEmoji.getStringID();
-            return "> The message a user sent to level up will now be reacted with " + customEmoji.toString() + ".";
+            return "\\> The message a user sent to level up will now be reacted with " + customEmoji.toString() + ".";
         }
     }
 

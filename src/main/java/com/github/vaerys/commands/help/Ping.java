@@ -15,7 +15,7 @@ public class Ping extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return "Pong! " + NumberFormat.getInstance().format(command.client.get().getShards().get(0).getResponseTime()) + "ms";
+        return "\\> Pong! " + NumberFormat.getInstance().format(command.client.get().getShards().get(0).getResponseTime()) + "ms";
     }
 
     @Override

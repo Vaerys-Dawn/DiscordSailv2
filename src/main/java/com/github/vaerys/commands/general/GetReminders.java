@@ -21,7 +21,7 @@ public class GetReminders extends Command {
     public String execute(String args, CommandObject command) {
         List<ReminderObject> reminders = Globals.getGlobalData().getRemindersUser(command.user.longID);
 
-        if (reminders.size() == 0) return "> You have no reminders set.";
+        if (reminders.size() == 0) return "\\> You have no reminders set.";
 
         XEmbedBuilder embed = new XEmbedBuilder(command);
         int i = 1;
@@ -49,7 +49,7 @@ public class GetReminders extends Command {
             i++;
         }
         i--;   // oh of course
-        embed.withTitle( String.format("> You have %d Reminder%s:", i, (i==1) ? "":"s" ) );
+        embed.withTitle( String.format("\\> You have %d Reminder%s:", i, (i==1) ? "":"s" ) );
         embed.send(command);
         return null;
     }

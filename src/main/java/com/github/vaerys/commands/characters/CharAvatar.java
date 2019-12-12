@@ -14,7 +14,7 @@ public class CharAvatar extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         CharacterObject charObject = command.guild.characters.getCharByName(args.split(" ")[0]);
-        if (charObject == null) return "> Could not find any characters with that Character ID.";
+        if (charObject == null) return "\\> Could not find any characters with that Character ID.";
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(charObject.getNickname());
         IUser user = command.guild.getUserByID(charObject.getUserID());
@@ -28,7 +28,7 @@ public class CharAvatar extends Command {
             builder.withColor(charObject.getColor(command.guild));
         }
         if (charObject.getAvatarURL() == null || charObject.getAvatarURL().isEmpty())
-            return "> " + charObject.getNickname() + " Does not have an avatar set up.";
+            return "\\> " + charObject.getNickname() + " Does not have an avatar set up.";
         builder.withImage(charObject.getAvatarURL());
         builder.send(command.channel);
         return "";

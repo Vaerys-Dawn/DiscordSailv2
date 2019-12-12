@@ -20,13 +20,13 @@ public class BlockUser extends DMCommand {
         }
         GlobalData globalData = Globals.getGlobalData();
         if (userId == Globals.creatorID) {
-            return "> What are you doing. Don't try to block yourself.";
+            return "\\> What are you doing. Don't try to block yourself.";
         }
         if (command.client.get().fetchUser(userId) != null) {
             globalData.blockUserFromDMS(userId);
-            return "> User was blocked";
+            return "\\> User was blocked";
         }
-        return "> Could not find a valid userID";
+        return "\\> Could not find a valid userID";
     }
 
     @Override

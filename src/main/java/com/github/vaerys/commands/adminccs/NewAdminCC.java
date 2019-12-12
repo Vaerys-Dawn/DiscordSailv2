@@ -34,13 +34,13 @@ public class NewAdminCC extends Command {
 
         SplitFirstObject object = new SplitFirstObject(args);
         if (object.getFirstWord().length() > 50) {
-            return "> Cannot create Admin CC, Command name length too long. (Max Chars 50)";
+            return "\\> Cannot create Admin CC, Command name length too long. (Max Chars 50)";
         }
         if (object.getFirstWord().contains("\n")) {
-            return "> Cannot create Admin CC, Command name contains Newlines.";
+            return "\\> Cannot create Admin CC, Command name contains Newlines.";
         }
         if (command.guild.adminCCs.commandExists(object.getFirstWord())) {
-            return "> Command name already in use.";
+            return "\\> Command name already in use.";
         }
 
         StringHandler contents = getContents(command, object.getRest());
@@ -48,20 +48,20 @@ public class NewAdminCC extends Command {
 
         switch (response) {
             case EMPTY_CONTENTS:
-                return "> Cannot create Admin CC, Contents is empty.";
+                return "\\> Cannot create Admin CC, Contents is empty.";
             case TOO_MANY_EMBEDS:
-                return "> Cannot create Admin CC, Contents contains more than one <embedImage> tag.";
+                return "\\> Cannot create Admin CC, Contents contains more than one <embedImage> tag.";
             case NOT_ENOUGH_SLOTS:
-                return "> This server has already hit the limit on how many Admin Custom Commands it can hold, you will need to delete or edit old commands to make room.";
+                return "\\> This server has already hit the limit on how many Admin Custom Commands it can hold, you will need to delete or edit old commands to make room.";
             case OVERLOADS_SLOTS:
-                return "> There are not enough slots left for you to create this Admin Custom Command. The length of the command is too long.";
+                return "\\> There are not enough slots left for you to create this Admin Custom Command. The length of the command is too long.";
         }
 
         AdminCCObject cc = command.guild.adminCCs.addCommand(command, object.getFirstWord(), contents.toString());
 
 
         int remainder = (20 - command.guild.adminCCs.getUsedSlots());
-        return String.format("> New Admin Custom Command Created, you can run the new command by performing `%s`. (%d Admin CC slot%s remain)",
+        return String.format("\\> New Admin Custom Command Created, you can run the new command by performing `%s`. (%d Admin CC slot%s remain)",
                 cc.getName(command), remainder, remainder != 1 ? "s" : "");
     }
 

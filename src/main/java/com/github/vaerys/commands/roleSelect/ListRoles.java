@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ListRoles extends Command {
 
     public static XEmbedBuilder getList(CommandObject command) {
-        String title = "> Here are the Cosmetic roles you can choose from:";
+        String title = "\\> Here are the Cosmetic roles you can choose from:";
         List<String> list = command.guild.getCosmeticRoles().stream().map(iRole -> iRole.getName()).collect(Collectors.toList());
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.withTitle(title);
@@ -29,7 +29,7 @@ public class ListRoles extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         if (command.guild.config.getCosmeticRoleIDs().size() == 0)
-            return "> No Cosmetic roles are set up right now. Come back later.";
+            return "\\> No Cosmetic roles are set up right now. Come back later.";
         RequestHandler.sendEmbedMessage("", getList(command), command.channel.get());
         return null;
     }

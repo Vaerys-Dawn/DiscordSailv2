@@ -12,10 +12,10 @@ public class ResetTries extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         AdminCCObject cc = command.guild.adminCCs.getCommand(args);
-        if (cc == null) return "> Could not find Admin Custom Command.";
+        if (cc == null) return "\\> Could not find Admin Custom Command.";
         command.guild.adminCCs.removeTries(cc);
         cc.removeAllKeys();
-        return "> Attempts for this command have been reset.";
+        return "\\> Attempts for this command have been reset.";
     }
 
     @Override

@@ -14,7 +14,7 @@ public class ClearGroupUp extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         command.guild.channelData.getGroupUpObjects().clear();
-        return "> GroupUp list cleared.";
+        return "\\> GroupUp list cleared.";
     }
 
     @Override

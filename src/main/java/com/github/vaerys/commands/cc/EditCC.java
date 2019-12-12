@@ -33,7 +33,7 @@ public class EditCC extends Command {
     public String execute(String args, CommandObject command) {
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
-            return "> " + command.user.mention() + ", You have been denied the modification of custom commands.";
+            return "\\> " + command.user.mention() + ", You have been denied the modification of custom commands.";
         }
         SplitFirstObject getName = new SplitFirstObject(args);
         String rest = getName.getRest();
@@ -48,7 +48,7 @@ public class EditCC extends Command {
                 }
                 rest += "<embedImage>{" + testLink + "}";
             } else {
-                return "> Custom command attachment must be a valid Image.";
+                return "\\> Custom command attachment must be a valid Image.";
             }
         }
         SplitFirstObject getMode = new SplitFirstObject(rest);
@@ -56,16 +56,16 @@ public class EditCC extends Command {
         String content = getMode.getRest();
         CCommandObject customCommand = command.guild.customCommands.getCommand(getName.getFirstWord());
         if (customCommand == null) {
-            return "> Command Not found.";
+            return "\\> Command Not found.";
         }
         boolean canBypass = GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES);
         boolean isAuthor = command.user.longID == customCommand.getUserID();
         //test if can edit
         if ((customCommand.isLocked() && !canBypass) || (!canBypass && !isAuthor)) {
-            return "> You do not have permission to edit this command.";
+            return "\\> You do not have permission to edit this command.";
         }
         if (customCommand.isLocked() && !canBypass) {
-            return "> This command is locked and cannot be edited.";
+            return "\\> This command is locked and cannot be edited.";
         }
         switch (mode.toLowerCase()) {
             case "replace":

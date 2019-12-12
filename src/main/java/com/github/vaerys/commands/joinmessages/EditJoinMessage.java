@@ -23,24 +23,24 @@ public class EditJoinMessage extends Command {
         try {
             index = Integer.parseInt(splitArgs.getFirstWord());
         } catch (NumberFormatException e) {
-            return "> Not a valid number.";
+            return "\\> Not a valid number.";
         }
         index--;
         if (index < 0 || index >= messages.size()) {
-            return "> Could not find message.";
+            return "\\> Could not find message.";
         }
         if (splitArgs.getRest() == null) {
-            return "> Could not find any content to edit with.";
+            return "\\> Could not find any content to edit with.";
         }
-        if (!splitArgs.getRest().contains("<user>")) return "> Could not find <user> tag.";
+        if (!splitArgs.getRest().contains("<user>")) return "\\> Could not find <user> tag.";
         for (JoinMessage m : messages) {
             if (m.getContent().equals(splitArgs.getRest())) {
-                return "> New Contents matches another Custom join message's contents, cannot have duplicate messages.";
+                return "\\> New Contents matches another Custom join message's contents, cannot have duplicate messages.";
             }
         }
         JoinMessage message = messages.get(index);
         message.setContent(splitArgs.getRest());
-        return "> Contents edited.";
+        return "\\> Contents edited.";
     }
 
     @Override

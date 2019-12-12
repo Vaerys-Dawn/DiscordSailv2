@@ -18,7 +18,7 @@ public class WhatsMyColour extends Command {
         UserObject user = command.user;
         if (args != null && !args.isEmpty()) {
             user = Utility.getUser(command, args, true, false);
-            if (user == null) return "> Could not find user.";
+            if (user == null) return "\\> Could not find user.";
         }
         boolean notAuthor = user.longID != command.user.longID;
         Color color = user.getRandomColour();

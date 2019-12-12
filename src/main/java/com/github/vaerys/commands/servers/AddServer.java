@@ -22,7 +22,7 @@ public class AddServer extends Command {
             port = splitArgs.get(2);
         }
         if (splitArgs.size() < 2) {
-            return "> Cannot create server, Missing IP";
+            return "\\> Cannot create server, Missing IP";
         }
         return command.guild.servers.addServer(command.user.longID, splitArgs.get(0), splitArgs.get(1), port);
     }

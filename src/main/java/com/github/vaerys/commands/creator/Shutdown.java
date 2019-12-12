@@ -18,7 +18,7 @@ public class Shutdown extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        RequestHandler.sendMessage("> Shutting Down.", command.channel.get());
+        RequestHandler.sendMessage("\\> Shutting Down.", command.channel.get());
         Utility.sendGlobalAdminLogging(this, args, command);
         try {
             Thread.sleep(4000);

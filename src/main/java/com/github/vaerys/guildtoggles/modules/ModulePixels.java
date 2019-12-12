@@ -46,12 +46,12 @@ public class ModulePixels extends GuildModule {
             return "Error, you should not get this message. if you do please report this to the bot developer.";
         }
         return "This module enables **" + command.client.bot.displayName + "'s** XP system known as pixels.\n" +
-                "> Pixels are a xp system that allows the **granting of roles** at certain levels.\n" +
-                "> When a user levels up a **level up message** will be sent to them based on specific settings.\n" +
-                "> Level up messages can be **customised completely**, from where they are sent by default to the text that they send.\n" +
-                "> Pixels are able to be granted **once per minute** to users when they send messages.\n" +
-                "> The amount of pixels that are given per chunk can be customised via a **settable multiplier**.\n" +
-                "> An optional **decay system** also exists to remove pixels from users who become inactive.\n\n" +
+                "\\> Pixels are a xp system that allows the **granting of roles** at certain levels.\n" +
+                "\\> When a user levels up a **level up message** will be sent to them based on specific settings.\n" +
+                "\\> Level up messages can be **customised completely**, from where they are sent by default to the text that they send.\n" +
+                "\\> Pixels are able to be granted **once per minute** to users when they send messages.\n" +
+                "\\> The amount of pixels that are given per chunk can be customised via a **settable multiplier**.\n" +
+                "\\> An optional **decay system** also exists to remove pixels from users who become inactive.\n\n" +
                 "**Stats:**\n" +
                 "To see stats of this module you will need to run either the **" + new GetGuildInfo().getCommand(command) +
                 "** or **" + new PixelHelp().getCommand(command) + "** commands.\nThe **" + new PixelHelp().getCommand(command) + "** command will also give you a lot more information about this module.";

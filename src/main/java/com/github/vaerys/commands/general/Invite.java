@@ -13,7 +13,7 @@ public class Invite extends Command {
     public String execute(String args, CommandObject command) {
         String user = command.user.displayName;
         String bot = command.client.bot.displayName;
-        return String.format("> Hello %s, %s is currently still in beta and as such inviting the bot to your server " +
+        return String.format("\\> Hello %s, %s is currently still in beta and as such inviting the bot to your server " +
                 "requires Developer help.\n\nIf you wish to get %s on your server you will need to " +
                 "contact %s on the support server which you can find here: <https://discord.gg/XSyQQrR>",
                 user, bot, bot, Globals.getCreator().getName());

@@ -12,9 +12,9 @@ public class Echo extends DMCommand {
     public String execute(String args, CommandObject command) {
         IUser recipient = command.client.get().getUserByID(Globals.lastDmUserID);
         if (recipient != null) {
-            return Respond.sendDM(args, command, recipient, "> ");
+            return Respond.sendDM(args, command, recipient, "\\> ");
         } else {
-            return "> no user to respond to.";
+            return "\\> no user to respond to.";
         }
     }
 

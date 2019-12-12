@@ -31,7 +31,7 @@ public class EventSetup extends Command {
             return null;
         }
         if (eventName.getRest() == null) {
-            return "> Missing Mode.\n" + getModes();
+            return "\\> Missing Mode.\n" + getModes();
         }
         for (TimedEvent t : Globals.getEvents()) {
             if (t.getEventName().equalsIgnoreCase(eventName.getFirstWord())) {
@@ -40,11 +40,11 @@ public class EventSetup extends Command {
         }
         if (event == null && eventName.getRest().equalsIgnoreCase("Create")) {
             Globals.getEvents().add(new TimedEvent(eventName.getFirstWord()));
-            return "> Event Created.";
+            return "\\> Event Created.";
         } else {
             SplitFirstObject mode = new SplitFirstObject(eventName.getRest());
             if (event == null) {
-                return "> Event does not exist yet.";
+                return "\\> Event does not exist yet.";
             }
             String output = doModes(event, mode, command);
             event.sanitizeDates();

@@ -16,25 +16,25 @@ public class EditAdminCC extends Command {
         SplitFirstObject object = new SplitFirstObject(args);
 
         AdminCCObject cc = command.guild.adminCCs.getCommand(object.getFirstWord());
-        if (cc == null) return "> Could not find any admin custom commands with that name.";
+        if (cc == null) return "\\> Could not find any admin custom commands with that name.";
 
         StringHandler contents = NewAdminCC.getContents(command, object.getRest());
         NewAdminCC.ResponseCode response = NewAdminCC.testContents(command, contents, cc);
 
         switch (response) {
             case EMPTY_CONTENTS:
-                return "> Cannot edit Admin CC, Contents is empty.";
+                return "\\> Cannot edit Admin CC, Contents is empty.";
             case TOO_MANY_EMBEDS:
-                return "> Cannot edit Admin CC, Contents contains more than one <embedImage> tag.";
+                return "\\> Cannot edit Admin CC, Contents contains more than one <embedImage> tag.";
             case NOT_ENOUGH_SLOTS:
-                return "> This message should never run, but if you did get this message it means you somehow have gone over the slot limit for Admin Custom Commands.";
+                return "\\> This message should never run, but if you did get this message it means you somehow have gone over the slot limit for Admin Custom Commands.";
             case OVERLOADS_SLOTS:
-                return "> There are not enough slots left for you to edit this Admin Custom Command. The new length of the command is too long.";
+                return "\\> There are not enough slots left for you to edit this Admin Custom Command. The new length of the command is too long.";
         }
 
         cc.setContents(contents.toString());
         int remainder = (20 - command.guild.adminCCs.getUsedSlots());
-        return String.format("> Admin custom command contents updated. (%d Admin CC slot%s remain)", remainder, remainder != 1 ? "s" : "");
+        return String.format("\\> Admin custom command contents updated. (%d Admin CC slot%s remain)", remainder, remainder != 1 ? "s" : "");
     }
 
     @Override

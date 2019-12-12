@@ -22,11 +22,11 @@ public class AddProfile extends Command {
             }
         }
         if (command.guild.users.getUserByID(user.getLongID()) != null) {
-            return "> " + user.getDisplayName(command.guild.get()) + " already has a profile.";
+            return "\\> " + user.getDisplayName(command.guild.get()) + " already has a profile.";
         }
-        if (user == null) return "> Invalid UserID";
+        if (user == null) return "\\> Invalid UserID";
         command.guild.users.addUser(user.getLongID());
-        return "> Profile for **" + user.getDisplayName(command.guild.get()) + "** Created.";
+        return "\\> Profile for **" + user.getDisplayName(command.guild.get()) + "** Created.";
     }
 
     @Override

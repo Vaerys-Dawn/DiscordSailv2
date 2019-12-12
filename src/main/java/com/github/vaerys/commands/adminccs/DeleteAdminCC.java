@@ -12,9 +12,9 @@ public class DeleteAdminCC extends Command {
     public String execute(String args, CommandObject command) {
         if (command.guild.adminCCs.commandExists(args)){
             command.guild.adminCCs.removeCommand(args);
-            return "> Admin Custom Command Deleted.";
+            return "\\> Admin Custom Command Deleted.";
         }else {
-            return "> Could not find any admin custom commands with that name.";
+            return "\\> Could not find any admin custom commands with that name.";
         }
     }
 

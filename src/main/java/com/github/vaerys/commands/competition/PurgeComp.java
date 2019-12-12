@@ -15,7 +15,7 @@ public class PurgeComp extends Command {
     public String execute(String args, CommandObject command) {
         command.guild.competition.purgeEntries();
         command.guild.competition.purgeVotes();
-        return "> Purge Complete.";
+        return "\\> Purge Complete.";
     }
 
     @Override

@@ -79,10 +79,10 @@ public class ModNote extends Command {
         if (opts == null || opts.isEmpty()) opts = "list";
 
         UserObject user = Utility.getUser(command, userCall, false, true);
-        if (user == null) return "> Could not find user.";
+        if (user == null) return "\\> Could not find user.";
 
         ProfileObject profile = user.getProfile(command.guild);
-        if (profile == null) return "> No profile found for " + user.displayName + ".";
+        if (profile == null) return "\\> No profile found for " + user.displayName + ".";
 
         long timestamp = command.message.getTimestampZone().toEpochSecond();
         String mode = new SplitFirstObject(opts.trim()).getFirstWord().toLowerCase();
@@ -108,13 +108,13 @@ public class ModNote extends Command {
                 String modeIdx = new SplitFirstObject(modeOpts).getFirstWord();
                 index = Integer.parseInt(modeIdx);
                 if (profile.modNotes == null || profile.modNotes.size() == 0) {
-                    return "> " + user.displayName + " doesn't have any notes yet.";
+                    return "\\> " + user.displayName + " doesn't have any notes yet.";
                 }
                 if (index <= 0 || index > profile.modNotes.size()) {
-                    return "> Index out of bounds.";
+                    return "\\> Index out of bounds.";
                 }
             } catch (NumberFormatException e) {
-                return "> I wasn't able to understand what you asked me.";
+                return "\\> I wasn't able to understand what you asked me.";
             }
 
             // cache modNotes list
@@ -125,7 +125,7 @@ public class ModNote extends Command {
                     String newNote = new SplitFirstObject(modeOpts).getRest();
 
                     modNotes.get(index - 1).editNote(newNote, command.user.longID, timestamp);
-                    return "> Note #" + index + " edited for user " + user.displayName + ".";
+                    return "\\> Note #" + index + " edited for user " + user.displayName + ".";
 
                 // "info" mode
                 case "info":
@@ -137,10 +137,10 @@ public class ModNote extends Command {
                     boolean strike = modNotes.get(index - 1).getStrike();
                     if (strike) {
                         modNotes.get(index - 1).setStrike(false);
-                        return "> Strike cleared for note " + index + " for user " + user.displayName + ".";
+                        return "\\> Strike cleared for note " + index + " for user " + user.displayName + ".";
                     } else {
                         modNotes.get(index - 1).setStrike(true);
-                        return "> Strike set for note " + index + " for user " + user.displayName + ".";
+                        return "\\> Strike set for note " + index + " for user " + user.displayName + ".";
                     }
 
                     // "delete" command
@@ -149,19 +149,19 @@ public class ModNote extends Command {
                 case "remove":
                 case "rem":
                     modNotes.remove(index - 1);
-                    return "> Note #" + index + " for " + user.displayName + " deleted.";
+                    return "\\> Note #" + index + " for " + user.displayName + " deleted.";
             }
         } else {
             if (profile.modNotes == null) profile.modNotes = new LinkedList<>();
             profile.modNotes.add(new ModNoteObject(opts, command.user.longID, timestamp));
-            return String.format("> Note added for %s at index %d.", user.displayName, profile.modNotes.size());
+            return String.format("\\> Note added for %s at index %d.", user.displayName, profile.modNotes.size());
         }
-        return "> This code should be unreachable.";
+        return "\\> This code should be unreachable.";
     }
 
     private String createListEmbed(ProfileObject user, CommandObject command) {
         if (user.modNotes == null || user.modNotes.size() == 0) {
-            return "> " + user.getUser(command.guild).displayName + " doesn't have any notes yet.";
+            return "\\> " + user.getUser(command.guild).displayName + " doesn't have any notes yet.";
         }
 
         UserObject userObject = user.getUser(command.guild);
@@ -239,11 +239,11 @@ public class ModNote extends Command {
     public String description(CommandObject command) {
         return "Allows staff members to create and manage notes about users\n\n" +
                 "**Modes**\n" +
-                "> `list` - List any notes attached to **[@User]**.\n" +
-                "> `edit [index] [new note]` - Edit an existing note.\n" +
-                "> `strike [index]` - Toggle the strike status of an existing note.\n" +
-                "> `info [index]` - Show details of a specific note.\n" +
-                "> `delete [index]` - Remove an existing note.\n";
+                "\\> `list` - List any notes attached to **[@User]**.\n" +
+                "\\> `edit [index] [new note]` - Edit an existing note.\n" +
+                "\\> `strike [index]` - Toggle the strike status of an existing note.\n" +
+                "\\> `info [index]` - Show details of a specific note.\n" +
+                "\\> `delete [index]` - Remove an existing note.\n";
     }
 
     @Override

@@ -24,7 +24,7 @@ public class InfoEditModes {
 
     public static String uploadFile(CommandObject command) {
         if (command.message.getAttachments() == null || command.message.getAttachments().size() == 0) {
-            return "> No file to upload found.";
+            return "\\> No file to upload found.";
         } else {
             try {
                 IMessage.Attachment attachment = command.message.getAttachments().get(0);
@@ -33,7 +33,7 @@ public class InfoEditModes {
                 File[] imageList = imagDir.listFiles();
 
                 if (!Utility.isImageLink(attachment.getFilename())) {
-                    return "> Cannot upload File. File type is invalid.";
+                    return "\\> Cannot upload File. File type is invalid.";
                 }
 
                 //grab file
@@ -46,20 +46,20 @@ public class InfoEditModes {
                     file.delete();
                     Files.copy(stream, Paths.get(file.getPath()));
                     stream.close();
-                    return "> File **" + attachment.getFilename() + "** updated";
+                    return "\\> File **" + attachment.getFilename() + "** updated";
                 } else {
                     if (imageList.length >= 25) {
                         stream.close();
-                        return "> Max images already reached, you will need to remove an old image to upload a new one.";
+                        return "\\> Max images already reached, you will need to remove an old image to upload a new one.";
                     } else {
                         Files.copy(stream, Paths.get(file.getPath()));
                         stream.close();
-                        return "> File **" + attachment.getFilename() + "** uploaded";
+                        return "\\> File **" + attachment.getFilename() + "** uploaded";
                     }
                 }
             } catch (IOException e) {
                 Utility.sendStack(e);
-                return "> An error occurred trying to upload your file.";
+                return "\\> An error occurred trying to upload your file.";
             }
         }
     }
@@ -70,16 +70,16 @@ public class InfoEditModes {
         for (File f : imageList) {
             if (f.getName().equalsIgnoreCase(rest)) {
                 f.delete();
-                return "> File Removed.";
+                return "\\> File Removed.";
             }
         }
-        return "> File Not Found.";
+        return "\\> File Not Found.";
     }
 
     public static String listFiles(CommandObject command) {
         //send Embed
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle("> Here are the files available to you:");
+        builder.withTitle("\\> Here are the files available to you:");
         File imagDir = new File(Utility.getGuildImageDir(command.guild.longID));
         File[] imageList = imagDir.listFiles();
         ArrayList<String> fileNames = new ArrayList<>();
@@ -93,14 +93,14 @@ public class InfoEditModes {
 
     public static String uploadInfo(CommandObject command) {
         if (command.message.getAttachments() == null || command.message.getAttachments().size() == 0) {
-            return "> No file to upload found.";
+            return "\\> No file to upload found.";
         } else {
             try {
                 IMessage.Attachment attachment = command.message.getAttachments().get(0);
                 File file = new File(Utility.getFilePath(command.guild.longID, Constants.FILE_INFO));
 
                 if (!attachment.getFilename().equals(Constants.FILE_INFO)) {
-                    return "> Cannot upload file, File name must be \"" + Constants.FILE_INFO + "\"";
+                    return "\\> Cannot upload file, File name must be \"" + Constants.FILE_INFO + "\"";
                 }
 
                 //grab file
@@ -113,11 +113,11 @@ public class InfoEditModes {
                     file.delete();
                     Files.copy(stream, Paths.get(file.getPath()));
                     stream.close();
-                    return "> Updated **" + Constants.FILE_INFO + "** file.";
+                    return "\\> Updated **" + Constants.FILE_INFO + "** file.";
                 } else {
                     Files.copy(stream, Paths.get(file.getPath()));
                     stream.close();
-                    return "> New **" + Constants.FILE_INFO + "** file uploaded.";
+                    return "\\> New **" + Constants.FILE_INFO + "** file uploaded.";
                 }
             } catch (IOException e) {
                 Utility.sendStack(e);
@@ -128,7 +128,7 @@ public class InfoEditModes {
 
     public static String getInfoFile(CommandObject command) {
         String filePath = Utility.getFilePath(command.guild.longID, Constants.FILE_INFO);
-        String message = String.format("> Here is your **%s** file.", Constants.FILE_INFO);
+        String message = String.format("\\> Here is your **%s** file.", Constants.FILE_INFO);
         boolean templateLoaded = false;
         File file;
         if (FileHandler.isEmpty(filePath)) {
@@ -138,7 +138,7 @@ public class InfoEditModes {
             file = new File(filePath);
         }
         if (file == null || !file.exists()) {
-            return "> Something went wrong! The template must be missing, please Direct message me to alert my developer.";
+            return "\\> Something went wrong! The template must be missing, please Direct message me to alert my developer.";
         }
         if (templateLoaded) message = message.concat("\nThis file has been preloaded with some related info and a basic template for your convenience.");
         RequestHandler.sendFile(message, file, command);

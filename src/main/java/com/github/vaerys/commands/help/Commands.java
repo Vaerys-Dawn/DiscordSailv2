@@ -73,7 +73,7 @@ public class Commands extends Command {
         boolean argsNull = args == null || args.isEmpty();
         if (typeNull || argsNull) {
             //get prefix
-            String prefix = typeNull && !argsNull ? "> There are no commands with the type: **" + args + "**." : "";
+            String prefix = typeNull && !argsNull ? "\\> There are no commands with the type: **" + args + "**." : "";
             //title
             builder.withTitle("Here are the Command Types I have available for use:");
             //desc
@@ -85,7 +85,7 @@ public class Commands extends Command {
         }
 
         //send page
-        builder.withTitle("> Here are all of the " + type.toString() + " Commands I have available.");
+        builder.withTitle("\\> Here are all of the " + type.toString() + " Commands I have available.");
         builder.withDesc(pages.get(type) + get(Help.class).missingArgs(command));
         builder.send(command);
         return null;
@@ -124,7 +124,7 @@ public class Commands extends Command {
         String suffix = "";
         if (type == SAILType.DM) {
             suffix = "**These commands can only be performed in DMs.**\n" +
-                    "> If you send a non command message to my DMs it will send it to my creator.\n\n";
+                    "\\> If you send a non command message to my DMs it will send it to my creator.\n\n";
         } else if (type == SAILType.CREATOR) {
             suffix = "**Only the creator of this bot can run these commands.**\n\n";
         }

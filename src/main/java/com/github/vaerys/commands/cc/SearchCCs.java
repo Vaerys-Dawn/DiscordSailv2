@@ -37,7 +37,7 @@ public class SearchCCs extends Command {
             }
         }
         if (searched.size() == 0) {
-            return "> Could not find any custom commands that contains **" + args + "**.";
+            return "\\> Could not find any custom commands that contains **" + args + "**.";
         }
 
         String title = "> Here is your search:";
@@ -46,7 +46,7 @@ public class SearchCCs extends Command {
         if (contents.length() > 2040) {
             List<String> blah = new ArrayList<>();
             StringBuilder complete = new StringBuilder();
-            complete.append("> Search for \"" + args + "\", Results found: " + searched.size() + "\n");
+            complete.append("\\> Search for \"" + args + "\", Results found: " + searched.size() + "\n");
             for (CCommandObject c : searched) {
                 if (blah.size() == 8) {
                     complete.append(Utility.listFormatter(blah, true));

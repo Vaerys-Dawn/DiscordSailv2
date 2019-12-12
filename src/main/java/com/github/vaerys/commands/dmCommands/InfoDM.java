@@ -22,7 +22,7 @@ public class InfoDM extends DMCommand {
             commands.addAll(CommandList.getCreatorCommands(true));
         }
 
-        String error = "> Could not find information on any commands named **" + args + "**.";
+        String error = "\\> Could not find information on any commands named **" + args + "**.";
         for (Command c : commands) {
             for (String s : c.names) {
                 if (args.equalsIgnoreCase(s)) {

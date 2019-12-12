@@ -18,7 +18,7 @@ public class PatreonToken extends DMCommand {
             add(args);
         }});
         Client.checkPatrons();
-        return "> Token refreshed.";
+        return "\\> Token refreshed.";
     }
 
     @Override

@@ -54,7 +54,7 @@ public class DailyMessage {
                 found = true;
             }
         }
-        if (!found) newContent = "> " + newContent;
+        if (!found) newContent = "\\> " + newContent;
         return newContent;
     }
 

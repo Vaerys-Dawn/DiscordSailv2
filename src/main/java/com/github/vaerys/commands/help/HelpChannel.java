@@ -17,7 +17,7 @@ public class HelpChannel extends Command {
                 return null;
             }
         }
-        return "> Could not find Channel Type.";
+        return "\\> Could not find Channel Type.";
     }
 
     @Override

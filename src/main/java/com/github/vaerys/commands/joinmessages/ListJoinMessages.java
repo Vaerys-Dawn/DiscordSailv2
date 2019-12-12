@@ -22,15 +22,15 @@ public class ListJoinMessages extends Command {
         StringHandler handler = new StringHandler();
         List<JoinMessage> messages = command.guild.channelData.getJoinMessages();
         if (messages.size() == 0) {
-            return "> No Messages exist right now, you can create some with **" + new NewJoinMessage().getUsage(command) + "**";
+            return "\\> No Messages exist right now. An admin can create some with **" + new NewJoinMessage().getUsage(command) + "**.";
         }
         int page = 1;
         try {
             page = Integer.parseInt(args);
-            if (page <= 0) return "> Invalid Page.";
+            if (page <= 0) return "\\> Invalid Page.";
         } catch (NumberFormatException e) {
             if (args != null && !args.isEmpty()) {
-                return "> Not a valid number";
+                return "\\> Not a valid number";
             }
         }
         page--;
@@ -46,7 +46,7 @@ public class ListJoinMessages extends Command {
                 handler.emptyContent();
             }
             String shortNote = Utility.truncateString(Utility.removeFun(m.getContent()), 65);
-            handler.append("**> Message #" + index + "**");
+            handler.append("**\\> Message #" + index + "**");
             handler.append("\n" + shortNote);
             handler.append("\n");
             i++;
@@ -54,10 +54,10 @@ public class ListJoinMessages extends Command {
         }
         pages.add(handler.toString());
         if (page >= pages.size()) {
-            return "> Invalid Page.";
+            return "\\> Invalid Page.";
         }
 
-        builder.withTitle("> Join Message list");
+        builder.withTitle("\\> Join Message list");
         builder.withDesc(pages.get(page) + "\n\n" + missingArgs(command));
         builder.withFooterText("Page " + (page + 1) + "/" + pages.size() + " | Total Join Messages: " + messages.size());
         builder.send(command.channel);

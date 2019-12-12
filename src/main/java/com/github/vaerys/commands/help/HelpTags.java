@@ -22,7 +22,7 @@ public class HelpTags extends Command {
                 return null;
             }
         }
-        return "> Could not find tag.";
+        return "\\> Could not find tag.";
     }
 
     @Override

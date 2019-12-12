@@ -15,7 +15,7 @@ public class HelpModules extends Command {
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = getInfo(true, args, command);
         if (builder == null) {
-            return "> Could not find any modules named **" + args + "**.";
+            return "\\> Could not find any modules named **" + args + "**.";
         } else {
             RequestHandler.sendEmbedMessage("", builder, command.channel.get());
             return null;

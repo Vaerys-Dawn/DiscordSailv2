@@ -35,7 +35,7 @@ public class SetQuote extends Command {
             if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
                 SplitFirstObject userCall = new SplitFirstObject(quote);
                 user = Utility.getUser(command, userCall.getFirstWord(), false, true);
-                if (user == null) return "> Could not find user.";
+                if (user == null) return "\\> Could not find user.";
                 quote = userCall.getRest();
                 adminEdit = true;
             } else {
@@ -52,12 +52,12 @@ public class SetQuote extends Command {
         }
         ProfileObject u = user.getProfile(command.guild);
         quote = Utility.removeFun(quote);
-        if (quote == null || quote.isEmpty()) return "> You can't have an empty quote.";
+        if (quote == null || quote.isEmpty()) return "\\> You can't have an empty quote.";
         if (StringUtils.countMatches(quote, "\n") > maxNewlines)
-            return "> You have too many newlines in that quote. (Max: " + maxNewlines + ")";
+            return "\\> You have too many newlines in that quote. (Max: " + maxNewlines + ")";
         for (String s : quote.split(" ")) {
             if (!Utility.checkURL(s)) {
-                return "> Cannot add quote. Malicious link found.";
+                return "\\> Cannot add quote. Malicious link found.";
             }
         }
         if (adminEdit) {
@@ -65,16 +65,16 @@ public class SetQuote extends Command {
                 u = command.guild.users.addUser(user.longID);
             }
             if (quote.length() > maxLength) {
-                return "> Quote is too long...\n(must be under " + maxLength + " chars)";
+                return "\\> Quote is too long...\n(must be under " + maxLength + " chars)";
             }
             u.setQuote(quote);
-            return "> " + user.displayName + "'s Quote Edited.";
+            return "\\> " + user.displayName + "'s Quote Edited.";
         } else {
             if (quote.length() > maxLength) {
-                return "> Your Quote is too long...\n(must be under " + maxLength + " chars)";
+                return "\\> Your Quote is too long...\n(must be under " + maxLength + " chars)";
             }
             u.setQuote(quote);
-            return "> Quote Edited.";
+            return "\\> Quote Edited.";
         }
     }
 

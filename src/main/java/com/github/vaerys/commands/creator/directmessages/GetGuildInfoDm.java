@@ -19,7 +19,7 @@ public class GetGuildInfoDm extends DMCommand {
             get(GetGuildInfo.class).execute(args, command.setGuild(guild));
             return null;
         } else {
-            return "> Guild ID Invalid";
+            return "\\> Guild ID Invalid";
         }
     }
 

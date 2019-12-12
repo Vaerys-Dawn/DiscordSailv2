@@ -27,7 +27,7 @@ public class Report extends Command {
     public static String report(String args, CommandObject command, boolean isSilent) {
         IChannel channel = command.guild.getChannelByType(ChannelSetting.ADMIN);
         if (channel == null) {
-            return "> Your report could not be sent as the server does not have an admin channel set up at this time.";
+            return "\\> Your report could not be sent as the server does not have an admin channel set up at this time.";
         }
 
         SplitFirstObject split = new SplitFirstObject(args);
@@ -36,16 +36,16 @@ public class Report extends Command {
         addUser(command);
 
         if (command.user.isBlockedFromDms()) {
-            return "> " + command.user.mention() + ", You have been blocked, you can no longer send any more report requests.";
+            return "\\> " + command.user.mention() + ", You have been blocked, you can no longer send any more report requests.";
         }
         if (reported == null) {
-            return "> Cannot send report. Could not find user.";
+            return "\\> Cannot send report. Could not find user.";
         }
         if (reported.longID == command.user.longID) {
-            return "> You can't report yourself.";
+            return "\\> You can't report yourself.";
         }
         if (channel == null) {
-            return "> Your report could not be sent as the server does not have an admin channel set up at this time.";
+            return "\\> Your report could not be sent as the server does not have an admin channel set up at this time.";
         }
 
         //build embed
@@ -67,9 +67,9 @@ public class Report extends Command {
         }
         //send response
         if (response == null) {
-            return "> User report was not be sent. Looks like I can't send messages to " + channel.mention() + ".";
+            return "\\> User report was not be sent. Looks like I can't send messages to " + channel.mention() + ".";
         } else {
-            return "> User Report sent.";
+            return "\\> User Report sent.";
         }
     }
 

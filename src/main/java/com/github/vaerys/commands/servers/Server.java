@@ -34,10 +34,10 @@ public class Server extends Command {
                 }
                 builder.append(s.getServerDesc());
                 command.user.sendDm(builder.toString());
-                return "> Server info has been sent to your DMs";
+                return "\\> Server info has been sent to your DMs";
             }
         }
-        return "> Server with that name not found.";
+        return "\\> Server with that name not found.";
     }
 
     @Override

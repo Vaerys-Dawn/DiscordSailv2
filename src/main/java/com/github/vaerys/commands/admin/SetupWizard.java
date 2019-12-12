@@ -25,14 +25,14 @@ public class SetupWizard extends Command {
         // END DEBUG
 
         if (SetupHandler.isRunningSetup(command.guild)) {
-            return "> Setup is already running for this guild. I can't run it twice!";
+            return "\\> Setup is already running for this guild. I can't run it twice!";
         }
 
         // user can only run setup for one guild at a time
         UserObject user = command.user;
         for (GuildObject guildObject : Globals.getGuilds()) {
             if (guildObject.config.setupUser == user.longID) {
-                return "> You're running setup for a different guild. I can't do more than one at a time.";
+                return "\\> You're running setup for a different guild. I can't do more than one at a time.";
             }
         }
 
@@ -43,13 +43,13 @@ public class SetupWizard extends Command {
                 "** and **" + new SetupNext().getUsage(command) + "**";
 
         if (command.user.sendDm(message) == null) {
-            return "> **ERROR**: I wasn't able to send you a DM! Check your server privacy settings!";
+            return "\\> **ERROR**: I wasn't able to send you a DM! Check your server privacy settings!";
         }
 
         // send first setup stage response
         SetupHandler.setSetupStage(command, SetupStage.SETUP_MODULES);
 
-        return "> Check your DMs for more instructions.";
+        return "\\> Check your DMs for more instructions.";
     }
 
     @Override

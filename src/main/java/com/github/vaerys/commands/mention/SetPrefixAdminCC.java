@@ -12,10 +12,10 @@ public class SetPrefixAdminCC extends MentionCommand {
     public String execute(String args, CommandObject command) {
         boolean isAlphanumeric = args.matches("[A-Za-z0-9]+");
         if (args.contains(" ") || args.contains("\n") || args.length() > 5 || args.contains("#") || args.contains("@") || isAlphanumeric) {
-            return "> Not a valid Prefix.";
+            return "\\> Not a valid Prefix.";
         }
         command.guild.config.setPrefixAdminCC(args);
-        return "> Admin Custom Command Prefix set to: " + args;
+        return "\\> Admin Custom Command Prefix set to: " + args;
     }
 
     @Override

@@ -82,7 +82,7 @@ public class GetGlobalStats extends Command {
         output.append("\n\n**[PIXEL STATS]**");
         output.append("\nAvg Pixels: " + totalXP / totalXpUsers);
         command.user.sendDm(output.toString());
-        return "> Data sent to Your DMs";
+        return "\\> Data sent to Your DMs";
 
 //        int totalGlobalUsers = 0;
 //        int totalAvg = 0;

@@ -17,7 +17,7 @@ public class LastDailyMessage extends Command {
         if (messageObject != null) {
             RequestHandler.sendEmbedMessage("", new DailyMsg().getInfo(messageObject, command), command.channel.get());
             return null;
-        } else return "> It appears that there have been no daily messages stored.";
+        } else return "\\> It appears that there have been no daily messages stored.";
     }
 
     @Override
