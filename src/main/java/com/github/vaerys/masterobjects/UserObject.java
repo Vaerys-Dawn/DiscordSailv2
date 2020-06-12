@@ -83,7 +83,7 @@ public class UserObject {
     private UserObject(long userID, GuildObject guild) {
         this.client = guild.client;
         IUser user = guild.getUserByID(userID);
-        if (user == null) user = Client.getClient().getUserByID(userID);
+        if (user == null) user = Client.getClient().fetchUser(userID);
         if (user == null) initNull(userID, guild);
         else init(user, guild, true);
     }

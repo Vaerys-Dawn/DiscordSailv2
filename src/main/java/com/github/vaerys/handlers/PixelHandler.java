@@ -116,7 +116,7 @@ public class PixelHandler {
         if (userObject.getSettings().contains(DENY_AUTO_ROLE)) return;
 
         //check if user is on the server.
-        IUser user = Globals.getClient().getUserByID(userObject.getUserID());
+        IUser user = Globals.getClient().fetchUser(userObject.getUserID());
         if (user == null) {
             return;
         }

@@ -16,7 +16,7 @@ public class GlobalUserObject extends UserObject {
     public List<ReminderObject> reminders;
 
     public GlobalUserObject(long lastDmUserID) {
-        super(Client.getClient().getUserByID(lastDmUserID), null);
+        super(Client.getClient().fetchUser(lastDmUserID), null);
         for (GuildObject g : Globals.getGuilds()) {
             if (g.get().getUserByID(longID) != null) {
                 customCommands.addAll(g.customCommands.getCommandList().stream().filter(cCommandObject -> cCommandObject.getUserID() == longID).collect(Collectors.toList()));

@@ -16,7 +16,7 @@ public class ReminderObject {
     public ReminderObject(long userID, long channelID, String message, long reminderTime) {
         this.userID = userID;
         this.channelID = channelID;
-        this.message = Globals.getClient().getUserByID(userID).mention() + " " + Utility.removeMentions(message);
+        this.message = Globals.getClient().fetchUser(userID).mention() + " " + Utility.removeMentions(message);
         this.executeTime = reminderTime;
     }
 

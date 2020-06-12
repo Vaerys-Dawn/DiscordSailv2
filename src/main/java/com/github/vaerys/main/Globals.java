@@ -191,7 +191,7 @@ public class Globals {
             logger.warn("No guilds to connect to. Will idle for connections.");
         } else {
             IUser user = RequestBuffer.request(() -> {
-                return Client.getClient().getUserByID(creatorID);
+                return Client.getClient().fetchUser(creatorID);
             }).get();
             if (user == null) {
                 // hecc

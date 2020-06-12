@@ -90,7 +90,7 @@ public class DailyMsg extends Command {
 
     public XEmbedBuilder getInfo(DailyMessage messageObject, CommandObject command) {
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
-        IUser user = command.client.get().getUserByID(messageObject.getUserID());
+        IUser user = command.client.get().fetchUser(messageObject.getUserID());
         if (user != null) {
             embedBuilder.withAuthorName(user.getName() + "#" + user.getDiscriminator());
         }

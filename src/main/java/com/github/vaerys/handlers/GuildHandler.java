@@ -82,7 +82,7 @@ public class GuildHandler {
         if (content.config.muteRemovesRoles &&
                 content.users.getMutedUser(profile.getUserID()) != null) return;
 
-        IUser user = content.getUserByID(profile.getUserID());
+        IUser user = Globals.getClient().fetchUser(profile.getUserID());
         if (user == null) return;
 
         List<IRole> userRoles = user.getRolesForGuild(content.get());

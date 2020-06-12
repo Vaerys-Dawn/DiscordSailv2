@@ -188,7 +188,7 @@ public class Utility {
             if (userID == -1) {
                 userID = stringLong(StringUtils.substringBetween(content, "<@", ">"));
             }
-            IUser user = Globals.getClient().getUserByID(userID);
+            IUser user = Globals.getClient().fetchUser(userID);
             if (user != null) {
                 return userID;
             } else {
@@ -209,7 +209,7 @@ public class Utility {
             if (from.contains("<@") || from.contains("<!@")) {
                 long userID = getMentionUserID(from);
                 if (userID != -1) {
-                    IUser mentioned = Globals.getClient().getUserByID(userID);
+                    IUser mentioned = Globals.getClient().fetchUser(userID);
                     from = from.replace("<@!" + userID + ">", mentioned.getName() + "#" + mentioned.getDiscriminator());
                     from = from.replace("<@" + userID + ">", mentioned.getName() + "#" + mentioned.getDiscriminator());
                 }

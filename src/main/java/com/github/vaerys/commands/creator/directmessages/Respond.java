@@ -38,7 +38,7 @@ public class Respond extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         SplitFirstObject response = new SplitFirstObject(args);
-        IUser recipient = command.client.get().getUserByID(Utility.stringLong(response.getFirstWord()));
+        IUser recipient = command.client.get().fetchUser(Utility.stringLong(response.getFirstWord()));
         return sendDM(response.getRest(), command, recipient, command.user.username + ": ");
     }
 

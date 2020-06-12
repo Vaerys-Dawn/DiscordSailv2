@@ -441,7 +441,7 @@ public class RequestHandler {
 
     public static RequestBuffer.RequestFuture<Boolean> muteUser(long guildID, long userID, boolean isMuting) {
         GuildObject content = Globals.getGuildContent(guildID);
-        IUser user = Globals.getClient().getUserByID(userID);
+        IUser user = Globals.getClient().fetchUser(userID);
         IGuild guild = Globals.getClient().getGuildByID(guildID);
         IRole mutedRole = Globals.client.getRoleByID(content.config.getMutedRoleID());
 

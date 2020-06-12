@@ -112,7 +112,7 @@ public class TimerHandler {
         } else if (FileHandler.exists("screenlog.0")) {
             File file = new File("screenlog.0");
             if (file.length() > 1048576 * 10) {
-                IUser creator = Client.getClient().getUserByID(Globals.creatorID);
+                IUser creator = Client.getClient().fetchUser(Globals.creatorID);
                 if (creator == null) return;
                 UserObject creatorUser = new UserObject(creator, null);
                 creatorUser.sendDm("\\> screenlog.0 got too big, potential log spam, archived log to prevent loss of usage.");
@@ -278,7 +278,7 @@ public class TimerHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                IUser user = Client.getClient().getUserByID(object.getUserID());
+                IUser user = Client.getClient().fetchUser(object.getUserID());
                 IChannel channel = Client.getClient().getChannelByID(object.getChannelID());
                 // sanitize channel
                 if (channel == null) {

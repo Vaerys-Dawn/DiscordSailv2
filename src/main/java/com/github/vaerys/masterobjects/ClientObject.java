@@ -28,7 +28,7 @@ public class ClientObject {
     }
 
     public IUser getUserByID(long userID) {
-        return object.getUserByID(userID);
+        return object.fetchUser(userID);
     }
 
     public IUser fetchUser(long l) {

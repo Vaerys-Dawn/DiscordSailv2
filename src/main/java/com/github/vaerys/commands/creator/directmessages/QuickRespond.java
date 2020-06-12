@@ -13,7 +13,7 @@ public class QuickRespond extends DMCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
-        IUser recipient = command.client.get().getUserByID(Globals.lastDmUserID);
+        IUser recipient = command.client.get().fetchUser(Globals.lastDmUserID);
         if (recipient != null) {
             return Respond.sendDM(args, command, recipient, command.user.username + ": ");
         } else {

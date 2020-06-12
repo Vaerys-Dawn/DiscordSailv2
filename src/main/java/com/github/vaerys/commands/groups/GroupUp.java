@@ -40,7 +40,7 @@ public class GroupUp extends Command {
         List<String> completeList = new ArrayList<>();
 
         for (GroupUpObject g : list) {
-            IUser user = command.client.get().getUserByID(g.getUserID());
+            IUser user = command.client.get().fetchUser(g.getUserID());
             if (user == null) continue;
             IPresence userPres = user.getPresence();
             if (!userPres.getStatus().equals(StatusType.DND) && !userPres.getStatus().equals(StatusType.OFFLINE) && !userPres.getStatus().equals(StatusType.UNKNOWN)) {

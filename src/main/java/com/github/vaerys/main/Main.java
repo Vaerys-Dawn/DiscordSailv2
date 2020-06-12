@@ -194,7 +194,7 @@ public class Main {
             if (Globals.consoleMessageCID != -1) {
                 IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
 
-                message = message.replace("#Dawn#", Globals.getClient().getUserByID(153159020528533505L).getName());
+                message = message.replace("#Dawn#", Globals.getClient().fetchUser(153159020528533505L).getName());
                 message = message.replace("teh", "the");
                 message = message.replace("Teh", "The");
 //            System.out.println(message);
