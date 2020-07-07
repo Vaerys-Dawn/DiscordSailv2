@@ -2,15 +2,14 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +22,18 @@ public class ChannelStats extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle("Channel Stats");
+        builder.setTitle("Channel Stats");
         ArrayList<String> channelTypes = new ArrayList<>();
         ArrayList<String> channelSettings = new ArrayList<>();
 
         if (args != null && !args.isEmpty()) {
             for (ChannelSetting s : command.guild.channelSettings) {
                 if (s.toString().equalsIgnoreCase(args)) {
-                    List<IChannel> channels = command.guild.getChannelsByType(s);
+                    List<TextChannel> channels = command.guild.getChannelsByType(s);
                     List<String> channelMentions = Utility.getChannelMentions(channels);
                     if (channels.size() != 0) {
-                        builder.appendField(s.toString(), Utility.listFormatter(channelMentions, true), false);
-                        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+                        builder.addField(s.toString(), Utility.listFormatter(channelMentions, true), false);
+                        builder.send(command.channel);
                         return null;
                     } else {
                         if (s.isSetting()) {
@@ -66,12 +65,12 @@ public class ChannelStats extends Command {
             return "\\> I found nothing of value.";
         }
         if (channelTypes.size() != 0) {
-            builder.appendField("Types:", Utility.listFormatter(channelTypes, true), false);
+            builder.addField("Types:", Utility.listFormatter(channelTypes, true), false);
         }
         if (channelSettings.size() != 0) {
-            builder.appendField("Settings:", Utility.listFormatter(channelSettings, true), false);
+            builder.addField("Settings:", Utility.listFormatter(channelSettings, true), false);
         }
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        builder.send(command.channel);
         return null;
     }
 
@@ -107,8 +106,8 @@ public class ChannelStats extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_CHANNELS};
+    protected Permission[] perms() {
+        return new Permission[]{Permission.MANAGE_CHANNEL};
     }
 
     @Override

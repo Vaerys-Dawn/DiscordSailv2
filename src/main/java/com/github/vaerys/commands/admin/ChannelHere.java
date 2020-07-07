@@ -8,7 +8,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,9 +42,9 @@ public class ChannelHere extends Command {
         desc += "The Command **" + get(HelpChannel.class).getUsage(command) + "** Can give you extra information about each of the above.\n\n";
         desc += "See what is enabled on a channel via **" +get(ChannelStats.class).getUsage(command) + "**\n\n";
         desc += missingArgs(command);
-        embedBuilder.withDesc(desc);
-        embedBuilder.withTitle(title);
-        RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
+        embedBuilder.setDescription(desc);
+        embedBuilder.setTitle(title);
+        embedBuilder.send(command.channel);
         return null;
     }
 
@@ -84,8 +84,8 @@ public class ChannelHere extends Command {
 
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_CHANNELS};
+    protected Permission[] perms() {
+        return new Permission[]{Permission.MANAGE_CHANNEL};
     }
 
 

@@ -62,8 +62,8 @@ public class SetLevelUpReaction extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_EMOJIS};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_EMOJIS};
     }
 
     @Override

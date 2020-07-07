@@ -30,7 +30,7 @@ public class HelpDM extends DMCommand {
         Collections.sort(list);
         StringBuilder desc = new StringBuilder("**\\> Direct Message Commands.**```" + Utility.listFormatter(list, false) + "```\n");
         desc.append(get(InfoDM.class).missingArgs(command));
-        builder.withDescription(desc.toString());
+        builder.setDescription(desc.toString());
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }

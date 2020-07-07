@@ -181,8 +181,8 @@ public class EditXp extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
     }
 
     @Override

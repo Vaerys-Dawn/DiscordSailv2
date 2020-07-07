@@ -71,7 +71,7 @@ public class Toggle extends Command {
         }
         Collections.sort(typesActive);
         Collections.sort(typesDeactivated);
-        embedBuilder.withTitle(title);
+        embedBuilder.setTitle(title);
 
         desc.append("**Activated**\n```\n" + spacer + Utility.listEnumFormatter(typesActive, true) + "```\n" +
                 "**Deactivated**\n```\n" + spacer + Utility.listEnumFormatter(typesDeactivated, true) + "```\n");
@@ -85,7 +85,7 @@ public class Toggle extends Command {
 
         desc.append(missingArgs(command));
 
-        embedBuilder.withDescription(desc.toString());
+        embedBuilder.setDescription(desc.toString());
         RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
         return null;
     }
@@ -116,8 +116,8 @@ public class Toggle extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

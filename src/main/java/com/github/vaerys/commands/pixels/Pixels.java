@@ -64,14 +64,14 @@ public class Pixels extends Command {
         }
 
         //build embed
-        builder.withAuthorName(user.displayName + "'s Pixel stats.");
+        builder.setAuthor(user.displayName + "'s Pixel stats.");
         builder.withAuthorIcon(Constants.PIXELS_ICON); //pixel icon
-        builder.appendField(titlePixels, contentsPixels, true);
-        builder.appendField(titleRank, contentsRank, true);
-        builder.appendField(titleProgress, contentsProgress.toString(), false);
+        builder.addField(titlePixels, contentsPixels, true);
+        builder.addField(titleRank, contentsRank, true);
+        builder.addField(titleProgress, contentsProgress.toString(), false);
 
         if (profile.getSettings().contains(UserSetting.HIT_LEVEL_FLOOR)) {
-            builder.withDescription("**You have decayed to the level floor,\nYou will need to level up again to see your rank.**");
+            builder.setDescription("**You have decayed to the level floor,\nYou will need to level up again to see your rank.**");
         }
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
@@ -124,8 +124,8 @@ public class Pixels extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

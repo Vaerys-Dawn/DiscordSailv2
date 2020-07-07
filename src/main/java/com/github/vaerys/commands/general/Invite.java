@@ -46,7 +46,7 @@ public class Invite extends Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[0];
+        return new Permission[0];
     }
 
     @Override

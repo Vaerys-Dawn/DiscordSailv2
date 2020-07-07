@@ -48,8 +48,8 @@ public class SetPrefix extends MentionCommand {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

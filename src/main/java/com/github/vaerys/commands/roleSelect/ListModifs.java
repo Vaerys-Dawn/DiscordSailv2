@@ -21,8 +21,8 @@ public class ListModifs extends Command {
         String title = "\\> Here are the Modifier roles you can choose from:";
         List<String> list = command.guild.getModifierRoles().stream().map(iRole -> iRole.getName()).collect(Collectors.toList());
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle(title);
-        builder.withDesc("```\n" + Utility.listFormatter(list, true) + "```\n" + get(ModifierRoles.class).missingArgs(command));
+        builder.setTitle(title);
+        builder.setDescription("```\n" + Utility.listFormatter(list, true) + "```\n" + get(ModifierRoles.class).missingArgs(command));
         return builder;
     }
 
@@ -60,8 +60,8 @@ public class ListModifs extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

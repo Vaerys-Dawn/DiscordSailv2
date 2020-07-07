@@ -55,7 +55,7 @@ public class InfoDM extends DMCommand {
         // if (c.type().equals(DMCommand.TYPE_CREATOR)) {
         // builder.append("**" + ownerOnly + "**");
         // }
-        // infoEmbed.appendField("> Info - " + c.names()[0], builder.toString(), false);
+        // infoEmbed.addField("> Info - " + c.names()[0], builder.toString(), false);
         //
         // //aliases
         // if (c.names().length > 1) {
@@ -65,7 +65,7 @@ public class InfoDM extends DMCommand {
         // }
         // aliasBuilder.delete(aliasBuilder.length() - 2, aliasBuilder.length());
         // aliasBuilder.append(".\n");
-        // infoEmbed.appendField("Aliases:", aliasBuilder.toString(), false);
+        // infoEmbed.addField("Aliases:", aliasBuilder.toString(), false);
         // }
         // Utility.sendEmbedMessage("", infoEmbed, command.channel.getAllToggles());
         // return "";

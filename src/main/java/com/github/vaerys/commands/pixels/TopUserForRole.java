@@ -89,8 +89,8 @@ public class TopUserForRole extends Command {
         XEmbedBuilder embed = new XEmbedBuilder(command);
         int showing = (userIDs.size() > 5 ? 5 : userIDs.size());
 
-        embed.withTitle("Top " + (userIDs.size() == 1 ? " user" : showing + " users") + " for role " + role.getName());
-        embed.withFooterText("Total ranked users with this role: " + userIDs.size());
+        embed.setTitle("Top " + (userIDs.size() == 1 ? " user" : showing + " users") + " for role " + role.getName());
+        embed.setFooter("Total ranked users with this role: " + userIDs.size());
         ProfileObject userProfile;
         UserObject userObject;
         NumberFormat nf = NumberFormat.getInstance();
@@ -101,7 +101,7 @@ public class TopUserForRole extends Command {
             userProfile = command.guild.users.getUserByID(userIDs.get(i));
             userObject = userProfile.getUser(command.guild);
 
-            embed.appendField(String.format(titlef, i + 1, userObject.displayName),
+            embed.addField(String.format(titlef, i + 1, userObject.displayName),
                     String.format(contentf, nf.format(userProfile.getXP()), userProfile.getCurrentLevel(), userObject.longID),
                     false);
         }
@@ -135,8 +135,8 @@ public class TopUserForRole extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_ROLES};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_ROLES};
     }
 
     @Override

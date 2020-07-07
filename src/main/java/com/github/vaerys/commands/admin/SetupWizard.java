@@ -79,7 +79,7 @@ public class SetupWizard extends Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[]{Permissions.ADMINISTRATOR};
+        return new Permission[]{Permissions.ADMINISTRATOR};
     }
 
     @Override

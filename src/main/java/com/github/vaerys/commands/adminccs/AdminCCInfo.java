@@ -37,7 +37,7 @@ public class AdminCCInfo extends Command {
         }
 
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle(String.format("\\> Here is the information for the Admin Custom Command: %s", cc.getName()));
+        builder.setTitle(String.format("\\> Here is the information for the Admin Custom Command: %s", cc.getName()));
         UserObject creator = UserObject.getNewUserObject(cc.getCreatorID(), command.guild);
         StringHandler desc = new StringHandler("Creator: **@%s**\nTimes Run: **%d**\nSlots Used: **%d**", creator.username, cc.getTimesRun(), cc.getSlots(), cc.getPathKeys().size());
         if (cc.hasLimitTry()) {
@@ -52,7 +52,7 @@ public class AdminCCInfo extends Command {
             String compiled = Utility.listFormatter(formattedKeys, true);
             desc.appendFormatted("\nKey Counts: \n```\n%s```", compiled);
         }
-        builder.withDesc(desc.toString());
+        builder.setDescription(desc.toString());
         builder.send(command);
         return null;
     }
@@ -84,7 +84,7 @@ public class AdminCCInfo extends Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[0];
+        return new Permission[0];
     }
 
     @Override

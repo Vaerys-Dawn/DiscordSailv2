@@ -16,6 +16,7 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -225,13 +226,13 @@ public class Utility {
             title = Command.spacer;
         }
         if (formattedList.isEmpty()) {
-            builder.appendField(title, Command.spacer, false);
+            builder.addField(title, Command.spacer, false);
             return;
         }
         if (horizontal) {
-            builder.appendField(title, "`" + formattedList + "`", false);
+            builder.addField(title, "`" + formattedList + "`", false);
         } else {
-            builder.appendField(title, "```\n" + formattedList + "```", false);
+            builder.addField(title, "```\n" + formattedList + "```", false);
         }
     }
 
@@ -723,12 +724,8 @@ public class Utility {
     }
 
 
-    public static List<String> getChannelMentions(List<IChannel> channels) {
-        List<String> mentions = new ArrayList<>();
-        for (IChannel c : channels) {
-            mentions.add(c.mention());
-        }
-        return mentions;
+    public static List<String> getChannelMentions(List<TextChannel> channels) {
+        return channels.stream().map(c -> c.getAsMention()).collect(Collectors.toList());
     }
 
     public static UserObject getUser(CommandObject command, String args, boolean doContains, boolean hasProfile) {

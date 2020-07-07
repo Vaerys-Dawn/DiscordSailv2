@@ -56,15 +56,15 @@ public class ListCCs extends Command {
                 total++;
             }
         }
-        builder.withTitle(title);
+        builder.setTitle(title);
         String content = Utility.listFormatter(list, true);
         if (content.length() > 2000) {
             String fileName = String.format("Commands_%s.txt", command.user.name);
             RequestHandler.sendFile(title, content, fileName, command.channel.get());
             return null;
         }
-        builder.withDescription("```\n" + content + "```");
-        builder.withFooterText("Total Custom commands: " + total + "/" + max + ".");
+        builder.setDescription("```\n" + content + "```");
+        builder.setFooter("Total Custom commands: " + total + "/" + max + ".");
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
@@ -89,8 +89,8 @@ public class ListCCs extends Command {
         pages.add("```" + Utility.listFormatter(list, true) + "```");
         try {
             String title = "> Here is Page **" + page + "/" + pages.size() + "** of Custom Commands:";
-            builder.appendField(title, pages.get(page - 1), false);
-            builder.withFooterText("Total Custom Commands stored on this Server: " + totalCCs);
+            builder.addField(title, pages.get(page - 1), false);
+            builder.setFooter("Total Custom Commands stored on this Server: " + totalCCs);
             RequestHandler.sendEmbedMessage("", builder, command.channel.get());
             return null;
         } catch (IndexOutOfBoundsException e) {
@@ -124,8 +124,8 @@ public class ListCCs extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

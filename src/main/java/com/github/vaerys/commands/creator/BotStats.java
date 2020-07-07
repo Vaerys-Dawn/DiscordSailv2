@@ -28,9 +28,9 @@ public class BotStats extends Command {
         double mb = 1048576.0;
 
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle(command.client.bot.username);
+        builder.setTitle(command.client.bot.username);
         builder.withTimestamp(command.client.bot.get().getCreationDate());
-        builder.withFooterText("Creation Date");
+        builder.setFooter("Creation Date");
         StringHandler handler = new StringHandler();
         handler.append("**Total Servers**: ").append(command.client.get().getGuilds().size());
         handler.append(indent + "**Total Users**: " + userCount);
@@ -42,7 +42,7 @@ public class BotStats extends Command {
         handler.append(nf.format(usedMemory / mb)).append("MB used\t");
         handler.append(nf.format(freeMemory / mb)).append("MB free");
         handler.append("\n**Ping**: ").append(nf.format(ping)).append("ms");
-        builder.withDesc(handler.toString());
+        builder.setDescription(handler.toString());
         builder.withThumbnail(command.client.bot.avatarURL);
         builder.send(command.channel);
         return null;
@@ -74,8 +74,8 @@ public class BotStats extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

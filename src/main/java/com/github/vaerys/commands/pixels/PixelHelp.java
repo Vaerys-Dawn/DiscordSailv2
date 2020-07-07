@@ -43,8 +43,8 @@ public class PixelHelp extends Command {
             default:
                 StringBuilder builder = new StringBuilder();
                 XEmbedBuilder embed = new XEmbedBuilder(command);
-                embed.withTitle("Pixel System Information.");
-                embed.withDescription("Pixels are " + command.client.bot.displayName + "'s" +
+                embed.setTitle("Pixel System Information.");
+                embed.setDescription("Pixels are " + command.client.bot.displayName + "'s" +
                         " form of xp, you can gain " + (int) (command.guild.config.xpRate * command.guild.config.xpModifier) + "xp" +
                         " once per minute by sending a message that meets all of the specific message rules.\n\n");
                 if (command.guild.config.getRewardRoles().size() != 0) {
@@ -55,10 +55,10 @@ public class PixelHelp extends Command {
                         }
                         builder.append("\n\\> **" + reward.getName() + "** -> Level: **" + r.getLevel() + "**");
                     }
-                    embed.appendField("Reward Roles:", builder.toString(), true);
+                    embed.addField("Reward Roles:", builder.toString(), true);
                 }
                 if (command.guild.config.xpModifier != 1) {
-                    embed.appendField("\n**Current Xp Modifier:**\n", "> **x" + command.guild.config.xpModifier + "**.\n", true);
+                    embed.addField("\n**Current Xp Modifier:**\n", "> **x" + command.guild.config.xpModifier + "**.\n", true);
                 }
                 int random = new Random().nextInt(25);
                 if (random == 1) {
@@ -66,7 +66,7 @@ public class PixelHelp extends Command {
                 } else {
                     embed.withThumbnail(Constants.LEVEL_UP_IMAGE_URL);
                 }
-                embed.appendField("Pixel and Level Calculators:", getModes(command) + "\n\n" + missingArgs(command), false);
+                embed.addField("Pixel and Level Calculators:", getModes(command) + "\n\n" + missingArgs(command), false);
                 RequestHandler.sendEmbedMessage("", embed, command.channel.get());
                 return null;
         }
@@ -183,8 +183,8 @@ public class PixelHelp extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

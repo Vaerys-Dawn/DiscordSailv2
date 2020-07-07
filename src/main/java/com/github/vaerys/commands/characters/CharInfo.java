@@ -25,13 +25,13 @@ public class CharInfo extends Command {
         for (CharacterObject object : command.guild.characters.getCharacters(command.guild.get())) {
             if (object.getName().equalsIgnoreCase(args)) {
                 XEmbedBuilder builder = new XEmbedBuilder(command);
-                builder.withTitle(object.getNickname());
+                builder.setTitle(object.getNickname());
 
                 IUser user = command.guild.getUserByID(object.getUserID());
                 if (user == null) {
-                    builder.withFooterText("Author: No longer on this server | Character ID: " + object.getName());
+                    builder.setFooter("Author: No longer on this server | Character ID: " + object.getName());
                 } else {
-                    builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
+                    builder.setFooter("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
                 }
 
                 ArrayList<IRole> roles = new ArrayList<>();
@@ -71,7 +71,7 @@ public class CharInfo extends Command {
                 if (object.getLongBioURL() != null && !object.getLongBioURL().isEmpty()) {
                     description.append("\n\n**[Long Description Link...](" + object.getLongBioURL() + ")**");
                 }
-                builder.withDesc(description.toString());
+                builder.setDescription(description.toString());
                 if (object.getAvatarURL() != null && !object.getAvatarURL().isEmpty()) {
                     if (object.getAvatarURL().contains("\n") || object.getAvatarURL().contains(" ")) {
                         return "\\> An Error Occurred. Avatar url needs to be reset.";
@@ -111,8 +111,8 @@ public class CharInfo extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

@@ -1,14 +1,12 @@
 package com.github.vaerys.utilobjects;
 
-import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.ChannelObject;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.util.EmbedBuilder;
-import sx.blah.discord.util.RequestBuffer;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 import java.awt.*;
 
@@ -21,69 +19,64 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     public XEmbedBuilder(UserObject user) {
-        withColor(user.color);
+        setColor(user.color);
     }
 
     public XEmbedBuilder(Color color) {
-        withColor(color);
+        setColor(color);
     }
 
     public XEmbedBuilder(CommandObject command) {
-        withColor(command.client.bot.color);
+        setColor(command.client.bot.color);
     }
 
-    public RequestBuffer.RequestFuture<IMessage> send(IChannel channel) {
-        return RequestHandler.sendEmbedMessage("", this, channel);
+    public MessageAction send(TextChannel channel) {
+        return channel.sendMessage(this.build());
     }
 
-    public RequestBuffer.RequestFuture<IMessage> send(ChannelObject channel) {
-        return RequestHandler.sendEmbedMessage("", this, channel.get());
+    public MessageAction send(ChannelObject channel) {
+        return channel.get().sendMessage(this.build());
     }
 
-    public RequestBuffer.RequestFuture<IMessage> send(CommandObject command) {
-        return RequestHandler.sendEmbedMessage("", this, command.channel.get());
+    public MessageAction send(CommandObject command) {
+        return command.channel.get().sendMessage(this.build());
     }
 
-    public RequestBuffer.RequestFuture<IMessage> send(String s, IChannel channel) {
-        return RequestHandler.sendEmbedMessage(s, this, channel);
+    public MessageAction send(String s, TextChannel channel) {
+        return channel.sendMessage(s).embed(this.build());
     }
 
-    public RequestBuffer.RequestFuture<IMessage> send(String s, ChannelObject channel) {
-        return RequestHandler.sendEmbedMessage(s, this, channel.get());
+    public MessageAction send(String s, ChannelObject channel) {
+        return channel.get().sendMessage(s).embed(this.build());
     }
 
-    public RequestBuffer.RequestFuture<IMessage> send(String s, CommandObject command) {
-        return RequestHandler.sendEmbedMessage(s, this, command.channel.get());
-    }
-
-    @Override
-    public EmbedBuilder withTitle(String title) {
-        return super.withTitle(Utility.removeMentions(title));
+    public MessageAction send(String s, CommandObject command) {
+        return command.channel.get().sendMessage(s).embed(this.build());
     }
 
     @Override
-    public EmbedBuilder withDesc(String desc) {
-        return super.withDesc(Utility.removeMentions(desc));
+    public EmbedBuilder setTitle(String title) {
+        return super.setTitle(Utility.removeMentions(title));
+    }
+
+    public EmbedBuilder setDescription(String desc) {
+        return super.setDescription(Utility.removeMentions(desc));
+    }
+
+
+    @Override
+    public EmbedBuilder addField(String title, String content, boolean inline) {
+        return super.addField(Utility.removeMentions(title), Utility.removeMentions(content), inline);
     }
 
     @Override
-    public EmbedBuilder withDescription(String desc) {
-        return super.withDescription(Utility.removeMentions(desc));
+    public EmbedBuilder setFooter(String footerText) {
+        return super.setFooter(Utility.removeMentions(footerText));
     }
 
     @Override
-    public EmbedBuilder appendField(String title, String content, boolean inline) {
-        return super.appendField(Utility.removeMentions(title), Utility.removeMentions(content), inline);
-    }
-
-    @Override
-    public EmbedBuilder withFooterText(String footerText) {
-        return super.withFooterText(Utility.removeMentions(footerText));
-    }
-
-    @Override
-    public EmbedBuilder withAuthorName(String authorName) {
-        return super.withAuthorName(Utility.removeMentions(authorName));
+    public EmbedBuilder setAuthor(String authorName) {
+        return super.setAuthor(Utility.removeMentions(authorName));
     }
 
 }

@@ -9,16 +9,8 @@
   </component>
   <component name="ProjectPlainTextFileTypeManager">
     <file url="file://$PROJECT_DIR$/pull_request_template.md" />
-    <file url="file://$PROJECT_DIR$/wiki/_Sidebar.md" />
-    <file url="file://$PROJECT_DIR$/wiki/AdminCC-Tag-Examples.md" />
-    <file url="file://$PROJECT_DIR$/wiki/Contributor-Message-Formatting-Guide.md" />
-    <file url="file://$PROJECT_DIR$/wiki/Custom-Command-Guide.md" />
-    <file url="file://$PROJECT_DIR$/wiki/Home.md" />
-    <file url="file://$PROJECT_DIR$/wiki/S.A.I.L-Startup-Guide.md" />
-    <file url="file://$PROJECT_DIR$/wiki/Tag-Info.md" />
-    <file url="file://$PROJECT_DIR$/wiki/Update-Info-Command.md" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="14" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

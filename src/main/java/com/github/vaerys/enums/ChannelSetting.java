@@ -177,11 +177,11 @@ public enum ChannelSetting {
     public XEmbedBuilder getInfo(CommandObject object) {
         XEmbedBuilder builder = new XEmbedBuilder(object);
         if (isSetting()) {
-            builder.withTitle("Channel Setting - " + name);
+            builder.setTitle("Channel Setting - " + name);
         } else {
-            builder.withTitle("Channel Type - " + name);
+            builder.setTitle("Channel Type - " + name);
         }
-        builder.withDesc(getDesc(object));
+        builder.setDescription(getDesc(object));
         List<IChannel> channels = object.guild.getChannelsByType(this);
         channels = object.user.getVisibleChannels(channels);
         String title;
@@ -191,7 +191,7 @@ public enum ChannelSetting {
             title = "Channel:";
         }
         if (channels.size() != 0) {
-            builder.appendField(title, Utility.listFormatter(channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()), true), false);
+            builder.addField(title, Utility.listFormatter(channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()), true), false);
         }
         List<Command> commands = object.guild.commands.stream().filter(command -> {
             if (command.channel != null && GuildHandler.testForPerms(object, command.perms)) {
@@ -201,7 +201,7 @@ public enum ChannelSetting {
         }).collect(Collectors.toList());
         List<String> typeCommands = commands.stream().map(command -> command.getCommand(object)).collect(Collectors.toList());
         if (commands.size() != 0) {
-            builder.appendField("Commands:", Utility.listFormatter(typeCommands, true), false);
+            builder.addField("Commands:", Utility.listFormatter(typeCommands, true), false);
         }
         return builder;
     }

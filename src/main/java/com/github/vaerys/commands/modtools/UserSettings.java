@@ -3,7 +3,6 @@ package com.github.vaerys.commands.modtools;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
@@ -138,7 +137,7 @@ public class UserSettings extends Command {
             userSettings.add(s.toString());
         }
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle(user.displayName + "'s User settings:");
+        builder.setTitle(user.displayName + "'s User settings:");
         if (userSettings.size() == 0) {
             return "\\> **" + user.displayName + "** has no settings on their profile.";
         } else {
@@ -146,7 +145,7 @@ public class UserSettings extends Command {
             if (showCommand) {
                 desc += "\n" + missingArgs(command);
             }
-            builder.withDesc(desc);
+            builder.setDescription(desc);
         }
         RequestHandler.sendEmbedMessage(prefix, builder, command.channel.get());
         return "";
@@ -178,8 +177,8 @@ public class UserSettings extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES, Permissions.MANAGE_ROLES};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_MESSAGES, Permissions.MANAGE_ROLES};
     }
 
     @Override

@@ -65,8 +65,8 @@ public class GetGuildInfo extends Command {
         }
 
         serverInfo.withThumbnail(command.guild.get().getIconURL());
-        serverInfo.withAuthorName(command.guild.get().getName());
-        serverInfo.withFooterText("Creation Date");
+        serverInfo.setAuthor(command.guild.get().getName());
+        serverInfo.setFooter("Creation Date");
         serverInfo.withTimestamp(command.guild.get().getCreationDate());
 
         StringBuilder serverStats = new StringBuilder();
@@ -112,7 +112,7 @@ public class GetGuildInfo extends Command {
             }
         }
 
-        serverInfo.withDescription(serverStats.toString());
+        serverInfo.setDescription(serverStats.toString());
 
         if (isGuildStats) {
             RequestHandler.sendEmbedMessage("", serverInfo, command.channel.get()).get();
@@ -136,9 +136,9 @@ public class GetGuildInfo extends Command {
                 }
             }
 
-            toggles.appendField("MODULES", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
+            toggles.addField("MODULES", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
                     "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.spacer, true);
-            toggles.appendField("SETTINGS", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
+            toggles.addField("SETTINGS", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
                     "**Disabled**```" + Utility.listEnumFormatter(disabledSettings, true) + "```", true);
             RequestHandler.sendEmbedMessage("", toggles, channel).get();
         }
@@ -161,10 +161,10 @@ public class GetGuildInfo extends Command {
                 if (channelList.size() != 0) {
                     String content = Utility.listFormatter(channelList, true);
                     channels = resetEmbed(channels, channel, command, s.toString().length() + content.length());
-                    channels.appendField(s.toString(), content, true);
+                    channels.addField(s.toString(), content, true);
                 }
             }
-            channels.withTitle("CHANNEL STATS");
+            channels.setTitle("CHANNEL STATS");
             RequestHandler.sendEmbedMessage("", channels, channel).get();
         }
 
@@ -210,18 +210,18 @@ public class GetGuildInfo extends Command {
                             moduleStats = resetEmbed(moduleStats, channel, command, title.length() + toSend.get(i).length());
                             if (i + 1 < toSend.size()) {
                                 if (toSend.get(i).length() + toSend.get(i + 1).length() < EmbedBuilder.FIELD_CONTENT_LIMIT / 4) {
-                                    moduleStats.appendField(title, toSend.get(i) + "\n\n" + toSend.get(i + 1), true);
+                                    moduleStats.addField(title, toSend.get(i) + "\n\n" + toSend.get(i + 1), true);
                                     i++;
                                 } else {
-                                    moduleStats.appendField(title, toSend.get(i), true);
+                                    moduleStats.addField(title, toSend.get(i), true);
                                 }
                             } else {
-                                moduleStats.appendField(title, toSend.get(i), true);
+                                moduleStats.addField(title, toSend.get(i), true);
                             }
                         }
                     } else {
                         moduleStats = resetEmbed(moduleStats, channel, command, title.length() + stats.length());
-                        moduleStats.appendField(title, stats, true);
+                        moduleStats.addField(title, stats, true);
                     }
                 }
             }
@@ -257,8 +257,8 @@ public class GetGuildInfo extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

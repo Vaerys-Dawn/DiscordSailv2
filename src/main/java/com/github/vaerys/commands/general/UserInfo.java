@@ -58,7 +58,7 @@ public class UserInfo extends Command {
         StringBuilder desc = new StringBuilder();
 
         //sets title to user Display Name;
-        builder.withAuthorName(user.displayName);
+        builder.setAuthor(user.displayName);
 
         //sets thumbnail to user Avatar.
         builder.withThumbnail(user.avatarURL);
@@ -82,10 +82,10 @@ public class UserInfo extends Command {
         //build desc desc
         if (command.guild.config.userInfoShowsDate) {
             builder.withTimestamp(user.creationDate);
-            builder.withFooterText("UserID: " + profile.getUserID() + ", Creation Date");
+            builder.setFooter("UserID: " + profile.getUserID() + ", Creation Date");
         } else {
             desc.append("**Account Created: **" + Utility.formatTimeDifference(accountAge));
-            builder.withFooterText("User ID: " + profile.getUserID());
+            builder.setFooter("User ID: " + profile.getUserID());
         }
 
         //append gender
@@ -110,7 +110,7 @@ public class UserInfo extends Command {
         //add break between footer
         desc.append("\n").append(spacer);
         //add desc
-        builder.withDesc(desc.toString());
+        builder.setDescription(desc.toString());
         //sends Message
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
@@ -146,8 +146,8 @@ public class UserInfo extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

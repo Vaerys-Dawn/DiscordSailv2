@@ -74,7 +74,7 @@ public class DMHandler {
         XEmbedBuilder builder = new XEmbedBuilder();
         Color color = command.user.getRandomColour();
         builder.withColor(color);
-        builder.withAuthorName(command.user.username + " | " + command.user.longID);
+        builder.setAuthor(command.user.username + " | " + command.user.longID);
         builder.withAuthorIcon(command.user.avatarURL);
         int attachmentStart = 0;
         List<IMessage.Attachment> attachmentList = command.message.getAttachments();
@@ -90,7 +90,7 @@ public class DMHandler {
                 content += attachmentList.get(i).getUrl();
             }
         }
-        builder.withDescription(content);
+        builder.setDescription(content);
         builder.send(ownerDm);
     }
 

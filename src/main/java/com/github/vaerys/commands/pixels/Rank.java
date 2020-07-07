@@ -97,8 +97,8 @@ public class Rank extends Command {
                     }
                 }
                 XEmbedBuilder builder = new XEmbedBuilder(command);
-                builder.withTitle("Rank stats for: " + user.displayName);
-                builder.withDesc(Utility.listFormatter(response, false));
+                builder.setTitle("Rank stats for: " + user.displayName);
+                builder.setDescription(Utility.listFormatter(response, false));
                 RequestHandler.sendEmbedMessage("", builder, command.channel.get());
                 return null;
             }
@@ -132,8 +132,8 @@ public class Rank extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

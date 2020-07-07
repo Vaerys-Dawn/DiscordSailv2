@@ -9,6 +9,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,7 @@ public abstract class Command {
     public final SAILType type;
     public final String[] names;
     public final String usage;
-    public final Permissions[] perms;
+    public final Permission[] perms;
     public final boolean requiresArgs;
     public final boolean doAdminLogging;
     public List<SubCommandObject> subCommands = new LinkedList<>();
@@ -101,7 +102,7 @@ public abstract class Command {
      */
     protected abstract ChannelSetting channel();
 
-    protected abstract Permissions[] perms();
+    protected abstract Permission[] perms();
 
     protected abstract boolean requiresArgs();
 
@@ -177,7 +178,7 @@ public abstract class Command {
 
             builder.append("\n**Perms: **");
             ArrayList<String> permList = new ArrayList<>(perms.length);
-            for (Permissions p : perms) {
+            for (Permission p : perms) {
                 permList.add(Utility.enumToString(p));
             }
             builder.append(Utility.listFormatter(permList, true));
@@ -195,12 +196,12 @@ public abstract class Command {
 
         if (objectList.size() != 0) builder.append("\n" + Command.spacer);
 
-        infoEmbed.withTitle("> Help - " + names()[0]);
-        infoEmbed.appendField("**" + getUsage(command) + "**    " + Command.spacer, builder.toString(), true);
+        infoEmbed.setTitle("> Help - " + names()[0]);
+        infoEmbed.addField("**" + getUsage(command) + "**    " + Command.spacer, builder.toString(), true);
 
 
         for (SubCommandObject s : objectList) {
-            infoEmbed.appendField(s.getCommandUsage(command) + "    " + Command.spacer, s.getHelpDesc(command), true);
+            infoEmbed.addField(s.getCommandUsage(command) + "    " + Command.spacer, s.getHelpDesc(command), true);
         }
 
         //Handle channels
@@ -210,9 +211,9 @@ public abstract class Command {
         //channel
         if (channels.size() > 0) {
             if (channelMentions.size() != 0) {
-                infoEmbed.appendField(channels.size() == 1 ? "Channel " : "Channels", Utility.listFormatter(channelMentions, true), false);
+                infoEmbed.addField(channels.size() == 1 ? "Channel " : "Channels", Utility.listFormatter(channelMentions, true), false);
             } else {
-                infoEmbed.appendField("Channels", "You do not have access to any channels that you are able to run this command in.", false);
+                infoEmbed.addField("Channels", "You do not have access to any channels that you are able to run this command in.", false);
             }
         }
 
@@ -270,7 +271,7 @@ public abstract class Command {
         } else {
             boolean hasPerms = false;
             for (SubCommandObject s : subCommands) {
-                List<Permissions> allPerms = new ArrayList<>(Arrays.asList(perms));
+                List<Permission> allPerms = new ArrayList<>(Arrays.asList(perms));
                 allPerms.addAll(Arrays.asList(s.getPermissions()));
                 if (GuildHandler.testForPerms(commandObject, allPerms)) {
                     hasPerms = true;

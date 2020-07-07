@@ -26,19 +26,19 @@ public class GetCompEntries extends Command {
         List<CompObject> compObjects = command.guild.competition.getEntries();
         for (int i = 0; i < compObjects.size(); i++) {
             XEmbedBuilder builder = new XEmbedBuilder(command);
-            builder.withTitle("Entry " + (i + 1));
+            builder.setTitle("Entry " + (i + 1));
             IUser user = command.guild.getUserByID(compObjects.get(i).getUserID());
             if (user != null) {
-                builder.withDesc(user.mention());
+                builder.setDescription(user.mention());
                 builder.withColor(GuildHandler.getUsersColour(user, command.guild.get()));
             }
             if (Utility.isImageLink(compObjects.get(i).getFileUrl())) {
                 builder.withThumbnail(compObjects.get(i).getFileUrl());
             } else {
                 if (user != null) {
-                    builder.withDesc(user.mention(false) + "\n" + compObjects.get(i).getFileUrl());
+                    builder.setDescription(user.mention(false) + "\n" + compObjects.get(i).getFileUrl());
                 } else {
-                    builder.withDesc(compObjects.get(i).getFileUrl());
+                    builder.setDescription(compObjects.get(i).getFileUrl());
                 }
             }
             builder.send(command.channel);
@@ -77,8 +77,8 @@ public class GetCompEntries extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

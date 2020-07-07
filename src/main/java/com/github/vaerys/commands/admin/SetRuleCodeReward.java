@@ -52,7 +52,7 @@ public class SetRuleCodeReward extends Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

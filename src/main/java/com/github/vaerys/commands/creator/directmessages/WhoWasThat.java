@@ -35,7 +35,7 @@ public class WhoWasThat extends Command {
             return "\\> No user found.";
         }
         XEmbedBuilder embed = new XEmbedBuilder(command);
-        embed.withAuthorName("@" + user.username);
+        embed.setAuthor("@" + user.username);
         if (user.isPatron) embed.withAuthorIcon(Constants.PATREON_ICON_URL);
         embed.withThumbnail(user.get().getAvatarURL());
         StringBuilder builder = new StringBuilder();
@@ -74,9 +74,9 @@ public class WhoWasThat extends Command {
         builder.append("\n**Total DailyMessages:** " + user.dailyMessages.size());
         builder.append("\n**Total Reminders:** " + user.reminders.size());
 
-        embed.withFooterText(user.longID + ", Creation Date");
+        embed.setFooter(user.longID + ", Creation Date");
         embed.withTimestamp(user.get().getCreationDate());
-        embed.withDesc(builder.toString());
+        embed.setDescription(builder.toString());
         embed.send(command.channel);
         return null;
     }
@@ -107,8 +107,8 @@ public class WhoWasThat extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

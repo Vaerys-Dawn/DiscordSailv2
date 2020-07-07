@@ -169,7 +169,7 @@ public class ModNote extends Command {
 
 
         builder.withColor(userObject.color);
-        builder.withTitle("Notes for " + userObject.displayName);
+        builder.setTitle("Notes for " + userObject.displayName);
 
         //avatar
         if (userObject.get() != null) builder.withThumbnail(userObject.get().getAvatarURL());
@@ -187,10 +187,10 @@ public class ModNote extends Command {
             }
             content.append(String.format(noteLine, ++counter, shortNote));
         }
-        builder.withDesc(content.toString());
+        builder.setDescription(content.toString());
 
         // finalize and send message:
-        builder.withFooterText("Total Notes: " + user.modNotes.size());
+        builder.setFooter("Total Notes: " + user.modNotes.size());
         builder.send(command.channel);
         return null;
     }
@@ -204,9 +204,9 @@ public class ModNote extends Command {
 
         // title and avatar of user in question.
         if (noteObject.getStrike()) {
-            builder.withTitle("⚠ Note " + (index + 1) + " - " + displayName);
+            builder.setTitle("⚠ Note " + (index + 1) + " - " + displayName);
         } else {
-            builder.withTitle("Note " + (index + 1) + " - " + displayName);
+            builder.setTitle("Note " + (index + 1) + " - " + displayName);
         }
         if (userObject.get() != null) builder.withThumbnail(userObject.get().getAvatarURL());
         else builder.withThumbnail(user.getDefaultAvatarURL());
@@ -215,7 +215,7 @@ public class ModNote extends Command {
         builder.appendDesc(noteObject.getNote());
         // Get a UserObject from the stored ID to add to the embed.
         UserObject creator = new UserObject(command.guild.getUserByID(noteObject.getCreatorId()), command.guild);
-        builder.withFooterText("Created by " + creator.displayName);
+        builder.setFooter("Created by " + creator.displayName);
         builder.withFooterIcon(creator.avatarURL);
         builder.withTimestamp(noteObject.getTimestamp() * 1000);
 
@@ -275,8 +275,8 @@ public class ModNote extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_MESSAGES};
     }
 
     @Override

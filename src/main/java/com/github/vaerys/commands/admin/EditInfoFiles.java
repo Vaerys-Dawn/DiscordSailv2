@@ -9,7 +9,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 26/06/2017.
@@ -78,7 +78,7 @@ public class EditInfoFiles extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
+    protected Permission[] perms() {
         return new UpdateInfo().perms();
     }
 

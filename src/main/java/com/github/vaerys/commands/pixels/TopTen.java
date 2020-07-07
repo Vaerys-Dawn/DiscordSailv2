@@ -14,7 +14,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class TopTen extends Command {
@@ -48,8 +47,8 @@ public class TopTen extends Command {
             }
         }
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle("Top Ten Users for the " + command.guild.get().getName() + " Server.");
-        builder.withDesc(Utility.listFormatter(response, false));
+        builder.setTitle("Top Ten Users for the " + command.guild.get().getName() + " Server.");
+        builder.setDescription(Utility.listFormatter(response, false));
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
@@ -80,8 +79,8 @@ public class TopTen extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

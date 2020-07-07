@@ -40,12 +40,12 @@ public class QueueHandler {
                         break;
                     }
                     XEmbedBuilder embedBuilder = new XEmbedBuilder(object);
-                    embedBuilder.withAuthorName("New Daily Message - " + object.guild.get().getName());
-                    embedBuilder.withFooterText(object.user.longID + "");
-                    embedBuilder.withTitle(object.user.username);
-                    embedBuilder.withDesc(content);
-                    embedBuilder.appendField(dowString, dayOfWeek + "", true);
-                    embedBuilder.appendField(uIDString, uID + "", true);
+                    embedBuilder.setAuthor("New Daily Message - " + object.guild.get().getName());
+                    embedBuilder.setFooter(object.user.longID + "");
+                    embedBuilder.setTitle(object.user.username);
+                    embedBuilder.setDescription(content);
+                    embedBuilder.addField(dowString, dayOfWeek + "", true);
+                    embedBuilder.addField(uIDString, uID + "", true);
                     IMessage message = RequestHandler.sendEmbedMessage("", embedBuilder, channel).get();
                     RequestBuffer.request(() -> message.addReaction(thumbsUp)).get();
                     RequestBuffer.request(() -> message.addReaction(thumbsDown)).get();

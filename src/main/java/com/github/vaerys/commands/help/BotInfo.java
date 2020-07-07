@@ -21,7 +21,7 @@ public class BotInfo extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         StringHandler response = new StringHandler();
         IUser creator = Globals.getCreator();
-        builder.withTitle("Information about " + Globals.botName);
+        builder.setTitle("Information about " + Globals.botName);
         response.append("Created by: **@" + creator.getName() + "#" + creator.getDiscriminator() + "**.");
         response.append("\nCreated entirely using Java 8 and the **[Discord4J Libraries](https://discord4j.com/)**.");
         response.append("\nSupport " + Globals.botName + " on **[Patreon](https://www.patreon.com/DawnFelstar)**.");
@@ -30,9 +30,9 @@ public class BotInfo extends Command {
         response.append("\n\nContributors: ");
         response.append(String.join(", ", Globals.getContributors().stream().map(u -> String.format("**@%s#%s**", u.getName(), u.getDiscriminator())).collect(Collectors.toList())));
         response.append(".");
-        builder.withDesc(response.toString());
+        builder.setDescription(response.toString());
         builder.withThumbnail(command.client.bot.avatarURL);
-        builder.withFooterText("Bot Version: " + Globals.version + " | D4J Version: " + Globals.d4jVersion);
+        builder.setFooter("Bot Version: " + Globals.version + " | D4J Version: " + Globals.d4jVersion);
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
@@ -63,8 +63,8 @@ public class BotInfo extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

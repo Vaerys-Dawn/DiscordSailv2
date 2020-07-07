@@ -4,6 +4,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.Permission;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -42,8 +43,8 @@ public class DelCC extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

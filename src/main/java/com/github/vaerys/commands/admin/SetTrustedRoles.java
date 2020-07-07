@@ -55,8 +55,8 @@ public class SetTrustedRoles extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_ROLES};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_ROLES};
     }
 
     @Override

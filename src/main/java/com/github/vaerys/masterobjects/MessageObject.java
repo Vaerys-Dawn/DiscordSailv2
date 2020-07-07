@@ -1,45 +1,45 @@
 package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.main.Utility;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IReaction;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class MessageObject {
 
     public ClientObject client;
     public long longID;
     public UserObject author;
-    private IMessage object;
+    private Message object;
 
-    public MessageObject(IMessage message, GuildObject guild) {
+    public MessageObject(Message message, GuildObject guild) {
         if (message == null) return;
         client = new ClientObject(guild);
         this.object = message;
-        this.longID = message.getLongID();
+        this.longID = message.getIdLong();
         this.author = new UserObject(message.getAuthor(), guild);
     }
 
-    public IMessage get() {
+    public Message get() {
         return object;
     }
 
-    public List<IMessage.Attachment> getAttachments() {
+    public List<Message.Attachment> getAttachments() {
         return object.getAttachments();
     }
 
     public int length() {
-        return object.getContent().length();
+        return object.getContentRaw().length();
     }
 
     public String getContent() {
-        return object.getContent();
+        return object.getContentRaw();
     }
 
     public void delete() {
@@ -47,22 +47,24 @@ public class MessageObject {
     }
 
     public ZonedDateTime getTimestampZone() {
-        return ZonedDateTime.ofInstant(object.getTimestamp(), ZoneOffset.UTC);
+        return object.getTimeCreated().atZoneSameInstant(ZoneOffset.UTC);
     }
 
-    public List<IReaction> getReactions() {
+    public List<MessageReaction> getReactions() {
         return object.getReactions();
     }
 
-    public IReaction getReationByName(String s) {
-        return object.getReactionByEmoji(Utility.getReaction(s));
+    public MessageReaction getReactionByName(String s) {
+        Optional<MessageReaction> temp = object.getReactions().stream().filter(r -> r.getReactionEmote().getName() == s).findFirst();
+        if (temp.isPresent()) return temp.get();
+        return null;
     }
 
-    public List<IUser> getMentions() {
-        return object.getMentions();
+    public List<User> getMentions() {
+        return object.getMentionedUsers();
     }
 
     public Instant getTimestamp() {
-        return object.getTimestamp();
+        return object.getTimeCreated().toInstant();
     }
 }

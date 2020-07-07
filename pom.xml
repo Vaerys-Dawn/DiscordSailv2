@@ -9,7 +9,6 @@
     <version>2.11.0 snapshot 10</version>
 
     <properties>
-        <discord4j.version>ed414ec449</discord4j.version>
         <patreonAPI.version>0.4.2</patreonAPI.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -82,9 +81,9 @@
     </build>
 
     <repositories>
-        <repository> <!-- This repo fixes issues with transitive dependencies -->
+        <repository>
             <id>jcenter</id>
-            <url>http://jcenter.bintray.com</url>
+            <url>https://jcenter.bintray.com</url>
         </repository>
         <repository>
             <id>jitpack.io</id>
@@ -99,10 +98,9 @@
             <version>20140107</version>
         </dependency>
         <dependency>
-            <groupId>com.github.Lyrth</groupId>
-            <artifactId>Discord4j</artifactId>
-            <version>${discord4j.version}</version>
-            <classifier>shaded</classifier>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>4.1.1_101</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>

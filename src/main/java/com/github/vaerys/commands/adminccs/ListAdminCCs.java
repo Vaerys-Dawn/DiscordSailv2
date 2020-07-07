@@ -19,9 +19,9 @@ public class ListAdminCCs extends Command {
         List<AdminCCObject> adminCCs = command.guild.adminCCs.getCommands();
         if (adminCCs.size() == 0) return "\\> There currently are no Admin Custom Commands right now, come back later.";
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle("\\> Here are all of the available Admin Custom Commands.");
+        builder.setTitle("\\> Here are all of the available Admin Custom Commands.");
         List<String> commandNames = adminCCs.stream().map(c -> c.getName(command)).collect(Collectors.toList());
-        builder.withDesc("```\n" + Utility.listFormatter(commandNames, true) + "```");
+        builder.setDescription("```\n" + Utility.listFormatter(commandNames, true) + "```");
         builder.send(command);
         return null;
     }
@@ -53,7 +53,7 @@ public class ListAdminCCs extends Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[0];
+        return new Permission[0];
     }
 
     @Override

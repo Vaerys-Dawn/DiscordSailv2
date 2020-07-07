@@ -46,7 +46,7 @@ public class ArtHandler {
             if (command.message.longID == l && command.message.author.longID == command.user.longID) {
                 RequestBuffer.request(() -> channel.unpin(command.message.get()));
                 RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_REMOVE_PIN)));
-                IReaction reaction = command.message.getReationByName(Constants.EMOJI_ADD_PIN);
+                IReaction reaction = command.message.getReactionByName(Constants.EMOJI_ADD_PIN);
                 for (IUser user : reaction.getUsers()) {
                     RequestBuffer.request(() -> command.message.get().removeReaction(user, reaction));
                 }
@@ -68,7 +68,7 @@ public class ArtHandler {
         //exit if message owner is a bot
         if (owner.get().isBot()) return;
         //exit if message has already been unpinned.
-        IReaction reaction = command.message.getReationByName(Constants.EMOJI_REMOVE_PIN);
+        IReaction reaction = command.message.getReactionByName(Constants.EMOJI_REMOVE_PIN);
         if (reaction != null && reaction.getUserReacted(command.client.bot.get())) {
             RequestBuffer.request(() ->
                     command.message.get().removeReaction(reacted.get(), Utility.getReaction(Constants.EMOJI_ADD_PIN))).get();

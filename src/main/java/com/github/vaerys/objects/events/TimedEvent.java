@@ -178,7 +178,7 @@ public class TimedEvent {
 
     public String getInfo(CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle("Event - " + eventName);
+        builder.setTitle("Event - " + eventName);
         StringBuilder desc = new StringBuilder();
         desc.append("**Position:** " + Globals.getEvents().indexOf(this));
         desc.append("\n**Valid Event:** " + isValid());
@@ -206,7 +206,7 @@ public class TimedEvent {
         }).collect(Collectors.toList()), true);
         if (messageList.length() != 0) desc.append("\n**Messages:**\n```\n" + messageList + Command.spacer + "```");
         if (avatarList.length() != 0) desc.append("\n**Avatars:**\n```\n" + avatarList + Command.spacer + "```");
-        builder.withDesc(desc.toString());
+        builder.setDescription(desc.toString());
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }

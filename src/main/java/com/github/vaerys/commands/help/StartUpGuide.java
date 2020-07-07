@@ -19,8 +19,8 @@ public class StartUpGuide extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withAuthorName("Start Up Guide.");
-        builder.withTitle("Helpful Commands.");
+        builder.setAuthor("Start Up Guide.");
+        builder.setTitle("Helpful Commands.");
         String desc = "**" + new Commands().getUsage(command) + "**\n" +
                 "Lists all commands.\n**" +
                 get(Help.class).getUsage(command) + "**\n" +
@@ -47,7 +47,7 @@ public class StartUpGuide extends Command {
                 "Gives you information about this bot.\n**" +
                 get(BotHelp.class).getUsage(command) + "**\n" +
                 "Gives you information about various bot features.";
-        builder.withDesc(desc);
+        builder.setDescription(desc);
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }
@@ -78,8 +78,8 @@ public class StartUpGuide extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

@@ -65,10 +65,10 @@ public class SearchCCs extends Command {
             RequestHandler.sendFile(title, complete.toString(), String.format("Search_%s.txt", args), command.channel.get());
             return null;
         } else {
-            embedBuilder.withTitle(title);
-            embedBuilder.withDesc("```\n" + contents + spacer + "```");
+            embedBuilder.setTitle(title);
+            embedBuilder.setDescription("```\n" + contents + spacer + "```");
             RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
-            embedBuilder.withFooterText("Results Found: " + searched.size());
+            embedBuilder.setFooter("Results Found: " + searched.size());
             return null;
         }
     }
@@ -99,8 +99,8 @@ public class SearchCCs extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

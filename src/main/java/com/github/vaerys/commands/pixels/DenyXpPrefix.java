@@ -75,8 +75,8 @@ public class DenyXpPrefix extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

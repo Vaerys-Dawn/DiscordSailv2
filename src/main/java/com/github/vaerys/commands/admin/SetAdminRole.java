@@ -55,8 +55,8 @@ public class SetAdminRole extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_SERVER};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_SERVER};
     }
 
     @Override

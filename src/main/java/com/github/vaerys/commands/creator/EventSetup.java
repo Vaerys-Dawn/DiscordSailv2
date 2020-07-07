@@ -24,9 +24,9 @@ public class EventSetup extends Command {
         TimedEvent event = null;
         if (eventName.getFirstWord().equalsIgnoreCase("list")) {
             XEmbedBuilder builder = new XEmbedBuilder(command);
-            builder.withTitle("All Events:");
+            builder.setTitle("All Events:");
             String eventList = Utility.listFormatter(Globals.getEvents().stream().map(event1 -> event1.getEventName()).collect(Collectors.toList()), true);
-            builder.withDesc("```\n" + eventList + spacer + "```");
+            builder.setDescription("```\n" + eventList + spacer + "```");
             RequestHandler.sendEmbedMessage("", builder, command.channel.get());
             return null;
         }
@@ -330,8 +330,8 @@ public class EventSetup extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

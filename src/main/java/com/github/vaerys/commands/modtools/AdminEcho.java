@@ -68,8 +68,8 @@ public class AdminEcho extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES, Permissions.MENTION_EVERYONE};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_MESSAGES, Permissions.MENTION_EVERYONE};
     }
 
     @Override

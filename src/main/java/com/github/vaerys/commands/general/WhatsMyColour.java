@@ -30,7 +30,7 @@ public class WhatsMyColour extends Command {
             desc += "colour is : ";
         }
         desc += "**#" + Integer.toHexString(color.getRGB()).substring(2).toUpperCase() + "**";
-        builder.withDescription(desc);
+        builder.setDescription(desc);
         builder.send(command.channel);
         return null;
     }
@@ -63,8 +63,8 @@ public class WhatsMyColour extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

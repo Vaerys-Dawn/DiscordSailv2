@@ -40,9 +40,9 @@ public abstract class GuildToggle {
     public XEmbedBuilder info(CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         if (isModule()) {
-            builder.withTitle("Module - " + name());
+            builder.setTitle("Module - " + name());
         } else {
-            builder.withTitle("Setting - " + name());
+            builder.setTitle("Setting - " + name());
         }
         String fullDesc = desc(command);
         if (statsOnInfo()) {
@@ -51,7 +51,7 @@ public abstract class GuildToggle {
                 fullDesc += "\n\n**Stats:**\n" + stats;
             }
         }
-        builder.withDesc(fullDesc);
+        builder.setDescription(fullDesc);
         List<String> commandNames = commands.stream().map(c -> Command.get(c).getCommand(command)).collect(Collectors.toList());
         commandNames.addAll(CommandList.getAll().stream()
                 .filter(command1 -> command1.type() == affectsType)
@@ -61,15 +61,15 @@ public abstract class GuildToggle {
         List<ChannelSetting> channelNames = channels.stream().collect(Collectors.toList());
 
         if (commandNames.size() != 0) {
-            builder.appendField("Commands:", "```\n" + Utility.listFormatter(commandNames, true) + Command.spacer + "```", true);
+            builder.addField("Commands:", "```\n" + Utility.listFormatter(commandNames, true) + Command.spacer + "```", true);
         }
 
         if (settingNames.size() != 0) {
-            builder.appendField("Settings:", "```\n" + Utility.listEnumFormatter(settingNames, true) + Command.spacer + "```", true);
+            builder.addField("Settings:", "```\n" + Utility.listEnumFormatter(settingNames, true) + Command.spacer + "```", true);
         }
 
         if (channelNames.size() != 0) {
-            builder.appendField("Channels:", "```\n" + Utility.listEnumFormatter(channelNames, true) + Command.spacer + "```", true);
+            builder.addField("Channels:", "```\n" + Utility.listEnumFormatter(channelNames, true) + Command.spacer + "```", true);
         }
 
         StringBuilder footer = new StringBuilder();
@@ -77,7 +77,7 @@ public abstract class GuildToggle {
         else footer.append("Setting ");
         if (enabled(command.guild.config)) footer.append("Enabled.");
         else footer.append("Disabled.");
-        builder.withFooterText(footer.toString());
+        builder.setFooter(footer.toString());
         return builder;
     }
 

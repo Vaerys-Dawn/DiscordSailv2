@@ -5,8 +5,8 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.InfoHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 
@@ -17,15 +17,15 @@ public class UpdateInfo extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.INFO);
+        List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.INFO);
         if (channels.size() == 0) {
             return "\\> No Info channel set up yet, you need to set one up in order to run this command.\n" + missingArgs(command);
         }
-        if (channels.get(0).getLongID() == command.channel.longID) {
+        if (channels.get(0).getIdLong() == command.channel.longID) {
             new InfoHandler(command);
             return null;
         } else {
-            return "\\> Command must be performed in " + channels.get(0).mention() + ".";
+            return "\\> Command must be performed in " + channels.get(0).getAsMention() + ".";
         }
     }
 
@@ -55,8 +55,8 @@ public class UpdateInfo extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+    protected Permission[] perms() {
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

@@ -47,9 +47,9 @@ public class ListChars extends Command {
                     "\\> User does not have any characters yet.";
         }
         //build embed data
-        builder.withTitle(title);
-        builder.withDesc("```\n" + Utility.listFormatter(list, true) + "```\n" + new CharInfo().missingArgs(command));
-        builder.withFooterText(user.characters.size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
+        builder.setTitle(title);
+        builder.setDescription("```\n" + Utility.listFormatter(list, true) + "```\n" + new CharInfo().missingArgs(command));
+        builder.setFooter(user.characters.size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
         //send private char list
         if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
@@ -86,8 +86,8 @@ public class ListChars extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

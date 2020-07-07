@@ -69,8 +69,8 @@ public class FinalTally extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_MESSAGES, Permissions.MANAGE_ROLES};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_MESSAGES, Permissions.MANAGE_ROLES};
     }
 
     @Override

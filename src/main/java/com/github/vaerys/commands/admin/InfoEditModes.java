@@ -6,6 +6,7 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import sx.blah.discord.handle.obj.IMessage;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class InfoEditModes {
             return "\\> No file to upload found.";
         } else {
             try {
-                IMessage.Attachment attachment = command.message.getAttachments().get(0);
+                Message.Attachment attachment = command.message.getAttachments().get(0);
                 File file = new File(Utility.getGuildImageDir(command.guild.longID) + attachment.getFilename());
                 File imagDir = new File(Utility.getGuildImageDir(command.guild.longID));
                 File[] imageList = imagDir.listFiles();
@@ -79,14 +80,14 @@ public class InfoEditModes {
     public static String listFiles(CommandObject command) {
         //send Embed
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle("\\> Here are the files available to you:");
+        builder.setTitle("\\> Here are the files available to you:");
         File imagDir = new File(Utility.getGuildImageDir(command.guild.longID));
         File[] imageList = imagDir.listFiles();
         ArrayList<String> fileNames = new ArrayList<>();
         for (File f : imageList) {
             fileNames.add(f.getName());
         }
-        builder.withDesc("```\n" + Utility.listFormatter(fileNames, true) + "```");
+        builder.setDescription("```\n" + Utility.listFormatter(fileNames, true) + "```");
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
     }

@@ -49,9 +49,9 @@ public class ModulesStage extends SetupHandler {
             }
         }
 
-        embed.withTitle("Here's the current list of enabled and disabled modules");
-        embed.appendField("Enabled Modules", enabled.toString(), true);
-        embed.appendField("Disabled Modules", disabled.toString(), true);
+        embed.setTitle("Here's the current list of enabled and disabled modules");
+        embed.addField("Enabled Modules", enabled.toString(), true);
+        embed.addField("Disabled Modules", disabled.toString(), true);
         //embed.send(command.user.getDmChannel());
         RequestHandler.sendEmbedMessage(output.toString(), embed, command.channel);
     }

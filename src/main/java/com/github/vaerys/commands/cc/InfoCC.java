@@ -30,7 +30,7 @@ public class InfoCC extends Command {
         builder.append("Time Run: **" + customCommand.getTimesRun() + "**\n");
         builder.append("Is Locked: **" + customCommand.isLocked() + "**\n");
         builder.append("Is ShitPost: **" + customCommand.isShitPost() + "**");
-        embedBuilder.appendField(title, builder.toString(), false);
+        embedBuilder.addField(title, builder.toString(), false);
         RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
         return null;
 
@@ -62,8 +62,8 @@ public class InfoCC extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

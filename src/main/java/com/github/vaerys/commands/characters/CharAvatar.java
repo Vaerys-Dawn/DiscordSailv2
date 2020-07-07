@@ -16,12 +16,12 @@ public class CharAvatar extends Command {
         CharacterObject charObject = command.guild.characters.getCharByName(args.split(" ")[0]);
         if (charObject == null) return "\\> Could not find any characters with that Character ID.";
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle(charObject.getNickname());
+        builder.setTitle(charObject.getNickname());
         IUser user = command.guild.getUserByID(charObject.getUserID());
         if (user == null) {
-            builder.withFooterText("Author: No longer on this server | Character ID: " + charObject.getName());
+            builder.setFooter("Author: No longer on this server | Character ID: " + charObject.getName());
         } else {
-            builder.withFooterText("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + charObject.getName());
+            builder.setFooter("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + charObject.getName());
         }
         command.guild.characters.validateRoles(command.guild.get());
         if (charObject.getRoleIDs().size() != 0) {
@@ -60,8 +60,8 @@ public class CharAvatar extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

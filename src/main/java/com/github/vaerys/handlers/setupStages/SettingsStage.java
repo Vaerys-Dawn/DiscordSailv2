@@ -15,7 +15,6 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SettingsStage extends SetupHandler {
     @Override
@@ -73,9 +72,9 @@ public class SettingsStage extends SetupHandler {
 
         // Append additional enabled/disabled state info.
         XEmbedBuilder embed = new XEmbedBuilder(command);
-        embed.withTitle("Global Settings");
-        embed.appendField("Enabled", "```" + Utility.listFormatter(enabled, true) + "```", false);
-        embed.appendField("Disabled", "```" + Utility.listFormatter(disabled, true) + "```", false);
+        embed.setTitle("Global Settings");
+        embed.addField("Enabled", "```" + Utility.listFormatter(enabled, true) + "```", false);
+        embed.addField("Disabled", "```" + Utility.listFormatter(disabled, true) + "```", false);
 
         RequestHandler.sendEmbedMessage(output.toString(), embed, command.channel);
     }

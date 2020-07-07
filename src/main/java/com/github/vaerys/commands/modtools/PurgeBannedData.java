@@ -128,8 +128,8 @@ public class PurgeBannedData extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.ADMINISTRATOR, Permissions.BAN};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.ADMINISTRATOR, Permissions.BAN};
     }
 
     @Override

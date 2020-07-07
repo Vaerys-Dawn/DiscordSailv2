@@ -57,9 +57,9 @@ public class ListJoinMessages extends Command {
             return "\\> Invalid Page.";
         }
 
-        builder.withTitle("\\> Join Message list");
-        builder.withDesc(pages.get(page) + "\n\n" + missingArgs(command));
-        builder.withFooterText("Page " + (page + 1) + "/" + pages.size() + " | Total Join Messages: " + messages.size());
+        builder.setTitle("\\> Join Message list");
+        builder.setDescription(pages.get(page) + "\n\n" + missingArgs(command));
+        builder.setFooter("Page " + (page + 1) + "/" + pages.size() + " | Total Join Messages: " + messages.size());
         builder.send(command.channel);
         return null;
     }
@@ -90,8 +90,8 @@ public class ListJoinMessages extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

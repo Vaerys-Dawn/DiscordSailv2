@@ -202,7 +202,7 @@ public abstract class TagObject {
 
     public XEmbedBuilder getInfo(CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle(name);
+        builder.setTitle(name);
         StringBuilder descContents = new StringBuilder();
         descContents.append(desc);
 
@@ -215,7 +215,7 @@ public abstract class TagObject {
             descContents.append("\n**Usage:** `" + prefix + "`");
         }
         descContents.append("\n\n**Types:** " + Utility.listEnumFormatter(types, true));
-        builder.withDesc(descContents.toString());
+        builder.setDescription(descContents.toString());
         return builder;
     }
 

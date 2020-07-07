@@ -44,8 +44,8 @@ public class PurgeComp extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.ADMINISTRATOR};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.ADMINISTRATOR};
     }
 
     @Override

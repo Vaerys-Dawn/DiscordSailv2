@@ -71,8 +71,8 @@ public class ListTags extends Command {
             sendModes(command, "\\> Invalid mode.");
             return null;
         }
-        builder.withTitle("\\> Here are all of the " + StringUtils.capitalize(args) + " tags:");
-        builder.withDesc("```\n" + Utility.listFormatter(list, true) + "```\n" +
+        builder.setTitle("\\> Here are all of the " + StringUtils.capitalize(args) + " tags:");
+        builder.setDescription("```\n" + Utility.listFormatter(list, true) + "```\n" +
                 "Tags are run in the order listed above.\n\n" + new HelpTags().missingArgs(command));
         RequestHandler.sendEmbedMessage("", builder, command.channel.get());
         return null;
@@ -80,8 +80,8 @@ public class ListTags extends Command {
 
     private void sendModes(CommandObject command, String s) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle("\\> Modes");
-        builder.withDesc("```\n" + Utility.listFormatter(getModes(command), false) + "```\n" + missingArgs(command));
+        builder.setTitle("\\> Modes");
+        builder.setDescription("```\n" + Utility.listFormatter(getModes(command), false) + "```\n" + missingArgs(command));
         RequestHandler.sendEmbedMessage(s, builder, command);
     }
 
@@ -113,8 +113,8 @@ public class ListTags extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

@@ -49,7 +49,7 @@ public class GetReminders extends Command {
             i++;
         }
         i--;   // oh of course
-        embed.withTitle( String.format("\\> You have %d Reminder%s:", i, (i==1) ? "":"s" ) );
+        embed.setTitle( String.format("\\> You have %d Reminder%s:", i, (i==1) ? "":"s" ) );
         embed.send(command);
         return null;
     }
@@ -80,8 +80,8 @@ public class GetReminders extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

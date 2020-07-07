@@ -27,13 +27,13 @@ public class JoinMessageInfo extends Command {
             return "\\> Could not find message.";
         }
         JoinMessage message = messages.get(index);
-        builder.withTitle("Message #" + (index + 1));
-        builder.withDesc(message.getContent());
+        builder.setTitle("Message #" + (index + 1));
+        builder.setDescription(message.getContent());
         UserObject user = UserObject.getNewUserObject(message.getCreator(), command.guild);
         if (user == null) {
-            builder.withFooterText("Could not find user.");
+            builder.setFooter("Could not find user.");
         } else {
-            builder.withFooterText("Creator: @" + user.username);
+            builder.setFooter("Creator: @" + user.username);
             builder.withFooterIcon(user.avatarURL);
         }
         builder.send(command.channel);
@@ -66,8 +66,8 @@ public class JoinMessageInfo extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_SERVER};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_SERVER};
     }
 
     @Override

@@ -56,7 +56,7 @@ public class Report extends Command {
         String format = "**%s**\nReported User: %s\nReason: `%s`\nChannel: %s\n\nLink to Report:\n%s\nReported by: %s";
         String reportType = isSilent ? "User Report - Silent" : "User Report";
         String message = String.format(format, reportType, reported.mention(), reason, command.channel.mention, command.getMessageLink(), command.user.mention());
-//        embed.withTitle(reportType);
+//        embed.setTitle(reportType);
         IMessage response;
 
         //send report
@@ -121,8 +121,8 @@ public class Report extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

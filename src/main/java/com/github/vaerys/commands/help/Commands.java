@@ -75,9 +75,9 @@ public class Commands extends Command {
             //get prefix
             String prefix = typeNull && !argsNull ? "\\> There are no commands with the type: **" + args + "**." : "";
             //title
-            builder.withTitle("Here are the Command Types I have available for use:");
+            builder.setTitle("Here are the Command Types I have available for use:");
             //desc
-            builder.withDesc("```\n" +
+            builder.setDescription("```\n" +
                     Utility.listFormatter(types.stream().map(t -> t.toString()).collect(Collectors.toList()), false) +
                     "```\n" + missingArgs(command));
             builder.send(prefix, command);
@@ -85,8 +85,8 @@ public class Commands extends Command {
         }
 
         //send page
-        builder.withTitle("\\> Here are all of the " + type.toString() + " Commands I have available.");
-        builder.withDesc(pages.get(type) + get(Help.class).missingArgs(command));
+        builder.setTitle("\\> Here are all of the " + type.toString() + " Commands I have available.");
+        builder.setDescription(pages.get(type) + get(Help.class).missingArgs(command));
         builder.send(command);
         return null;
     }
@@ -159,8 +159,8 @@ public class Commands extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override

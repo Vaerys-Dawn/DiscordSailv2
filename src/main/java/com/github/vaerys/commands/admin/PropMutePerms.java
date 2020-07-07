@@ -84,7 +84,7 @@ public class PropMutePerms extends Command {
 
     @Override
     public Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_CHANNELS, Permissions.MANAGE_ROLES};
+        return new Permission[]{Permissions.MANAGE_CHANNELS, Permissions.MANAGE_ROLES};
     }
 
     @Override

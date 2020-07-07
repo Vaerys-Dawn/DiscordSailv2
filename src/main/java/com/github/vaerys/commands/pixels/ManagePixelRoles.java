@@ -29,7 +29,7 @@ public class ManagePixelRoles extends Command {
     public String execute(String args, CommandObject command) {
         if (args.equalsIgnoreCase("list")) {
             XEmbedBuilder builder = new XEmbedBuilder(command);
-            builder.withTitle("Pixel Roles");
+            builder.setTitle("Pixel Roles");
             IRole xpDenied = command.guild.getXPDeniedRole();
             IRole topTen = command.guild.getTopTenRole();
             List<RewardRoleObject> rewardRoles = command.guild.config.getRewardRoles();
@@ -50,7 +50,7 @@ public class ManagePixelRoles extends Command {
             if (xpDenied != null) {
                 desc += "**Pixel Denied Role**: " + xpDenied.getName();
             }
-            builder.withDesc(desc);
+            builder.setDescription(desc);
             builder.send(command.channel);
             return null;
         }
@@ -147,8 +147,8 @@ public class ManagePixelRoles extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[]{Permissions.MANAGE_ROLES};
+    protected Permission[] perms() {
+        return new Permission[]{Permissions.MANAGE_ROLES};
     }
 
     @Override

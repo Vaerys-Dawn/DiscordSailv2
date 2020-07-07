@@ -19,6 +19,10 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.FileFactory;
 import com.github.vaerys.templates.GlobalFile;
 import com.github.vaerys.templates.GuildToggle;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.*;
@@ -50,14 +54,14 @@ public class GuildObject {
     private List<GuildToggle> toggles;
     public List<ChannelSetting> channelSettings;
     public List<SAILType> commandTypes;
-    private IGuild object;
+    private Guild object;
     private List<UserRateObject> rateUsers = new ArrayList<>();
     private List<Long> spokenUsers = new ArrayList<>();
     private List<GuildToggle> toRemove = new ArrayList<>();
 
-    public GuildObject(IGuild object) {
+    public GuildObject(Guild object) {
         this.object = object;
-        this.longID = object.getLongID();
+        this.longID = object.getIdLong();
         this.config = FileFactory.create(longID, FilePaths.GUILD_CONFIG, GuildConfig.class);
         this.customCommands = FileFactory.create(longID, FilePaths.CUSTOM_COMMANDS, CustomCommands.class);
         this.servers = FileFactory.create(longID, FilePaths.SERVERS, Servers.class);
@@ -110,7 +114,7 @@ public class GuildObject {
         logger.trace(output);
     }
 
-    public void sendDebugLog(IUser user, IChannel channel, String type, String name, String contents) {
+    public void sendDebugLog(User user, TextChannel channel, String type, String name, String contents) {
         GuildLogObject object = new GuildLogObject(user, channel, type, name, contents);
         String output = object.getOutput(this);
         if (object != null) {
@@ -258,7 +262,7 @@ public class GuildObject {
         return allCommands;
     }
 
-    public IChannel getChannelByID(long id) {
+    public TextChannel getChannelByID(long id) {
         return object.getChannelByID(id);
     }
 
@@ -333,12 +337,12 @@ public class GuildObject {
         return null;
     }
 
-    public List<IChannel> getChannelsByType(ChannelSetting type) {
-        List<IChannel> channels = new ArrayList<>();
+    public List<TextChannel> getChannelsByType(ChannelSetting type) {
+        List<TextChannel> channels = new ArrayList<>();
         for (ChannelSettingObject c : channelData.getChannelSettings()) {
             if (c.getType() == type) {
                 for (long s : c.getChannelIDs()) {
-                    IChannel channel = getChannelByID(s);
+                    TextChannel channel = getChannelByID(s);
                     if (channel != null) {
                         channels.add(channel);
                     }

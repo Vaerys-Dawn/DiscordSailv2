@@ -2,8 +2,8 @@ package com.github.vaerys.objects.utils;
 
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class GuildLogObject {
 
@@ -41,13 +41,13 @@ public class GuildLogObject {
         this.messageID = logObject.messageID;
     }
 
-    public GuildLogObject(IUser user, IChannel channel, String type, String name, String contents) {
+    public GuildLogObject(User user, TextChannel channel, String type, String name, String contents) {
         this.type = type;
         this.name = name;
         this.contents = contents;
         this.messageID = -1;
-        this.channelID = channel.getLongID();
-        this.userID = user.getLongID();
+        this.channelID = channel.getIdLong();
+        this.userID = user.getIdLong();
     }
 
     public String getOutput(GuildObject guild) {

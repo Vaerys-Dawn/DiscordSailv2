@@ -36,8 +36,8 @@ public abstract class SlashCommand extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override
@@ -89,10 +89,10 @@ public abstract class SlashCommand extends Command {
     @Override
     public XEmbedBuilder getCommandInfo(CommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.withTitle(getCommand(command));
-        builder.withDescription(description(command));
+        builder.setTitle(getCommand(command));
+        builder.setDescription(description(command));
         if (names.length != 1) {
-            builder.appendField("Aliases:", Utility.listFormatter(Arrays.asList(names), true), true);
+            builder.addField("Aliases:", Utility.listFormatter(Arrays.asList(names), true), true);
         }
         return builder;
     }

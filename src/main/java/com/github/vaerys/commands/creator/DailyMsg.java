@@ -92,16 +92,16 @@ public class DailyMsg extends Command {
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         IUser user = command.client.get().getUserByID(messageObject.getUserID());
         if (user != null) {
-            embedBuilder.withAuthorName(user.getName() + "#" + user.getDiscriminator());
+            embedBuilder.setAuthor(user.getName() + "#" + user.getDiscriminator());
         }
         if (messageObject.getDay() != null) {
-            embedBuilder.withTitle(messageObject.getDay() + "");
+            embedBuilder.setTitle(messageObject.getDay() + "");
         }
         String contents = messageObject.getContents(new CommandObject(command.guild, command.channel.get()));
         if (contents.matches("^(> |\\*> |\\*\\*> |\\*\\*\\*> |_> |__> |`> |```> ).*$") || contents.startsWith("> ")) {
-            embedBuilder.withDesc(contents);
+            embedBuilder.setDescription(contents);
         } else {
-            embedBuilder.withDesc("\\> " + contents);
+            embedBuilder.setDescription("\\> " + contents);
         }
         String formattedFooter;
         if (messageObject.getUID() != -1) {
@@ -109,7 +109,7 @@ public class DailyMsg extends Command {
         } else {
             formattedFooter = messageObject.getSpecialID();
         }
-        embedBuilder.withFooterText(formattedFooter);
+        embedBuilder.setFooter(formattedFooter);
         return embedBuilder;
     }
 
@@ -139,8 +139,8 @@ public class DailyMsg extends Command {
     }
 
     @Override
-    protected Permissions[] perms() {
-        return new Permissions[0];
+    protected Permission[] perms() {
+        return new Permission[0];
     }
 
     @Override
