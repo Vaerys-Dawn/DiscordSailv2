@@ -9,7 +9,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 public class ModuleRuleRewards extends GuildModule {
@@ -63,7 +63,7 @@ public class ModuleRuleRewards extends GuildModule {
             if (object.guild.config.getRuleCode() != null) {
                 response += "**Rule Code:** " + object.guild.config.getRuleCode();
             }
-            IRole reward = object.guild.getRoleByID(object.guild.config.ruleCodeRewardID);
+            Role reward = object.guild.getRoleById(object.guild.config.ruleCodeRewardID);
             if (reward != null) {
                 if (!response.isEmpty()) response += "\n";
                 response += "**Reward Role:** " + reward.getName();

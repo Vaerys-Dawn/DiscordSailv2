@@ -3,7 +3,7 @@ package com.github.vaerys.objects.adminlevel;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import sx.blah.discord.api.internal.DiscordUtils;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.time.Instant;
@@ -48,7 +48,7 @@ public class UserRateObject {
         return messageIDs.size();
     }
 
-    public List<IChannel> getChannels(GuildObject guild) {
+    public List<TextChannel> getChannels(GuildObject guild) {
         return channelIDs.stream().map(l -> guild.getChannelByID(l)).collect(Collectors.toList());
     }
 

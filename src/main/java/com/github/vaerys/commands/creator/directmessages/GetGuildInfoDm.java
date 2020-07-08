@@ -5,7 +5,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.DMCommand;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.Guild;
 
 /**
  * Created by Vaerys on 17/02/2017.
@@ -14,7 +14,7 @@ public class GetGuildInfoDm extends DMCommand {
 
     @Override
     public String execute(String args, CommandObject command) {
-        IGuild guild = command.client.get().getGuildByID(Utility.stringLong(args));
+        Guild guild = command.client.get().getGuildByID(Utility.stringLong(args));
         if (guild != null) {
             get(GetGuildInfo.class).execute(args, command.setGuild(guild));
             return null;

@@ -11,8 +11,8 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Message;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -28,7 +28,7 @@ public class TopUserForRole extends Command {
         int index = 1;
 
         // try to get role.
-        IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
+        Role role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) {
             try {
                 // if role get fails, try again, but this time assume the first "word" is the rank the user wants to get.
@@ -44,10 +44,10 @@ public class TopUserForRole extends Command {
             if (role == null) return "\\> Invalid Role.";
         }
 
-        IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
+        Message working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
 
         // populate list with users with role defined.
-        List<Long> userIDs = command.guild.get().getUsersByRole(role).stream().map(IUser::getLongID).collect(Collectors.toList());
+        List<Long> userIDs = command.guild.get().getUsersByRole(role).stream().map(IUser::getIdLong).collect(Collectors.toList());
         if (userIDs.isEmpty()) {
             RequestHandler.deleteMessage(working);
             return "\\> Could not find any users with that role!";
@@ -85,7 +85,7 @@ public class TopUserForRole extends Command {
 
     }
 
-    private void getEmbed(CommandObject command, IRole role, List<Long> userIDs) {
+    private void getEmbed(CommandObject command, Role role, List<Long> userIDs) {
         XEmbedBuilder embed = new XEmbedBuilder(command);
         int showing = (userIDs.size() > 5 ? 5 : userIDs.size());
 

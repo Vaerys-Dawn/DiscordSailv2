@@ -4,7 +4,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.templates.TagObject;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.regex.Pattern;
@@ -45,7 +45,7 @@ public class TagRemoveMentions extends TagObject {
             //remove role mentions
             try {
                 long roleID = Long.parseUnsignedLong(id);
-                IRole role = command.guild.getRoleByID(roleID);
+                Role role = command.guild.getRoleById(roleID);
                 if (role != null) {
                     from = from.replace("<@&" + id + ">", role.getName());
                 } else {

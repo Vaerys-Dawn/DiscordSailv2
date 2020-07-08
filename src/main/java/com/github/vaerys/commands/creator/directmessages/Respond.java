@@ -6,8 +6,8 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.DMCommand;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Message;
 import sx.blah.discord.handle.obj.IUser;
 
 /**
@@ -22,9 +22,9 @@ public class Respond extends DMCommand {
         if (args == null) {
             return "\\> Could Not Send Response, Contents cannot be empty.";
         }
-        IChannel channel = recipient.getOrCreatePMChannel();
+        TextChannel channel = recipient.getOrCreatePMChannel();
         if (command.message.getAttachments().size() != 0) {
-            for (IMessage.Attachment a : command.message.getAttachments()) {
+            for (Message.Attachment a : command.message.getAttachments()) {
                 args += "\n" + a.getUrl();
             }
         }

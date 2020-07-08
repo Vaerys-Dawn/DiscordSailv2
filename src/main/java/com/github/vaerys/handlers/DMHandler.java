@@ -7,8 +7,8 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Message;
 
 import java.awt.*;
 import java.time.Instant;
@@ -32,8 +32,8 @@ public class DMHandler {
         if (command.message.get().getAuthor().isBot()) return;
         if (command.user.longID == Globals.creatorID) return;
 
-        IChannel channel = command.user.get().getOrCreatePMChannel();
-        IChannel ownerDm = command.client.creator.getDmChannel();
+        TextChannel channel = command.user.get().getOrCreatePMChannel();
+        TextChannel ownerDm = command.client.creator.getDmChannel();
         Globals.lastDmUserID = command.user.longID;
 
         sendLog(command);
@@ -58,7 +58,7 @@ public class DMHandler {
 //
 //                if (command.message.getAllToggles().getAttachments().size() > 0) {
 //                    String attachmemts = "";
-//                    for (IMessage.Attachment a : command.message.getAllToggles().getAttachments()) {
+//                    for (Message.Attachment a : command.message.getAllToggles().getAttachments()) {
 //                        attachmemts = "\n" + a.getUrl();
 //                    }
 //                    RequestHandler.sendMessage(logging + attachmemts, ownerDm);
@@ -69,7 +69,7 @@ public class DMHandler {
 
     }
 
-    private void sendMessage(CommandObject command, IChannel ownerDm) {
+    private void sendMessage(CommandObject command, TextChannel ownerDm) {
         String content = command.message.getContent();
         XEmbedBuilder builder = new XEmbedBuilder();
         Color color = command.user.getRandomColour();
@@ -77,7 +77,7 @@ public class DMHandler {
         builder.setAuthor(command.user.username + " | " + command.user.longID);
         builder.withAuthorIcon(command.user.avatarURL);
         int attachmentStart = 0;
-        List<IMessage.Attachment> attachmentList = command.message.getAttachments();
+        List<Message.Attachment> attachmentList = command.message.getAttachments();
         if (attachmentList.size() != 0 && Utility.isImageLink(attachmentList.get(0).getUrl())) {
             attachmentStart++;
             builder.withImage(attachmentList.get(0).getUrl());
@@ -112,7 +112,7 @@ public class DMHandler {
         return false;
     }
 
-    private boolean spamCatcher(CommandObject command, IChannel ownerDm) {
+    private boolean spamCatcher(CommandObject command, TextChannel ownerDm) {
         long count = getCount(command.user.longID);
         if (count == 7) {
             sendMessage(command, ownerDm);
@@ -151,7 +151,7 @@ public class DMHandler {
     }
 
     private void sendLog(CommandObject command) {
-        final String[] logging = {"[" + command.message.get().getAuthor().getLongID() + "] " + command.message.get().getAuthor().getName() + "#" + command.message.get().getAuthor().getDiscriminator() + ": " + command.message.get().toString()};
+        final String[] logging = {"[" + command.message.get().getAuthor().getIdLong() + "] " + command.message.get().getAuthor().getName() + "#" + command.message.get().getAuthor().getDiscriminator() + ": " + command.message.get().toString()};
         if (command.message.getAttachments().size() != 0) {
             command.message.getAttachments().forEach(attachment -> logging[0] += "\n" + attachment.getUrl());
         }
@@ -191,7 +191,7 @@ public class DMHandler {
         return false;
     }
 
-    private boolean smartAssBlocker(CommandObject command, IChannel ownerDm) {
+    private boolean smartAssBlocker(CommandObject command, TextChannel ownerDm) {
         String step1 = "Thank you for your message.";
         String step2 = "That's what I just said, you don't have to repeat it.";
         String step3 = "Okay, do you like repeating the things bots say?";

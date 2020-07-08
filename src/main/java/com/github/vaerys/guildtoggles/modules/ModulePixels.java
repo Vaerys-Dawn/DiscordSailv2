@@ -12,7 +12,7 @@ import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -80,8 +80,8 @@ public class ModulePixels extends GuildModule {
         builder.append("**Pixels Per Message: ** " + command.guild.config.xpRate);
         builder.append("\n**Pixel Modifier:** " + command.guild.config.xpModifier);
         if (hasManageServer) {
-            IRole topTen = command.guild.getRoleByID(command.guild.config.topTenRoleID);
-            IRole xpDenied = command.guild.getRoleByID(command.guild.config.xpDeniedRoleID);
+            Role topTen = command.guild.getRoleById(command.guild.config.topTenRoleID);
+            Role xpDenied = command.guild.getRoleById(command.guild.config.xpDeniedRoleID);
             if (topTen != null)
                 builder.append("\n**Top Ten Role:** " + topTen.getName());
             if (xpDenied != null)
@@ -90,7 +90,7 @@ public class ModulePixels extends GuildModule {
         if (command.guild.config.getRewardRoles().size() != 0) {
             builder.append("\n\n**[REWARD ROLES]**");
             for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
-                IRole role = command.guild.getRoleByID(r.getRoleID());
+                Role role = command.guild.getRoleById(r.getRoleID());
                 if (role != null) {
                     builder.append("\n**" + role.getName() + "** - Lvl " + r.getLevel());
                 }

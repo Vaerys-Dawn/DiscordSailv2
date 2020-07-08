@@ -7,7 +7,7 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.GlobalFile;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class GuildUsers extends GlobalFile {
         return false;
     }
 
-    public boolean muteUser(long userID, long guildID, long time, List<IRole> roles) {
+    public boolean muteUser(long userID, long guildID, long time, List<Role> roles) {
         boolean found = false;
         for (MutedUserObject c : mutedUsers) {
             if (c.getID() == userID) {
@@ -95,7 +95,7 @@ public class GuildUsers extends GlobalFile {
 
     public boolean isUserMuted(IUser user) {
         for (MutedUserObject u : mutedUsers) {
-            if (u.getID() == user.getLongID()) return true;
+            if (u.getID() == user.getIdLong()) return true;
         }
         return false;
     }

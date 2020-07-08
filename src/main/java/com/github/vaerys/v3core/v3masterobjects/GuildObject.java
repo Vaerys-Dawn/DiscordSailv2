@@ -59,7 +59,7 @@ public class GuildObject {
 
     public GuildObject(Guild object) {
         this.object = object;
-        this.longID = object.getLongID();
+        this.longID = object.getIdLong();
         this.config = FileFactory.create(longID, FilePaths.GUILD_CONFIG, GuildConfig.class);
         this.customCommands = FileFactory.create(longID, FilePaths.CUSTOM_COMMANDS, CustomCommands.class);
         this.servers = FileFactory.create(longID, FilePaths.SERVERS, Servers.class);
@@ -112,7 +112,7 @@ public class GuildObject {
         logger.trace(output);
     }
 
-    public void sendDebugLog(IUser user, IChannel channel, String type, String name, String contents) {
+    public void sendDebugLog(IUser user, TextChannel channel, String type, String name, String contents) {
         GuildLogObject object = new GuildLogObject(user, channel, type, name, contents);
         String output = object.getOutput(this);
         if (object != null) {
@@ -131,7 +131,7 @@ public class GuildObject {
         checkToggles();
     }
 
-    public IGuild get() {
+    public Guild get() {
         return object;
     }
 
@@ -157,7 +157,7 @@ public class GuildObject {
                 }
             }
         }
-        IChannel channel = client.get().getChannelByID(Globals.queueChannelID);
+        TextChannel channel = client.get().getChannelByID(Globals.queueChannelID);
         if (channel == null) {
             ListIterator iterator = commands.listIterator();
             while (iterator.hasNext()) {
@@ -260,7 +260,7 @@ public class GuildObject {
         return allCommands;
     }
 
-    public IChannel getChannelByID(long id) {
+    public TextChannel getChannelByID(long id) {
         return object.getChannelByID(id);
     }
 
@@ -268,8 +268,8 @@ public class GuildObject {
         return object.getUserByID(id);
     }
 
-    public IRole getRoleByID(long id) {
-        return object.getRoleByID(id);
+    public Role getRoleById(long id) {
+        return object.getRoleById(id);
     }
 
     public IVoiceChannel getVoiceChannelByID(long id) {
@@ -303,12 +303,12 @@ public class GuildObject {
         if (command.guild.get() == null || command.channel == null) {
             return;
         }
-        IChannel general = getChannelByType(ChannelSetting.GENERAL);
-        if (general != null && command.channel.longID != general.getLongID()) {
+        TextChannel general = getChannelByType(ChannelSetting.GENERAL);
+        if (general != null && command.channel.longID != general.getIdLong()) {
             return;
         }
         if (!GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER)) return;
-        IMessage message = RequestHandler.sendMessage(Constants.getWelcomeMessage(command), command.channel.get()).get();
+        Message message = RequestHandler.sendMessage(Constants.getWelcomeMessage(command), command.channel.get()).get();
         if (message != null) {
             command.guild.config.initialMessage = true;
             Thread thread = new Thread(() -> {
@@ -327,20 +327,20 @@ public class GuildObject {
         config.resetOffenders();
     }
 
-    public IChannel getChannelByType(ChannelSetting type) {
-        List<IChannel> channels = getChannelsByType(type);
+    public TextChannel getChannelByType(ChannelSetting type) {
+        List<TextChannel> channels = getChannelsByType(type);
         if (channels.size() != 0) {
             return channels.get(0);
         }
         return null;
     }
 
-    public List<IChannel> getChannelsByType(ChannelSetting type) {
-        List<IChannel> channels = new ArrayList<>();
+    public List<TextChannel> getChannelsByType(ChannelSetting type) {
+        List<TextChannel> channels = new ArrayList<>();
         for (ChannelSettingObject c : channelData.getChannelSettings()) {
             if (c.getType() == type) {
                 for (long s : c.getChannelIDs()) {
-                    IChannel channel = getChannelByID(s);
+                    TextChannel channel = getChannelByID(s);
                     if (channel != null) {
                         channels.add(channel);
                     }
@@ -350,34 +350,34 @@ public class GuildObject {
         return channels;
     }
 
-    public List<IRole> getRewardRoles() {
-        List<IRole> roles = new LinkedList<>();
-        config.getRewardRoles().forEach(rewardRoleObject -> roles.add(object.getRoleByID(rewardRoleObject.getRoleID())));
+    public List<Role> getRewardRoles() {
+        List<Role> roles = new LinkedList<>();
+        config.getRewardRoles().forEach(rewardRoleObject -> roles.add(object.getRoleById(rewardRoleObject.getRoleID())));
         return roles;
     }
 
-    public IRole getMutedRole() {
-        return object.getRoleByID(config.getMutedRoleID());
+    public Role getMutedRole() {
+        return object.getRoleById(config.getMutedRoleID());
     }
 
-    public IRole getXPDeniedRole() {
-        return object.getRoleByID(config.getMutedRoleID());
+    public Role getXPDeniedRole() {
+        return object.getRoleById(config.getMutedRoleID());
     }
 
-    public IRole getTopTenRole() {
-        return object.getRoleByID(config.topTenRoleID);
+    public Role getTopTenRole() {
+        return object.getRoleById(config.topTenRoleID);
     }
 
-    public List<IRole> getCosmeticRoles() {
-        return config.getCosmeticRoleIDs().stream().map(id -> object.getRoleByID(id)).collect(Collectors.toList());
+    public List<Role> getCosmeticRoles() {
+        return config.getCosmeticRoleIDs().stream().map(id -> object.getRoleById(id)).collect(Collectors.toList());
     }
 
-    public List<IRole> getModifierRoles() {
-        return config.getModifierRoleIDs().stream().map(id -> object.getRoleByID(id)).collect(Collectors.toList());
+    public List<Role> getModifierRoles() {
+        return config.getModifierRoleIDs().stream().map(id -> object.getRoleById(id)).collect(Collectors.toList());
     }
 
-    public IRole getRuleCodeRole() {
-        return object.getRoleByID(config.ruleCodeRewardID);
+    public Role getRuleCodeRole() {
+        return object.getRoleById(config.ruleCodeRewardID);
     }
 
     public boolean channelHasSetting(ChannelSetting setting, long channelID) {
@@ -386,26 +386,26 @@ public class GuildObject {
         return settings.getChannelIDs().contains(channelID);
     }
 
-    public boolean channelHasSetting(ChannelSetting setting, IChannel channel) {
-        return channelHasSetting(setting, channel.getLongID());
+    public boolean channelHasSetting(ChannelSetting setting, TextChannel channel) {
+        return channelHasSetting(setting, channel.getIdLong());
     }
 
     public boolean channelHasSetting(ChannelSetting setting, ChannelObject channel) {
         return channelHasSetting(setting, channel.longID);
     }
 
-    public IMessage fetchMessage(long l) {
-        for (IChannel c : object.getChannels()) {
+    public Message fetchMessage(long l) {
+        for (TextChannel c : object.getChannels()) {
             EnumSet<Permissions> perms = c.getModifiedPermissions(client.bot.get());
             if (!perms.contains(Permissions.READ_MESSAGE_HISTORY) || !perms.contains(Permissions.READ_MESSAGES))
                 continue;
-            IMessage message = RequestBuffer.request(() -> c.fetchMessage(l)).get();
+            Message message = RequestBuffer.request(() -> c.fetchMessage(l)).get();
             if (message != null) return message;
         }
         return null;
     }
 
-    public IMessage getMessageByID(Long l) {
+    public Message getMessageByID(Long l) {
         return object.getMessageByID(l);
     }
 

@@ -7,8 +7,8 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.TagObject;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Guild;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.io.File;
@@ -22,15 +22,15 @@ import java.util.regex.Pattern;
 public class InfoHandler {
     List<String> infoContents;
     CommandObject object;
-    private IGuild guild;
-    private IChannel channel;
+    private Guild guild;
+    private TextChannel channel;
 
     public InfoHandler(CommandObject object) {
         this.object = object;
         this.channel = object.channel.get();
         this.guild = object.guild.get();
         RequestHandler.deleteMessage(object.message.get());
-        infoContents = FileHandler.readFromFile(Utility.getFilePath(guild.getLongID(), Constants.FILE_INFO));
+        infoContents = FileHandler.readFromFile(Utility.getFilePath(guild.getIdLong(), Constants.FILE_INFO));
         updateChannel();
     }
 
@@ -87,7 +87,7 @@ public class InfoHandler {
         for (String contents : stringChunks) {
             if (contents.contains(imagePrefix)) {
                 image = StringUtils.substringBetween(contents, imagePrefix, imageSuffix);
-                File file = new File(Utility.getGuildImageDir(guild.getLongID()) + image);
+                File file = new File(Utility.getGuildImageDir(guild.getIdLong()) + image);
                 RequestHandler.sendFile("", file, channel).get();
             } else {
                 RequestHandler.sendMessage(contents, channel).get();

@@ -4,7 +4,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CharacterObject;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -141,7 +141,7 @@ public class CharEditModes {
     }
 
     public static String roles(CommandObject command, CharacterObject c) {
-        List<IRole> cosmetics = command.user.roles.stream().filter(r -> command.guild.config.isRoleCosmetic(r.getLongID())).collect(Collectors.toList());
+        List<Role> cosmetics = command.user.roles.stream().filter(r -> command.guild.config.isRoleCosmetic(r.getIdLong())).collect(Collectors.toList());
         c.update(c.getName(), cosmetics);
         return "\\> Character Roles Updated.";
     }

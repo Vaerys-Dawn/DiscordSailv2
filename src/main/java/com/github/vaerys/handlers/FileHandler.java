@@ -6,7 +6,7 @@ import com.google.gson.*;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.Message;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -176,7 +176,7 @@ public class FileHandler {
      * @param attachment the file to be decoded.
      * @return the getContents of the file.
      */
-    public static String readFromFile(IMessage.Attachment attachment) {
+    public static String readFromFile(Message.Attachment attachment) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(attachment.getUrl()).openConnection();
             connection.setRequestProperty("User-Agent", Constants.MOZILLA_USER_AGENT);

@@ -2,49 +2,40 @@ package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IEmoji;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.RequestBuffer;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ClientObject {
-    public UserObject bot;
-    public UserObject creator;
-    private IDiscordClient object;
+    public GlobalUserObject bot;
+    public GlobalUserObject creator;
+    private JDA object;
 
-    public ClientObject(GuildObject guild) {
+    public ClientObject() {
         this.object = Client.getClient();
-        if (!object.isReady()) return;
-        bot = new UserObject(object.getOurUser(), guild, this);
-        creator = new UserObject(fetchUser(Globals.creatorID), guild, this);
+        bot = new GlobalUserObject(object.getSelfUser(), this);
+        creator = new GlobalUserObject(getUserByID(Globals.creatorID), this);
     }
 
-    public IDiscordClient get() {
+    public JDA get() {
         return object;
     }
 
-    public IUser getUserByID(long userID) {
-        return object.getUserByID(userID);
+    public User getUserByID(long userID) {
+        return object.getUserById(userID);
     }
 
-    public IUser fetchUser(long l) {
-        return RequestBuffer.request(() -> object.fetchUser(l)).get();
-    }
-
-    public List<IGuild> getGuilds() {
+    public List<Guild> getGuilds() {
         return object.getGuilds();
     }
 
-    public IEmoji getEmojiByID(long emojiID) {
-        List<IEmoji> emojis = new ArrayList<>();
-        getGuilds().forEach(g -> emojis.addAll(g.getEmojis()));
-        for (IEmoji e : emojis) {
-            if (e.getLongID() == emojiID) return e;
-        }
-        return null;
+    public Emote getEmojiByID(long emojiID) {
+        Optional<Emote> emote = getGuilds().stream().flatMap(g-> g.getEmotes().stream().filter(e->e.getIdLong() == emojiID)).findFirst();
+        if (emote.isPresent()) return emote.get();
+        else return null;
     }
 }

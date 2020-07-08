@@ -13,7 +13,7 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -49,8 +49,8 @@ public class UserInfo extends Command {
 
         //start of the profile builder.
         XEmbedBuilder builder = new XEmbedBuilder(user);
-        List<IRole> roles = user.roles;
-        List<String> roleNames = roles.stream().filter(role -> !role.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList());
+        List<Role> roles = user.roles;
+        List<String> roleNames = roles.stream().filter(role -> !role.isEveryoneRole()).map(Role::getName).collect(Collectors.toList());
         List<String> links = profile.getLinks().stream().map(link -> link.toString()).collect(Collectors.toList());
         long accountAge = user.getAccountAgeSeconds();
         boolean showCC = command.guild.config.moduleCC;

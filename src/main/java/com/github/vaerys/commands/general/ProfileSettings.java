@@ -7,7 +7,7 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class ProfileSettings extends Command {
                 return error;
             }
             if (pixels && levelChannel && toTest == UserSetting.SEND_LVLUP_RANK_CHANNEL) {
-                IChannel levelUp = command.guild.getChannelByType(ChannelSetting.LEVEL_UP);
+                TextChannel levelUp = command.guild.getChannelByType(ChannelSetting.LEVEL_UP);
                 if (levelUp != null) {
                     removeLevelSettings(profile);
                     profile.getSettings().add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
@@ -93,7 +93,7 @@ public class ProfileSettings extends Command {
 
     private String getSettings(CommandObject object) {
         StringBuilder builder = new StringBuilder();
-        List<IChannel> levelUp = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP);
+        List<TextChannel> levelUp = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP);
         builder.append("**Settings:**\n");
         if (object.guild.config.modulePixels) {
             if (levelUp.size() != 0) {

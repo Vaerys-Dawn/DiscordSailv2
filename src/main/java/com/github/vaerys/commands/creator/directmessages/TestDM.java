@@ -8,7 +8,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GlobalUserObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.templates.DMCommand;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.Message;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.HashMap;
@@ -27,11 +27,11 @@ public class TestDM extends DMCommand {
 //        GlobalUserObject user = new GlobalUserObject(command.user.longID);
 //        Map<IUser, List<GuildObject>> mutuals = new HashMap<>();
 //        GuildObject sandFox = Globals.getGuildContent(372416523861622787L);
-//        IMessage working = RequestHandler.sendMessage("`Working...`", command.channel).get();
+//        Message working = RequestHandler.sendMessage("`Working...`", command.channel).get();
 //        for (IUser u : sandFox.getUsers()) {
 //            List<GuildObject> userMutuals = new LinkedList<>();
 //            for (GuildObject g : user.guilds) {
-//                if (g.getUserByID(u.getLongID()) != null) {
+//                if (g.getUserByID(u.getIdLong()) != null) {
 //                    userMutuals.add(g);
 //                }
 //            }

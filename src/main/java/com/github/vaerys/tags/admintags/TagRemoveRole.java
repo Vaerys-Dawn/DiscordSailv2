@@ -7,7 +7,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminSubTagObject;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 
 public class TagRemoveRole extends TagAdminSubTagObject {
 
@@ -17,7 +17,7 @@ public class TagRemoveRole extends TagAdminSubTagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args, AdminCCObject cc) {
-        IRole role = GuildHandler.getRoleFromName(getSubTag(from), command.guild.get());
+        Role role = GuildHandler.getRoleFromName(getSubTag(from), command.guild.get());
         if (role == null) {
             return replaceFirstTag(from, error);
         } else if (!Utility.testUserHierarchy(command.client.bot.get(), role, command.guild.get())) {

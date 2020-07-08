@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.Guild;
 
 import java.io.File;
 
@@ -19,8 +19,8 @@ public class GuildCreateListener {
 
     @EventSubscriber
     public void onGuildCreateEvent(GuildCreateEvent event) {
-        IGuild guild = event.getGuild();
-        long guildID = guild.getLongID();
+        Guild guild = event.getGuild();
+        long guildID = guild.getIdLong();
         logger.debug("Starting Loading process for Guild with ID: " + guildID);
 
         if (new File(Utility.getDirectory(guildID)).exists()) {

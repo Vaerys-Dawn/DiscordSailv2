@@ -7,7 +7,6 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import sx.blah.discord.handle.obj.IMessage;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,11 +28,11 @@ public class InfoEditModes {
         } else {
             try {
                 Message.Attachment attachment = command.message.getAttachments().get(0);
-                File file = new File(Utility.getGuildImageDir(command.guild.longID) + attachment.getFilename());
+                File file = new File(Utility.getGuildImageDir(command.guild.longID) + attachment.getFileName());
                 File imagDir = new File(Utility.getGuildImageDir(command.guild.longID));
                 File[] imageList = imagDir.listFiles();
 
-                if (!Utility.isImageLink(attachment.getFilename())) {
+                if (!Utility.isImageLink(attachment.getFileName())) {
                     return "\\> Cannot upload File. File type is invalid.";
                 }
 
@@ -47,7 +46,7 @@ public class InfoEditModes {
                     file.delete();
                     Files.copy(stream, Paths.get(file.getPath()));
                     stream.close();
-                    return "\\> File **" + attachment.getFilename() + "** updated";
+                    return "\\> File **" + attachment.getFileName() + "** updated";
                 } else {
                     if (imageList.length >= 25) {
                         stream.close();
@@ -55,7 +54,7 @@ public class InfoEditModes {
                     } else {
                         Files.copy(stream, Paths.get(file.getPath()));
                         stream.close();
-                        return "\\> File **" + attachment.getFilename() + "** uploaded";
+                        return "\\> File **" + attachment.getFileName() + "** uploaded";
                     }
                 }
             } catch (IOException e) {
@@ -88,7 +87,7 @@ public class InfoEditModes {
             fileNames.add(f.getName());
         }
         builder.setDescription("```\n" + Utility.listFormatter(fileNames, true) + "```");
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        builder.send(command.channel);
         return null;
     }
 
@@ -97,10 +96,10 @@ public class InfoEditModes {
             return "\\> No file to upload found.";
         } else {
             try {
-                IMessage.Attachment attachment = command.message.getAttachments().get(0);
+                Message.Attachment attachment = command.message.getAttachments().get(0);
                 File file = new File(Utility.getFilePath(command.guild.longID, Constants.FILE_INFO));
 
-                if (!attachment.getFilename().equals(Constants.FILE_INFO)) {
+                if (!attachment.getFileName().equals(Constants.FILE_INFO)) {
                     return "\\> Cannot upload file, File name must be \"" + Constants.FILE_INFO + "\"";
                 }
 

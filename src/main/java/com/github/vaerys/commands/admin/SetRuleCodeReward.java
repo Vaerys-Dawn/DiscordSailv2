@@ -5,14 +5,14 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 
 public class SetRuleCodeReward extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
+        Role role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) return "\\> Not a valid Role name.";
         if (command.guild.config.ruleCodeRewardID != -1) {
             if (args.equalsIgnoreCase("remove")) {
@@ -21,7 +21,7 @@ public class SetRuleCodeReward extends Command {
             }
             return "\\> You already have a RuleCode Reward set.";
         }
-        command.guild.config.ruleCodeRewardID = role.getLongID();
+        command.guild.config.ruleCodeRewardID = role.getIdLong();
         return "\\> **" + role.getName() + "** Is now the RuleCode Reward.";
     }
 
@@ -51,8 +51,8 @@ public class SetRuleCodeReward extends Command {
     }
 
     @Override
-    public Permissions[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+    public Permission[] perms() {
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

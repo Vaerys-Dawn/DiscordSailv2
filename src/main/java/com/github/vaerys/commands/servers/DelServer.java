@@ -13,7 +13,7 @@ public class DelServer extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return command.guild.servers.deleteServer(command.user.get().getLongID(), args, command.guild.get());
+        return command.guild.servers.deleteServer(command.user.get().getIdLong(), args, command.guild.get());
     }
 
     @Override

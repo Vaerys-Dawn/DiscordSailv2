@@ -9,8 +9,8 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class RulesCode extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         command.message.delete();
-        List<IChannel> botCommands = command.user.getVisibleChannels(command.guild.getChannelsByType(ChannelSetting.BOT_COMMANDS));
+        List<TextChannel> botCommands = command.user.getVisibleChannels(command.guild.getChannelsByType(ChannelSetting.BOT_COMMANDS));
         if (!botCommands.isEmpty() && !botCommands.contains(command.channel.get())
                 && !GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
             return Utility.getChannelMessage(botCommands);
@@ -45,7 +45,7 @@ public class RulesCode extends Command {
             } else {
                 response += " has been added to your profile.";
             }
-            IRole ruleReward = command.guild.getRuleCodeRole();
+            Role ruleReward = command.guild.getRuleCodeRole();
             if (ruleReward != null) {
                 response += "\nYou have also been granted the **" + ruleReward.getName() + "** Role.";
             }

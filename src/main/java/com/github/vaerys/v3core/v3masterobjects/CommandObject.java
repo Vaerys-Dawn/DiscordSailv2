@@ -29,7 +29,7 @@ public class CommandObject {
         if (message.getGuild() == null) {
             this.guild = new GuildObject();
         } else {
-            this.guild = Globals.getGuildContent(message.getGuild().getLongID());
+            this.guild = Globals.getGuildContent(message.getGuild().getIdLong());
         }
         this.message = new MessageObject(message, guild);
         this.channel = new ChannelObject(message.getChannel(), guild);
@@ -45,11 +45,11 @@ public class CommandObject {
         client = new ClientObject(null);
     }
 
-    public CommandObject(IMessage message, IGuild guild, IChannel channel, IUser author) {
+    public CommandObject(Message message, Guild guild, TextChannel channel, IUser author) {
         if (guild == null) {
             this.guild = new GuildObject();
         } else {
-            this.guild = Globals.getGuildContent(guild.getLongID());
+            this.guild = Globals.getGuildContent(guild.getIdLong());
         }
         this.message = new MessageObject(message, this.guild);
         this.channel = new ChannelObject(channel, this.guild);
@@ -57,7 +57,7 @@ public class CommandObject {
         this.client = new ClientObject(this.guild);
     }
 
-    public CommandObject(GuildObject task, IChannel channel) {
+    public CommandObject(GuildObject task, TextChannel channel) {
         this.client = task.client;
         this.guild = task;
         this.channel = new ChannelObject(channel, task);
@@ -65,7 +65,7 @@ public class CommandObject {
         this.user = null;
     }
 
-    public CommandObject(GuildObject content, IChannel channel, IUser user) {
+    public CommandObject(GuildObject content, TextChannel channel, IUser user) {
         this.guild = content;
         this.message = null;
         this.channel = new ChannelObject(channel, guild);
@@ -78,19 +78,19 @@ public class CommandObject {
         return this;
     }
 
-    public CommandObject setChannel(IChannel channel) {
+    public CommandObject setChannel(TextChannel channel) {
         this.channel = new ChannelObject(channel, guild);
         return this;
     }
 
-    public CommandObject setGuild(IGuild guild) {
-        this.guild = Globals.getGuildContent(guild.getLongID());
+    public CommandObject setGuild(Guild guild) {
+        this.guild = Globals.getGuildContent(guild.getIdLong());
         this.user = new UserObject(user.get(), this.guild);
         this.client = new ClientObject(this.guild);
         return this;
     }
 
-    public CommandObject setMessage(IMessage message) {
+    public CommandObject setMessage(Message message) {
         this.message = new MessageObject(message, guild);
         return this;
     }

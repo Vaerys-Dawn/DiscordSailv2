@@ -35,7 +35,7 @@ public class WeightedFinalTally extends Command {
                         if (entryVotes.containsKey(vote)) {
                             IUser user = command.guild.getUserByID(Utility.stringLong(splitVotes[0]));
                             if (user != null) {
-                                int weight = PixelHandler.getRewardCount(command.guild, user.getLongID());
+                                int weight = PixelHandler.getRewardCount(command.guild, user.getIdLong());
                                 entryVotes.put(vote, entryVotes.get(vote).longValue() + weight + 1);
                                 totalVotes += weight + 1;
                             }

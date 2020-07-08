@@ -16,7 +16,7 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class NewCC extends Command {
         boolean isShitpost;
         boolean isLocked = false;
         SplitFirstObject splitFirst = new SplitFirstObject(args);
-        List<IChannel> shitpostChannels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
+        List<TextChannel> shitpostChannels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
 
         isShitpost = shitpostChannels.contains(command.channel);
 

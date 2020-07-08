@@ -49,7 +49,7 @@ public class GetGlobalStats extends Command {
             }
             //re enable to find channel stats
 //            for (ChannelStatsObject s : channelStats) {
-//                for (IChannel c : command.guild.getChannels()) {
+//                for (TextChannel c : command.guild.getChannels()) {
 //                    ArrayList<String> channelIDs = command.guildConfig.getChannelIDsByType(s.getNames());
 //                    if (channelIDs != null) {
 //                        s.addCounts(channelIDs.size());
@@ -86,7 +86,7 @@ public class GetGlobalStats extends Command {
 
 //        int totalGlobalUsers = 0;
 //        int totalAvg = 0;
-//        for (IGuild guild : command.client.getGuilds()) {
+//        for (Guild guild : command.client.getGuilds()) {
 //            StringBuilder builder = new StringBuilder();
 //            long totalUsers = 0;
 //            long totalMessage = 0;
@@ -95,7 +95,7 @@ public class GetGlobalStats extends Command {
 //            long bottomGuild = 0;
 //            String topUser = null;
 //            String bottomUser = null;
-//            GuildContentObject content = Globals.getGuildContent(guild.getLongID());
+//            GuildContentObject content = Globals.getGuildContent(guild.getIdLong());
 //            for (UserTypeObject user : content.getGuildUsers().getProfiles()) {
 //                if (bottomGuild == 0) {
 //                    bottomGuild = user.getXP();

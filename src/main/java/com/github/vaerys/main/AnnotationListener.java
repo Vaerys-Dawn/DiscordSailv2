@@ -23,8 +23,8 @@ import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
 import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.voice.VoiceChannelUpdateEvent;
 import sx.blah.discord.handle.impl.obj.ReactionEmoji;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.Guild;
+import sx.blah.discord.handle.obj.Message;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -36,8 +36,8 @@ public class AnnotationListener {
 
     final static Logger logger = LoggerFactory.getLogger(AnnotationListener.class);
 
-    public static void updateVariables(IGuild guild) {
-        long guildID = guild.getLongID();
+    public static void updateVariables(Guild guild) {
+        long guildID = guild.getIdLong();
         GuildObject guildObject = Globals.getGuildContent(guildID);
         guildObject.config.updateVariables(guild);
         guildObject.characters.updateVars(guild);
@@ -49,7 +49,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onGuildLeaveEvent(GuildLeaveEvent event) {
-        Globals.unloadGuild(event.getGuild().getLongID());
+        Globals.unloadGuild(event.getGuild().getIdLong());
     }
 
     @EventSubscriber
@@ -61,8 +61,8 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onSystemMessageReceivedEvent(MessageSendEvent event) {
-        IMessage message = event.getMessage();
-        if (message.getType() != IMessage.Type.CHANEL_PINNED_MESSAGE) return;
+        Message message = event.getMessage();
+        if (message.getType() != Message.Type.CHANEL_PINNED_MESSAGE) return;
         if (!message.getAuthor().equals(event.getClient().getOurUser())) return;
         RequestHandler.deleteMessage(message);
     }
@@ -107,7 +107,7 @@ public class AnnotationListener {
             RequestHandler.sendMessage(builder.toString(), event.getChannel());
             if (event.getGuild() != null) {
                 Globals.addToLog(new LogObject("ERROR", "MESSAGE_HANDLER", event.getMessage().getContent(),
-                        event.getChannel().getLongID(), event.getAuthor().getLongID(), event.getMessageID(), event.getGuild().getLongID()));
+                        event.getChannel().getIdLong(), event.getAuthor().getIdLong(), event.getMessageID(), event.getGuild().getIdLong()));
             }
             Utility.sendStack(e);
         }
@@ -130,7 +130,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onVoiceChannelUpdateEvent(VoiceChannelUpdateEvent event) {
-        LoggingHandler.logChannelUpdate(Globals.getGuildContent(event.getGuild().getLongID()), event.getOldVoiceChannel(), event.getNewVoiceChannel());
+        LoggingHandler.logChannelUpdate(Globals.getGuildContent(event.getGuild().getIdLong()), event.getOldVoiceChannel(), event.getNewVoiceChannel());
     }
 
     @EventSubscriber
@@ -139,7 +139,7 @@ public class AnnotationListener {
             return;
         }
         updateVariables(event.getNewChannel().getGuild());
-        LoggingHandler.logChannelUpdate(Globals.getGuildContent(event.getGuild().getLongID()), event.getOldChannel(), event.getNewChannel());
+        LoggingHandler.logChannelUpdate(Globals.getGuildContent(event.getGuild().getIdLong()), event.getOldChannel(), event.getNewChannel());
     }
 
     @EventSubscriber
@@ -173,7 +173,7 @@ public class AnnotationListener {
 
         if (emoji == null) return;
 
-        IMessage message = event.getMessage();
+        Message message = event.getMessage();
         if (message == null) message = event.getChannel().getMessageByID(event.getMessageID());
 
         CommandObject object = new CommandObject(message);
@@ -200,7 +200,7 @@ public class AnnotationListener {
                 ArtHandler.pinLiked(object, pinner, owner);
             //give a gift
             if (emoji.equals(gift))
-                Globals.getGlobalData().giveGift(message.getLongID(), pinner, object.guild);
+                Globals.getGlobalData().giveGift(message.getIdLong(), pinner, object.guild);
             //do only within Direct messages
         } else if (event.getChannel().isPrivate() && emoji.isUnicode()) {
             //if anyone uses x
@@ -215,7 +215,7 @@ public class AnnotationListener {
         if (event.getChannel().isPrivate()) return;
         if (!Globals.isReady) return;
         if (event.getMessage() == null) return;
-        if (event.getGuild().getUserByID(event.getAuthor().getLongID()) == null) return;
+        if (event.getGuild().getUserByID(event.getAuthor().getIdLong()) == null) return;
         CommandObject command = new CommandObject(event.getMessage());
         if (!command.guild.config.moduleLogging) return;
         LoggingHandler.logDelete(command, event.getMessage());
@@ -223,7 +223,7 @@ public class AnnotationListener {
 
     @EventSubscriber
     public void onUserJoinEvent(UserJoinEvent event) {
-        GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         UserObject user = new UserObject(event.getUser(), content);
         if (content.config.welcomeMessages && !user.get().isBot()) {
             JoinHandler.sendWelcomeMessage(content, event, user);

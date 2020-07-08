@@ -2,15 +2,11 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
-import com.github.vaerys.objects.utils.WebHookObject;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.DiscordException;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -60,7 +56,7 @@ public class Test extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

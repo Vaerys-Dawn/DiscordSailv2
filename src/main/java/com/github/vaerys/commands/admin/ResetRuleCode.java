@@ -8,7 +8,10 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IMessage;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import sx.blah.discord.handle.obj.Message;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -16,16 +19,16 @@ public class ResetRuleCode extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        IMessage working = RequestHandler.sendMessage("`Working...`", command.channel).get();
+        Message working = command.channel.get().sendMessage("`Working...`").complete();
         for (ProfileObject p : command.guild.users.profiles) {
             if (p.getSettings().size() != 0) {
                 p.getSettings().remove(UserSetting.READ_RULES);
             }
         }
-        for (IUser u : command.guild.getUsers()) {
-            GuildHandler.checkUsersRoles(u.getLongID(), command.guild);
+        for (Member u : command.guild.getUsers()) {
+            GuildHandler.checkUsersRoles(u.getIdLong(), command.guild);
         }
-        RequestHandler.deleteMessage(working);
+        working.delete();
         return "\\> Done. The Rule code tag has been removed off all profiles.";
     }
 
@@ -55,8 +58,8 @@ public class ResetRuleCode extends Command {
     }
 
     @Override
-    public Permissions[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+    public Permission[] perms() {
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

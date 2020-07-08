@@ -35,19 +35,19 @@ public class RequestHandler {
 
     final static Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private static void sendError(String prefix, String message, IChannel channel) {
+    private static void sendError(String prefix, String message, TextChannel channel) {
         long guildID;
         if (channel.isPrivate()) guildID = -1;
-        else guildID = channel.getGuild().getLongID();
+        else guildID = channel.getGuild().getIdLong();
         String format = "%s {\"MESSAGE\": \"%s\", \"GUILD\": %d, \"CHANNEL\": %d}";
-        logger.debug(String.format(format, prefix, message, guildID, channel.getLongID()));
+        logger.debug(String.format(format, prefix, message, guildID, channel.getIdLong()));
     }
 
-    private static void missingPermissions(String message, IChannel channel) {
+    private static void missingPermissions(String message, TextChannel channel) {
         sendError("Could not send message, Missing Permissions.", message, channel);
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendMessage(String message, IChannel channel) {
+    public static RequestBuffer.RequestFuture<Message> sendMessage(String message, TextChannel channel) {
         return RequestBuffer.request(() -> {
             //message and channel checking
             if (!Globals.client.isReady()) return null;
@@ -82,15 +82,15 @@ public class RequestHandler {
         });
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendMessage(String message, ChannelObject channel) {
+    public static RequestBuffer.RequestFuture<Message> sendMessage(String message, ChannelObject channel) {
         return sendMessage(message, channel.get());
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendMessage(String message, CommandObject command) {
+    public static RequestBuffer.RequestFuture<Message> sendMessage(String message, CommandObject command) {
         return sendMessage(message, command.channel.get());
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendEmbedMessage(String message, XEmbedBuilder builder, IChannel channel) {
+    public static RequestBuffer.RequestFuture<Message> sendEmbedMessage(String message, XEmbedBuilder builder, TextChannel channel) {
         return RequestBuffer.request(() -> {
             String checkedMessage = message;
             if (builder == null) throw new IllegalArgumentException("Embed builder must never be null.");
@@ -115,15 +115,15 @@ public class RequestHandler {
         });
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendEmbedMessage(String message, XEmbedBuilder builder, ChannelObject channel) {
+    public static RequestBuffer.RequestFuture<Message> sendEmbedMessage(String message, XEmbedBuilder builder, ChannelObject channel) {
         return sendEmbedMessage(message, builder, channel.get());
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendEmbedMessage(String message, XEmbedBuilder builder, CommandObject command) {
+    public static RequestBuffer.RequestFuture<Message> sendEmbedMessage(String message, XEmbedBuilder builder, CommandObject command) {
         return sendEmbedMessage(message, builder, command.channel.get());
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendEmbed(String content, EmbedObject embedObject, IChannel channel) {
+    public static RequestBuffer.RequestFuture<Message> sendEmbed(String content, EmbedObject embedObject, TextChannel channel) {
         return RequestBuffer.request(() -> {
             try {
                 if (embedObject == null) return null;
@@ -140,15 +140,15 @@ public class RequestHandler {
         });
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendEmbed(String content, EmbedObject embedObject, ChannelObject channel) {
+    public static RequestBuffer.RequestFuture<Message> sendEmbed(String content, EmbedObject embedObject, ChannelObject channel) {
         return sendEmbed(content, embedObject, channel.get());
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendEmbed(String content, EmbedObject embedObject, CommandObject command) {
+    public static RequestBuffer.RequestFuture<Message> sendEmbed(String content, EmbedObject embedObject, CommandObject command) {
         return sendEmbed(content, embedObject, command.channel.get());
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, File file, IChannel channel) {
+    public static RequestBuffer.RequestFuture<Message> sendFile(String message, File file, TextChannel channel) {
         return RequestBuffer.request(() -> {
             String checkedMessage = message;
             if (file == null) throw new IllegalArgumentException("File must never be null.");
@@ -169,13 +169,13 @@ public class RequestHandler {
         });
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, String fileContents, String fileName, IChannel channel) {
+    public static RequestBuffer.RequestFuture<Message> sendFile(String message, String fileContents, String fileName, TextChannel channel) {
         return RequestBuffer.request(() -> {
             String checkedMessage = message;
             if (checkedMessage == null) checkedMessage = "";
             InputStream stream = new ByteArrayInputStream(fileContents.getBytes(StandardCharsets.UTF_8));
             try {
-                IMessage sent = channel.sendFile(checkedMessage, stream, fileName);
+                Message sent = channel.sendFile(checkedMessage, stream, fileName);
                 stream.close();
                 return sent;
             } catch (MissingPermissionsException e) {
@@ -191,24 +191,24 @@ public class RequestHandler {
         });
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, File file, ChannelObject channel) {
+    public static RequestBuffer.RequestFuture<Message> sendFile(String message, File file, ChannelObject channel) {
         return sendFile(message, file, channel.get());
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, File file, CommandObject command) {
+    public static RequestBuffer.RequestFuture<Message> sendFile(String message, File file, CommandObject command) {
         return sendFile(message, file, command.channel.get());
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, String fileContents, String fileName, ChannelObject channel) {
+    public static RequestBuffer.RequestFuture<Message> sendFile(String message, String fileContents, String fileName, ChannelObject channel) {
         return sendFile(message, fileContents, fileName, channel.get());
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendFile(String message, String fileContents, String fileName, CommandObject command) {
+    public static RequestBuffer.RequestFuture<Message> sendFile(String message, String fileContents, String fileName, CommandObject command) {
         return sendFile(message, fileContents, fileName, command.channel.get());
     }
 
 
-    public static RequestBuffer.RequestFuture<IMessage> sendFileURL(String preMessage, String imageURL, IChannel channel, boolean loadMessage) {
+    public static RequestBuffer.RequestFuture<Message> sendFileURL(String preMessage, String imageURL, TextChannel channel, boolean loadMessage) {
         // if url is empty send as regular Image
         if (imageURL == null || imageURL.isEmpty()) {
             return sendMessage(preMessage, channel);
@@ -227,14 +227,14 @@ public class RequestHandler {
         final String message = preMessage;
 
         //send loading message
-        IMessage loading = null;
+        Message loading = null;
         if (loadMessage) {
             loading = sendMessage("`Loading...`", channel).get();
         }
 
         //request for image to be sent.
-        RequestBuffer.RequestFuture<IMessage> sent = RequestBuffer.request(() -> {
-            IMessage sentMessage = null;
+        RequestBuffer.RequestFuture<Message> sent = RequestBuffer.request(() -> {
+            Message sentMessage = null;
             InputStream stream = null;
             int responseCode = -1;
             try {
@@ -301,28 +301,28 @@ public class RequestHandler {
     }
 
 
-    public static RequestBuffer.RequestFuture<IMessage> sendFileURL(String message, String imageURL, ChannelObject channel, boolean loadMessage) {
+    public static RequestBuffer.RequestFuture<Message> sendFileURL(String message, String imageURL, ChannelObject channel, boolean loadMessage) {
         return sendFileURL(message, imageURL, channel.get(), loadMessage);
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendFileURL(String message, String imageURL, CommandObject command, boolean loadMessage) {
+    public static RequestBuffer.RequestFuture<Message> sendFileURL(String message, String imageURL, CommandObject command, boolean loadMessage) {
         return sendFileURL(message, imageURL, command.channel.get(), loadMessage);
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, long newRoleID, boolean isAdding) {
+    public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, Guild guild, long newRoleID, boolean isAdding) {
         return RequestBuffer.request(() -> {
             try {
-                if (guild.getRoleByID(newRoleID) == null) return true;
+                if (guild.getRoleById(newRoleID) == null) return true;
                 if (isAdding) {
-                    author.addRole(guild.getRoleByID(newRoleID));
+                    author.addRole(guild.getRoleById(newRoleID));
                 } else {
-                    author.removeRole(guild.getRoleByID(newRoleID));
+                    author.removeRole(guild.getRoleById(newRoleID));
                 }
             } catch (RateLimitException e) {
                 throw e;
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("Edited roles hierarchy is too high.")) {
-                    logger.debug("Error Editing roles of user with id: " + author.getLongID() + " on guild with id: " + guild.getLongID() +
+                    logger.debug("Error Editing roles of user with id: " + author.getIdLong() + " on guild with id: " + guild.getIdLong() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
                     return true;
                 } else {
@@ -337,16 +337,16 @@ public class RequestHandler {
         });
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, List<IRole> userRoles) {
+    public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, Guild guild, List<Role> userRoles) {
         return roleManagement(author, guild, userRoles, false);
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, IGuild guild, List<IRole> userRoles, boolean suppressWarnings) {
+    public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, Guild guild, List<Role> userRoles, boolean suppressWarnings) {
         return RequestBuffer.request(() -> {
             try {
-                List<IRole> temp = userRoles.stream().filter(r -> r != null).collect(Collectors.toList());
-                IRole[] roles = temp.toArray(new IRole[temp.size()]);
-                List<IRole> tempUserRoles = author.getRolesForGuild(guild);
+                List<Role> temp = userRoles.stream().filter(r -> r != null).collect(Collectors.toList());
+                Role[] roles = temp.toArray(new Role[temp.size()]);
+                List<Role> tempUserRoles = author.getRolesForGuild(guild);
                 if (tempUserRoles.containsAll(temp) && temp.containsAll(tempUserRoles)) return false;
                 guild.editUserRoles(author, roles);
                 return true;
@@ -355,7 +355,7 @@ public class RequestHandler {
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("hierarchy")) {
                     if (!suppressWarnings) {
-                        logger.warn("Error Editing roles of user with id: " + author.getLongID() + " on guild with id: " + guild.getLongID() +
+                        logger.warn("Error Editing roles of user with id: " + author.getIdLong() + " on guild with id: " + guild.getIdLong() +
                                 ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
                     }
                     return false;
@@ -395,7 +395,7 @@ public class RequestHandler {
         });
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> deleteMessage(IMessage message) {
+    public static RequestBuffer.RequestFuture<Boolean> deleteMessage(Message message) {
         return RequestBuffer.request(() -> {
             try {
                 if (Globals.isReady) {
@@ -418,7 +418,7 @@ public class RequestHandler {
         return deleteMessage(message.get());
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> updateUserNickName(IUser author, IGuild guild, String nickname) {
+    public static RequestBuffer.RequestFuture<Boolean> updateUserNickName(IUser author, Guild guild, String nickname) {
         return RequestBuffer.request(() -> {
             try {
                 guild.setUserNickname(author, nickname);
@@ -442,13 +442,13 @@ public class RequestHandler {
     public static RequestBuffer.RequestFuture<Boolean> muteUser(long guildID, long userID, boolean isMuting) {
         GuildObject content = Globals.getGuildContent(guildID);
         IUser user = Globals.getClient().getUserByID(userID);
-        IGuild guild = Globals.getClient().getGuildByID(guildID);
-        IRole mutedRole = Globals.client.getRoleByID(content.config.getMutedRoleID());
+        Guild guild = Globals.getClient().getGuildByID(guildID);
+        Role mutedRole = Globals.client.getRoleById(content.config.getMutedRoleID());
 
         if (user == null) return RequestBuffer.request(() -> true);
-        List<IRole> newRoles = user.getRolesForGuild(guild);
+        List<Role> newRoles = user.getRolesForGuild(guild);
         //roles for logging
-        List<IRole> oldRoles = new ArrayList<>(newRoles);
+        List<Role> oldRoles = new ArrayList<>(newRoles);
 
         if (mutedRole == null) return RequestBuffer.request(() -> true);
 
@@ -474,7 +474,7 @@ public class RequestHandler {
         Client.getClient().changePresence(StatusType.ONLINE, ActivityType.PLAYING, s);
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendEmbededImage(String s, String imageUrl, IChannel channel) {
+    public static RequestBuffer.RequestFuture<Message> sendEmbededImage(String s, String imageUrl, TextChannel channel) {
         XEmbedBuilder builder = new XEmbedBuilder(Constants.pixelColour);
         builder.withImage(imageUrl);
         if (s.length() > 2000) {
@@ -497,15 +497,15 @@ public class RequestHandler {
         return roleManagement(user.get(), content.get(), mutedRoleID, isAdding);
     }
 
-    public static void addReaction(IMessage message, ReactionEmoji emoji) {
+    public static void addReaction(Message message, ReactionEmoji emoji) {
         RequestBuffer.request(() -> {
             try {
                 message.addReaction(emoji);
             } catch (MissingPermissionsException e) {
                 logger.debug("Could not add reaction to message. Reason: Missing Permission ADD_REACTIONS\n" +
-                        "MessageID: " + message.getLongID() + ", ReactionID: " +
-                        (emoji.isUnicode() ? emoji.getName() : emoji.getLongID()) + ", GuildID: " +
-                        (message.getGuild() == null ? -1 : message.getGuild().getLongID()));
+                        "MessageID: " + message.getIdLong() + ", ReactionID: " +
+                        (emoji.isUnicode() ? emoji.getName() : emoji.getIdLong()) + ", GuildID: " +
+                        (message.getGuild() == null ? -1 : message.getGuild().getIdLong()));
             }
         });
     }
@@ -514,8 +514,8 @@ public class RequestHandler {
         addReaction(message.get(), emoji);
     }
 
-    public static void roleManagement(CommandObject command, IRole role, boolean isAdding) {
-        roleManagement(command.user.get(), command.guild.get(), role.getLongID(), isAdding);
+    public static void roleManagement(CommandObject command, Role role, boolean isAdding) {
+        roleManagement(command.user.get(), command.guild.get(), role.getIdLong(), isAdding);
     }
 
     public static void sendWebHook(String webHookUrl, WebHookObject object) {
@@ -544,17 +544,17 @@ public class RequestHandler {
         }
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> roleManagement(UserObject user, GuildObject guild, List<IRole> roles) {
+    public static RequestBuffer.RequestFuture<Boolean> roleManagement(UserObject user, GuildObject guild, List<Role> roles) {
         return roleManagement(user.get(), guild.get(), roles);
     }
 
-    public static RequestBuffer.RequestFuture<IMessage> sendCreatorDm(String s) {
-        IChannel creatorDm = RequestBuffer.request(() -> Globals.getCreator().getOrCreatePMChannel()).get();
+    public static RequestBuffer.RequestFuture<Message> sendCreatorDm(String s) {
+        TextChannel creatorDm = RequestBuffer.request(() -> Globals.getCreator().getOrCreatePMChannel()).get();
         return sendMessage(s, creatorDm);
     }
 
-    public static RequestBuffer.RequestFuture<Boolean> roleManagement(UserObject u, GuildObject content, IRole topTenRole, boolean b) {
-        long roleID = topTenRole.getLongID();
+    public static RequestBuffer.RequestFuture<Boolean> roleManagement(UserObject u, GuildObject content, Role topTenRole, boolean b) {
+        long roleID = topTenRole.getIdLong();
         return roleManagement(u, content, roleID, b);
     }
 
@@ -580,12 +580,12 @@ public class RequestHandler {
 //        });
 //    }
 
-    //    public static RequestBuffer.RequestFuture<IMessage> sendMessage(String message, IChannel channel) {
+    //    public static RequestBuffer.RequestFuture<Message> sendMessage(String message, TextChannel channel) {
 //        if (!Globals.client.isReady()) {
 //            return null;
 //        }
 //        return RequestBuffer.request(() -> {
-//            IMessage error = null;
+//            Message error = null;
 //            if (message == null) {
 //                return error;
 //            }
@@ -604,9 +604,9 @@ public class RequestHandler {
 //                        return channel.sendMessage(Utility.removeMentions(message));
 //                    }
 //                } catch (MissingPermissionsException e) {
-//                    String debug = "Error sending message to channel with id: " + channel.getLongID();
+//                    String debug = "Error sending message to channel with id: " + channel.getIdLong();
 //                    if (channel.getGuild() != null) {
-//                        debug += " on guild with id: " + channel.getGuild().getLongID() + ".";
+//                        debug += " on guild with id: " + channel.getGuild().getIdLong() + ".";
 //                    }
 //                    debug += "\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.";
 //                    logger.debug(debug);
@@ -623,7 +623,7 @@ public class RequestHandler {
 //                    }
 //                }
 //            } else {
-//                logger.debug("Message to be sent to channel with id: " + channel.getLongID() + "on guild with id: " + channel.getGuild().getLongID() +
+//                logger.debug("Message to be sent to channel with id: " + channel.getIdLong() + "on guild with id: " + channel.getGuild().getIdLong() +
 //                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Message to large.");
 //                return error;
 //            }
@@ -631,7 +631,7 @@ public class RequestHandler {
 //        });
 //    }
 
-//    public static RequestBuffer.RequestFuture<IMessage> sendEmbedMessage(String message, XEmbedBuilder builder, IChannel channel) {
+//    public static RequestBuffer.RequestFuture<Message> sendEmbedMessage(String message, XEmbedBuilder builder, TextChannel channel) {
 //
 //        //removal of @everyone and @here Mentions.
 //        EmbedObject embed = builder.build();
@@ -650,7 +650,7 @@ public class RequestHandler {
 //                    return null;
 //                }
 //            } catch (MissingPermissionsException e) {
-//                logger.debug("Error sending File to channel with id: " + channel.getLongID() + " on guild with id: " + channel.getGuild().getLongID() +
+//                logger.debug("Error sending File to channel with id: " + channel.getIdLong() + " on guild with id: " + channel.getGuild().getIdLong() +
 //                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
 //                return sendMessage(Utility.embedToString(embed), channel).getAllToggles();
 //            }
@@ -658,8 +658,8 @@ public class RequestHandler {
 //        });
 //    }
 
-//    public static IMessage sendDMEmbed(String message, XEmbedBuilder embed, long userID) {
-//        IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
+//    public static Message sendDMEmbed(String message, XEmbedBuilder embed, long userID) {
+//        TextChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
 //        if (channel != null) {
 //            return sendEmbedMessage(message, embed, channel).getAllToggles();
 //        } else {
@@ -667,10 +667,10 @@ public class RequestHandler {
 //        }
 //    }
 //
-//    public static RequestBuffer.RequestFuture<IMessage> sendDM(String message, long userID) {
+//    public static RequestBuffer.RequestFuture<Message> sendDM(String message, long userID) {
 //        return RequestBuffer.request(() -> {
 //            try {
-//                IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
+//                TextChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
 //                if (message == null || message.isEmpty()) {
 //                    return null;
 //                }
@@ -689,7 +689,7 @@ public class RequestHandler {
 //        });
 //    }
 //
-//    public static IMessage sendDM(String message, String userID) {
+//    public static Message sendDM(String message, String userID) {
 //        try {
 //            return sendDM(message, Long.parseLong(userID)).getAllToggles();
 //        } catch (NumberFormatException e) {
@@ -700,7 +700,7 @@ public class RequestHandler {
 //    public static RequestBuffer.RequestFuture<Boolean> sendFileDM(String message, File attatchment, long userID) {
 //        return RequestBuffer.request(() -> {
 //            try {
-//                IChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
+//                TextChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
 //                if (message == null || message.isEmpty()) {
 //                    return true;
 //                }
@@ -720,14 +720,14 @@ public class RequestHandler {
 //        });
 //    }
 
-//    public static RequestBuffer.RequestFuture<Boolean> sendFile(String message, File file, IChannel channel) {
+//    public static RequestBuffer.RequestFuture<Boolean> sendFile(String message, File file, TextChannel channel) {
 //        return RequestBuffer.request(() -> {
 //            try {
 //                if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("")) {
 //                    if (file != null) {
 //                        channel.sendFile(file);
 //                    } else {
-//                        logger.debug("Error sending File to channel with id: " + channel.getLongID() + " on guild with id: " + channel.getGuild().getLongID() +
+//                        logger.debug("Error sending File to channel with id: " + channel.getIdLong() + " on guild with id: " + channel.getGuild().getIdLong() +
 //                                ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
 //                        return true;
 //                    }
@@ -757,12 +757,12 @@ public class RequestHandler {
 //        });
 //    }
 
-    //    public static IMessage sendFileURL(String message, String imageURL, IChannel channel, boolean loadMessage) {
-//        IMessage toDelete = null;
+    //    public static Message sendFileURL(String message, String imageURL, TextChannel channel, boolean loadMessage) {
+//        Message toDelete = null;
 //        if (loadMessage) {
 //            toDelete = sendMessage("`Loading...`", channel).getAllToggles();
 //        }
-//        IMessage sentMessage = null;
+//        Message sentMessage = null;
 //        HttpURLConnection connection = null;
 //        try {
 //            connection = (HttpURLConnection) new URL(imageURL).openConnection();
@@ -788,7 +788,7 @@ public class RequestHandler {
 //                    } else if (message != null && !message.isEmpty() && imageURL != null) {
 //                        return channel.sendFile(Utility.removeMentions(message), false, stream, filename);
 //                    } else {
-//                        logger.debug("Error sending File to channel with id: " + channel.getLongID() + " on guild with id: " + channel.getGuild().getLongID() +
+//                        logger.debug("Error sending File to channel with id: " + channel.getIdLong() + " on guild with id: " + channel.getGuild().getIdLong() +
 //                                ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
 //                        return null;
 //                    }

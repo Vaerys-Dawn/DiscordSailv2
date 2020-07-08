@@ -7,8 +7,8 @@ import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.RequestBuffer;
 
@@ -41,7 +41,7 @@ public class MessageHandler {
             if (!GuildHandler.testForPerms(command, command.channel.get(), Permissions.MENTION_EVERYONE)) {
                 // sanitize @everyone and @here mentions.
                 args = args.replaceAll("(?i)@(everyone|here)", "REDACTED");
-                for (IRole r : command.message.get().getRoleMentions()) {
+                for (Role r : command.message.get().getRoleMentions()) {
                     args = args.replaceAll(r.mention(), r.getName());
                 }
             }
@@ -87,7 +87,7 @@ public class MessageHandler {
 
     private boolean checkMuteAppeals(CommandObject command) {
         if (!command.guild.config.moduleModMute) return false;
-        IRole muted = command.guild.getMutedRole();
+        Role muted = command.guild.getMutedRole();
         if (muted == null) return false;
         if (!command.guild.getChannelsByType(ChannelSetting.MUTE_APPEALS).contains(command.channel.get())) return false;
         if (GuildHandler.canBypass(command)) return false;
@@ -135,7 +135,7 @@ public class MessageHandler {
     //Command Handler
     private boolean handleCommand(CommandObject command, String args) {
         List<Command> commands = new ArrayList<>(command.guild.commands);
-        IChannel currentChannel = command.channel.get();
+        TextChannel currentChannel = command.channel.get();
         String commandArgs;
         for (Command c : commands) {
             if (c.isCall(args, command)) {
@@ -150,9 +150,9 @@ public class MessageHandler {
                 //check if it is a valid channel
                 if (!currentChannel.isPrivate()) {
                     if (c.channel != null && !GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
-                        List<IChannel> channels = command.guild.getChannelsByType(c.channel);
+                        List<TextChannel> channels = command.guild.getChannelsByType(c.channel);
                         if (channels.size() != 0 && !channels.contains(command.channel.get())) {
-                            List<IChannel> visibleChannels = command.user.getVisibleChannels(channels);
+                            List<TextChannel> visibleChannels = command.user.getVisibleChannels(channels);
                             RequestHandler.sendMessage(Utility.getChannelMessage(visibleChannels), command.channel.get());
                             return true;
                         }

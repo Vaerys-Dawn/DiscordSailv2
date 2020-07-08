@@ -16,6 +16,7 @@ import com.github.vaerys.pogos.GuildUsers;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
+import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.obj.ReactionEmoji;
@@ -120,12 +121,12 @@ public class PixelHandler {
         if (user == null) {
             return;
         }
-        List<IRole> userRoles = user.getRolesForGuild(content.get());
+        List<Role> userRoles = user.getRolesForGuild(content.get());
         //remove all rewardRoles to prep for checking.
         ListIterator iterator = userRoles.listIterator();
         while (iterator.hasNext()) {
-            IRole role = (IRole) iterator.next();
-            if (content.config.isRoleReward(role.getLongID())) {
+            Role role = (Role) iterator.next();
+            if (content.config.isRoleReward(role.getIdLong())) {
                 iterator.remove();
             }
         }
@@ -135,15 +136,15 @@ public class PixelHandler {
             userRoles.add(r.getRole(content));
         }
         //add the top ten role if they should have it.
-        IRole topTenRole = content.get().getRoleByID(content.config.topTenRoleID);
+        Role topTenRole = content.get().getRoleById(content.config.topTenRoleID);
         if (topTenRole != null) {
-            long rank = PixelHandler.rank(content.users, content.get(), user.getLongID());
+            long rank = PixelHandler.rank(content.users, content.get(), user.getIdLong());
             if (rank <= 10 && rank > 0) {
                 userRoles.add(topTenRole);
             }
         }
         //only do a role update if the role count changes
-        List<IRole> currentRoles = user.getRolesForGuild(content.get());
+        List<Role> currentRoles = user.getRolesForGuild(content.get());
         if (!currentRoles.containsAll(userRoles) || currentRoles.size() != userRoles.size()) {
             RequestHandler.roleManagement(user, content.get(), userRoles);
         }
@@ -177,7 +178,7 @@ public class PixelHandler {
         if (user.getSettings().contains(NO_XP_GAIN) || user.getSettings().contains(DENIED_XP)) return;
 
         //role xp denying
-        IRole xpDenied = object.guild.getXPDeniedRole();
+        Role xpDenied = object.guild.getXPDeniedRole();
         if (xpDenied != null && object.user.roles.contains(xpDenied)) return;
 
         //you can only gain xp once per min
@@ -264,10 +265,10 @@ public class PixelHandler {
         UserSetting defaultOverride = object.guild.config.defaultLevelMode;
         UserSetting userState = user.getLevelState();
         boolean rankedUp = reward != null;
-        IChannel levelChannel = object.guild.getChannelByType(ChannelSetting.LEVEL_UP);
-        IChannel currentChannel = object.channel.get();
-        IChannel dmChannel = object.user.getDmChannel();
-        IMessage levelMessage = null;
+        TextChannel levelChannel = object.guild.getChannelByType(ChannelSetting.LEVEL_UP);
+        TextChannel currentChannel = object.channel.get();
+        TextChannel dmChannel = object.user.getDmChannel();
+        Message levelMessage = null;
 
         //force override
         if (userState == null || defaultOverride == DONT_SEND_LVLUP || defaultOverride == SEND_LVLUP_DMS) {
@@ -332,7 +333,7 @@ public class PixelHandler {
      * @param doGif    weather the gif should be displayed.
      * @return the message that was sent.
      */
-    private static IMessage sendLevelMessage(String message, IChannel channel, boolean isRankUp, boolean doGif) {
+    private static Message sendLevelMessage(String message, TextChannel channel, boolean isRankUp, boolean doGif) {
         return doGif ?
                 (RequestHandler.sendEmbededImage(message, isRankUp ? Constants.RANK_UP_IMAGE_URL : Constants.LEVEL_UP_IMAGE_URL, channel).get()) :
                 (RequestHandler.sendMessage(message, channel).get());
@@ -372,7 +373,7 @@ public class PixelHandler {
     }
 
     private static void sendReactionError(CommandObject object) {
-        IChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
+        TextChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
         if (adminChannel == null) adminChannel = object.channel.get();
         RequestHandler.sendMessage("\\> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
         return;
@@ -384,7 +385,7 @@ public class PixelHandler {
      * @param message the message to be deleted.
      * @param user    the user that level up message.
      */
-    private static void selfDestruct(IMessage message, ProfileObject user, CommandObject object) {
+    private static void selfDestruct(Message message, ProfileObject user, CommandObject object) {
         if (object.guild.config.selfDestructLevelUps) {
             selfDestruct.schedule(() -> RequestHandler.deleteMessage(message), user.getCurrentLevel() == 1 ? 2 : 1, TimeUnit.MINUTES);
         }
@@ -419,9 +420,9 @@ public class PixelHandler {
         return levelxp;
     }
 
-    public static boolean isUnRanked(long userID, GuildUsers users, IGuild guild) {
+    public static boolean isUnRanked(long userID, GuildUsers users, Guild guild) {
         ProfileObject user = users.getUserByID(userID);
-        GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
+        GuildObject guildObject = Globals.getGuildContent(guild.getIdLong());
         if (user == null) return true;
         if (guild.getUserByID(userID) == null) return true;
         if (user.getXP() == 0) return true;
@@ -439,7 +440,7 @@ public class PixelHandler {
     }
 
 
-    public static long rank(GuildUsers guildUsers, IGuild guild, long userID) {
+    public static long rank(GuildUsers guildUsers, Guild guild, long userID) {
         if (isUnRanked(userID, guildUsers, guild)) {
             return -1;
         }
@@ -575,7 +576,7 @@ public class PixelHandler {
 
 //        boolean leveledUp;
 //        boolean rankedup = false;
-//        IMessage selfDestruct = null;
+//        Message selfDestruct = null;
 //        if (user.getCurrentLevel() == -1) {
 //            user.setCurrentLevel(xpToLevel(user.getXP()));
 //            return;
@@ -608,9 +609,9 @@ public class PixelHandler {
 //                                user.getEnabledSettings().remove(i);
 //                            }
 //                        }
-//                        levelUpMessage = "Welcome Back.\n" + levelUpMessage + "\nYour **@" + object.guild.getRoleByID(r.getRoleID()).getName() + "** role has been returned to you.";
+//                        levelUpMessage = "Welcome Back.\n" + levelUpMessage + "\nYour **@" + object.guild.getRoleById(r.getRoleID()).getName() + "** role has been returned to you.";
 //                    } else {
-//                        levelUpMessage += "\nYou have been granted the **@" + object.guild.getRoleByID(r.getRoleID()).getName() + "** role for reaching this level.";
+//                        levelUpMessage += "\nYou have been granted the **@" + object.guild.getRoleById(r.getRoleID()).getName() + "** role for reaching this level.";
 //                    }
 //                    rankedup = true;
 //                }
@@ -633,8 +634,8 @@ public class PixelHandler {
 //            } else {
 //                userOverride = object.guild.config.defaultLevelMode;
 //            }
-//            List<IChannel> levelDenied = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP_DENIED);
-//            List<IChannel> levelUpChannel = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP);
+//            List<TextChannel> levelDenied = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP_DENIED);
+//            List<TextChannel> levelUpChannel = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP);
 //            if (levelDenied.size() != 0 && levelDenied.contains(object.channel.get())) {
 //                if (userOverride != SEND_LVLUP_DMS || userOverride != SEND_LVLUP_RANK_CHANNEL && levelUpChannel.size() == 0) {
 //                    userOverride = DONT_SEND_LVLUP;
@@ -645,7 +646,7 @@ public class PixelHandler {
 //                    selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
 //                    break;
 //                case SEND_LVLUP_RANK_CHANNEL:
-//                    IChannel channel = null;
+//                    TextChannel channel = null;
 //                    if (levelUpChannel.size() != 0) {
 //                        channel = levelUpChannel.get(0);
 //                    }
@@ -706,7 +707,7 @@ public class PixelHandler {
 //            IEmoji customEmoji = null;
 //            Emoji emoji = EmojiManager.getByUnicode(object.guild.config.levelUpReaction);
 //            boolean found = false;
-//            for (IGuild g : object.client.get().getGuilds()) {
+//            for (Guild g : object.client.get().getGuilds()) {
 //                IEmoji test;
 //                try {
 //                    long emojiId = Long.parseLong(object.guild.config.levelUpReaction);
@@ -726,7 +727,7 @@ public class PixelHandler {
 //            }
 //            if (object.guild.config.levelUpReaction.equalsIgnoreCase("null")) return;
 //            if (found == false) {
-//                IChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
+//                TextChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
 //                if (adminChannel == null) adminChannel = object.channel.get();
 //                RequestHandler.sendMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
 //                return;

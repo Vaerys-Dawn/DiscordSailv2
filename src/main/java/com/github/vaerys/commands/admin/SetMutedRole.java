@@ -6,8 +6,8 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -20,11 +20,11 @@ public class SetMutedRole extends Command {
             command.guild.config.setRoleToMentionID(-1);
             return "\\> Muted Role Removed.";
         }
-        IRole role = GuildHandler.getRoleFromName(args, command.guild.get());
+        Role role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) {
             return Constants.ERROR_ROLE_NOT_FOUND;
         } else {
-            command.guild.config.setMutedRoleID(role.getLongID());
+            command.guild.config.setMutedRoleID(role.getIdLong());
             return "\\> The role **" + role.getName() + "** is now set as the mute role.";
         }
     }
@@ -56,7 +56,7 @@ public class SetMutedRole extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_ROLES, Permission.MANAGE_SERVER};
     }
 
     @Override

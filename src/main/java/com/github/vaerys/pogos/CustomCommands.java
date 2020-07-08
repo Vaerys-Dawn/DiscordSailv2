@@ -9,8 +9,9 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.GlobalFile;
+import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.Guild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -89,7 +90,7 @@ public class CustomCommands extends GlobalFile {
         }
     }
 
-    public void initCustomCommands(IGuild guild) {
+    public void initCustomCommands(Guild guild) {
         //make sure that echo works properly
         boolean echoExists = true;
         CCommandObject echo = getCommand("echo");
@@ -100,7 +101,7 @@ public class CustomCommands extends GlobalFile {
             echoExists = false;
         }
         if (!echoExists)
-            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getLongID(), "Echo", "<args><dontSanitize>", false));
+            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getIdLong(), "Echo", "<args><dontSanitize>", false));
 
         //make sure that wiki works properly
         boolean wikiExists = true;
@@ -112,7 +113,7 @@ public class CustomCommands extends GlobalFile {
             wikiExists = false;
         }
         if (!wikiExists)
-            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getLongID(), "Wiki", "http://starbounder.org/Special:Search/<args><replace>{ ;;_}", false));
+            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getIdLong(), "Wiki", "http://starbounder.org/Special:Search/<args><replace>{ ;;_}", false));
     }
 
     public ArrayList<CCommandObject> getCommandList() {
@@ -121,7 +122,7 @@ public class CustomCommands extends GlobalFile {
 
 //    @Deprecated
 //    public String sendCCasJSON(long channelID, String commandName) {
-//        IChannel channel = Globals.getClient().getChannelByID(channelID);
+//        TextChannel channel = Globals.getClient().getChannelByID(channelID);
 //        for (CCommandObject c : commands) {
 //            if (c.getName().equalsIgnoreCase(commandName)) {
 //                FileHandler.writeToJson(Constants.DIRECTORY_TEMP + c.getName() + ".json", c);
@@ -143,18 +144,18 @@ public class CustomCommands extends GlobalFile {
 //    }
 
 
-    public String delCommand(String args, IUser author, IGuild guild) {
+    public String delCommand(String args, IUser author, Guild guild) {
         int i = 0;
         for (CCommandObject c : commands) {
             if (c.getName().equalsIgnoreCase(args)) {
                 boolean canBypass = GuildHandler.testForPerms(author, guild, Permissions.MANAGE_MESSAGES);
-                if (author.getLongID() == guild.getOwnerLongID()
-                        || author.getLongID() == Globals.creatorID
-                        || author.getLongID() == Globals.client.getOurUser().getLongID()) {
+                if (author.getIdLong() == guild.getOwnerLongID()
+                        || author.getIdLong() == Globals.creatorID
+                        || author.getIdLong() == Globals.client.getOurUser().getIdLong()) {
                     canBypass = true;
                 }
-                if (author.getLongID() == c.getUserID() || canBypass) {
-                    if (c.isLocked() && Globals.client.getOurUser().getLongID() != author.getLongID()) {
+                if (author.getIdLong() == c.getUserID() || canBypass) {
+                    if (c.isLocked() && Globals.client.getOurUser().getIdLong() != author.getIdLong()) {
                         return "\\> This command is locked and must be unlocked to be deleted.";
                     } else {
                         commands.remove(i);

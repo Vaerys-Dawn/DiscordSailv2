@@ -5,7 +5,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.tags.cctags.TagSearchTags;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.Guild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -14,7 +14,7 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 public class CCEditModes {
 
-    public static String lock(CCommandObject c, CommandObject command, IUser author, IGuild guild) {
+    public static String lock(CCommandObject c, CommandObject command, IUser author, Guild guild) {
         if (GuildHandler.testForPerms(author, guild, Permissions.MANAGE_MESSAGES)) {
             c.toggleLocked();
             return "\\> Lock for **" + c.getName() + "** is now " + c.isLocked() + ".";
@@ -23,7 +23,7 @@ public class CCEditModes {
         }
     }
 
-    public static String shitPost(CCommandObject c, CommandObject command, IUser author, IGuild guild) {
+    public static String shitPost(CCommandObject c, CommandObject command, IUser author, Guild guild) {
         if (GuildHandler.testForPerms(author, guild, Permissions.MANAGE_MESSAGES)) {
             c.toggleShitPost();
             return "\\> Shitpost for **" + c.getName() + "** is now " + c.isShitPost() + ".";

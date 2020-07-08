@@ -116,7 +116,7 @@ public class UserObject {
             return;
         }
         this.object = object;
-        this.longID = object.getLongID();
+        this.longID = object.getIdLong();
         this.name = object.getName();
         this.username = object.getName() + "#" + object.getDiscriminator();
         this.isBot = object.isBot();
@@ -159,7 +159,7 @@ public class UserObject {
         return this;
     }
 
-    public List<IChannel> getVisibleChannels(List<IChannel> channels) {
+    public List<TextChannel> getVisibleChannels(List<TextChannel> channels) {
         List<Permissions> neededPerms = Arrays.asList(Permissions.SEND_MESSAGES, Permissions.READ_MESSAGES);
         return channels.stream().filter(c -> c.getModifiedPermissions(object).containsAll(neededPerms)).collect(Collectors.toList());
     }
@@ -196,13 +196,13 @@ public class UserObject {
     }
 
 
-    public IChannel getDmChannel() {
+    public TextChannel getDmChannel() {
         return RequestBuffer.request(() -> {
             return object.getOrCreatePMChannel();
         }).get();
     }
 
-    public RequestBuffer.RequestFuture<IMessage> sendDm(String s) {
+    public RequestBuffer.RequestFuture<Message> sendDm(String s) {
         return RequestHandler.sendMessage(s, getDmChannel());
     }
 
@@ -214,7 +214,7 @@ public class UserObject {
         return Globals.getGlobalData().getBlockedFromDMS().contains(longID);
     }
 
-    public RequestBuffer.RequestFuture<IMessage> sendEmbededDm(String s, XEmbedBuilder builder) {
+    public RequestBuffer.RequestFuture<Message> sendEmbededDm(String s, XEmbedBuilder builder) {
         return RequestHandler.sendEmbedMessage(s, builder, getDmChannel());
     }
 
@@ -238,8 +238,8 @@ public class UserObject {
         return PixelHandler.getRewardCount(command.guild, longID);
     }
 
-    public List<IRole> getCosmeticRoles(CommandObject command) {
-        return roles.stream().filter(iRole -> command.guild.config.isRoleCosmetic(iRole.getLongID())).collect(Collectors.toList());
+    public List<Role> getCosmeticRoles(CommandObject command) {
+        return roles.stream().filter(iRole -> command.guild.config.isRoleCosmetic(iRole.getIdLong())).collect(Collectors.toList());
     }
 
     public EnumSet<Permissions> getPermissions(GuildObject guild) {

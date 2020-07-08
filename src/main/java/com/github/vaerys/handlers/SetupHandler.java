@@ -12,7 +12,7 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.util.HashMap;
@@ -70,7 +70,7 @@ public abstract class SetupHandler {
      */
     private static boolean handleCommand(CommandObject command, String args) {
         List<Command> commands = CommandList.getSetupCommands();
-        IChannel currentChannel = command.channel.get();
+        TextChannel currentChannel = command.channel.get();
         String commandArgs;
         for (Command c : commands) {
             if (c.isCall(args, command)) {
@@ -152,11 +152,11 @@ public abstract class SetupHandler {
 
     /**
      * The initial text to be displayed for the step currently running.<br />
-     * Send a message to the user with {@link RequestHandler#sendMessage(String, IChannel)}
+     * Send a message to the user with {@link RequestHandler#sendMessage(String, TextChannel)}
      *
      * @param command A {@link CommandObject} passed to each setup instance.
      * @return A string value representing the text output.
-     * @see RequestHandler#sendMessage(String, IChannel)
+     * @see RequestHandler#sendMessage(String, TextChannel)
      * @see XEmbedBuilder
      */
     public abstract void stepText(CommandObject command);

@@ -54,7 +54,7 @@ public class PurgeBannedData extends Command {
             purgeData(userId, command, purgedData);
         } else {
             for (IUser user : command.guild.get().getBannedUsers()) {
-                purgeData(user.getLongID(), command, purgedData);
+                purgeData(user.getIdLong(), command, purgedData);
             }
         }
         String response = "\\> Purged Profiles: **" + purgedData[0] + "**." +

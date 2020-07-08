@@ -23,7 +23,7 @@ public class EditServerDesc extends Command {
             return "\\> Cannot edit server description, missing arguments.";
         }
         desc = args.replaceFirst(Pattern.quote(splitArgs.get(0) + " "), "");
-        return command.guild.servers.editServerDesc(command.user.get().getLongID(), splitArgs.get(0), desc, command.guild.get());
+        return command.guild.servers.editServerDesc(command.user.get().getIdLong(), splitArgs.get(0), desc, command.guild.get());
     }
 
     @Override

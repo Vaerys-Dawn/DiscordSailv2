@@ -33,7 +33,7 @@ public class CustomCommands {
                 commandContents = c[2];
                 if (c[0].contains("LockedCommand")) {
                     isLocked = true;
-                    userID = Globals.getClient().getOurUser().getLongID();
+                    userID = Globals.getClient().getOurUser().getIdLong();
                 } else {
                     isLocked = false;
                     userID = Utility.stringLong(c[0]);

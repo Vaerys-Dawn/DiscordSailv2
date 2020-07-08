@@ -9,8 +9,10 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.objects.userlevel.DungeonCharObject;
 import com.github.vaerys.templates.GlobalFile;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IRole;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
+import sx.blah.discord.handle.obj.Guild;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -31,15 +33,15 @@ public class Characters extends GlobalFile {
     List<DungeonCharObject> dungeonChars = new ArrayList<>();
     private String rolePrefix = "";
 
-    public ArrayList<CharacterObject> getCharacters(IGuild guild) {
+    public ArrayList<CharacterObject> getCharacters(Guild guild) {
         validateRoles(guild);
         return characters;
     }
 
-    public String delChar(String character, IUser author, IGuild guild, boolean bypass) {
+    public String delChar(String character, IUser author, Guild guild, boolean bypass) {
         for (CharacterObject c : characters) {
             if (c.getName().equalsIgnoreCase(character)) {
-                if (author.getLongID() == c.getUserID() || bypass) {
+                if (author.getIdLong() == c.getUserID() || bypass) {
                     characters.remove(c);
                     return "\\> Character Deleted.";
                 } else {
@@ -58,14 +60,14 @@ public class Characters extends GlobalFile {
         this.rolePrefix = rolePrefix;
     }
 
-    public void validateRoles(IGuild guild) {
+    public void validateRoles(Guild guild) {
         if (guild == null) {
             return;
         }
         for (CharacterObject c : characters) {
             ListIterator iterator = c.getRoleIDs().listIterator();
             while (iterator.hasNext()) {
-                IRole role = guild.getRoleByID((long) iterator.next());
+                Role role = guild.getRoleById((long) iterator.next());
                 if (role == null) {
                     iterator.remove();
                 }
@@ -73,12 +75,12 @@ public class Characters extends GlobalFile {
         }
     }
 
-    public void updateVars(IGuild guild) {
+    public void updateVars(Guild guild) {
         for (CharacterObject c : characters) {
             ListIterator iterator = c.getRoleIDs().listIterator();
             while (iterator.hasNext()) {
                 long id = (long) iterator.next();
-                if (guild.getRoleByID(id) == null) {
+                if (guild.getRoleById(id) == null) {
                     iterator.remove();
                 }
             }
@@ -94,14 +96,12 @@ public class Characters extends GlobalFile {
         return null;
     }
 
+    public List<CharacterObject> getCharactersForUser(long id) {
+        return characters.stream().filter(c->c.getUserID()==id).collect(Collectors.toList());
+    }
+
     public List<CharacterObject> getCharactersForUser(UserObject user) {
-        List<CharacterObject> charObjects = new LinkedList<>();
-        for (CharacterObject c : characters) {
-            if (c.getUserID() == user.longID) {
-                charObjects.add(c);
-            }
-        }
-        return charObjects;
+        return getCharactersForUser(user.longID);
     }
 
     public int maxCharsForUser(UserObject user, GuildObject guild) {
@@ -110,7 +110,7 @@ public class Characters extends GlobalFile {
         maxChars += rewardCount * 2;
         if (user.isPatron) maxChars += 4;
         if (GuildHandler.canBypass(user, guild)) maxChars += 4;
-        if (GuildHandler.testForPerms(user, guild, Permissions.MANAGE_MESSAGES)) maxChars += 4;
+        if (GuildHandler.testForPerms(user, guild, Permission.MESSAGE_MANAGE)) maxChars += 4;
         return maxChars;
     }
 
@@ -118,8 +118,8 @@ public class Characters extends GlobalFile {
         return maxCharsForUser(command.user, command.guild);
     }
 
-    public void addChar(String characterID, List<IRole> roles, UserObject user) {
-        characters.add(new CharacterObject(characterID, user.longID, user.displayName, roles.stream().map(iRole -> iRole.getLongID()).collect(Collectors.toList())));
+    public void addChar(String characterID, List<Role> roles, UserObject user) {
+        characters.add(new CharacterObject(characterID, user.longID, user.displayName, roles.stream().map(iRole -> iRole.getIdLong()).collect(Collectors.toList())));
     }
 
 

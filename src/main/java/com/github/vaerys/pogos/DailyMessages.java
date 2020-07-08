@@ -76,7 +76,7 @@ public class DailyMessages extends GlobalFile {
                 configMessage = d;
             }
         }
-        DailyMessage object = new DailyMessage(configMessage.getContents(command), today, Globals.client.getOurUser().getLongID(), 0000);
+        DailyMessage object = new DailyMessage(configMessage.getContents(command), today, Globals.client.getOurUser().getIdLong(), 0000);
         for (DailyMessage d : dailyMessages) {
             if (d.getUID() == dailyMessageID) {
                 return d;

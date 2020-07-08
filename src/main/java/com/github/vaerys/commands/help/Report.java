@@ -8,9 +8,9 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.botlevel.AutoBlocker;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Message;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class Report extends Command {
     private static List<AutoBlocker> lastUsers = new ArrayList<>(5);
 
     public static String report(String args, CommandObject command, boolean isSilent) {
-        IChannel channel = command.guild.getChannelByType(ChannelSetting.ADMIN);
+        TextChannel channel = command.guild.getChannelByType(ChannelSetting.ADMIN);
         if (channel == null) {
             return "\\> Your report could not be sent as the server does not have an admin channel set up at this time.";
         }
@@ -50,14 +50,14 @@ public class Report extends Command {
 
         //build embed
 //        XEmbedBuilder embed = new XEmbedBuilder(new Color(250, 166, 26));
-        IRole roleToMention = command.guild.getRoleByID(command.guild.config.getRoleToMentionID());
+        Role roleToMention = command.guild.getRoleById(command.guild.config.getRoleToMentionID());
         split.editRestReplace(split.getRest(), Utility.convertMentionToText(split.getRest()));
         String reason = split.getRest() != null ? split.getRest() : "No reason given.";
         String format = "**%s**\nReported User: %s\nReason: `%s`\nChannel: %s\n\nLink to Report:\n%s\nReported by: %s";
         String reportType = isSilent ? "User Report - Silent" : "User Report";
         String message = String.format(format, reportType, reported.mention(), reason, command.channel.mention, command.getMessageLink(), command.user.mention());
 //        embed.setTitle(reportType);
-        IMessage response;
+        Message response;
 
         //send report
         if (roleToMention == null) {

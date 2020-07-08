@@ -7,7 +7,7 @@ import com.github.vaerys.objects.depreciated.BlackListObject;
 import com.github.vaerys.objects.userlevel.ServerObject;
 import com.github.vaerys.templates.GlobalFile;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.Guild;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class Servers extends GlobalFile {
         return servers;
     }
 
-    public String editServerDesc(long userID, String serverName, String desc, IGuild guild) {
+    public String editServerDesc(long userID, String serverName, String desc, Guild guild) {
         for (ServerObject s : servers) {
             if (s.getName().equalsIgnoreCase(serverName)) {
                 boolean bypass = GuildHandler.testForPerms(Globals.getClient().getUserByID(userID), guild, Permissions.MANAGE_MESSAGES);
@@ -89,7 +89,7 @@ public class Servers extends GlobalFile {
         return "\\> Server with that name not found.";
     }
 
-    public String editIP(long userID, String serverName, String IP, String port, IGuild guild) {
+    public String editIP(long userID, String serverName, String IP, String port, Guild guild) {
         for (ServerObject s : servers) {
             if (s.getName().equalsIgnoreCase(serverName)) {
                 boolean bypass = GuildHandler.testForPerms(Globals.getClient().getUserByID(userID), guild, Permissions.MANAGE_MESSAGES);
@@ -107,7 +107,7 @@ public class Servers extends GlobalFile {
         return "\\> Server with that name not found.";
     }
 
-    public String editServerName(long userID, String oldServerName, String newServerName, IGuild guild) {
+    public String editServerName(long userID, String oldServerName, String newServerName, Guild guild) {
         for (ServerObject s : servers) {
             if (s.getName().equalsIgnoreCase(oldServerName)) {
                 boolean bypass = GuildHandler.testForPerms(Globals.getClient().getUserByID(userID), guild, Permissions.MANAGE_MESSAGES);
@@ -129,7 +129,7 @@ public class Servers extends GlobalFile {
         return "\\> Server with that name not found.";
     }
 
-    public String deleteServer(long userID, String serverName, IGuild guild) {
+    public String deleteServer(long userID, String serverName, Guild guild) {
         int position = 0;
         for (ServerObject s : servers) {
             if (s.getName().equalsIgnoreCase(serverName)) {

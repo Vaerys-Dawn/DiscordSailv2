@@ -9,8 +9,8 @@ import com.github.vaerys.objects.botlevel.TrackLikes;
 import com.github.vaerys.objects.userlevel.GroupUpObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.GlobalFile;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Guild;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -57,12 +57,12 @@ public class ChannelData extends GlobalFile {
         return channelSettings;
     }
 
-    public void updateVariables(IGuild guild) {
+    public void updateVariables(Guild guild) {
         //update channels
         for (ChannelSettingObject c : channelSettings) {
             ListIterator iterator = c.getChannelIDs().listIterator();
             while (iterator.hasNext()) {
-                IChannel channel = guild.getChannelByID((Long) iterator.next());
+                TextChannel channel = guild.getChannelByID((Long) iterator.next());
                 if (channel == null) {
                     iterator.remove();
                 }

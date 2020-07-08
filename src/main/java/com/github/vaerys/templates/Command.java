@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
@@ -205,7 +205,7 @@ public abstract class Command {
         }
 
         //Handle channels
-        List<IChannel> channels = command.guild.getChannelsByType(channel);
+        List<TextChannel> channels = command.guild.getChannelsByType(channel);
         List<String> channelMentions = command.user.getVisibleChannels(channels).stream().map(c -> c.mention()).collect(Collectors.toList());
 
         //channel

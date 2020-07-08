@@ -12,8 +12,8 @@ import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.text.NumberFormat;
@@ -49,7 +49,7 @@ public class PixelHelp extends Command {
                         " once per minute by sending a message that meets all of the specific message rules.\n\n");
                 if (command.guild.config.getRewardRoles().size() != 0) {
                     for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
-                        IRole reward = command.guild.getRoleByID(r.getRoleID());
+                        Role reward = command.guild.getRoleById(r.getRoleID());
                         if (reward == null) {
                             break;
                         }
@@ -73,7 +73,7 @@ public class PixelHelp extends Command {
     }
 
     private String rules(CommandObject command) {
-        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.XP_DENIED);
+        List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.XP_DENIED);
         List<String> channelMentions = Utility.getChannelMentions(channels);
         String rules = "**The rules for gaining pixels are:**\n" +
                 "\\> Cannot gain pixels if the message contains less than 10 chars.\n" +

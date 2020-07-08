@@ -2,7 +2,7 @@ package com.github.vaerys.v3core.v3masterobjects;
 
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.Message;
 import sx.blah.discord.handle.obj.IReaction;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -16,21 +16,21 @@ public class MessageObject {
     public ClientObject client;
     public long longID;
     public UserObject author;
-    private IMessage object;
+    private Message object;
 
-    public MessageObject(IMessage message, GuildObject guild) {
+    public MessageObject(Message message, GuildObject guild) {
         if (message == null) return;
         client = new ClientObject(guild);
         this.object = message;
-        this.longID = message.getLongID();
+        this.longID = message.getIdLong();
         this.author = new UserObject(message.getAuthor(), guild);
     }
 
-    public IMessage get() {
+    public Message get() {
         return object;
     }
 
-    public List<IMessage.Attachment> getAttachments() {
+    public List<Message.Attachment> getAttachments() {
         return object.getAttachments();
     }
 

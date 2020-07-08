@@ -6,7 +6,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 
 /**
  * Created by Vaerys on 02/03/2017.
@@ -77,7 +77,7 @@ public class ModuleRoles extends GuildModule {
     }
 
     private long appendRole(StringBuilder builder, long id, CommandObject object) {
-        IRole role = object.guild.getRoleByID(id);
+        Role role = object.guild.getRoleById(id);
         if (role != null) {
             String roleName = role.getName();
             if (role.isEveryoneRole()) roleName = "everyone";

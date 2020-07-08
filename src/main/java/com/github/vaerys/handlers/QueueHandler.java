@@ -29,7 +29,7 @@ public class QueueHandler {
         runCheck();
         ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
         ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
-        IChannel channel = object.client.get().getChannelByID(Globals.queueChannelID);
+        TextChannel channel = object.client.get().getChannelByID(Globals.queueChannelID);
 
         if (channel != null) {
             switch (type) {
@@ -46,10 +46,10 @@ public class QueueHandler {
                     embedBuilder.setDescription(content);
                     embedBuilder.addField(dowString, dayOfWeek + "", true);
                     embedBuilder.addField(uIDString, uID + "", true);
-                    IMessage message = RequestHandler.sendEmbedMessage("", embedBuilder, channel).get();
+                    Message message = RequestHandler.sendEmbedMessage("", embedBuilder, channel).get();
                     RequestBuffer.request(() -> message.addReaction(thumbsUp)).get();
                     RequestBuffer.request(() -> message.addReaction(thumbsDown)).get();
-                    Globals.getDailyMessages().getQueue().add(new QueueObject(message.getLongID(), uID, type));
+                    Globals.getDailyMessages().getQueue().add(new QueueObject(message.getIdLong(), uID, type));
                     return;
                 default:
                     return;
@@ -61,13 +61,13 @@ public class QueueHandler {
         if (isChecking) return;
         new Thread(() -> {
             isChecking = true;
-            IChannel queueChannel = Globals.client.getChannelByID(Globals.queueChannelID);
+            TextChannel queueChannel = Globals.client.getChannelByID(Globals.queueChannelID);
             if (queueChannel == null) return;
             ArrayList<QueueObject> queuedMessages = Globals.getDailyMessages().getQueue();
             ListIterator iterator = queuedMessages.listIterator();
             while (iterator.hasNext()) {
                 QueueObject object = (QueueObject) iterator.next();
-                IMessage item = queueChannel.getMessageByID(object.getMessageId());
+                Message item = queueChannel.getMessageByID(object.getMessageId());
                 if (item == null) {
                     item = RequestBuffer.request(() -> queueChannel.fetchMessage(object.getMessageId())).get();
                 }
@@ -87,7 +87,7 @@ public class QueueHandler {
         ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
         ReactionEmoji ok = Utility.getReaction(Constants.EMOJI_ALLOW);
         ReactionEmoji no = Utility.getReaction(Constants.EMOJI_DENY);
-        IMessage message = object.message.get();
+        Message message = object.message.get();
         IUser owner = object.client.creator.get();
         //exit if not the queue channel
         if (object.channel.longID != Globals.queueChannelID) return;
@@ -102,7 +102,7 @@ public class QueueHandler {
         QueueObject request = Globals.getDailyMessages().getRequestItem(object.message.longID);
         if (request == null) return;
 
-        if (request.getMessageId() == message.getLongID()) {
+        if (request.getMessageId() == message.getIdLong()) {
             //getAllToggles the embed
             IEmbed embed = message.getEmbeds().get(0);
             RequestBuffer.request(() -> message.removeAllReactions()).get();

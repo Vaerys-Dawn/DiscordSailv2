@@ -9,7 +9,7 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -182,7 +182,7 @@ public enum ChannelSetting {
             builder.setTitle("Channel Type - " + name);
         }
         builder.setDescription(getDesc(object));
-        List<IChannel> channels = object.guild.getChannelsByType(this);
+        List<TextChannel> channels = object.guild.getChannelsByType(this);
         channels = object.user.getVisibleChannels(channels);
         String title;
         if (isSetting()) {

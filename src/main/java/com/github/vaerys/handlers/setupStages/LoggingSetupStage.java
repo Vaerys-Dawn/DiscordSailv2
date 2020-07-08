@@ -5,7 +5,7 @@ import com.github.vaerys.guildtoggles.modules.ModuleLogging;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.handlers.StringHandler;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,10 +75,10 @@ public class LoggingSetupStage extends SetupHandler {
     }
 
     private boolean checkForGeneralLog(CommandObject command) {
-        IChannel channel = null;
+        TextChannel channel = null;
         StringHandler output = new StringHandler();
         for (String s : serverLogChannelNames) {
-            List<IChannel> genLogChannel = command.guild.get().getChannelsByName(s);
+            List<TextChannel> genLogChannel = command.guild.get().getChannelsByName(s);
             if (genLogChannel.size() == 1) {
                 channel = genLogChannel.get(0);
                 break;
@@ -86,8 +86,8 @@ public class LoggingSetupStage extends SetupHandler {
                 output.append("I found multiple valid channels...")
                 .append("\nPick a channel from the list below: ```");
                 String format = "\n%s [%s]";
-                for (IChannel c : genLogChannel) {
-                    output.appendFormatted(format, c.getName(), c.getLongID());
+                for (TextChannel c : genLogChannel) {
+                    output.appendFormatted(format, c.getName(), c.getIdLong());
                 }
                 output.append("\n```")
                 .append("Respond with the ID of the channel you want to use.");

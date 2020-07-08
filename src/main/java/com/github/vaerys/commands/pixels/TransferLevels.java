@@ -9,7 +9,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.Message;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -29,15 +29,15 @@ public class TransferLevels extends Command {
         if (command.guild.config.getRewardRoles().size() == 0) {
             return "\\> No rewards available to grant. cannot transfer levels";
         }
-        IMessage message = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
+        Message message = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
 
         Utility.sortRewards(command.guild.config.getRewardRoles());
 
         for (IUser user : command.guild.getUsers()) {
             if (!user.isBot()) {
-                ProfileObject uObject = command.guild.users.getUserByID(user.getLongID());
+                ProfileObject uObject = command.guild.users.getUserByID(user.getIdLong());
                 if (uObject == null) {
-                    uObject = command.guild.users.addUser(user.getLongID());
+                    uObject = command.guild.users.addUser(user.getIdLong());
                 }
                 uObject.lastTalked = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
                 uObject.setXp(0);

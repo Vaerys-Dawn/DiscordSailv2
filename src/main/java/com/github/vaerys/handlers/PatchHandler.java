@@ -14,7 +14,7 @@ import com.google.gson.JsonObject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.Guild;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ public class PatchHandler {
 
     final static Logger logger = LoggerFactory.getLogger(PatchHandler.class);
 
-    public static void guildPatches(IGuild guild) {
+    public static void guildPatches(Guild guild) {
 
         // 1.0 overhauling strings to longs and fixing spelling/name issues.
         overhaulCharacters(guild);
@@ -73,8 +73,8 @@ public class PatchHandler {
         fixMultipleDailies();
     }
 
-    private static PatchObject getJsonConfig(IGuild guild, String file, double patchID, String patch) {
-        String path = Utility.getFilePath(guild.getLongID(), file);
+    private static PatchObject getJsonConfig(Guild guild, String file, double patchID, String patch) {
+        String path = Utility.getFilePath(guild.getIdLong(), file);
         // check if file exists:
         if (!FileHandler.exists(path)) return null;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -87,12 +87,12 @@ public class PatchHandler {
         FileHandler.writeToJson(patch.getPath(), patch.getObject());
     }
 
-    private static void removeChannelTag(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), Constants.FILE_INFO);
+    private static void removeChannelTag(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), Constants.FILE_INFO);
         if (!FileHandler.exists(path)) return;
         String infoContents = String.join("\n", FileHandler.readFromFile(path));
         if (!infoContents.contains("<channel>{")) return;
-        else logger.info("Running Info Patch: remove <channel> tag for guild with id: " + guild.getLongID());
+        else logger.info("Running Info Patch: remove <channel> tag for guild with id: " + guild.getIdLong());
         for (String id = getChannelID(infoContents); id != null; id = getChannelID(infoContents)) {
             infoContents = infoContents.replace(String.format("<channel>{%s}", id), String.format("<#%s>", id));
         }
@@ -103,7 +103,7 @@ public class PatchHandler {
         return StringUtils.substringBetween(input, "<channel>{", "}");
     }
 
-    private static void renameToggles(IGuild guild) {
+    private static void renameToggles(Guild guild) {
         PatchObject patch = getJsonConfig(guild, GuildConfig.FILE_PATH, 1.4, "RenameToggles");
         if (patch == null) return;
         boolean welcome = patch.getObject().get("joinsServerMessages").getAsBoolean();
@@ -117,7 +117,7 @@ public class PatchHandler {
         finalizePatch(patch);
     }
 
-    private static void refactorTrustedToInviteAllowed(IGuild guild) {
+    private static void refactorTrustedToInviteAllowed(Guild guild) {
         PatchObject patch = getJsonConfig(guild, GuildConfig.FILE_PATH,
                 1.3, "Refactor_Trusted_To_Invite_Allowed");
         if (patch == null) return;
@@ -131,7 +131,7 @@ public class PatchHandler {
         finalizePatch(patch);
     }
 
-    private static void changeChannelSettingsToEnum(IGuild guild) {
+    private static void changeChannelSettingsToEnum(Guild guild) {
         PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
                 1.2, "Change_ChannelSettings_To_Enum");
         if (json == null) return;
@@ -152,7 +152,7 @@ public class PatchHandler {
         finalizePatch(json);
     }
 
-    private static void updateChannelTypesForCodeConventions(IGuild guild) {
+    private static void updateChannelTypesForCodeConventions(Guild guild) {
         PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
                 1.3, "");
         if (json == null) return;
@@ -179,7 +179,7 @@ public class PatchHandler {
         finalizePatch(json);
     }
 
-    private static void moveChannelsToChannelData(IGuild guild) {
+    private static void moveChannelsToChannelData(Guild guild) {
         PatchObject jsonConfig = getJsonConfig(guild, GuildConfig.FILE_PATH,
                 1.2, "Move_Channels_To_Channel_Data_2");
         PatchObject jsonChannel = getJsonConfig(guild, ChannelData.FILE_PATH,
@@ -195,15 +195,15 @@ public class PatchHandler {
     }
 
 
-    private static void switchModNotesToStrikes(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH);
+    private static void switchModNotesToStrikes(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), GuildUsers.FILE_PATH);
         // check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.2, guild, "Update_Notes_To_Strikes", json)) return;
 
         // patch
-        GuildUsers guildUsers = FileFactory.create(guild.getLongID(), FilePaths.GUILD_USERS, GuildUsers.class);
+        GuildUsers guildUsers = FileFactory.create(guild.getIdLong(), FilePaths.GUILD_USERS, GuildUsers.class);
         guildUsers.profiles.forEach(object -> {
             if (object.modNotes == null) return;
 
@@ -222,14 +222,14 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    private static void removeNullPrefix(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH);
+    private static void removeNullPrefix(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), CustomCommands.FILE_PATH);
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.5, guild, "Remove_Null_Prefixes_CustomCommands", json)) return;
 
-        CustomCommands commands = FileFactory.create(guild.getLongID(), FilePaths.CUSTOM_COMMANDS, CustomCommands.class);
+        CustomCommands commands = FileFactory.create(guild.getIdLong(), FilePaths.CUSTOM_COMMANDS, CustomCommands.class);
         commands.getCommandList().forEach(object -> {
             String contents = object.getContents(false);
             if (contents.startsWith("null")) {
@@ -304,8 +304,8 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    private static void sanitizer(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH);
+    private static void sanitizer(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), CustomCommands.FILE_PATH);
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -325,8 +325,8 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    private static void removeMentionRestriction(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH);
+    private static void removeMentionRestriction(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), CustomCommands.FILE_PATH);
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -343,8 +343,8 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    private static void guildConfigRemoveUnicodeEmoji(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), GuildConfig.FILE_PATH);
+    private static void guildConfigRemoveUnicodeEmoji(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), GuildConfig.FILE_PATH);
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -365,9 +365,9 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    private static void fixUnicodeGuildUsers(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH);
-        String backupPath = Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH + "1", true);
+    private static void fixUnicodeGuildUsers(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), GuildUsers.FILE_PATH);
+        String backupPath = Utility.getFilePath(guild.getIdLong(), GuildUsers.FILE_PATH + "1", true);
         //check files
         if (!FileHandler.exists(path) || !FileHandler.exists(backupPath)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -418,9 +418,9 @@ public class PatchHandler {
         json.addProperty("fileVersion", s);
     }
 
-    private static void fixUnicode(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH);
-        String backupPath = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH + "1", true);
+    private static void fixUnicode(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), CustomCommands.FILE_PATH);
+        String backupPath = Utility.getFilePath(guild.getIdLong(), CustomCommands.FILE_PATH + "1", true);
         //check files
         if (!FileHandler.exists(path) || !FileHandler.exists(backupPath)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -442,11 +442,11 @@ public class PatchHandler {
     }
 
 
-    private static boolean checkPatch(double version, IGuild guild, String patch, JsonObject json) {
+    private static boolean checkPatch(double version, Guild guild, String patch, JsonObject json) {
         if (json.get("fileVersion") != null) {
             if (json.get("fileVersion").getAsDouble() >= version) {
                 if (guild != null) {
-                    logger.trace(guild.getLongID() + ": Skipping Patch - " + patch + ".");
+                    logger.trace(guild.getIdLong() + ": Skipping Patch - " + patch + ".");
                 } else {
                     logger.trace("Skipping Patch - " + patch + ".");
                 }
@@ -454,15 +454,15 @@ public class PatchHandler {
             }
         }
         if (guild != null) {
-            logger.info(guild.getLongID() + ": Performing Patch " + patch + ".");
+            logger.info(guild.getIdLong() + ": Performing Patch " + patch + ".");
         } else {
             logger.info("Performing Patch " + patch + ".");
         }
         return false;
     }
 
-    private static void overhaulComp(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), Competition.FILE_PATH);
+    private static void overhaulComp(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), Competition.FILE_PATH);
         //check file
         if (!FileHandler.exists(path)) ;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -485,8 +485,8 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    private static void overhaulServers(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), Servers.FILE_PATH);
+    private static void overhaulServers(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), Servers.FILE_PATH);
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -509,8 +509,8 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    private static void overhaulCustomCommands(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), CustomCommands.FILE_PATH);
+    private static void overhaulCustomCommands(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), CustomCommands.FILE_PATH);
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -533,8 +533,8 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    private static void overhaulGuildUsers(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), GuildUsers.FILE_PATH);
+    private static void overhaulGuildUsers(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), GuildUsers.FILE_PATH);
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -567,8 +567,8 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    private static void overhaulCharacters(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), Characters.FILE_PATH);
+    private static void overhaulCharacters(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), Characters.FILE_PATH);
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);
@@ -593,8 +593,8 @@ public class PatchHandler {
         FileHandler.writeToJson(path, json);
     }
 
-    private static void overhaulGuildConfig(IGuild guild) {
-        String path = Utility.getFilePath(guild.getLongID(), GuildConfig.FILE_PATH);
+    private static void overhaulGuildConfig(Guild guild) {
+        String path = Utility.getFilePath(guild.getIdLong(), GuildConfig.FILE_PATH);
         //check file
         if (!FileHandler.exists(path)) return;
         JsonObject json = FileHandler.fileToJsonObject(path);

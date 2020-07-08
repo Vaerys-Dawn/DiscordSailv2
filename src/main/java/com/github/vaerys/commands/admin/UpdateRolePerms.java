@@ -7,8 +7,10 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IRole;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import sx.blah.discord.handle.obj.Message;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.RequestBuffer;
 
@@ -23,17 +25,17 @@ public class UpdateRolePerms extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        List<IRole> parentRole = GuildHandler.getRolesByName(command.guild.get(), args);
-        EnumSet parentPerms = command.guild.get().getEveryoneRole().getPermissions();
+        List<Role> parentRole = GuildHandler.getRolesByName(command.guild.get(), args);
+        EnumSet parentPerms = command.guild.get().getPublicRole().getPermissions();
         ArrayList<String> permList = new ArrayList<>();
-        IMessage workingMsg = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
+        Message workingMsg = command.channel.get().sendMessage("`Working...`").complete();
         if (parentRole.size() != 0) {
-            if (command.guild.config.isRoleCosmetic(parentRole.get(0).getLongID())) {
+            if (command.guild.config.isRoleCosmetic(parentRole.get(0).getIdLong())) {
                 parentPerms = parentRole.get(0).getPermissions();
             }
         }
-        for (IRole r : command.guild.get().getRoles()) {
-            if (command.guild.config.isRoleCosmetic(r.getLongID())) {
+        for (Role r : command.guild.get().getRoles()) {
+            if (command.guild.config.isRoleCosmetic(r.getIdLong())) {
                 if (!r.getPermissions().containsAll(parentPerms) && !parentPerms.containsAll(r.getPermissions())) {
                     EnumSet finalParentPerms = parentPerms;
                     RequestBuffer.request(() -> r.changePermissions(finalParentPerms));
@@ -43,7 +45,7 @@ public class UpdateRolePerms extends Command {
         for (Object p : parentPerms.toArray()) {
             permList.add(p.toString());
         }
-        RequestHandler.deleteMessage(workingMsg);
+        workingMsg.delete();
         return "\\> Cosmetic Roles Perms set to : " + Utility.listFormatter(permList, true);
     }
 

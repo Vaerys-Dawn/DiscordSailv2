@@ -8,8 +8,8 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ReminderObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Guild;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.time.Instant;
@@ -29,7 +29,7 @@ public class GetReminders extends Command {
             long timeSecs = r.getExecuteTime() - Instant.now().getEpochSecond();
             String timeFormatted = Utility.formatTime(timeSecs, true);
 
-            IChannel channel = command.client.get().getChannelByID(r.getChannelID());
+            TextChannel channel = command.client.get().getChannelByID(r.getChannelID());
             if (channel == null) {
                 // try to verify it's a DM channel instead.
                 channel = command.user.getDmChannel();
@@ -41,8 +41,8 @@ public class GetReminders extends Command {
             if (!channel.isPrivate()) {
                 // not a DM channel.
                 mention = channel.mention();
-                IGuild guild = channel.getGuild();
-                guildName = (guild.getLongID() == command.guild.longID) ? "" : " (" + guild.getName() + ")";
+                Guild guild = channel.getGuild();
+                guildName = (guild.getIdLong() == command.guild.longID) ? "" : " (" + guild.getName() + ")";
             }
 
             embed.appendDesc( String.format("\n`%d.` **%s** in %s%s.", i, timeFormatted, mention, guildName) );

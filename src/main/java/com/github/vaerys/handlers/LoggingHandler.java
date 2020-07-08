@@ -45,7 +45,7 @@ public class LoggingHandler {
     }
 
     public static void sendLog(String message, GuildObject guild, boolean isAdmin, EmbedObject... object) {
-        IChannel channel;
+        TextChannel channel;
         if (isAdmin) channel = guild.getChannelByType(ChannelSetting.ADMIN_LOG);
         else channel = guild.getChannelByType(ChannelSetting.SERVER_LOG);
         if (channel == null) return;
@@ -61,10 +61,10 @@ public class LoggingHandler {
         if (command.message.getContent().length() > 200) chars200 = command.message.getContent().substring(0, 200);
         if (command.guild == null) return false;
         if (!command.guild.config.moduleLogging) return false;
-        IChannel info = command.guild.getChannelByType(ChannelSetting.INFO);
-        IChannel serverLog = command.guild.getChannelByType(ChannelSetting.SERVER_LOG);
-        IChannel adminLog = command.guild.getChannelByType(ChannelSetting.ADMIN_LOG);
-        List<IChannel> dontLog = command.guild.getChannelsByType(ChannelSetting.DONT_LOG);
+        TextChannel info = command.guild.getChannelByType(ChannelSetting.INFO);
+        TextChannel serverLog = command.guild.getChannelByType(ChannelSetting.SERVER_LOG);
+        TextChannel adminLog = command.guild.getChannelByType(ChannelSetting.ADMIN_LOG);
+        List<TextChannel> dontLog = command.guild.getChannelsByType(ChannelSetting.DONT_LOG);
         if (dontLog.contains(command.channel.get())) return false;
         if (command.guild.config.dontLogBot && command.user.get().isBot()) return false;
         if (chars200.equals("`Working...`") && isSailMessage(command)) return false;
@@ -77,7 +77,7 @@ public class LoggingHandler {
         return true;
     }
 
-    private static boolean messageEmpty(IMessage message) {
+    private static boolean messageEmpty(Message message) {
         return (message.getContent() == null || message.getContent().isEmpty()) &&
                 message.getEmbeds().size() == 0 &&
                 message.getAttachments().size() == 0;
@@ -91,7 +91,7 @@ public class LoggingHandler {
         return length;
     }
 
-    private static String getFormattedTimeStamp(CommandObject command, IMessage message) {
+    private static String getFormattedTimeStamp(CommandObject command, Message message) {
         long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - message.getTimestamp().atZone(ZoneOffset.UTC).toEpochSecond();
         StringBuffer formatted = new StringBuffer();
         if (command.guild.config.useTimeStamps) {
@@ -102,7 +102,7 @@ public class LoggingHandler {
         return formatted.toString();
     }
 
-    public static void logDelete(CommandObject command, IMessage deletedMessage) {
+    public static void logDelete(CommandObject command, Message deletedMessage) {
         if (!command.guild.config.deleteLogging) return;
         if (!shouldLog(command)) return;
         if (messageEmpty(deletedMessage)) return;
@@ -115,7 +115,7 @@ public class LoggingHandler {
         //check embed
         if (deletedMessage.getEmbeds().size() != 0) embed = new EmbedObject(deletedMessage.getEmbeds().get(0));
         //add and attachments
-        for (IMessage.Attachment atc : deletedMessage.getAttachments()) {
+        for (Message.Attachment atc : deletedMessage.getAttachments()) {
             if (extraContent.length() != 0) extraContent.append("\n");
             extraContent.append("<").append(atc.getUrl()).append(">");
         }
@@ -151,7 +151,7 @@ public class LoggingHandler {
     //channel moved (Category changed), channel name updated.
     private static final String channelUpdateFormat = "> %s's %s.\n%s";
 
-    public static void logChannelUpdate(GuildObject guild, IChannel oldChannel, IChannel newChannel) {
+    public static void logChannelUpdate(GuildObject guild, TextChannel oldChannel, TextChannel newChannel) {
         if (!guild.config.moduleLogging) return;
         if (!guild.config.channelLogging) return;
         boolean isVoice = newChannel instanceof VoiceChannel;
@@ -180,7 +180,7 @@ public class LoggingHandler {
 
     //Text Only
     //toggle NSFW, change topic, remove topic, add topic
-    private static String logTextUpdate(String channelName, IChannel oldChannel, IChannel newChannel) {
+    private static String logTextUpdate(String channelName, TextChannel oldChannel, TextChannel newChannel) {
         StringHandler action = new StringHandler();
         StringHandler extraContent = new StringHandler();
         String oldTopic = oldChannel.getTopic() == null ? "" : oldChannel.getTopic();
@@ -243,7 +243,7 @@ public class LoggingHandler {
         return "";
     }
 
-    private static String logChannelMove(String channelName, IChannel oldChannel, IChannel newChannel, GuildObject guild) {
+    private static String logChannelMove(String channelName, TextChannel oldChannel, TextChannel newChannel, GuildObject guild) {
         int oldPosition = oldChannel.getPosition();
         int newPosition = newChannel.getPosition();
         ICategory oldCategory = oldChannel.getCategory();
@@ -273,7 +273,7 @@ public class LoggingHandler {
     }
 
     public static void doChannelDeleteLog(ChannelDeleteEvent event) {
-        GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel #" + event.getChannel().getName() + " was deleted.";
@@ -282,7 +282,7 @@ public class LoggingHandler {
     }
 
     public static void doChannelCreateLog(ChannelCreateEvent event) {
-        GuildObject content = Globals.getGuildContent(event.getGuild().getLongID());
+        GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel " + event.getChannel().mention() + " was created.";
@@ -291,8 +291,8 @@ public class LoggingHandler {
     }
 
     public static void doJoinLeaveLog(GuildMemberEvent event, boolean joining) {
-        IGuild guild = event.getGuild();
-        GuildObject content = Globals.getGuildContent(guild.getLongID());
+        Guild guild = event.getGuild();
+        GuildObject content = Globals.getGuildContent(guild.getIdLong());
         if (!content.config.moduleLogging) return;
 
         String output = "> **@%s#%s** %s.\n**Current Users:** %s."; //name, descriminator, thinger, usercount.
@@ -311,7 +311,7 @@ public class LoggingHandler {
         }
     }
 
-    public static void doMessageEditLog(CommandObject command, IMessage oldMessage, IMessage newMessage) {
+    public static void doMessageEditLog(CommandObject command, Message oldMessage, Message newMessage) {
         if (!shouldLog(command)) return;
 
         if (!command.guild.config.editLogging) return;
@@ -342,15 +342,15 @@ public class LoggingHandler {
     }
 
     public static void doRoleUpdateLog(UserRoleUpdateEvent event) {
-        IGuild guild = event.getGuild();
-        UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getLongID()));
-        GuildObject content = Globals.getGuildContent(guild.getLongID());
+        Guild guild = event.getGuild();
+        UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getIdLong()));
+        GuildObject content = Globals.getGuildContent(guild.getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.userRoleLogging) {
             ArrayList<String> oldRoles = new ArrayList<>();
             ArrayList<String> newRoles = new ArrayList<>();
-            oldRoles.addAll(event.getOldRoles().stream().filter(r -> !r.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
-            newRoles.addAll(event.getNewRoles().stream().filter(r -> !r.isEveryoneRole()).map(IRole::getName).collect(Collectors.toList()));
+            oldRoles.addAll(event.getOldRoles().stream().filter(r -> !r.isEveryoneRole()).map(Role::getName).collect(Collectors.toList()));
+            newRoles.addAll(event.getNewRoles().stream().filter(r -> !r.isEveryoneRole()).map(Role::getName).collect(Collectors.toList()));
             StringBuilder oldRoleList = new StringBuilder();
             StringBuilder newRoleList = new StringBuilder();
             for (String r : oldRoles) {
@@ -370,7 +370,7 @@ public class LoggingHandler {
      * @param guild the Guild the user left.
      * @param user  the User that left the server.
      */
-    private static void doKickLog(IGuild guild, IUser user) {
+    private static void doKickLog(Guild guild, IUser user) {
         IUser botUser = Client.getClient().getOurUser();
         //test if the bot has auditLog perms
         if (!GuildHandler.testForPerms(botUser, guild, Permissions.VIEW_AUDIT_LOG)) return;
@@ -383,15 +383,15 @@ public class LoggingHandler {
         StringHandler kickLog = new StringHandler("**@%s#%s** has been **Kicked** by **@%s#%s**");
 
         // do some checks to make sure the user was in fact kicked
-        List<TargetedEntry> kicksLog = guild.getAuditLog(ActionType.MEMBER_KICK).getEntriesByTarget(user.getLongID());
+        List<TargetedEntry> kicksLog = guild.getAuditLog(ActionType.MEMBER_KICK).getEntriesByTarget(user.getIdLong());
         if (kicksLog.size() == 0) return;
 
         //sort kickLog and get latest entry
-        kicksLog.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getLongID()).toEpochMilli()));
+        kicksLog.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getIdLong()).toEpochMilli()));
         AuditLogEntry lastKick = kicksLog.get(kicksLog.size() - 1);
 
         //get the latest entry's timestamp
-        long lastKickTime = DiscordUtils.getSnowflakeTimeFromID(lastKick.getLongID()).toEpochMilli();
+        long lastKickTime = DiscordUtils.getSnowflakeTimeFromID(lastKick.getIdLong()).toEpochMilli();
 
         //get user responsible
         IUser responsible = lastKick.getResponsibleUser();
@@ -407,24 +407,24 @@ public class LoggingHandler {
         }
 
         //send log
-        GuildObject content = Globals.getGuildContent(guild.getLongID());
+        GuildObject content = Globals.getGuildContent(guild.getIdLong());
         sendLog(kickLog.toString(), content, true);
     }
 
 
     public static void doBanLog(UserBanEvent event) {
-        IGuild guild = event.getGuild();
-        GuildObject guildObject = Globals.getGuildContent(guild.getLongID());
+        Guild guild = event.getGuild();
+        GuildObject guildObject = Globals.getGuildContent(guild.getIdLong());
         if (!guildObject.config.moduleLogging || !guildObject.config.banLogging) return;
         if (!GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG)) return;
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
 
         // get recent bans
-        List<TargetedEntry> recentBans = event.getGuild().getAuditLog(ActionType.MEMBER_BAN_ADD).getEntriesByTarget(event.getUser().getLongID());
+        List<TargetedEntry> recentBans = event.getGuild().getAuditLog(ActionType.MEMBER_BAN_ADD).getEntriesByTarget(event.getUser().getIdLong());
         if (recentBans.size() == 0) return;
         // and sort them. last entry is most recent.
-        recentBans.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getLongID()).toEpochMilli()));
+        recentBans.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getIdLong()).toEpochMilli()));
 
         AuditLogEntry lastBan = recentBans.get(recentBans.size() - 1);
         output.appendFormatted(" by **@%s#%s**", lastBan.getResponsibleUser().getName(), lastBan.getResponsibleUser().getDiscriminator());

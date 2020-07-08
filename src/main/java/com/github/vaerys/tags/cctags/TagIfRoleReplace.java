@@ -5,7 +5,7 @@ import com.github.vaerys.enums.TagType;
 import com.github.vaerys.objects.utils.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class TagIfRoleReplace extends TagReplaceObject {
         List<String> splitString = getSplit(from);
         from = removeFirstTag(from);
         boolean found = false;
-        for (IRole r : command.user.roles) {
+        for (Role r : command.user.roles) {
             if (StringUtils.containsIgnoreCase(r.getName(), splitString.get(0))) {
                 found = true;
             }

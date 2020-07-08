@@ -8,6 +8,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
@@ -19,14 +20,10 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.FileFactory;
 import com.github.vaerys.templates.GlobalFile;
 import com.github.vaerys.templates.GuildToggle;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.*;
-import sx.blah.discord.util.RequestBuffer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -83,12 +80,12 @@ public class GuildObject {
             add(adminCCs);
         }};
         customCommands.initCustomCommands(get());
-        this.client = new ClientObject(this);
+        this.client = Client.getClientObject();
         loadCommandData();
     }
 
     public GuildObject() {
-        this.client = new ClientObject(this);
+        this.client = Client.getClientObject();
         this.object = null;
         this.longID = -1;
         this.config = new GuildConfig();
@@ -133,7 +130,7 @@ public class GuildObject {
         checkToggles();
     }
 
-    public IGuild get() {
+    public Guild get() {
         return object;
     }
 
@@ -159,7 +156,7 @@ public class GuildObject {
                 }
             }
         }
-        IChannel channel = client.get().getChannelByID(Globals.queueChannelID);
+        TextChannel channel = client.get().getTextChannelById(Globals.queueChannelID);
         if (channel == null) {
             ListIterator iterator = commands.listIterator();
             while (iterator.hasNext()) {
@@ -263,39 +260,39 @@ public class GuildObject {
     }
 
     public TextChannel getChannelByID(long id) {
-        return object.getChannelByID(id);
+        return object.getTextChannelById(id);
     }
 
-    public IUser getUserByID(long id) {
-        return object.getUserByID(id);
+    public Member getUserByID(long id) {
+        return object.getMemberById(id);
     }
 
-    public IRole getRoleByID(long id) {
-        return object.getRoleByID(id);
+    public Role getRoleById(long id) {
+        return object.getRoleById(id);
     }
 
-    public IVoiceChannel getVoiceChannelByID(long id) {
-        return object.getVoiceChannelByID(id);
+    public VoiceChannel getVoiceChannelByID(long id) {
+        return object.getVoiceChannelById(id);
     }
 
-    public IEmoji getEmojiById(long id) {
-        return object.getEmojiByID(id);
+    public Emote getEmojiById(long id) {
+        return object.getEmoteById(id);
     }
 
     public long getOwnerID() {
-        return object.getOwnerLongID();
+        return object.getOwnerIdLong();
     }
 
-    public IUser getOwner() {
+    public Member getOwner() {
         return object.getOwner();
     }
 
-    public List<IUser> getUsers() {
-        return object.getUsers();
+    public List<Member> getUsers() {
+        return object.getMembers();
     }
 
-    public IEmoji getEmojiByName(String name) {
-        return object.getEmojiByName(name);
+    public List<Emote> getEmojiByName(String name) {
+        return object.getEmotesByName(name, true);
     }
 
     public void handleWelcome(CommandObject command) {
@@ -305,18 +302,18 @@ public class GuildObject {
         if (command.guild.get() == null || command.channel == null) {
             return;
         }
-        IChannel general = getChannelByType(ChannelSetting.GENERAL);
-        if (general != null && command.channel.longID != general.getLongID()) {
+        TextChannel general = getChannelByType(ChannelSetting.GENERAL);
+        if (general != null && command.channel.longID != general.getIdLong()) {
             return;
         }
-        if (!GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER)) return;
-        IMessage message = RequestHandler.sendMessage(Constants.getWelcomeMessage(command), command.channel.get()).get();
+        if (!GuildHandler.testForPerms(command, Permission.MANAGE_SERVER)) return;
+        Message message = command.channel.get().sendMessage(Constants.getWelcomeMessage(command)).complete();
         if (message != null) {
             command.guild.config.initialMessage = true;
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(5 * 60 * 1000);
-                    RequestHandler.deleteMessage(message);
+                    message.delete();
                 } catch (InterruptedException e) {
                     // do nothing
                 }
@@ -329,8 +326,8 @@ public class GuildObject {
         config.resetOffenders();
     }
 
-    public IChannel getChannelByType(ChannelSetting type) {
-        List<IChannel> channels = getChannelsByType(type);
+    public TextChannel getChannelByType(ChannelSetting type) {
+        List<TextChannel> channels = getChannelsByType(type);
         if (channels.size() != 0) {
             return channels.get(0);
         }
@@ -352,34 +349,34 @@ public class GuildObject {
         return channels;
     }
 
-    public List<IRole> getRewardRoles() {
-        List<IRole> roles = new LinkedList<>();
-        config.getRewardRoles().forEach(rewardRoleObject -> roles.add(object.getRoleByID(rewardRoleObject.getRoleID())));
+    public List<Role> getRewardRoles() {
+        List<Role> roles = new LinkedList<>();
+        config.getRewardRoles().forEach(rewardRoleObject -> roles.add(object.getRoleById(rewardRoleObject.getRoleID())));
         return roles;
     }
 
-    public IRole getMutedRole() {
-        return object.getRoleByID(config.getMutedRoleID());
+    public Role getMutedRole() {
+        return object.getRoleById(config.getMutedRoleID());
     }
 
-    public IRole getXPDeniedRole() {
-        return object.getRoleByID(config.getMutedRoleID());
+    public Role getXPDeniedRole() {
+        return object.getRoleById(config.getMutedRoleID());
     }
 
-    public IRole getTopTenRole() {
-        return object.getRoleByID(config.topTenRoleID);
+    public Role getTopTenRole() {
+        return object.getRoleById(config.topTenRoleID);
     }
 
-    public List<IRole> getCosmeticRoles() {
-        return config.getCosmeticRoleIDs().stream().map(id -> object.getRoleByID(id)).collect(Collectors.toList());
+    public List<Role> getCosmeticRoles() {
+        return config.getCosmeticRoleIDs().stream().map(id -> object.getRoleById(id)).collect(Collectors.toList());
     }
 
-    public List<IRole> getModifierRoles() {
-        return config.getModifierRoleIDs().stream().map(id -> object.getRoleByID(id)).collect(Collectors.toList());
+    public List<Role> getModifierRoles() {
+        return config.getModifierRoleIDs().stream().map(id -> object.getRoleById(id)).collect(Collectors.toList());
     }
 
-    public IRole getRuleCodeRole() {
-        return object.getRoleByID(config.ruleCodeRewardID);
+    public Role getRuleCodeRole() {
+        return object.getRoleById(config.ruleCodeRewardID);
     }
 
     public boolean channelHasSetting(ChannelSetting setting, long channelID) {
@@ -388,27 +385,23 @@ public class GuildObject {
         return settings.getChannelIDs().contains(channelID);
     }
 
-    public boolean channelHasSetting(ChannelSetting setting, IChannel channel) {
-        return channelHasSetting(setting, channel.getLongID());
+    public boolean channelHasSetting(ChannelSetting setting, TextChannel channel) {
+        return channelHasSetting(setting, channel.getIdLong());
     }
 
     public boolean channelHasSetting(ChannelSetting setting, ChannelObject channel) {
         return channelHasSetting(setting, channel.longID);
     }
 
-    public IMessage fetchMessage(long l) {
-        for (IChannel c : object.getChannels()) {
-            EnumSet<Permissions> perms = c.getModifiedPermissions(client.bot.get());
-            if (!perms.contains(Permissions.READ_MESSAGE_HISTORY) || !perms.contains(Permissions.READ_MESSAGES))
-                continue;
-            IMessage message = RequestBuffer.request(() -> c.fetchMessage(l)).get();
-            if (message != null) return message;
+    public Message fetchMessage(long l) {
+        for (TextChannel c : object.getTextChannels()) {
+            return c.retrieveMessageById(l).complete();
         }
         return null;
     }
 
-    public IMessage getMessageByID(Long l) {
-        return object.getMessageByID(l);
+    public Message getMessageByID(Long l) {
+        return fetchMessage(l);
     }
 
     public UserRateObject rateLimit(CommandObject command) {

@@ -6,52 +6,59 @@ import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.PermissionOverride;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.managers.ChannelManager;
 import sx.blah.discord.handle.obj.*;
-import sx.blah.discord.util.cache.LongMap;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 
 public class PropMutePerms extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
         // check if bot has perms
-        EnumSet<Permissions> botPerms = command.client.bot.getPermissions(command.guild);
-        if (!botPerms.contains(Permissions.MANAGE_CHANNELS)) {
+        EnumSet<Permission> botPerms = command.client.bot.getPermissions(command.guild);
+        if (!botPerms.contains(Permission.MANAGE_CHANNEL)) {
             return "\\> I do not have permission to run this command. I need to have **Manage Channels**.\n" +
                     "Feel free to remove the permission after I am done as I will no longer need it.";
         }
         // get current channel's "Muted" role perms
-        IRole mutedRole = command.guild.getMutedRole();
+        Role mutedRole = command.guild.getMutedRole();
         if (mutedRole == null) return "\\> No muted role set.";
-        LongMap<PermissionOverride> roleOverrides = command.channel.get().getRoleOverrides();
-        if (!roleOverrides.containsKey(mutedRole.getLongID()))
-            return "\\> No modified permissions for " + mutedRole.getName() + " in this channel.";
+        List<PermissionOverride> roleOverrides = command.channel.get().getRolePermissionOverrides();
+        Optional<PermissionOverride> mutedRoleOverride = roleOverrides.stream().filter(p -> p.getRole().getIdLong() == mutedRole.getIdLong()).findFirst();
 
-        IMessage workingMsg = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
+        if (!mutedRoleOverride.isPresent()) return "\\> No modified Permission for " + mutedRole.getName() + " in this channel.";
+
+        Message workingMsg = command.channel.get().sendMessage("`Working...`").complete();
 
         StringHandler extraComments = new StringHandler();
-        PermissionOverride mutedPermissions = roleOverrides.get(mutedRole.getLongID());
-        List<IChannel> guildChannels = command.guild.get().getChannels();
+        List<TextChannel> guildChannels = command.guild.get().getTextChannels();
         int counter = 0;
-        for (IChannel channel : guildChannels) {
-            // remove old permissions, then add our stored set.
-            if (!channel.getModifiedPermissions(command.client.bot.get()).contains(Permissions.MANAGE_PERMISSIONS)) {
+        for (TextChannel channel : guildChannels) {
+            ChannelManager manager = channel.getManager();
+            // remove old Permission, then add our stored set.
+            if (!manager.getChannel().getPermissionOverride(command.client.bot.get()).contains(Permission.MANAGE_PERMISSIONS)) {
                 if (extraComments.isEmpty()) {
-                    extraComments.append("\\> Could not apply the permissions to the following channels:");
+                    extraComments.append("\\> Could not apply the Permission to the following channels:");
                 }
                 extraComments.append("\n" + channel.mention());
             } else {
-                channel.removePermissionsOverride(mutedRole);
-                channel.overrideRolePermissions(mutedRole, mutedPermissions.allow(), mutedPermissions.deny());
+                channel.removePermissionOverride(mutedRole);
+                channel.getManager(mutedRole, mutedRoleOverride.get().getAllowed(), mutedRoleOverride.get().getDenied());
                 counter++;
             }
         }
 
         RequestHandler.deleteMessage(workingMsg);
-        return "\\> Set permissions for " + counter + " channels to:\n**Allow**:" + mutedPermissions.allow().toString() +
-                "\n**Deny**:" + mutedPermissions.deny().toString() +
+        return "\\> Set Permission for " + counter + " channels to:\n**Allow**:" + mutedPermission.allow().toString() +
+                "\n**Deny**:" + mutedPermission.deny().toString() +
                 (extraComments.isEmpty() ? "" : "\n" + extraComments) +
                 "\n\nYou are now free to remove my **Manage Channels** Permission as I no longer need it.";
     }
@@ -63,7 +70,7 @@ public class PropMutePerms extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Syncs the current channel's \"muted\" role permissions to all of the other channels on this server.\n" +
+        return "Syncs the current channel's \"muted\" role Permission to all of the other channels on this server.\n" +
                 "You will need to set the muted role on your server for this command to work.";
     }
 
@@ -83,8 +90,8 @@ public class PropMutePerms extends Command {
     }
 
     @Override
-    public Permissions[] perms() {
-        return new Permission[]{Permissions.MANAGE_CHANNELS, Permissions.MANAGE_ROLES};
+    public Permission[] perms() {
+        return new Permission[]{Permission.MANAGE_CHANNEL, Permission.MANAGE_ROLES};
     }
 
     @Override

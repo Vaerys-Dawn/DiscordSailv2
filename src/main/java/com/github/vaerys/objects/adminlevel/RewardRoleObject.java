@@ -3,8 +3,8 @@ package com.github.vaerys.objects.adminlevel;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.masterobjects.GuildObject;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Guild;
+import sx.blah.discord.handle.obj.Role;
 
 /**
  * Created by Vaerys on 11/05/2017.
@@ -38,19 +38,19 @@ public class RewardRoleObject {
         return PixelHandler.totalXPForLevel(level);
     }
 
-    public IRole get(GuildObject guild) {
-        return guild.getRoleByID(roleID);
+    public Role get(GuildObject guild) {
+        return guild.getRoleById(roleID);
     }
 
-    public IRole getRole(CommandObject object) {
-        return object.guild.getRoleByID(roleID);
+    public Role getRole(CommandObject object) {
+        return object.guild.getRoleById(roleID);
     }
 
-    public IRole getRole(GuildObject object) {
-        return object.getRoleByID(roleID);
+    public Role getRole(GuildObject object) {
+        return object.getRoleById(roleID);
     }
 
-    public IRole getRole(IGuild object) {
-        return object.getRoleByID(roleID);
+    public Role getRole(Guild object) {
+        return object.getRoleById(roleID);
     }
 }

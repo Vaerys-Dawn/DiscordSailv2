@@ -1,7 +1,7 @@
 package com.github.vaerys.objects.adminlevel;
 
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Guild;
+import sx.blah.discord.handle.obj.Role;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,10 +15,10 @@ public class MutedUserObject {
     long remainderSecs;
     List<Long> roleIDs; // set in requesthandler when this information is already available
 
-    public MutedUserObject(long userID, long remainderSecs, List<IRole> roles) {
+    public MutedUserObject(long userID, long remainderSecs, List<Role> roles) {
         this.userID = userID;
         this.remainderSecs = remainderSecs;
-        this.roleIDs = roles.stream().map(r -> r.getLongID()).collect(Collectors.toList());
+        this.roleIDs = roles.stream().map(r -> r.getIdLong()).collect(Collectors.toList());
     }
 
     public long getID() {
@@ -29,9 +29,9 @@ public class MutedUserObject {
         return remainderSecs;
     }
 
-    public List<IRole> getRoles(IGuild guild) {
+    public List<Role> getRoles(Guild guild) {
         if (roleIDs == null || roleIDs.isEmpty()) return new LinkedList<>();
-        return roleIDs.stream().map(guild::getRoleByID).collect(Collectors.toList());
+        return roleIDs.stream().map(guild::getRoleById).collect(Collectors.toList());
     }
 
     public void setRemainderSecs(long remainderSecs) {

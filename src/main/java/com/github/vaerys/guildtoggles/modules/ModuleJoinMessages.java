@@ -7,7 +7,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 
 public class ModuleJoinMessages extends GuildModule {
 
@@ -49,7 +49,7 @@ public class ModuleJoinMessages extends GuildModule {
 
     @Override
     public String stats(CommandObject command) {
-        IChannel channel = command.guild.getChannelByType(ChannelSetting.JOIN_CHANNEL);
+        TextChannel channel = command.guild.getChannelByType(ChannelSetting.JOIN_CHANNEL);
         StringHandler builder = new StringHandler();
         if (channel != null) {
             builder.append("Join Channel: " + channel.mention());

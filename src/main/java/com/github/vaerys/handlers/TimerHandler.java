@@ -213,7 +213,7 @@ public class TimerHandler {
             task.adminCCs.dailyReset();
 
             //getAllToggles general channel
-            IChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
+            TextChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
 
             //do daily messages
             if (generalChannel != null && guildconfig.dailyMessage) {
@@ -279,7 +279,7 @@ public class TimerHandler {
             @Override
             public void run() {
                 IUser user = Client.getClient().getUserByID(object.getUserID());
-                IChannel channel = Client.getClient().getChannelByID(object.getChannelID());
+                TextChannel channel = Client.getClient().getChannelByID(object.getChannelID());
                 // sanitize channel
                 if (channel == null) {
                     channel = user.getOrCreatePMChannel();
@@ -288,7 +288,7 @@ public class TimerHandler {
                         channel = user.getOrCreatePMChannel();
                     }
                 }
-                IMessage message = RequestHandler.sendMessage(object.getMessage(), channel).get();
+                Message message = RequestHandler.sendMessage(object.getMessage(), channel).get();
 
                 boolean canSend = channel.getModifiedPermissions(Client.getClient().getOurUser()).contains(Permissions.SEND_MESSAGES);
                 //check message sent.
@@ -325,10 +325,10 @@ public class TimerHandler {
     private static void reportHandling(GuildObject guild) {
         List<UserRateObject> offenders = guild.getRateUsers();
 
-        IRole muteRole = guild.getRoleByID(guild.config.getMutedRoleID());
+        Role muteRole = guild.getRoleById(guild.config.getMutedRoleID());
         if (muteRole == null) return;
 
-        IChannel admin = guild.getChannelByType(ChannelSetting.ADMIN);
+        TextChannel admin = guild.getChannelByType(ChannelSetting.ADMIN);
 
         for (UserRateObject u : offenders) {
             //ignore non muted users
@@ -337,7 +337,7 @@ public class TimerHandler {
             String adminFormat = "\\> %s was muted for breaking the guild's rate limit (%d Over Limit) in %s.";
             String modNoteFormat = "\\> Muted by Rate Limiter, %d Over Limit. Channel%s: %s.";
             //get channels
-            List<IChannel> channels = u.getChannels(guild);
+            List<TextChannel> channels = u.getChannels(guild);
             //get admin channel
             if (admin == null && !channels.isEmpty()) admin = channels.get(channels.size() - 1);
             //get offender

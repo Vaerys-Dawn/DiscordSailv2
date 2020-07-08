@@ -12,7 +12,7 @@ import com.github.vaerys.objects.botlevel.AutoBlocker;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.Message;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.time.DayOfWeek;
@@ -34,7 +34,7 @@ public class NewDailyMessage extends Command {
                 return "\\> You have been blocked. You cannot send daily message requests.";
             }
             if (day.getRest() != null) {
-                IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
+                Message working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
                 QueueHandler.addToQueue(command, day.getRest(), dayOfWeek, Constants.QUEUE_DAILY);
                 RequestHandler.deleteMessage(working);
                 return "\\> Request Sent.";

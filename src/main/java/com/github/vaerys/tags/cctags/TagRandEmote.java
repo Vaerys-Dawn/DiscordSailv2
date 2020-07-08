@@ -22,7 +22,7 @@ public class TagRandEmote extends TagObject {
         IEmoji emoji = emojis.get(random.nextInt(emojis.size()));
         String output;
         if (emoji.getImageUrl().endsWith(".gif")) {
-            output = "<a:" + emoji.getName() + ":" + emoji.getLongID() + ">";
+            output = "<a:" + emoji.getName() + ":" + emoji.getIdLong() + ">";
         } else {
             output = emoji.toString();
         }

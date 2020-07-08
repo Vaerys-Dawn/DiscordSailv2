@@ -35,7 +35,7 @@ public class SpamHandler {
         if (!command.guild.config.stopSpamWalls) return false;
         if (command.message.length() < 800) return false;
 
-        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
+        List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
         if (channels.contains(command.channel.get())) return false;
 
         String message = command.message.getContent();
@@ -58,7 +58,7 @@ public class SpamHandler {
                         command.guild.users.muteUser(command, -1);
                         command.user.sendDm("\\> You were muted for spamming.");
                         command.guild.sendDebugLog(command, "CATCH_SPAM_WALLS", "MUTE", offenceCount + " Offences");
-                        IChannel admin = command.guild.getChannelByType(ChannelSetting.ADMIN);
+                        TextChannel admin = command.guild.getChannelByType(ChannelSetting.ADMIN);
                         String report = command.user.mention() + " was muted for spamming";
                         // add an automated note to the user.
                         command.user.getProfile(command.guild).addSailModNote(report, command, false);
@@ -78,13 +78,13 @@ public class SpamHandler {
     }
 
     public static boolean checkMentionCount(CommandObject command) {
-        IMessage message = command.message.get();
+        Message message = command.message.get();
         GuildConfig guildconfig = command.guild.config;
         IUser author = command.user.get();
-        List<IRole> oldRoles = command.user.roles;
-        IGuild guild = command.guild.get();
+        List<Role> oldRoles = command.user.roles;
+        Guild guild = command.guild.get();
 
-        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
+        List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
         if (channels.contains(command.channel.get())) return false;
 
         if (GuildHandler.testForPerms(command, Permissions.MENTION_EVERYONE)) return false;
@@ -98,7 +98,7 @@ public class SpamHandler {
                 int i = 0;
                 boolean offenderFound = false;
                 for (OffenderObject o : guildconfig.getOffenders()) {
-                    if (author.getLongID() == o.getID()) {
+                    if (author.getIdLong() == o.getID()) {
                         guildconfig.addOffence(o.getID());
                         command.guild.sendDebugLog(command, "STOP_MASS_MENTIONS", "OFFENCE_ADDED", message.getMentions().size() + " Mentions");
                         offenderFound = true;
@@ -115,10 +115,10 @@ public class SpamHandler {
                     }
                 }
                 if (!offenderFound) {
-                    guildconfig.addOffender(new OffenderObject(author.getLongID()));
+                    guildconfig.addOffender(new OffenderObject(author.getIdLong()));
                 }
                 String response = "\\> <mentionAdmin>, " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message in " + command.channel.mention + ".";
-                IRole roleToMention = command.guild.getRoleByID(guildconfig.getRoleToMentionID());
+                Role roleToMention = command.guild.getRoleById(guildconfig.getRoleToMentionID());
                 if (roleToMention != null) {
                     response = response.replaceAll("<mentionAdmin>", roleToMention.mention());
                 } else {
@@ -140,7 +140,7 @@ public class SpamHandler {
         if (command.guild.users.isUserMuted(command.user.get())) return false;
 
         //ignore spam in tagged channels
-        List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
+        List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
         if (channels.contains(command.channel.get())) return false;
 
         //increase the counter and get the object
@@ -173,7 +173,7 @@ public class SpamHandler {
             //mute handling
             if (!command.guild.config.muteRepeatOffenders) return true;
             if (userRate.isMuted()) return true;
-            IRole mutedRole = command.guild.getMutedRole();
+            Role mutedRole = command.guild.getMutedRole();
             if (mutedRole == null) return true;
             userRate.mute();
             //mute user for 300 seconds
@@ -185,7 +185,7 @@ public class SpamHandler {
 
     private static void logDelete(CommandObject command, String type, String reason) {
         String contents = command.message.getContent();
-        for (IMessage.Attachment a : command.message.getAttachments()) {
+        for (Message.Attachment a : command.message.getAttachments()) {
             contents += " <" + a.getUrl() + ">";
         }
         if (command.message.getContent() == null || command.message.getContent().isEmpty()) {
@@ -199,8 +199,8 @@ public class SpamHandler {
         if (!guildconfig.denyInvites) {
             return false;
         }
-        IMessage message = command.message.get();
-        IGuild guild = command.guild.get();
+        Message message = command.message.get();
+        Guild guild = command.guild.get();
         IUser author = command.user.get();
         List<String> inviteformats = new ArrayList<String>() {{
             add("discord.gg");

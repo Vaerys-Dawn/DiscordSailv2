@@ -11,7 +11,7 @@ import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class JoinHandler {
      * @param content The Guild that the user joined. ({@link GuildObject})
      */
     public static void customJoinMessages(GuildObject content, IUser user) {
-        IChannel channel = content.getChannelByType(ChannelSetting.JOIN_CHANNEL);
+        TextChannel channel = content.getChannelByType(ChannelSetting.JOIN_CHANNEL);
         if (channel == null) return;
         Random random = Globals.getGlobalRandom();
         List<JoinMessage> joinMessageList = content.channelData.getJoinMessages();
@@ -51,7 +51,7 @@ public class JoinHandler {
         if ((5 * 60 * 60 * 1000) > difference) {
             ProfileObject profileObject = user.addProfile(content);
             profileObject.getSettings().add(UserSetting.JOIN_WHILE_NEW);
-            IChannel admin = content.getChannelByType(ChannelSetting.ADMIN_LOG);
+            TextChannel admin = content.getChannelByType(ChannelSetting.ADMIN_LOG);
             if (admin == null) {
                 admin = event.getGuild().getDefaultChannel();
             }
@@ -84,8 +84,8 @@ public class JoinHandler {
      */
     public static void autoReMute(UserJoinEvent event, GuildObject content, UserObject user) {
         for (MutedUserObject u : content.users.mutedUsers) {
-            if (u.getID() == event.getUser().getLongID()) {
-                IChannel admin = content.getChannelByType(ChannelSetting.ADMIN);
+            if (u.getID() == event.getUser().getIdLong()) {
+                TextChannel admin = content.getChannelByType(ChannelSetting.ADMIN);
                 if (admin != null) {
                     RequestHandler.sendMessage("\\> Looks like " + user.mention() + " has returned, I have muted them again for you.", admin);
                 }

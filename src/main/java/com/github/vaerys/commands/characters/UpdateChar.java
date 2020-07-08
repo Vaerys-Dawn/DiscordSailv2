@@ -6,7 +6,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -30,8 +30,8 @@ public class UpdateChar extends Command {
         List<CharacterObject> userChars = command.user.characters;
         String charName = args.split(" ")[0];
         CharacterObject selectedChar = command.guild.characters.getCharByName(charName);
-        List<IRole> cosmeticRoles = command.user.getCosmeticRoles(command);
-        List<Long> cosmeticRoleIDs = cosmeticRoles.stream().map(iRole -> iRole.getLongID()).collect(Collectors.toList());
+        List<Role> cosmeticRoles = command.user.getCosmeticRoles(command);
+        List<Long> cosmeticRoleIDs = cosmeticRoles.stream().map(iRole -> iRole.getIdLong()).collect(Collectors.toList());
         String cosmeticString = command.guild.config.moduleRoles ? " and cosmetic roles" : "";
         if (selectedChar != null) {
             if (selectedChar.getUserID() != command.user.longID) {

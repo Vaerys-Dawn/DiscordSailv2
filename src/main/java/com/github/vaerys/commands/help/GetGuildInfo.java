@@ -12,9 +12,9 @@ import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 import sx.blah.discord.handle.obj.IRegion;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -35,7 +35,7 @@ public class GetGuildInfo extends Command {
             SAILType.HELP
     );
 
-    private XEmbedBuilder resetEmbed(XEmbedBuilder builder, IChannel channel, CommandObject command, int extraLength) {
+    private XEmbedBuilder resetEmbed(XEmbedBuilder builder, TextChannel channel, CommandObject command, int extraLength) {
         if ((builder.getTotalVisibleCharacters() + extraLength) > 2000 ||
                 builder.getFieldCount() + 1 > EmbedBuilder.FIELD_COUNT_LIMIT) {
             RequestHandler.sendEmbedMessage("", builder, channel).get();
@@ -52,7 +52,7 @@ public class GetGuildInfo extends Command {
 
         boolean isGuildStats = GUILD_STATS.isSubCommand(command);
 
-        IChannel channel = command.user.get().getOrCreatePMChannel();
+        TextChannel channel = command.user.get().getOrCreatePMChannel();
         boolean hasManageServer = GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER);
 
 
@@ -101,7 +101,7 @@ public class GetGuildInfo extends Command {
             if (command.guild.config.muteRepeatOffenders && command.guild.config.getMutedRoleID() != -1)
                 adminBuilder.append("\n**Messages Until AutoMute:** " + (command.guild.config.messageLimit - 3));
             if (command.guild.config.denyInvites) {
-                IRole role = command.guild.getRoleByID(command.guild.config.getInviteAllowedID());
+                Role role = command.guild.getRoleById(command.guild.config.getInviteAllowedID());
                 if (role != null) {
                     adminBuilder.append("\n**Invite Allowed Role:** ");
                     adminBuilder.append(role.getName());
@@ -153,7 +153,7 @@ public class GetGuildInfo extends Command {
             for (ChannelSetting s : channelSettings) {
                 List<String> channelList = new ArrayList<>();
                 for (long id : s.getIDs(command.guild)) {
-                    IChannel ch = command.guild.getChannelByID(id);
+                    TextChannel ch = command.guild.getChannelByID(id);
                     if (ch != null) {
                         channelList.add("#" + ch.getName() + "");
                     }

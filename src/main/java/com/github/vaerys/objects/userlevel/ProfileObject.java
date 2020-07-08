@@ -210,7 +210,7 @@ public class ProfileObject {
     public void addSailModNote(String contents, long timeStamp, boolean isStrike) {
         if (modNotes == null) modNotes = new LinkedList<>();
         IDiscordClient client = Client.getClient();
-        modNotes.add(new ModNoteObject(contents, client.getOurUser().getLongID(), timeStamp, isStrike));
+        modNotes.add(new ModNoteObject(contents, client.getOurUser().getIdLong(), timeStamp, isStrike));
     }
 
     public void addSailModNote(String contents, CommandObject command) {

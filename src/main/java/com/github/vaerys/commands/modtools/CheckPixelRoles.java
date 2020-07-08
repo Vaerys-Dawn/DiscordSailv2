@@ -6,7 +6,7 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.Message;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -17,9 +17,9 @@ public class CheckPixelRoles extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        IMessage working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
+        Message working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
         for (IUser user : command.guild.getUsers()) {
-            GuildHandler.checkUsersRoles(user.getLongID(), command.guild, true);
+            GuildHandler.checkUsersRoles(user.getIdLong(), command.guild, true);
         }
         GuildHandler.checkTopTen(command.guild);
         RequestHandler.deleteMessage(working);

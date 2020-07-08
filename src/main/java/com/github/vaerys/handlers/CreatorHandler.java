@@ -18,7 +18,7 @@ public class CreatorHandler {
 
     @EventSubscriber
     public void creatorCommands(MessageReceivedEvent event) {
-        if (event.getAuthor().getLongID() != Globals.creatorID) return;
+        if (event.getAuthor().getIdLong() != Globals.creatorID) return;
         List<Command> commands;
         CommandObject command = new CommandObject(event.getMessage());
         if (event.getChannel().isPrivate()) {
@@ -50,7 +50,7 @@ public class CreatorHandler {
                 // do nothing
             }
             auth.add(Globals.creatorID);
-            if (auth.contains(event.getAuthor().getLongID())) {
+            if (auth.contains(event.getAuthor().getIdLong())) {
                 restart.execute("", command);
                 return;
             }

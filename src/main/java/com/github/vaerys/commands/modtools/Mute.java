@@ -10,8 +10,8 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.regex.Pattern;
@@ -32,7 +32,7 @@ public class Mute extends Command {
     public String execute(String args, CommandObject command) {
         // init vars
         SplitFirstObject userCall = new SplitFirstObject(args);
-        IRole mutedRole = command.guild.getMutedRole();
+        Role mutedRole = command.guild.getMutedRole();
         UserObject mutedUser = Utility.getUser(command, userCall.getFirstWord(), false, false);
 
         StringHandler response = new StringHandler("\\> %s %s.");
@@ -53,7 +53,7 @@ public class Mute extends Command {
             timeValue.setContent(isMute ? "was %s for %s" : "will be %s in %s");
             timeValue.format(mode, formattedTime);
         }
-        IChannel adminChannel = command.guild.getChannelByType(ChannelSetting.ADMIN);
+        TextChannel adminChannel = command.guild.getChannelByType(ChannelSetting.ADMIN);
 
         // check for user and muted role
         if (mutedUser == null || mutedUser.get() == null) return "\\> Could not find user";

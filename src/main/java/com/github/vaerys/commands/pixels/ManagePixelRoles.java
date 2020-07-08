@@ -8,7 +8,7 @@ import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -30,8 +30,8 @@ public class ManagePixelRoles extends Command {
         if (args.equalsIgnoreCase("list")) {
             XEmbedBuilder builder = new XEmbedBuilder(command);
             builder.setTitle("Pixel Roles");
-            IRole xpDenied = command.guild.getXPDeniedRole();
-            IRole topTen = command.guild.getTopTenRole();
+            Role xpDenied = command.guild.getXPDeniedRole();
+            Role topTen = command.guild.getTopTenRole();
             List<RewardRoleObject> rewardRoles = command.guild.config.getRewardRoles();
             if (xpDenied == null && topTen == null && rewardRoles.size() == 0) {
                 return "\\> No roles are set up.\n" + missingArgs(command);
@@ -40,7 +40,7 @@ public class ManagePixelRoles extends Command {
             if (rewardRoles.size() != 0) {
                 desc += "**Reward Roles**";
                 for (RewardRoleObject r : rewardRoles) {
-                    desc += "\n> **" + command.guild.getRoleByID(r.getRoleID()).getName() + "** -> Level: **" + r.getLevel() + "**";
+                    desc += "\n> **" + command.guild.getRoleById(r.getRoleID()).getName() + "** -> Level: **" + r.getLevel() + "**";
                 }
                 desc += "\n\n";
             }
@@ -55,7 +55,7 @@ public class ManagePixelRoles extends Command {
             return null;
         }
         SplitFirstObject mode = new SplitFirstObject(args);
-        IRole role = GuildHandler.getRoleFromName(mode.getRest(), command.guild.get());
+        Role role = GuildHandler.getRoleFromName(mode.getRest(), command.guild.get());
         if (role == null) {
             return "\\> **" + mode.getRest() + "** is not a valid Role name.";
         }
@@ -68,47 +68,47 @@ public class ManagePixelRoles extends Command {
                 if (r.getLevel() == level) {
                     return "\\> That level already has a reward set.";
                 }
-                if (r.getRoleID() == role.getLongID()) {
+                if (r.getRoleID() == role.getIdLong()) {
                     r.setLevel(level);
                     return "\\> Level to obtain **" + role.getName() + "** is now set to level **" + level + "**.";
                 }
             }
-            command.guild.config.getRewardRoles().add(new RewardRoleObject(role.getLongID(), level));
+            command.guild.config.getRewardRoles().add(new RewardRoleObject(role.getIdLong(), level));
             return "\\> The role **" + role.getName() + "** will now be awarded at level **" + level + "**.";
         } catch (NumberFormatException e) {
             switch (mode.getFirstWord().toLowerCase()) {
                 case "xpdenied":
                     for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
-                        if (r.getRoleID() == role.getLongID()) {
+                        if (r.getRoleID() == role.getIdLong()) {
                             return "\\> **" + role.getName() + "** is already set as a reward role.";
                         }
                     }
-                    if (role.getLongID() == command.guild.config.topTenRoleID) {
+                    if (role.getIdLong() == command.guild.config.topTenRoleID) {
                         return "\\> **" + role.getName() + "** is already set as the server's TopTen role.";
                     }
-                    command.guild.config.xpDeniedRoleID = role.getLongID();
+                    command.guild.config.xpDeniedRoleID = role.getIdLong();
                     return "\\> **" + role.getName() + "** is now the server's XpDenied role.";
                 case "topten":
                     for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
-                        if (r.getRoleID() == role.getLongID()) {
+                        if (r.getRoleID() == role.getIdLong()) {
                             return "\\> **" + role.getName() + "** is already set as a reward role.";
                         }
                     }
-                    if (role.getLongID() == command.guild.config.xpDeniedRoleID) {
+                    if (role.getIdLong() == command.guild.config.xpDeniedRoleID) {
                         return "\\> **" + role.getName() + "** is already set as the server's xpDenied role.";
                     }
-                    command.guild.config.topTenRoleID = role.getLongID();
+                    command.guild.config.topTenRoleID = role.getIdLong();
                     return "\\> **" + role.getName() + "** is now the server's TopTen role.";
                 case "remove":
-                    if (role.getLongID() == command.guild.config.xpDeniedRoleID) {
+                    if (role.getIdLong() == command.guild.config.xpDeniedRoleID) {
                         command.guild.config.xpDeniedRoleID = -1;
                         return "\\> **" + role.getName() + "** is no longer the server's xpDenied role.";
-                    } else if (role.getLongID() == command.guild.config.topTenRoleID) {
+                    } else if (role.getIdLong() == command.guild.config.topTenRoleID) {
                         command.guild.config.topTenRoleID = -1;
                         return "\\> **" + role.getName() + "** is no longer the server's Top Ten role.";
                     }
                     for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
-                        if (r.getRoleID() == role.getLongID()) {
+                        if (r.getRoleID() == role.getIdLong()) {
                             command.guild.config.getRewardRoles().remove(r);
                             return "\\> **" + role.getName() + "** is no longer set as a reward role.";
                         }

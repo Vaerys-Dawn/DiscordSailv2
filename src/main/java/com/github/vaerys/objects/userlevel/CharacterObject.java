@@ -3,7 +3,7 @@ package com.github.vaerys.objects.userlevel;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.GuildObject;
 import sx.blah.discord.handle.obj.IIDLinkedObject;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -105,13 +105,13 @@ public class CharacterObject {
         this.shortBio = shortBio;
     }
 
-    public void update(String name, List<IRole> roles) {
+    public void update(String name, List<Role> roles) {
         this.nickname = name;
-        this.roleIDs = new ArrayList<>(roles.stream().map(IIDLinkedObject::getLongID).collect(Collectors.toList()));
+        this.roleIDs = new ArrayList<>(roles.stream().map(IIDLinkedObject::getIdLong).collect(Collectors.toList()));
     }
 
     public Color getColor(GuildObject guild) {
-        return GuildHandler.getUsersColour(roleIDs.stream().map(aLong -> guild.getRoleByID(aLong)).filter(iRole -> iRole != null).collect(Collectors.toList()));
+        return GuildHandler.getUsersColour(roleIDs.stream().map(aLong -> guild.getRoleById(aLong)).filter(iRole -> iRole != null).collect(Collectors.toList()));
     }
 
     public void setWeight(String weight) {

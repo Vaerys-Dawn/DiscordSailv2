@@ -9,7 +9,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.Iterator;
@@ -40,11 +40,11 @@ public class ModifierRoles extends Command {
         if (EDIT_ROLES.isSubCommand(command)) {
             boolean isAdding = args.split(" ")[0].equals("+");
             //test the permissions of the user to make sure they can modify the role list.
-            IRole role = null;
+            Role role = null;
 
             String subArgs = EDIT_ROLES.getArgs(command);
             try {
-                role = command.guild.getRoleByID(Utility.stringLong(subArgs));
+                role = command.guild.getRoleById(Utility.stringLong(subArgs));
             } catch (NumberFormatException e) {
                 // move on.
             }
@@ -61,20 +61,20 @@ public class ModifierRoles extends Command {
                 // do if modifier is true
                 if (isAdding) {
                     //check for the role and add if its not a Modifier role.
-                    if (command.guild.config.isRoleModifier(role.getLongID())) {
+                    if (command.guild.config.isRoleModifier(role.getIdLong())) {
                         return "\\> The **" + role.getName() + "** role is already listed as a modifier role.";
                     } else {
-                        command.guild.config.getModifierRoleIDs().add(role.getLongID());
+                        command.guild.config.getModifierRoleIDs().add(role.getIdLong());
                         return "\\> The **" + role.getName() + "** role was added to the modifier role list.";
                     }
                     //do if modifier is false
                 } else {
                     //check for the role and remove if it is a Modifier role.
-                    if (command.guild.config.isRoleModifier(role.getLongID())) {
+                    if (command.guild.config.isRoleModifier(role.getIdLong())) {
                         Iterator iterator = command.guild.config.getModifierRoleIDs().listIterator();
                         while (iterator.hasNext()) {
                             long id = (long) iterator.next();
-                            if (role.getLongID() == id) {
+                            if (role.getIdLong() == id) {
                                 iterator.remove();
                             }
                         }
@@ -90,18 +90,18 @@ public class ModifierRoles extends Command {
         } else {
             if (command.guild.config.getModifierRoleIDs().size() == 0)
                 return "> No Modifier roles are set up right now. Come back later.";
-            IRole role;
+            Role role;
             role = GuildHandler.getRoleFromName(args, command.guild.get(), command.guild.config.getModifierRoleIDs());
             if (role == null && args.length() > 3) {
                 role = GuildHandler.getRoleFromName(args, command.guild.get(), command.guild.config.getModifierRoleIDs(), true);
             }
-            List<IRole> userRoles = command.user.roles;
+            List<Role> userRoles = command.user.roles;
             String response;
             if (role == null) {
                 RequestHandler.sendEmbedMessage("\\> **" + args + "** is not a valid Role Name.", ListModifs.getList(command), command.channel.get());
                 return null;
             } else {
-                if (command.guild.config.isRoleModifier(role.getLongID())) {
+                if (command.guild.config.isRoleModifier(role.getIdLong())) {
                     //if user has role remove it
                     if (userRoles.contains(role)) {
                         userRoles.remove(role);

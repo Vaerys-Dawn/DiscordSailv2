@@ -4,6 +4,7 @@ import com.github.kennedyoliveira.pastebin4j.AccountCredentials;
 import com.github.kennedyoliveira.pastebin4j.PasteBin;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.ClientObject;
 import com.github.vaerys.objects.events.EventAvatar;
 import com.github.vaerys.objects.events.TimedEvent;
 import com.github.vaerys.objects.patreonlevel.PatreonSAIL;
@@ -14,14 +15,13 @@ import com.patreon.PatreonAPI;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.ClientBuilder;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.Image;
 
+import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
 import java.time.ZoneOffset;
@@ -37,26 +37,22 @@ import java.util.stream.Collectors;
 public class Client {
     final static Logger logger = LoggerFactory.getLogger(Client.class);
     private static PatreonAPI patreonApi = null;
-    private static IDiscordClient client = null;
+    private static JDA client = null;
     private static AccountCredentials credentials = null;
     private static PasteBin pasteBin = null;
     private static PatreonOAuth patreonOAuth = null;
+    private static ClientObject clientObject = null;
 //    private static ImgurAPI imgurAPI = null;
 
-    public static IDiscordClient createClient(String token, boolean login) throws DiscordException {
-        ClientBuilder clientBuilder = new ClientBuilder();
-        clientBuilder.withToken(token);
-        clientBuilder.setMaxReconnectAttempts(4000);
-        if (login) {
-            logger.info("Logging in to Discord");
-            client = clientBuilder.login();
-        } else {
-            client = clientBuilder.build();
-        }
+    public static JDA createClient(String token, boolean login) throws LoginException {
+        JDABuilder clientBuilder = new JDABuilder();
+        clientBuilder.setToken(token);
+        clientBuilder.setMaxReconnectDelay(4000);
+        client = clientBuilder.build();
         return client;
     }
 
-    public static IDiscordClient getClient() {
+    public static JDA getClient() {
         return client;
     }
 
@@ -211,5 +207,12 @@ public class Client {
 //        } catch (IOException e) {
 //            Utility.sendStack(e);
 //        }
+    }
+
+    public static ClientObject getClientObject() {
+        if (clientObject == null) {
+            clientObject = new ClientObject();
+        }
+        return clientObject;
     }
 }

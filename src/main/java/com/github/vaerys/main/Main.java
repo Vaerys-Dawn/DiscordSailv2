@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RateLimitException;
@@ -139,7 +139,7 @@ public class Main {
             // initialize creatorID if it is completely unset:
             if (config.creatorID == 0) {
                 IUser botOwner = client.getApplicationOwner();
-                config.creatorID = botOwner.getLongID();
+                config.creatorID = botOwner.getIdLong();
                 Globals.creatorID = config.creatorID;
 
                 logger.info("Default creatorID set to user " + botOwner.getName() + "#" + botOwner.getDiscriminator());
@@ -192,7 +192,7 @@ public class Main {
                 return;
             }
             if (Globals.consoleMessageCID != -1) {
-                IChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
+                TextChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
 
                 message = message.replace("#Dawn#", Globals.getClient().getUserByID(153159020528533505L).getName());
                 message = message.replace("teh", "the");

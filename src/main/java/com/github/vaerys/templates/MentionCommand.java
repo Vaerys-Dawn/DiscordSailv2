@@ -38,7 +38,7 @@ public abstract class MentionCommand extends Command {
         }
         SplitFirstObject call = new SplitFirstObject(mention.getRest());
         for (String s : names) {
-            String regex = "^(<@|<@!)" + bot.getLongID() + "> " + s.toLowerCase();
+            String regex = "^(<@|<@!)" + bot.getIdLong() + "> " + s.toLowerCase();
             String toMatch = mention.getFirstWord() + " " + call.getFirstWord().toLowerCase();
             Matcher matcher = Pattern.compile(regex).matcher(toMatch);
             if (matcher.matches()) {

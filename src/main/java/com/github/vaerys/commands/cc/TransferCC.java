@@ -10,8 +10,8 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.pogos.CustomCommands;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Guild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -28,9 +28,9 @@ public class TransferCC extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         String filePath = Constants.DIRECTORY_OLD_FILES + command.guild.longID + "_CustomCommands.json";
-        IGuild guild = command.guild.get();
+        Guild guild = command.guild.get();
         IUser author = command.user.get();
-        IChannel channel = command.channel.get();
+        TextChannel channel = command.channel.get();
         CustomCommands customCommands = command.guild.customCommands;
 
         if (Paths.get(filePath).toFile().exists()) {
@@ -48,7 +48,7 @@ public class TransferCC extends Command {
                 RequestHandler.sendMessage("> This command's old owner no longer is part of this server.\n" + Constants.PREFIX_INDENT +
                         author.getDisplayName(guild) + " will become the new owner of this command.\n" +
                         "> I am now attempting to transfer the command over.", channel);
-                userID = author.getLongID();
+                userID = author.getIdLong();
             } else {
                 RequestHandler.sendMessage("> I am now attempting to transfer " + guild.getUserByID(userID).getDisplayName(guild) + "'s command.", channel);
             }

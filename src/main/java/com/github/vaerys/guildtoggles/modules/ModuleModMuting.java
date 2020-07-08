@@ -9,7 +9,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.Permissions;
 
 /**
@@ -60,7 +60,7 @@ public class ModuleModMuting extends GuildModule {
     @Override
     public String stats(CommandObject object) {
         if (!GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
-        IRole muteRole = object.guild.getRoleByID(object.guild.config.getMutedRoleID());
+        Role muteRole = object.guild.getRoleById(object.guild.config.getMutedRoleID());
         if (muteRole != null) {
             return "**Mute Role:** " + muteRole.getName();
         }

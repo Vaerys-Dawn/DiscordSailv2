@@ -5,7 +5,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.DMCommand;
-import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.Guild;
 
 import java.util.ArrayList;
 
@@ -17,8 +17,8 @@ public class GetGuildList extends DMCommand {
     @Override
     public String execute(String args, CommandObject command) {
         ArrayList<String> guilds = new ArrayList<>();
-        for (IGuild g : command.client.get().getGuilds()) {
-            guilds.add(g.getName() + ": " + g.getLongID());
+        for (Guild g : command.client.get().getGuilds()) {
+            guilds.add(g.getName() + ": " + g.getIdLong());
         }
         XEmbedBuilder builder = new XEmbedBuilder(command);
         Utility.listFormatterEmbed("List Of Guilds", builder, guilds, false);

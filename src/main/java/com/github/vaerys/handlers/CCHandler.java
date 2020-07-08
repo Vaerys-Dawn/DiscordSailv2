@@ -16,8 +16,8 @@ import com.github.vaerys.tags.cctags.TagRemoveMentions;
 import com.github.vaerys.templates.TagObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.TextChannel;
+import sx.blah.discord.handle.obj.Message;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public class CCHandler {
             ccArgs = "";
         }
 
-        List<IChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
+        List<TextChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
         if (ccDenied.contains(command.channel.get())) {
             RequestHandler.sendMessage("\\> Custom Command usage has been disabled for this channel.", command.channel);
             return;
@@ -102,7 +102,7 @@ public class CCHandler {
                 int time = Integer.parseInt(autoDelete.getSubTag(contents));
                 contents = autoDelete.removeAllTag(contents);
                 contents = removeMentions.handleTag(contents, command, "");
-                IMessage message = RequestHandler.sendMessage(contents, command.channel.get()).get();
+                Message message = RequestHandler.sendMessage(contents, command.channel.get()).get();
                 autoDelete(message, time);
                 return;
             } catch (NumberFormatException e) {
@@ -126,7 +126,7 @@ public class CCHandler {
 
         if (commandObject == null) return;
 
-        List<IChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
+        List<TextChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
         if (ccDenied.contains(command.channel.get())) {
             RequestHandler.sendMessage("\\> Custom Command usage has been disabled for this channel.", command.channel);
             return;
@@ -143,7 +143,7 @@ public class CCHandler {
         String contents = commandObject.getContents(true);
         //shitpost handling
         if (commandObject.isShitPost() && command.guild.config.shitPostFiltering && !GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
-            List<IChannel> channels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
+            List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
             if (channels.size() != 0 && !channels.contains(command.channel.get())) {
                 channels = command.user.getVisibleChannels(channels);
                 RequestHandler.sendMessage(Utility.getChannelMessage(channels), command.channel.get());
@@ -161,7 +161,7 @@ public class CCHandler {
 
     }
 
-    public static void autoDelete(IMessage message, int time) {
+    public static void autoDelete(Message message, int time) {
         deleter.schedule(() -> RequestHandler.deleteMessage(message), time, TimeUnit.MINUTES);
     }
 }

@@ -6,7 +6,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +22,14 @@ public class TagChannelLock extends TagObject {
     public String execute(String from, CommandObject command, String args) {
         List<String> splitContents = getSplit(from);
         Pattern mention = Pattern.compile("<#[0-9]*>");
-        List<IChannel> channels = new ArrayList<>(splitContents.size());
+        List<TextChannel> channels = new ArrayList<>(splitContents.size());
         for (String s : splitContents) {
             if (!mention.matcher(s).matches()) {
                 return replaceFirstTag(from, error);
             }
             try {
                 long id = Long.parseUnsignedLong(StringUtils.substringBetween(s, "<#", ">"));
-                IChannel channel = command.guild.getChannelByID(id);
+                TextChannel channel = command.guild.getChannelByID(id);
                 if (channel == null) return replaceFirstTag(from, error);
                 channels.add(channel);
             } catch (NumberFormatException e) {

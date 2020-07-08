@@ -6,7 +6,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminSubTagObject;
-import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.TextChannel;
 import sx.blah.discord.handle.obj.IUser;
 
 public class TagAlert extends TagAdminSubTagObject {
@@ -24,7 +24,7 @@ public class TagAlert extends TagAdminSubTagObject {
     public String execute(String from, CommandObject command, String args, AdminCCObject cc) {
         try {
             long id = Long.parseUnsignedLong(getSubTag(from));
-            IChannel destination = command.guild.getChannelByID(id);
+            TextChannel destination = command.guild.getChannelByID(id);
             if (destination == null) {
                 IUser user = command.guild.getUserByID(id);
                 if (user != null) destination = UserObject.getNewUserObject(id, command.guild).getDmChannel();

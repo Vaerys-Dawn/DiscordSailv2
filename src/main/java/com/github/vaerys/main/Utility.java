@@ -291,10 +291,10 @@ public class Utility {
             if (!c.config.moduleLogging) continue;
             if (!c.config.adminLogging) continue;
 
-            List<IChannel> adminlog = c.getChannelsByType(ChannelSetting.ADMIN_LOG);
-            List<IChannel> serverLog = c.getChannelsByType(ChannelSetting.SERVER_LOG);
+            List<TextChannel> adminlog = c.getChannelsByType(ChannelSetting.ADMIN_LOG);
+            List<TextChannel> serverLog = c.getChannelsByType(ChannelSetting.SERVER_LOG);
 
-            IChannel channel = null;
+            TextChannel channel = null;
 
             if (!(args == null || args.isEmpty())) {
                 message.append(" with args: `" + args + "`");
@@ -467,14 +467,14 @@ public class Utility {
      * @param guild the guild the action should take place
      * @return if the higher user is above the lower user
      */
-    public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, IGuild guild, boolean sameLevel) {
-        List<IRole> lowerRoles = lowerUser.getRolesForGuild(guild);
-        List<IRole> higherRoles = higherUser.getRolesForGuild(guild);
+    public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, Guild guild, boolean sameLevel) {
+        List<Role> lowerRoles = lowerUser.getRolesForGuild(guild);
+        List<Role> higherRoles = higherUser.getRolesForGuild(guild);
         // higher user is guild owner, automatically has highest role:
         if (guild.getOwner().equals(higherUser)) return true;
-        IRole topRole = null;
+        Role topRole = null;
         int topRolePos = 0;
-        for (IRole role : higherRoles) {
+        for (Role role : higherRoles) {
             if (topRole == null) {
                 topRole = role;
                 topRolePos = role.getPosition();
@@ -485,7 +485,7 @@ public class Utility {
                 }
             }
         }
-        for (IRole role : lowerRoles) {
+        for (Role role : lowerRoles) {
             if (sameLevel) {
                 if (role.getPosition() > topRolePos) {
                     return false;
@@ -499,7 +499,7 @@ public class Utility {
         return true;
     }
 
-    public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, IGuild guild) {
+    public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, Guild guild) {
         return testUserHierarchy(higherUser, lowerUser, guild, true);
     }
 
@@ -516,9 +516,9 @@ public class Utility {
         return testUserHierarchy(higherUser.get(), lowerUser.get(), guild.get());
     }
 
-    public static boolean testUserHierarchy(IUser author, IRole toTest, IGuild guild) {
+    public static boolean testUserHierarchy(IUser author, Role toTest, Guild guild) {
         boolean roleIsLower = false;
-        for (IRole r : author.getRolesForGuild(guild)) {
+        for (Role r : author.getRolesForGuild(guild)) {
             if (toTest.getPosition() < r.getPosition()) {
                 roleIsLower = true;
             }
@@ -569,18 +569,18 @@ public class Utility {
         return embedToString.toString();
     }
 
-    public static String unFormatMentions(IMessage message) {
+    public static String unFormatMentions(Message message) {
         StringHandler from = new StringHandler(message.getContent());
         from.replaceRegex("(?i)(@here|@everyone)", "**[REDACTED]**");
         for (IUser user : message.getMentions()) {
             if (user != null) {
-                StringHandler regex = new StringHandler("<@!?").append(user.getLongID()).append(">");
+                StringHandler regex = new StringHandler("<@!?").append(user.getIdLong()).append(">");
                 StringHandler replacement = new StringHandler("__@").append(user.getDisplayName(message.getGuild())).append("__");
                 from.replaceRegex(regex, replacement);
             }
         }
-        for (IRole role : message.getRoleMentions()) {
-            StringHandler toReplace = new StringHandler("<@&").append(role.getLongID()).append(">");
+        for (Role role : message.getRoleMentions()) {
+            StringHandler toReplace = new StringHandler("<@&").append(role.getIdLong()).append(">");
             StringHandler replaceWith = new StringHandler("__**@").append(role.getName()).append("**__");
             from.replace(toReplace, replaceWith);
         }
@@ -653,7 +653,7 @@ public class Utility {
         List<String> channelNames = new ArrayList<>();
         if (channelIDs != null) {
             for (long s : channelIDs) {
-                IChannel channel = command.guild.getChannelByID(s);
+                TextChannel channel = command.guild.getChannelByID(s);
                 if (channel != null) {
                     channelNames.add(channel.mention());
                 }
@@ -733,7 +733,7 @@ public class Utility {
 
         try {
             long userId = Long.parseUnsignedLong(args);
-            IUser user = command.client.fetchUser(userId);
+            IUser user = command.client.getUserByID(userId);
             if (user != null || UserObject.checkForUser(userId, command.guild)) {
                 return UserObject.getNewUserObject(userId, command.guild);
             }
@@ -919,7 +919,7 @@ public class Utility {
         return mostCorrect;
     }
 
-    public static String getChannelMessage(List<IChannel> channels) {
+    public static String getChannelMessage(List<TextChannel> channels) {
         List<String> channelMentions = Utility.getChannelMentions(channels);
         if (channels.size() == 0) {
             return "\\> You do not have access to any channels that you are able to run this command in.";

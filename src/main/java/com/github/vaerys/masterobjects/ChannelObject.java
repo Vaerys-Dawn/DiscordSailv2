@@ -1,6 +1,7 @@
 package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.main.Client;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -18,7 +19,7 @@ public class ChannelObject {
 
     public ChannelObject(TextChannel channel, GuildObject guild) {
         if (channel == null) return;
-        this.client = new ClientObject( guild);
+        this.client = Client.getClientObject();
         this.object = channel;
         this.longID = channel.getIdLong();
         this.name = channel.getName();

@@ -9,8 +9,8 @@ import com.github.vaerys.objects.adminlevel.OffenderObject;
 import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.templates.GlobalFile;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Guild;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
@@ -157,10 +157,10 @@ public class GuildConfig extends GlobalFile {
         this.guildName = guildName;
     }
 
-    public void updateVariables(IGuild guild) {
+    public void updateVariables(Guild guild) {
         //update Guild Name
         setGuildName(guild.getName());
-        guildID = guild.getLongID();
+        guildID = guild.getIdLong();
         GuildObject object = Globals.getGuildContent(guildID);
         object.channelData.updateVariables(guild);
         validateRoles();
@@ -177,40 +177,40 @@ public class GuildConfig extends GlobalFile {
     }
 
     public void validateRoles() {
-        IGuild guild = Globals.client.getGuildByID(guildID);
+        Guild guild = Globals.client.getGuildByID(guildID);
         if (guild == null) {
             return;
         }
         ListIterator iterator = cosmeticRoleIDs.listIterator();
         while (iterator.hasNext()) {
-            IRole role = guild.getRoleByID((Long) iterator.next());
+            Role role = guild.getRoleById((Long) iterator.next());
             if (role == null) {
                 iterator.remove();
             }
         }
         iterator = modifierRoleIDs.listIterator();
         while (iterator.hasNext()) {
-            IRole role = guild.getRoleByID((Long) iterator.next());
+            Role role = guild.getRoleById((Long) iterator.next());
             if (role == null) {
                 iterator.remove();
             }
         }
-        IRole inviteAllowedRole = guild.getRoleByID(inviteAllowedID);
+        Role inviteAllowedRole = guild.getRoleById(inviteAllowedID);
         if (inviteAllowedRole == null) {
             inviteAllowedID = -1;
         }
-        IRole mutedRole = guild.getRoleByID(mutedRoleID);
+        Role mutedRole = guild.getRoleById(mutedRoleID);
         if (mutedRole == null) {
             mutedRoleID = -1;
         }
-        IRole roleToMention = guild.getRoleByID(roleToMentionID);
+        Role roleToMention = guild.getRoleById(roleToMentionID);
         if (roleToMention == null) {
             roleToMentionID = -1;
         }
         iterator = rewardRoles.listIterator();
         while (iterator.hasNext()) {
             RewardRoleObject reward = (RewardRoleObject) iterator.next();
-            IRole role = guild.getRoleByID(reward.getRoleID());
+            Role role = guild.getRoleById(reward.getRoleID());
             if (role == null) {
                 iterator.remove();
             }
@@ -227,9 +227,9 @@ public class GuildConfig extends GlobalFile {
         return cosmeticRoleIDs;
     }
 
-    public boolean testIsTrusted(IUser author, IGuild guild) {
+    public boolean testIsTrusted(IUser author, Guild guild) {
         validateRoles();
-        IRole inviteAllowed = guild.getRoleByID(inviteAllowedID);
+        Role inviteAllowed = guild.getRoleById(inviteAllowedID);
         if (inviteAllowed == null) {
             return true;
         } else {

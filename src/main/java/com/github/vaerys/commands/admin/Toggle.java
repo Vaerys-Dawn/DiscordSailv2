@@ -5,14 +5,13 @@ import com.github.vaerys.commands.help.HelpSettings;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleList;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -86,7 +85,7 @@ public class Toggle extends Command {
         desc.append(missingArgs(command));
 
         embedBuilder.setDescription(desc.toString());
-        RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
+        embedBuilder.send(command);
         return null;
     }
 
@@ -117,7 +116,7 @@ public class Toggle extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

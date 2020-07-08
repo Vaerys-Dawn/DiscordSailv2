@@ -9,7 +9,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.Role;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -34,12 +34,12 @@ public class CharInfo extends Command {
                     builder.setFooter("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
                 }
 
-                ArrayList<IRole> roles = new ArrayList<>();
+                ArrayList<Role> roles = new ArrayList<>();
                 ArrayList<String> roleNames = new ArrayList<>();
                 for (Long roleId : object.getRoleIDs()) {
-                    if (command.client.get().getRoleByID(roleId) != null) {
-                        roles.add(command.client.get().getRoleByID(roleId));
-                        roleNames.add(command.client.get().getRoleByID(roleId).getName());
+                    if (command.client.get().getRoleById(roleId) != null) {
+                        roles.add(command.client.get().getRoleById(roleId));
+                        roleNames.add(command.client.get().getRoleById(roleId).getName());
                     }
                 }
                 if (roles.size() != 0) {

@@ -13,7 +13,7 @@ import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.cctags.TagEmbedImage;
 import com.github.vaerys.templates.Command;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.Message;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.Arrays;
@@ -68,7 +68,7 @@ public class NewAdminCC extends Command {
 
     public static StringHandler getContents(CommandObject command, String args) {
         StringHandler contents = new StringHandler(args);
-        IMessage.Attachment attachment = null;
+        Message.Attachment attachment = null;
         if (command.message.getAttachments().size() != 0) {
             attachment = command.message.getAttachments().get(0);
         }
