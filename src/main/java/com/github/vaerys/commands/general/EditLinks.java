@@ -36,7 +36,7 @@ public class EditLinks extends Command {
         boolean adminEdit = false;
         if (GuildHandler.testForPerms(command, ADMIN_EDIT.getPermissions()) || GuildHandler.canBypass(command.user.get(), command.guild.get())) {
             user = Utility.getUser(command, userCall.getFirstWord(), false);
-            if (user != null && userCall.getRest() != null && user.getProfile(command.guild) != null) {
+            if (user != null && userCall.getRest() != null && user.getProfile() != null) {
                 adminEdit = true;
             } else {
                 user = command.user;
@@ -49,7 +49,7 @@ public class EditLinks extends Command {
         } else {
             linkName = new SplitFirstObject(args);
         }
-        ProfileObject userObject = user.getProfile(command.guild);
+        ProfileObject userObject = user.getProfile();
         if (userObject == null) {
             return "\\> " + user.displayName + " Has not Spoken yet thus they have nothing to edit.";
         }

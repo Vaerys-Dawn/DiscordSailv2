@@ -68,7 +68,7 @@ public class EditXp extends Command {
         if (pixelAmount > Constants.PIXELS_CAP)
             return "\\> That's too many pixels for me to be working with. (Max: " + Constants.PIXELS_CAP + ")";
 
-        ProfileObject profile = user.getProfile(command.guild);
+        ProfileObject profile = user.getProfile();
         if (profile == null) return "\\> " + user.displayName + " doesn't have a profile yet.";
 
         String out;

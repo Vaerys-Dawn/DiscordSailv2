@@ -31,7 +31,7 @@ public class SetXp extends Command {
         }
         try {
             long xp = Long.parseLong(xpArgs.getRest());
-            ProfileObject userObject = user.getProfile(command.guild);
+            ProfileObject userObject = user.getProfile();
             if (userObject != null) {
                 userObject.setXp(xp);
                 userObject.removeLevelFloor();

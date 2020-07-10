@@ -12,7 +12,7 @@ public class TagLevel extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        return replaceAllTag(from, command.user.getProfile(command.guild).getCurrentLevel() + "");
+        return replaceAllTag(from, command.user.getProfile().getCurrentLevel() + "");
     }
 
     @Override

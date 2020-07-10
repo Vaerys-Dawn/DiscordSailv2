@@ -7,7 +7,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 public class EditAdminCC extends Command {
 
@@ -65,7 +65,7 @@ public class EditAdminCC extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER, Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
+        return new Permission[]{Permission.MANAGE_SERVER, Permission.MANAGE_ROLES, Permission.MESSAGE_MANAGE};
     }
 
     @Override

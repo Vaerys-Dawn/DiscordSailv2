@@ -643,7 +643,7 @@ public class PixelHandler {
 //            }
 //            switch (userOverride) {
 //                case SEND_LVLUP_CURRENT_CHANNEL:
-//                    selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
+//                    selfDestruct = RequestHandler.queueMessage(levelUpMessage.toString(), object.channel.get()).get();
 //                    break;
 //                case SEND_LVLUP_RANK_CHANNEL:
 //                    TextChannel channel = null;
@@ -658,10 +658,10 @@ public class PixelHandler {
 //                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, channel);
 //                            }
 //                        } else {
-//                            RequestHandler.sendMessage(levelUpMessage.toString(), channel).get();
+//                            RequestHandler.queueMessage(levelUpMessage.toString(), channel).get();
 //                        }
 //                    } else {
-//                        selfDestruct = RequestHandler.sendMessage(levelUpMessage.toString(), object.channel.get()).get();
+//                        selfDestruct = RequestHandler.queueMessage(levelUpMessage.toString(), object.channel.get()).get();
 //                    }
 //                    break;
 //                case SEND_LVLUP_DMS:
@@ -729,7 +729,7 @@ public class PixelHandler {
 //            if (found == false) {
 //                TextChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
 //                if (adminChannel == null) adminChannel = object.channel.get();
-//                RequestHandler.sendMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
+//                RequestHandler.queueMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
 //                return;
 //            }
 //            IEmoji finalCustomEmoji = customEmoji;

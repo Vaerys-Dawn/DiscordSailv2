@@ -3,6 +3,7 @@ package com.github.vaerys.templates;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.Permission;
 import sx.blah.discord.handle.obj.Permissions;
 
 public abstract class SetupCommand extends Command {

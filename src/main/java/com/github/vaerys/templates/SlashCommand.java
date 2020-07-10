@@ -6,6 +6,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.Arrays;

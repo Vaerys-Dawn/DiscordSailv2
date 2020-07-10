@@ -3,6 +3,7 @@ package com.github.vaerys.handlers;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.google.gson.*;
+import net.dv8tion.jda.api.entities.Message;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

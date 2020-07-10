@@ -2,15 +2,14 @@ package com.github.vaerys.commands.characters;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class SelectChar extends Command {
         for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
             if (c.getName().equalsIgnoreCase(args)) {
                 if (c.getUserID() == command.user.longID) {
-                    List<Role> userRoles = command.guild.get().getRolesForUser(command.user.get());
+                    List<Role> userRoles = command.user.roles;
                     //resets User roles back to scratch.
                     for (int i = 0; i < userRoles.size(); i++) {
                         if (command.guild.config.isRoleCosmetic(userRoles.get(i).getIdLong())) {
@@ -37,8 +36,8 @@ public class SelectChar extends Command {
                     for (long r : c.getRoleIDs()) {
                         userRoles.add(command.guild.getRoleById(r));
                     }
-                    RequestHandler.roleManagement(command.user.get(), command.guild.get(), userRoles);
-                    RequestHandler.updateUserNickName(command.user.get(), command.guild.get(), c.getNickname());
+                    command.guild.get().modifyMemberRoles(command.user.getMember(), userRoles);
+                    command.guild.get().modifyNickname(command.user.getMember(), c.getNickname());
                     return "\\> Character " + c.getNickname() + " Loaded.";
                 } else {
                     return "\\> " + c.getName() + " is not your character.";

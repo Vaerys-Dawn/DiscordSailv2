@@ -2,12 +2,11 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -21,8 +20,8 @@ public class GetCCData extends Command {
         if (cc == null) return "\\> Custom command " + args + " could not be found.";
 
         StringBuilder content = new StringBuilder("Command Name: \"" + cc.getName() + "\"");
-        IUser createdBy = command.guild.getUserByID(cc.getUserID());
-        if (createdBy == null) createdBy = command.client.get().fetchUser(cc.getUserID());
+        User createdBy = command.guild.getUserByID(cc.getUserID()).getUser();
+        if (createdBy == null) createdBy = command.client.getUserByID(cc.getUserID());
         if (createdBy == null) content.append("\nCreated by: \"null\"");
         else {
             content.append("\nCreated by: \"" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "\"");
@@ -30,7 +29,7 @@ public class GetCCData extends Command {
         content.append("\nTimes run: \"" + cc.getTimesRun() + "\"");
         content.append("\nContents: \"" + cc.getContents(false) + "\"");
         String fileName = String.format("%s.txt",cc.getName());
-        RequestHandler.sendFile("\\> Here is the raw data for Custom Command: **" + cc.getName() + "**", content.toString(), fileName, command.channel.get()).get();
+        command.channel.queueFile("\\> Here is the raw data for Custom Command: **" + cc.getName() + "**", content.toString().getBytes(), fileName);
         return "";
     }
 

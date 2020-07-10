@@ -31,7 +31,7 @@ public class UserInfo extends Command {
         else user = Utility.getUser(command, args, true);
         if (user == null) return "\\> Could not find user.";
 
-        ProfileObject profile = user.getProfile(command.guild);
+        ProfileObject profile = user.getProfile();
 
         //init bot profile
         if (profile == null && user.get().isBot()) {
@@ -112,7 +112,7 @@ public class UserInfo extends Command {
         //add desc
         builder.setDescription(desc.toString());
         //sends Message
-        if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
+        if (user.getProfile().getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
             return "\\> Profile sent to your Direct messages.";
         }

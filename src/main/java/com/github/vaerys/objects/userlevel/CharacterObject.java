@@ -2,8 +2,7 @@ package com.github.vaerys.objects.userlevel;
 
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.GuildObject;
-import sx.blah.discord.handle.obj.IIDLinkedObject;
-import sx.blah.discord.handle.obj.Role;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -107,7 +106,7 @@ public class CharacterObject {
 
     public void update(String name, List<Role> roles) {
         this.nickname = name;
-        this.roleIDs = new ArrayList<>(roles.stream().map(IIDLinkedObject::getIdLong).collect(Collectors.toList()));
+        this.roleIDs = new ArrayList<>(roles.stream().map(Role::getIdLong).collect(Collectors.toList()));
     }
 
     public Color getColor(GuildObject guild) {

@@ -81,7 +81,7 @@ public class ModNote extends Command {
         UserObject user = Utility.getUser(command, userCall, false, true);
         if (user == null) return "\\> Could not find user.";
 
-        ProfileObject profile = user.getProfile(command.guild);
+        ProfileObject profile = user.getProfile();
         if (profile == null) return "\\> No profile found for " + user.displayName + ".";
 
         long timestamp = command.message.getTimestampZone().toEpochSecond();
@@ -191,7 +191,7 @@ public class ModNote extends Command {
 
         // finalize and send message:
         builder.setFooter("Total Notes: " + user.modNotes.size());
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 
@@ -232,7 +232,7 @@ public class ModNote extends Command {
             }
         }
 
-        builder.send(command.channel);
+        builder.queue(command.channel);
     }
 
     @Override

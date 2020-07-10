@@ -22,6 +22,7 @@ public class CommandObject {
     public MessageObject message;
     public ChannelObject channel;
     public ClientObject client;
+    public UserObject botUser;
 
 
     public CommandObject(Message message) {
@@ -37,14 +38,7 @@ public class CommandObject {
         this.channel = new ChannelObject(message.getTextChannel(), guild);
         this.user = new UserObject(message.getMember(), guild);
         this.client = Client.getClientObject();
-    }
-
-    public CommandObject() {
-        guild = new GuildObject();
-        user = new UserObject(null, null);
-        message = new MessageObject(null, null);
-        channel = new ChannelObject(null, null);
-        client = Client.getClientObject();
+        this.botUser = new UserObject(client.bot, this.guild);
     }
 
     public CommandObject(Message message, Guild guild, TextChannel channel, Member author) {
@@ -57,14 +51,16 @@ public class CommandObject {
         this.channel = new ChannelObject(channel, this.guild);
         this.user = new UserObject(author, this.guild);
         this.client = Client.getClientObject();
+        this.botUser = new UserObject(client.bot, this.guild);
     }
 
     public CommandObject(GuildObject task, TextChannel channel) {
-        this.client = task.client;
+        this.client = Client.getClientObject();
         this.guild = task;
         this.channel = new ChannelObject(channel, task);
         this.message = null;
         this.user = null;
+        this.botUser = new UserObject(client.bot, this.guild);
     }
 
     public CommandObject(GuildObject content, TextChannel channel, Member user) {
@@ -73,6 +69,7 @@ public class CommandObject {
         this.channel = new ChannelObject(channel, guild);
         this.user = new UserObject(user, guild);
         this.client = Client.getClientObject();
+        this.botUser = new UserObject(client.bot, this.guild);
     }
 
     public CommandObject setAuthor(Member author) {

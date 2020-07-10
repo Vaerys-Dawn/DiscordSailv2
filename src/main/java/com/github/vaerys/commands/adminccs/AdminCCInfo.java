@@ -10,7 +10,7 @@ import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.objects.utils.TriVar;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,7 +38,7 @@ public class AdminCCInfo extends Command {
 
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.setTitle(String.format("\\> Here is the information for the Admin Custom Command: %s", cc.getName()));
-        UserObject creator = UserObject.getNewUserObject(cc.getCreatorID(), command.guild);
+        UserObject creator = new UserObject(command.guild.get().getMemberById(cc.getCreatorID()), command.guild);
         StringHandler desc = new StringHandler("Creator: **@%s**\nTimes Run: **%d**\nSlots Used: **%d**", creator.username, cc.getTimesRun(), cc.getSlots(), cc.getPathKeys().size());
         if (cc.hasLimitTry()) {
             long attempts = command.guild.adminCCs.getTries(cc).size();
@@ -53,7 +53,7 @@ public class AdminCCInfo extends Command {
             desc.appendFormatted("\nKey Counts: \n```\n%s```", compiled);
         }
         builder.setDescription(desc.toString());
-        builder.send(command);
+        builder.queue(command);
         return null;
     }
 
@@ -83,7 +83,7 @@ public class AdminCCInfo extends Command {
     }
 
     @Override
-    public Permissions[] perms() {
+    public Permission[] perms() {
         return new Permission[0];
     }
 

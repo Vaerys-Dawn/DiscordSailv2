@@ -30,7 +30,7 @@ public class SetLevel extends Command {
             if (level > Constants.LEVEL_CAP)
                 return "\\> No... " + level + " Is way too many levels. Im not setting your level that high.";
             long xp = PixelHandler.totalXPForLevel(level);
-            ProfileObject userObject = user.getProfile(command.guild);
+            ProfileObject userObject = user.getProfile();
             if (userObject == null) {
                 return "\\> User does not have a profile.";
             }

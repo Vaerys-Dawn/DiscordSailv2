@@ -4,10 +4,10 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CharacterObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 
 public class CharAvatar extends Command {
 
@@ -17,20 +17,20 @@ public class CharAvatar extends Command {
         if (charObject == null) return "\\> Could not find any characters with that Character ID.";
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.setTitle(charObject.getNickname());
-        IUser user = command.guild.getUserByID(charObject.getUserID());
+        Member user = command.guild.getUserByID(charObject.getUserID());
         if (user == null) {
             builder.setFooter("Author: No longer on this server | Character ID: " + charObject.getName());
         } else {
-            builder.setFooter("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + charObject.getName());
+            builder.setFooter("Author: " + user.getNickname() + " | Character ID: " + charObject.getName());
         }
         command.guild.characters.validateRoles(command.guild.get());
         if (charObject.getRoleIDs().size() != 0) {
-            builder.withColor(charObject.getColor(command.guild));
+            builder.setColor(charObject.getColor(command.guild));
         }
         if (charObject.getAvatarURL() == null || charObject.getAvatarURL().isEmpty())
             return "\\> " + charObject.getNickname() + " Does not have an avatar set up.";
-        builder.withImage(charObject.getAvatarURL());
-        builder.send(command.channel);
+        builder.setImage(charObject.getAvatarURL());
+        builder.queue(command.channel);
         return "";
     }
 

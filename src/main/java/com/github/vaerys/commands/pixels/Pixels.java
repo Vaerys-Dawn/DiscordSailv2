@@ -28,11 +28,11 @@ public class Pixels extends Command {
             user = Utility.getUser(command, args, true);
             if (user == null) return "\\> Could not find user.";
         }
-        ProfileObject profile = user.getProfile(command.guild);
+        ProfileObject profile = user.getProfile();
         if (profile == null) {
             return String.format("\\> %s does not have a profile yet.", user.displayName);
         }
-        if (user.isPrivateProfile(command.guild) && !user.equals(command.user)) {
+        if (user.isPrivateProfile() && !user.equals(command.user)) {
             return String.format("\\> %s has set their profile to private.", user.displayName);
         }
         //init vars
@@ -73,7 +73,7 @@ public class Pixels extends Command {
         if (profile.getSettings().contains(UserSetting.HIT_LEVEL_FLOOR)) {
             builder.setDescription("**You have decayed to the level floor,\nYou will need to level up again to see your rank.**");
         }
-        if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
+        if (user.getProfile().getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
             return "\\> Pixels sent to your Direct messages.";
         }

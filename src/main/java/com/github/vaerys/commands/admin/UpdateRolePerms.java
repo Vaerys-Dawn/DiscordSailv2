@@ -3,16 +3,12 @@ package com.github.vaerys.commands.admin;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.RequestBuffer;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -28,7 +24,7 @@ public class UpdateRolePerms extends Command {
         List<Role> parentRole = GuildHandler.getRolesByName(command.guild.get(), args);
         EnumSet parentPerms = command.guild.get().getPublicRole().getPermissions();
         ArrayList<String> permList = new ArrayList<>();
-        Message workingMsg = command.channel.get().sendMessage("`Working...`").complete();
+        Message workingMsg = command.channel.sendMessage("`Working...`");
         if (parentRole.size() != 0) {
             if (command.guild.config.isRoleCosmetic(parentRole.get(0).getIdLong())) {
                 parentPerms = parentRole.get(0).getPermissions();
@@ -38,7 +34,7 @@ public class UpdateRolePerms extends Command {
             if (command.guild.config.isRoleCosmetic(r.getIdLong())) {
                 if (!r.getPermissions().containsAll(parentPerms) && !parentPerms.containsAll(r.getPermissions())) {
                     EnumSet finalParentPerms = parentPerms;
-                    RequestBuffer.request(() -> r.changePermissions(finalParentPerms));
+                    r.getManager().setPermissions(finalParentPerms).queue();
                 }
             }
         }
@@ -76,7 +72,7 @@ public class UpdateRolePerms extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_ROLES, Permission.MANAGE_SERVER};
     }
 
     @Override

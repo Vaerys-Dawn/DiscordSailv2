@@ -3,13 +3,12 @@ package com.github.vaerys.commands.characters;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,11 +34,11 @@ public class ListChars extends Command {
             }
         }
         //check private
-        if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
+        if (user.isPrivateProfile() && user.longID != command.user.longID) {
             return "\\> User has set their profile to private.";
         }
         //generate list
-        List<String> list = user.characters.stream().map(c -> c.getName()).collect(Collectors.toList());
+        List<String> list = user.getCharacters().stream().map(c -> c.getName()).collect(Collectors.toList());
         //give message if empty
         if (list.size() == 0) {
             return user.longID == command.user.longID ?
@@ -49,14 +48,14 @@ public class ListChars extends Command {
         //build embed data
         builder.setTitle(title);
         builder.setDescription("```\n" + Utility.listFormatter(list, true) + "```\n" + new CharInfo().missingArgs(command));
-        builder.setFooter(user.characters.size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
+        builder.setFooter(user.getCharacters().size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
         //send private char list
-        if (user.getProfile(command.guild).getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
-            RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
+        if (user.getProfile().getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
+            command.user.queueDm(builder.build());
             return "\\> Char list sent to your Direct messages.";
         }
         //send regular
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        builder.queue(command);
         return null;
     }
 

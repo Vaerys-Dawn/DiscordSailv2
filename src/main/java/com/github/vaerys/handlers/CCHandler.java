@@ -82,7 +82,7 @@ public class CCHandler {
 //                }
 //                String fullTag = t.requiredArgs == 0 ? ccPrefix : ccPrefix + ccContents + t.suffix;
 //                System.out.println(fullTag);
-////                RequestHandler.sendMessage(String.format("A stack overflow error occurred within one of the **%s** tags.\n\n**Tag Details:**```\n%s```", t.name, fullTag), command);
+////                RequestHandler.queueMessage(String.format("A stack overflow error occurred within one of the **%s** tags.\n\n**Tag Details:**```\n%s```", t.name, fullTag), command);
 ////                return;
                 FileHandler.writeToFile(Constants.DIRECTORY_STORAGE + "Error.txt", contents, true);
                 contents = t.handleTag(contents, command, ccArgs, cc);

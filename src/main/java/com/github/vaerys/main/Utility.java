@@ -764,7 +764,7 @@ public class Utility {
             try {
                 UserObject object = new UserObject(u, command.guild, true);
                 if (hasProfile) {
-                    ProfileObject profile = object.getProfile(command.guild);
+                    ProfileObject profile = object.getProfile();
                     if (profile == null || profile.isEmpty()) continue;
                 }
                 if ((u.getName() + "#" + u.getDiscriminator()).matches("(?i)" + toTest)) {

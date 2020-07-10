@@ -2,7 +2,6 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
@@ -10,7 +9,7 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,12 +59,12 @@ public class ListCCs extends Command {
         String content = Utility.listFormatter(list, true);
         if (content.length() > 2000) {
             String fileName = String.format("Commands_%s.txt", command.user.name);
-            RequestHandler.sendFile(title, content, fileName, command.channel.get());
+            command.channel.queueFile(title, content.getBytes(), fileName);
             return null;
         }
         builder.setDescription("```\n" + content + "```");
         builder.setFooter("Total Custom commands: " + total + "/" + max + ".");
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        builder.queue(command);
         return null;
     }
 
@@ -91,7 +90,7 @@ public class ListCCs extends Command {
             String title = "> Here is Page **" + page + "/" + pages.size() + "** of Custom Commands:";
             builder.addField(title, pages.get(page - 1), false);
             builder.setFooter("Total Custom Commands stored on this Server: " + totalCCs);
-            RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+            builder.queue(command);
             return null;
         } catch (IndexOutOfBoundsException e) {
             return "> That Page does not exist.";

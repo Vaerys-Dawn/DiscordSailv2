@@ -3,8 +3,8 @@ package com.github.vaerys.commands.characters;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CharacterObject;
+import net.dv8tion.jda.api.entities.Role;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.Role;
 
 import java.net.MalformedURLException;
 import java.net.URL;

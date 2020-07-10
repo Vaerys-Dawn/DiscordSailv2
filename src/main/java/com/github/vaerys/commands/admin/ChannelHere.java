@@ -43,7 +43,7 @@ public class ChannelHere extends Command {
         desc += missingArgs(command);
         embedBuilder.setDescription(desc);
         embedBuilder.setTitle(title);
-        embedBuilder.send(command.channel);
+        embedBuilder.queue(command.channel);
         return null;
     }
 

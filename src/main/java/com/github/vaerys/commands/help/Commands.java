@@ -80,14 +80,14 @@ public class Commands extends Command {
             builder.setDescription("```\n" +
                     Utility.listFormatter(types.stream().map(t -> t.toString()).collect(Collectors.toList()), false) +
                     "```\n" + missingArgs(command));
-            builder.send(prefix, command);
+            builder.queue(prefix, command);
             return null;
         }
 
         //send page
         builder.setTitle("\\> Here are all of the " + type.toString() + " Commands I have available.");
         builder.setDescription(pages.get(type) + get(Help.class).missingArgs(command));
-        builder.send(command);
+        builder.queue(command);
         return null;
     }
 

@@ -7,7 +7,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 26/02/2017.
@@ -34,7 +34,7 @@ public class EditChar extends Command {
         SplitFirstObject mode = new SplitFirstObject(charName.getRest());
         for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
             if (c.getName().equalsIgnoreCase(charName.getFirstWord())) {
-                if (c.getUserID() == command.user.longID || GuildHandler.canBypass(command.user.get(), command.guild.get())) {
+                if (c.getUserID() == command.user.longID || GuildHandler.canBypass(command.user.getMember(), command.guild.get())) {
                     String rest = mode.getRest();
                     if (rest == null) {
                         rest = "";

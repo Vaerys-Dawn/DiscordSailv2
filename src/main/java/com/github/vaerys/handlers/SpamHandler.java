@@ -15,6 +15,7 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,12 +57,12 @@ public class SpamHandler {
                 if (offenceCount > 2) {
                     if (command.guild.config.muteRepeatOffenders) {
                         command.guild.users.muteUser(command, -1);
-                        command.user.sendDm("\\> You were muted for spamming.");
+                        command.user.queueDm("\\> You were muted for spamming.");
                         command.guild.sendDebugLog(command, "CATCH_SPAM_WALLS", "MUTE", offenceCount + " Offences");
                         TextChannel admin = command.guild.getChannelByType(ChannelSetting.ADMIN);
                         String report = command.user.mention() + " was muted for spamming";
                         // add an automated note to the user.
-                        command.user.getProfile(command.guild).addSailModNote(report, command, false);
+                        command.user.getProfile().addSailModNote(report, command, false);
                         if (admin != null) {
                             RequestHandler.sendMessage(report + " in " + command.channel.get().mention() + ".", admin);
                         } else {
@@ -70,7 +71,7 @@ public class SpamHandler {
                         return true;
                     }
                 }
-                command.user.sendDm("\\> Your message was deleted because it was considered spam.");
+                command.user.queueDm("\\> Your message was deleted because it was considered spam.");
                 return true;
             }
         }
@@ -108,7 +109,7 @@ public class SpamHandler {
                             command.guild.users.muteUser(command, -1);
                             command.guild.sendDebugLog(command, "STOP_MASS_MENTIONS", "MUTE", o.getCount() + " Offences");
                             // add strike in modnote
-                            command.user.getProfile(command.guild).addSailModNote(String.format(report, author.mention()), command, false);
+                            command.user.getProfile().addSailModNote(String.format(report, author.mention()), command, false);
                             // send admin notification
                             RequestHandler.sendMessage(String.format(report, author.mention()), command.channel.get());
                         }
@@ -167,7 +168,7 @@ public class SpamHandler {
 
         //send warnings
         if (userRate.getSize() < messageLimit + 4) {
-            command.user.sendDm(String.format(rateLimitFormat, guildName, messageLimit));
+            command.user.queueDm(String.format(rateLimitFormat, guildName, messageLimit));
             return true;
         } else {
             //mute handling
@@ -178,7 +179,7 @@ public class SpamHandler {
             userRate.mute();
             //mute user for 300 seconds
             command.guild.users.muteUser(command, 300);
-            command.user.sendDm(String.format(muteFormat, guildName, messageLimit)).get();
+            command.user.queueDm(String.format(muteFormat, guildName, messageLimit));
             return true;
         }
     }
@@ -210,7 +211,7 @@ public class SpamHandler {
 
         boolean inviteFound = false;
         boolean shouldDelete = false;
-        ProfileObject object = command.user.getProfile(command.guild);
+        ProfileObject object = command.user.getProfile();
         boolean userSettingDenied = false;
         if (object != null) {
             userSettingDenied = object.getSettings().contains(UserSetting.DENY_INVITES);

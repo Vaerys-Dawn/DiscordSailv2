@@ -27,7 +27,7 @@ public class TagAddPixels extends TagAdminSubTagObject {
             } else if ((pixels < 1 || pixels > 200) && !cc.hasLimitTry()) {
                 from = replaceFirstTag(from, error);
             } else {
-                ProfileObject profile = command.user.getProfile(command.guild);
+                ProfileObject profile = command.user.getProfile();
                 if (profile == null) return removeAllTag(from);
                 if (profile.getSettings().contains(UserSetting.DENIED_XP) ||
                         profile.getSettings().contains(UserSetting.NO_XP_GAIN)) {

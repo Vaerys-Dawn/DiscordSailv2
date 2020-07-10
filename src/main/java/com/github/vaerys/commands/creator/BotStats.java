@@ -44,7 +44,7 @@ public class BotStats extends Command {
         handler.append("\n**Ping**: ").append(nf.format(ping)).append("ms");
         builder.setDescription(handler.toString());
         builder.withThumbnail(command.client.bot.avatarURL);
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 

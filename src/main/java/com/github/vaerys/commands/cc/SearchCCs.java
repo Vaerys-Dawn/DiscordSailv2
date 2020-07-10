@@ -2,13 +2,12 @@ package com.github.vaerys.commands.cc;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,12 +61,12 @@ public class SearchCCs extends Command {
             if (complete.toString().endsWith(",\n")) {
                 complete.replace(complete.length() - 2, complete.length() - 1, ".");
             }
-            RequestHandler.sendFile(title, complete.toString(), String.format("Search_%s.txt", args), command.channel.get());
+            command.channel.queueFile(title, complete.toString().getBytes(), String.format("Search_%s.txt", args));
             return null;
         } else {
             embedBuilder.setTitle(title);
             embedBuilder.setDescription("```\n" + contents + spacer + "```");
-            RequestHandler.sendEmbedMessage("", embedBuilder, command.channel.get());
+            embedBuilder.queue(command);
             embedBuilder.setFooter("Results Found: " + searched.size());
             return null;
         }

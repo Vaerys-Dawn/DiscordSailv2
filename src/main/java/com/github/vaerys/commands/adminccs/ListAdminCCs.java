@@ -7,7 +7,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +22,7 @@ public class ListAdminCCs extends Command {
         builder.setTitle("\\> Here are all of the available Admin Custom Commands.");
         List<String> commandNames = adminCCs.stream().map(c -> c.getName(command)).collect(Collectors.toList());
         builder.setDescription("```\n" + Utility.listFormatter(commandNames, true) + "```");
-        builder.send(command);
+        builder.queue(command);
         return null;
     }
 
@@ -52,7 +52,7 @@ public class ListAdminCCs extends Command {
     }
 
     @Override
-    public Permissions[] perms() {
+    public Permission[] perms() {
         return new Permission[0];
     }
 

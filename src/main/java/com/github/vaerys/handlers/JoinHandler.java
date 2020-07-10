@@ -72,7 +72,7 @@ public class JoinHandler {
         String message = content.config.getJoinMessage();
         message = message.replace("<server>", event.getGuild().getName());
         message = message.replace("<user>", event.getUser().getName());
-        user.sendDm(message);
+        user.queueDm(message);
     }
 
     /**

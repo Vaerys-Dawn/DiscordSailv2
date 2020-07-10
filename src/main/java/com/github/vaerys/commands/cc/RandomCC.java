@@ -13,7 +13,7 @@ import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.cctags.TagEmbedImage;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 import java.util.Random;

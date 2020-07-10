@@ -85,7 +85,7 @@ public class Toggle extends Command {
         desc.append(missingArgs(command));
 
         embedBuilder.setDescription(desc.toString());
-        embedBuilder.send(command);
+        embedBuilder.queue(command);
         return null;
     }
 

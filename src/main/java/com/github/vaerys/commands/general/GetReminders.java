@@ -50,7 +50,7 @@ public class GetReminders extends Command {
         }
         i--;   // oh of course
         embed.setTitle( String.format("\\> You have %d Reminder%s:", i, (i==1) ? "":"s" ) );
-        embed.send(command);
+        embed.queue(command);
         return null;
     }
 

@@ -92,7 +92,7 @@ public class ChannelData extends GlobalFile {
                 continue;
             }
             //if they have no profile remove them.
-            ProfileObject profile = user.getProfile(command);
+            ProfileObject profile = user.getProfile();
             if (profile == null) {
                 iterator.remove();
                 continue;

@@ -5,6 +5,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ServerObject;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.Permission;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -33,7 +34,7 @@ public class Server extends Command {
                     builder.append("**Listing Creator:** " + user.getName() + "#" + user.getDiscriminator() + "\n");
                 }
                 builder.append(s.getServerDesc());
-                command.user.sendDm(builder.toString());
+                command.user.queueDm(builder.toString());
                 return "\\> Server info has been sent to your DMs";
             }
         }

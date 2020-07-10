@@ -1,13 +1,13 @@
 package com.github.vaerys.objects.utils;
 
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
+import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,10 +21,10 @@ public class SubCommandObject {
     private final String usage;
     private final String description;
     private final SAILType type;
-    private final Permissions[] permissions;
+    private final Permission[] permissions;
     private String regex = "";
 
-    public SubCommandObject(String[] name, String usage, String description, SAILType type, Permissions... permissions) {
+    public SubCommandObject(String[] name, String usage, String description, SAILType type, Permission... permissions) {
         this.names = name;
         this.usage = usage;
         this.description = description;
@@ -95,7 +95,7 @@ public class SubCommandObject {
         return type;
     }
 
-    public Permissions[] getPermissions() {
+    public Permission[] getPermissions() {
         return permissions;
     }
 
@@ -114,7 +114,7 @@ public class SubCommandObject {
 
             builder.append("\n**Perms: **");
             ArrayList<String> permList = new ArrayList<>(permissions.length);
-            for (Permissions p : permissions) {
+            for (Permission p : permissions) {
                 permList.add(Utility.enumToString(p));
             }
             builder.append(Utility.listFormatter(permList, true));

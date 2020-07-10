@@ -77,7 +77,7 @@ public class WhoWasThat extends Command {
         embed.setFooter(user.longID + ", Creation Date");
         embed.withTimestamp(user.get().getCreationDate());
         embed.setDescription(builder.toString());
-        embed.send(command.channel);
+        embed.queue(command.channel);
         return null;
     }
 

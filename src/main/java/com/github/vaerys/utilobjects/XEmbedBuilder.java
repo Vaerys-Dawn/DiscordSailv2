@@ -5,8 +5,8 @@ import com.github.vaerys.masterobjects.ChannelObject;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 import java.awt.*;
 
@@ -30,28 +30,52 @@ public class XEmbedBuilder extends EmbedBuilder {
         setColor(command.client.bot.color);
     }
 
-    public MessageAction send(TextChannel channel) {
+    public void queue(TextChannel channel) {
+        channel.sendMessage(this.build()).queue();
+    }
+
+    public void queue(ChannelObject channel) {
+        channel.queueMessage(this.build());
+    }
+
+    public void queue(CommandObject command) {
+        command.channel.queueMessage(this.build());
+    }
+
+    public void queue(String s, TextChannel channel) {
+        channel.sendMessage(s).embed(this.build()).queue();
+    }
+
+    public void queue(String s, ChannelObject channel) {
+        channel.queueMessage(s,this.build());
+    }
+
+    public void queue(String s, CommandObject command) {
+        command.channel.queueMessage(s,this.build());
+    }
+
+    public Message send(TextChannel channel) {
+        return channel.sendMessage(this.build()).complete();
+    }
+
+    public Message send(ChannelObject channel) {
         return channel.sendMessage(this.build());
     }
 
-    public MessageAction send(ChannelObject channel) {
-        return channel.get().sendMessage(this.build());
+    public Message send(CommandObject command) {
+        return command.channel.sendMessage(this.build());
     }
 
-    public MessageAction send(CommandObject command) {
-        return command.channel.get().sendMessage(this.build());
+    public Message send(String s, TextChannel channel) {
+        return channel.sendMessage(s).embed(this.build()).complete();
     }
 
-    public MessageAction send(String s, TextChannel channel) {
-        return channel.sendMessage(s).embed(this.build());
+    public Message send(String s, ChannelObject channel) {
+        return channel.sendMessage(s,this.build());
     }
 
-    public MessageAction send(String s, ChannelObject channel) {
-        return channel.get().sendMessage(s).embed(this.build());
-    }
-
-    public MessageAction send(String s, CommandObject command) {
-        return command.channel.get().sendMessage(s).embed(this.build());
+    public Message send(String s, CommandObject command) {
+        return command.channel.sendMessage(s, this.build());
     }
 
     @Override
@@ -75,8 +99,18 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     @Override
+    public EmbedBuilder setFooter(String footerText, String footerImageURL) {
+        return super.setFooter(Utility.removeMentions(footerText), footerImageURL);
+    }
+
+    @Override
     public EmbedBuilder setAuthor(String authorName) {
         return super.setAuthor(Utility.removeMentions(authorName));
+    }
+
+    @Override
+    public EmbedBuilder setAuthor(String authorName, String avatarImageURL) {
+        return super.setAuthor(Utility.removeMentions(authorName), avatarImageURL);
     }
 
 }

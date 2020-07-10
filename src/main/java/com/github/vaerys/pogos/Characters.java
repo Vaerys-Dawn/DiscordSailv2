@@ -10,6 +10,8 @@ import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.objects.userlevel.DungeonCharObject;
 import com.github.vaerys.templates.GlobalFile;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import sx.blah.discord.handle.obj.Guild;
 import sx.blah.discord.handle.obj.Role;
@@ -17,7 +19,6 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
@@ -38,14 +39,14 @@ public class Characters extends GlobalFile {
         return characters;
     }
 
-    public String delChar(String character, IUser author, Guild guild, boolean bypass) {
+    public String delChar(String character, Member author, boolean bypass) {
         for (CharacterObject c : characters) {
             if (c.getName().equalsIgnoreCase(character)) {
                 if (author.getIdLong() == c.getUserID() || bypass) {
                     characters.remove(c);
                     return "\\> Character Deleted.";
                 } else {
-                    return "\\> I'm sorry " + author.getDisplayName(guild) + ", I'm afraid I can't do that.";
+                    return "\\> I'm sorry " + author.getNickname() + ", I'm afraid I can't do that.";
                 }
             }
         }

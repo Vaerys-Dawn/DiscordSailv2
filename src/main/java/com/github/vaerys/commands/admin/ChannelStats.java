@@ -33,7 +33,7 @@ public class ChannelStats extends Command {
                     List<String> channelMentions = Utility.getChannelMentions(channels);
                     if (channels.size() != 0) {
                         builder.addField(s.toString(), Utility.listFormatter(channelMentions, true), false);
-                        builder.send(command.channel);
+                        builder.queue(command.channel);
                         return null;
                     } else {
                         if (s.isSetting()) {
@@ -70,7 +70,7 @@ public class ChannelStats extends Command {
         if (channelSettings.size() != 0) {
             builder.addField("Settings:", Utility.listFormatter(channelSettings, true), false);
         }
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 

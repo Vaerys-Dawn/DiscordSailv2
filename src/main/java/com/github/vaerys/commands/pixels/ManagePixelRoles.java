@@ -51,7 +51,7 @@ public class ManagePixelRoles extends Command {
                 desc += "**Pixel Denied Role**: " + xpDenied.getName();
             }
             builder.setDescription(desc);
-            builder.send(command.channel);
+            builder.queue(command.channel);
             return null;
         }
         SplitFirstObject mode = new SplitFirstObject(args);

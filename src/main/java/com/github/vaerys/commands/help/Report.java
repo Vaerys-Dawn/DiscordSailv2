@@ -8,10 +8,10 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.botlevel.AutoBlocker;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -61,13 +61,13 @@ public class Report extends Command {
 
         //send report
         if (roleToMention == null) {
-            response = channel.sendMessage(message);
+            response = channel.sendMessage(message).complete();
         } else {
-            response = channel.sendMessage(roleToMention.mention() + "\n" + message);
+            response = channel.sendMessage(roleToMention.getAsMention() + "\n" + message).complete();
         }
         //send response
         if (response == null) {
-            return "\\> User report was not be sent. Looks like I can't send messages to " + channel.mention() + ".";
+            return "\\> User report was not be sent. Looks like I can't send messages to " + channel.getAsMention() + ".";
         } else {
             return "\\> User Report sent.";
         }
@@ -77,7 +77,7 @@ public class Report extends Command {
         AutoBlocker blocker = null;
         for (AutoBlocker a : lastUsers) {
             if (a.getUserID() == command.user.longID) {
-                a.addCount(command.message.get().getTimestamp());
+                a.addCount(command.message.getTimestamp());
             }
         }
         if (blocker == null) lastUsers.add(new AutoBlocker(command));

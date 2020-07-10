@@ -87,7 +87,7 @@ public class InfoEditModes {
             fileNames.add(f.getName());
         }
         builder.setDescription("```\n" + Utility.listFormatter(fileNames, true) + "```");
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 
@@ -141,7 +141,7 @@ public class InfoEditModes {
             return "\\> Something went wrong! The template must be missing, please Direct message me to alert my developer.";
         }
         if (templateLoaded) message = message.concat("\nThis file has been preloaded with some related info and a basic template for your convenience.");
-        RequestHandler.sendFile(message, file, command);
+        command.channel.queueFile(message, file, "Info.txt");
         return null;
     }
 }

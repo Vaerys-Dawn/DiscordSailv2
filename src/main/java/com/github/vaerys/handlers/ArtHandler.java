@@ -75,7 +75,7 @@ public class ArtHandler {
             return;
         }
         //exit if user has art pinning denied.
-        ProfileObject profile = reacted.getProfile(command.guild);
+        ProfileObject profile = reacted.getProfile();
         if (profile != null && profile.getSettings().contains(UserSetting.DENY_ART_PINNING)) return;
         //exit if there is no art channel
         if (channelIDS == null) return;
@@ -373,7 +373,7 @@ public class ArtHandler {
         //cant like the same thing more than once
         if (messageLikes.getUsers().contains(reacted.longID)) return;
 
-        ProfileObject profile = owner.getProfile(command.guild);
+        ProfileObject profile = owner.getProfile();
 
         //exit if profile doesn't exist
         if (profile == null) return;

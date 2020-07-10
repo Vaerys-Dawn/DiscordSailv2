@@ -60,7 +60,7 @@ public class ListJoinMessages extends Command {
         builder.setTitle("\\> Join Message list");
         builder.setDescription(pages.get(page) + "\n\n" + missingArgs(command));
         builder.setFooter("Page " + (page + 1) + "/" + pages.size() + " | Total Join Messages: " + messages.size());
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 

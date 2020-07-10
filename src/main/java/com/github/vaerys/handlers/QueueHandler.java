@@ -36,7 +36,7 @@ public class QueueHandler {
                 case Constants.QUEUE_DAILY:
                     long uID = Globals.getDailyMessages().newDailyMsgUID();
                     if (uID == -1) {
-                        object.client.creator.sendDm("\\> Max limit of Daily messages hit.");
+                        object.client.creator.queueDm("\\> Max limit of Daily messages hit.");
                         break;
                     }
                     XEmbedBuilder embedBuilder = new XEmbedBuilder(object);
@@ -125,14 +125,14 @@ public class QueueHandler {
                         //do if accepted
                         if (reaction.getEmoji().equals(thumbsUp)) {
 
-                            user.sendDm("\\> A daily message you sent was approved. **[" + uID + "]**");
+                            user.queueDm("\\> A daily message you sent was approved. **[" + uID + "]**");
                             Globals.getDailyMessages().getMessages().add(new DailyMessage(embed.getDescription(), day, userID, uID));
                             RequestBuffer.request(() -> message.addReaction(ok)).get();
                             request.toggleMarkedForRemoval();
                             return;
                             //do if denied
                         } else if (reaction.getEmoji().equals(thumbsDown)) {
-                            user.sendDm("\\> A daily message you sent was denied. **[" + uID + "]**");
+                            user.queueDm("\\> A daily message you sent was denied. **[" + uID + "]**");
                             request.toggleMarkedForRemoval();
                             RequestBuffer.request(() -> message.addReaction(no)).get();
                             return;

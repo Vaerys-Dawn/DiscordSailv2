@@ -22,7 +22,7 @@ public class GetGuildList extends DMCommand {
         }
         XEmbedBuilder builder = new XEmbedBuilder(command);
         Utility.listFormatterEmbed("List Of Guilds", builder, guilds, false);
-        command.user.sendEmbededDm("", builder);
+        command.user.queueDm(builder.build());
         return null;
     }
 

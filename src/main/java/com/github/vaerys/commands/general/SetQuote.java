@@ -50,7 +50,7 @@ public class SetQuote extends Command {
         if (user.isPatron) {
             maxNewlines += 2;
         }
-        ProfileObject u = user.getProfile(command.guild);
+        ProfileObject u = user.getProfile();
         quote = Utility.removeFun(quote);
         if (quote == null || quote.isEmpty()) return "\\> You can't have an empty quote.";
         if (StringUtils.countMatches(quote, "\n") > maxNewlines)

@@ -19,9 +19,9 @@ public class GetAvatar extends Command {
         UserObject user = Utility.getUser(command, args, true, false);
         if (user != null) {
             String message = user.displayName + ":\n" + user.get().getAvatarURL();
-            if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
+            if (user.isPrivateProfile() && user.longID != command.user.longID) {
                 return "\\> User has set their profile to private.";
-            } else if (user.isPrivateProfile(command.guild) && user.longID == command.user.longID) {
+            } else if (user.isPrivateProfile() && user.longID == command.user.longID) {
                 RequestHandler.sendMessage(message, user.get().getOrCreatePMChannel());
                 return "\\> Avatar sent to your direct messages.";
             }

@@ -33,7 +33,7 @@ public class BotHelp extends Command {
                 "Gives you information about how Direct messages work for **" + command.client.bot.displayName + "**.\n" +
                 "\\> **Tags**\n" +
                 "Gives you information explaining what tags are.\n\n" + missingArgs(command));
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 
@@ -41,7 +41,7 @@ public class BotHelp extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.setTitle("Tags.");
         builder.setDescription("\\> Tags are strings of text that when added to CustomCommands, The info page generator, Daily Messages or Level up messages run specific code and change the output text.");
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 
@@ -49,7 +49,7 @@ public class BotHelp extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.setTitle("Direct messages.");
         builder.setDescription("\\> When you send a non command Direct message to " + command.client.bot.displayName + " it will send it to the bot developer.");
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 
@@ -62,7 +62,7 @@ public class BotHelp extends Command {
                 "\\> When an argument ends in `...` it means you can input as many of this argument as you like.\n" +
                 "\\> The `@User` argument means that you can either use a user ID, mention or the user's display name or username as an argument.\n" +
                 "\\> The `Time` argument means that you can enter a number or a number ending in `d` for days, `h` for hours, `m` for minutes or `s` for seconds.");
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 

@@ -5,7 +5,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -15,10 +15,10 @@ public class DelChar extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         boolean bypass = false;
-        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+        if (GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE)) {
             bypass = true;
         }
-        return command.guild.characters.delChar(args.split(" ")[0], command.user.get(), command.guild.get(), bypass);
+        return command.guild.characters.delChar(args.split(" ")[0], command.user.getMember(), bypass);
     }
 
     @Override

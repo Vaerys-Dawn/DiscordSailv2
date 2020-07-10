@@ -115,7 +115,7 @@ public class TimerHandler {
                 IUser creator = Client.getClient().getUserByID(Globals.creatorID);
                 if (creator == null) return;
                 UserObject creatorUser = new UserObject(creator, null);
-                creatorUser.sendDm("\\> screenlog.0 got too big, potential log spam, archived log to prevent loss of usage.");
+                creatorUser.queueDm("\\> screenlog.0 got too big, potential log spam, archived log to prevent loss of usage.");
                 file.renameTo(new File("screenlog.closed"));
             }
         }

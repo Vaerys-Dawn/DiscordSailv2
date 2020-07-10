@@ -4,18 +4,19 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.tags.cctags.TagSearchTags;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.Guild;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+
 
 /**
  * Created by Vaerys on 04/04/2017.
  */
 public class CCEditModes {
 
-    public static String lock(CCommandObject c, CommandObject command, IUser author, Guild guild) {
-        if (GuildHandler.testForPerms(author, guild, Permissions.MANAGE_MESSAGES)) {
+    public static String lock(CCommandObject c, CommandObject command, Member author, Guild guild) {
+        if (GuildHandler.testForPerms(author, guild, Permission.MESSAGE_MANAGE)) {
             c.toggleLocked();
             return "\\> Lock for **" + c.getName() + "** is now " + c.isLocked() + ".";
         } else {
@@ -23,8 +24,8 @@ public class CCEditModes {
         }
     }
 
-    public static String shitPost(CCommandObject c, CommandObject command, IUser author, Guild guild) {
-        if (GuildHandler.testForPerms(author, guild, Permissions.MANAGE_MESSAGES)) {
+    public static String shitPost(CCommandObject c, CommandObject command, Member author, Guild guild) {
+        if (GuildHandler.testForPerms(author, guild, Permission.MESSAGE_MANAGE)) {
             c.toggleShitPost();
             return "\\> Shitpost for **" + c.getName() + "** is now " + c.isShitPost() + ".";
         } else {

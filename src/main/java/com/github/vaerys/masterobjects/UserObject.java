@@ -33,9 +33,31 @@ public class UserObject extends GlobalUserObject {
     public UserObject(Member object, GuildObject guild) {
         super(object.getUser());
         member = object;
+        initMember(member, guild);
+    }
+
+    public UserObject(User object, GuildObject guild) {
+        super(object);
+        member = guild.get().getMember(object);
+        initMember(member, guild);
+    }
+
+    public UserObject(GlobalUserObject globalUser, GuildObject guild) {
+        super(globalUser.object);
+        member = guild.get().getMember(object);
+        initMember(member, guild);
+    }
+
+    public UserObject(long userID, GuildObject guild) {
+        super(userID);
+        member = guild.get().getMemberById(longID);
+        initMember(member, guild);
+    }
+
+    private void initMember(Member member, GuildObject guild) {
         this.guild = guild;
         displayName = member.getNickname();
-        roles = object.getRoles();
+        roles = member.getRoles();
         escapeMentions();
         notAllowed = "\\> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
     }
@@ -85,17 +107,6 @@ public class UserObject extends GlobalUserObject {
     }
 
 
-    public PrivateChannel getDmChannel() {
-        return client.get().getPrivateChannelById(longID);
-    }
-
-    public MessageAction sendDm(String s) {
-        return getDmChannel().sendMessage(s);
-    }
-
-    public MessageAction sendEmbededDm(String s, XEmbedBuilder builder) {
-        return getDmChannel().sendMessage(s).embed(builder.build());
-    }
 
     public String mention() {
         return member.getAsMention();

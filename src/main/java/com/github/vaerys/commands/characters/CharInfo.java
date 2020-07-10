@@ -3,15 +3,14 @@ package com.github.vaerys.commands.characters;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CharacterObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.ArrayList;
 
@@ -27,25 +26,25 @@ public class CharInfo extends Command {
                 XEmbedBuilder builder = new XEmbedBuilder(command);
                 builder.setTitle(object.getNickname());
 
-                IUser user = command.guild.getUserByID(object.getUserID());
+                Member user = command.guild.getUserByID(object.getUserID());
                 if (user == null) {
                     builder.setFooter("Author: No longer on this server | Character ID: " + object.getName());
                 } else {
-                    builder.setFooter("Author: " + user.getDisplayName(command.guild.get()) + " | Character ID: " + object.getName());
+                    builder.setFooter("Author: " + user.getNickname() + " | Character ID: " + object.getName());
                 }
 
                 ArrayList<Role> roles = new ArrayList<>();
                 ArrayList<String> roleNames = new ArrayList<>();
                 for (Long roleId : object.getRoleIDs()) {
                     if (command.client.get().getRoleById(roleId) != null) {
-                        roles.add(command.client.get().getRoleById(roleId));
+                        roles.add(command.guild.getRoleById(roleId));
                         roleNames.add(command.client.get().getRoleById(roleId).getName());
                     }
                 }
                 if (roles.size() != 0) {
-                    builder.withColor(GuildHandler.getUsersColour(roles));
+                    builder.setColor(GuildHandler.getUsersColour(roles));
                 } else {
-                    builder.withColor(GuildHandler.getUsersColour(user, command.guild.get()));
+                    builder.setColor(GuildHandler.getUsersColour(user, command.guild.get()));
                 }
 
                 StringBuilder description = new StringBuilder();
@@ -76,9 +75,9 @@ public class CharInfo extends Command {
                     if (object.getAvatarURL().contains("\n") || object.getAvatarURL().contains(" ")) {
                         return "\\> An Error Occurred. Avatar url needs to be reset.";
                     }
-                    builder.withThumbnail(object.getAvatarURL());
+                    builder.setThumbnail(object.getAvatarURL());
                 }
-                RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+                builder.send(command);
                 return null;
             }
         }

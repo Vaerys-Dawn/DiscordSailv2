@@ -54,7 +54,7 @@ public class UserSettings extends Command {
         if (user == null) {
             return "\\> Could not find user.";
         }
-        ProfileObject profile = user.getProfile(command.guild);
+        ProfileObject profile = user.getProfile();
         if (profile != null) {
             if (split.getRest() == null || split.getRest().equalsIgnoreCase("list")) {
                 return sendList("", profile, command, user, false);

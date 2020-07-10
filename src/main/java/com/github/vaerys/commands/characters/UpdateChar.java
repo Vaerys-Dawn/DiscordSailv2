@@ -6,8 +6,8 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,10 +27,10 @@ public class UpdateChar extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        List<CharacterObject> userChars = command.user.characters;
+        List<CharacterObject> userChars = command.user.getCharacters();
         String charName = args.split(" ")[0];
         CharacterObject selectedChar = command.guild.characters.getCharByName(charName);
-        List<Role> cosmeticRoles = command.user.getCosmeticRoles(command);
+        List<Role> cosmeticRoles = command.user.getCosmeticRoles();
         List<Long> cosmeticRoleIDs = cosmeticRoles.stream().map(iRole -> iRole.getIdLong()).collect(Collectors.toList());
         String cosmeticString = command.guild.config.moduleRoles ? " and cosmetic roles" : "";
         if (selectedChar != null) {
@@ -53,7 +53,7 @@ public class UpdateChar extends Command {
                 return "\\> The CharID you have chosen is too long. (max 20 chars)";
             }
             int maxChars = command.guild.characters.maxCharsForUser(command);
-            int rewardCount = command.user.getRewardValue(command);
+            int rewardCount = command.user.getRewardValue();
             if (userChars.size() == maxChars) {
                 if (command.guild.config.modulePixels && command.guild.config.xpGain && rewardCount != 4) {
                     return "\\> You have reached the maximum allowed characters for your level," +

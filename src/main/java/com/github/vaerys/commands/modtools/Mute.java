@@ -57,7 +57,7 @@ public class Mute extends Command {
 
         // check for user and muted role
         if (mutedUser == null || mutedUser.get() == null) return "\\> Could not find user";
-        if (mutedUser.getProfile(command.guild) == null) mutedUser.addProfile(command.guild);
+        if (mutedUser.getProfile() == null) mutedUser.addProfile(command.guild);
         if (mutedRole == null) return "\\> Muted role is not configured.";
 
         // check hierarchy
@@ -86,7 +86,7 @@ public class Mute extends Command {
                 isStrike = true;
             }
             modNote.format(mode, command.user.username, reason, formattedTime, command.channel.mention);
-            mutedUser.getProfile(command).addSailModNote(modNote.toString(), command, isStrike);
+            mutedUser.getProfile().addSailModNote(modNote.toString(), command, isStrike);
         }
 
         // send admin report

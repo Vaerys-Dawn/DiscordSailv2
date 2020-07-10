@@ -5,16 +5,18 @@ import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.userlevel.*;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.utils.MiscUtil;
 import net.dv8tion.jda.api.utils.TimeUtil;
 
 import java.awt.*;
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class GlobalUserObject {
@@ -205,5 +207,37 @@ public class GlobalUserObject {
         if (guild.servers.checkForUser(userID)) return true;
         if (guild.users.checkForUser(userID)) return true;
         return false;
+    }
+
+    public UserObject getUserObject(GuildObject guild) {
+        return new UserObject(object, guild);
+    }
+
+    public PrivateChannel getDmChannel() {
+        return client.get().getPrivateChannelById(longID);
+    }
+
+    public void queueDm(String s) {
+        getDmChannel().sendMessage(s).queue();
+    }
+
+    public void queueDm(MessageEmbed embed) {
+        getDmChannel().sendMessage(embed).queue();
+    }
+
+    public void queueDm(String s, MessageEmbed embed) {
+        getDmChannel().sendMessage(s).embed(embed).queue();
+    }
+
+    public Message sendDm(String s) {
+        return getDmChannel().sendMessage(s).complete();
+    }
+
+    public Message sendDm(MessageEmbed embed) {
+        return getDmChannel().sendMessage(embed).complete();
+    }
+
+    public Message sendDm(String s, MessageEmbed embed) {
+        return getDmChannel().sendMessage(s).embed(embed).complete();
     }
 }

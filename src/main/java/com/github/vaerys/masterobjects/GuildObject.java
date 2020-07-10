@@ -7,7 +7,6 @@ import com.github.vaerys.enums.FilePaths;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -307,7 +306,7 @@ public class GuildObject {
             return;
         }
         if (!GuildHandler.testForPerms(command, Permission.MANAGE_SERVER)) return;
-        Message message = command.channel.get().sendMessage(Constants.getWelcomeMessage(command)).complete();
+        Message message = command.channel.queueMessage(Constants.getWelcomeMessage(command)).complete();
         if (message != null) {
             command.guild.config.initialMessage = true;
             Thread thread = new Thread(() -> {

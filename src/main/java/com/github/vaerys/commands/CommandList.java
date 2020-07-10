@@ -1,6 +1,7 @@
 package com.github.vaerys.commands;
 
 import com.github.vaerys.commands.admin.*;
+import com.github.vaerys.commands.admin.Module;
 import com.github.vaerys.commands.adminccs.*;
 import com.github.vaerys.commands.cc.*;
 import com.github.vaerys.commands.characters.*;

@@ -5,6 +5,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.TextChannel;
@@ -28,12 +29,9 @@ public class DMHandler {
     private static TreeMap<Instant, Long> lastMinUsers = new TreeMap<>();
 
     public DMHandler(CommandObject command) {
-        if (!command.client.get().isReady()) return;
         if (command.message.get().getAuthor().isBot()) return;
         if (command.user.longID == Globals.creatorID) return;
 
-        TextChannel channel = command.user.get().getOrCreatePMChannel();
-        TextChannel ownerDm = command.client.creator.getDmChannel();
         Globals.lastDmUserID = command.user.longID;
 
         sendLog(command);
@@ -42,17 +40,17 @@ public class DMHandler {
 
         addUser(command);
 
-        if (spamCatcher(command, ownerDm)) return;
+        if (spamCatcher(command)) return;
 
-        if (smartAssBlocker(command, ownerDm)) return;
+        if (smartAssBlocker(command)) return;
 
         if (commandChecker(command)) return;
 
         if (inviteCatcher(command)) return;
 
-        sendMessage(command, ownerDm);
+        sendMessage(command);
 
-        RequestHandler.sendMessage("\\> Thank you for your message.", channel);
+        command.user.queueDm("\\> Thank you for your message.");
 
 //            if (command.)
 //
@@ -61,26 +59,25 @@ public class DMHandler {
 //                    for (Message.Attachment a : command.message.getAllToggles().getAttachments()) {
 //                        attachmemts = "\n" + a.getUrl();
 //                    }
-//                    RequestHandler.sendMessage(logging + attachmemts, ownerDm);
+//                    RequestHandler.queueMessage(logging + attachmemts, ownerDm);
 //                } else {
-//                    RequestHandler.sendMessage(logging, ownerDm);
+//                    RequestHandler.queueMessage(logging, ownerDm);
 //                }
-//            RequestHandler.sendMessage("> Thank you for your message.", channel);
+//            RequestHandler.queueMessage("> Thank you for your message.", channel);
 
     }
 
-    private void sendMessage(CommandObject command, TextChannel ownerDm) {
+    private void sendMessage(CommandObject command) {
         String content = command.message.getContent();
         XEmbedBuilder builder = new XEmbedBuilder();
         Color color = command.user.getRandomColour();
-        builder.withColor(color);
-        builder.setAuthor(command.user.username + " | " + command.user.longID);
-        builder.withAuthorIcon(command.user.avatarURL);
+        builder.setColor(color);
+        builder.setAuthor(command.user.username + " | " + command.user.longID, command.user.avatarURL);
         int attachmentStart = 0;
         List<Message.Attachment> attachmentList = command.message.getAttachments();
         if (attachmentList.size() != 0 && Utility.isImageLink(attachmentList.get(0).getUrl())) {
             attachmentStart++;
-            builder.withImage(attachmentList.get(0).getUrl());
+            builder.setImage(attachmentList.get(0).getUrl());
         }
         if (attachmentList.size() > attachmentStart) {
             for (int i = attachmentStart; i < attachmentList.size(); i++) {
@@ -91,7 +88,7 @@ public class DMHandler {
             }
         }
         builder.setDescription(content);
-        builder.send(ownerDm);
+        command.client.creator.queueDm(builder.build());
     }
 
     private void addUser(CommandObject command) {
@@ -106,45 +103,45 @@ public class DMHandler {
 
     private boolean blockedUserHandler(CommandObject command) {
         if (command.user.isBlockedFromDms()) {
-            command.user.sendDm("\\> You have been blocked from sending DMs to S.A.I.L by the Bot Creator.");
+            command.user.queueDm("\\> You have been blocked from sending DMs to S.A.I.L by the Bot Creator.");
             return true;
         }
         return false;
     }
 
-    private boolean spamCatcher(CommandObject command, TextChannel ownerDm) {
+    private boolean spamCatcher(CommandObject command) {
         long count = getCount(command.user.longID);
         if (count == 7) {
-            sendMessage(command, ownerDm);
-            command.user.sendDm("\\> Hey. Could you slow down with the dms? My creator doesn't need you spamming her.");
+            sendMessage(command);
+            command.user.queueDm("\\> Hey. Could you slow down with the dms? My creator doesn't need you spamming her.");
             return true;
         }
         if (count == 8) {
-            sendMessage(command, ownerDm);
-            command.user.sendDm("\\> **Hey!**");
+            sendMessage(command);
+            command.user.queueDm("\\> **Hey!**");
             return true;
         }
         if (count == 9) {
-            sendMessage(command, ownerDm);
-            command.user.sendDm("\\> **Hey! Stop that!**");
+            sendMessage(command);
+            command.user.queueDm("\\> **Hey! Stop that!**");
             return true;
         }
         if (count == 10) {
-            sendMessage(command, ownerDm);
-            command.user.sendDm("\\> **I'm going to block you if you don't stop...**");
+            sendMessage(command);
+            command.user.queueDm("\\> **I'm going to block you if you don't stop...**");
             return true;
         }
         if (count > 10) {
-            sendMessage(command, ownerDm);
-            command.user.sendDm("\\> **I warned you...**");
+            sendMessage(command);
+            command.user.queueDm("\\> **I warned you...**");
             Globals.getGlobalData().getBlockedFromDMS().add(command.user.longID);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 Utility.sendStack(e);
             }
-            command.user.sendDm("\\> You were blocked.");
-            RequestHandler.sendMessage("\\> I blocked " + command.user.username + " for spamming you.", ownerDm);
+            command.user.queueDm("\\> You were blocked.");
+            command.client.creator.queueDm("\\> I blocked " + command.user.username + " for spamming you.");
             return true;
         }
         return false;
@@ -173,7 +170,7 @@ public class DMHandler {
         prefixes = prefixes.stream().distinct().collect(Collectors.toList());
         for (String p : prefixes) {
             if (command.message.getContent().startsWith(p)) {
-                command.user.sendDm("\\> Hey there, looks like you're trying to use a command only available on a guild. unfortunately I can't run guild only commands in my Direct messages.");
+                command.user.queueDm("\\> Hey there, looks like you're trying to use a command only available on a guild. unfortunately I can't run guild only commands in my Direct messages.");
                 return true;
             }
         }
@@ -182,7 +179,7 @@ public class DMHandler {
 
     private boolean inviteCatcher(CommandObject command) {
         if (Pattern.compile("(?i)(discord\\.gg/|discordapp\\.com/Invite/)").matcher(command.message.getContent()).find()) {
-            command.user.sendDm("\\> Hey it looks like you are trying to send me a Invite link to a server. If you want me to " +
+            command.user.queueDm("\\> Hey it looks like you are trying to send me a Invite link to a server. If you want me to " +
                     "join your server please send a request to the Support server found in my info command.\n" +
                     "Note: My Creator may be busy or asleep when you send the request so please be polite, " +
                     "I am still an invite only bot that still requires developer help to set up to keep that in mind.");
@@ -191,34 +188,34 @@ public class DMHandler {
         return false;
     }
 
-    private boolean smartAssBlocker(CommandObject command, TextChannel ownerDm) {
+    private boolean smartAssBlocker(CommandObject command) {
         String step1 = "Thank you for your message.";
         String step2 = "That's what I just said, you don't have to repeat it.";
         String step3 = "Okay, do you like repeating the things bots say?";
         String step4 = "Alright this was funny to begin with but now its gotten too far. next time you do that, im going to block you.";
         String step5 = "I warned you...";
         if (command.message.getContent().toLowerCase().contains(step1.toLowerCase())) {
-            command.user.sendDm("\\> " + step2);
+            command.user.queueDm("\\> " + step2);
             return true;
         }
         if (command.message.getContent().toLowerCase().contains(step2.toLowerCase())) {
-            command.user.sendDm("\\> " + step3);
+            command.user.queueDm("\\> " + step3);
             return true;
         }
         if (command.message.getContent().toLowerCase().contains(step3.toLowerCase())) {
-            command.user.sendDm("\\> " + step4);
+            command.user.queueDm("\\> " + step4);
             return true;
         }
         if (command.message.getContent().toLowerCase().contains(step4.toLowerCase())) {
-            command.user.sendDm("\\> " + step5);
+            command.user.queueDm("\\> " + step5);
             Globals.getGlobalData().getBlockedFromDMS().add(command.user.longID);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 Utility.sendStack(e);
             }
-            command.user.sendDm("\\> You were blocked.");
-            RequestHandler.sendMessage("\\> " + command.user.username + " was blocked for being a smart ass.", ownerDm);
+            command.user.queueDm("\\> You were blocked.");
+            command.client.creator.queueDm("\\> " + command.user.username + " was blocked for being a smart ass.");
             return true;
         }
         return false;

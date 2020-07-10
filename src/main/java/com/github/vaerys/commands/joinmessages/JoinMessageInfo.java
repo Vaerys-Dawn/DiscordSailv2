@@ -36,7 +36,7 @@ public class JoinMessageInfo extends Command {
             builder.setFooter("Creator: @" + user.username);
             builder.withFooterIcon(user.avatarURL);
         }
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 

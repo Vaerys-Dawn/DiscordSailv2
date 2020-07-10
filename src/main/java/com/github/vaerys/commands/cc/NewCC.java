@@ -5,19 +5,24 @@ import com.github.vaerys.commands.admin.Test;
 import com.github.vaerys.commands.creator.directmessages.Echo;
 import com.github.vaerys.commands.general.Hello;
 import com.github.vaerys.commands.general.Patreon;
+import com.github.vaerys.commands.help.Help;
 import com.github.vaerys.commands.help.Ping;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
+import com.github.vaerys.pogos.CustomCommands;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,17 +57,31 @@ public class NewCC extends Command {
         String nameCC = splitFirst.getFirstWord();
         String argsCC = splitFirst.getRest();
 
+
+        // cc validation
         if (handleNameFilter(command, nameCC)) {
             return "\\> Custom Commands cannot have the same name as built-in commands.";
         }
-
         if (!Pattern.matches("[\\p{Alnum}\\p{Punct}&&[^#@$*\\\\/`]]+", nameCC)) {
             return "\\> Custom Command names cannot contain special characters.";
         }
-
         if ((argsCC == null || argsCC.isEmpty()) && command.message.get().getAttachments().size() == 0) {
             return "\\> Custom command contents cannot be blank.";
         }
+        if (nameCC.length() > 50) {
+            return "\\> Command name too long.";
+        }
+        if (nameCC.isEmpty()) {
+            return "\\> Command name cannot be empty.";
+        }
+        CCommandObject existing = command.guild.customCommands.getCommand(nameCC);
+        if (existing != null){
+            if (existing.getUserID() == command.user.longID) {
+                return String.format("> You have already created the custom command **%s**, Please use `%s %s [contents]` instead.", nameCC, get(EditCC.class).getCommand(command), nameCC);
+            }
+            return "\\> Command name already in use.";
+        }
+
         if (command.message.get().getAttachments().size() != 0) {
             String testLink = command.message.get().getAttachments().get(0).getUrl();
             if (Utility.isImageLink(testLink)) {
@@ -75,6 +94,10 @@ public class NewCC extends Command {
                 return "\\> Custom command attachment must be a valid Image.";
             }
         }
+        if (StringUtils.countMatches(argsCC, "<embedImage>{") > 1) {
+            return "\\> Custom Commands Cannot have multiple <embedImage> tags";
+        }
+
         if (nameCC.contains("\n")) {
             return "\\> Command name cannot contain Newlines.";
         }
@@ -82,11 +105,31 @@ public class NewCC extends Command {
             argsCC.replace("<shitpost>", "");
             isShitpost = true;
         }
-        if (argsCC.contains("<lock>") && GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+        if (argsCC.contains("<lock>") && GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE)) {
             argsCC.replace("<lock>", "");
             isLocked = true;
         }
-        return command.guild.customCommands.addCommand(isLocked, nameCC, argsCC, isShitpost, command);
+
+        // add new cc
+        int counter = 0;
+        int limitCCs;
+        limitCCs = command.guild.customCommands.maxCCs(command.user, command.guild);
+
+        if (counter < limitCCs) {
+            command.guild.customCommands.addCommand(isLocked, command.user.longID, nameCC, argsCC, isShitpost);
+            long remaining = limitCCs - counter - 1;
+            String response = "\\> Command Added, you have ";
+            if (remaining > 1) {
+                response += remaining + " custom command slots left.\n";
+            } else {
+                response += remaining + " custom command slot left.\n";
+            }
+            response += Constants.PREFIX_INDENT + "You can run your new command by performing `" + command.guild.config.getPrefixCC() + nameCC + "`.";
+            return response;
+
+        } else {
+            return "\\> You have run out of custom command slots. You can make room by deleting or editing old custom commands.";
+        }
     }
 
     private boolean handleNameFilter(CommandObject command, String nameCC) {

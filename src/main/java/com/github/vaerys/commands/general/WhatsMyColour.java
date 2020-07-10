@@ -31,7 +31,7 @@ public class WhatsMyColour extends Command {
         }
         desc += "**#" + Integer.toHexString(color.getRGB()).substring(2).toUpperCase() + "**";
         builder.setDescription(desc);
-        builder.send(command.channel);
+        builder.queue(command.channel);
         return null;
     }
 

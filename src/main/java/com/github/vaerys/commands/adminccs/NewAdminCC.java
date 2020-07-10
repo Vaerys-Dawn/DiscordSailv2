@@ -12,9 +12,9 @@ import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.cctags.TagEmbedImage;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -72,11 +72,11 @@ public class NewAdminCC extends Command {
         if (command.message.getAttachments().size() != 0) {
             attachment = command.message.getAttachments().get(0);
         }
-        if (attachment != null && attachment.getFilename().endsWith(".txt")) {
+        if (attachment != null && attachment.getFileName().endsWith(".txt")) {
             contents.append(FileHandler.readFromFile(attachment));
         }
         TagEmbedImage tag = TagList.getTag(TagEmbedImage.class);
-        if (attachment != null && Utility.isImageLink(attachment.getFilename())) {
+        if (attachment != null && Utility.isImageLink(attachment.getFileName())) {
             contents.append(tag.prefix).append(attachment.getUrl()).append(tag.suffix);
         }
         StringHandler temp = new StringHandler();
@@ -133,8 +133,8 @@ public class NewAdminCC extends Command {
     }
 
     @Override
-    public Permissions[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER, Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
+    public Permission[] perms() {
+        return new Permission[]{Permission.MANAGE_SERVER, Permission.MANAGE_ROLES, Permission.MESSAGE_MANAGE};
     }
 
     @Override

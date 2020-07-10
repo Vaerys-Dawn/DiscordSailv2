@@ -106,7 +106,7 @@ public class TopUserForRole extends Command {
                     false);
         }
 
-        embed.send(command.channel);
+        embed.queue(command.channel);
     }
 
     @Override

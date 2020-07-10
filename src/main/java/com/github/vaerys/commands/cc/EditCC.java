@@ -11,7 +11,7 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -26,7 +26,7 @@ public class EditCC extends Command {
             "[Command Name] (Mode)",
             "allows editing of other user's commands or editing toggles.\n" + adminModes,
             SAILType.MOD_TOOLS,
-            new Permissions[]{Permissions.MANAGE_MESSAGES}
+            new Permission[]{Permission.MESSAGE_MANAGE}
     );
 
     @Override
@@ -58,7 +58,7 @@ public class EditCC extends Command {
         if (customCommand == null) {
             return "\\> Command Not found.";
         }
-        boolean canBypass = GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES);
+        boolean canBypass = GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE);
         boolean isAuthor = command.user.longID == customCommand.getUserID();
         //test if can edit
         if ((customCommand.isLocked() && !canBypass) || (!canBypass && !isAuthor)) {
@@ -78,9 +78,9 @@ public class EditCC extends Command {
             case "delcall":
                 return CCEditModes.deleteTag(customCommand);
             case "shitpost":
-                return CCEditModes.shitPost(customCommand, command, command.user.get(), command.guild.get());
+                return CCEditModes.shitPost(customCommand, command, command.user.getMember(), command.guild.get());
             case "lock":
-                return CCEditModes.lock(customCommand, command, command.user.get(), command.guild.get());
+                return CCEditModes.lock(customCommand, command, command.user.getMember(), command.guild.get());
             case "addsearch":
                 return CCEditModes.addSearchTag(customCommand, content);
             case "removesearch":

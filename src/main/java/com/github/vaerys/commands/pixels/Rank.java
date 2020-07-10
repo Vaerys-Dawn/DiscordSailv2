@@ -31,15 +31,15 @@ public class Rank extends Command {
             }
         }
         String error = "\\> Cannot get rank stats for " + user.displayName + ".";
-        if (user.isPrivateProfile(command.guild) && user.longID != command.user.longID) {
+        if (user.isPrivateProfile() && user.longID != command.user.longID) {
             return "\\> " + user.displayName + " has set their profile to private.";
-        } else if (user.isPrivateProfile(command.guild) && user.longID == command.user.longID) {
+        } else if (user.isPrivateProfile() && user.longID == command.user.longID) {
             return "\\> You cannot see your ranking as you have set your profile to private.";
         }
-        if (user.getProfile(command.guild) == null) {
+        if (user.getProfile() == null) {
             return error;
         }
-        if (user.getProfile(command.guild).getSettings().contains(UserSetting.HIT_LEVEL_FLOOR)) {
+        if (user.getProfile().getSettings().contains(UserSetting.HIT_LEVEL_FLOOR)) {
             if (user.get() != command.user.get()) {
                 return "\\> " + user.displayName + " has decayed to the level floor, they will need to level up again to see your rank.";
             } else {

@@ -40,7 +40,7 @@ public class SetGender extends Command {
         if (user.isPatron) {
             maxLength += 20;
         }
-        ProfileObject u = user.getProfile(command.guild);
+        ProfileObject u = user.getProfile();
 
         quote = Utility.removeFun(quote);
         if (quote == null || quote.isEmpty()) return "\\> You can't have an empty gender.";

@@ -2,6 +2,7 @@ package com.github.vaerys.pogos;
 
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
@@ -9,6 +10,7 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.GlobalFile;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.obj.Guild;
@@ -33,8 +35,8 @@ public class CustomCommands extends GlobalFile {
 
     public int maxCCs(UserObject user, GuildObject guild) {
         int total = 10;
-        boolean hasManagePerms = GuildHandler.testForPerms(user, guild, Permissions.MANAGE_MESSAGES);
-        boolean hasAdminPerms = GuildHandler.testForPerms(user, guild, Permissions.ADMINISTRATOR);
+        boolean hasManagePerms = GuildHandler.testForPerms(user, guild, Permission.MESSAGE_MANAGE);
+        boolean hasAdminPerms = GuildHandler.testForPerms(user, guild, Permission.ADMINISTRATOR);
         if (hasManagePerms) {
             total += 50;
         }
@@ -51,43 +53,8 @@ public class CustomCommands extends GlobalFile {
         return total;
     }
 
-    public String addCommand(boolean isLocked, String commandName, String commandContents, boolean isShitPost, CommandObject object) {
-        int counter = 0;
-        int limitCCs;
-        if (commandName.length() > 50) {
-            return "\\> Command name too long.";
-        }
-        if (commandName.isEmpty()) {
-            return "\\> Command name cannot be empty.";
-        }
-        if (StringUtils.countMatches(commandContents, "<embedImage>{") > 1) {
-            return "\\> Custom Commands Cannot have multiple <embedImage> tags";
-        }
-        limitCCs = maxCCs(object.user, object.guild);
-
-        for (CCommandObject c : commands) {
-            if (c.getName().equalsIgnoreCase(commandName)) {
-                return "\\> Command name already in use.";
-            }
-            if (c.getUserID() == object.user.longID) {
-                counter++;
-            }
-        }
-        if (counter < limitCCs) {
-            commands.add(new CCommandObject(isLocked, object.user.longID, commandName, commandContents, isShitPost));
-            long remaining = limitCCs - counter - 1;
-            String response = "\\> Command Added, you have ";
-            if (remaining > 1) {
-                response += remaining + " custom command slots left.\n";
-            } else {
-                response += remaining + " custom command slot left.\n";
-            }
-            response += Constants.PREFIX_INDENT + "You can run your new command by performing `" + object.guild.config.getPrefixCC() + commandName + "`.";
-            return response;
-
-        } else {
-            return "\\> You have run out of custom command slots. you can make room by deleting or editing old custom commands.";
-        }
+    public void addCommand(boolean isLocked, long userID, String commandName, String commandContents, boolean isShitPost) {
+        commands.add(new CCommandObject(isLocked, userID, commandName, commandContents, isShitPost));
     }
 
     public void initCustomCommands(Guild guild) {
@@ -95,79 +62,29 @@ public class CustomCommands extends GlobalFile {
         boolean echoExists = true;
         CCommandObject echo = getCommand("echo");
         if (echo != null && echo.getContents(false).contains("#")) {
-            delCommand("echo", Globals.getClient().getOurUser(), guild);
+            removeCommand(echo);
             echoExists = false;
         } else if (echo == null) {
             echoExists = false;
         }
         if (!echoExists)
-            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getIdLong(), "Echo", "<args><dontSanitize>", false));
+            commands.add(new CCommandObject(true, Client.getClientObject().bot.longID, "Echo", "<args><dontSanitize>", false));
 
         //make sure that wiki works properly
         boolean wikiExists = true;
         CCommandObject wiki = getCommand("wiki");
         if (wiki != null && wiki.getContents(false).contains("#")) {
-            delCommand("wiki", Globals.getClient().getOurUser(), guild);
+            removeCommand(wiki);
             wikiExists = false;
         } else if (wiki == null) {
             wikiExists = false;
         }
         if (!wikiExists)
-            commands.add(new CCommandObject(true, Globals.getClient().getOurUser().getIdLong(), "Wiki", "http://starbounder.org/Special:Search/<args><replace>{ ;;_}", false));
+            commands.add(new CCommandObject(true, Client.getClientObject().bot.longID, "Wiki", "http://starbounder.org/Special:Search/<args><replace>{ ;;_}", false));
     }
 
     public ArrayList<CCommandObject> getCommandList() {
         return commands;
-    }
-
-//    @Deprecated
-//    public String sendCCasJSON(long channelID, String commandName) {
-//        TextChannel channel = Globals.getClient().getChannelByID(channelID);
-//        for (CCommandObject c : commands) {
-//            if (c.getName().equalsIgnoreCase(commandName)) {
-//                FileHandler.writeToJson(Constants.DIRECTORY_TEMP + c.getName() + ".json", c);
-//                File file = new File(Constants.DIRECTORY_TEMP + c.getName() + ".json");
-//                if (RequestHandler.sendFile("> Here is the Raw Data for Custom Command: **" + c.getName() + "**", file, channel).get() == null) {
-//                    RequestHandler.sendMessage("> An error occurred when attempting to getSlashCommands CC data.", channel);
-//                }
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException e) {
-//                    Utility.sendStack(e);
-//                }
-//                file.delete();
-//                return null;
-//            }
-//        }
-//        RequestHandler.sendMessage(Constants.ERROR_CC_NOT_FOUND, channel);
-//        return null;
-//    }
-
-
-    public String delCommand(String args, IUser author, Guild guild) {
-        int i = 0;
-        for (CCommandObject c : commands) {
-            if (c.getName().equalsIgnoreCase(args)) {
-                boolean canBypass = GuildHandler.testForPerms(author, guild, Permissions.MANAGE_MESSAGES);
-                if (author.getIdLong() == guild.getOwnerLongID()
-                        || author.getIdLong() == Globals.creatorID
-                        || author.getIdLong() == Globals.client.getOurUser().getIdLong()) {
-                    canBypass = true;
-                }
-                if (author.getIdLong() == c.getUserID() || canBypass) {
-                    if (c.isLocked() && Globals.client.getOurUser().getIdLong() != author.getIdLong()) {
-                        return "\\> This command is locked and must be unlocked to be deleted.";
-                    } else {
-                        commands.remove(i);
-                        return "\\> Command Deleted.";
-                    }
-                } else {
-                    return "\\> You do not have permission to delete that command.";
-                }
-            }
-            i++;
-        }
-        return Constants.ERROR_CC_NOT_FOUND;
     }
 
     public String getUserCommandCount(UserObject user, GuildObject guild) {
@@ -202,5 +119,9 @@ public class CustomCommands extends GlobalFile {
     public boolean checkForUser(long userID) {
         if (commands.stream().map(c -> c.getUserID()).filter(c -> c == userID).toArray().length != 0) return true;
         return false;
+    }
+
+    public void removeCommand(CCommandObject cc) {
+        commands.remove(cc);
     }
 }

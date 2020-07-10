@@ -96,7 +96,7 @@ public class GlobalData extends GlobalFile {
     public void giveGift(long messageID, UserObject pinner, GuildObject guild) {
         if (messageID != presentID) return;
         if (giftsGiven.contains(pinner.longID)) return;
-        pinner.getProfile(guild).addXP(1000, guild.config);
+        pinner.getProfile().addXP(1000, guild.config);
         giftsGiven.add(pinner.longID);
     }
 }

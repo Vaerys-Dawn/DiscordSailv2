@@ -19,7 +19,6 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.*;
 
 import java.awt.*;
 import java.util.*;
@@ -49,11 +48,11 @@ public class GuildHandler {
         Utility.sortUserObjects(profiles, false);
         int counter = 0;
         //empty non top ten users
-        List<UserObject> topTen = content.get().getUsersByRole(topTenRole).stream().map(u -> new UserObject(u, content)).collect(Collectors.toList());
+        List<UserObject> topTen = content.get().getMembersWithRoles(topTenRole).stream().map(u -> new UserObject(u, content)).collect(Collectors.toList());
         for (UserObject u : topTen) {
             long rank = PixelHandler.rank(content, u);
             if (rank > 10 || rank < 0) {
-                RequestHandler.roleManagement(u, content, topTenRole, false);
+                content.get().removeRoleFromMember(u.getMember(), topTenRole).queue();
             }
         }
         //check for new top ten users
@@ -64,7 +63,7 @@ public class GuildHandler {
             UserObject user = p.getUser(content);
             if (user.get() == null) continue;
             newTopTen.add(p);
-            RequestHandler.roleManagement(user, content, topTenRole, true);
+            content.get().addRoleToMember(user.getMember(), topTenRole).queue();
             counter++;
         }
     }
@@ -76,7 +75,7 @@ public class GuildHandler {
     public static void checkUsersRoles(long id, GuildObject content, boolean bulkCheck) {
 
         //don't try to edit your own roles ya butt.
-        if (id == Client.getClient().getOurUser().getIdLong()) return;
+        if (id == Client.getClientObject().bot.longID) return;
 
         //do code.
         ProfileObject profile = content.users.getUserByID(id);
@@ -87,10 +86,10 @@ public class GuildHandler {
         if (content.config.muteRemovesRoles &&
                 content.users.getMutedUser(profile.getUserID()) != null) return;
 
-        IUser user = content.getUserByID(profile.getUserID());
+        Member user = content.getUserByID(profile.getUserID());
         if (user == null) return;
 
-        List<Role> userRoles = user.getRolesForGuild(content.get());
+        List<Role> userRoles = user.getRoles();
         if (userRoles.contains(content.getMutedRole())) return;
 
         if (content.config.readRuleReward) {
@@ -116,7 +115,7 @@ public class GuildHandler {
             //add all roles that the user should have.
             ArrayList<RewardRoleObject> allRewards = content.config.getAllRewards(profile.getCurrentLevel());
             for (RewardRoleObject r : allRewards) {
-                userRoles.add(Globals.getClient().getRoleById(r.getRoleID()));
+                userRoles.add(content.get().getRoleById(r.getRoleID()));
             }
             if (!bulkCheck) {
                 //add the top ten role if they should have it.
@@ -133,9 +132,9 @@ public class GuildHandler {
         }
 
         //only do a role update if the role count changes
-        List<Role> currentRoles = user.getRolesForGuild(content.get());
+        List<Role> currentRoles = user.getRoles();
         if (!currentRoles.containsAll(userRoles) || currentRoles.size() != userRoles.size()) {
-            RequestHandler.roleManagement(user, content.get(), userRoles, bulkCheck);
+            content.get().modifyMemberRoles(user, userRoles).queue();
         }
     }
 
@@ -222,10 +221,10 @@ public class GuildHandler {
         return roles;
     }
 
-    public static Color getUsersColour(IUser user, Guild guild) {
+    public static Color getUsersColour(Member user, Guild guild) {
         //before
         if (user == null) return Constants.DEFAULT_COLOUR;
-        List<Role> userRoles = guild.getRolesForUser(user);
+        List<Role> userRoles = user.getRoles();
         Role topColour = null;
         String defaultColour = "0,0,0";
         for (Role role : userRoles) {
@@ -293,7 +292,7 @@ public class GuildHandler {
     }
 
     public static boolean canBypass(UserObject user, GuildObject guild) {
-        return canBypass(user.get(), guild.get());
+        return canBypass(user.getMember(), guild.get());
     }
 
     public static boolean canBypass(CommandObject command) {
@@ -312,15 +311,15 @@ public class GuildHandler {
             addAll(toMatch.stream().map(Enum::toString).collect(Collectors.toList()));
         }};
         List<String> userList = new ArrayList<String>() {{
-            addAll(user.getPermissionsForGuild(guild).stream().map(Enum::toString).collect(Collectors.toList()));
+            addAll(user.getPermissions().stream().map(Enum::toString).collect(Collectors.toList()));
         }};
         if (true) {
             logger.trace("To Match : " + Utility.listFormatter(toMatchList, true));
             logger.trace("User Perms : " + Utility.listFormatter(userList, true));
-            logger.trace("Result : " + user.getPermissionsForGuild(guild).containsAll(toMatch));
+            logger.trace("Result : " + user.getPermissions().containsAll(toMatch));
         }
 //        end Debug
-        return user.getPermissionsForGuild(guild).containsAll(toMatch);
+        return user.getPermissions().containsAll(toMatch);
     }
 
     public static boolean testForPerms(CommandObject object, Permission... perms) {
@@ -382,12 +381,12 @@ public class GuildHandler {
         if (roles.length != 0) {
             user.roles.addAll(temp);
         }
-        RequestHandler.roleManagement(user, guild, user.roles);
+        guild.get().modifyMemberRoles(user.getMember(), user.roles);
     }
 
     public static void toggleRoles(Member user, Guild guild, Role... roles) {
         GuildObject guildObject = Globals.getGuildContent(guild.getIdLong());
-        UserObject userObject = UserObject.getNewUserObject(user.getIdLong(), guildObject);
+        UserObject userObject = new UserObject(user, guildObject);
         toggleRoles(userObject, guildObject, roles);
     }
 }
