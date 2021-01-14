@@ -2,12 +2,11 @@ package com.github.vaerys.commands.help;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -18,7 +17,7 @@ public class HelpTags extends Command {
     public String execute(String args, CommandObject command) {
         for (TagObject t : TagList.get()) {
             if (t.name.equalsIgnoreCase(args) || t.name.equalsIgnoreCase("<" + args + ">")) {
-                RequestHandler.sendEmbedMessage("", t.getInfo(command), command.channel.get());
+                t.getInfo(command).queue(command);
                 return null;
             }
         }

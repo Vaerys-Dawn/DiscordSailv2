@@ -19,6 +19,8 @@ import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.FileFactory;
 import com.github.vaerys.templates.GlobalFile;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
@@ -56,7 +58,7 @@ public class Globals {
     public static String d4jVersion;
     public static long consoleMessageCID = -1;
     public static ArrayList<DailyMessage> configDailyMessages = new ArrayList<>();
-    public static IDiscordClient client;
+    public static JDA client;
     public static boolean showSaveWarning = false;
     public static boolean shuttingDown = false;
     public static boolean savingFiles = false;
@@ -76,8 +78,8 @@ public class Globals {
     private static Events events;
     private static String currentEvent = null;
     public static long lastRateLimitReset = System.currentTimeMillis();
-    private static IUser creator = null;
-    private static List<IUser> contributors = new LinkedList<>();
+    private static User creator = null;
+    private static List<User> contributors = new LinkedList<>();
     private static final Random globalRandom = new Random();
 
     public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
@@ -195,7 +197,7 @@ public class Globals {
             }).get();
             if (user == null) {
                 // hecc
-                logger.error("Could not find creator in any connected guilds. Make sure you are using the right user ID in " + Constants.FILE_CONFIG);
+                logger.error("Could not find creator in any connected guilds. Make sure you are using the right globalUser ID in " + Constants.FILE_CONFIG);
                 return false;
             }
         }
@@ -222,10 +224,6 @@ public class Globals {
         } catch (IOException e) {
             Utility.sendStack(e);
         }
-    }
-
-    public static IDiscordClient getClient() {
-        return client;
     }
 
     public static GuildObject getGuildContent(long guildID) {
@@ -392,22 +390,21 @@ public class Globals {
         return allLogs;
     }
 
-    public static IUser getCreator() {
+    public static User getCreator() {
         return creator;
     }
 
-    public static List<IUser> getContributors() {
+    public static List<User> getContributors() {
         return contributors;
     }
 
     public static void loadContributors() {
-        RequestBuffer.request(() -> {
-            IDiscordClient client = Client.getClient();
-            creator = client.fetchUser(153159020528533505L);
-            contributors.add(client.fetchUser(175442602508812288L));
-            contributors.add(client.fetchUser(222041304761237505L));
-            contributors.add(client.fetchUser(368727799189733376L));
-        });
+        JDA client = Client.getClient();
+        creator = client.retrieveUserById(153159020528533505L).complete();
+        contributors.add(client.retrieveUserById(175442602508812288L).complete());
+        contributors.add(client.retrieveUserById(222041304761237505L).complete());
+        contributors.add(client.retrieveUserById(368727799189733376L).complete());
+
     }
 
     public static Random getGlobalRandom() {

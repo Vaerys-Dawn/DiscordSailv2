@@ -24,7 +24,7 @@ public class EditCC extends Command {
     private static final SubCommandObject SUB_1 = new SubCommandObject(
             new String[]{"EditCC"},
             "[Command Name] (Mode)",
-            "allows editing of other user's commands or editing toggles.\n" + adminModes,
+            "allows editing of other globalUser's commands or editing toggles.\n" + adminModes,
             SAILType.MOD_TOOLS,
             new Permission[]{Permission.MESSAGE_MANAGE}
     );

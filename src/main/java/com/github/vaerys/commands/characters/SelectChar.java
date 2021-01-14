@@ -37,8 +37,8 @@ public class SelectChar extends Command {
                         userRoles.add(command.guild.getRoleById(r));
                     }
                     command.guild.get().modifyMemberRoles(command.user.getMember(), userRoles);
-                    command.guild.get().modifyNickname(command.user.getMember(), c.getNickname());
-                    return "\\> Character " + c.getNickname() + " Loaded.";
+                    command.guild.get().modifyNickname(command.user.getMember(), c.getEffectiveName());
+                    return "\\> Character " + c.getEffectiveName() + " Loaded.";
                 } else {
                     return "\\> " + c.getName() + " is not your character.";
                 }

@@ -4,17 +4,16 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.PixelHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -31,7 +30,7 @@ public class TopUserForRole extends Command {
         Role role = GuildHandler.getRoleFromName(args, command.guild.get());
         if (role == null) {
             try {
-                // if role get fails, try again, but this time assume the first "word" is the rank the user wants to get.
+                // if role get fails, try again, but this time assume the first "word" is the rank the globalUser wants to get.
                 index = Integer.parseInt(new SplitFirstObject(args).getFirstWord());
             } catch (NumberFormatException e) {
                 // not a valid number, can't find role, bork.
@@ -44,12 +43,12 @@ public class TopUserForRole extends Command {
             if (role == null) return "\\> Invalid Role.";
         }
 
-        Message working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
+        Message working = command.guildChannel.sendMessage("`Working...`");
 
         // populate list with users with role defined.
-        List<Long> userIDs = command.guild.get().getUsersByRole(role).stream().map(IUser::getIdLong).collect(Collectors.toList());
+        List<Long> userIDs = command.guild.get().getMembersWithRoles(role).stream().map(Member::getIdLong).collect(Collectors.toList());
         if (userIDs.isEmpty()) {
-            RequestHandler.deleteMessage(working);
+            working.delete().complete();
             return "\\> Could not find any users with that role!";
         }
 
@@ -63,13 +62,13 @@ public class TopUserForRole extends Command {
         if (userIDs.size() == 0) return "\\> Could not find any ranked users with that role.";
 
         if (index > userIDs.size()) {
-            RequestHandler.deleteMessage(working);
-            return "\\> There's only " + userIDs.size() + (userIDs.size() == 1 ? " user" : " users") + " with that role.";
+            working.delete().complete();
+            return "\\> There's only " + userIDs.size() + (userIDs.size() == 1 ? " globalUser" : " users") + " with that role.";
         }
 
         if (index == 1) {
             // show an embed with the top (at most) 5 users instead.
-            RequestHandler.deleteMessage(working);
+            working.delete().complete();
             getEmbed(command, role, userIDs);
             return null;
         }
@@ -78,7 +77,7 @@ public class TopUserForRole extends Command {
         UserObject topUser = topUserProfile.getUser(command.guild);
 
         NumberFormat nf = NumberFormat.getInstance();
-        RequestHandler.deleteMessage(working);
+        working.delete().complete();
         return "\\> @" + topUser.username + ", **Pixels:** " + nf.format(topUserProfile.getXP()) +
                 ", **Level:** " + topUserProfile.getCurrentLevel() +
                 ", **User ID:** " + topUser.longID;
@@ -89,7 +88,7 @@ public class TopUserForRole extends Command {
         XEmbedBuilder embed = new XEmbedBuilder(command);
         int showing = (userIDs.size() > 5 ? 5 : userIDs.size());
 
-        embed.setTitle("Top " + (userIDs.size() == 1 ? " user" : showing + " users") + " for role " + role.getName());
+        embed.setTitle("Top " + (userIDs.size() == 1 ? " globalUser" : showing + " users") + " for role " + role.getName());
         embed.setFooter("Total ranked users with this role: " + userIDs.size());
         ProfileObject userProfile;
         UserObject userObject;
@@ -106,7 +105,7 @@ public class TopUserForRole extends Command {
                     false);
         }
 
-        embed.queue(command.channel);
+        embed.queue(command.guildChannel);
     }
 
     @Override
@@ -116,7 +115,7 @@ public class TopUserForRole extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Gets the top user (Pixel wise) for a specific role.";
+        return "Gets the top globalUser (Pixel wise) for a specific role.";
     }
 
     @Override
@@ -136,7 +135,7 @@ public class TopUserForRole extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_ROLES};
+        return new Permission[]{Permission.MANAGE_ROLES};
     }
 
     @Override

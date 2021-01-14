@@ -11,7 +11,7 @@ import com.github.vaerys.objects.botlevel.ToggleStatsObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.ArrayList;
 
@@ -47,7 +47,7 @@ public class GetGlobalStats extends Command {
                     }
                 }
             }
-            //re enable to find channel stats
+            //re enable to find messageChannel stats
 //            for (ChannelStatsObject s : channelStats) {
 //                for (TextChannel c : command.guild.getChannels()) {
 //                    ArrayList<String> channelIDs = command.guildConfig.getChannelIDsByType(s.getNames());
@@ -96,22 +96,22 @@ public class GetGlobalStats extends Command {
 //            String topUser = null;
 //            String bottomUser = null;
 //            GuildContentObject content = Globals.getGuildContent(guild.getIdLong());
-//            for (UserTypeObject user : content.getGuildUsers().getProfiles()) {
+//            for (UserTypeObject globalUser : content.getGuildUsers().getProfiles()) {
 //                if (bottomGuild == 0) {
-//                    bottomGuild = user.getXP();
-//                    bottomUser = user.getID();
-//                } else if (bottomGuild > user.getXP()) {
-//                    bottomGuild = user.getXP();
-//                    bottomUser = user.getID();
+//                    bottomGuild = globalUser.getXP();
+//                    bottomUser = globalUser.getID();
+//                } else if (bottomGuild > globalUser.getXP()) {
+//                    bottomGuild = globalUser.getXP();
+//                    bottomUser = globalUser.getID();
 //                }
 //                if (topGuild == 0) {
-//                    topGuild = user.getXP();
-//                    topUser = user.getID();
-//                } else if (topGuild < user.getXP()) {
-//                    topGuild = user.getXP();
-//                    topUser = user.getID();
+//                    topGuild = globalUser.getXP();
+//                    topUser = globalUser.getID();
+//                } else if (topGuild < globalUser.getXP()) {
+//                    topGuild = globalUser.getXP();
+//                    topUser = globalUser.getID();
 //                }
-//                totalMessage += user.getXP();
+//                totalMessage += globalUser.getXP();
 //                totalGlobalUsers++;
 //                totalUsers++;
 //            }

@@ -24,13 +24,13 @@ public class CharInfo extends Command {
         for (CharacterObject object : command.guild.characters.getCharacters(command.guild.get())) {
             if (object.getName().equalsIgnoreCase(args)) {
                 XEmbedBuilder builder = new XEmbedBuilder(command);
-                builder.setTitle(object.getNickname());
+                builder.setTitle(object.getEffectiveName());
 
                 Member user = command.guild.getUserByID(object.getUserID());
                 if (user == null) {
                     builder.setFooter("Author: No longer on this server | Character ID: " + object.getName());
                 } else {
-                    builder.setFooter("Author: " + user.getNickname() + " | Character ID: " + object.getName());
+                    builder.setFooter("Author: " + user.getEffectiveName() + " | Character ID: " + object.getName());
                 }
 
                 ArrayList<Role> roles = new ArrayList<>();

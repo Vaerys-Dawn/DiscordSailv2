@@ -9,8 +9,8 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 
 /**
  * Created by Vaerys on 02/03/2017.
@@ -59,7 +59,7 @@ public class ModuleModMuting extends GuildModule {
 
     @Override
     public String stats(CommandObject object) {
-        if (!GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) return null;
+        if (!GuildHandler.testForPerms(object, Permission.MANAGE_SERVER)) return null;
         Role muteRole = object.guild.getRoleById(object.guild.config.getMutedRoleID());
         if (muteRole != null) {
             return "**Mute Role:** " + muteRole.getName();

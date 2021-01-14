@@ -3,15 +3,14 @@ package com.github.vaerys.commands.pixels;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.adminlevel.RewardRoleObject;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -29,12 +28,12 @@ public class TransferLevels extends Command {
         if (command.guild.config.getRewardRoles().size() == 0) {
             return "\\> No rewards available to grant. cannot transfer levels";
         }
-        Message message = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
+        Message message = command.guildChannel.sendMessage("`Working...`");
 
         Utility.sortRewards(command.guild.config.getRewardRoles());
 
-        for (IUser user : command.guild.getUsers()) {
-            if (!user.isBot()) {
+        for (Member user : command.guild.getUsers()) {
+            if (!user.getUser().isBot()) {
                 ProfileObject uObject = command.guild.users.getUserByID(user.getIdLong());
                 if (uObject == null) {
                     uObject = command.guild.users.addUser(user.getIdLong());
@@ -43,7 +42,7 @@ public class TransferLevels extends Command {
                 uObject.setXp(0);
                 uObject.setCurrentLevel(0);
                 for (RewardRoleObject r : command.guild.config.getRewardRoles()) {
-                    if (user.getRolesForGuild(command.guild.get()).contains(r.get(command.guild))) {
+                    if (user.getRoles().contains(r.get(command.guild))) {
                         uObject.setXp(r.getXp());
                         uObject.setCurrentLevel(r.getLevel());
                     }
@@ -51,7 +50,7 @@ public class TransferLevels extends Command {
                 GuildHandler.checkUsersRoles(uObject.getUserID(), command.guild);
             }
         }
-        RequestHandler.deleteMessage(message);
+        message.delete().complete();
         command.guild.config.xpGain = true;
         return "\\> Transfer Complete.";
     }
@@ -83,7 +82,7 @@ public class TransferLevels extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

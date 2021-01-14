@@ -40,7 +40,7 @@ public class DailyMessage extends GuildSetting {
 
     @Override
     public String desc(CommandObject command) {
-        return "Enables special messages that are sent once a day to your server's " + ChannelSetting.GENERAL.toString() + " channel.";
+        return "Enables special messages that are sent once a day to your server's " + ChannelSetting.GENERAL.toString() + " messageChannel.";
     }
 
     @Override

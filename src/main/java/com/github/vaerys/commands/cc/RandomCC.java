@@ -26,14 +26,14 @@ public class RandomCC extends Command {
         if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
             return "\\> Nothing interesting happens. `(ERROR: 403)`";
         }
-        if (command.guild.channelHasSetting(ChannelSetting.CC_DENIED,command.channel.longID)) {
-            return "\\> Custom Command usage has been disabled for this channel.";
+        if (command.guild.channelHasSetting(ChannelSetting.CC_DENIED,command.guildChannel.longID)) {
+            return "\\> Custom Command usage has been disabled for this messageChannel.";
         }
         Random random = Globals.getGlobalRandom();
         int counter = 0;
         List<CCommandObject> commands = command.guild.customCommands.getCommandList();
         CCommandObject randCC = commands.get(random.nextInt(commands.size()));
-        while (!command.channel.settings.contains(ChannelSetting.SHITPOST) && randCC.isShitPost() && command.guild.config.shitPostFiltering) {
+        while (!command.guildChannel.settings.contains(ChannelSetting.SHITPOST) && randCC.isShitPost() && command.guild.config.shitPostFiltering) {
             if (counter > 25) {
                 return "\\> Your server has way to many shitpost commands, I couldn't find you a normal one.";
             }

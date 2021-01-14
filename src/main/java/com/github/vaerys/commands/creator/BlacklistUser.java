@@ -8,7 +8,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 public class BlacklistUser extends Command {
     @Override
@@ -27,7 +27,7 @@ public class BlacklistUser extends Command {
         if (globalData.blacklistUser(user.longID, 5) != null)
             return "\\> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** blacklisted.";
 
-        return "\\> Failed to blacklist user.";
+        return "\\> Failed to blacklist globalUser.";
     }
 
     @Override
@@ -37,7 +37,7 @@ public class BlacklistUser extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Adds a user to the command blacklist, preventing that person from using any bot commands on any server.";
+        return "Adds a globalUser to the command blacklist, preventing that person from using any bot commands on any server.";
     }
 
     @Override

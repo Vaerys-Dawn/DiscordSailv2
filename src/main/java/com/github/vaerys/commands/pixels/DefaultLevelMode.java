@@ -5,7 +5,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 02/07/2017.
@@ -24,13 +24,13 @@ public class DefaultLevelMode extends Command {
         switch (args.toLowerCase()) {
             case "levelchannel":
                 command.guild.config.setDefaultLevelMode(UserSetting.SEND_LVLUP_RANK_CHANNEL);
-                return message + "the server's level up channel.";
+                return message + "the server's level up messageChannel.";
             case "currentchannel":
                 command.guild.config.setDefaultLevelMode(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
-                return message + "the current channel.";
+                return message + "the current messageChannel.";
             case "dms":
                 command.guild.config.setDefaultLevelMode(UserSetting.SEND_LVLUP_DMS);
-                return message + "the user's Direct messages.";
+                return message + "the globalUser's Direct messages.";
             case "nomessage":
                 command.guild.config.setDefaultLevelMode(UserSetting.DONT_SEND_LVLUP);
                 return "\\> Now set to now no longer send level up messages";
@@ -66,7 +66,7 @@ public class DefaultLevelMode extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

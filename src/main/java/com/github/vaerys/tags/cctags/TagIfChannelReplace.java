@@ -28,7 +28,7 @@ public class TagIfChannelReplace extends TagReplaceObject {
             } catch (NumberFormatException e) {
                 return replaceFirstTag(from, error);
             }
-            if (id == command.channel.longID) {
+            if (id == command.guildChannel.longID) {
                 toReplace.add(new ReplaceObject(splitString.get(1), splitString.get(2)));
             } else {
                 toReplace.add(new ReplaceObject(splitString.get(1), splitString.get(3)));
@@ -54,6 +54,6 @@ public class TagIfChannelReplace extends TagReplaceObject {
 
     @Override
     protected String desc() {
-        return "replaces the second argument with text based of if its in the specified channel or not.";
+        return "replaces the second argument with text based of if its in the specified messageChannel or not.";
     }
 }

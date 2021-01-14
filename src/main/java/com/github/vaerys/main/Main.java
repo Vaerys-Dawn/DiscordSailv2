@@ -142,7 +142,7 @@ public class Main {
                 config.creatorID = botOwner.getIdLong();
                 Globals.creatorID = config.creatorID;
 
-                logger.info("Default creatorID set to user " + botOwner.getName() + "#" + botOwner.getDiscriminator());
+                logger.info("Default creatorID set to globalUser " + botOwner.getName() + "#" + botOwner.getDiscriminator());
 
                 // save it back out to file.
                 config.flushFile();

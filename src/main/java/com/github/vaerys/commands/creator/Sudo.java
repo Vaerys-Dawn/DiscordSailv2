@@ -3,14 +3,13 @@ package com.github.vaerys.commands.creator;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.MessageHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 02/02/2017.
@@ -23,14 +22,14 @@ public class Sudo extends Command {
         SplitFirstObject sudo = new SplitFirstObject(args);
         UserObject user = Utility.getUser(command, sudo.getFirstWord(), false, false);
         if (user == null) {
-            return "\\> Could not find user.";
+            return "\\> Could not find globalUser.";
         }
-        command.setAuthor(user.get());
+        command.setAuthor(user.getMember());
         if (sudo.getRest() == null) {
             return "\\> You need to specify some arguments.";
         }
         try {
-            new MessageHandler(sudo.getRest(), command, false);
+            MessageHandler.handleMessage(sudo.getRest(), command);
         } catch (Exception e) {
             String errorPos = "";
             for (StackTraceElement s : e.getStackTrace()) {
@@ -48,7 +47,7 @@ public class Sudo extends Command {
                 builder.append("\n" + Constants.PREFIX_INDENT + "at " + errorPos);
             }
             builder.append("```");
-            RequestHandler.sendMessage(builder.toString(), command.channel.get());
+            command.guildChannel.sendMessage(builder.toString());
             Utility.sendStack(e);
         }
         return null;

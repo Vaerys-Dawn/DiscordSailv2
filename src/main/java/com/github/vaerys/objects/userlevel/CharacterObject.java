@@ -60,7 +60,7 @@ public class CharacterObject {
         this.nickname = nickname;
     }
 
-    public String getNickname() {
+    public String getEffectiveName() {
         return nickname;
     }
 

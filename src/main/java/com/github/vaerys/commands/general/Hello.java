@@ -6,7 +6,7 @@ import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.events.TimedEvent;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -15,13 +15,13 @@ public class Hello extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        String message = "\\> Hello <user>.";
+        String message = "\\> Hello <globalUser>.";
         TimedEvent event = Globals.getCurrentEvent();
         if (event != null && event.getHelloMessage() != null) message = event.getHelloMessage();
         if (command.user.longID == 153159020528533505L) {
-            message = message.replace("<user>", "Mother");
+            message = message.replace("<globalUser>", "Mother");
         }
-        return message.replace("<user>", command.user.displayName);
+        return message.replace("<globalUser>", command.user.displayName);
     }
 
     @Override

@@ -3,8 +3,9 @@ package com.github.vaerys.commands.creator.directmessages;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.templates.DMCommand;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * Created by Vaerys on 12/06/2017.
@@ -12,12 +13,12 @@ import sx.blah.discord.handle.obj.IUser;
 public class QuickRespond extends DMCommand {
 
     @Override
-    public String execute(String args, CommandObject command) {
-        IUser recipient = command.client.get().getUserByID(Globals.lastDmUserID);
+    public String executeDm(String args, DmCommandObject command) {
+        User recipient = command.client.get().getUserById(Globals.lastDmUserID);
         if (recipient != null) {
-            return Respond.sendDM(args, command, recipient, command.user.username + ": ");
+            return Respond.sendDM(args, command, recipient, command.globalUser.username + ": ");
         } else {
-            return "\\> no user to respond to.";
+            return "\\> no globalUser to respond to.";
         }
     }
 

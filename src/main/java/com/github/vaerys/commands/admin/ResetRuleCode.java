@@ -15,7 +15,7 @@ public class ResetRuleCode extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        Message working = command.channel.sendMessage("`Working...`");
+        Message working = command.guildChannel.sendMessage("`Working...`");
         for (ProfileObject p : command.guild.users.profiles) {
             if (p.getSettings().size() != 0) {
                 p.getSettings().remove(UserSetting.READ_RULES);
@@ -24,7 +24,7 @@ public class ResetRuleCode extends Command {
         for (Member u : command.guild.getUsers()) {
             GuildHandler.checkUsersRoles(u.getIdLong(), command.guild);
         }
-        working.delete();
+        working.delete().complete();
         return "\\> Done. The Rule code tag has been removed off all profiles.";
     }
 

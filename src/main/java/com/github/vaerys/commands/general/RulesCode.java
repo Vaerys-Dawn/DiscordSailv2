@@ -22,7 +22,7 @@ public class RulesCode extends Command {
     public String execute(String args, CommandObject command) {
         command.message.delete();
         List<TextChannel> botCommands = command.user.getVisibleChannels(command.guild.getChannelsByType(ChannelSetting.BOT_COMMANDS));
-        if (!botCommands.isEmpty() && !botCommands.contains(command.channel.get())
+        if (!botCommands.isEmpty() && !botCommands.contains(command.guildChannel.get())
                 && !GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE)) {
             return Utility.getChannelMessage(botCommands);
         }

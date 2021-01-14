@@ -26,7 +26,7 @@ public class TagIfChannel extends TagObject {
             } catch (NumberFormatException e) {
                 return replaceFirstTag(from, error);
             }
-            if (id == command.channel.longID) {
+            if (id == command.guildChannel.longID) {
                 return replaceFirstTag(from, splitContents.get(1));
             } else {
                 return replaceFirstTag(from, splitContents.get(2));
@@ -46,11 +46,11 @@ public class TagIfChannel extends TagObject {
 
     @Override
     public String usage() {
-        return "#channel" + splitter + "true" + splitter + "false";
+        return "#messageChannel" + splitter + "true" + splitter + "false";
     }
 
     @Override
     public String desc() {
-        return "replaces itself with text based of if its in the specified channel or not.";
+        return "replaces itself with text based of if its in the specified messageChannel or not.";
     }
 }

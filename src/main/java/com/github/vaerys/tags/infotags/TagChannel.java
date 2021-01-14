@@ -24,7 +24,7 @@ public class TagChannel extends TagObject {
 
     @Override
     public String tagName() {
-        return "<channel>";
+        return "<messageChannel>";
     }
 
     @Override
@@ -39,6 +39,6 @@ public class TagChannel extends TagObject {
 
     @Override
     public String desc() {
-        return "Replaces the tag with the channel mention of the Id specified.";
+        return "Replaces the tag with the messageChannel mention of the Id specified.";
     }
 }

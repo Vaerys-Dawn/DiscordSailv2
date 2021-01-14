@@ -5,7 +5,6 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.PixelHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
@@ -13,8 +12,8 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +28,7 @@ public class UserInfo extends Command {
         UserObject user;
         if (args == null || args.isEmpty()) user = command.user;
         else user = Utility.getUser(command, args, true);
-        if (user == null) return "\\> Could not find user.";
+        if (user == null) return "\\> Could not find globalUser.";
 
         ProfileObject profile = user.getProfile();
 
@@ -42,58 +41,59 @@ public class UserInfo extends Command {
         }
 
         //private profile check
-        if (!GuildHandler.testForPerms(command, Permissions.ADMINISTRATOR) &&
-                (user.isPrivateProfile(command.guild) && user.longID != command.user.longID)) {
+        if (!GuildHandler.testForPerms(command, Permission.ADMINISTRATOR) &&
+                (user.isPrivateProfile() && user.longID != command.user.longID)) {
             return "\\> " + user.displayName + " has set their profile to private.";
         }
 
         //start of the profile builder.
         XEmbedBuilder builder = new XEmbedBuilder(user);
         List<Role> roles = user.roles;
-        List<String> roleNames = roles.stream().filter(role -> !role.isEveryoneRole()).map(Role::getName).collect(Collectors.toList());
+        List<String> roleNames = roles.stream().filter(role -> !role.isPublicRole()).map(Role::getName).collect(Collectors.toList());
         List<String> links = profile.getLinks().stream().map(link -> link.toString()).collect(Collectors.toList());
         long accountAge = user.getAccountAgeSeconds();
         boolean showCC = command.guild.config.moduleCC;
         boolean showLevel = command.guild.config.modulePixels && profile.getXP() != 0;
         StringBuilder desc = new StringBuilder();
 
-        //sets title to user Display Name;
+        //sets title to globalUser Display Name;
         builder.setAuthor(user.displayName);
 
-        //sets thumbnail to user Avatar.
-        builder.withThumbnail(user.avatarURL);
+        //sets thumbnail to globalUser Avatar.
+        builder.setThumbnail(user.avatarURL);
 
         //set author Icon
         if (user.longID == 153159020528533505L) {
-            builder.withAuthorIcon(Constants.DEV_IMAGE_URL);
-            builder.withAuthorUrl(Constants.LINK_GITHUB);
-        } else if (user.isPatron) builder.withAuthorIcon(Constants.PATREON_ICON_URL);
+            builder.setAuthor(user.displayName, Constants.LINK_GITHUB, Constants.DEV_IMAGE_URL );
+        } else if (user.isPatron) builder.setAuthor(user.displayName, Constants.PATREON_ICON_URL);
         //bots only
-        if (user.isBot) builder.withAuthorIcon(Constants.BOT_USER_URL);
+        if (user.isBot) builder.setAuthor(user.displayName, Constants.BOT_USER_URL);
         if (user.get() == null) {
-            builder.withAuthorIcon(Constants.UNKNOWN_USER_URL);
+            builder.setAuthor(user.displayName, Constants.UNKNOWN_USER_URL);
         }
 
         //append sticker
-        if (profile.getSettings().contains(UserSetting.READ_RULES) && command.guild.config.readRuleReward) {
-            builder.withFooterIcon(Constants.STICKER_STAR_URL);
-        }
+        boolean hasStar = profile.getSettings().contains(UserSetting.READ_RULES) && command.guild.config.readRuleReward;
 
         //build desc desc
         if (command.guild.config.userInfoShowsDate) {
-            builder.withTimestamp(user.creationDate);
-            builder.setFooter("UserID: " + profile.getUserID() + ", Creation Date");
+            builder.setTimestamp(user.creationDate);
+            if (hasStar) builder.setFooter("UserID: " + profile.getUserID() + ", Creation Date", Constants.STICKER_STAR_URL);
+            else builder.setFooter("UserID: " + profile.getUserID() + ", Creation Date");
         } else {
             desc.append("**Account Created: **" + Utility.formatTimeDifference(accountAge));
-            builder.setFooter("User ID: " + profile.getUserID());
+            if (hasStar) builder.setFooter("User ID: " + profile.getUserID(), Constants.STICKER_STAR_URL);
+            else builder.setFooter("User ID: " + profile.getUserID());
         }
+
+
 
         //append gender
         desc.append("\n**Gender: **" + profile.getGender());
 
         //append cc count and level
         if (showCC || showLevel) desc.append("\n");
-        if (showCC) desc.append(String.format("**Custom Commands:** %d", user.customCommands.size()));
+        if (showCC) desc.append(String.format("**Custom Commands:** %d", user.getCustomCommands(command.guild.longID).size()));
         if (showLevel) {
             if (showCC) desc.append(indent + indent + indent);
             desc.append(String.format("**Level:** %d", PixelHandler.xpToLevel(profile.getXP())));
@@ -113,10 +113,10 @@ public class UserInfo extends Command {
         builder.setDescription(desc.toString());
         //sends Message
         if (user.getProfile().getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
-            RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
+            command.user.queueDm(builder.build());
             return "\\> Profile sent to your Direct messages.";
         }
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        builder.queue(command);
         return null;
     }
 
@@ -127,12 +127,12 @@ public class UserInfo extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Lets you see some information about yourself or another user.";
+        return "Lets you see some information about yourself or another globalUser.";
     }
 
     @Override
     protected String usage() {
-        return "(@user)";
+        return "(@globalUser)";
     }
 
     @Override

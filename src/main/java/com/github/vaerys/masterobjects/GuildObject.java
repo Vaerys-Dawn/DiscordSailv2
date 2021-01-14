@@ -24,7 +24,10 @@ import net.dv8tion.jda.api.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 /**
@@ -188,7 +191,7 @@ public class GuildObject {
     }
 
     /**
-     * Removes a channel setting from the specified channel
+     * Removes a messageChannel setting from the specified messageChannel
      *
      * @param channel
      */
@@ -298,21 +301,21 @@ public class GuildObject {
         if (config.initialMessage) {
             return;
         }
-        if (command.guild.get() == null || command.channel == null) {
+        if (command.guild.get() == null || command.guildChannel == null) {
             return;
         }
         TextChannel general = getChannelByType(ChannelSetting.GENERAL);
-        if (general != null && command.channel.longID != general.getIdLong()) {
+        if (general != null && command.guildChannel.longID != general.getIdLong()) {
             return;
         }
         if (!GuildHandler.testForPerms(command, Permission.MANAGE_SERVER)) return;
-        Message message = command.channel.queueMessage(Constants.getWelcomeMessage(command)).complete();
+        Message message = command.guildChannel.sendMessage(Constants.getWelcomeMessage(command));
         if (message != null) {
             command.guild.config.initialMessage = true;
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(5 * 60 * 1000);
-                    message.delete();
+                    message.delete().complete();
                 } catch (InterruptedException e) {
                     // do nothing
                 }
@@ -446,5 +449,14 @@ public class GuildObject {
 
     public List<GuildToggle> getToggles() {
         return toggles.stream().filter(t -> t.name() != SAILType.DEFAULT).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GuildObject) {
+            return longID == ((GuildObject) obj).longID;
+        } else {
+            return super.equals(obj);
+        }
     }
 }

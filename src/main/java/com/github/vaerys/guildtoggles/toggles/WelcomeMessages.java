@@ -39,7 +39,7 @@ public class WelcomeMessages extends GuildSetting {
 
     @Override
     public String desc(CommandObject command) {
-        return "Enables the sending of a welcome message to user's dms when they join the server.";
+        return "Enables the sending of a welcome message to globalUser's dms when they join the server.";
     }
 
     @Override

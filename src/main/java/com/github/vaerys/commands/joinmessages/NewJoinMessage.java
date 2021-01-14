@@ -8,8 +8,8 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.adminlevel.JoinMessage;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class NewJoinMessage extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         List<JoinMessage> messages = command.guild.channelData.getJoinMessages();
-        if (!args.contains("<user>")) return "\\> Could not find <user> Tag";
+        if (!args.contains("<globalUser>")) return "\\> Could not find <globalUser> Tag";
         for (JoinMessage m : messages) {
             if (m.getContent().equals(args)) {
                 return "\\> New Join Message Contents matches another Custom Join Message's contents, cannot have duplicate messages.";
@@ -58,8 +58,8 @@ public class NewJoinMessage extends Command {
     }
 
     @Override
-    public Permissions[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+    public Permission[] perms() {
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

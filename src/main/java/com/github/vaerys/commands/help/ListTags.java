@@ -11,8 +11,8 @@ import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,7 +25,7 @@ public class ListTags extends Command {
     private static final SubCommandObject TAGS = new SubCommandObject(new String[]{"Tags"}, "",
             "Shows the cc tags.", SAILType.CC);
     private static final SubCommandObject TAGS_ADMIN = new SubCommandObject(new String[]{"AdminTags", "TagsAdmin"}, "",
-            "Shows the cc tags and admin cc tags in one list.", SAILType.ADMIN_CC, Permissions.MANAGE_SERVER, Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES);
+            "Shows the cc tags and admin cc tags in one list.", SAILType.ADMIN_CC, Permission.MANAGE_SERVER, Permission.MANAGE_ROLES, Permission.MESSAGE_MANAGE);
 
 
     public static List<String> getModes(CommandObject command) {
@@ -74,7 +74,7 @@ public class ListTags extends Command {
         builder.setTitle("\\> Here are all of the " + StringUtils.capitalize(args) + " tags:");
         builder.setDescription("```\n" + Utility.listFormatter(list, true) + "```\n" +
                 "Tags are run in the order listed above.\n\n" + new HelpTags().missingArgs(command));
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        builder.queue(command);
         return null;
     }
 

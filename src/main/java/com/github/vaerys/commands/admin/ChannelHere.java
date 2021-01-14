@@ -25,13 +25,13 @@ public class ChannelHere extends Command {
         if (!args.isEmpty()) {
             ChannelSetting setting = ChannelSetting.get(args);
             if (setting == null) {
-                desc = "\\> Could not find channel type \"" + args + "\"\n";
+                desc = "\\> Could not find messageChannel type \"" + args + "\"\n";
             } else {
                 return setting.toggleSetting(command);
             }
         }
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
-        String title = "\\> Here are all of the channel Types and Settings:";
+        String title = "\\> Here are all of the messageChannel Types and Settings:";
 
         List<ChannelSetting> channelSettings = command.guild.channelSettings;
         List<String> types = channelSettings.stream().filter(channelSetting -> !channelSetting.isSetting()).map(ChannelSetting::toString).collect(Collectors.toList());
@@ -39,18 +39,18 @@ public class ChannelHere extends Command {
         Collections.sort(types);
         desc += "**Types**\n```\n" + spacer + Utility.listFormatter(types, true) + "```\n" + spacer + "**Settings**\n```\n" + Utility.listFormatter(settings, true) + "```\n";
         desc += "The Command **" + get(HelpChannel.class).getUsage(command) + "** Can give you extra information about each of the above.\n\n";
-        desc += "See what is enabled on a channel via **" +get(ChannelStats.class).getUsage(command) + "**\n\n";
+        desc += "See what is enabled on a messageChannel via **" +get(ChannelStats.class).getUsage(command) + "**\n\n";
         desc += missingArgs(command);
         embedBuilder.setDescription(desc);
         embedBuilder.setTitle(title);
-        embedBuilder.queue(command.channel);
+        embedBuilder.queue(command.guildChannel);
         return null;
     }
 
 
     @Override
     public String description(CommandObject command) {
-        return "Sets the current channel as the channel type you select.";
+        return "Sets the current messageChannel as the messageChannel type you select.";
     }
 
     @Override

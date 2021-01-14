@@ -37,7 +37,7 @@ public class SpamHandler {
         if (command.message.length() < 800) return false;
 
         List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
-        if (channels.contains(command.channel.get())) return false;
+        if (channels.contains(command.guildChannel.get())) return false;
 
         String message = command.message.getContent();
         if (StringUtils.startsWithIgnoreCase(message, new NewCC().getCommand(command))) return false;
@@ -61,12 +61,12 @@ public class SpamHandler {
                         command.guild.sendDebugLog(command, "CATCH_SPAM_WALLS", "MUTE", offenceCount + " Offences");
                         TextChannel admin = command.guild.getChannelByType(ChannelSetting.ADMIN);
                         String report = command.user.mention() + " was muted for spamming";
-                        // add an automated note to the user.
+                        // add an automated note to the globalUser.
                         command.user.getProfile().addSailModNote(report, command, false);
                         if (admin != null) {
-                            RequestHandler.sendMessage(report + " in " + command.channel.get().mention() + ".", admin);
+                            RequestHandler.sendMessage(report + " in " + command.guildChannel.get().mention() + ".", admin);
                         } else {
-                            RequestHandler.sendMessage(report + ".", command.channel.get());
+                            RequestHandler.sendMessage(report + ".", command.guildChannel.get());
                         }
                         return true;
                     }
@@ -86,7 +86,7 @@ public class SpamHandler {
         Guild guild = command.guild.get();
 
         List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
-        if (channels.contains(command.channel.get())) return false;
+        if (channels.contains(command.guildChannel.get())) return false;
 
         if (GuildHandler.testForPerms(command, Permissions.MENTION_EVERYONE)) return false;
 
@@ -111,21 +111,21 @@ public class SpamHandler {
                             // add strike in modnote
                             command.user.getProfile().addSailModNote(String.format(report, author.mention()), command, false);
                             // send admin notification
-                            RequestHandler.sendMessage(String.format(report, author.mention()), command.channel.get());
+                            RequestHandler.sendMessage(String.format(report, author.mention()), command.guildChannel.get());
                         }
                     }
                 }
                 if (!offenderFound) {
                     guildconfig.addOffender(new OffenderObject(author.getIdLong()));
                 }
-                String response = "\\> <mentionAdmin>, " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message in " + command.channel.mention + ".";
+                String response = "\\> <mentionAdmin>, " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message in " + command.guildChannel.mention + ".";
                 Role roleToMention = command.guild.getRoleById(guildconfig.getRoleToMentionID());
                 if (roleToMention != null) {
                     response = response.replaceAll("<mentionAdmin>", roleToMention.mention());
                 } else {
                     response = response.replaceAll("<mentionAdmin>", "Admin");
                 }
-                RequestHandler.sendMessage(response, command.channel.get());
+                RequestHandler.sendMessage(response, command.guildChannel.get());
                 return true;
             }
         }
@@ -137,12 +137,12 @@ public class SpamHandler {
         //make sure that the rate limiting should actually happen
         if (!command.guild.config.rateLimiting) return false;
         if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
-        if (command.channel.settings.contains(ChannelSetting.MUTE_APPEALS)) return false;
+        if (command.guildChannel.settings.contains(ChannelSetting.MUTE_APPEALS)) return false;
         if (command.guild.users.isUserMuted(command.user.get())) return false;
 
         //ignore spam in tagged channels
         List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
-        if (channels.contains(command.channel.get())) return false;
+        if (channels.contains(command.guildChannel.get())) return false;
 
         //increase the counter and get the object
         UserRateObject userRate = command.guild.rateLimit(command);
@@ -154,7 +154,7 @@ public class SpamHandler {
                     ", **Guild Name:** " + command.guild.get().getName(), command.client.creator.getDmChannel());
         }
 
-        //check if user is rate limited
+        //check if globalUser is rate limited
         if (!userRate.isRateLimited(command.guild)) return false;
 
         //delete messages
@@ -177,7 +177,7 @@ public class SpamHandler {
             Role mutedRole = command.guild.getMutedRole();
             if (mutedRole == null) return true;
             userRate.mute();
-            //mute user for 300 seconds
+            //mute globalUser for 300 seconds
             command.guild.users.muteUser(command, 300);
             command.user.queueDm(String.format(muteFormat, guildName, messageLimit));
             return true;
@@ -238,7 +238,7 @@ public class SpamHandler {
             }
             RequestHandler.deleteMessage(message);
             command.guild.sendDebugLog(command, "INVITE_REMOVAL", "REMOVED", message.getContent());
-            RequestHandler.sendMessage(response, command.channel.get());
+            RequestHandler.sendMessage(response, command.guildChannel.get());
             return true;
         }
         return false;
@@ -269,7 +269,7 @@ public class SpamHandler {
         List<BlackListObject.BlacklistedUserObject> blacklistedUsers = globalData.getBlacklistedUsers();
         for (BlackListObject.BlacklistedUserObject object : blacklistedUsers) {
             if (user.longID == object.getUserID()) {
-                // user is on blacklist, and hasn't timed out...
+                // globalUser is on blacklist, and hasn't timed out...
                 if (Instant.now().toEpochMilli() <= object.getEndTime()) return true;
             }
         }
@@ -294,11 +294,11 @@ public class SpamHandler {
                     long diffTime = blUser.getEndTime() - Instant.now().toEpochMilli();
 
                     if (blUser.getCounter() >= 5) {
-                        RequestHandler.sendMessage("\\> OKAY, ENOUGH " + user.mention() + ". You've been permanently blacklisted from using commands.", command.channel);
+                        RequestHandler.sendMessage("\\> OKAY, ENOUGH " + user.mention() + ". You've been permanently blacklisted from using commands.", command.guildChannel);
                         RequestHandler.sendCreatorDm(String.format("\\> @%s(%d) was blacklisted from using commands", user.username, user.longID));
                     } else {
                         RequestHandler.sendMessage("\\> You're using commands too much " + user.mention() +
-                                ". Take a chill pill, and try again in " + Utility.formatTime(diffTime / 1000, true), command.channel);
+                                ". Take a chill pill, and try again in " + Utility.formatTime(diffTime / 1000, true), command.guildChannel);
                     }
 
                     spamCounter.remove(userID);

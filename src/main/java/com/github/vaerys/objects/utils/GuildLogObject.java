@@ -18,7 +18,7 @@ public class GuildLogObject {
         this.type = type;
         this.name = name;
         this.contents = contents;
-        this.channelID = command.channel.longID;
+        this.channelID = command.guildChannel.longID;
         this.userID = command.user.longID;
         this.messageID = command.message.longID;
     }

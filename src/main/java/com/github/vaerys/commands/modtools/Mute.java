@@ -2,7 +2,6 @@ package com.github.vaerys.commands.modtools;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
@@ -10,9 +9,9 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.regex.Pattern;
 
@@ -24,9 +23,11 @@ public class Mute extends Command {
     private final static SubCommandObject UN_MUTE = new SubCommandObject(
             new String[]{"UnMute"},
             "[@User]",
-            "Allows you to UnMute a user.",
+            "Allows you to UnMute a globalUser.",
             SAILType.MOD_TOOLS
     );
+
+    //todo add check for integration roles, and don't try to remove them, it causes a 401. 
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -55,23 +56,23 @@ public class Mute extends Command {
         }
         TextChannel adminChannel = command.guild.getChannelByType(ChannelSetting.ADMIN);
 
-        // check for user and muted role
-        if (mutedUser == null || mutedUser.get() == null) return "\\> Could not find user";
-        if (mutedUser.getProfile() == null) mutedUser.addProfile(command.guild);
+        // check for globalUser and muted role
+        if (mutedUser == null || mutedUser.get() == null) return "\\> Could not find globalUser";
+        if (mutedUser.getProfile() == null) mutedUser.addProfile();
         if (mutedRole == null) return "\\> Muted role is not configured.";
 
         // check hierarchy
         if (mutedUser.longID == command.user.longID && isMute) return "\\> Don't try to mute yourself you numpty.";
-        if (!Utility.testUserHierarchy(command.client.bot.get(), mutedRole, command.guild.get()))
+        if (!Utility.testUserHierarchy(command.botUser.getMember(), mutedRole, command.guild.get()))
             return String.format("\\> Cannot %s %s. The **%s** role has a higher hierarchy than me.", mode, mutedUser.displayName, mutedRole.getName());
-        if (!Utility.testUserHierarchy(command.user.get(), mutedUser.get(), command.guild.get(), false))
+        if (!Utility.testUserHierarchy(command.user.getMember(), mutedUser.getMember(), command.guild.get(), false))
             return String.format("\\> Cannot %s %s. User hierarchy higher than yours.", mode, mutedUser.displayName);
 
-        if (!isMute && !mutedUser.roles.contains(mutedRole) && !command.guild.users.isUserMuted(mutedUser.get())) {
+        if (!isMute && !mutedUser.roles.contains(mutedRole) && !command.guild.users.isUserMuted(mutedUser.getMember())) {
             return String.format("\\> %s is not muted.", mutedUser.displayName);
         }
 
-        // mute/un-mute user
+        // mute/un-mute globalUser
         if (!isMute && timeSecs <= 0) {
             command.guild.users.unMuteUser(mutedUser, command.guild);
         } else {
@@ -85,14 +86,14 @@ public class Mute extends Command {
                 reason.replaceRegex("(^⚠ | ⚠|⚠)", "");
                 isStrike = true;
             }
-            modNote.format(mode, command.user.username, reason, formattedTime, command.channel.mention);
+            modNote.format(mode, command.user.username, reason, formattedTime, command.guildChannel.mention);
             mutedUser.getProfile().addSailModNote(modNote.toString(), command, isStrike);
         }
 
         // send admin report
         if (adminChannel != null) {
-            responseAdmin.format(mutedUser.mention(), timeValue, command.user.displayName, command.channel.mention, reason);
-            RequestHandler.sendMessage(responseAdmin.toString(), adminChannel);
+            responseAdmin.format(mutedUser.mention(), timeValue, command.user.displayName, command.guildChannel.mention, reason);
+            adminChannel.sendMessage(responseAdmin.toString()).queue();
         }
 
         // send final response
@@ -102,7 +103,7 @@ public class Mute extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Mutes a user and adds a modnote to the user. if a ⚠ emoji is added to the mute reason the note will be a strike.";
+        return "Mutes a globalUser and adds a modnote to the globalUser. if a ⚠ emoji is added to the mute reason the note will be a strike.";
     }
 
     @Override
@@ -127,7 +128,7 @@ public class Mute extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_MESSAGES};
+        return new Permission[]{Permission.MESSAGE_MANAGE};
     }
 
     @Override

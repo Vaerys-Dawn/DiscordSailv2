@@ -3,11 +3,10 @@ package com.github.vaerys.commands.general;
 import com.github.vaerys.commands.creator.DailyMsg;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 public class LastDailyMessage extends Command {
 
@@ -15,7 +14,7 @@ public class LastDailyMessage extends Command {
     public String execute(String args, CommandObject command) {
         DailyMessage messageObject = command.guild.config.getLastDailyMessage();
         if (messageObject != null) {
-            RequestHandler.sendEmbedMessage("", new DailyMsg().getInfo(messageObject, command), command.channel.get());
+            new DailyMsg().getInfo(messageObject, command).queue(command);
             return null;
         } else return "\\> It appears that there have been no daily messages stored.";
     }

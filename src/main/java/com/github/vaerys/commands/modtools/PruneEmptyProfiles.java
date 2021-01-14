@@ -5,7 +5,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class PruneEmptyProfiles extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

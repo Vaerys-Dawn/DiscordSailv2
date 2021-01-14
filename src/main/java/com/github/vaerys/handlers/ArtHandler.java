@@ -6,16 +6,14 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.botlevel.TrackLikes;
+import com.github.vaerys.objects.userlevel.ProfileObject;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.IReaction;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.RequestBuffer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,17 +36,17 @@ public class ArtHandler {
     public static void unPin(CommandObject command) {
         TextChannel channel = command.guild.getChannelByType(ChannelSetting.ART);
         List<Long> pins = command.guild.channelData.getPinnedMessages();
-        //exit if channel is wrong
-        if (channel == null || !command.channel.get().equals(channel)) return;
+        //exit if messageChannel is wrong
+        if (channel == null || !command.guildChannel.get().equals(channel)) return;
         //exit if message isn't pinned
         if (!command.message.get().isPinned()) return;
         for (long l : pins) {
             if (command.message.longID == l && command.message.author.longID == command.user.longID) {
-                RequestBuffer.request(() -> channel.unpin(command.message.get()));
-                RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_REMOVE_PIN)));
-                IReaction reaction = command.message.getReactionByName(Constants.EMOJI_ADD_PIN);
-                for (IUser user : reaction.getUsers()) {
-                    RequestBuffer.request(() -> command.message.get().removeReaction(user, reaction));
+                channel.unpinMessageById(command.message.longID).queue();
+                command.message.get().addReaction(Constants.EMOJI_REMOVE_PIN).queue();
+                MessageReaction reaction = command.message.getReactionByName(Constants.EMOJI_ADD_PIN);
+                for (User user : reaction.retrieveUsers().complete()) {
+                    command.message.get().removeReaction(reaction.getReactionEmote().getEmote(), user).queue();
                 }
                 checkList(command);
                 return;
@@ -68,92 +66,83 @@ public class ArtHandler {
         //exit if message owner is a bot
         if (owner.get().isBot()) return;
         //exit if message has already been unpinned.
-        IReaction reaction = command.message.getReactionByName(Constants.EMOJI_REMOVE_PIN);
-        if (reaction != null && reaction.getUserReacted(command.client.bot.get())) {
-            RequestBuffer.request(() ->
-                    command.message.get().removeReaction(reacted.get(), Utility.getReaction(Constants.EMOJI_ADD_PIN))).get();
+        MessageReaction reaction = command.message.getReactionByName(Constants.EMOJI_REMOVE_PIN);
+        if (reaction != null && reaction.retrieveUsers().stream().anyMatch(c -> c == command.client.bot.get())) {
+            command.message.get().removeReaction(Constants.EMOJI_ADD_PIN, reacted.get()).queue();
             return;
         }
-        //exit if user has art pinning denied.
+        //exit if globalUser has art pinning denied.
         ProfileObject profile = reacted.getProfile();
         if (profile != null && profile.getSettings().contains(UserSetting.DENY_ART_PINNING)) return;
-        //exit if there is no art channel
+        //exit if there is no art messageChannel
         if (channelIDS == null) return;
-        //exit if this is not the art channel
-        if (channelIDS.getIdLong() != command.channel.longID) return;
+        //exit if this is not the art messageChannel
+        if (channelIDS.getIdLong() != command.guildChannel.longID) return;
         //exit if there is no art to be found
         if (!checkAttachments(command) && !checkMessage(command)) return;
 
-        try {
-            //pin message
-            RequestBuffer.request(() -> command.channel.get().pin(command.message.get())).get();
+        //pin message
+        command.guildChannel.get().pinMessageById(command.message.longID).queue();
 
-            //debug builder
-            String name;
-            if (checkAttachments(command)) {
-                name = "ATTACHMENT_PIN";
-            } else {
-                name = "MESSAGE_PIN";
-            }
-            String args;
-            args = command.message.getContent();
-            for (Message.Attachment a : command.message.getAttachments()) {
-                args += " <" + a.getUrl() + ">";
-            }
-            if (command.message.getContent() == null || command.message.getContent().isEmpty()) {
-                args = args.replace("  ", "");
-            }
-
-            command.guild.sendDebugLog(command, "ART_PINNED", name, args);
-            //end debug
-
-            //add to ping
-            pins.add(command.message.longID);
-            //add pin response
-            RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_ADD_PIN)));
-            //if like art
-
-            if (command.guild.config.likeArt && command.guild.config.modulePixels) {
-                //add heart
-                RequestBuffer.request(() -> command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_LIKE_PIN)));
-                //add to list
-                likes.add(new TrackLikes(command.message.longID));
-            }
-
-            String response;
-            if (command.guild.config.autoArtPinning && reacted.longID == command.client.bot.longID) {
-                response = "\\> I have pinned **" + owner.displayName + "'s** art.";
-            } else {
-                if (owner.longID == reacted.longID) {
-                    response = "\\> **" + reacted.displayName + "** Has pinned their";
-                } else {
-                    response = "\\> **" + reacted.displayName + "** Has pinned **" + owner.displayName + "'s**";
-                }
-                response += " art by reacting with the \uD83D\uDCCC emoji.";
-            }
-            if (command.guild.config.likeArt && command.guild.config.modulePixels) {
-                response += "\nYou can now react with a \u2764 emoji to give the user some pixels.";
-            }
-            Message pinResponse = RequestHandler.sendMessage(response, command.channel).get();
-            Thread thread = new Thread(() -> {
-                try {
-                    logger.trace("Deleting in 2 minutes.");
-                    Thread.sleep(2 * 60 * 1000);
-                    RequestHandler.deleteMessage(pinResponse);
-                } catch (InterruptedException e) {
-                    // do nothing
-                }
-            });
-            checkList(command);
-            thread.start();
-            return;
-        } catch (DiscordException e) {
-            if (e.getErrorMessage().contains("already pinned")) {
-                return;
-            } else {
-                Utility.sendStack(e);
-            }
+        //debug builder
+        String name;
+        if (checkAttachments(command)) {
+            name = "ATTACHMENT_PIN";
+        } else {
+            name = "MESSAGE_PIN";
         }
+        String args;
+        args = command.message.getContent();
+        for (Message.Attachment a : command.message.getAttachments()) {
+            args += " <" + a.getUrl() + ">";
+        }
+        if (command.message.getContent() == null || command.message.getContent().isEmpty()) {
+            args = args.replace("  ", "");
+        }
+
+        command.guild.sendDebugLog(command, "ART_PINNED", name, args);
+        //end debug
+
+        //add to ping
+        pins.add(command.message.longID);
+        //add pin response
+        command.message.get().addReaction(Constants.EMOJI_ADD_PIN).queue();
+        //if like art
+
+        if (command.guild.config.likeArt && command.guild.config.modulePixels) {
+            //add heart
+            command.message.get().addReaction(Constants.EMOJI_LIKE_PIN).queue();
+            //add to list
+            likes.add(new TrackLikes(command.message.longID));
+        }
+
+        String response;
+        if (command.guild.config.autoArtPinning && reacted.longID == command.client.bot.longID) {
+            response = "\\> I have pinned **" + owner.displayName + "'s** art.";
+        } else {
+            if (owner.longID == reacted.longID) {
+                response = "\\> **" + reacted.displayName + "** Has pinned their";
+            } else {
+                response = "\\> **" + reacted.displayName + "** Has pinned **" + owner.displayName + "'s**";
+            }
+            response += " art by reacting with the \uD83D\uDCCC emoji.";
+        }
+        if (command.guild.config.likeArt && command.guild.config.modulePixels) {
+            response += "\nYou can now react with a \u2764 emoji to give the globalUser some pixels.";
+        }
+        Message pinResponse = command.guildChannel.sendMessage(response);
+        Thread thread = new Thread(() -> {
+            try {
+                logger.trace("Deleting in 2 minutes.");
+                Thread.sleep(2 * 60 * 1000);
+                pinResponse.delete().queue();
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+        });
+        checkList(command);
+        thread.start();
+        return;
     }
 
     private static boolean checkAttachments(CommandObject command) {
@@ -165,7 +154,7 @@ public class ArtHandler {
     }
 
     private static boolean checkMessage(CommandObject command) {
-        for (String s : command.message.get().getContent().split("( |\n)")) {
+        for (String s : command.message.get().getContentRaw().split("( |\n)")) {
             if (Utility.isImageLink(s) || isSoundFile(s) || isHostingWebsite(s)) return true;
         }
         return false;
@@ -178,13 +167,13 @@ public class ArtHandler {
     private static void checkList(CommandObject command) {
         List<Long> pinnedMessages = command.guild.channelData.getPinnedMessages();
         List<TrackLikes> likes = command.guild.channelData.getLikes();
-        List<Message> channelpins = RequestBuffer.request(() -> command.channel.get().getPinnedMessages()).get();
+        List<Message> channelPins = command.guildChannel.get().retrievePinnedMessages().complete();
         List<Message> markedForUnpin = new LinkedList<>();
         int pinLimit = command.guild.config.pinLimit;
         int tries = 0;
 
         ListIterator iterator = pinnedMessages.listIterator();
-        List<Long> channelPinsLong = channelpins.stream().map(iMessage -> iMessage.getIdLong()).collect(Collectors.toList());
+        List<Long> channelPinsLong = channelPins.stream().map(iMessage -> iMessage.getIdLong()).collect(Collectors.toList());
         try {
             while (iterator.hasNext()) {
                 long item = (long) iterator.next();
@@ -197,7 +186,7 @@ public class ArtHandler {
         }
 
         while (pinnedMessages.size() > pinLimit && tries < 50) {
-            for (Message p : channelpins) {
+            for (Message p : channelPins) {
                 if (pinnedMessages.contains(p.getIdLong()) && pinnedMessages.get(0) == p.getIdLong()) {
                     //adds the pin to the messages to be unpinned
                     markedForUnpin.add(p);
@@ -207,21 +196,13 @@ public class ArtHandler {
             tries++;
         }
 
-        tries = 0;
         for (Message message : markedForUnpin) {
-            try {
-                if (message.isPinned()) {
-                    RequestBuffer.request(() -> command.channel.get().unpin(message)).get();
-                    command.guild.sendDebugLog(command.setMessage(message), "ART_PINNED", "UNPIN", "PIN TOTAL = " +
-                            command.channel.getPinCount() + "/" + command.guild.config.pinLimit);
-                }
-            } catch (DiscordException e) {
-                if (!e.getMessage().contains("Message is not pinned!")) {
-                    throw (e);
-                }
+            if (message.isPinned()) {
+                command.guildChannel.get().unpinMessageById(message.getId()).queue();
+                command.guild.sendDebugLog(command.setMessage(message), "ART_PINNED", "UNPIN", "PIN TOTAL = " +
+                        command.guildChannel.getPinCount() + "/" + command.guild.config.pinLimit);
             }
         }
-        tries++;
 
 
         iterator = likes.listIterator();
@@ -231,83 +212,7 @@ public class ArtHandler {
                 iterator.remove();
             }
         }
-
     }
-
-//    private static void checkList(CommandObject command) {
-//        List<Long> pinnedMessages = command.guild.channelData.getPinnedMessages();
-//        List<TrackLikes> likes = command.guild.channelData.getLikes();
-//        List<Message> pins = RequestBuffer.request(() -> {
-//            return command.channel.getAllToggles().getPinnedMessages();
-//        }).getAllToggles();
-//        List<Message> markedForUnpin = new ArrayList<>();
-//        int tries = 0;
-//
-//
-//        ListIterator iterator = pinnedMessages.listIterator();
-//        try {
-//            while (iterator.hasNext()) {
-//                Long id = (Long) iterator.next();
-//                Message pin = command.channel.getAllToggles().getMessageByID(id);
-//                if (pin == null) {
-//                    pin = RequestBuffer.request(() -> {
-//                        return command.channel.getAllToggles().fetchMessage(id);
-//                    }).getAllToggles();
-//                }
-//                if (pin == null) iterator.remove();
-//                else if (!pin.isPinned()) iterator.remove();
-//            }
-//        } catch (ConcurrentModificationException e) {
-//            //skip, this happens if hearts are added too quickly
-//        }
-//
-//        int pinLimit = command.guild.config.pinLimit;
-//
-//        while (pinnedMessages.size() > pinLimit && tries < 50) {
-//            for (Message p : pins) {
-//                if (pinnedMessages.contains(p.getIdLong()) && pinnedMessages.getAllToggles(0) == p.getIdLong()) {
-//                    //adds the pin to the messages to be unpinned
-//                    markedForUnpin.add(p);
-//                    removePin(p, pinnedMessages);
-//                }
-//            }
-//            tries++;
-//        }
-//        tries = 0;
-//        boolean flag = markedForUnpin.size() != 0;
-////        while (flag && tries < 20) {
-//            int expectedSize = command.channel.getPinCount();
-//            for (Message message : markedForUnpin) {
-//                try {
-//                    if (message.isPinned()) {
-//                        RequestBuffer.request(() -> command.channel.getAllToggles().unpin(message)).getAllToggles();
-//                        logger.debug(Utility.loggingFormatter(command.setMessage(message), "ART_PINNED", "UNPIN", "PIN TOTAL = " + command.channel.getPinCount()));
-//                        expectedSize--;
-//                    }
-//                } catch (DiscordException e) {
-//                    if (!e.getMessage().contains("Message is not pinned!")) {
-//                        throw (e);
-//                    }
-//                }
-////                List<Message> pinned = RequestBuffer.request(() -> {
-////                    return command.channel.getAllToggles().getPinnedMessages();
-////                }).getAllToggles();
-////                int size = pinned.size();
-////                if (size > expectedSize) {
-////                    flag = true;
-////                }
-//            }
-//            tries++;
-////        }
-//
-//        iterator = likes.listIterator();
-//        while (iterator.hasNext()) {
-//            TrackLikes like = (TrackLikes) iterator.next();
-//            if (!pinnedMessages.contains(like.getMessageID())) {
-//                iterator.remove();
-//            }
-//        }
-//    }
 
     private static void removePin(Message p, List<Long> pins) {
         ListIterator iterator = pins.listIterator();
@@ -337,13 +242,13 @@ public class ArtHandler {
     }
 
     /**
-     * Handles the granting of xp to user's when their art has a :heart: reaction applied to their
+     * Handles the granting of xp to globalUser's when their art has a :heart: reaction applied to their
      * message that was pinned with the artPinning module.
      *
-     * @param command Used to parse in the variables needed to access the guild, channel, message,
-     *                and user objects. these objects allows access to the api.
-     * @param reacted the user that added a reaction.
-     * @param owner   the user that owns the message.
+     * @param command Used to parse in the variables needed to access the guild, messageChannel, message,
+     *                and globalUser objects. these objects allows access to the api.
+     * @param reacted the globalUser that added a reaction.
+     * @param owner   the globalUser that owns the message.
      */
     public static void pinLiked(CommandObject command, UserObject reacted, UserObject owner) {
         List<TextChannel> channelIDS = command.guild.getChannelsByType(ChannelSetting.ART);
@@ -357,10 +262,10 @@ public class ArtHandler {
         if (!command.guild.config.likeArt) return;
         //exit if message owner is a bot
         if (owner.get().isBot()) return;
-        //exit if there is no art channel
+        //exit if there is no art messageChannel
         if (channelIDS.size() == 0) return;
-        //exit if this is not the art channel
-        if (channelIDS.get(0).getIdLong() != command.channel.longID) return;
+        //exit if this is not the art messageChannel
+        if (channelIDS.get(0).getIdLong() != command.guildChannel.longID) return;
         //you cant give yourself pixels via your own art
         if (owner.longID == reacted.longID) return;
 
@@ -377,12 +282,12 @@ public class ArtHandler {
 
         //exit if profile doesn't exist
         if (profile == null) return;
-        //exit if the user should not gain pixels
+        //exit if the globalUser should not gain pixels
         if (profile.getSettings().contains(UserSetting.NO_XP_GAIN) ||
                 profile.getSettings().contains(UserSetting.DENIED_XP)) return;
 
         logger.trace(reacted.displayName + " just gave " + owner.displayName + " some pixels for liking their art.");
-        //grant user xp for their nice art.
+        //grant globalUser xp for their nice art.
         profile.addXP(5, command.guild.config);
         messageLikes.getUsers().add(reacted.longID);
     }

@@ -36,6 +36,6 @@ public class TagAddTry extends TagAdminObject {
 
     @Override
     protected String desc() {
-        return "Add's the user to the list of attempts when the tag is run. Will only work if the Admin CC contains the <LimitTry> Tag. Removes itself upon activation.";
+        return "Add's the globalUser to the list of attempts when the tag is run. Will only work if the Admin CC contains the <LimitTry> Tag. Removes itself upon activation.";
     }
 }

@@ -29,7 +29,7 @@ public class GetCCData extends Command {
         content.append("\nTimes run: \"" + cc.getTimesRun() + "\"");
         content.append("\nContents: \"" + cc.getContents(false) + "\"");
         String fileName = String.format("%s.txt",cc.getName());
-        command.channel.queueFile("\\> Here is the raw data for Custom Command: **" + cc.getName() + "**", content.toString().getBytes(), fileName);
+        command.guildChannel.queueFile("\\> Here is the raw data for Custom Command: **" + cc.getName() + "**", content.toString().getBytes(), fileName);
         return "";
     }
 

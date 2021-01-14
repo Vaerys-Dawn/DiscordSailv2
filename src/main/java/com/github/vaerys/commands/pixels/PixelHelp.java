@@ -3,7 +3,6 @@ package com.github.vaerys.commands.pixels;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.PixelHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -12,9 +11,9 @@ import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -44,7 +43,7 @@ public class PixelHelp extends Command {
                 StringBuilder builder = new StringBuilder();
                 XEmbedBuilder embed = new XEmbedBuilder(command);
                 embed.setTitle("Pixel System Information.");
-                embed.setDescription("Pixels are " + command.client.bot.displayName + "'s" +
+                embed.setDescription("Pixels are " + command.botUser.displayName + "'s" +
                         " form of xp, you can gain " + (int) (command.guild.config.xpRate * command.guild.config.xpModifier) + "xp" +
                         " once per minute by sending a message that meets all of the specific message rules.\n\n");
                 if (command.guild.config.getRewardRoles().size() != 0) {
@@ -62,12 +61,12 @@ public class PixelHelp extends Command {
                 }
                 int random = new Random().nextInt(25);
                 if (random == 1) {
-                    embed.withThumbnail(Constants.RANK_UP_IMAGE_URL);
+                    embed.setThumbnail(Constants.RANK_UP_IMAGE_URL);
                 } else {
-                    embed.withThumbnail(Constants.LEVEL_UP_IMAGE_URL);
+                    embed.setThumbnail(Constants.LEVEL_UP_IMAGE_URL);
                 }
                 embed.addField("Pixel and Level Calculators:", getModes(command) + "\n\n" + missingArgs(command), false);
-                RequestHandler.sendEmbedMessage("", embed, command.channel.get());
+                embed.queue(command);
                 return null;
         }
     }
@@ -105,7 +104,7 @@ public class PixelHelp extends Command {
                         "> Decay cannot decay you past the lowest reward role.\n" +
                         "> Decay does not affect you if you are below the lowest reward role.\n";
             }
-            rules += "> Any message regardless of size or channel will reset the decay timer.\n\n";
+            rules += "> Any message regardless of size or messageChannel will reset the decay timer.\n\n";
             return rules;
         } else {
             return "> Decay is not currently active on this server.";

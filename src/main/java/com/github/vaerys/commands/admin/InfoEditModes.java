@@ -1,7 +1,6 @@
 package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.handlers.FileHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
@@ -87,7 +86,7 @@ public class InfoEditModes {
             fileNames.add(f.getName());
         }
         builder.setDescription("```\n" + Utility.listFormatter(fileNames, true) + "```");
-        builder.queue(command.channel);
+        builder.queue(command.guildChannel);
         return null;
     }
 
@@ -141,7 +140,7 @@ public class InfoEditModes {
             return "\\> Something went wrong! The template must be missing, please Direct message me to alert my developer.";
         }
         if (templateLoaded) message = message.concat("\nThis file has been preloaded with some related info and a basic template for your convenience.");
-        command.channel.queueFile(message, file, "Info.txt");
+        command.guildChannel.queueFile(message, file, "Info.txt");
         return null;
     }
 }

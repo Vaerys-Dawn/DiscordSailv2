@@ -27,7 +27,7 @@ public class UpdateChar extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        List<CharacterObject> userChars = command.user.getCharacters();
+        List<CharacterObject> userChars = command.user.getCharacters(command.guild.longID);
         String charName = args.split(" ")[0];
         CharacterObject selectedChar = command.guild.characters.getCharByName(charName);
         List<Role> cosmeticRoles = command.user.getCosmeticRoles();
@@ -37,7 +37,7 @@ public class UpdateChar extends Command {
             if (selectedChar.getUserID() != command.user.longID) {
                 return "\\> That is not your character you cannot update it.";
             }
-            if (selectedChar.getNickname().equals(command.user.displayName)
+            if (selectedChar.getEffectiveName().equals(command.user.displayName)
                     && selectedChar.getRoleIDs().containsAll(cosmeticRoleIDs)) {
                 return "\\> You haven't updated your details since the last time this character was updated.\n" +
                         "Characters use your nickname " + cosmeticString + " to use as data.";

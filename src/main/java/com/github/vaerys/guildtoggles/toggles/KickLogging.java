@@ -33,7 +33,7 @@ public class KickLogging extends GuildSetting {
 
     @Override
     public String shortDesc(CommandObject command) {
-        return "Enables user kick logging.";
+        return "Enables globalUser kick logging.";
     }
 
     @Override

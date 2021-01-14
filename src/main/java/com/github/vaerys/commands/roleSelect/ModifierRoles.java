@@ -3,14 +3,12 @@ package com.github.vaerys.commands.roleSelect;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +23,7 @@ public class ModifierRoles extends Command {
             "+/-/add/del [Role Name]",
             "Used to manage the selectable modifier roles.",
             SAILType.ADMIN,
-            Permissions.MANAGE_ROLES
+            Permission.MANAGE_ROLES
     );
 
     @Override
@@ -39,7 +37,7 @@ public class ModifierRoles extends Command {
 
         if (EDIT_ROLES.isSubCommand(command)) {
             boolean isAdding = args.split(" ")[0].equals("+");
-            //test the permissions of the user to make sure they can modify the role list.
+            //test the permissions of the globalUser to make sure they can modify the role list.
             Role role = null;
 
             String subArgs = EDIT_ROLES.getArgs(command);
@@ -53,11 +51,11 @@ public class ModifierRoles extends Command {
             if (role == null) return "\\> **" + subArgs + "** is not a valid Role Name.";
 
             //tests to see if the bot is allowed to mess with a role.
-            if (!Utility.testUserHierarchy(command.client.bot.get(), role, command.guild.get())) {
+            if (!Utility.testUserHierarchy(command.botUser.getMember(), role, command.guild.get())) {
                 return "\\> I do not have permission to modify the **" + role.getName() + "** role.";
             }
-            //test the user's hierarchy to make sure that the are allowed to mess with that role.
-            if (Utility.testUserHierarchy(command.user.get(), role, command.guild.get())) {
+            //test the globalUser's hierarchy to make sure that the are allowed to mess with that role.
+            if (Utility.testUserHierarchy(command.user.getMember(), role, command.guild.get())) {
                 // do if modifier is true
                 if (isAdding) {
                     //check for the role and add if its not a Modifier role.
@@ -86,7 +84,7 @@ public class ModifierRoles extends Command {
             } else {
                 return "\\> You do not have permission to modify the **" + role.getName() + "** role.";
             }
-            //do user role modification
+            //do globalUser role modification
         } else {
             if (command.guild.config.getModifierRoleIDs().size() == 0)
                 return "> No Modifier roles are set up right now. Come back later.";
@@ -98,11 +96,11 @@ public class ModifierRoles extends Command {
             List<Role> userRoles = command.user.roles;
             String response;
             if (role == null) {
-                RequestHandler.sendEmbedMessage("\\> **" + args + "** is not a valid Role Name.", ListModifs.getList(command), command.channel.get());
+                ListModifs.getList(command).queue("\\> **" + args + "** is not a valid Role Name.", command);
                 return null;
             } else {
                 if (command.guild.config.isRoleModifier(role.getIdLong())) {
-                    //if user has role remove it
+                    //if globalUser has role remove it
                     if (userRoles.contains(role)) {
                         userRoles.remove(role);
                         response = "\\> You have had the **" + role.getName() + "** role removed.";
@@ -112,13 +110,13 @@ public class ModifierRoles extends Command {
                         response = "\\> You have been granted the **" + role.getName() + "** role.";
                     }
                     //push changes
-                    if (RequestHandler.roleManagement(command.user.get(), command.guild.get(), userRoles).get()) {
-                        return response;
-                    } else {
-                        return Constants.ERROR_UPDATING_ROLE;
-                    }
+                    command.guild.get().modifyMemberRoles(command.user.getMember(), userRoles).queue();
+                    return response;
+//                    } else {
+//                        return Constants.ERROR_UPDATING_ROLE;
+//                    }
                 } else {
-                    RequestHandler.sendEmbedMessage("\\> The **" + role.getName() + "** role is not listed as a modifier role.", ListModifs.getList(command), command.channel.get());
+                    ListModifs.getList(command).queue("\\> The **" + role.getName() + "** role is not listed as a modifier role.", command);
                     return null;
                 }
             }

@@ -4,19 +4,18 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.modules.ModuleRoles;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.IRegion;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.EmbedBuilder;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.Region;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,10 +34,10 @@ public class GetGuildInfo extends Command {
             SAILType.HELP
     );
 
-    private XEmbedBuilder resetEmbed(XEmbedBuilder builder, TextChannel channel, CommandObject command, int extraLength) {
-        if ((builder.getTotalVisibleCharacters() + extraLength) > 2000 ||
-                builder.getFieldCount() + 1 > EmbedBuilder.FIELD_COUNT_LIMIT) {
-            RequestHandler.sendEmbedMessage("", builder, channel).get();
+    private XEmbedBuilder resetEmbed(XEmbedBuilder builder, CommandObject command, int extraLength) {
+        if ((builder.length() + extraLength) > 2000 ||
+                builder.getFields().size() + 1 > Constants.MAX_FIELD_COUNT) {
+            command.user.queueDm(builder.build());
             builder = new XEmbedBuilder(command);
         }
         return builder;
@@ -52,28 +51,28 @@ public class GetGuildInfo extends Command {
 
         boolean isGuildStats = GUILD_STATS.isSubCommand(command);
 
-        TextChannel channel = command.user.get().getOrCreatePMChannel();
-        boolean hasManageServer = GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER);
+        boolean hasManageServer = GuildHandler.testForPerms(command, Permission.MANAGE_SERVER);
 
 
         //todo change this to the proper impl when api allows it.
 
 
-        boolean isVIP = command.guild.get().getRegion().isVIPOnly();
-        if (isVIP) {
-            serverInfo.withAuthorIcon("https://i.imgur.com/m0jqzBn.png");
-        }
+        boolean isVIP = command.guild.get().getRegion().isVip();
 
-        serverInfo.withThumbnail(command.guild.get().getIconURL());
+
+        serverInfo.setThumbnail(command.guild.get().getIconUrl());
         serverInfo.setAuthor(command.guild.get().getName());
+        if (isVIP) {
+            serverInfo.setAuthor(command.guild.get().getName(), "https://i.imgur.com/m0jqzBn.png");
+        }
         serverInfo.setFooter("Creation Date");
-        serverInfo.withTimestamp(command.guild.get().getCreationDate());
+        serverInfo.setTimestamp(command.guild.get().getTimeCreated().toInstant());
 
         StringBuilder serverStats = new StringBuilder();
         UserObject owner = new UserObject(command.guild.getOwner(), command.guild);
         serverStats.append("**Guild ID:** " + command.guild.longID);
         serverStats.append("\n**Guild Owner:** @" + owner.username);
-        IRegion region = command.guild.get().getRegion();
+        Region region = command.guild.get().getRegion();
         if (region != null) {
             serverStats.append("\n**Region:** ");
             serverStats.append(command.guild.get().getRegion().getName());
@@ -115,10 +114,10 @@ public class GetGuildInfo extends Command {
         serverInfo.setDescription(serverStats.toString());
 
         if (isGuildStats) {
-            RequestHandler.sendEmbedMessage("", serverInfo, command.channel.get()).get();
+            serverInfo.queue(command);
             return null;
         } else {
-            RequestHandler.sendEmbedMessage("", serverInfo, channel).get();
+            command.user.queueDm(serverInfo.build());
         }
 
         if (hasManageServer) {
@@ -140,11 +139,11 @@ public class GetGuildInfo extends Command {
                     "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.spacer, true);
             toggles.addField("SETTINGS", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
                     "**Disabled**```" + Utility.listEnumFormatter(disabledSettings, true) + "```", true);
-            RequestHandler.sendEmbedMessage("", toggles, channel).get();
+            command.user.queueDm(toggles.build());
         }
 
 
-        if (GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+        if (GuildHandler.testForPerms(command, Permission.MANAGE_CHANNEL)) {
 
             List<ChannelSetting> channelSettings = command.guild.channelSettings;
             channelSettings.sort(Comparator.comparing(ChannelSetting::toString));
@@ -160,12 +159,12 @@ public class GetGuildInfo extends Command {
                 }
                 if (channelList.size() != 0) {
                     String content = Utility.listFormatter(channelList, true);
-                    channels = resetEmbed(channels, channel, command, s.toString().length() + content.length());
+                    channels = resetEmbed(channels, command, s.toString().length() + content.length());
                     channels.addField(s.toString(), content, true);
                 }
             }
             channels.setTitle("CHANNEL STATS");
-            RequestHandler.sendEmbedMessage("", channels, channel).get();
+            command.user.queueDm(channels.build());
         }
 
         //module builders.
@@ -190,7 +189,7 @@ public class GetGuildInfo extends Command {
                     List<String> toSend = new ArrayList<>();
                     StringBuilder builder = new StringBuilder();
                     for (String s : splitStats) {
-                        if (builder.length() + s.length() + 1 > EmbedBuilder.FIELD_CONTENT_LIMIT / 4) {
+                        if (builder.length() + s.length() + 1 > Constants.MAX_FIELD_COUNT / 4) {
                             toSend.add(builder.toString());
                             builder = new StringBuilder();
                         }
@@ -207,9 +206,9 @@ public class GetGuildInfo extends Command {
                     String title = toggle.name().toString().toUpperCase() + " STATS";
                     if (toSend.size() != 0) {
                         for (int i = 0; i < toSend.size(); i++) {
-                            moduleStats = resetEmbed(moduleStats, channel, command, title.length() + toSend.get(i).length());
+                            moduleStats = resetEmbed(moduleStats, command, title.length() + toSend.get(i).length());
                             if (i + 1 < toSend.size()) {
-                                if (toSend.get(i).length() + toSend.get(i + 1).length() < EmbedBuilder.FIELD_CONTENT_LIMIT / 4) {
+                                if (toSend.get(i).length() + toSend.get(i + 1).length() < Constants.MAX_FIELD_COUNT / 4) {
                                     moduleStats.addField(title, toSend.get(i) + "\n\n" + toSend.get(i + 1), true);
                                     i++;
                                 } else {
@@ -220,14 +219,13 @@ public class GetGuildInfo extends Command {
                             }
                         }
                     } else {
-                        moduleStats = resetEmbed(moduleStats, channel, command, title.length() + stats.length());
+                        moduleStats = resetEmbed(moduleStats, command, title.length() + stats.length());
                         moduleStats.addField(title, stats, true);
                     }
                 }
             }
         }
-        RequestHandler.sendEmbedMessage("", moduleStats, channel).get();
-
+        command.user.sendDm(moduleStats.build());
         return "\\> Info sent to Dms.";
     }
 

@@ -6,8 +6,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ServerObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -18,10 +17,10 @@ public class Server extends Command {
     public String execute(String args, CommandObject command) {
         for (ServerObject s : command.guild.servers.getServers()) {
             if (s.getName().equalsIgnoreCase(args)) {
-                IUser user = command.guild.getUserByID(s.getCreatorID());
+                User user = command.guild.getUserByID(s.getCreatorID()).getUser();
                 boolean isGuildUser = true;
                 if (user == null) {
-                    user = command.client.get().fetchUser(s.getCreatorID());
+                    user = command.client.get().getUserById(s.getCreatorID());
                     isGuildUser = false;
                 }
 
@@ -29,7 +28,7 @@ public class Server extends Command {
                 builder.append("**" + s.getName() + "**\n");
                 builder.append("**IP:** " + s.getServerIP() + " **Port:** " + s.getServerPort() + "\n");
                 if (isGuildUser) {
-                    builder.append("**Listing Creator:** " + user.getDisplayName(command.guild.get()) + "\n");
+                    builder.append("**Listing Creator:** " + command.guild.get().getMember(user).getNickname() + "\n");
                 } else {
                     builder.append("**Listing Creator:** " + user.getName() + "#" + user.getDiscriminator() + "\n");
                 }

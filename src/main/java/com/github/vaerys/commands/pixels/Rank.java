@@ -4,15 +4,14 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.PixelHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class Rank extends Command {
             if (userObject != null) {
                 user = userObject;
             } else {
-                return "\\> Could not find user.";
+                return "\\> Could not find globalUser.";
             }
         }
         String error = "\\> Cannot get rank stats for " + user.displayName + ".";
@@ -50,7 +49,7 @@ public class Rank extends Command {
         ArrayList<ProfileObject> users = (ArrayList<ProfileObject>) command.guild.users.getProfiles().clone();
         //sort profiles by Xp in ascending order (lowest Xp to highest XP).
         Utility.sortUserObjects(users, true);
-        //test to see if said user actually has rank stats.
+        //test to see if said globalUser actually has rank stats.
         if (PixelHandler.rank(command.guild.users, command.guild.get(), user.longID) == -1) {
             return error;
         }
@@ -72,9 +71,9 @@ public class Rank extends Command {
                     }
                     posTop++;
                 }
-                //add center user
+                //add center globalUser
                 ranks.add(users.get(i));
-                //add user below
+                //add globalUser below
                 while (addedBottom < 3 && i + posBottom > 0) {
                     if (user.longID != users.get(i + posBottom).getUserID() && PixelHandler.rank(command.guild.users, command.guild.get(), users.get(i + posBottom).getUserID()) != -1) {
                         addedBottom++;
@@ -86,9 +85,9 @@ public class Rank extends Command {
                 Utility.sortUserObjects(ranks, false);
                 //format rank stats
                 for (ProfileObject r : ranks) {
-                    IUser ranked = command.guild.getUserByID(r.getUserID());
+                    Member ranked = command.guild.getUserByID(r.getUserID());
                     String rankPos = "**" + PixelHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
-                    String toFormat = ranked.getDisplayName(command.guild.get())
+                    String toFormat = ranked.getNickname()
                             + "\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`";
                     if (r.getUserID() == user.longID) {
                         response.add(rankPos + spacer + "**" + toFormat + "**");
@@ -99,7 +98,7 @@ public class Rank extends Command {
                 XEmbedBuilder builder = new XEmbedBuilder(command);
                 builder.setTitle("Rank stats for: " + user.displayName);
                 builder.setDescription(Utility.listFormatter(response, false));
-                RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+                builder.queue(command);
                 return null;
             }
         }

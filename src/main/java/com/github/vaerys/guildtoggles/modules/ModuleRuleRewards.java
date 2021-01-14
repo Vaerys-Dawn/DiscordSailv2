@@ -7,10 +7,9 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 
 public class ModuleRuleRewards extends GuildModule {
 
@@ -58,7 +57,7 @@ public class ModuleRuleRewards extends GuildModule {
 
     @Override
     public String stats(CommandObject object) {
-        if (GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) {
+        if (GuildHandler.testForPerms(object, Permission.MANAGE_SERVER)) {
             String response = "";
             if (object.guild.config.getRuleCode() != null) {
                 response += "**Rule Code:** " + object.guild.config.getRuleCode();

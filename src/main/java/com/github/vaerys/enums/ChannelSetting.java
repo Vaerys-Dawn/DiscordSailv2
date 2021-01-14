@@ -9,7 +9,7 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.TextChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,35 +33,35 @@ public enum ChannelSetting {
 
     CC_INFO("CustomCommands", true, "Channel for general use of the base CC commands."),
 
-    CC_DENIED("CCDenied", true, "When this setting is enabled on a channel it will deny the use of custom commands in it."),
+    CC_DENIED("CCDenied", true, "When this setting is enabled on a messageChannel it will deny the use of custom commands in it."),
 
     CHARACTER("Characters", true, "General Channel for Character related commands."),
 
     MANAGE_CC("ManageCC", true, "Channel for creating, editing and deleting custom commands."),
 
-    DONT_LOG("DontLog", true, "When enabled on a channel, no message logs will occur for the channel."),
+    DONT_LOG("DontLog", true, "When enabled on a messageChannel, no message logs will occur for the messageChannel."),
 
     GROUPS("Groups", true, "Channel for the group commands."),
 
-    LEVEL_UP_DENIED("LevelUpDenied", true, "When this setting is on a channel no level up messages will be sent to the channel."),
+    LEVEL_UP_DENIED("LevelUpDenied", true, "When this setting is on a messageChannel no level up messages will be sent to the messageChannel."),
 
     PIXELS("Pixels", true, "Channel for pixel commands."),
 
     SERVERS("Servers", true, "Channel for the server listing commands."),
 
     /**
-     * When this setting is on a channel all custom commands create in it will be, automatically tagged
+     * When this setting is on a messageChannel all custom commands create in it will be, automatically tagged
      * shitpost. shitpost commands can only be run in shitpost channels.
      */
-    SHITPOST("ShitPost", true, "When this setting is on a channel all custom commands create in it will be, automatically tagged shitpost. shitpost commands can only be run in shitpost channels."),
+    SHITPOST("ShitPost", true, "When this setting is on a messageChannel all custom commands create in it will be, automatically tagged shitpost. shitpost commands can only be run in shitpost channels."),
 
-    XP_DENIED("XpDenied", true, "When this setting is on a channel no pixels will be gained in the  channel."),
+    XP_DENIED("XpDenied", true, "When this setting is on a messageChannel no pixels will be gained in the  messageChannel."),
 
     PROFILES("Profiles", true, "Channel For Profile related Commands."),
 
     IGNORE_SPAM("IgnoreSpam", true, "When Enabled Spam Type messages will be ignored."),
 
-    MUTE_APPEALS("MuteAppeals", true, "Stops muted people from using commands in the channel."),
+    MUTE_APPEALS("MuteAppeals", true, "Stops muted people from using commands in the messageChannel."),
 
     // "Types"
 
@@ -93,7 +93,7 @@ public enum ChannelSetting {
     protected String desc;
 
     /**
-     * Creates a channel setting class
+     * Creates a messageChannel setting class
      *
      * @param name
      * @param isNotUnique defines if is allowed to have multiples of this ChannelSetting per server.
@@ -130,7 +130,7 @@ public enum ChannelSetting {
 
 
     /**
-     * checks if the setting is actually a channel setting
+     * checks if the setting is actually a messageChannel setting
      */
     public boolean isSetting() {
         return isSetting;
@@ -142,7 +142,7 @@ public enum ChannelSetting {
      * returns the setting description using a command as a description argument
      *
      * @param command the command used in the documentation
-     * @return the description of the channel setting
+     * @return the description of the messageChannel setting
      */
     public String getDesc(CommandObject command) {
         if (command == null) {
@@ -191,7 +191,7 @@ public enum ChannelSetting {
             title = "Channel:";
         }
         if (channels.size() != 0) {
-            builder.addField(title, Utility.listFormatter(channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()), true), false);
+            builder.addField(title, Utility.listFormatter(channels.stream().map(channel -> channel.getAsMention()).collect(Collectors.toList()), true), false);
         }
         List<Command> commands = object.guild.commands.stream().filter(command -> {
             if (command.channel != null && GuildHandler.testForPerms(object, command.perms)) {
@@ -209,8 +209,8 @@ public enum ChannelSetting {
     public String toggleSetting(CommandObject command) {
         ChannelSettingObject settingObject = command.guild.channelData.getChannelSetting(this);
         if (settingObject == null) settingObject = command.guild.channelData.initSetting(this);
-        String mention = command.channel.mention;
-        long channelID = command.channel.longID;
+        String mention = command.guildChannel.mention;
+        long channelID = command.guildChannel.longID;
         if (isSetting) {
             String mode = "removed";
             if (!settingObject.getChannelIDs().removeIf(l -> l == channelID)) {
@@ -230,7 +230,7 @@ public enum ChannelSetting {
                     settingObject.getChannelIDs().set(0, channelID);
                 }
             }
-            return String.format("> %s is %s the Server's **%s** channel.", mention, isAdding ? "is now" : "is no longer", name);
+            return String.format("> %s is %s the Server's **%s** messageChannel.", mention, isAdding ? "is now" : "is no longer", name);
         }
     }
 }

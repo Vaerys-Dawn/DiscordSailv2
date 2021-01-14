@@ -32,6 +32,6 @@ public class TagLevel extends TagObject {
 
     @Override
     public String desc() {
-        return "Replaces itself with the current level of the user.";
+        return "Replaces itself with the current level of the globalUser.";
     }
 }

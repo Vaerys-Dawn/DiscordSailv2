@@ -3,9 +3,9 @@ package com.github.vaerys.main;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.GlobalUserObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.RewardRoleObject;
@@ -14,17 +14,12 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import com.vdurmont.emoji.Emoji;
-import com.vdurmont.emoji.EmojiManager;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.impl.obj.ReactionEmoji;
-import sx.blah.discord.handle.obj.*;
-import sx.blah.discord.util.EmbedBuilder;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -189,7 +184,7 @@ public class Utility {
             if (userID == -1) {
                 userID = stringLong(StringUtils.substringBetween(content, "<@", ">"));
             }
-            IUser user = Globals.getClient().getUserByID(userID);
+            User user = Client.getClientObject().getUserByID(userID);
             if (user != null) {
                 return userID;
             } else {
@@ -210,7 +205,7 @@ public class Utility {
             if (from.contains("<@") || from.contains("<!@")) {
                 long userID = getMentionUserID(from);
                 if (userID != -1) {
-                    IUser mentioned = Globals.getClient().getUserByID(userID);
+                    User mentioned = Client.getClient().getUserById(userID);
                     from = from.replace("<@!" + userID + ">", mentioned.getName() + "#" + mentioned.getDiscriminator());
                     from = from.replace("<@" + userID + ">", mentioned.getName() + "#" + mentioned.getDiscriminator());
                 }
@@ -236,20 +231,19 @@ public class Utility {
         }
     }
 
-    public static void listFormatterEmbed(String title, EmbedBuilder builder, List<String> list,
-                                          boolean horizontal, String suffix) {
+    public static void listFormatterEmbed(String title, EmbedBuilder builder, List<String> list, boolean horizontal, String suffix) {
         String formattedList = listFormatter(list, horizontal);
         if (title == null || title.isEmpty()) {
             title = Command.spacer;
         }
         if (formattedList.isEmpty()) {
-            builder.appendField(title, Command.spacer + suffix, false);
+            builder.addField(title, Command.spacer + suffix, false);
             return;
         }
         if (horizontal) {
-            builder.appendField(title, "`" + formattedList + "`\n" + suffix, false);
+            builder.addField(title, "`" + formattedList + "`\n" + suffix, false);
         } else {
-            builder.appendField(title, "```\n" + formattedList + "```\n" + suffix, false);
+            builder.addField(title, "```\n" + formattedList + "```\n" + suffix, false);
         }
     }
 
@@ -284,9 +278,9 @@ public class Utility {
         return lst;
     }
 
-    public static void sendGlobalAdminLogging(Command command, String args, CommandObject commandObject) {
+    public static void sendGlobalAdminLogging(Command command, String args, GlobalUserObject user) {
         StringHandler message = new StringHandler("***GLOBAL LOGGING***\n> **@%s** Has Used Command `%s`",
-                commandObject.user.username, command.names[0]);
+                user.username, command.names[0]);
         for (GuildObject c : Globals.getGuilds()) {
             if (!c.config.moduleLogging) continue;
             if (!c.config.adminLogging) continue;
@@ -306,7 +300,7 @@ public class Utility {
                 channel = adminlog.get(0);
             }
             if (channel != null) {
-                RequestHandler.sendMessage(message.toString(), channel);
+                channel.sendMessage(message.toString()).queue();
             }
         }
     }
@@ -373,10 +367,10 @@ public class Utility {
 
     public static String escapeFun(String from) {
 
-        from = from.replace("`","\\`");
-        from = from.replace("*","\\*");
-        from = from.replace("_","\\_");
-        return from.replace("~","\\~");
+        from = from.replace("`", "\\`");
+        from = from.replace("*", "\\*");
+        from = from.replace("_", "\\_");
+        return from.replace("~", "\\~");
     }
 
     public static String replaceFun(String from, String fun, boolean[] exit) {
@@ -462,15 +456,15 @@ public class Utility {
     /***
      * Tests the role hierarchy of two users.
      *
-     * @param higherUser the user that will be performing the action
-     * @param lowerUser the user that the action will performed on
+     * @param higherUser the globalUser that will be performing the action
+     * @param lowerUser the globalUser that the action will performed on
      * @param guild the guild the action should take place
-     * @return if the higher user is above the lower user
+     * @return if the higher globalUser is above the lower globalUser
      */
-    public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, Guild guild, boolean sameLevel) {
-        List<Role> lowerRoles = lowerUser.getRolesForGuild(guild);
-        List<Role> higherRoles = higherUser.getRolesForGuild(guild);
-        // higher user is guild owner, automatically has highest role:
+    public static boolean testUserHierarchy(Member higherUser, Member lowerUser, Guild guild, boolean sameLevel) {
+        List<Role> lowerRoles = lowerUser.getRoles();
+        List<Role> higherRoles = higherUser.getRoles();
+        // higher globalUser is guild owner, automatically has highest role:
         if (guild.getOwner().equals(higherUser)) return true;
         Role topRole = null;
         int topRolePos = 0;
@@ -499,26 +493,26 @@ public class Utility {
         return true;
     }
 
-    public static boolean testUserHierarchy(IUser higherUser, IUser lowerUser, Guild guild) {
+    public static boolean testUserHierarchy(Member higherUser, Member lowerUser, Guild guild) {
         return testUserHierarchy(higherUser, lowerUser, guild, true);
     }
 
     /***
      * Tests the role hierarchy of two users.
      *
-     * @param higherUser the user that will be performing the action
-     * @param lowerUser the user that the action will performed on
+     * @param higherUser the globalUser that will be performing the action
+     * @param lowerUser the globalUser that the action will performed on
      * @param guild the guild the action should take place
-     * @return if the higher user is above the lower user
+     * @return if the higher globalUser is above the lower globalUser
      */
     public static boolean testUserHierarchy(UserObject higherUser, UserObject lowerUser, GuildObject guild) {
-        if (GuildHandler.canBypass(lowerUser.get(), guild.get())) return false;
-        return testUserHierarchy(higherUser.get(), lowerUser.get(), guild.get());
+        if (GuildHandler.canBypass(lowerUser.getMember(), guild.get())) return false;
+        return testUserHierarchy(higherUser.getMember(), lowerUser.getMember(), guild.get());
     }
 
-    public static boolean testUserHierarchy(IUser author, Role toTest, Guild guild) {
+    public static boolean testUserHierarchy(Member author, Role toTest, Guild guild) {
         boolean roleIsLower = false;
-        for (Role r : author.getRolesForGuild(guild)) {
+        for (Role r : author.getRoles()) {
             if (toTest.getPosition() < r.getPosition()) {
                 roleIsLower = true;
             }
@@ -547,39 +541,44 @@ public class Utility {
         }
     }
 
-    public static String embedToString(EmbedObject embed) {
+    public static String embedToString(MessageEmbed embed) {
         if (embed == null) return "";
         StringHandler embedToString = new StringHandler();
-        if (embed.author != null) embedToString.append("**").append(embed.author.name).append("**\n");
-        if (embed.title != null) embedToString.append("**").append(embed.title).append("**\n");
-        if (embed.description != null) embedToString.append(embed.description).append("\n");
-        if (embed.fields != null) {
-            for (EmbedObject.EmbedFieldObject field : embed.fields) {
-                embedToString.append("**").append(field.name).append("**\n").append(field.value).append("\n");
+        if (embed.getAuthor() != null) embedToString.append("**").append(embed.getAuthor().getName()).append("**\n");
+        if (embed.getTitle() != null) embedToString.append("**").append(embed.getTitle()).append("**\n");
+        if (embed.getDescription() != null) embedToString.append(embed.getDescription()).append("\n");
+        if (embed.getFields() != null) {
+            for (MessageEmbed.Field field : embed.getFields()) {
+                embedToString.append("**").append(field.getName()).append("**\n").append(field.getValue()).append("\n");
             }
         }
-        if (embed.footer != null) {
-            embedToString.append("*").append(embed.footer.text).append("*");
-            if (embed.timestamp != null) embedToString.append(" | ");
+        if (embed.getFooter() != null) {
+            embedToString.append("*").append(embed.getFooter().getText()).append("*");
+            if (embed.getTimestamp() != null) embedToString.append(" | ");
         }
-        if (embed.timestamp != null) {
-            embedToString.append(embed.timestamp);
+        if (embed.getThumbnail() != null) {
+            embedToString.append(embed.getTimestamp());
         }
-        if (embed.image != null) embedToString.append("\n").append(embed.image.url);
+        if (embed.getImage() != null) embedToString.append("\n").append(embed.getImage().getUrl());
         return embedToString.toString();
     }
 
     public static String unFormatMentions(Message message) {
-        StringHandler from = new StringHandler(message.getContent());
+        StringHandler from = new StringHandler(message.getContentRaw());
         from.replaceRegex("(?i)(@here|@everyone)", "**[REDACTED]**");
-        for (IUser user : message.getMentions()) {
+        for (User user : message.getMentionedUsers()) {
             if (user != null) {
                 StringHandler regex = new StringHandler("<@!?").append(user.getIdLong()).append(">");
-                StringHandler replacement = new StringHandler("__@").append(user.getDisplayName(message.getGuild())).append("__");
+                StringHandler replacement;
+                if (message.getChannel().getType().isGuild()) {
+                    replacement = new StringHandler("__@").append(message.getGuild().getMember(user).getNickname()).append("__");
+                } else {
+                    replacement = new StringHandler("__@").append(user.getName()).append("__");
+                }
                 from.replaceRegex(regex, replacement);
             }
         }
-        for (Role role : message.getRoleMentions()) {
+        for (Role role : message.getMentionedRoles()) {
             StringHandler toReplace = new StringHandler("<@&").append(role.getIdLong()).append(">");
             StringHandler replaceWith = new StringHandler("__**@").append(role.getName()).append("**__");
             from.replace(toReplace, replaceWith);
@@ -655,7 +654,7 @@ public class Utility {
             for (long s : channelIDs) {
                 TextChannel channel = command.guild.getChannelByID(s);
                 if (channel != null) {
-                    channelNames.add(channel.mention());
+                    channelNames.add(channel.getAsMention());
                 }
             }
         }
@@ -691,7 +690,7 @@ public class Utility {
                 toReturn.addAll(commands.stream()
                         .filter(c -> c.channel == ChannelSetting.FROM_DM)
                         .filter(c -> {
-                            //only show creator commands if the user the creator.
+                            //only show creator commands if the globalUser the creator.
                             if (c.type == SAILType.CREATOR && commandObject.user.checkIsCreator())
                                 return true;
                             if (c.type != SAILType.CREATOR) {
@@ -730,15 +729,14 @@ public class Utility {
 
     public static UserObject getUser(CommandObject command, String args, boolean doContains, boolean hasProfile) {
         if (args == null || args.isEmpty()) return null;
-
         try {
             long userId = Long.parseUnsignedLong(args);
-            IUser user = command.client.getUserByID(userId);
+            User user = command.client.getUserByID(userId);
             if (user != null || UserObject.checkForUser(userId, command.guild)) {
-                return UserObject.getNewUserObject(userId, command.guild);
+                return new UserObject(user, command.guild);
             }
         } catch (NumberFormatException e) {
-            List<IUser> mention = command.message.getMentions();
+            List<User> mention = command.message.getMentions();
             if (mention.size() > 0) {
                 Collections.reverse(mention);
                 return new UserObject(mention.get(0), command.guild);
@@ -746,39 +744,39 @@ public class Utility {
         }
 
 
-        IUser user = null;
-        IUser conUser = null;
+        Member user = null;
+        Member conUser = null;
         String toTest;
         if (args.split(" ").length != 1) {
             toTest = escapeRegex(args);
         } else {
             toTest = escapeRegex(args).replace("_", "[_| ]");
         }
-        List<IUser> guildUsers = command.guild.getUsers();
-        guildUsers.sort(Comparator.comparing(o -> o.getRolesForGuild(command.guild.get()).size()));
+        List<Member> guildUsers = command.guild.getUsers();
+        guildUsers.sort(Comparator.comparing(o -> o.getRoles().size()));
         Collections.reverse(guildUsers);
-        for (IUser u : guildUsers) {
+        for (Member u : guildUsers) {
             if (user != null) {
                 break;
             }
             try {
-                UserObject object = new UserObject(u, command.guild, true);
+                UserObject object = new UserObject(u, command.guild);
                 if (hasProfile) {
                     ProfileObject profile = object.getProfile();
                     if (profile == null || profile.isEmpty()) continue;
                 }
-                if ((u.getName() + "#" + u.getDiscriminator()).matches("(?i)" + toTest)) {
+                if ((u.getUser().getAsTag()).matches("(?i)" + toTest)) {
                     user = u;
                 }
-                if (u.getName().matches("(?i)" + toTest) && user == null) {
+                if (u.getUser().getName().matches("(?i)" + toTest) && user == null) {
                     user = u;
                 }
-                String displayName = u.getDisplayName(command.guild.get());
+                String displayName = u.getNickname();
                 if (displayName.matches("(?i)" + toTest) && user == null) {
                     user = u;
                 }
                 if (doContains && conUser == null) {
-                    if (u.getName().matches("(?i).*" + toTest + ".*")) {
+                    if (u.getUser().getName().matches("(?i).*" + toTest + ".*")) {
                         conUser = u;
                     }
                     if (displayName.matches("(?i).*" + toTest + ".*") && conUser == null) {
@@ -832,15 +830,6 @@ public class Utility {
 
     public static String getDefaultAvatarURL(long userID) {
         return String.format("https://cdn.discordapp.com/embed/avatars/%d.png", new Random(userID).nextInt(5));
-    }
-
-
-    public static ReactionEmoji getReaction(String emojiName) {
-        Emoji emoji = EmojiManager.getForAlias(emojiName);
-        if (emoji == null) {
-            throw new IllegalStateException("Invalid unicode call: " + emojiName);
-        }
-        return ReactionEmoji.of(emoji.getUnicode());
     }
 
 
@@ -934,14 +923,6 @@ public class Utility {
 //        return Pattern.compile("https?://imgur\\.com/a/.*").matcher(fileURL).matches();
 //    }
 
-    public static String getUnicodeEmoji(String emojiName) {
-        Emoji emoji = EmojiManager.getForAlias(emojiName);
-        if (emoji == null) {
-            throw new IllegalStateException("Invalid unicode call: " + emojiName);
-        }
-        return emoji.getUnicode();
-    }
-
     public static String formatError(Object object) {
         return "at " + object.getClass().getName() + "(" + object.getClass().getSimpleName() + ".java:0)\n";
     }
@@ -993,58 +974,3 @@ public class Utility {
 
 
 }
-
-//    public static List<String> getAlbumIUrls(String fileURL) {
-//        String id = getImgurID(fileURL);
-//        if (id == null) return new ArrayList<>();
-//        Album album = getAlbum(id);
-//        if (album != null) {
-//            return album.getImages().stream().map(image -> image.getLink()).collect(Collectors.toList());
-//        } else return new ArrayList<>();
-//    }
-
-//    private static String getImgurID(String fileURL) {
-//        if (!isImgurAlbum(fileURL)) return null;
-//        return fileURL.replaceAll("https?://imgur\\.com/a/", "");
-//    }
-
-//    public static Album getAlbum(String id) {
-//        String albulUrl = "https://api.imgur.com/3/album/";
-//        albulUrl += id;
-//        HttpURLConnection request;
-//        try {
-//            URL url = new URL(albulUrl);
-//            request = (HttpURLConnection) url.openConnection();
-//            request.setDoOutput(true);
-//            request.setRequestMethod("GET");
-//            request.connect();
-//            JsonParser parser = new JsonParser();
-//            JsonElement element = parser.parse(new InputStreamReader((org.omg.CORBA.portable.InputStream) request.getContent()));
-//            if (request.getResponseCode() == HttpURLConnection.HTTP_OK) {
-//                Album album = new Gson().fromJson(element.getAsJsonObject().getAsString(), Album.class);
-//                return album;
-//            }
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
-//    public static HttpResponse requestPOST(String requestURL, StringEntity entity) {
-//        String postUrl = requestURL;// put in your url
-//        HttpClient httpClient = HttpClientBuilder.create().build();
-//        HttpPost post = new HttpPost(postUrl);
-//        post.setEntity(entity);
-//        post.setHeader("Content-type", "application/json");
-//        try {
-//            return httpClient.execute(post);
-//        } catch (ClientProtocolException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//}

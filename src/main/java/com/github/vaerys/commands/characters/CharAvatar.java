@@ -16,21 +16,21 @@ public class CharAvatar extends Command {
         CharacterObject charObject = command.guild.characters.getCharByName(args.split(" ")[0]);
         if (charObject == null) return "\\> Could not find any characters with that Character ID.";
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        builder.setTitle(charObject.getNickname());
+        builder.setTitle(charObject.getEffectiveName());
         Member user = command.guild.getUserByID(charObject.getUserID());
         if (user == null) {
             builder.setFooter("Author: No longer on this server | Character ID: " + charObject.getName());
         } else {
-            builder.setFooter("Author: " + user.getNickname() + " | Character ID: " + charObject.getName());
+            builder.setFooter("Author: " + user.getEffectiveName() + " | Character ID: " + charObject.getName());
         }
         command.guild.characters.validateRoles(command.guild.get());
         if (charObject.getRoleIDs().size() != 0) {
             builder.setColor(charObject.getColor(command.guild));
         }
         if (charObject.getAvatarURL() == null || charObject.getAvatarURL().isEmpty())
-            return "\\> " + charObject.getNickname() + " Does not have an avatar set up.";
+            return "\\> " + charObject.getEffectiveName() + " Does not have an avatar set up.";
         builder.setImage(charObject.getAvatarURL());
-        builder.queue(command.channel);
+        builder.queue(command.guildChannel);
         return "";
     }
 

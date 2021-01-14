@@ -4,7 +4,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 10/05/2017.
@@ -13,7 +13,7 @@ public class ToggleTypingStatus extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-//        command.channel.getAllToggles().toggleTypingStatus();
+        command.guildChannel.get().sendTyping().complete();
         return null;
     }
 
@@ -24,7 +24,7 @@ public class ToggleTypingStatus extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Toggles the typing status on a channel.";
+        return "Toggles the typing status on a messageChannel.";
     }
 
     @Override

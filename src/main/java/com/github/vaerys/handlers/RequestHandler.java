@@ -45,7 +45,7 @@ public class RequestHandler {
 
     public static RequestBuffer.RequestFuture<Message> sendMessage(String message, TextChannel channel) {
         return RequestBuffer.request(() -> {
-            //message and channel checking
+            //message and messageChannel checking
             if (!Globals.client.isReady()) return null;
             if (message == null || message.isEmpty()) return null;
             if (channel == null) return null;
@@ -83,7 +83,7 @@ public class RequestHandler {
     }
 
     public static RequestBuffer.RequestFuture<Message> sendMessage(String message, CommandObject command) {
-        return sendMessage(message, command.channel.get());
+        return sendMessage(message, command.guildChannel.get());
     }
 
     public static RequestBuffer.RequestFuture<Message> sendEmbedMessage(String message, XEmbedBuilder builder, TextChannel channel) {
@@ -116,7 +116,7 @@ public class RequestHandler {
     }
 
     public static RequestBuffer.RequestFuture<Message> sendEmbedMessage(String message, XEmbedBuilder builder, CommandObject command) {
-        return sendEmbedMessage(message, builder, command.channel.get());
+        return sendEmbedMessage(message, builder, command.guildChannel.get());
     }
 
     public static RequestBuffer.RequestFuture<Message> sendEmbed(String content, EmbedObject embedObject, TextChannel channel) {
@@ -141,7 +141,7 @@ public class RequestHandler {
     }
 
     public static RequestBuffer.RequestFuture<Message> sendEmbed(String content, EmbedObject embedObject, CommandObject command) {
-        return sendEmbed(content, embedObject, command.channel.get());
+        return sendEmbed(content, embedObject, command.guildChannel.get());
     }
 
     public static RequestBuffer.RequestFuture<Message> sendFile(String message, File file, TextChannel channel) {
@@ -192,7 +192,7 @@ public class RequestHandler {
     }
 
     public static RequestBuffer.RequestFuture<Message> sendFile(String message, File file, CommandObject command) {
-        return sendFile(message, file, command.channel.get());
+        return sendFile(message, file, command.guildChannel.get());
     }
 
     public static RequestBuffer.RequestFuture<Message> sendFile(String message, String fileContents, String fileName, ChannelObject channel) {
@@ -200,7 +200,7 @@ public class RequestHandler {
     }
 
     public static RequestBuffer.RequestFuture<Message> sendFile(String message, String fileContents, String fileName, CommandObject command) {
-        return sendFile(message, fileContents, fileName, command.channel.get());
+        return sendFile(message, fileContents, fileName, command.guildChannel.get());
     }
 
 
@@ -302,7 +302,7 @@ public class RequestHandler {
     }
 
     public static RequestBuffer.RequestFuture<Message> sendFileURL(String message, String imageURL, CommandObject command, boolean loadMessage) {
-        return sendFileURL(message, imageURL, command.channel.get(), loadMessage);
+        return sendFileURL(message, imageURL, command.guildChannel.get(), loadMessage);
     }
 
     public static RequestBuffer.RequestFuture<Boolean> roleManagement(IUser author, Guild guild, long newRoleID, boolean isAdding) {
@@ -318,7 +318,7 @@ public class RequestHandler {
                 throw e;
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("Edited roles hierarchy is too high.")) {
-                    logger.debug("Error Editing roles of user with id: " + author.getIdLong() + " on guild with id: " + guild.getIdLong() +
+                    logger.debug("Error Editing roles of globalUser with id: " + author.getIdLong() + " on guild with id: " + guild.getIdLong() +
                             ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
                     return true;
                 } else {
@@ -351,7 +351,7 @@ public class RequestHandler {
             } catch (MissingPermissionsException e) {
                 if (e.getMessage().contains("hierarchy")) {
                     if (!suppressWarnings) {
-                        logger.warn("Error Editing roles of user with id: " + author.getIdLong() + " on guild with id: " + guild.getIdLong() +
+                        logger.warn("Error Editing roles of globalUser with id: " + author.getIdLong() + " on guild with id: " + guild.getIdLong() +
                                 ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
                     }
                     return false;
@@ -576,7 +576,7 @@ public class RequestHandler {
 //        });
 //    }
 
-    //    public static RequestBuffer.RequestFuture<Message> queueMessage(String message, TextChannel channel) {
+    //    public static RequestBuffer.RequestFuture<Message> queueMessage(String message, TextChannel messageChannel) {
 //        if (!Globals.client.isReady()) {
 //            return null;
 //        }
@@ -587,7 +587,7 @@ public class RequestHandler {
 //            }
 //            if (message.length() < 2000) {
 //                try {
-//                    if (channel == null) {
+//                    if (messageChannel == null) {
 //                        return error;
 //                    }
 //                    if (StringUtils.containsOnly(message, "\n")) {
@@ -597,21 +597,21 @@ public class RequestHandler {
 //                        return error;
 //                    }
 //                    if (message != null && !message.isEmpty()) {
-//                        return channel.queueMessage(Utility.removeMentions(message));
+//                        return messageChannel.queueMessage(Utility.removeMentions(message));
 //                    }
 //                } catch (MissingPermissionsException e) {
-//                    String debug = "Error sending message to channel with id: " + channel.getIdLong();
-//                    if (channel.getGuild() != null) {
-//                        debug += " on guild with id: " + channel.getGuild().getIdLong() + ".";
+//                    String debug = "Error sending message to messageChannel with id: " + messageChannel.getIdLong();
+//                    if (messageChannel.getGuild() != null) {
+//                        debug += " on guild with id: " + messageChannel.getGuild().getIdLong() + ".";
 //                    }
 //                    debug += "\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.";
 //                    logger.debug(debug);
 //                    return error;
 //                } catch (DiscordException e) {
 //                    if (e.getMessage().contains("CloudFlare")) {
-//                        return queueMessage(message, channel).getAllToggles();
+//                        return queueMessage(message, messageChannel).getAllToggles();
 //                    } else if (e.getMessage().contains("Message was unable to be sent (Discord didn't return a response).")) {
-//                        logger.debug("Could not Send DM, Perhaps the user has Dms from server members turned off.\nMessage: " + message);
+//                        logger.debug("Could not Send DM, Perhaps the globalUser has Dms from server members turned off.\nMessage: " + message);
 //                    } else {
 //                        Utility.sendStack(e);
 //                        logger.error(message);
@@ -619,7 +619,7 @@ public class RequestHandler {
 //                    }
 //                }
 //            } else {
-//                logger.debug("Message to be sent to channel with id: " + channel.getIdLong() + "on guild with id: " + channel.getGuild().getIdLong() +
+//                logger.debug("Message to be sent to messageChannel with id: " + messageChannel.getIdLong() + "on guild with id: " + messageChannel.getGuild().getIdLong() +
 //                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Message to large.");
 //                return error;
 //            }
@@ -627,7 +627,7 @@ public class RequestHandler {
 //        });
 //    }
 
-//    public static RequestBuffer.RequestFuture<Message> sendEmbedMessage(String message, XEmbedBuilder builder, TextChannel channel) {
+//    public static RequestBuffer.RequestFuture<Message> sendEmbedMessage(String message, XEmbedBuilder builder, TextChannel messageChannel) {
 //
 //        //removal of @everyone and @here Mentions.
 //        EmbedObject embed = builder.build();
@@ -637,27 +637,27 @@ public class RequestHandler {
 //                if (iMessage == null) {
 //                    iMessage = "";
 //                }
-//                return channel.queueMessage(iMessage, builder.build(), false);
+//                return messageChannel.queueMessage(iMessage, builder.build(), false);
 //            } catch (DiscordException e) {
 //                if (e.getMessage().contains("CloudFlare")) {
-//                    sendEmbedMessage(message, builder, channel);
+//                    sendEmbedMessage(message, builder, messageChannel);
 //                } else {
 //                    Utility.sendStack(e);
 //                    return null;
 //                }
 //            } catch (MissingPermissionsException e) {
-//                logger.debug("Error sending File to channel with id: " + channel.getIdLong() + " on guild with id: " + channel.getGuild().getIdLong() +
+//                logger.debug("Error sending File to messageChannel with id: " + messageChannel.getIdLong() + " on guild with id: " + messageChannel.getGuild().getIdLong() +
 //                        ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Missing permissions.");
-//                return queueMessage(Utility.embedToString(embed), channel).getAllToggles();
+//                return queueMessage(Utility.embedToString(embed), messageChannel).getAllToggles();
 //            }
 //            return null;
 //        });
 //    }
 
 //    public static Message sendDMEmbed(String message, XEmbedBuilder embed, long userID) {
-//        TextChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
-//        if (channel != null) {
-//            return sendEmbedMessage(message, embed, channel).getAllToggles();
+//        TextChannel messageChannel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
+//        if (messageChannel != null) {
+//            return sendEmbedMessage(message, embed, messageChannel).getAllToggles();
 //        } else {
 //            return null;
 //        }
@@ -666,11 +666,11 @@ public class RequestHandler {
 //    public static RequestBuffer.RequestFuture<Message> sendDM(String message, long userID) {
 //        return RequestBuffer.request(() -> {
 //            try {
-//                TextChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
+//                TextChannel messageChannel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
 //                if (message == null || message.isEmpty()) {
 //                    return null;
 //                }
-//                return queueMessage(message, channel).getAllToggles();
+//                return queueMessage(message, messageChannel).getAllToggles();
 //            } catch (DiscordException e) {
 //                if (e.getMessage().contains("CloudFlare")) {
 //                    return sendDM(message, userID).getAllToggles();
@@ -696,11 +696,11 @@ public class RequestHandler {
 //    public static RequestBuffer.RequestFuture<Boolean> sendFileDM(String message, File attatchment, long userID) {
 //        return RequestBuffer.request(() -> {
 //            try {
-//                TextChannel channel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
+//                TextChannel messageChannel = Globals.getClient().getOrCreatePMChannel(Globals.getClient().getUserByID(userID));
 //                if (message == null || message.isEmpty()) {
 //                    return true;
 //                }
-//                sendFile(message, attatchment, channel);
+//                sendFile(message, attatchment, messageChannel);
 //            } catch (DiscordException e) {
 //                if (e.getMessage().contains("CloudFlare")) {
 //                    sendFileDM(message, attatchment, userID);
@@ -716,28 +716,28 @@ public class RequestHandler {
 //        });
 //    }
 
-//    public static RequestBuffer.RequestFuture<Boolean> sendFile(String message, File file, TextChannel channel) {
+//    public static RequestBuffer.RequestFuture<Boolean> sendFile(String message, File file, TextChannel messageChannel) {
 //        return RequestBuffer.request(() -> {
 //            try {
 //                if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("")) {
 //                    if (file != null) {
-//                        channel.sendFile(file);
+//                        messageChannel.sendFile(file);
 //                    } else {
-//                        logger.debug("Error sending File to channel with id: " + channel.getIdLong() + " on guild with id: " + channel.getGuild().getIdLong() +
+//                        logger.debug("Error sending File to messageChannel with id: " + messageChannel.getIdLong() + " on guild with id: " + messageChannel.getGuild().getIdLong() +
 //                                ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
 //                        return true;
 //                    }
 //                } else {
 //                    if (message != null) {
-//                        channel.sendFile(Utility.removeMentions(message), file);
+//                        messageChannel.sendFile(Utility.removeMentions(message), file);
 //                    } else {
-//                        queueMessage(message, channel);
+//                        queueMessage(message, messageChannel);
 //                        return true;
 //                    }
 //                }
 //            } catch (DiscordException e) {
 //                if (e.getMessage().contains("CloudFlare")) {
-//                    sendFile(message, file, channel);
+//                    sendFile(message, file, messageChannel);
 //                } else {
 //                    Utility.sendStack(e);
 //                    return true;
@@ -745,18 +745,18 @@ public class RequestHandler {
 //            } catch (IOException e) {
 //                Utility.sendStack(e);
 //            } catch (MissingPermissionsException e) {
-//                queueMessage("> Could not send File, missing permissions.", channel);
-//                missingPermissions("FILE", channel);
+//                queueMessage("> Could not send File, missing permissions.", messageChannel);
+//                missingPermissions("FILE", messageChannel);
 //                return true;
 //            }
 //            return false;
 //        });
 //    }
 
-    //    public static Message sendFileURL(String message, String imageURL, TextChannel channel, boolean loadMessage) {
+    //    public static Message sendFileURL(String message, String imageURL, TextChannel messageChannel, boolean loadMessage) {
 //        Message toDelete = null;
 //        if (loadMessage) {
-//            toDelete = queueMessage("`Loading...`", channel).getAllToggles();
+//            toDelete = queueMessage("`Loading...`", messageChannel).getAllToggles();
 //        }
 //        Message sentMessage = null;
 //        HttpURLConnection connection = null;
@@ -772,39 +772,39 @@ public class RequestHandler {
 //                    URL url = new URL(imageURL);
 //                    String filename = FilenameUtils.getNames(url.getPath());
 //                    if (filename.equalsIgnoreCase("giphy.gif")) {
-//                        return queueMessage(message + " " + imageURL, channel).getAllToggles();
+//                        return queueMessage(message + " " + imageURL, messageChannel).getAllToggles();
 //                    }
 //                    //checks if url is valid
 //                    if (!Utility.isImageLink(filename)) {
-//                        return queueMessage(message + " " + imageURL, channel).getAllToggles();
+//                        return queueMessage(message + " " + imageURL, messageChannel).getAllToggles();
 //                    }
 //                    //sends message/files
 //                    if (StringUtils.containsOnly(message, "\n") || (message == null) || message.equals("") && imageURL != null) {
-//                        return channel.sendFile("", stream, filename);
+//                        return messageChannel.sendFile("", stream, filename);
 //                    } else if (message != null && !message.isEmpty() && imageURL != null) {
-//                        return channel.sendFile(Utility.removeMentions(message), false, stream, filename);
+//                        return messageChannel.sendFile(Utility.removeMentions(message), false, stream, filename);
 //                    } else {
-//                        logger.debug("Error sending File to channel with id: " + channel.getIdLong() + " on guild with id: " + channel.getGuild().getIdLong() +
+//                        logger.debug("Error sending File to messageChannel with id: " + messageChannel.getIdLong() + " on guild with id: " + messageChannel.getGuild().getIdLong() +
 //                                ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: No file to send");
 //                        return null;
 //                    }
 //                } catch (MalformedURLException e) {
-//                    return queueMessage(message + " " + imageURL, channel).getAllToggles();
+//                    return queueMessage(message + " " + imageURL, messageChannel).getAllToggles();
 //                } catch (MissingPermissionsException e) {
-//                    missingPermissions("URL_FILE", channel);
-//                    return queueMessage(message + " <" + imageURL + ">", channel).getAllToggles();
+//                    missingPermissions("URL_FILE", messageChannel);
+//                    return queueMessage(message + " <" + imageURL + ">", messageChannel).getAllToggles();
 //                }
 //            }).getAllToggles();
 //            stream.close();
 //        } catch (MalformedURLException e) {
 //            Utility.sendStack(e);
 //        } catch (SSLHandshakeException e) {
-//            queueMessage(message + " " + imageURL + " `FAILED TO EMBED - Failed SSL Handshake`", channel).getAllToggles();
+//            queueMessage(message + " " + imageURL + " `FAILED TO EMBED - Failed SSL Handshake`", messageChannel).getAllToggles();
 //        } catch (IOException e) {
 //            try {
 //                if (connection != null) {
 //                    int responseCode = connection.getResponseCode();
-//                    queueMessage(message + " " + imageURL + " `FAILED TO EMBED - ERROR:" + responseCode + "`", channel).getAllToggles();
+//                    queueMessage(message + " " + imageURL + " `FAILED TO EMBED - ERROR:" + responseCode + "`", messageChannel).getAllToggles();
 //                } else {
 //                    Utility.sendStack(e);
 //                }
@@ -813,7 +813,7 @@ public class RequestHandler {
 //            }
 //        } catch (IllegalArgumentException e) {
 //            if (e.getMessage().contains("http host = null")) {
-//                queueMessage("> `HTTP HOST ERROR, CHECK URL FOR ERRORS.`", channel);
+//                queueMessage("> `HTTP HOST ERROR, CHECK URL FOR ERRORS.`", messageChannel);
 //            }
 //        }
 //        if (loadMessage && toDelete != null) {

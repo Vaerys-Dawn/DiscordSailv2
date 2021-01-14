@@ -4,13 +4,15 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.*;
 import com.github.vaerys.objects.userlevel.ReminderObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Guild;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.time.Instant;
 import java.util.List;
@@ -19,39 +21,53 @@ public class GetReminders extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        List<ReminderObject> reminders = Globals.getGlobalData().getRemindersUser(command.user.longID);
+        return doGetReminders(command.user, command.client, command.guildChannel, command.guild.longID, new XEmbedBuilder(command));
+    }
+
+    @Override
+    public String executeDm(String args, DmCommandObject command) {
+        return doGetReminders(command.globalUser, command.client, command.messageChannel, -1, new XEmbedBuilder());
+    }
+
+    private String doGetReminders(GlobalUserObject user, ClientObject client, ChannelObject channel, long guildID, XEmbedBuilder embed) {
+        List<ReminderObject> reminders = Globals.getGlobalData().getRemindersUser(user.longID);
 
         if (reminders.size() == 0) return "\\> You have no reminders set.";
 
-        XEmbedBuilder embed = new XEmbedBuilder(command);
         int i = 1;
         for (ReminderObject r : reminders) {
             long timeSecs = r.getExecuteTime() - Instant.now().getEpochSecond();
             String timeFormatted = Utility.formatTime(timeSecs, true);
 
-            TextChannel channel = command.client.get().getChannelByID(r.getChannelID());
-            if (channel == null) {
-                // try to verify it's a DM channel instead.
-                channel = command.user.getDmChannel();
+            MessageChannel reminderChannel = client.get().getTextChannelById(r.getChannelID());
+            if (reminderChannel == null) {
+                // try to verify it's a DM messageChannel instead.
+                reminderChannel = user.getDmChannel();
                 if ( channel == null ) continue;
             }
 
             String mention = "your Direct Messages";
             String guildName = "";
-            if (!channel.isPrivate()) {
-                // not a DM channel.
-                mention = channel.mention();
-                Guild guild = channel.getGuild();
-                guildName = (guild.getIdLong() == command.guild.longID) ? "" : " (" + guild.getName() + ")";
+            if (reminderChannel.getType() == ChannelType.TEXT) {
+                // not a DM messageChannel.
+                TextChannel textChannel = client.get().getTextChannelById(reminderChannel.getIdLong());
+                mention = textChannel.getAsMention();
+                Guild guild = textChannel.getGuild();
+                guildName = (guild.getIdLong() == guildID) ? "" : " (" + guild.getName() + ")";
             }
 
-            embed.appendDesc( String.format("\n`%d.` **%s** in %s%s.", i, timeFormatted, mention, guildName) );
+            embed.setDescription( String.format("\n`%d.` **%s** in %s%s.", i, timeFormatted, mention, guildName) );
             i++;
         }
         i--;   // oh of course
         embed.setTitle( String.format("\\> You have %d Reminder%s:", i, (i==1) ? "":"s" ) );
-        embed.queue(command);
+        channel.queueMessage(embed.build());
         return null;
+    }
+
+    @Override
+    protected boolean hasDmVersion() {
+        return true;
     }
 
     @Override

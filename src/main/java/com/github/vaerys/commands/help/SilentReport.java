@@ -1,6 +1,5 @@
 package com.github.vaerys.commands.help;
 
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 
 /**
@@ -10,11 +9,8 @@ public class SilentReport extends Report {
 
     @Override
     public String execute(String args, CommandObject command) {
-        if (command.channel.get().getTypingStatus()) {
-            command.channel.get().toggleTypingStatus();
-        }
-        RequestHandler.deleteMessage(command.message.get());
-        RequestHandler.sendMessage(Report.report(args, command, true), command.user.get().getOrCreatePMChannel());
+        command.message.delete();
+        command.user.queueDm(Report.report(args, command, true));
         return null;
     }
 
@@ -25,7 +21,7 @@ public class SilentReport extends Report {
 
     @Override
     public String description(CommandObject command) {
-        return "Can be used to send a user report to the server staff.\n" +
+        return "Can be used to send a globalUser report to the server staff.\n" +
                 indent + " It will also remove the message used to call the command.";
     }
 
@@ -33,6 +29,9 @@ public class SilentReport extends Report {
     protected String usage() {
         return new Report().usage;
     }
+
+    @Override
+    protected boolean sendTyping() {return false;}
 
     @Override
     public void init() {

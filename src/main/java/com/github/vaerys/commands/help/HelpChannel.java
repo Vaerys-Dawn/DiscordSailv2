@@ -2,10 +2,9 @@ package com.github.vaerys.commands.help;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 public class HelpChannel extends Command {
 
@@ -13,7 +12,7 @@ public class HelpChannel extends Command {
     public String execute(String args, CommandObject command) {
         for (ChannelSetting s : command.guild.channelSettings) {
             if (s.toString().equalsIgnoreCase(args)) {
-                RequestHandler.sendEmbedMessage("", s.getInfo(command), command.channel.get());
+                s.getInfo(command).queue(command);
                 return null;
             }
         }
@@ -27,7 +26,7 @@ public class HelpChannel extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Gives information about a specific channel type or setting.";
+        return "Gives information about a specific messageChannel type or setting.";
     }
 
     @Override

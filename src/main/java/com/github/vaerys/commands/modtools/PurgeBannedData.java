@@ -9,8 +9,9 @@ import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.userlevel.ServerObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.util.ListIterator;
 
@@ -37,24 +38,24 @@ public class PurgeBannedData extends Command {
             if (userId == command.guild.getOwnerID()) {
                 return "\\> You cannot purge the servers owner's data, if you have found an error in their data please DM me with the details.";
             }
-            IUser toTest = command.guild.getUserByID(userId);
+            Member toTest = command.guild.getUserByID(userId);
             if (toTest != null) {
-                if (toTest.getPermissionsForGuild(command.guild.get()).contains(Permissions.ADMINISTRATOR)) {
-                    return "\\> You cannot purge a user with the administrator permission, if you have found an error in their data please DM me with the details.";
+                if (toTest.getPermissions().contains(Permission.ADMINISTRATOR)) {
+                    return "\\> You cannot purge a globalUser with the administrator permission, if you have found an error in their data please DM me with the details.";
                 }
             }
         } catch (NumberFormatException e) {
             //do nothing
         }
-        if (!command.client.bot.get().getPermissionsForGuild(command.guild.get()).contains(Permissions.BAN)) {
-            return "\\> I cant purge the data of banned user unless I get the **Ban Members** permission.\n" +
+        if (!command.botUser.getPermissions().contains(Permission.BAN_MEMBERS)) {
+            return "\\> I cant purge the data of banned globalUser unless I get the **Ban Members** permission.\n" +
                     "Feel free to remove the permission after you purge the data as I will no longer need it.";
         }
         if (userId != -1 && userStringID != null) {
             purgeData(userId, command, purgedData);
         } else {
-            for (IUser user : command.guild.get().getBannedUsers()) {
-                purgeData(user.getIdLong(), command, purgedData);
+            for (Guild.Ban user : command.guild.get().retrieveBanList().complete()) {
+                purgeData(user.getUser().getIdLong(), command, purgedData);
             }
         }
         String response = "\\> Purged Profiles: **" + purgedData[0] + "**." +
@@ -108,7 +109,7 @@ public class PurgeBannedData extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Removes all data related to banned users from the server's data. or just the data from one user.\n\n" +
+        return "Removes all data related to banned users from the server's data. or just the data from one globalUser.\n\n" +
                 "***!!! WARNING: IF YOU USE A USER_ID YOU WILL PURGE ALL DATA FOR THAT USER REGARDLESS OF STATUS SO BE CAREFUL !!!***\n";
     }
 
@@ -129,7 +130,7 @@ public class PurgeBannedData extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.ADMINISTRATOR, Permissions.BAN};
+        return new Permission[]{Permission.ADMINISTRATOR, Permission.BAN_MEMBERS};
     }
 
     @Override

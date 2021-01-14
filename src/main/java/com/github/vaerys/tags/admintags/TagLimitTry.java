@@ -37,6 +37,6 @@ public class TagLimitTry extends TagAdminObject {
 
     @Override
     protected String desc() {
-        return "When activated if the user has been added to the Try list for this command it will return with the contents of the tag and close the admin cc process, else it will remove itself.";
+        return "When activated if the globalUser has been added to the Try list for this command it will return with the contents of the tag and close the admin cc process, else it will remove itself.";
     }
 }

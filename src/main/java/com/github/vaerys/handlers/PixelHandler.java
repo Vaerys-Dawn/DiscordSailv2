@@ -7,6 +7,7 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.ChannelObject;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
@@ -16,10 +17,13 @@ import com.github.vaerys.pogos.GuildUsers;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
+import emoji4j.EmojiUtils;
+import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
 
 import java.time.ZoneOffset;
@@ -47,7 +51,7 @@ public class PixelHandler {
      * Handler for performing pixel decay.
      *
      * @param content The Guild decay is being checked on ({@link GuildObject})
-     * @param user    the profile object for the user that is having decay tested.
+     * @param user    the profile object for the globalUser that is having decay tested.
      */
     public static void doDecay(GuildObject content, ProfileObject user) {
         long days = user.daysDecayed(content);
@@ -86,7 +90,7 @@ public class PixelHandler {
                         if (user.getXP() < rewardFloor) {
                             user.setXp(rewardFloor);
                         }
-                        //if user is at level floor add setting.
+                        //if globalUser is at level floor add setting.
                         if (user.getXP() == rewardFloor && !user.getSettings().contains(HIT_LEVEL_FLOOR)) {
                             user.getSettings().add(HIT_LEVEL_FLOOR);
                         }
@@ -104,7 +108,7 @@ public class PixelHandler {
     /***
      * Handler for performing automatic role allocation
      *
-     * @param id      the user ID of the user that is having their roles checked.
+     * @param id      the globalUser ID of the globalUser that is having their roles checked.
      * @param content a wrapper around the Guild API object that contains extra information about the guild.
      */
     public static void checkUsersRoles(long id, GuildObject content) {
@@ -116,7 +120,7 @@ public class PixelHandler {
         //if denyAutoRole exit
         if (userObject.getSettings().contains(DENY_AUTO_ROLE)) return;
 
-        //check if user is on the server.
+        //check if globalUser is on the server.
         IUser user = Globals.getClient().getUserByID(userObject.getUserID());
         if (user == null) {
             return;
@@ -130,7 +134,7 @@ public class PixelHandler {
                 iterator.remove();
             }
         }
-        //add all roles that the user should have.
+        //add all roles that the globalUser should have.
         ArrayList<RewardRoleObject> allRewards = content.config.getAllRewards(userObject.getCurrentLevel());
         for (RewardRoleObject r : allRewards) {
             userRoles.add(r.getRole(content));
@@ -159,7 +163,7 @@ public class PixelHandler {
         //bots don't get XP
         if (object.user.get().isBot()) return;
 
-        //creates a profile for the user if they don't already have one.
+        //creates a profile for the globalUser if they don't already have one.
         ProfileObject user = new ProfileObject(object.user.longID);
         if (object.guild.users.getUserByID(object.user.longID) == null) {
             object.guild.users.getProfiles().add(user);
@@ -174,7 +178,7 @@ public class PixelHandler {
         if (!object.guild.config.modulePixels) return;
         if (!object.guild.config.xpGain) return;
 
-        //user setting no xp gain
+        //globalUser setting no xp gain
         if (user.getSettings().contains(NO_XP_GAIN) || user.getSettings().contains(DENIED_XP)) return;
 
         //role xp denying
@@ -199,8 +203,8 @@ public class PixelHandler {
         if (object.message.get().getContent().length() < 10 &&
                 object.message.get().getAttachments().isEmpty()) return;
 
-        //you cannot gain xp in an xpDenied channel
-        if (object.guild.channelHasSetting(ChannelSetting.XP_DENIED, object.channel)) return;
+        //you cannot gain xp in an xpDenied messageChannel
+        if (object.guild.channelHasSetting(ChannelSetting.XP_DENIED, object.guildChannel)) return;
 
         //gives them their xp.
         user.addXP(object.guild.config);
@@ -211,14 +215,14 @@ public class PixelHandler {
         //adds to the list of users who have spoken in the last min
         object.guild.getSpokenUsers().add(object.user.longID);
 
-        //check the level up state of the user.
+        //check the level up state of the globalUser.
         handleLevelUp(user, object);
     }
 
     /***
-     * Handler for user level ups.
+     * Handler for globalUser level ups.
      *
-     * @param user   the user that leveled up.
+     * @param user   the globalUser that leveled up.
      * @param object the container for all relevant API content.
      */
     private static void handleLevelUp(ProfileObject user, CommandObject object) {
@@ -227,11 +231,11 @@ public class PixelHandler {
         //get next level xp
         long nextLevelXp = totalXPForLevel(user.getCurrentLevel() + 1);
 
-        //check if the user actually leveled up
+        //check if the globalUser actually leveled up
         if (user.getXP() < nextLevelXp) return;
         user.levelUp();
 
-        //check if the user ranked up
+        //check if the globalUser ranked up
         for (RewardRoleObject r : object.guild.config.getRewardRoles()) {
             if (r.getLevel() == user.getCurrentLevel()) {
                 reward = r;
@@ -250,14 +254,14 @@ public class PixelHandler {
         //handle level up messages
         handleMessage(user, object, reward);
 
-        //check user's roles for rank up purposes
+        //check globalUser's roles for rank up purposes
         checkUsersRoles(user.getUserID(), object.guild);
     }
 
     /***
      * Handles the sending of the level up message
      *
-     * @param user   the user that leveled up.
+     * @param user   the globalUser that leveled up.
      * @param object the container for all relevant API content.
      * @param reward reward object that contains info on the reward they have received.
      */
@@ -266,7 +270,7 @@ public class PixelHandler {
         UserSetting userState = user.getLevelState();
         boolean rankedUp = reward != null;
         TextChannel levelChannel = object.guild.getChannelByType(ChannelSetting.LEVEL_UP);
-        TextChannel currentChannel = object.channel.get();
+        TextChannel currentChannel = object.guildChannel.get();
         TextChannel dmChannel = object.user.getDmChannel();
         Message levelMessage = null;
 
@@ -328,7 +332,7 @@ public class PixelHandler {
      * Helper method to send a level up message.
      *
      * @param message  the message to be sent
-     * @param channel  the channel the message should be sent to.
+     * @param channel  the messageChannel the message should be sent to.
      * @param isRankUp weather the rank or level up gif should be used.
      * @param doGif    weather the gif should be displayed.
      * @return the message that was sent.
@@ -340,54 +344,39 @@ public class PixelHandler {
     }
 
     /***
-     * Handler for attaching reactions to the message that leveled the user up.
+     * Handler for attaching reactions to the message that leveled the globalUser up.
      *
-     * @param user   the user that leveled up
+     * @param user   the globalUser that leveled up
      * @param object the container for all relevant API content.
      */
     private static void handleReactions(ProfileObject user, CommandObject object) {
         if (user.getSettings().contains(UserSetting.NO_LEVEL_UP_REACTIONS)) return;
         if (object.guild.config.levelUpReaction.equalsIgnoreCase("null")) return;
-        ReactionEmoji emoji;
-
-        //get Emoji
-        try {
-            long emojiID = Long.parseUnsignedLong(object.guild.config.levelUpReaction);
-            IEmoji react = object.client.getEmojiByID(emojiID);
-            if (react == null) {
-                sendReactionError(object);
-                return;
-            }
-            emoji = ReactionEmoji.of(react);
-        } catch (NumberFormatException e) {
-            emoji = ReactionEmoji.of(object.guild.config.levelUpReaction);
-        }
-
-        //send error if the reaction failed
-        if (emoji == null) {
+        Emote emote = object.client.get().getEmoteById(object.guild.config.levelUpReaction);
+        if (EmojiUtils.isEmoji(object.guild.config.levelUpReaction)) {
+            object.message.get().addReaction(object.guild.config.levelUpReaction).queue();
+        } else if (emote != null) {
+            object.message.get().addReaction(emote).queue();
+        } else {
             sendReactionError(object);
         }
-
-        //add the reaction
-        RequestHandler.addReaction(object.message, emoji);
     }
 
     private static void sendReactionError(CommandObject object) {
-        TextChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
-        if (adminChannel == null) adminChannel = object.channel.get();
-        RequestHandler.sendMessage("\\> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
-        return;
+        ChannelObject adminChannel = new ChannelObject(object.guild.getChannelByType(ChannelSetting.ADMIN));
+        if (adminChannel == null) adminChannel = object.guildChannel;
+        adminChannel.queueMessage("\\> The current emoji set to be used for level up reactions is invalid and needs to be updated.");
     }
 
     /***
      * Helper method to self destruct messages after a certain time.
      *
      * @param message the message to be deleted.
-     * @param user    the user that level up message.
+     * @param user    the globalUser that level up message.
      */
     private static void selfDestruct(Message message, ProfileObject user, CommandObject object) {
         if (object.guild.config.selfDestructLevelUps) {
-            selfDestruct.schedule(() -> RequestHandler.deleteMessage(message), user.getCurrentLevel() == 1 ? 2 : 1, TimeUnit.MINUTES);
+            selfDestruct.schedule(() -> message.delete().queue(), user.getCurrentLevel() == 1 ? 2 : 1, TimeUnit.MINUTES);
         }
     }
 
@@ -557,7 +546,7 @@ public class PixelHandler {
 //                        if (u.getXP() < rewardFloor) {
 //                            u.setXp(rewardFloor);
 //                        }
-//                        //if user is at level floor add setting.
+//                        //if globalUser is at level floor add setting.
 //                        if (u.getXP() == rewardFloor && !u.getEnabledSettings().contains(HIT_LEVEL_FLOOR)) {
 //                            u.getEnabledSettings().add(HIT_LEVEL_FLOOR);
 //                        }
@@ -569,7 +558,7 @@ public class PixelHandler {
 //                    }
 //                }
 //            }
-//            //check user's roles and make sure that they have the right roles.
+//            //check globalUser's roles and make sure that they have the right roles.
 //        }
 //        checkUsersRoles(u.getUserID(), content);
 //    }
@@ -577,19 +566,19 @@ public class PixelHandler {
 //        boolean leveledUp;
 //        boolean rankedup = false;
 //        Message selfDestruct = null;
-//        if (user.getCurrentLevel() == -1) {
-//            user.setCurrentLevel(xpToLevel(user.getXP()));
+//        if (globalUser.getCurrentLevel() == -1) {
+//            globalUser.setCurrentLevel(xpToLevel(globalUser.getXP()));
 //            return;
 //        }
-//        long newLevel = xpToLevel(user.getXP());
-//        long nextLevel = user.getCurrentLevel() + 1;
+//        long newLevel = xpToLevel(globalUser.getXP());
+//        long nextLevel = globalUser.getCurrentLevel() + 1;
 //        if (newLevel >= nextLevel) {
 //            //react to message that leveled them up
 //            reactTolevelUp(object);
 //
-//            // level the user up
-//            user.setCurrentLevel(xpToLevel(user.getXP()));
-//            UserSetting userOverride = user.getLevelState();
+//            // level the globalUser up
+//            globalUser.setCurrentLevel(xpToLevel(globalUser.getXP()));
+//            UserSetting userOverride = globalUser.getLevelState();
 //            String levelUpMessage = object.guild.config.levelUpMessage;
 //
 //            //run tags
@@ -599,14 +588,14 @@ public class PixelHandler {
 //
 //            //adds a special message if a reward is added.
 //            for (RewardRoleObject r : object.guild.config.getRewardRoles()) {
-//                if (r.getLevel() == user.getCurrentLevel()) {
-//                    if (user.getEnabledSettings().contains(DENY_AUTO_ROLE)) {
+//                if (r.getLevel() == globalUser.getCurrentLevel()) {
+//                    if (globalUser.getEnabledSettings().contains(DENY_AUTO_ROLE)) {
 //                        break;
 //                    }
-//                    if (user.getEnabledSettings().contains(HIT_LEVEL_FLOOR)) {
-//                        for (int i = 0; i < user.getEnabledSettings().size(); i++) {
-//                            if (user.getEnabledSettings().get(i) == HIT_LEVEL_FLOOR) {
-//                                user.getEnabledSettings().remove(i);
+//                    if (globalUser.getEnabledSettings().contains(HIT_LEVEL_FLOOR)) {
+//                        for (int i = 0; i < globalUser.getEnabledSettings().size(); i++) {
+//                            if (globalUser.getEnabledSettings().get(i) == HIT_LEVEL_FLOOR) {
+//                                globalUser.getEnabledSettings().remove(i);
 //                            }
 //                        }
 //                        levelUpMessage = "Welcome Back.\n" + levelUpMessage + "\nYour **@" + object.guild.getRoleById(r.getRoleID()).getName() + "** role has been returned to you.";
@@ -619,12 +608,12 @@ public class PixelHandler {
 //
 //
 //            String loggingType = rankedup ? "RANKUP" : "LEVELUP";
-//            object.guild.sendDebugLog(object, "PIXELS", loggingType, user.getCurrentLevel() + "");
+//            object.guild.sendDebugLog(object, "PIXELS", loggingType, globalUser.getCurrentLevel() + "");
 //
 //
-//            //if the user only just reached level 1 send them a message telling them about the pixelSettings command.
-//            if (user.getCurrentLevel() == 1) {
-//                levelUpMessage += "\n\n> If you want to change where these messages are sent or want to remove them completely you can change that with `" + new ProfileSettings().getUsage(object) + "`.";
+//            //if the globalUser only just reached level 1 send them a message telling them about the pixelSettings command.
+//            if (globalUser.getCurrentLevel() == 1) {
+//                levelUpMessage += "\n\n> If you want to change where these messages are sent or want to remove them completely you can change that with `" + new ProfileSettings().getUsageDm(object) + "`.";
 //            }
 //
 //            if (userOverride != null) {
@@ -636,39 +625,39 @@ public class PixelHandler {
 //            }
 //            List<TextChannel> levelDenied = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP_DENIED);
 //            List<TextChannel> levelUpChannel = object.guild.getChannelsByType(ChannelSetting.LEVEL_UP);
-//            if (levelDenied.size() != 0 && levelDenied.contains(object.channel.get())) {
+//            if (levelDenied.size() != 0 && levelDenied.contains(object.messageChannel.get())) {
 //                if (userOverride != SEND_LVLUP_DMS || userOverride != SEND_LVLUP_RANK_CHANNEL && levelUpChannel.size() == 0) {
 //                    userOverride = DONT_SEND_LVLUP;
 //                }
 //            }
 //            switch (userOverride) {
 //                case SEND_LVLUP_CURRENT_CHANNEL:
-//                    selfDestruct = RequestHandler.queueMessage(levelUpMessage.toString(), object.channel.get()).get();
+//                    selfDestruct = RequestHandler.queueMessage(levelUpMessage.toString(), object.messageChannel.get()).get();
 //                    break;
 //                case SEND_LVLUP_RANK_CHANNEL:
-//                    TextChannel channel = null;
+//                    TextChannel messageChannel = null;
 //                    if (levelUpChannel.size() != 0) {
-//                        channel = levelUpChannel.get(0);
+//                        messageChannel = levelUpChannel.get(0);
 //                    }
-//                    if (channel != null) {
-//                        if (channel.getModifiedPermissions(object.client.bot.get()).contains(Permissions.ATTACH_FILES)) {
+//                    if (messageChannel != null) {
+//                        if (messageChannel.getModifiedPermissions(object.client.bot.get()).contains(Permissions.ATTACH_FILES)) {
 //                            if (rankedup) {
-//                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, channel);
+//                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, messageChannel);
 //                            } else {
-//                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, channel);
+//                                RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, messageChannel);
 //                            }
 //                        } else {
-//                            RequestHandler.queueMessage(levelUpMessage.toString(), channel).get();
+//                            RequestHandler.queueMessage(levelUpMessage.toString(), messageChannel).get();
 //                        }
 //                    } else {
-//                        selfDestruct = RequestHandler.queueMessage(levelUpMessage.toString(), object.channel.get()).get();
+//                        selfDestruct = RequestHandler.queueMessage(levelUpMessage.toString(), object.messageChannel.get()).get();
 //                    }
 //                    break;
 //                case SEND_LVLUP_DMS:
 //                    if (rankedup) {
-//                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel());
+//                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.RANK_UP_IMAGE_URL, object.globalUser.get().getOrCreatePMChannel());
 //                    } else {
-//                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.user.get().getOrCreatePMChannel());
+//                        RequestHandler.sendEmbededImage(levelUpMessage.toString(), Constants.LEVEL_UP_IMAGE_URL, object.globalUser.get().getOrCreatePMChannel());
 //                    }
 //                    break;
 //                case DONT_SEND_LVLUP:
@@ -681,12 +670,12 @@ public class PixelHandler {
 //            leveledUp = false;
 //        }
 //        if (leveledUp) {
-//            checkUsersRoles(user.getUserID(), object.guild);
+//            checkUsersRoles(globalUser.getUserID(), object.guild);
 //        }
 //        if (object.guild.config.selfDestructLevelUps && selfDestruct != null && !rankedup) {
 //            try {
 //                //keep the message around just a little longer for their first level up.
-//                if (user.getCurrentLevel() == 1) {
+//                if (globalUser.getCurrentLevel() == 1) {
 //                    Thread.sleep(60 * 1000);
 //                }
 //                //self destruct messages after 1 min.
@@ -700,8 +689,8 @@ public class PixelHandler {
 //
 //    private static void reactTolevelUp(CommandObject object) {
 //        if (object.guild.config.reactToLevelUp) {
-//            ProfileObject user = object.guild.users.getUserByID(object.user.longID);
-//            if (user != null && user.getEnabledSettings().contains(UserSetting.NO_LEVEL_UP_REACTIONS)) {
+//            ProfileObject globalUser = object.guild.users.getUserByID(object.globalUser.longID);
+//            if (globalUser != null && globalUser.getEnabledSettings().contains(UserSetting.NO_LEVEL_UP_REACTIONS)) {
 //                return;
 //            }
 //            IEmoji customEmoji = null;
@@ -728,7 +717,7 @@ public class PixelHandler {
 //            if (object.guild.config.levelUpReaction.equalsIgnoreCase("null")) return;
 //            if (found == false) {
 //                TextChannel adminChannel = object.guild.getChannelByType(ChannelSetting.ADMIN);
-//                if (adminChannel == null) adminChannel = object.channel.get();
+//                if (adminChannel == null) adminChannel = object.messageChannel.get();
 //                RequestHandler.queueMessage("> The current emoji set to be used for level up reactions is invalid and needs to be updated.", adminChannel);
 //                return;
 //            }

@@ -9,7 +9,7 @@ import com.github.vaerys.tags.cctags.TagRemoveMentions;
 import com.github.vaerys.tags.cctags.TagRemovePrep;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -69,7 +69,7 @@ public class AdminEcho extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_MESSAGES, Permissions.MENTION_EVERYONE};
+        return new Permission[]{Permission.MESSAGE_MANAGE, Permission.MESSAGE_MENTION_EVERYONE};
     }
 
     @Override

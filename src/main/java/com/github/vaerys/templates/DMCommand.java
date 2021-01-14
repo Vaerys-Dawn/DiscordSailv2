@@ -1,12 +1,18 @@
 package com.github.vaerys.templates;
 
 import com.github.vaerys.enums.ChannelSetting;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.masterobjects.CommandObject;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 05/02/2017.
  */
 public abstract class DMCommand extends Command {
+
+    @Override
+    public String execute(String args, CommandObject command) {
+        return null;
+    }
 
     //Channel Constants
     @Override
@@ -22,6 +28,11 @@ public abstract class DMCommand extends Command {
     @Override
     protected boolean doAdminLogging() {
         return false;
+    }
+
+    @Override
+    protected boolean hasDmVersion() {
+        return true;
     }
 
     @Override

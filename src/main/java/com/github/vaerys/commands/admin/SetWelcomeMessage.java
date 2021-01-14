@@ -24,10 +24,10 @@ public class SetWelcomeMessage extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows for the setting of the message that shows when a user joins the server.\n" +
+        return "Allows for the setting of the message that shows when a globalUser joins the server.\n" +
                 "**Available tags**\n" +
                 "<server> = Server Name\n" +
-                "<user> = User's Name";
+                "<globalUser> = User's Name";
     }
 
     @Override

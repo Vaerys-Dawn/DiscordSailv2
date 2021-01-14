@@ -1,14 +1,14 @@
 package com.github.vaerys.templates;
 
 import com.github.vaerys.commands.CommandList;
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

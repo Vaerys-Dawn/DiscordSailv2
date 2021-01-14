@@ -4,29 +4,29 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 
 public class AddProfile extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        IUser user = null;
+        Member user = null;
         try {
             long userID = Long.parseUnsignedLong(args);
             user = command.guild.getUserByID(userID);
 
         } catch (NumberFormatException e) {
             if (command.message.get().getMentions().size() != 0) {
-                user = command.message.get().getMentions().get(0);
+                user = command.message.get().getMentionedMembers().get(0);
             }
         }
         if (command.guild.users.getUserByID(user.getIdLong()) != null) {
-            return "\\> " + user.getDisplayName(command.guild.get()) + " already has a profile.";
+            return "\\> " + user.getNickname() + " already has a profile.";
         }
         if (user == null) return "\\> Invalid UserID";
         command.guild.users.addUser(user.getIdLong());
-        return "\\> Profile for **" + user.getDisplayName(command.guild.get()) + "** Created.";
+        return "\\> Profile for **" + user.getNickname() + "** Created.";
     }
 
     @Override
@@ -36,7 +36,7 @@ public class AddProfile extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows Admins to initiate a profile for a user using a userID";
+        return "Allows Admins to initiate a profile for a globalUser using a userID";
     }
 
     @Override
@@ -56,7 +56,7 @@ public class AddProfile extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_MESSAGES};
+        return new Permission[]{Permission.MESSAGE_MANAGE};
     }
 
     @Override

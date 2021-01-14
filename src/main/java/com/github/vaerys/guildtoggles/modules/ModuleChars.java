@@ -1,14 +1,12 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.guildtoggles.ToggleList;
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.guildtoggles.toggles.RoleIsToggle;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 20/02/2017.
@@ -54,7 +52,7 @@ public class ModuleChars extends GuildModule {
     public String stats(CommandObject object) {
         StringBuilder builder = new StringBuilder();
         builder.append("**Total Characters:** " + object.guild.characters.getCharacters(object.guild.get()).size());
-        if (GuildHandler.testForPerms(object, Permissions.MANAGE_SERVER)) {
+        if (GuildHandler.testForPerms(object, Permission.MANAGE_SERVER)) {
             builder.append("\n**Character Roles Prefix:** " + object.guild.characters.getRolePrefix());
         }
         return builder.toString();

@@ -29,7 +29,7 @@ public class CheckNewUsers extends GuildSetting {
 
     @Override
     public String desc(CommandObject command) {
-        return "Checks to see if a user's account is less than 5 hours old and sends a message to the admin logs if set up or the general channel if it is.";
+        return "Checks to see if a globalUser's account is less than 5 hours old and sends a message to the admin logs if set up or the general messageChannel if it is.";
     }
 
     @Override

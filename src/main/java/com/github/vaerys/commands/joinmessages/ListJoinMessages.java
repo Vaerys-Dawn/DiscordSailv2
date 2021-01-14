@@ -6,9 +6,9 @@ import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.adminlevel.JoinMessage;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -60,7 +60,7 @@ public class ListJoinMessages extends Command {
         builder.setTitle("\\> Join Message list");
         builder.setDescription(pages.get(page) + "\n\n" + missingArgs(command));
         builder.setFooter("Page " + (page + 1) + "/" + pages.size() + " | Total Join Messages: " + messages.size());
-        builder.queue(command.channel);
+        builder.queue(command.guildChannel);
         return null;
     }
 

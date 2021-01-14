@@ -13,10 +13,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import sx.blah.discord.handle.obj.Guild;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +42,7 @@ public class Characters extends GlobalFile {
                     characters.remove(c);
                     return "\\> Character Deleted.";
                 } else {
-                    return "\\> I'm sorry " + author.getNickname() + ", I'm afraid I can't do that.";
+                    return "\\> I'm sorry " + author.getEffectiveName() + ", I'm afraid I can't do that.";
                 }
             }
         }

@@ -7,11 +7,11 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
+import com.github.vaerys.objects.userlevel.UserLinkObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
-import com.github.vaerys.objects.userlevel.UserLinkObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,9 +24,9 @@ public class EditLinks extends Command {
     protected static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
             new String[]{"EditLinks", "NewLink"},
             "[@User] [Link Name] (Link)",
-            "Allows the modification of user links.",
+            "Allows the modification of globalUser links.",
             SAILType.MOD_TOOLS,
-            Permissions.MANAGE_MESSAGES
+            Permission.MESSAGE_MANAGE
     );
 
     @Override
@@ -34,7 +34,7 @@ public class EditLinks extends Command {
         UserObject user = command.user;
         SplitFirstObject userCall = new SplitFirstObject(args);
         boolean adminEdit = false;
-        if (GuildHandler.testForPerms(command, ADMIN_EDIT.getPermissions()) || GuildHandler.canBypass(command.user.get(), command.guild.get())) {
+        if (GuildHandler.testForPerms(command, ADMIN_EDIT.getPermissions()) || GuildHandler.canBypass(command.user.getMember(), command.guild.get())) {
             user = Utility.getUser(command, userCall.getFirstWord(), false);
             if (user != null && userCall.getRest() != null && user.getProfile() != null) {
                 adminEdit = true;
@@ -109,7 +109,7 @@ public class EditLinks extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows uses to manage the links attached to their profile. Max 5 links per user (10 if user is a patron).";
+        return "Allows uses to manage the links attached to their profile. Max 5 links per globalUser (10 if globalUser is a patron).";
     }
 
     @Override

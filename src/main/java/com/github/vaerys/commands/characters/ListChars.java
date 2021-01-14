@@ -23,11 +23,11 @@ public class ListChars extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         UserObject user = command.user;
         String title = "\\> Here are all of your characters.";
-        //get user
+        //get globalUser
         if (args != null && !args.isEmpty()) {
             user = Utility.getUser(command, args, true);
             if (user == null) {
-                return "\\> Could not find user.";
+                return "\\> Could not find globalUser.";
             }
             if (user.longID != command.user.longID) {
                 title = "\\> Here are all of @" + user.displayName + "'s Characters.";
@@ -38,7 +38,7 @@ public class ListChars extends Command {
             return "\\> User has set their profile to private.";
         }
         //generate list
-        List<String> list = user.getCharacters().stream().map(c -> c.getName()).collect(Collectors.toList());
+        List<String> list = user.getCharacters(command.guild.longID).stream().map(c -> c.getName()).collect(Collectors.toList());
         //give message if empty
         if (list.size() == 0) {
             return user.longID == command.user.longID ?
@@ -48,7 +48,7 @@ public class ListChars extends Command {
         //build embed data
         builder.setTitle(title);
         builder.setDescription("```\n" + Utility.listFormatter(list, true) + "```\n" + new CharInfo().missingArgs(command));
-        builder.setFooter(user.getCharacters().size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
+        builder.setFooter(user.getCharacters(command.guild.longID).size() + "/" + command.guild.characters.maxCharsForUser(user, command.guild) + " Slots used.");
         //send private char list
         if (user.getProfile().getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
             command.user.queueDm(builder.build());

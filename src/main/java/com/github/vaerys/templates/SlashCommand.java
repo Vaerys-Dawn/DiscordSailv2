@@ -1,13 +1,12 @@
 package com.github.vaerys.templates;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.Arrays;
 
@@ -83,7 +82,7 @@ public abstract class SlashCommand extends Command {
     }
 
     @Override
-    public String getArgs(String args, CommandObject command) {
+    public String getArgs(String args) {
         return null;
     }
 

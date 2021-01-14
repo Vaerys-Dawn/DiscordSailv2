@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * Wrapper for the User API object. Contains All bot information linked to that user for the Guild assigned to it.
+ * Wrapper for the User API object. Contains All bot information linked to that globalUser for the Guild assigned to it.
  */
 
 public class UserObject extends GlobalUserObject {
@@ -56,7 +56,7 @@ public class UserObject extends GlobalUserObject {
 
     private void initMember(Member member, GuildObject guild) {
         this.guild = guild;
-        displayName = member.getNickname();
+        displayName = member.getEffectiveName();
         roles = member.getRoles();
         escapeMentions();
         notAllowed = "\\> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
@@ -112,9 +112,6 @@ public class UserObject extends GlobalUserObject {
         return member.getAsMention();
     }
 
-    public boolean isBlockedFromDms() {
-        return Globals.getGlobalData().getBlockedFromDMS().contains(longID);
-    }
 
     public boolean isDecaying() {
         return getProfile().daysDecayed(guild) > 7;

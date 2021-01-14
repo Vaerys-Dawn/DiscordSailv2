@@ -3,18 +3,19 @@ package com.github.vaerys.commands.creator.directmessages;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.templates.DMCommand;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.User;
 
 public class Echo extends DMCommand {
 
     @Override
-    public String execute(String args, CommandObject command) {
-        IUser recipient = command.client.get().getUserByID(Globals.lastDmUserID);
+    public String executeDm(String args, DmCommandObject command) {
+        User recipient = command.client.get().getUserById(Globals.lastDmUserID);
         if (recipient != null) {
             return Respond.sendDM(args, command, recipient, "\\> ");
         } else {
-            return "\\> no user to respond to.";
+            return "\\> no globalUser to respond to.";
         }
     }
 
@@ -25,7 +26,7 @@ public class Echo extends DMCommand {
 
     @Override
     public String description(CommandObject command) {
-        return "Sail sends a response to the most recent user";
+        return "Sail sends a response to the most recent globalUser";
     }
 
     @Override

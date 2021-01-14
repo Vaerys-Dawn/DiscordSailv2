@@ -212,7 +212,7 @@ public class TimerHandler {
             //reset Admin CC counters
             task.adminCCs.dailyReset();
 
-            //getAllToggles general channel
+            //getAllToggles general messageChannel
             TextChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
 
             //do daily messages
@@ -280,7 +280,7 @@ public class TimerHandler {
             public void run() {
                 IUser user = Client.getClient().getUserByID(object.getUserID());
                 TextChannel channel = Client.getClient().getChannelByID(object.getChannelID());
-                // sanitize channel
+                // sanitize messageChannel
                 if (channel == null) {
                     channel = user.getOrCreatePMChannel();
                 } else if (!channel.isPrivate()) {
@@ -338,14 +338,14 @@ public class TimerHandler {
             String modNoteFormat = "\\> Muted by Rate Limiter, %d Over Limit. Channel%s: %s.";
             //get channels
             List<TextChannel> channels = u.getChannels(guild);
-            //get admin channel
+            //get admin messageChannel
             if (admin == null && !channels.isEmpty()) admin = channels.get(channels.size() - 1);
             //get offender
             IUser offender = u.getUser(guild);
             ProfileObject profile = guild.users.getUserByID(u.getUserID());
             //get amount over limit
             long rate = u.getSize() - guild.config.messageLimit;
-            //format channel mentions
+            //format messageChannel mentions
             String formattedChannels = String.join(", ", channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()));
             //debug log mute
             guild.sendDebugLog(offender, admin, "RATE_LIMITING", "MUTE", rate + " over limit.");

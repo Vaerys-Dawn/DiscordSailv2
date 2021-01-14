@@ -1,34 +1,34 @@
 package com.github.vaerys.commands.creator.directmessages;
 
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.DMCommand;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.PrivateChannel;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * Created by Vaerys on 05/02/2017.
  */
 public class Respond extends DMCommand {
 
-    public static String sendDM(String args, CommandObject command, IUser recipient, String prefix) {
+    public static String sendDM(String args, DmCommandObject command, User recipient, String prefix) {
         if (recipient == null) {
             return "\\> Could Not Send Response, UserID is invalid.";
         }
         if (args == null) {
             return "\\> Could Not Send Response, Contents cannot be empty.";
         }
-        TextChannel channel = recipient.getOrCreatePMChannel();
+        PrivateChannel channel = recipient.openPrivateChannel().complete();
         if (command.message.getAttachments().size() != 0) {
             for (Message.Attachment a : command.message.getAttachments()) {
                 args += "\n" + a.getUrl();
             }
         }
-        if (RequestHandler.sendMessage(prefix + args, channel).get() == null) {
+        if (channel.sendMessage(prefix + args).complete() == null) {
             return "\\> An Error occurred while attempting to run this command.";
         } else {
             return "\\> Message Sent.";
@@ -36,10 +36,10 @@ public class Respond extends DMCommand {
     }
 
     @Override
-    public String execute(String args, CommandObject command) {
+    public String executeDm(String args, DmCommandObject command) {
         SplitFirstObject response = new SplitFirstObject(args);
-        IUser recipient = command.client.get().getUserByID(Utility.stringLong(response.getFirstWord()));
-        return sendDM(response.getRest(), command, recipient, command.user.username + ": ");
+        User recipient = command.client.get().getUserById(Utility.stringLong(response.getFirstWord()));
+        return sendDM(response.getRest(), command, recipient, command.globalUser.username + ": ");
     }
 
     @Override
@@ -49,7 +49,7 @@ public class Respond extends DMCommand {
 
     @Override
     public String description(CommandObject command) {
-        return "Sends a response to a user.";
+        return "Sends a response to a globalUser.";
     }
 
     @Override

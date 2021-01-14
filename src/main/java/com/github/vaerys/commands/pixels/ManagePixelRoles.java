@@ -8,8 +8,8 @@ import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class ManagePixelRoles extends Command {
                 desc += "**Pixel Denied Role**: " + xpDenied.getName();
             }
             builder.setDescription(desc);
-            builder.queue(command.channel);
+            builder.queue(command.guildChannel);
             return null;
         }
         SplitFirstObject mode = new SplitFirstObject(args);
@@ -148,7 +148,7 @@ public class ManagePixelRoles extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_ROLES};
+        return new Permission[]{Permission.MANAGE_ROLES};
     }
 
     @Override

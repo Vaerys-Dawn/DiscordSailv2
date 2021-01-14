@@ -3,12 +3,11 @@ package com.github.vaerys.commands.modtools;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 
 /**
  * Created by Vaerys on 12/07/2017.
@@ -17,12 +16,12 @@ public class CheckPixelRoles extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        Message working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
-        for (IUser user : command.guild.getUsers()) {
+        Message working = command.guildChannel.sendMessage("`Working...`");
+        for (Member user : command.guild.getUsers()) {
             GuildHandler.checkUsersRoles(user.getIdLong(), command.guild, true);
         }
         GuildHandler.checkTopTen(command.guild);
-        RequestHandler.deleteMessage(working);
+        working.delete().complete();
         return "\\> Done.";
     }
 
@@ -33,7 +32,7 @@ public class CheckPixelRoles extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "checks all user's Roles and allocates the correct roles based on their Pixel stats.";
+        return "checks all globalUser's Roles and allocates the correct roles based on their Pixel stats.";
     }
 
     @Override
@@ -53,7 +52,7 @@ public class CheckPixelRoles extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

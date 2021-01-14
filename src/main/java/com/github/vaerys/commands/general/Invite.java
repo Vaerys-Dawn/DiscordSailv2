@@ -1,22 +1,22 @@
 package com.github.vaerys.commands.general;
 
-import com.github.vaerys.main.Globals;
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.main.Client;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 public class Invite extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
         String user = command.user.displayName;
-        String bot = command.client.bot.displayName;
+        String bot = command.botUser.displayName;
         return String.format("\\> Hello %s, %s is currently still in beta and as such inviting the bot to your server " +
                 "requires Developer help.\n\nIf you wish to get %s on your server you will need to " +
                 "contact %s on the support server which you can find here: <https://discord.gg/XSyQQrR>",
-                user, bot, bot, Globals.getCreator().getName());
+                user, bot, bot, Client.getClientObject().creator.name);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Invite extends Command {
     }
 
     @Override
-    public Permissions[] perms() {
+    public Permission[] perms() {
         return new Permission[0];
     }
 

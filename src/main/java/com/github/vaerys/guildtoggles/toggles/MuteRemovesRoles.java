@@ -29,12 +29,12 @@ public class MuteRemovesRoles extends GuildSetting {
 
     @Override
     public String shortDesc(CommandObject command) {
-        return "Removes extra user roles when muting.";
+        return "Removes extra globalUser roles when muting.";
     }
 
     @Override
     public String desc(CommandObject command) {
-        return "Enables automatic removal/replacing of user roles when they are muted and unmuted.";
+        return "Enables automatic removal/replacing of globalUser roles when they are muted and unmuted.";
     }
 
     @Override

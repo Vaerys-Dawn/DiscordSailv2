@@ -9,8 +9,8 @@ import com.github.vaerys.objects.botlevel.TrackLikes;
 import com.github.vaerys.objects.userlevel.GroupUpObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.GlobalFile;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Guild;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class ChannelData extends GlobalFile {
         for (ChannelSettingObject c : channelSettings) {
             ListIterator iterator = c.getChannelIDs().listIterator();
             while (iterator.hasNext()) {
-                TextChannel channel = guild.getChannelByID((Long) iterator.next());
+                TextChannel channel = guild.getTextChannelById((Long) iterator.next());
                 if (channel == null) {
                     iterator.remove();
                 }
@@ -86,7 +86,7 @@ public class ChannelData extends GlobalFile {
         while (iterator.hasNext()) {
             GroupUpObject g = (GroupUpObject) iterator.next();
             // if they aren't on the guild anymore remove them
-            UserObject user = UserObject.getNewUserObject(g.getUserID(), command.guild);
+            UserObject user = new UserObject(g.getUserID(), command.guild);
             if (user == null) {
                 iterator.remove();
                 continue;
@@ -97,7 +97,7 @@ public class ChannelData extends GlobalFile {
                 iterator.remove();
                 continue;
             }
-            // if user hasn't spoken in the past 2 days remove from the list.
+            // if globalUser hasn't spoken in the past 2 days remove from the list.
             Instant now = command.message.getTimestamp();
             long time = now.toEpochMilli() / 1000;
             long diff = time - profile.getLastTalked();

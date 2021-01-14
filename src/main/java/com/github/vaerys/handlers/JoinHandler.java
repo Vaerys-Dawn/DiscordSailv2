@@ -9,10 +9,10 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.JoinMessage;
 import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.IUser;
 
 import java.util.List;
 import java.util.Random;
@@ -20,12 +20,12 @@ import java.util.Random;
 public class JoinHandler {
 
     /**
-     * Send A special message to the specified JoinMessage channel that welcomes the user to the server.
+     * Send A special message to the specified JoinMessage messageChannel that welcomes the globalUser to the server.
      *
-     * @param user    The user that joined. ({@link UserObject})
-     * @param content The Guild that the user joined. ({@link GuildObject})
+     * @param user    The globalUser that joined. ({@link UserObject})
+     * @param content The Guild that the globalUser joined. ({@link GuildObject})
      */
-    public static void customJoinMessages(GuildObject content, IUser user) {
+    public static void customJoinMessages(GuildObject content, Member user) {
         TextChannel channel = content.getChannelByType(ChannelSetting.JOIN_CHANNEL);
         if (channel == null) return;
         Random random = Globals.getGlobalRandom();
@@ -33,14 +33,14 @@ public class JoinHandler {
         if (joinMessageList.size() == 0) return;
         JoinMessage message = joinMessageList.get(random.nextInt(joinMessageList.size()));
         String response = message.getContent(new CommandObject(content, channel, user));
-        RequestHandler.sendMessage(response, channel);
+        channel.sendMessage(response).queue();
     }
 
     /**
-     * Checks to see if the user's account is brand new or not and send a message if true. (new = account is younger than 5 hours)
+     * Checks to see if the globalUser's account is brand new or not and send a message if true. (new = account is younger than 5 hours)
      *
-     * @param user    The user that joined. ({@link UserObject})
-     * @param content The Guild that the user joined. ({@link GuildObject})
+     * @param user    The globalUser that joined. ({@link UserObject})
+     * @param content The Guild that the globalUser joined. ({@link GuildObject})
      * @param event   The event that calls this. ({@link UserJoinEvent})
      */
     public static void checkNewUsers(GuildObject content, UserJoinEvent event, UserObject user) {
@@ -56,30 +56,30 @@ public class JoinHandler {
                 admin = event.getGuild().getDefaultChannel();
             }
             if (admin != null) {
-                RequestHandler.sendMessage("> New user " + user.mention() + " has a creation time less than 5 hours ago.", admin);
+                RequestHandler.sendMessage("> New globalUser " + user.mention() + " has a creation time less than 5 hours ago.", admin);
             }
         }
     }
 
     /**
-     * Sends a special message to the user when the join the server.
+     * Sends a special message to the globalUser when the join the server.
      *
-     * @param user    The user that joined. ({@link UserObject})
-     * @param content The Guild that the user joined. ({@link GuildObject})
+     * @param user    The globalUser that joined. ({@link UserObject})
+     * @param content The Guild that the globalUser joined. ({@link GuildObject})
      * @param event   The event that calls this. ({@link UserJoinEvent})
      */
     public static void sendWelcomeMessage(GuildObject content, UserJoinEvent event, UserObject user) {
         String message = content.config.getJoinMessage();
         message = message.replace("<server>", event.getGuild().getName());
-        message = message.replace("<user>", event.getUser().getName());
+        message = message.replace("<globalUser>", event.getUser().getName());
         user.queueDm(message);
     }
 
     /**
      * Automatically re-mutes users that were muted when they left and their mute timer hasnt timed out.
      *
-     * @param user    The user that joined. ({@link UserObject})
-     * @param content The Guild that the user joined. ({@link GuildObject})
+     * @param user    The globalUser that joined. ({@link UserObject})
+     * @param content The Guild that the globalUser joined. ({@link GuildObject})
      * @param event   The event that calls this. ({@link UserJoinEvent})
      */
     public static void autoReMute(UserJoinEvent event, GuildObject content, UserObject user) {

@@ -8,7 +8,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 public class UnBlacklistUser extends Command {
 
@@ -18,7 +18,7 @@ public class UnBlacklistUser extends Command {
 
         // Attempt to get an IUser so we know our thing is real.
         UserObject user = Utility.getUser(command, args, false);
-        if (user == null) return "\\> Could not find user.";
+        if (user == null) return "\\> Could not find globalUser.";
 
         GlobalData globalData = Globals.getGlobalData();
         if (globalData == null) throw new NullPointerException("GlobalData not loaded yet!");
@@ -35,12 +35,12 @@ public class UnBlacklistUser extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Removes a user from the command blacklist";
+        return "Removes a globalUser from the command blacklist";
     }
 
     @Override
     protected String usage() {
-        return "[@user]";
+        return "[@globalUser]";
     }
 
     @Override

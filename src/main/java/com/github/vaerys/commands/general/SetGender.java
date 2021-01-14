@@ -9,7 +9,7 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 27/02/2017.
@@ -19,9 +19,9 @@ public class SetGender extends Command {
     public static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
             new String[]{"SetUserGender"},
             "[@User] [Gender]",
-            "Edits a user's gender.",
+            "Edits a globalUser's gender.",
             SAILType.MOD_TOOLS,
-            Permissions.MANAGE_MESSAGES
+            Permission.MESSAGE_MANAGE
     );
 
     @Override
@@ -32,7 +32,7 @@ public class SetGender extends Command {
         if (ADMIN_EDIT.isSubCommand(command)) {
             SplitFirstObject userCall = new SplitFirstObject(quote);
             user = Utility.getUser(command, userCall.getFirstWord(), false, true);
-            if (user == null) return "\\> Could not find user.";
+            if (user == null) return "\\> Could not find globalUser.";
             quote = userCall.getRest();
             adminEdit = true;
         }

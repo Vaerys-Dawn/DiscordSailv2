@@ -91,16 +91,16 @@ public class PatchHandler {
         String path = Utility.getFilePath(guild.getIdLong(), Constants.FILE_INFO);
         if (!FileHandler.exists(path)) return;
         String infoContents = String.join("\n", FileHandler.readFromFile(path));
-        if (!infoContents.contains("<channel>{")) return;
-        else logger.info("Running Info Patch: remove <channel> tag for guild with id: " + guild.getIdLong());
+        if (!infoContents.contains("<messageChannel>{")) return;
+        else logger.info("Running Info Patch: remove <messageChannel> tag for guild with id: " + guild.getIdLong());
         for (String id = getChannelID(infoContents); id != null; id = getChannelID(infoContents)) {
-            infoContents = infoContents.replace(String.format("<channel>{%s}", id), String.format("<#%s>", id));
+            infoContents = infoContents.replace(String.format("<messageChannel>{%s}", id), String.format("<#%s>", id));
         }
         FileHandler.writeToFile(path, infoContents, true);
     }
 
     private static String getChannelID (String input){
-        return StringUtils.substringBetween(input, "<channel>{", "}");
+        return StringUtils.substringBetween(input, "<messageChannel>{", "}");
     }
 
     private static void renameToggles(Guild guild) {

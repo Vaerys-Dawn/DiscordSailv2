@@ -2,21 +2,20 @@ package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
 
 public class Present extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
         if (!command.guild.config.modulePixels && !command.guild.config.xpGain) return "\\> Cannot give gift right now :C";
-        Message message = RequestHandler.sendMessage("\\> Click Me :D", command.channel).get();
-        RequestHandler.addReaction(message, Utility.getReaction("gift"));
+        Message message = command.guildChannel.sendMessage("\\> Click Me :D");
+        message.addReaction(Utility.getReaction("gift"));
         Globals.getGlobalData().setPresentId(message.getIdLong());
         return null;
     }

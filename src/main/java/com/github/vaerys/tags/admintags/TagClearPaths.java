@@ -34,6 +34,6 @@ public class TagClearPaths extends TagAdminObject {
 
     @Override
     protected String desc() {
-        return "This tag will clear all active path keys a user has. Removes itself upon activation.";
+        return "This tag will clear all active path keys a globalUser has. Removes itself upon activation.";
     }
 }

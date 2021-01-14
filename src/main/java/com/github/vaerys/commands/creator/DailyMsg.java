@@ -3,17 +3,16 @@ package com.github.vaerys.commands.creator;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.objects.utils.SplitFirstObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.User;
 
 import java.time.DayOfWeek;
 import java.util.Formatter;
@@ -77,10 +76,10 @@ public class DailyMsg extends Command {
                         return "\\> Not a valid day of the week.";
                     }
                 case "info":
-                    RequestHandler.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
+                    getInfo(messageObject,command).queue(command);
                     return null;
                 default:
-                    RequestHandler.sendEmbedMessage("", getInfo(messageObject, command), command.channel.get());
+                    getInfo(messageObject,command).queue(command);
                     return null;
             }
         } catch (NumberFormatException e) {
@@ -90,14 +89,14 @@ public class DailyMsg extends Command {
 
     public XEmbedBuilder getInfo(DailyMessage messageObject, CommandObject command) {
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
-        IUser user = command.client.get().getUserByID(messageObject.getUserID());
+        User user = command.client.get().getUserById(messageObject.getUserID());
         if (user != null) {
             embedBuilder.setAuthor(user.getName() + "#" + user.getDiscriminator());
         }
         if (messageObject.getDay() != null) {
             embedBuilder.setTitle(messageObject.getDay() + "");
         }
-        String contents = messageObject.getContents(new CommandObject(command.guild, command.channel.get()));
+        String contents = messageObject.getContents(new CommandObject(command.guild, command.guildChannel.get()));
         if (contents.matches("^(> |\\*> |\\*\\*> |\\*\\*\\*> |_> |__> |`> |```> ).*$") || contents.startsWith("> ")) {
             embedBuilder.setDescription(contents);
         } else {

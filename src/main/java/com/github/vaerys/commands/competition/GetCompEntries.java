@@ -6,10 +6,10 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CompObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.util.List;
 
@@ -27,21 +27,21 @@ public class GetCompEntries extends Command {
         for (int i = 0; i < compObjects.size(); i++) {
             XEmbedBuilder builder = new XEmbedBuilder(command);
             builder.setTitle("Entry " + (i + 1));
-            IUser user = command.guild.getUserByID(compObjects.get(i).getUserID());
+            Member user = command.guild.getUserByID(compObjects.get(i).getUserID());
             if (user != null) {
-                builder.setDescription(user.mention());
-                builder.withColor(GuildHandler.getUsersColour(user, command.guild.get()));
+                builder.setDescription(user.getAsMention());
+                builder.setColor(GuildHandler.getUsersColour(user, command.guild.get()));
             }
             if (Utility.isImageLink(compObjects.get(i).getFileUrl())) {
-                builder.withThumbnail(compObjects.get(i).getFileUrl());
+                builder.setThumbnail(compObjects.get(i).getFileUrl());
             } else {
                 if (user != null) {
-                    builder.setDescription(user.mention(false) + "\n" + compObjects.get(i).getFileUrl());
+                    builder.setDescription(user.getAsMention() + "\n" + compObjects.get(i).getFileUrl());
                 } else {
                     builder.setDescription(compObjects.get(i).getFileUrl());
                 }
             }
-            builder.queue(command.channel);
+            builder.queue(command.guildChannel);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -58,7 +58,7 @@ public class GetCompEntries extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Posts all of the Competition Entries in the current channel.";
+        return "Posts all of the Competition Entries in the current messageChannel.";
     }
 
     @Override
@@ -78,7 +78,7 @@ public class GetCompEntries extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

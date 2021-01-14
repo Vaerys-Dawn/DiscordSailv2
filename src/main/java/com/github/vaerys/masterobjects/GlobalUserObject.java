@@ -4,19 +4,18 @@ import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.userlevel.*;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.utils.MiscUtil;
 import net.dv8tion.jda.api.utils.TimeUtil;
 
 import java.awt.*;
 import java.time.Instant;
-import java.util.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class GlobalUserObject {
@@ -209,6 +208,10 @@ public class GlobalUserObject {
         return false;
     }
 
+    public boolean isBlockedFromDms() {
+        return Globals.getGlobalData().getBlockedFromDMS().contains(longID);
+    }
+
     public UserObject getUserObject(GuildObject guild) {
         return new UserObject(object, guild);
     }
@@ -239,5 +242,14 @@ public class GlobalUserObject {
 
     public Message sendDm(String s, MessageEmbed embed) {
         return getDmChannel().sendMessage(s).embed(embed).complete();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GlobalUserObject) {
+            return longID == ((GlobalUserObject) obj).longID;
+        } else {
+            return super.equals(obj);
+        }
     }
 }

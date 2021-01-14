@@ -1,10 +1,10 @@
 package com.github.vaerys.objects.adminlevel;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.handlers.PixelHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
-import sx.blah.discord.handle.obj.Guild;
-import sx.blah.discord.handle.obj.Role;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
 
 /**
  * Created by Vaerys on 11/05/2017.

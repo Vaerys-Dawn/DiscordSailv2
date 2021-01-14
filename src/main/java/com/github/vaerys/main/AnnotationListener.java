@@ -1,10 +1,13 @@
 package com.github.vaerys.main;
 
 import com.github.vaerys.handlers.*;
-import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.masterobjects.*;
 import com.github.vaerys.objects.utils.LogObject;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.EventListener;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -32,7 +35,7 @@ import sx.blah.discord.handle.obj.Permissions;
  */
 
 @SuppressWarnings({"unused", "StringConcatenationInsideStringBufferAppend"})
-public class AnnotationListener {
+public class AnnotationListener extends ListenerAdapter {
 
     final static Logger logger = LoggerFactory.getLogger(AnnotationListener.class);
 
@@ -59,32 +62,35 @@ public class AnnotationListener {
         RequestHandler.updateUsername(Globals.botName);
     }
 
-    @EventSubscriber
-    public void onSystemMessageReceivedEvent(MessageSendEvent event) {
+
+    public void handlePinnedMessages(MessageReceivedEvent event) {
         Message message = event.getMessage();
-        if (message.getType() != Message.Type.CHANEL_PINNED_MESSAGE) return;
-        if (!message.getAuthor().equals(event.getClient().getOurUser())) return;
-        RequestHandler.deleteMessage(message);
+        if (message.getAuthor().getIdLong() == Client.getClientObject().bot.longID) return;
+        message.delete().queue();
     }
 
-    @EventSubscriber
-    public void onMessageReceivedEvent(MessageReceivedEvent event) {
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+        if (event.getMessage().getType() == MessageType.CHANNEL_PINNED_ADD) {
+            handlePinnedMessages(event);
+        }
         if (!Globals.isReady) return;
         try {
             if (event.getAuthor().isBot()) return;
 
-            CommandObject command = new CommandObject(event.getMessage());
-
-            //Set Console Response Channel.
-            if (command.user.get().equals(command.client.creator)) {
-                Globals.consoleMessageCID = command.channel.longID;
-            }
-            command.guild.handleWelcome(command);
+            GlobalUserObject user = new GlobalUserObject(event.getAuthor());
+            MessageChannel channel = event.getChannel();
 
             //message and command handling
-            String args = command.message.getContent().isEmpty() ? "" : command.message.getContent();
+            String args = event.getMessage().getContentRaw().isEmpty() ? "" : event.getMessage().getContentRaw();
 
-            new MessageHandler(args, command, event.getChannel().isPrivate());
+            if (channel.getType() == ChannelType.PRIVATE) {
+                DmCommandObject command = new DmCommandObject(event.getMessage(), event.getPrivateChannel(), event.getAuthor());
+                MessageHandler.handleDmMessage(args, command);
+            }else {
+                CommandObject command = new CommandObject(event.getMessage(), event.getGuild());
+                MessageHandler.handleMessage(args, command);
+            }
         } catch (StackOverflowError e) {
             System.out.println("caught");
         } catch (Exception e) {
@@ -104,10 +110,10 @@ public class AnnotationListener {
                 builder.append("\n" + Constants.PREFIX_INDENT + "at " + errorPos);
             }
             builder.append("```");
-            RequestHandler.sendMessage(builder.toString(), event.getChannel());
+            event.getChannel().sendMessage(builder.toString()).queue();
             if (event.getGuild() != null) {
-                Globals.addToLog(new LogObject("ERROR", "MESSAGE_HANDLER", event.getMessage().getContent(),
-                        event.getChannel().getIdLong(), event.getAuthor().getIdLong(), event.getMessageID(), event.getGuild().getIdLong()));
+                Globals.addToLog(new LogObject("ERROR", "MESSAGE_HANDLER", event.getMessage().getContentRaw(),
+                        event.getChannel().getIdLong(), event.getAuthor().getIdLong(), event.getMessageIdLong(), event.getGuild().getIdLong()));
             }
             Utility.sendStack(e);
         }

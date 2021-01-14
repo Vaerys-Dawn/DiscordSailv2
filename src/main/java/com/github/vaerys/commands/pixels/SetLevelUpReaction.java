@@ -5,34 +5,31 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import com.vdurmont.emoji.Emoji;
-import com.vdurmont.emoji.EmojiManager;
-import sx.blah.discord.handle.obj.IEmoji;
-import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.util.MessageTokenizer;
+import emoji4j.Emoji;
+import emoji4j.EmojiUtils;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Emote;
 
 public class SetLevelUpReaction extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        MessageTokenizer messageTokenizer = new MessageTokenizer(command.message.get());
-        Emoji emoji = EmojiManager.getByUnicode(new SplitFirstObject(args).getFirstWord());
-        IEmoji customEmoji = null;
+        String emojiString = new SplitFirstObject(command.message.getContent()).getFirstWord();
         if (args.equalsIgnoreCase("Remove")) {
             command.guild.config.levelUpReaction = "null";
             return "\\> Level Up reaction was removed.";
-        }
-        if (messageTokenizer.hasNextEmoji()) {
-            customEmoji = messageTokenizer.nextEmoji().getEmoji();
-        }
-        if (emoji == null && customEmoji == null) {
-            return "\\> Not a valid Emoji.";
-        } else if (emoji != null) {
-            command.guild.config.levelUpReaction = emoji.getUnicode();
-            return "\\> The message a user sent to level up will now be reacted with " + emoji.getUnicode() + ".";
+        } else if (EmojiUtils.isEmoji(emojiString)) {
+            String emoji = EmojiUtils.getEmoji(emojiString).getEmoji();
+            command.guild.config.levelUpReaction = emoji;
+            return "\\> The message a user level ups with will now be reacted with " + emoji + ".";
+        } else if (command.message.get().getEmotes().size() > 0) {
+            Emote emote = command.message.get().getEmotes().get(0);
+            if (command.client.get().getEmoteById(emote.getId()) == null)
+                return "\\> Not an Emoji that is on any of my guilds.";
+            command.guild.config.levelUpReaction = emote.getId();
+            return "\\> The message a user level ups with will now be reacted with " + emote.getAsMention() + ".";
         } else {
-            command.guild.config.levelUpReaction = customEmoji.getStringID();
-            return "\\> The message a user sent to level up will now be reacted with " + customEmoji.toString() + ".";
+            return "\\> Not a valid Emoji.";
         }
     }
 
@@ -43,7 +40,7 @@ public class SetLevelUpReaction extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Sets the Reaction that the bot will post to the message a user sent to level up.";
+        return "Sets the Reaction that the bot will post to the message a globalUser sent to level up.";
     }
 
     @Override
@@ -63,7 +60,7 @@ public class SetLevelUpReaction extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_EMOJIS};
+        return new Permission[]{Permission.MANAGE_EMOTES};
     }
 
     @Override

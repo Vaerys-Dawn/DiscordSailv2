@@ -4,7 +4,6 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.PixelHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
@@ -13,7 +12,7 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 01/07/2017.
@@ -26,7 +25,7 @@ public class Pixels extends Command {
         UserObject user = command.user;
         if (!args.isEmpty()) {
             user = Utility.getUser(command, args, true);
-            if (user == null) return "\\> Could not find user.";
+            if (user == null) return "\\> Could not find globalUser.";
         }
         ProfileObject profile = user.getProfile();
         if (profile == null) {
@@ -57,15 +56,14 @@ public class Pixels extends Command {
         //calculate progress
         if (pixels > 0) {
             int progress = getProgress(profile);
-            contentsProgress.setContent("-------------------").replace(progress, progress, user.isDecaying(command.guild) ? "**<**" : "**>**");
+            contentsProgress.setContent("-------------------").replace(progress, progress, user.isDecaying() ? "**<**" : "**>**");
             contentsProgress.appendFrontFormatted("**%d** [", currentLevel).appendFormatted("] **%d**", currentLevel + 1);
         } else {
             contentsProgress.setContent("N/a");
         }
 
         //build embed
-        builder.setAuthor(user.displayName + "'s Pixel stats.");
-        builder.withAuthorIcon(Constants.PIXELS_ICON); //pixel icon
+        builder.setAuthor(user.displayName + "'s Pixel stats.", Constants.PIXELS_ICON); //pixel icon
         builder.addField(titlePixels, contentsPixels, true);
         builder.addField(titleRank, contentsRank, true);
         builder.addField(titleProgress, contentsProgress.toString(), false);
@@ -74,17 +72,17 @@ public class Pixels extends Command {
             builder.setDescription("**You have decayed to the level floor,\nYou will need to level up again to see your rank.**");
         }
         if (user.getProfile().getSettings().contains(UserSetting.PRIVATE_PROFILE)) {
-            RequestHandler.sendEmbedMessage("", builder, command.user.get().getOrCreatePMChannel());
+            builder.queue(command.user.getDmChannel());
             return "\\> Pixels sent to your Direct messages.";
         }
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        builder.queue(command);
         return null;
     }
 
     /***
      * Calculator for the progress for next rank based on a number between 0 and 19.
      *
-     * @param profile the user being tested
+     * @param profile the globalUser being tested
      * @return progress [0-19]
      */
     private int getProgress(ProfileObject profile) {

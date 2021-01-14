@@ -33,12 +33,12 @@ public class UserRoleLogging extends GuildSetting {
 
     @Override
     public String shortDesc(CommandObject command) {
-        return "Enables logging of user role changes.";
+        return "Enables logging of globalUser role changes.";
     }
 
     @Override
     public String desc(CommandObject command) {
-        return "Enables the logging of user role updates. Requires the " + ChannelSetting.SERVER_LOG.toString() + " Channel to be set up.";
+        return "Enables the logging of globalUser role updates. Requires the " + ChannelSetting.SERVER_LOG.toString() + " Channel to be set up.";
     }
 
     @Override

@@ -1,12 +1,12 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.help.GetGuildInfo;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.Role;
+import net.dv8tion.jda.api.entities.Role;
 
 /**
  * Created by Vaerys on 02/03/2017.
@@ -80,9 +80,9 @@ public class ModuleRoles extends GuildModule {
         Role role = object.guild.getRoleById(id);
         if (role != null) {
             String roleName = role.getName();
-            if (role.isEveryoneRole()) roleName = "everyone";
-            builder.append("\n**" + roleName + "** - " + object.guild.get().getUsersByRole(role).size());
-            return object.guild.get().getUsersByRole(role).size();
+            if (role.isPublicRole()) roleName = "everyone";
+            builder.append("\n**" + roleName + "** - " + object.guild.get().getMembersWithRoles(role).size());
+            return object.guild.get().getMembersWithRoles(role).size();
         }
         return 0;
     }

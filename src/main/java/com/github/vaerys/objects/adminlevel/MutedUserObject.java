@@ -1,7 +1,7 @@
 package com.github.vaerys.objects.adminlevel;
 
-import sx.blah.discord.handle.obj.Guild;
-import sx.blah.discord.handle.obj.Role;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.LinkedList;
 import java.util.List;

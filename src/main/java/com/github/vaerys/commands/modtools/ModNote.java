@@ -12,7 +12,7 @@ import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,25 +31,25 @@ public class ModNote extends Command {
     // sub commands.
     private static final SubCommandObject EDIT_MOD_NOTE = new SubCommandObject(
             new String[]{"EditModNote"},
-            "[@user] [index] message",
+            "[@globalUser] [index] message",
             "Edit an existing mod note",
             SAILType.MOD_TOOLS
     );
     private static final SubCommandObject DELETE_MOD_NOTE = new SubCommandObject(
             new String[]{"DeleteModNote", "DelModNote"},
-            "[@user] [index]",
+            "[@globalUser] [index]",
             "Delete an existing mod note.",
             SAILType.MOD_TOOLS
     );
     private static final SubCommandObject STRIKE_MOD_NOTE = new SubCommandObject(
             new String[]{"AddStrike", "StrikeModNote"},
-            "[@user] [index]",
+            "[@globalUser] [index]",
             "Switches the strike status on a mod note.",
             SAILType.MOD_TOOLS
     );
     private static final SubCommandObject GET_MOD_NOTE = new SubCommandObject(
             new String[]{"GetModNote"},
-            "[@user] [index]",
+            "[@globalUser] [index]",
             "Get a detailed version of an existing mod note.",
             SAILType.MOD_TOOLS
     );
@@ -74,12 +74,12 @@ public class ModNote extends Command {
             opts = "info " + opts;
         }
 
-        // empty user arg is not allowed;
+        // empty globalUser arg is not allowed;
         if (userCall == null || userCall.isEmpty()) return missingArgs(command);
         if (opts == null || opts.isEmpty()) opts = "list";
 
         UserObject user = Utility.getUser(command, userCall, false, true);
-        if (user == null) return "\\> Could not find user.";
+        if (user == null) return "\\> Could not find globalUser.";
 
         ProfileObject profile = user.getProfile();
         if (profile == null) return "\\> No profile found for " + user.displayName + ".";
@@ -125,7 +125,7 @@ public class ModNote extends Command {
                     String newNote = new SplitFirstObject(modeOpts).getRest();
 
                     modNotes.get(index - 1).editNote(newNote, command.user.longID, timestamp);
-                    return "\\> Note #" + index + " edited for user " + user.displayName + ".";
+                    return "\\> Note #" + index + " edited for globalUser " + user.displayName + ".";
 
                 // "info" mode
                 case "info":
@@ -137,10 +137,10 @@ public class ModNote extends Command {
                     boolean strike = modNotes.get(index - 1).getStrike();
                     if (strike) {
                         modNotes.get(index - 1).setStrike(false);
-                        return "\\> Strike cleared for note " + index + " for user " + user.displayName + ".";
+                        return "\\> Strike cleared for note " + index + " for globalUser " + user.displayName + ".";
                     } else {
                         modNotes.get(index - 1).setStrike(true);
-                        return "\\> Strike set for note " + index + " for user " + user.displayName + ".";
+                        return "\\> Strike set for note " + index + " for globalUser " + user.displayName + ".";
                     }
 
                     // "delete" command
@@ -191,7 +191,7 @@ public class ModNote extends Command {
 
         // finalize and send message:
         builder.setFooter("Total Notes: " + user.modNotes.size());
-        builder.queue(command.channel);
+        builder.queue(command.guildChannel);
         return null;
     }
 
@@ -202,7 +202,7 @@ public class ModNote extends Command {
 
         String displayName = user.getUser(command.guild).displayName;
 
-        // title and avatar of user in question.
+        // title and avatar of globalUser in question.
         if (noteObject.getStrike()) {
             builder.setTitle("⚠ Note " + (index + 1) + " - " + displayName);
         } else {
@@ -232,7 +232,7 @@ public class ModNote extends Command {
             }
         }
 
-        builder.queue(command.channel);
+        builder.queue(command.guildChannel);
     }
 
     @Override
@@ -276,7 +276,7 @@ public class ModNote extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_MESSAGES};
+        return new Permission[]{Permission.MESSAGE_MANAGE};
     }
 
     @Override

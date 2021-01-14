@@ -11,7 +11,7 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 06/07/2017.
@@ -23,7 +23,7 @@ public class SetLevel extends Command {
         SplitFirstObject xpArgs = new SplitFirstObject(args);
         UserObject user = Utility.getUser(command, xpArgs.getFirstWord(), false);
         if (user == null) {
-            return "\\> Could not find user.";
+            return "\\> Could not find globalUser.";
         }
         try {
             long level = Long.parseLong(xpArgs.getRest());
@@ -53,7 +53,7 @@ public class SetLevel extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows you to set the level of a user.";
+        return "Allows you to set the level of a globalUser.";
     }
 
     @Override
@@ -73,7 +73,7 @@ public class SetLevel extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_ROLES, Permissions.MANAGE_MESSAGES};
+        return new Permission[]{Permission.MANAGE_ROLES, Permission.MESSAGE_MANAGE};
     }
 
     @Override

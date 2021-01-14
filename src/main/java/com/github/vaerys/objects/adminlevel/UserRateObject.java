@@ -2,9 +2,9 @@ package com.github.vaerys.objects.adminlevel;
 
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
-import sx.blah.discord.api.internal.DiscordUtils;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.utils.TimeUtil;
 
 import java.time.Instant;
 import java.util.LinkedList;
@@ -23,7 +23,7 @@ public class UserRateObject {
     public UserRateObject(CommandObject command) {
         this.userID = command.user.longID;
         messageIDs.add(command.message.longID);
-        channelIDs.add(command.channel.longID);
+        channelIDs.add(command.guildChannel.longID);
     }
 
     public boolean isRateLimited(GuildObject guild) {
@@ -35,12 +35,12 @@ public class UserRateObject {
 
     public void addMessage(CommandObject command) {
         messageIDs.add(command.message.longID);
-        if (!channelIDs.contains(command.channel.longID)) channelIDs.add(command.channel.longID);
+        if (!channelIDs.contains(command.guildChannel.longID)) channelIDs.add(command.guildChannel.longID);
     }
 
     private long getDifference() {
-        Instant startTime = DiscordUtils.getSnowflakeTimeFromID(messageIDs.get(0));
-        Instant testTime = DiscordUtils.getSnowflakeTimeFromID(messageIDs.get(messageIDs.size() - 1));
+        Instant startTime = TimeUtil.getTimeCreated(messageIDs.get(0)).toInstant();
+        Instant testTime = TimeUtil.getTimeCreated(messageIDs.get(messageIDs.size()-1)).toInstant();
         return testTime.toEpochMilli() - startTime.toEpochMilli();
     }
 
@@ -52,7 +52,7 @@ public class UserRateObject {
         return channelIDs.stream().map(l -> guild.getChannelByID(l)).collect(Collectors.toList());
     }
 
-    public IUser getUser(GuildObject guild) {
+    public Member getUser(GuildObject guild) {
         return guild.getUserByID(userID);
     }
 
@@ -69,6 +69,6 @@ public class UserRateObject {
     }
 
     public long getTimeStamp() {
-        return DiscordUtils.getSnowflakeTimeFromID(messageIDs.get(messageIDs.size() - 1)).toEpochMilli() * 1000;
+        return TimeUtil.getTimeCreated(messageIDs.get(messageIDs.size() - 1)).toInstant().toEpochMilli() * 1000;
     }
 }

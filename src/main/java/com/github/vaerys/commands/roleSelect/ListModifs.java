@@ -2,12 +2,11 @@ package com.github.vaerys.commands.roleSelect;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +29,7 @@ public class ListModifs extends Command {
     public String execute(String args, CommandObject command) {
         if (command.guild.config.getModifierRoleIDs().size() == 0)
             return "\\> No Modifier roles are set up right now. Come back later.";
-        RequestHandler.sendEmbedMessage("", getList(command), command.channel.get());
+        getList(command).queue(command);
         return null;
     }
 

@@ -5,6 +5,7 @@ import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.templates.DMCommand;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 public class PatreonToken extends DMCommand {
 
     @Override
-    public String execute(String args, CommandObject command) {
+    public String executeDm(String args, DmCommandObject command) {
         FileHandler.writeToFile(Constants.FILE_PATREON_TOKEN, args, true);
         Client.initPatreon(new ArrayList<String>() {{
             add(args);

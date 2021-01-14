@@ -14,8 +14,8 @@ public class TagCheckLength extends TagObject {
     @Override
     public String execute(String from, CommandObject command, String args) {
         if (from.length() > 2000) {
-            RequestHandler.sendFile("ERROR: Custom command output exceeds 2000 characters.", from, "Error.txt", command.channel.get());
-//            RequestHandler.queueMessage("ERROR: Custom command output exceeds 2000 characters.", command.channel.get());
+            RequestHandler.sendFile("ERROR: Custom command output exceeds 2000 characters.", from, "Error.txt", command.guildChannel.get());
+//            RequestHandler.queueMessage("ERROR: Custom command output exceeds 2000 characters.", command.messageChannel.get());
             return null;
         }
         return from;

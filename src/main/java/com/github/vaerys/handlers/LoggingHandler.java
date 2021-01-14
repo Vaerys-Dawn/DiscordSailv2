@@ -7,6 +7,9 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.internal.DiscordUtils;
@@ -65,20 +68,20 @@ public class LoggingHandler {
         TextChannel serverLog = command.guild.getChannelByType(ChannelSetting.SERVER_LOG);
         TextChannel adminLog = command.guild.getChannelByType(ChannelSetting.ADMIN_LOG);
         List<TextChannel> dontLog = command.guild.getChannelsByType(ChannelSetting.DONT_LOG);
-        if (dontLog.contains(command.channel.get())) return false;
+        if (dontLog.contains(command.guildChannel.get())) return false;
         if (command.guild.config.dontLogBot && command.user.get().isBot()) return false;
         if (chars200.equals("`Working...`") && isSailMessage(command)) return false;
         if (chars200.equals("`Loading...`") && isSailMessage(command)) return false;
         if (isSailMessage(command) && chars200.matches(pinRegex)) return false;
         if (isSailMessage(command) && command.message.get().getEmbeds().size() != 0) return false;
-        if (serverLog != null && serverLog.equals(command.channel.get()) && isSailMessage(command)) return false;
-        if (adminLog != null && adminLog.equals(command.channel.get()) && isSailMessage(command)) return false;
-        if (info != null && info.equals(command.channel.get()) && isSailMessage(command)) return false;
+        if (serverLog != null && serverLog.equals(command.guildChannel.get()) && isSailMessage(command)) return false;
+        if (adminLog != null && adminLog.equals(command.guildChannel.get()) && isSailMessage(command)) return false;
+        if (info != null && info.equals(command.guildChannel.get()) && isSailMessage(command)) return false;
         return true;
     }
 
     private static boolean messageEmpty(Message message) {
-        return (message.getContent() == null || message.getContent().isEmpty()) &&
+        return (message.getContentRaw() == null || message.getContentRaw().isEmpty()) &&
                 message.getEmbeds().size() == 0 &&
                 message.getAttachments().size() == 0;
     }
@@ -108,12 +111,12 @@ public class LoggingHandler {
         if (messageEmpty(deletedMessage)) return;
         StringBuffer content;
         StringBuffer extraContent = new StringBuffer();
-        EmbedObject embed = null;
+        MessageEmbed embed = null;
         int charLimit = 2000;
         String timestamp = getFormattedTimeStamp(command, deletedMessage);
-        String format = "> **@%s's** Message %s was **Deleted** in channel: %s with contents:\n%s\n%s";
+        String format = "> **@%s's** Message %s was **Deleted** in messageChannel: %s with contents:\n%s\n%s";
         //check embed
-        if (deletedMessage.getEmbeds().size() != 0) embed = new EmbedObject(deletedMessage.getEmbeds().get(0));
+        if (deletedMessage.getEmbeds().size() != 0) embed = deletedMessage.getEmbeds().get(0);
         //add and attachments
         for (Message.Attachment atc : deletedMessage.getAttachments()) {
             if (extraContent.length() != 0) extraContent.append("\n");
@@ -123,7 +126,7 @@ public class LoggingHandler {
         List<String> vars = new ArrayList<String>() {{
             add(command.user.username);
             add(timestamp);
-            add(command.channel.mention);
+            add(command.guildChannel.mention);
             add(extraContent.toString());
         }};
         //calculate the limit of content
@@ -148,7 +151,7 @@ public class LoggingHandler {
 
 
     //global updates:
-    //channel moved (Category changed), channel name updated.
+    //messageChannel moved (Category changed), messageChannel name updated.
     private static final String channelUpdateFormat = "> %s's %s.\n%s";
 
     public static void logChannelUpdate(GuildObject guild, TextChannel oldChannel, TextChannel newChannel) {
@@ -336,8 +339,8 @@ public class LoggingHandler {
             extraContent.append("\n**Message's New Contents:**\n" + newContent);
         }
 
-        String response = String.format("> **@%s's** Message %s was **Edited** in channel: %s.\n%s", command.user.username,
-                getFormattedTimeStamp(command, oldMessage), command.channel.mention, extraContent);
+        String response = String.format("> **@%s's** Message %s was **Edited** in messageChannel: %s.\n%s", command.user.username,
+                getFormattedTimeStamp(command, oldMessage), command.guildChannel.mention, extraContent);
         sendLog(response, command.guild, false);
     }
 
@@ -367,7 +370,7 @@ public class LoggingHandler {
     /***
      * Handler for logging Kicks.
      *
-     * @param guild the Guild the user left.
+     * @param guild the Guild the globalUser left.
      * @param user  the User that left the server.
      */
     private static void doKickLog(Guild guild, IUser user) {
@@ -382,7 +385,7 @@ public class LoggingHandler {
 
         StringHandler kickLog = new StringHandler("**@%s#%s** has been **Kicked** by **@%s#%s**");
 
-        // do some checks to make sure the user was in fact kicked
+        // do some checks to make sure the globalUser was in fact kicked
         List<TargetedEntry> kicksLog = guild.getAuditLog(ActionType.MEMBER_KICK).getEntriesByTarget(user.getIdLong());
         if (kicksLog.size() == 0) return;
 
@@ -393,7 +396,7 @@ public class LoggingHandler {
         //get the latest entry's timestamp
         long lastKickTime = DiscordUtils.getSnowflakeTimeFromID(lastKick.getIdLong()).toEpochMilli();
 
-        //get user responsible
+        //get globalUser responsible
         IUser responsible = lastKick.getResponsibleUser();
 
         // Check if timestamp is within fifteen seconds either way, lastKick is valid.

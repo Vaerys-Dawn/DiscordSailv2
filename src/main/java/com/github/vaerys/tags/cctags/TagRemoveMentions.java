@@ -86,7 +86,7 @@ public class TagRemoveMentions extends TagObject {
 
     @Override
     public String desc() {
-        return "Removes mass mentions like Everyone and Here and turns role and user mentions into plain text.";
+        return "Removes mass mentions like Everyone and Here and turns role and globalUser mentions into plain text.";
     }
 
     @Override

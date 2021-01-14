@@ -1,7 +1,6 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
@@ -9,9 +8,9 @@ import com.github.vaerys.objects.adminlevel.OffenderObject;
 import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.templates.GlobalFile;
-import sx.blah.discord.handle.obj.Guild;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -24,7 +23,6 @@ public class GuildConfig extends GlobalFile {
     public static final String FILE_PATH = "Guild_Config.json";
     private double fileVersion = 1.4;
     //setup vars
-    public SetupHandler.SetupStage setupStage = SetupHandler.SetupStage.SETUP_UNSET;
     public long setupUser = -1;
     //initial welcome message
     public boolean initialMessage = false;
@@ -94,7 +92,7 @@ public class GuildConfig extends GlobalFile {
     public int pinLimit = 25;
     public UserSetting defaultLevelMode = UserSetting.SEND_LVLUP_RANK_CHANNEL;
     public String levelUpReaction = "null";
-    public String levelUpMessage = "\\> Ding. Gratz on level <level> <user>.";
+    public String levelUpMessage = "\\> Ding. Gratz on level <level> <globalUser>.";
     public long ruleCodeRewardID = -1;
     String prefixCommand = Globals.defaultPrefixCommand;
     String prefixCC = Globals.defaultPrefixCC;
@@ -111,7 +109,7 @@ public class GuildConfig extends GlobalFile {
     // TODO: 04/10/2016 let the mention limit be customisable.
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     ArrayList<OffenderObject> offenders = new ArrayList<>();
-    private String joinMessage = "\\> Welcome to the <server> server <user>.";
+    private String joinMessage = "\\> Welcome to the <server> server <globalUser>.";
     private DailyMessage lastDailyMessage = null;
     private ArrayList<String> xpDeniedPrefixes = new ArrayList<>();
     private String ruleCode = null;
@@ -177,7 +175,7 @@ public class GuildConfig extends GlobalFile {
     }
 
     public void validateRoles() {
-        Guild guild = Globals.client.getGuildByID(guildID);
+        Guild guild = Globals.client.getGuildById(guildID);
         if (guild == null) {
             return;
         }
@@ -227,13 +225,13 @@ public class GuildConfig extends GlobalFile {
         return cosmeticRoleIDs;
     }
 
-    public boolean testIsTrusted(IUser author, Guild guild) {
+    public boolean testIsTrusted(Member author, Guild guild) {
         validateRoles();
         Role inviteAllowed = guild.getRoleById(inviteAllowedID);
         if (inviteAllowed == null) {
             return true;
         } else {
-            return author.getRolesForGuild(guild).contains(inviteAllowed);
+            return author.getRoles().contains(inviteAllowed);
         }
     }
 

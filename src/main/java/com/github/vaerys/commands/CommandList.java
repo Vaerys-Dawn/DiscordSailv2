@@ -1,15 +1,16 @@
 package com.github.vaerys.commands;
 
-import com.github.vaerys.commands.admin.*;
 import com.github.vaerys.commands.admin.Module;
+import com.github.vaerys.commands.admin.*;
 import com.github.vaerys.commands.adminccs.*;
 import com.github.vaerys.commands.cc.*;
 import com.github.vaerys.commands.characters.*;
 import com.github.vaerys.commands.competition.*;
-import com.github.vaerys.commands.creator.*;
 import com.github.vaerys.commands.creator.Shutdown;
+import com.github.vaerys.commands.creator.*;
 import com.github.vaerys.commands.creator.directmessages.*;
-import com.github.vaerys.commands.dmCommands.*;
+import com.github.vaerys.commands.dmCommands.InfoDM;
+import com.github.vaerys.commands.dmCommands.InviteDm;
 import com.github.vaerys.commands.general.*;
 import com.github.vaerys.commands.groups.ClearGroupUp;
 import com.github.vaerys.commands.groups.GroupUp;
@@ -25,10 +26,6 @@ import com.github.vaerys.commands.roleSelect.ListModifs;
 import com.github.vaerys.commands.roleSelect.ListRoles;
 import com.github.vaerys.commands.roleSelect.ModifierRoles;
 import com.github.vaerys.commands.servers.*;
-import com.github.vaerys.commands.setup.SetupBack;
-import com.github.vaerys.commands.setup.SetupNext;
-import com.github.vaerys.commands.setup.SetupQuit;
-import com.github.vaerys.commands.setup.SetupRepeat;
 import com.github.vaerys.commands.slash.*;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
@@ -109,7 +106,6 @@ public class CommandList {
         add(new ListTags());
         add(new Report());
         add(new SilentReport());
-        add(new StartUpGuide());
 
         //RoleSelect commands
         add(new CosmeticRoles());
@@ -178,12 +174,7 @@ public class CommandList {
         add(new TransferLevels());
 
         //Dm commands
-        add(new BotInfoDm());
-        add(new ClearReminderDM());
-        add(new GetRemindersDM());
-        add(new HelpDM());
         add(new InfoDM());
-        add(new ReminderDM());
         add(new InviteDm());
 
         //slashCommands
@@ -238,9 +229,7 @@ public class CommandList {
         add(new GetGuildList());
         add(new GetGuildInfoDm());
         add(new Respond());
-        add(new ShutdownDM());
         add(new QuickRespond());
-        add(new TestDM());
         add(new Echo());
         add(new WhoWasThat());
         add(new PatreonToken());
@@ -249,21 +238,6 @@ public class CommandList {
         add(new Present());
     }};
 
-    private static final List<Command> setupCommands = new ArrayList<Command>() {{
-        // step 1
-        add(new Module());
-        add(new HelpModules());
-
-        //step 2
-        add(new Toggle());
-        add(new HelpSettings());
-
-        // Setup Traversal Commands
-        add(new SetupBack());
-        add(new SetupNext());
-        add(new SetupQuit());
-        add(new SetupRepeat());
-    }};
 
     public static List<Command> getAllCommands(boolean validate) {
         if (validate) validateCommands(commands);
@@ -272,11 +246,6 @@ public class CommandList {
 
     public static List<Command> getAllCommands() {
         return getAllCommands(false);
-    }
-
-    public static List<Command> getSetupCommands(boolean validate) {
-        if (validate) validateCommands(setupCommands);
-        return setupCommands;
     }
 
     public static List<Command> getSetupCommands() {
@@ -303,17 +272,16 @@ public class CommandList {
     public static List<Command> getAll() {
         List<Command> allCommands = new ArrayList<>(commands);
         allCommands.addAll(creatorCommands);
-        allCommands.addAll(setupCommands);
         return allCommands;
     }
 
     public static List<Command> getCommands(boolean isDm) {
         List<Command> getCommands = new ArrayList<>();
         for (Command c : commands) {
-            if (isDm && c.channel == ChannelSetting.FROM_DM) {
-                getCommands.add(c);
-            } else if (!isDm && c.channel != ChannelSetting.FROM_DM) {
-                getCommands.add(c);
+            if (isDm) {
+                if (c.channel == ChannelSetting.FROM_DM || c.hasDmVersion) getCommands.add(c);
+            } else {
+                if (c.channel != ChannelSetting.FROM_DM) getCommands.add(c);
             }
         }
         return getCommands;
@@ -323,11 +291,9 @@ public class CommandList {
         List<Command> getCommands = new ArrayList<>();
         for (Command c : creatorCommands) {
             if (isDm) {
-                if (c.channel == ChannelSetting.FROM_DM)
-                    getCommands.add(c);
+                if (c.channel == ChannelSetting.FROM_DM || c.hasDmVersion) getCommands.add(c);
             } else {
-                if (c.channel != ChannelSetting.FROM_DM)
-                    getCommands.add(c);
+                if (c.channel != ChannelSetting.FROM_DM) getCommands.add(c);
             }
         }
         return getCommands;

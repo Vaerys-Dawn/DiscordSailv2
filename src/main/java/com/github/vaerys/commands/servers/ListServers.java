@@ -2,13 +2,12 @@ package com.github.vaerys.commands.servers;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ServerObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +30,7 @@ public class ListServers extends Command {
         Collections.sort(serverNames);
         String suffix = get(Server.class).missingArgs(command);
         Utility.listFormatterEmbed(title, builder, serverNames, false, suffix);
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        command.guildChannel.queueMessage(builder.build());
         return null;
     }
 
@@ -42,7 +41,7 @@ public class ListServers extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Shows a listing of this guild's user registered servers.";
+        return "Shows a listing of this guild's globalUser registered servers.";
     }
 
     @Override

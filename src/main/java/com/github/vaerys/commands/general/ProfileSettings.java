@@ -7,8 +7,8 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 
@@ -44,16 +44,16 @@ public class ProfileSettings extends Command {
                 if (levelUp != null) {
                     removeLevelSettings(profile);
                     profile.getSettings().add(UserSetting.SEND_LVLUP_RANK_CHANNEL);
-                    builder.append(message + levelUp.mention() + ".");
+                    builder.append(message + levelUp.getAsMention() + ".");
                 } else {
                     removeLevelSettings(profile);
                     profile.getSettings().add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
-                    builder.append(message + "the current channel.");
+                    builder.append(message + "the current messageChannel.");
                 }
             } else if (pixels && toTest == UserSetting.SEND_LVLUP_CURRENT_CHANNEL) {
                 removeLevelSettings(profile);
                 profile.getSettings().add(UserSetting.SEND_LVLUP_CURRENT_CHANNEL);
-                builder.append(message + "the current channel.");
+                builder.append(message + "the current messageChannel.");
             } else if (pixels && toTest == UserSetting.SEND_LVLUP_DMS) {
                 removeLevelSettings(profile);
                 profile.getSettings().add(UserSetting.SEND_LVLUP_DMS);
@@ -97,9 +97,9 @@ public class ProfileSettings extends Command {
         builder.append("**Settings:**\n");
         if (object.guild.config.modulePixels) {
             if (levelUp.size() != 0) {
-                builder.append("\\> " + UserSetting.SEND_LVLUP_RANK_CHANNEL + " - `Level up messages will be sent to `" + levelUp.get(0).mention() + "\n");
+                builder.append("\\> " + UserSetting.SEND_LVLUP_RANK_CHANNEL + " - `Level up messages will be sent to `" + levelUp.get(0).getAsMention() + "\n");
             }
-            builder.append("\\> " + UserSetting.SEND_LVLUP_CURRENT_CHANNEL + " - `Level up messages will be sent to the current channel.`\n" +
+            builder.append("\\> " + UserSetting.SEND_LVLUP_CURRENT_CHANNEL + " - `Level up messages will be sent to the current messageChannel.`\n" +
                     "\\> " + UserSetting.SEND_LVLUP_DMS + " - `Level up messages will be sent to your DMs.`\n" +
                     "\\> " + UserSetting.DONT_SEND_LVLUP + " - `Hides your Level up messages.`\n" +
                     "\\> " + UserSetting.NO_XP_GAIN + " - `Stops you from gaining pixels.`\n" +

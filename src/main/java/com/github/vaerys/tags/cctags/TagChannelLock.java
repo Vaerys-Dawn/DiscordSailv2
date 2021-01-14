@@ -36,7 +36,7 @@ public class TagChannelLock extends TagObject {
                 return replaceFirstTag(from, error);
             }
         }
-        if (GuildHandler.canBypass(command) || channels.contains(command.channel.get())) {
+        if (GuildHandler.canBypass(command) || channels.contains(command.guildChannel.get())) {
             return removeAllTag(from);
         } else {
             return Utility.getChannelMessage(channels);

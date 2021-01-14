@@ -19,9 +19,9 @@ public class UpdateInfo extends Command {
     public String execute(String args, CommandObject command) {
         List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.INFO);
         if (channels.size() == 0) {
-            return "\\> No Info channel set up yet, you need to set one up in order to run this command.\n" + missingArgs(command);
+            return "\\> No Info messageChannel set up yet, you need to set one up in order to run this command.\n" + missingArgs(command);
         }
-        if (channels.get(0).getIdLong() == command.channel.longID) {
+        if (channels.get(0).getIdLong() == command.guildChannel.longID) {
             new InfoHandler(command);
             return null;
         } else {

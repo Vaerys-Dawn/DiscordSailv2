@@ -4,17 +4,18 @@ import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,8 @@ public abstract class Command {
     public final Permission[] perms;
     public final boolean requiresArgs;
     public final boolean doAdminLogging;
+    public final boolean sendTyping;
+    public final boolean hasDmVersion;
     public List<SubCommandObject> subCommands = new LinkedList<>();
     public boolean showIndividualSubs = false;
 
@@ -54,6 +57,8 @@ public abstract class Command {
         this.perms = perms();
         this.requiresArgs = requiresArgs();
         this.doAdminLogging = doAdminLogging();
+        this.sendTyping = sendTyping();
+        this.hasDmVersion = hasDmVersion();
         init();
     }
 
@@ -65,6 +70,10 @@ public abstract class Command {
      * @return The text or data to send back for the command
      */
     public abstract String execute(String args, CommandObject command);
+
+    public String executeDm(String args, DmCommandObject command) {
+        return "";
+    }
 
 
     /**
@@ -96,9 +105,9 @@ public abstract class Command {
     protected abstract SAILType type();
 
     /**
-     * The channel type the command can be ran in
+     * The messageChannel type the command can be ran in
      *
-     * @return the type of channel it can be ran in
+     * @return the type of messageChannel it can be ran in
      */
     protected abstract ChannelSetting channel();
 
@@ -107,6 +116,14 @@ public abstract class Command {
     protected abstract boolean requiresArgs();
 
     protected abstract boolean doAdminLogging();
+
+    protected boolean sendTyping() {
+        return true;
+    }
+
+    protected boolean hasDmVersion() {
+        return false;
+    }
 
     protected abstract void init();
 
@@ -118,6 +135,23 @@ public abstract class Command {
         return command.guild.config.getPrefixCommand() + names[i];
     }
 
+    public String getCommand() {
+        return Globals.defaultPrefixCommand + names[0];
+    }
+
+    public String getCommand(int i) {
+        return Globals.defaultPrefixCommand + names[i];
+    }
+
+
+    public String getCommandDm() {
+        return Globals.defaultPrefixCommand + names[0];
+    }
+
+    public String getCommandDm(int i) {
+        return Globals.defaultPrefixCommand + names[i];
+    }
+
     public String getUsage(CommandObject command) {
         if (usage() == null || usage().isEmpty()) {
             return getCommand(command);
@@ -126,8 +160,20 @@ public abstract class Command {
         }
     }
 
+    public String getUsageDm() {
+        if (usage() == null || usage().isEmpty()) {
+            return getCommandDm();
+        } else {
+            return getCommandDm() + " " + usage();
+        }
+    }
+
     public String missingArgs(CommandObject command) {
         return ">> **" + getUsage(command) + "** <<";
+    }
+
+    public String missingArgsDm() {
+        return ">> **" + getUsageDm() + "** <<";
     }
 
     public boolean isCall(String args, CommandObject command) {
@@ -150,7 +196,36 @@ public abstract class Command {
         return false;
     }
 
-    public String getArgs(String args, CommandObject command) {
+    public boolean isCall(String args, DmCommandObject command) {
+        List<String> prefixes = new ArrayList<>() {{
+            add("$");
+            add("!");
+            add("%");
+            add("@");
+            add(String.format("<@%d> ", command.client.bot.longID));
+        }};
+        List<String> validStates = new ArrayList(Arrays.asList(names));
+        subCommands.forEach(subCommandObject -> {
+            for (String s : subCommandObject.getNames()) {
+                validStates.add(s + subCommandObject.getRegex());
+            }
+        });
+        if (args.length() > 200) {
+            args = StringUtils.truncate(args, 200);
+        }
+        for (String s: prefixes) {
+            for (String state : validStates) {
+                String regexString = "^(?i)" +  Utility.escapeRegex(s) + state + " (.|\n)*";
+                String regexStringEnd = "^(?i)" + Utility.escapeRegex(s) + state + "$";
+                if (Pattern.compile(regexString).matcher(args).matches() || Pattern.compile(regexStringEnd).matcher(args).matches()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public String getArgs(String args) {
         SplitFirstObject call = new SplitFirstObject(args);
         if (call.getRest() == null) {
             return "";
@@ -206,9 +281,9 @@ public abstract class Command {
 
         //Handle channels
         List<TextChannel> channels = command.guild.getChannelsByType(channel);
-        List<String> channelMentions = command.user.getVisibleChannels(channels).stream().map(c -> c.mention()).collect(Collectors.toList());
+        List<String> channelMentions = command.user.getVisibleChannels(channels).stream().map(c -> c.getAsMention()).collect(Collectors.toList());
 
-        //channel
+        //messageChannel
         if (channels.size() > 0) {
             if (channelMentions.size() != 0) {
                 infoEmbed.addField(channels.size() == 1 ? "Channel " : "Channels", Utility.listFormatter(channelMentions, true), false);
@@ -231,10 +306,11 @@ public abstract class Command {
             response.append("   > Command name is empty.\n");
             isError = true;
         }
-        if (description(new CommandObject()) == null || description(new CommandObject()).isEmpty()) {
-            response.append("   > Command description is empty.\n");
-            isError = true;
-        }
+        // had to removed, was not safe, required possibility of null CommandObject
+//        if (description(new CommandObject()) == null || description(new CommandObject()).isEmpty()) {
+//            response.append("   > Command description is empty.\n");
+//            isError = true;
+//        }
         if (type == null) {
             response.append("   > Command type is empty.\n");
             isError = true;
@@ -251,7 +327,7 @@ public abstract class Command {
     }
 
     public boolean isAlias(CommandObject command, String subType) {
-        return command.message.get().getContent().toLowerCase().startsWith(command.guild.config.getPrefixCommand() + subType.toLowerCase());
+        return command.message.get().getContentRaw().toLowerCase().startsWith(command.guild.config.getPrefixCommand() + subType.toLowerCase());
     }
 
     public boolean hasSubCommands(SAILType type) {
@@ -310,6 +386,7 @@ public abstract class Command {
     public static <T extends Command> T get(Class obj) {
         return CommandList.getCommand(obj);
     }
+
 
 
 }

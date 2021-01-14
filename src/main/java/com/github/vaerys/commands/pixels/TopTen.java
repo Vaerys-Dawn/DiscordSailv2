@@ -3,14 +3,13 @@ package com.github.vaerys.commands.pixels;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.PixelHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -36,9 +35,9 @@ public class TopTen extends Command {
         Utility.sortUserObjects(ranks, false);
         //format rank stats
         for (ProfileObject r : ranks) {
-            IUser ranked = command.guild.getUserByID(r.getUserID());
+            Member ranked = command.guild.getUserByID(r.getUserID());
             String rankPos = "**" + PixelHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
-            StringBuilder toFormat = new StringBuilder(ranked.getDisplayName(command.guild.get()));
+            StringBuilder toFormat = new StringBuilder(ranked.getNickname());
             toFormat.append("\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`");
             if (r.getUserID() == command.user.get().getIdLong()) {
                 response.add(rankPos + spacer + "**" + toFormat + "**");
@@ -49,7 +48,7 @@ public class TopTen extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.setTitle("Top Ten Users for the " + command.guild.get().getName() + " Server.");
         builder.setDescription(Utility.listFormatter(response, false));
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        builder.queue(command);
         return null;
     }
 

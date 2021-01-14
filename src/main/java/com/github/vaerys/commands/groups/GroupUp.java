@@ -7,10 +7,10 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.GroupUpObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IPresence;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
-import sx.blah.discord.handle.obj.StatusType;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +40,15 @@ public class GroupUp extends Command {
         List<String> completeList = new ArrayList<>();
 
         for (GroupUpObject g : list) {
-            IUser user = command.client.get().getUserByID(g.getUserID());
+            Member user = command.guild.getUserByID(g.getUserID());
             if (user == null) continue;
-            IPresence userPres = user.getPresence();
-            if (!userPres.getStatus().equals(StatusType.DND) && !userPres.getStatus().equals(StatusType.OFFLINE) && !userPres.getStatus().equals(StatusType.UNKNOWN)) {
-                if (g.getPresence() != null || userPres.getText().isPresent()) {
+            OnlineStatus userStatus = user.getOnlineStatus();
+            Activity userPres = user.getActivities().get(0);
+            if (!userStatus.equals(OnlineStatus.DO_NOT_DISTURB) && !userStatus.equals(OnlineStatus.OFFLINE) && !userStatus.equals(OnlineStatus.UNKNOWN)) {
+                if (g.getPresence() != null) {
                     String newPres;
                     if (g.getPresence() == null) {
-                        newPres = userPres.getText().get();
+                        newPres = userPres.getName();
                     } else {
                         newPres = g.getPresence();
                     }
@@ -58,9 +59,9 @@ public class GroupUp extends Command {
                     }
                     builder.replaceRegex("(?i)@(here|everyone)", "[REDACTED]");
                     builder.replaceRegex("<@(!|&)?[0-9]*>", "[REDACTED]");
-                    completeList.add(indent + user.mention() + " Playing: " + builder.toString());
+                    completeList.add(indent + user.getAsMention() + " Playing: " + builder.toString());
                 } else {
-                    completeList.add(indent + user.mention());
+                    completeList.add(indent + user.getAsMention());
                 }
             }
         }

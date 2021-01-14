@@ -21,14 +21,14 @@ public class TagEmbedImage extends TagObject {
         String imageURL = getContents(from);
         try {
             new URL(imageURL);
-            boolean hasPerm = GuildHandler.testForPerms(command, command.channel.get(), Permissions.EMBED_LINKS);
+            boolean hasPerm = GuildHandler.testForPerms(command, command.guildChannel.get(), Permissions.EMBED_LINKS);
             String replaceWith = hasPerm ? "" : "<" + imageURL + ">";
             from = replaceAllTag(from, replaceWith);
             from = get(TagRemoveMentions.class).handleTag(from, command, args);
             if (hasPerm) {
-                RequestHandler.sendFileURL(from, imageURL, command.channel.get(), true);
+                RequestHandler.sendFileURL(from, imageURL, command.guildChannel.get(), true);
             } else {
-                RequestHandler.sendMessage(from, command.channel.get());
+                RequestHandler.sendMessage(from, command.guildChannel.get());
             }
         } catch (MalformedURLException e) {
             from = replaceFirstTag(from, imageURL);

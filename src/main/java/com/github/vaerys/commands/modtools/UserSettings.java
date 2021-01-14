@@ -12,7 +12,7 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class UserSettings extends Command {
             settings.append("\\> " + UserSetting.READ_RULES);
         }
         settings.append("\\> " + UserSetting.DENY_INVITES);
-        settings.append("\\> List - `Shows the user's settings.`");
+        settings.append("\\> List - `Shows the globalUser's settings.`");
         return settings.toString();
     }
 
@@ -52,7 +52,7 @@ public class UserSettings extends Command {
         SplitFirstObject split = new SplitFirstObject(args);
         UserObject user = Utility.getUser(command, split.getFirstWord(), false);
         if (user == null) {
-            return "\\> Could not find user.";
+            return "\\> Could not find globalUser.";
         }
         ProfileObject profile = user.getProfile();
         if (profile != null) {
@@ -60,7 +60,7 @@ public class UserSettings extends Command {
                 return sendList("", profile, command, user, false);
             }
             UserSetting toTest = UserSetting.get(split.getRest());
-            if (toTest == null) return "\\> Not a valid user setting.\n" + settings(command);
+            if (toTest == null) return "\\> Not a valid globalUser setting.\n" + settings(command);
             if (command.guild.config.modulePixels) {
                 switch (toTest) {
                     case DENIED_XP:
@@ -127,7 +127,7 @@ public class UserSettings extends Command {
                     }
             }
         } else {
-            return "\\> Invalid user.";
+            return "\\> Invalid globalUser.";
         }
     }
 
@@ -147,7 +147,7 @@ public class UserSettings extends Command {
             }
             builder.setDescription(desc);
         }
-        RequestHandler.sendEmbedMessage(prefix, builder, command.channel.get());
+        RequestHandler.sendEmbedMessage(prefix, builder, command.guildChannel.get());
         return "";
     }
 
@@ -158,7 +158,7 @@ public class UserSettings extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "allows setting of certain user settings.\n" + settings(command);
+        return "allows setting of certain globalUser settings.\n" + settings(command);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class UserSettings extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_MESSAGES, Permissions.MANAGE_ROLES};
+        return new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_ROLES};
     }
 
     @Override

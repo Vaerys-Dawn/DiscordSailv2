@@ -27,7 +27,7 @@ public class Report extends Command {
     public static String report(String args, CommandObject command, boolean isSilent) {
         TextChannel channel = command.guild.getChannelByType(ChannelSetting.ADMIN);
         if (channel == null) {
-            return "\\> Your report could not be sent as the server does not have an admin channel set up at this time.";
+            return "\\> Your report could not be sent as the server does not have an admin messageChannel set up at this time.";
         }
 
         SplitFirstObject split = new SplitFirstObject(args);
@@ -39,13 +39,13 @@ public class Report extends Command {
             return "\\> " + command.user.mention() + ", You have been blocked, you can no longer send any more report requests.";
         }
         if (reported == null) {
-            return "\\> Cannot send report. Could not find user.";
+            return "\\> Cannot send report. Could not find globalUser.";
         }
         if (reported.longID == command.user.longID) {
             return "\\> You can't report yourself.";
         }
         if (channel == null) {
-            return "\\> Your report could not be sent as the server does not have an admin channel set up at this time.";
+            return "\\> Your report could not be sent as the server does not have an admin messageChannel set up at this time.";
         }
 
         //build embed
@@ -55,7 +55,7 @@ public class Report extends Command {
         String reason = split.getRest() != null ? split.getRest() : "No reason given.";
         String format = "**%s**\nReported User: %s\nReason: `%s`\nChannel: %s\n\nLink to Report:\n%s\nReported by: %s";
         String reportType = isSilent ? "User Report - Silent" : "User Report";
-        String message = String.format(format, reportType, reported.mention(), reason, command.channel.mention, command.getMessageLink(), command.user.mention());
+        String message = String.format(format, reportType, reported.mention(), reason, command.guildChannel.mention, command.getMessageLink(), command.user.mention());
 //        embed.setTitle(reportType);
         Message response;
 
@@ -102,7 +102,7 @@ public class Report extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Can be used to send a user report to the server staff.";
+        return "Can be used to send a globalUser report to the server staff.";
     }
 
     @Override

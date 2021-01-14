@@ -1,14 +1,11 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.guildtoggles.ToggleList;
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.guildtoggles.toggles.CompEntries;
-import com.github.vaerys.guildtoggles.toggles.Voting;
 import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 20/02/2017.
@@ -48,7 +45,7 @@ public class ModuleComp extends GuildModule {
 
     @Override
     public String stats(CommandObject command) {
-        if (!GuildHandler.testForPerms(command, Permissions.MANAGE_SERVER)) return null;
+        if (!GuildHandler.testForPerms(command, Permission.MANAGE_SERVER)) return null;
         StringBuilder builder = new StringBuilder();
         builder.append("**Total Competition Entries:** " + command.guild.competition.getEntries().size());
         builder.append("\n**Total Voters:** " + command.guild.competition.getVoters().size());

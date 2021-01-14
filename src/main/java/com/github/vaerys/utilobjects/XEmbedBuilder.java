@@ -3,9 +3,11 @@ package com.github.vaerys.utilobjects;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.ChannelObject;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
+import com.github.vaerys.masterobjects.GlobalUserObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
@@ -18,7 +20,7 @@ public class XEmbedBuilder extends EmbedBuilder {
     public XEmbedBuilder() {
     }
 
-    public XEmbedBuilder(UserObject user) {
+    public XEmbedBuilder(GlobalUserObject user) {
         setColor(user.color);
     }
 
@@ -39,7 +41,15 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     public void queue(CommandObject command) {
-        command.channel.queueMessage(this.build());
+        command.guildChannel.queueMessage(this.build());
+    }
+
+    public void queue(DmCommandObject command) {
+        command.messageChannel.queueMessage(this.build());
+    }
+
+    public void queue(MessageChannel channel) {
+        channel.sendMessage(this.build()).queue();
     }
 
     public void queue(String s, TextChannel channel) {
@@ -51,7 +61,15 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     public void queue(String s, CommandObject command) {
-        command.channel.queueMessage(s,this.build());
+        command.guildChannel.queueMessage(s,this.build());
+    }
+
+    public void queue(String s, DmCommandObject command) {
+        command.messageChannel.queueMessage(s, this.build());
+    }
+
+    public void queue(String s, MessageChannel channel) {
+        channel.sendMessage(s).embed(this.build()).queue();
     }
 
     public Message send(TextChannel channel) {
@@ -63,7 +81,15 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     public Message send(CommandObject command) {
-        return command.channel.sendMessage(this.build());
+        return command.guildChannel.sendMessage(this.build());
+    }
+
+    public Message send(DmCommandObject command) {
+        return command.messageChannel.sendMessage(this.build());
+    }
+
+    public Message send(MessageChannel channel) {
+        return channel.sendMessage(this.build()).complete();
     }
 
     public Message send(String s, TextChannel channel) {
@@ -75,7 +101,15 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     public Message send(String s, CommandObject command) {
-        return command.channel.sendMessage(s, this.build());
+        return command.guildChannel.sendMessage(s, this.build());
+    }
+
+    public Message send(String s, DmCommandObject command) {
+        return command.messageChannel.sendMessage(s, this.build());
+    }
+
+    public Message send(String s, MessageChannel channel) {
+        return channel.sendMessage(s).embed(this.build()).complete();
     }
 
     @Override

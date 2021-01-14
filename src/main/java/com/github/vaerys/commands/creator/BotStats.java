@@ -5,9 +5,9 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.handlers.TimerHandler;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -24,12 +24,13 @@ public class BotStats extends Command {
         double usage = cpuUsage.stream().mapToDouble(value -> value).sum() / cpuUsage.size();
         // and make it look pretty
         NumberFormat nf = NumberFormat.getInstance();
-        long ping = command.client.get().getShards().get(0).getResponseTime();
+        long pingGate = command.client.get().getGatewayPing();
+        long pingRest = command.client.get().getRestPing().complete();
         double mb = 1048576.0;
 
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.setTitle(command.client.bot.username);
-        builder.withTimestamp(command.client.bot.get().getCreationDate());
+        builder.setTimestamp(command.client.bot.get().getTimeCreated());
         builder.setFooter("Creation Date");
         StringHandler handler = new StringHandler();
         handler.append("**Total Servers**: ").append(command.client.get().getGuilds().size());
@@ -41,10 +42,10 @@ public class BotStats extends Command {
         handler.append(nf.format(totalMemory / mb)).append("MB total\t");
         handler.append(nf.format(usedMemory / mb)).append("MB used\t");
         handler.append(nf.format(freeMemory / mb)).append("MB free");
-        handler.append("\n**Ping**: ").append(nf.format(ping)).append("ms");
+        handler.append(String.format("\n**Gateway Ping:** %sms, **Rest Ping:** %sms", nf.format(pingGate), nf.format(pingRest)));
         builder.setDescription(handler.toString());
-        builder.withThumbnail(command.client.bot.avatarURL);
-        builder.queue(command.channel);
+        builder.setThumbnail(command.client.bot.avatarURL);
+        builder.queue(command.guildChannel);
         return null;
     }
 

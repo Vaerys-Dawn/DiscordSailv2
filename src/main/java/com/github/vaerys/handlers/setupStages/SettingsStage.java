@@ -76,7 +76,7 @@ public class SettingsStage extends SetupHandler {
         embed.addField("Enabled", "```" + Utility.listFormatter(enabled, true) + "```", false);
         embed.addField("Disabled", "```" + Utility.listFormatter(disabled, true) + "```", false);
 
-        RequestHandler.sendEmbedMessage(output.toString(), embed, command.channel);
+        RequestHandler.sendEmbedMessage(output.toString(), embed, command.guildChannel);
     }
 
     @Override

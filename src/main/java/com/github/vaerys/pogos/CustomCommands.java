@@ -3,8 +3,6 @@ package com.github.vaerys.pogos;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Client;
-import com.github.vaerys.main.Constants;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
@@ -12,13 +10,8 @@ import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.GlobalFile;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
-import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.Guild;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 // TODO: 31/08/2016 Add the ability to search for a custom command based on name, getContents, or ShitPost (use separate commands) -- partially complete.
 // name:[name] shitpost getContents:[getContents]

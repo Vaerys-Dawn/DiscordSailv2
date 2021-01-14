@@ -33,22 +33,22 @@ public class ChannelStats extends Command {
                     List<String> channelMentions = Utility.getChannelMentions(channels);
                     if (channels.size() != 0) {
                         builder.addField(s.toString(), Utility.listFormatter(channelMentions, true), false);
-                        builder.queue(command.channel);
+                        builder.queue(command.guildChannel);
                         return null;
                     } else {
                         if (s.isSetting()) {
                             return "\\> Could not find any channels with the **" + s.toString() + "** setting enabled.";
                         } else {
-                            return "\\> Could not find a channel with the **" + s.toString() + "** type enabled.";
+                            return "\\> Could not find a messageChannel with the **" + s.toString() + "** type enabled.";
                         }
                     }
                 }
             }
-            return "\\> Could not any channel settings with that name.";
+            return "\\> Could not any messageChannel settings with that name.";
         }
 
         for (ChannelSettingObject c : command.guild.channelData.getChannelSettings()) {
-            if (c.getChannelIDs().contains(command.channel.longID)) {
+            if (c.getChannelIDs().contains(command.guildChannel.longID)) {
                 for (ChannelSetting setting : Globals.getChannelSettings()) {
                     if (c.getType() == setting) {
                         if (setting.isSetting()) {
@@ -70,14 +70,14 @@ public class ChannelStats extends Command {
         if (channelSettings.size() != 0) {
             builder.addField("Settings:", Utility.listFormatter(channelSettings, true), false);
         }
-        builder.queue(command.channel);
+        builder.queue(command.guildChannel);
         return null;
     }
 
 
     @Override
     public String description(CommandObject command) {
-        return "Gives information about the current channel";
+        return "Gives information about the current messageChannel";
     }
 
     @Override

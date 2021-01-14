@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * This Class Is the Handler for the updateInfo Method it pulls the info.txt doc and then updates the channel based on the getContents of the file.
+ * This Class Is the Handler for the updateInfo Method it pulls the info.txt doc and then updates the messageChannel based on the getContents of the file.
  */
 public class InfoHandler {
     List<String> infoContents;
@@ -27,7 +27,7 @@ public class InfoHandler {
 
     public InfoHandler(CommandObject object) {
         this.object = object;
-        this.channel = object.channel.get();
+        this.channel = object.guildChannel.get();
         this.guild = object.guild.get();
         RequestHandler.deleteMessage(object.message.get());
         infoContents = FileHandler.readFromFile(Utility.getFilePath(guild.getIdLong(), Constants.FILE_INFO));

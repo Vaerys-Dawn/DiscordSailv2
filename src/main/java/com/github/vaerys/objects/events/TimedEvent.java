@@ -207,7 +207,7 @@ public class TimedEvent {
         if (messageList.length() != 0) desc.append("\n**Messages:**\n```\n" + messageList + Command.spacer + "```");
         if (avatarList.length() != 0) desc.append("\n**Avatars:**\n```\n" + avatarList + Command.spacer + "```");
         builder.setDescription(desc.toString());
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        RequestHandler.sendEmbedMessage("", builder, command.guildChannel.get());
         return null;
     }
 

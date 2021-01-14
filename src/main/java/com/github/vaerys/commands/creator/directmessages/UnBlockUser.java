@@ -4,6 +4,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.templates.DMCommand;
 
@@ -12,7 +13,7 @@ import java.util.ListIterator;
 public class UnBlockUser extends DMCommand {
 
     @Override
-    public String execute(String args, CommandObject command) {
+    public String executeDm(String args, DmCommandObject command) {
         GlobalData globalData = Globals.getGlobalData();
         ListIterator iterator = globalData.getBlockedFromDMS().listIterator();
         long userID = Utility.stringLong(args.split(" ")[0]);
@@ -23,7 +24,7 @@ public class UnBlockUser extends DMCommand {
                 return "\\> User Unblocked";
             }
         }
-        return "\\> Could not find user or invalid ID.";
+        return "\\> Could not find globalUser or invalid ID.";
     }
 
     @Override
@@ -33,7 +34,7 @@ public class UnBlockUser extends DMCommand {
 
     @Override
     public String description(CommandObject command) {
-        return "unblocks a user";
+        return "unblocks a globalUser";
     }
 
     @Override

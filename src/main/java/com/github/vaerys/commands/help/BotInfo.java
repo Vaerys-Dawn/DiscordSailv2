@@ -3,24 +3,36 @@ package com.github.vaerys.commands.help;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Globals;
+import com.github.vaerys.masterobjects.ChannelObject;
+import com.github.vaerys.masterobjects.ClientObject;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.stream.Collectors;
 
 public class BotInfo extends Command {
 
     @Override
+    public String executeDm(String args, DmCommandObject command) {
+        sendInfo(command.client, command.messageChannel, new XEmbedBuilder());
+        return null;
+    }
+
+    @Override
     public String execute(String args, CommandObject command) {
-        XEmbedBuilder builder = new XEmbedBuilder(command);
+        sendInfo(command.client, command.guildChannel, new XEmbedBuilder(command));
+        return null;
+    }
+
+    private void sendInfo(ClientObject client, ChannelObject channel, XEmbedBuilder builder) {
         StringHandler response = new StringHandler();
-        IUser creator = Globals.getCreator();
+        User creator = client.creator.get();
         builder.setTitle("Information about " + Globals.botName);
         response.append("Created by: **@" + creator.getName() + "#" + creator.getDiscriminator() + "**.");
         response.append("\nCreated entirely using Java 8 and the **[Discord4J Libraries](https://discord4j.com/)**.");
@@ -28,13 +40,17 @@ public class BotInfo extends Command {
         response.append("\nFind " + Globals.botName + " on **[GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)**.");
         response.append("\nBot's Support Discord: **https://discord.gg/XSyQQrR**.");
         response.append("\n\nContributors: ");
-        response.append(String.join(", ", Globals.getContributors().stream().map(u -> String.format("**@%s#%s**", u.getName(), u.getDiscriminator())).collect(Collectors.toList())));
+        response.append(String.join(", ", Globals.getContributors().stream().map(u -> u.getAsTag()).collect(Collectors.toList())));
         response.append(".");
         builder.setDescription(response.toString());
-        builder.withThumbnail(command.client.bot.avatarURL);
+        builder.setThumbnail(client.bot.avatarURL);
         builder.setFooter("Bot Version: " + Globals.version + " | D4J Version: " + Globals.d4jVersion);
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
-        return null;
+        channel.queueMessage(builder.build());
+    }
+
+    @Override
+    protected boolean hasDmVersion() {
+        return true;
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.github.vaerys.objects.adminlevel.JoinMessage;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class EditJoinMessage extends Command {
         if (splitArgs.getRest() == null) {
             return "\\> Could not find any content to edit with.";
         }
-        if (!splitArgs.getRest().contains("<user>")) return "\\> Could not find <user> tag.";
+        if (!splitArgs.getRest().contains("<globalUser>")) return "\\> Could not find <globalUser> tag.";
         for (JoinMessage m : messages) {
             if (m.getContent().equals(splitArgs.getRest())) {
                 return "\\> New Contents matches another Custom join message's contents, cannot have duplicate messages.";
@@ -70,8 +70,8 @@ public class EditJoinMessage extends Command {
     }
 
     @Override
-    public Permissions[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+    public Permission[] perms() {
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

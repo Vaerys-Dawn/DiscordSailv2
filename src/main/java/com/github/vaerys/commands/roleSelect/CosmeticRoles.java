@@ -3,14 +3,13 @@ package com.github.vaerys.commands.roleSelect;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +25,7 @@ public class CosmeticRoles extends Command {
             "[Role Name]",
             "Used to manage the selectable cosmetic roles.",
             SAILType.ADMIN,
-            Permissions.MANAGE_ROLES
+            Permission.MANAGE_ROLES
     );
 
     @Override
@@ -39,7 +38,7 @@ public class CosmeticRoles extends Command {
 
         if (EDIT_ROLES.isSubCommand(command)) {
             boolean isAdding = args.split(" ")[0].equals("+");
-            //test the permissions of the user to make sure they can modify the role list.
+            //test the permissions of the globalUser to make sure they can modify the role list.
             Role role = null;
 
             String subArgs = EDIT_ROLES.getArgs(command);
@@ -52,11 +51,11 @@ public class CosmeticRoles extends Command {
             if (role == null) return "\\> **" + subArgs + "** is not a valid Role Name.";
 
             //tests to see if the bot is allowed to mess with a role.
-            if (!Utility.testUserHierarchy(command.client.bot.get(), role, command.guild.get())) {
+            if (!Utility.testUserHierarchy(command.botUser.getMember(), role, command.guild.get())) {
                 return "\\> I do not have permission to modify the **" + role.getName() + "** role.";
             }
-            //test the user's hierarchy to make sure that the are allowed to mess with that role.
-            if (Utility.testUserHierarchy(command.user.get(), role, command.guild.get())) {
+            //test the globalUser's hierarchy to make sure that the are allowed to mess with that role.
+            if (Utility.testUserHierarchy(command.user.getMember(), role, command.guild.get())) {
                 // do if modifier is true
                 if (isAdding) {
                     //check for the role and add if its not a cosmetic role.
@@ -85,9 +84,9 @@ public class CosmeticRoles extends Command {
             } else {
                 return "\\> You do not have permission to modify the **" + role.getName() + "** role.";
             }
-            //do user role modification
+            //do globalUser role modification
         } else {
-            //check to make sure that the user isn't including the args brackets or the /remove at the end;
+            //check to make sure that the globalUser isn't including the args brackets or the /remove at the end;
             if (command.guild.config.getCosmeticRoleIDs().size() == 0)
                 return "\\> No Cosmetic roles are set up right now. Come back later.";
             if (args.matches("[(|\\[].*[)|\\]]")) {
@@ -105,19 +104,19 @@ public class CosmeticRoles extends Command {
                 role = GuildHandler.getRoleFromName(args, command.guild.get(), command.guild.config.getCosmeticRoleIDs(), true);
             }
             if (role == null && !args.equalsIgnoreCase("remove")) {
-                RequestHandler.sendEmbedMessage("\\> **" + args + "** is not a valid Role Name.", ListRoles.getList(command), command.channel.get());
+                ListRoles.getList(command).queue("\\> **" + args + "** is not a valid Role Name.", command);
                 return null;
-                //if args = remove. remove the user's cosmetic role
+                //if args = remove. remove the globalUser's cosmetic role
             } else if (args.equalsIgnoreCase("remove")) {
                 userRoles = userRoles.stream().filter(r -> !command.guild.config.isRoleCosmetic(r.getIdLong())).collect(Collectors.toList());
-                if (command.user.getCosmeticRoles(command).size() == 0) return "\\> You don't have a role to remove...";
+                if (command.user.getCosmeticRoles().size() == 0) return "\\> You don't have a role to remove...";
                 else response = "\\> You have had your cosmetic role removed.";
             } else {
                 //check if role is cosmetic
                 if (command.guild.config.isRoleCosmetic(role.getIdLong())) {
                     //check to see if roles are toggles
                     if (command.guild.config.roleIsToggle) {
-                        //if user has role, remove it.
+                        //if globalUser has role, remove it.
                         if (userRoles.contains(role)) {
                             userRoles.remove(role);
                             response = "\\> You have had the **" + role.getName() + "** role removed.";
@@ -139,16 +138,16 @@ public class CosmeticRoles extends Command {
                         }
                     }
                 } else {
-                    RequestHandler.sendEmbedMessage("\\> **" + args + "** is not a valid cosmetic role.", ListRoles.getList(command), command.channel.get());
+                    ListRoles.getList(command).queue("\\> **" + args + "** is not a valid cosmetic role.", command);
                     return null;
                 }
             }
-            // push the changes to the user's roles.
-            if (RequestHandler.roleManagement(command.user.get(), command.guild.get(), userRoles).get()) {
-                return response;
-            } else {
-                return Constants.ERROR_UPDATING_ROLE;
-            }
+            // push the changes to the globalUser's roles.
+            command.guild.get().modifyMemberRoles(command.user.getMember(), userRoles).queue();
+            return response;
+//            } else {
+//                return Constants.ERROR_UPDATING_ROLE;
+//            }
         }
     }
 

@@ -24,7 +24,7 @@ public class UpdateRolePerms extends Command {
         List<Role> parentRole = GuildHandler.getRolesByName(command.guild.get(), args);
         EnumSet parentPerms = command.guild.get().getPublicRole().getPermissions();
         ArrayList<String> permList = new ArrayList<>();
-        Message workingMsg = command.channel.sendMessage("`Working...`");
+        Message workingMsg = command.guildChannel.sendMessage("`Working...`");
         if (parentRole.size() != 0) {
             if (command.guild.config.isRoleCosmetic(parentRole.get(0).getIdLong())) {
                 parentPerms = parentRole.get(0).getPermissions();
@@ -41,7 +41,7 @@ public class UpdateRolePerms extends Command {
         for (Object p : parentPerms.toArray()) {
             permList.add(p.toString());
         }
-        workingMsg.delete();
+        workingMsg.delete().complete();
         return "\\> Cosmetic Roles Perms set to : " + Utility.listFormatter(permList, true);
     }
 

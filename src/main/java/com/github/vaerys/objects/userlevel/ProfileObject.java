@@ -10,8 +10,8 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.ModNoteObject;
 import com.github.vaerys.pogos.GuildConfig;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -170,8 +170,8 @@ public class ProfileObject {
     }
 
     public UserObject getUser(GuildObject content) {
-        IUser user = content.getUserByID(userID);
-        if (user == null) return UserObject.getNewUserObject(userID, content);
+        Member user = content.getUserByID(userID);
+        if (user == null) return new UserObject(userID, content);
         return new UserObject(user, content);
     }
 
@@ -198,8 +198,8 @@ public class ProfileObject {
 
     /**
      * @param contents the getContents of the new mod note.
-     * @param command  Used to parse in the variables needed to access the guild, channel, message,
-     *                 and user objects. these objects allows access to the api.
+     * @param command  Used to parse in the variables needed to access the guild, messageChannel, message,
+     *                 and globalUser objects. these objects allows access to the api.
      * @param isStrike weather the note is a strike or not.
      */
     public void addSailModNote(String contents, CommandObject command, boolean isStrike) {
@@ -209,8 +209,8 @@ public class ProfileObject {
 
     public void addSailModNote(String contents, long timeStamp, boolean isStrike) {
         if (modNotes == null) modNotes = new LinkedList<>();
-        IDiscordClient client = Client.getClient();
-        modNotes.add(new ModNoteObject(contents, client.getOurUser().getIdLong(), timeStamp, isStrike));
+        JDA client = Client.getClient();
+        modNotes.add(new ModNoteObject(contents, client.getSelfUser().getIdLong(), timeStamp, isStrike));
     }
 
     public void addSailModNote(String contents, CommandObject command) {

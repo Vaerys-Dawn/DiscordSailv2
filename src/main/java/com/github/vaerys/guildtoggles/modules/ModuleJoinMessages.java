@@ -1,13 +1,12 @@
 package com.github.vaerys.guildtoggles.modules;
 
-import com.github.vaerys.guildtoggles.ToggleList;
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
-import sx.blah.discord.handle.obj.TextChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 public class ModuleJoinMessages extends GuildModule {
 
@@ -52,7 +51,7 @@ public class ModuleJoinMessages extends GuildModule {
         TextChannel channel = command.guild.getChannelByType(ChannelSetting.JOIN_CHANNEL);
         StringHandler builder = new StringHandler();
         if (channel != null) {
-            builder.append("Join Channel: " + channel.mention());
+            builder.append("Join Channel: " + channel.getAsMention());
         }
         if (!builder.isEmpty()) builder.append("\n");
         builder.append("Message count: " + command.guild.channelData.getJoinMessages().size());

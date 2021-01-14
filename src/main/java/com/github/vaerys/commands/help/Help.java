@@ -1,14 +1,20 @@
 package com.github.vaerys.commands.help;
 
 import com.github.vaerys.commands.CommandList;
+import com.github.vaerys.commands.dmCommands.InfoDM;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,9 +46,30 @@ public class Help extends Command {
 
         if (!GuildHandler.testForPerms(command, foundCommand.perms))
             return "\\> I'm sorry but you do not have permission to view the information for the **" + foundCommand.getCommand(command) + "** command.";
+        foundCommand.getCommandInfo(command).queue(command);
+        return null;
+    }
 
-        RequestHandler.sendEmbedMessage("", foundCommand.getCommandInfo(command), command.channel.get());
-        return "";
+    @Override
+    public String executeDm(String commandArgs, DmCommandObject command) {
+        XEmbedBuilder builder = new XEmbedBuilder();
+        List<Command> commands = CommandList.getCommands(true);
+        if (command.globalUser.checkIsCreator()) commands.addAll(CommandList.getCreatorCommands(true));
+        List<String> list = new ArrayList<>();
+        for (Command c : commands) {
+            list.add(c.getCommand());
+        }
+        Collections.sort(list);
+        StringBuilder desc = new StringBuilder("**\\> Direct Message Commands.**```" + Utility.listFormatter(list, false) + "```\n");
+        desc.append(get(InfoDM.class).missingArgsDm());
+        builder.setDescription(desc.toString());
+        builder.queue(command);
+        return null;
+    }
+
+    @Override
+    protected boolean hasDmVersion() {
+        return true;
     }
 
     @Override

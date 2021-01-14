@@ -49,9 +49,9 @@ public class PatreonAPI {
     }
 
     /**
-     * Get the user object of the creator
+     * Get the globalUser object of the creator
      *
-     * @return JSONAPIDocument<User> containing all data pertaining to the current user
+     * @return JSONAPIDocument<User> containing all data pertaining to the current globalUser
      * @throws IOException Thrown when the GET request failed
      */
     public JSONAPIDocument<User> fetchUser() throws IOException {

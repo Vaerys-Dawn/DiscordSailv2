@@ -4,7 +4,6 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.QueueHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
@@ -12,8 +11,8 @@ import com.github.vaerys.objects.botlevel.AutoBlocker;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -34,9 +33,9 @@ public class NewDailyMessage extends Command {
                 return "\\> You have been blocked. You cannot send daily message requests.";
             }
             if (day.getRest() != null) {
-                Message working = RequestHandler.sendMessage("`Working...`", command.channel.get()).get();
+                Message working = command.guildChannel.sendMessage("`Working...`");
                 QueueHandler.addToQueue(command, day.getRest(), dayOfWeek, Constants.QUEUE_DAILY);
-                RequestHandler.deleteMessage(working);
+                working.delete().complete();
                 return "\\> Request Sent.";
             } else {
                 return missingArgs(command);
@@ -50,7 +49,7 @@ public class NewDailyMessage extends Command {
         AutoBlocker blocker = null;
         for (AutoBlocker a : lastUsers) {
             if (a.getUserID() == command.user.longID) {
-                a.addCount(command.message.get().getTimestamp());
+                a.addCount(command.message.getTimestamp());
             }
         }
         if (blocker == null) lastUsers.add(new AutoBlocker(command));

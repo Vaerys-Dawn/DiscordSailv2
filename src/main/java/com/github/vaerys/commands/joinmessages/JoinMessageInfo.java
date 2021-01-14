@@ -5,9 +5,9 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.JoinMessage;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 
@@ -29,14 +29,13 @@ public class JoinMessageInfo extends Command {
         JoinMessage message = messages.get(index);
         builder.setTitle("Message #" + (index + 1));
         builder.setDescription(message.getContent());
-        UserObject user = UserObject.getNewUserObject(message.getCreator(), command.guild);
+        UserObject user = new UserObject(message.getCreator(), command.guild);
         if (user == null) {
-            builder.setFooter("Could not find user.");
+            builder.setFooter("Could not find globalUser.");
         } else {
-            builder.setFooter("Creator: @" + user.username);
-            builder.withFooterIcon(user.avatarURL);
+            builder.setFooter("Creator: @" + user.username, user.avatarURL);
         }
-        builder.queue(command.channel);
+        builder.queue(command.guildChannel);
         return null;
     }
 
@@ -67,7 +66,7 @@ public class JoinMessageInfo extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

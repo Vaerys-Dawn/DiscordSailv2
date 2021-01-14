@@ -3,7 +3,7 @@ package com.github.vaerys.templates;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -23,16 +23,12 @@ public abstract class MentionCommand extends Command {
 
     @Override
     public boolean isCall(String args, CommandObject command) {
-//        if (command.client.bot == null) {
-//            command.guild.sendDebugLog(command, "MENTION_COMMAND", "BOT_NULL", command.message.getContent());
-//            return false;
-//        }
         SplitFirstObject mention = new SplitFirstObject(args);
         if (mention.getRest() == null) {
             return false;
         }
-        List<IUser> users = command.message.getMentions();
-        IUser bot = Client.getClient().getOurUser();
+        List<User> users = command.message.getMentions();
+        User bot = Client.getClient().getSelfUser();
         if (bot == null || !users.contains(bot)) {
             return false;
         }
@@ -49,7 +45,7 @@ public abstract class MentionCommand extends Command {
     }
 
     @Override
-    public String getArgs(String args, CommandObject command) {
+    public String getArgs(String args) {
         SplitFirstObject mention = new SplitFirstObject(args);
         SplitFirstObject call = new SplitFirstObject(mention.getRest());
         if (call.getRest() == null) {

@@ -2,16 +2,15 @@ package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.objects.events.TimedEvent;
 import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.objects.utils.SplitFirstObject;
-import com.github.vaerys.objects.events.TimedEvent;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
 import java.time.DayOfWeek;
 import java.util.stream.Collectors;
@@ -27,7 +26,7 @@ public class EventSetup extends Command {
             builder.setTitle("All Events:");
             String eventList = Utility.listFormatter(Globals.getEvents().stream().map(event1 -> event1.getEventName()).collect(Collectors.toList()), true);
             builder.setDescription("```\n" + eventList + spacer + "```");
-            RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+            builder.queue(command);
             return null;
         }
         if (eventName.getRest() == null) {
@@ -131,7 +130,7 @@ public class EventSetup extends Command {
         if (rest.equalsIgnoreCase("remove")) {
             event.setHelloMessage(null);
         }
-        if (rest.contains("<user>")) {
+        if (rest.contains("<globalUser>")) {
             if (rest.startsWith("> ")) {
                 event.setHelloMessage(rest);
             } else {
@@ -139,7 +138,7 @@ public class EventSetup extends Command {
             }
             return "> Hello message set.";
         } else {
-            return "> Missing <user> tag";
+            return "> Missing <globalUser> tag";
         }
     }
 

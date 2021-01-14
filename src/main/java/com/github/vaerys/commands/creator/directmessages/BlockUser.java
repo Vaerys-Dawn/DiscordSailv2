@@ -4,6 +4,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.templates.DMCommand;
 
@@ -13,7 +14,7 @@ import com.github.vaerys.templates.DMCommand;
 public class BlockUser extends DMCommand {
 
     @Override
-    public String execute(String args, CommandObject command) {
+    public String executeDm(String args, DmCommandObject command) {
         long userId = Globals.lastDmUserID;
         if (args != null && !args.isEmpty()) {
             userId = Utility.stringLong(args.split(" ")[0]);
@@ -22,7 +23,7 @@ public class BlockUser extends DMCommand {
         if (userId == Globals.creatorID) {
             return "\\> What are you doing. Don't try to block yourself.";
         }
-        if (command.client.get().fetchUser(userId) != null) {
+        if (command.client.get().getUserById(userId) != null) {
             globalData.blockUserFromDMS(userId);
             return "\\> User was blocked";
         }
@@ -36,7 +37,7 @@ public class BlockUser extends DMCommand {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows the author to block a user from sending them DMs.";
+        return "Allows the author to block a globalUser from sending them DMs.";
     }
 
     @Override

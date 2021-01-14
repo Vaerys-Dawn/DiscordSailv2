@@ -4,7 +4,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 21/02/2017.
@@ -21,7 +21,7 @@ public class SetRateLimit extends Command {
                 return "\\> That would be stopped by Discord's Rate Limit.";
             } else {
                 command.guild.config.setRateLimit(max);
-                return "\\> Guild Rate limit set to **" + max + "** messages per user every 10 seconds.";
+                return "\\> Guild Rate limit set to **" + max + "** messages per globalUser every 10 seconds.";
             }
         } catch (NumberFormatException e) {
             return "\\> You need to specify a number.";
@@ -55,7 +55,7 @@ public class SetRateLimit extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

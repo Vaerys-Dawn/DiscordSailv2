@@ -7,8 +7,8 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.GlobalFile;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +93,7 @@ public class GuildUsers extends GlobalFile {
         return unMuteUser(user.longID, guild.longID);
     }
 
-    public boolean isUserMuted(IUser user) {
+    public boolean isUserMuted(Member user) {
         for (MutedUserObject u : mutedUsers) {
             if (u.getID() == user.getIdLong()) return true;
         }

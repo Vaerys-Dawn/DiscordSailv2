@@ -4,7 +4,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.text.NumberFormat;
 
@@ -15,7 +15,10 @@ public class Ping extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        return "\\> Pong! " + NumberFormat.getInstance().format(command.client.get().getShards().get(0).getResponseTime()) + "ms";
+        NumberFormat nf = NumberFormat.getInstance();
+        return String.format("\\> Pong!\nGateway: %sms\nRest: %sms",
+                nf.format(command.client.get().getGatewayPing()),
+                nf.format(command.client.get().getRestPing().complete()));
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 02/07/2017.
@@ -19,8 +19,8 @@ public class LevelUpMessage extends Command {
         if (args.length() > 100) {
             return "\\> Message to long.";
         } else {
-            if (!args.contains("<level>") || !args.contains("<user>")) {
-                return "\\> Missing <level> and/or <user> tags.";
+            if (!args.contains("<level>") || !args.contains("<globalUser>")) {
+                return "\\> Missing <level> and/or <globalUser> tags.";
             }
             command.guild.config.setLevelUpMessage(args);
             return "\\> New Level Up message set.";
@@ -55,7 +55,7 @@ public class LevelUpMessage extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

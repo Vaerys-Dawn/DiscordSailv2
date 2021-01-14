@@ -5,11 +5,10 @@ import com.github.vaerys.commands.admin.Module;
 import com.github.vaerys.commands.admin.Toggle;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * Created by Vaerys on 22/02/2017.
@@ -48,7 +47,7 @@ public class StartUpGuide extends Command {
                 get(BotHelp.class).getUsage(command) + "**\n" +
                 "Gives you information about various bot features.";
         builder.setDescription(desc);
-        RequestHandler.sendEmbedMessage("", builder, command.channel.get());
+        builder.queue(command);
         return null;
     }
 

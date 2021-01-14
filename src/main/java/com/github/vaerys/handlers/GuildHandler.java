@@ -34,7 +34,7 @@ public class GuildHandler {
         boolean doDecay = content.config.xpGain && content.config.modulePixels && content.config.xpDecay;
         for (ProfileObject p : content.users.getProfiles()) {
             if (doDecay) PixelHandler.doDecay(content, p);
-            //check user's roles and make sure that they have the right roles.
+            //check globalUser's roles and make sure that they have the right roles.
             checkUsersRoles(p.getUserID(), content, true);
         }
         checkTopTen(content);
@@ -112,7 +112,7 @@ public class GuildHandler {
                     iterator.remove();
                 }
             }
-            //add all roles that the user should have.
+            //add all roles that the globalUser should have.
             ArrayList<RewardRoleObject> allRewards = content.config.getAllRewards(profile.getCurrentLevel());
             for (RewardRoleObject r : allRewards) {
                 userRoles.add(content.get().getRoleById(r.getRoleID()));

@@ -66,7 +66,7 @@ public class TagAddPixels extends TagAdminSubTagObject {
 
     @Override
     protected String desc() {
-        return "Adds the amount of pixels specified in the SubTag to the user's profile upon activation. Replaces itself with \"You have been granted x pixels\".\n" +
+        return "Adds the amount of pixels specified in the SubTag to the globalUser's profile upon activation. Replaces itself with \"You have been granted x pixels\".\n" +
                 "Limit of 200 pixels, or 2000 with LimitTry Enabled. (Affected by Pixel multiplier)";
     }
 }

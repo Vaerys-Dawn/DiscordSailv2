@@ -6,8 +6,8 @@ import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class WeightedFinalTally extends Command {
                     try {
                         long vote = Long.parseLong(splitVotes[(int) i]);
                         if (entryVotes.containsKey(vote)) {
-                            IUser user = command.guild.getUserByID(Utility.stringLong(splitVotes[0]));
+                            Member user = command.guild.getUserByID(Utility.stringLong(splitVotes[0]));
                             if (user != null) {
                                 int weight = PixelHandler.getRewardCount(command.guild, user.getIdLong());
                                 entryVotes.put(vote, entryVotes.get(vote).longValue() + weight + 1);
@@ -81,7 +81,7 @@ public class WeightedFinalTally extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permissions.MANAGE_SERVER};
+        return new Permission[]{Permission.MANAGE_SERVER};
     }
 
     @Override

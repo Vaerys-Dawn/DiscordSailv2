@@ -53,7 +53,7 @@ public class LoggingSetupStage extends SetupHandler {
         output.append("We are moving on to setting up modules. The first one that needs to be configured is the Logging module");
         output.append("\nThis module can be used to extend and enhance the basic Audit Log used by Discord.");
         output.append("\n\nFirst part of this, I will need a couple of channels to use. One for general logging, and one for admin logging.");
-        output.append("\n*Admin Logging* is messages and events related to server configuration and user moderation.");
+        output.append("\n*Admin Logging* is messages and events related to server configuration and globalUser moderation.");
         output.append("\n*General Logging* is all of the logging that doesn't fit under admin logging, such as new member joins, message edits and deletes, general command usage, etc.");
         output.append("\n\nI am going to quickly scan your channels to see if I can find potential channels you might want to use...");
 
@@ -63,11 +63,11 @@ public class LoggingSetupStage extends SetupHandler {
             if (!checkForAdminLog(command)) {
                 output.append("\nI didn't find any channels that could be used. You'll have to tell me which ones you want me to use");
             } else {
-                // will ask for general channel thingers only...
+                // will ask for general messageChannel thingers only...
 
             }
         }
-        RequestHandler.sendMessage(output.toString(), command.channel);
+        RequestHandler.sendMessage(output.toString(), command.guildChannel);
     }
 
     private boolean checkForAdminLog(CommandObject command) {
@@ -84,13 +84,13 @@ public class LoggingSetupStage extends SetupHandler {
                 break;
             } else if (genLogChannel.size() > 1) {
                 output.append("I found multiple valid channels...")
-                .append("\nPick a channel from the list below: ```");
+                .append("\nPick a messageChannel from the list below: ```");
                 String format = "\n%s [%s]";
                 for (TextChannel c : genLogChannel) {
                     output.appendFormatted(format, c.getName(), c.getIdLong());
                 }
                 output.append("\n```")
-                .append("Respond with the ID of the channel you want to use.");
+                .append("Respond with the ID of the messageChannel you want to use.");
 
                 // handle this some special way
             }
@@ -98,8 +98,8 @@ public class LoggingSetupStage extends SetupHandler {
 
         if (channel == null) return false;
 
-        output.append("Do you want to use " + channel.getName() + " as the general log channel?");
-        RequestHandler.sendMessage(output.toString(), command.channel);
+        output.append("Do you want to use " + channel.getName() + " as the general log messageChannel?");
+        RequestHandler.sendMessage(output.toString(), command.guildChannel);
         return true;
     }
 

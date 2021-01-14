@@ -2,10 +2,10 @@ package com.github.vaerys.main;
 
 import com.github.vaerys.commands.help.StartUpGuide;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
+import emoji4j.EmojiUtils;
 
 import java.awt.*;
 import java.time.DayOfWeek;
@@ -125,13 +125,13 @@ public class Constants {
 
 
     //Emoji Constants
-    public static final String EMOJI_THUMBS_DOWN = "thumbsdown";
-    public static final String EMOJI_THUMBS_UP = "thumbsup";
-    public static final String EMOJI_DENY = "no_entry_sign";
-    public static final String EMOJI_ALLOW = "white_check_mark";
-    public static final String EMOJI_REMOVE_PIN = "x";
-    public static final String EMOJI_ADD_PIN = "pushpin";
-    public static final String EMOJI_LIKE_PIN = "heart";
+    public static final String EMOJI_THUMBS_DOWN = EmojiUtils.getEmoji("thumbsdown").getEmoji();
+    public static final String EMOJI_THUMBS_UP = EmojiUtils.getEmoji("thumbsup").getEmoji();
+    public static final String EMOJI_DENY = EmojiUtils.getEmoji("no_entry_sign").getEmoji();
+    public static final String EMOJI_ALLOW = EmojiUtils.getEmoji("white_check_mark").getEmoji();
+    public static final String EMOJI_REMOVE_PIN = EmojiUtils.getEmoji("x").getEmoji();
+    public static final String EMOJI_ADD_PIN = EmojiUtils.getEmoji("pushpin").getEmoji();
+    public static final String EMOJI_LIKE_PIN = EmojiUtils.getEmoji("heart").getEmoji();
 
     //image Constants
     public static final String LINK_GITHUB = "https://github.com/Vaerys-Dawn/DiscordSailv2";
@@ -150,6 +150,7 @@ public class Constants {
     //colours
     public static Color pixelColour = new Color(226, 218, 117);
     public static final Color DEFAULT_COLOUR = new Color(89, 91, 105);
+    public static int MAX_FIELD_COUNT = 25;
 
     public static String getWelcomeMessage(CommandObject object) {
         return "\\> I am S.A.I.L, your Server-Based Artificial Intelligence Lattice. I help manage servers.\n" +

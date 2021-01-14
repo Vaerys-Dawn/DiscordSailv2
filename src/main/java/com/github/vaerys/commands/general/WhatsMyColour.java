@@ -5,9 +5,9 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
 import java.awt.*;
 
@@ -18,7 +18,7 @@ public class WhatsMyColour extends Command {
         UserObject user = command.user;
         if (args != null && !args.isEmpty()) {
             user = Utility.getUser(command, args, true, false);
-            if (user == null) return "\\> Could not find user.";
+            if (user == null) return "\\> Could not find globalUser.";
         }
         boolean notAuthor = user.longID != command.user.longID;
         Color color = user.getRandomColour();
@@ -31,7 +31,7 @@ public class WhatsMyColour extends Command {
         }
         desc += "**#" + Integer.toHexString(color.getRGB()).substring(2).toUpperCase() + "**";
         builder.setDescription(desc);
-        builder.queue(command.channel);
+        builder.queue(command.guildChannel);
         return null;
     }
 
@@ -44,7 +44,7 @@ public class WhatsMyColour extends Command {
     public String description(CommandObject command) {
         return "returns the seeded colour assigned to your account" +
                 "\n**How this works:**\n" +
-                "Sail grabs 3 random numbers using your user ID for the seed and then converts it into a colour.\n";
+                "Sail grabs 3 random numbers using your globalUser ID for the seed and then converts it into a colour.\n";
     }
 
     @Override

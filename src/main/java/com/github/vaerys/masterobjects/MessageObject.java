@@ -1,6 +1,5 @@
 package com.github.vaerys.masterobjects;
 
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Client;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageReaction;
@@ -16,15 +15,15 @@ public class MessageObject {
 
     public ClientObject client;
     public long longID;
-    public UserObject author;
     private Message object;
+    public GlobalUserObject author;
 
-    public MessageObject(Message message, GuildObject guild) {
+    public MessageObject(Message message) {
         if (message == null) return;
         client = Client.getClientObject();
         this.object = message;
         this.longID = message.getIdLong();
-        this.author = new UserObject(message.getMember(), guild);
+        this.author = new GlobalUserObject(message.getAuthor());
     }
 
     public Message get() {
@@ -44,7 +43,7 @@ public class MessageObject {
     }
 
     public void delete() {
-        object.delete();
+        object.delete().complete();
     }
 
     public ZonedDateTime getTimestampZone() {
@@ -67,5 +66,14 @@ public class MessageObject {
 
     public Instant getTimestamp() {
         return object.getTimeCreated().toInstant();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof MessageObject) {
+            return longID == ((MessageObject) obj).longID;
+        } else {
+            return super.equals(obj);
+        }
     }
 }

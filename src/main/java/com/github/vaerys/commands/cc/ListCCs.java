@@ -42,12 +42,12 @@ public class ListCCs extends Command {
     }
 
     public String getUserCommands(CommandObject command, UserObject user) {
-        if (user == null) return "> Could not find user.";
+        if (user == null) return "> Could not find globalUser.";
         int total = 0;
-//        command.setAuthor(user);
+//        command.setAuthor(globalUser);
         int max = command.guild.customCommands.maxCCs(user, command.guild);
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        String title = "> Here are the custom commands for user: @" + user.username + ".";
+        String title = "> Here are the custom commands for globalUser: @" + user.username + ".";
         List<String> list = new ArrayList<>();
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
             if (c.getUserID() == user.longID) {
@@ -59,7 +59,7 @@ public class ListCCs extends Command {
         String content = Utility.listFormatter(list, true);
         if (content.length() > 2000) {
             String fileName = String.format("Commands_%s.txt", command.user.name);
-            command.channel.queueFile(title, content.getBytes(), fileName);
+            command.guildChannel.queueFile(title, content.getBytes(), fileName);
             return null;
         }
         builder.setDescription("```\n" + content + "```");

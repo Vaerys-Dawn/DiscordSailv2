@@ -5,7 +5,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 public class WhoIsThis extends Command {
 
@@ -21,7 +21,7 @@ public class WhoIsThis extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Gives global info about a user";
+        return "Gives global info about a globalUser";
     }
 
     @Override

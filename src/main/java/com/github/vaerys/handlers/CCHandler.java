@@ -14,11 +14,11 @@ import com.github.vaerys.tags.TagList;
 import com.github.vaerys.tags.admintags.TagAutoDelete;
 import com.github.vaerys.tags.cctags.TagRemoveMentions;
 import com.github.vaerys.templates.TagObject;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.Permissions;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -47,14 +47,14 @@ public class CCHandler {
         }
 
         List<TextChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
-        if (ccDenied.contains(command.channel.get())) {
-            RequestHandler.sendMessage("\\> Custom Command usage has been disabled for this channel.", command.channel);
+        if (ccDenied.contains(command.guildChannel.get())) {
+            RequestHandler.sendMessage("\\> Custom Command usage has been disabled for this messageChannel.", command.guildChannel);
             return;
         }
 
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
-            RequestHandler.sendMessage("\\> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
+            command.guildChannel.queueMessage("\\> Nothing interesting happens. `(ERROR: 403)`");
             return;
         }
 
@@ -69,21 +69,6 @@ public class CCHandler {
 
         for (TagObject t : tags) {
             try {
-
-////            } catch (StackOverflowError e) {
-//                String ccContents = t.getContents(getContents);
-//                String ccPrefix;
-//                if (t instanceof TagAdminSubTagObject) {
-//                    TagAdminSubTagObject tag = (TagAdminSubTagObject) t;
-//                    String subTag = tag.getSubTag(getContents);
-//                    ccPrefix = String.format("<%s:%s>%s", tag.tagName(), subTag, t.requiredArgs != 0 ? "{" : "");
-//                } else {
-//                    ccPrefix = t.prefix;
-//                }
-//                String fullTag = t.requiredArgs == 0 ? ccPrefix : ccPrefix + ccContents + t.suffix;
-//                System.out.println(fullTag);
-////                RequestHandler.queueMessage(String.format("A stack overflow error occurred within one of the **%s** tags.\n\n**Tag Details:**```\n%s```", t.name, fullTag), command);
-////                return;
                 FileHandler.writeToFile(Constants.DIRECTORY_STORAGE + "Error.txt", contents, true);
                 contents = t.handleTag(contents, command, ccArgs, cc);
                 if (contents == null) return;
@@ -102,14 +87,14 @@ public class CCHandler {
                 int time = Integer.parseInt(autoDelete.getSubTag(contents));
                 contents = autoDelete.removeAllTag(contents);
                 contents = removeMentions.handleTag(contents, command, "");
-                Message message = RequestHandler.sendMessage(contents, command.channel.get()).get();
+                Message message = command.guildChannel.sendMessage(contents);
                 autoDelete(message, time);
                 return;
             } catch (NumberFormatException e) {
                 //do nothing
             }
         }
-        RequestHandler.sendMessage(contents, command.channel.get());
+        command.guildChannel.queueMessage(contents);
     }
 
     public static void handleCommand(String args, CommandObject command) {
@@ -127,14 +112,14 @@ public class CCHandler {
         if (commandObject == null) return;
 
         List<TextChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
-        if (ccDenied.contains(command.channel.get())) {
-            RequestHandler.sendMessage("\\> Custom Command usage has been disabled for this channel.", command.channel);
+        if (ccDenied.contains(command.guildChannel.get())) {
+            RequestHandler.sendMessage("\\> Custom Command usage has been disabled for this messageChannel.", command.guildChannel);
             return;
         }
 
         ProfileObject object = command.guild.users.getUserByID(command.user.longID);
         if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
-            RequestHandler.sendMessage("\\> Nothing interesting happens. `(ERROR: 403)`", command.channel.get());
+            command.guildChannel.queueMessage("\\> Nothing interesting happens. `(ERROR: 403)`");
             return;
         }
 
@@ -142,11 +127,11 @@ public class CCHandler {
 
         String contents = commandObject.getContents(true);
         //shitpost handling
-        if (commandObject.isShitPost() && command.guild.config.shitPostFiltering && !GuildHandler.testForPerms(command, Permissions.MANAGE_CHANNELS)) {
+        if (commandObject.isShitPost() && command.guild.config.shitPostFiltering && !GuildHandler.testForPerms(command, Permission.MANAGE_CHANNEL)) {
             List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
-            if (channels.size() != 0 && !channels.contains(command.channel.get())) {
+            if (channels.size() != 0 && !channels.contains(command.guildChannel.get())) {
                 channels = command.user.getVisibleChannels(channels);
-                RequestHandler.sendMessage(Utility.getChannelMessage(channels), command.channel.get());
+                command.guildChannel.queueMessage(Utility.getChannelMessage(channels));
                 return;
             }
         }
@@ -156,12 +141,11 @@ public class CCHandler {
             contents = t.handleTag(contents, command, ccArgs);
             if (contents == null) return;
         }
-
-        RequestHandler.sendMessage(contents, command.channel.get());
+        command.guildChannel.queueMessage(contents);
 
     }
 
     public static void autoDelete(Message message, int time) {
-        deleter.schedule(() -> RequestHandler.deleteMessage(message), time, TimeUnit.MINUTES);
+        deleter.schedule(() -> message.delete().queue(), time, TimeUnit.MINUTES);
     }
 }

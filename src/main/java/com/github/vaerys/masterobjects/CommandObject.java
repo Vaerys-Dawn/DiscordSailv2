@@ -13,62 +13,50 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Vaerys on 29/01/2017.
  */
-public class CommandObject {
+public class CommandObject{
 
     final static Logger logger = LoggerFactory.getLogger(CommandObject.class);
     //master objects
     public GuildObject guild;
     public UserObject user;
+    public GuildChannelObject guildChannel;
     public MessageObject message;
-    public ChannelObject channel;
     public ClientObject client;
     public UserObject botUser;
 
-
-    public CommandObject(Message message) {
-        if (message == null) {
-            throw new IllegalStateException("Message should never be null.");
-        }
-        if (message.getGuild() == null) {
-            this.guild = new GuildObject();
-        } else {
-            this.guild = Globals.getGuildContent(message.getGuild().getIdLong());
-        }
-        this.message = new MessageObject(message, guild);
-        this.channel = new ChannelObject(message.getTextChannel(), guild);
-        this.user = new UserObject(message.getMember(), guild);
+    public CommandObject(Message message, Guild guild) {
         this.client = Client.getClientObject();
-        this.botUser = new UserObject(client.bot, this.guild);
-    }
-
-    public CommandObject(Message message, Guild guild, TextChannel channel, Member author) {
-        if (guild == null) {
-            this.guild = new GuildObject();
-        } else {
-            this.guild = Globals.getGuildContent(guild.getIdLong());
-        }
-        this.message = new MessageObject(message, this.guild);
-        this.channel = new ChannelObject(channel, this.guild);
-        this.user = new UserObject(author, this.guild);
-        this.client = Client.getClientObject();
+        this.message = new MessageObject(message);
+        this.guild = Globals.getGuildContent(guild.getIdLong());
+        this.guildChannel = new GuildChannelObject(message.getTextChannel(), this.guild);
+        this.user = new UserObject(message.getMember(), this.guild);
         this.botUser = new UserObject(client.bot, this.guild);
     }
 
     public CommandObject(GuildObject task, TextChannel channel) {
         this.client = Client.getClientObject();
         this.guild = task;
-        this.channel = new ChannelObject(channel, task);
-        this.message = null;
+        this.guildChannel = new GuildChannelObject(channel, this.guild);
         this.user = null;
+        this.message = null;
         this.botUser = new UserObject(client.bot, this.guild);
     }
 
     public CommandObject(GuildObject content, TextChannel channel, Member user) {
+        this.client = Client.getClientObject();
         this.guild = content;
         this.message = null;
-        this.channel = new ChannelObject(channel, guild);
+        this.guildChannel = new GuildChannelObject(channel, this.guild);
         this.user = new UserObject(user, guild);
+        this.botUser = new UserObject(client.bot, this.guild);
+    }
+
+    public CommandObject(DmCommandObject command, Guild guild) {
         this.client = Client.getClientObject();
+        this.message = command.message;
+        this.guild = Globals.getGuildContent(guild.getIdLong());
+        this.guildChannel = new GuildChannelObject(this.guild.get().getDefaultChannel(), this.guild);
+        this.user = new UserObject(command.globalUser, this.guild);
         this.botUser = new UserObject(client.bot, this.guild);
     }
 
@@ -77,8 +65,8 @@ public class CommandObject {
         return this;
     }
 
-    public CommandObject setChannel(TextChannel channel) {
-        this.channel = new ChannelObject(channel, guild);
+    public CommandObject setGuildChannel(TextChannel guildChannel) {
+        this.guildChannel = new GuildChannelObject(guildChannel, this.guild);
         return this;
     }
 
@@ -90,11 +78,11 @@ public class CommandObject {
     }
 
     public CommandObject setMessage(Message message) {
-        this.message = new MessageObject(message, guild);
+        this.message = new MessageObject(message);
         return this;
     }
 
     public String getMessageLink() {
-        return String.format("https://discordapp.com/channels/%d/%d/%d", guild.longID, channel.longID, message.longID);
+        return String.format("https://discordapp.com/channels/%d/%d/%d", guild.longID, guildChannel.longID, message.longID);
     }
 }

@@ -89,8 +89,8 @@ public class QueueHandler {
         ReactionEmoji no = Utility.getReaction(Constants.EMOJI_DENY);
         Message message = object.message.get();
         IUser owner = object.client.creator.get();
-        //exit if not the queue channel
-        if (object.channel.longID != Globals.queueChannelID) return;
+        //exit if not the queue messageChannel
+        if (object.guildChannel.longID != Globals.queueChannelID) return;
         //exit if not the owner.
         if (reaction.getCount() == 0) return;
         if (!reaction.getUserReacted(owner)) return;

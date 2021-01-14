@@ -5,7 +5,6 @@ import com.github.vaerys.commands.admin.Test;
 import com.github.vaerys.commands.creator.directmessages.Echo;
 import com.github.vaerys.commands.general.Hello;
 import com.github.vaerys.commands.general.Patreon;
-import com.github.vaerys.commands.help.Help;
 import com.github.vaerys.commands.help.Ping;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
@@ -18,7 +17,6 @@ import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
-import com.github.vaerys.pogos.CustomCommands;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -41,14 +39,14 @@ public class NewCC extends Command {
         if (object != null && object.getSettings().contains(UserSetting.DENY_MAKE_CC)) {
             return "\\> " + command.user.mention() + ", You have been denied the creation of custom commands.";
         }
-        if (command.guild.getChannelsByType(ChannelSetting.CC_DENIED).contains(command.channel.get()))
+        if (command.guild.getChannelsByType(ChannelSetting.CC_DENIED).contains(command.guildChannel.get()))
             return "\\> This Channel has CCs Denied, You cannot create ccs here.";
         boolean isShitpost;
         boolean isLocked = false;
         SplitFirstObject splitFirst = new SplitFirstObject(args);
         List<TextChannel> shitpostChannels = command.guild.getChannelsByType(ChannelSetting.SHITPOST);
 
-        isShitpost = shitpostChannels.contains(command.channel);
+        isShitpost = shitpostChannels.contains(command.guildChannel);
 
         if (object.getSettings().contains(UserSetting.AUTO_SHITPOST)) {
             isShitpost = true;

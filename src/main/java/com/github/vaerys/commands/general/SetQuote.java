@@ -10,8 +10,8 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 27/02/2017.
@@ -21,9 +21,9 @@ public class SetQuote extends Command {
     public static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
             new String[]{"SetUserQuote", "SetUserDesc"},
             "[@User] [Quote]",
-            "Edits a user's quote.",
+            "Edits a globalUser's quote.",
             SAILType.MOD_TOOLS,
-            Permissions.MANAGE_MESSAGES
+            Permission.MESSAGE_MANAGE
     );
 
     @Override
@@ -32,10 +32,10 @@ public class SetQuote extends Command {
         String quote = args;
         boolean adminEdit = false;
         if (ADMIN_EDIT.isSubCommand(command)) {
-            if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) {
+            if (GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE)) {
                 SplitFirstObject userCall = new SplitFirstObject(quote);
                 user = Utility.getUser(command, userCall.getFirstWord(), false, true);
-                if (user == null) return "\\> Could not find user.";
+                if (user == null) return "\\> Could not find globalUser.";
                 quote = userCall.getRest();
                 adminEdit = true;
             } else {

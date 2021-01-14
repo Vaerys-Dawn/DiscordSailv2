@@ -12,12 +12,12 @@ public class TagChannelMention extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        return replaceAllTag(from, command.channel.mention);
+        return replaceAllTag(from, command.guildChannel.mention);
     }
 
     @Override
     public String tagName() {
-        return "<channel>";
+        return "<messageChannel>";
     }
 
     @Override
@@ -32,6 +32,6 @@ public class TagChannelMention extends TagObject {
 
     @Override
     public String desc() {
-        return "Replaces itself with the current channel's name.";
+        return "Replaces itself with the current messageChannel's name.";
     }
 }

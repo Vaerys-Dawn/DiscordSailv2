@@ -61,7 +61,7 @@ public class SearchCCs extends Command {
             if (complete.toString().endsWith(",\n")) {
                 complete.replace(complete.length() - 2, complete.length() - 1, ".");
             }
-            command.channel.queueFile(title, complete.toString().getBytes(), String.format("Search_%s.txt", args));
+            command.guildChannel.queueFile(title, complete.toString().getBytes(), String.format("Search_%s.txt", args));
             return null;
         } else {
             embedBuilder.setTitle(title);

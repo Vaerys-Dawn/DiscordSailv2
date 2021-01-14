@@ -2,11 +2,11 @@ package com.github.vaerys.commands.creator;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Activity;
 
 /**
  * Created by Vaerys on 21/03/2017.
@@ -15,7 +15,7 @@ public class ResetPlayingStatus extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        RequestHandler.changePresence(Globals.playing);
+        command.client.get().getPresence().setActivity(Activity.playing(Globals.playing));
         return "\\> Status reset.";
     }
 
