@@ -58,8 +58,8 @@ public class DailyMessages extends GlobalFile {
         return queuedRequests;
     }
 
-    public ArrayList<DailyMessage> getDailyMessages(DayOfWeek day) {
-        ArrayList dailyMessages = new ArrayList();
+    public List<DailyMessage> getDailyMessages(DayOfWeek day) {
+        List dailyMessages = new ArrayList();
         for (DailyMessage d : this.dailyMessages) {
             if (d.getDay() == day) {
                 dailyMessages.add(d);
@@ -76,7 +76,7 @@ public class DailyMessages extends GlobalFile {
                 configMessage = d;
             }
         }
-        DailyMessage object = new DailyMessage(configMessage.getContents(command), today, Globals.client.getOurUser().getIdLong(), 0000);
+        DailyMessage object = new DailyMessage(configMessage.getContents(command), today, Globals.client.getSelfUser().getIdLong(), 0000);
         for (DailyMessage d : dailyMessages) {
             if (d.getUID() == dailyMessageID) {
                 return d;

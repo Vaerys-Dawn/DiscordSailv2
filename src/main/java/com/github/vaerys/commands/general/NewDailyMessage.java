@@ -21,7 +21,7 @@ import java.util.List;
 
 public class NewDailyMessage extends Command {
 
-    private static List<AutoBlocker> lastUsers = new ArrayList<>(5);
+    private static final List<AutoBlocker> lastUsers = new ArrayList<>(5);
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -46,19 +46,20 @@ public class NewDailyMessage extends Command {
     }
 
     private static void addUser(CommandObject command) {
-        AutoBlocker blocker = null;
+        boolean foundUser = false;
         for (AutoBlocker a : lastUsers) {
             if (a.getUserID() == command.user.longID) {
+                foundUser = true;
                 a.addCount(command.message.getTimestamp());
             }
         }
-        if (blocker == null) lastUsers.add(new AutoBlocker(command));
+        if (!foundUser) lastUsers.add(new AutoBlocker(command));
         try {
             while (lastUsers.size() > 5) {
                 lastUsers.remove(0);
             }
         } catch (ConcurrentModificationException e) {
-            return;
+            // do nothing
         }
     }
 

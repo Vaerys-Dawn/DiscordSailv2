@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class GlobalData extends GlobalFile {
     public static final String FILE_PATH = "Global_Data.json";
     private double fileVersion = 1.0;
-    ArrayList<Long> blockedFromDMS = new ArrayList<>();
+    List<Long> blockedFromDMS = new ArrayList<>();
     List<BlackListObject.BlacklistedUserObject> blacklistedUsers = new ArrayList<>();
     ArrayList<ReminderObject> reminders = new ArrayList<>();
     private long presentID = -1;
@@ -28,7 +28,8 @@ public class GlobalData extends GlobalFile {
         return blacklistedUsers;
     }
 
-    public ArrayList<Long> getBlockedFromDMS() {
+    public List<Long> getBlockedFromDMS() {
+        if (blockedFromDMS == null) blockedFromDMS = new ArrayList<>();
         return blockedFromDMS;
     }
 
@@ -60,7 +61,7 @@ public class GlobalData extends GlobalFile {
         return blacklistedUser;
     }
 
-    public ArrayList<ReminderObject> getReminders() {
+    public List<ReminderObject> getReminders() {
         return reminders;
     }
 
@@ -71,14 +72,6 @@ public class GlobalData extends GlobalFile {
     public void addReminder(ReminderObject object) {
         reminders.add(object);
     }
-
-//    public void removeReminder(long userID) {
-//        for (int i = 0; i < reminders.size(); i++) {
-//            if (reminders.getAllToggles(i).getUserID() == userID) {
-//                reminders.remove(i);
-//            }
-//        }
-//    }
 
     public void removeReminder(ReminderObject object) {
         for (int i = 0; i < reminders.size(); i++) {

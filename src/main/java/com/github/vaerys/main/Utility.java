@@ -36,27 +36,12 @@ import java.util.stream.Stream;
  */
 public class Utility {
 
-    //Logger
-    final static Logger logger = LoggerFactory.getLogger(Utility.class);
+    private Utility() {
+        throw new IllegalStateException("Utility Class");
+    }
 
-    //Command Utils
-//    public static String getCommandInfo(Command command, CommandObject commandObject) {
-//        StringBuilder response = new StringBuilder(">> **" + commandObject.guild.config.getPrefixCommand() + command.names[0]);
-//        if (command.usage != null) {
-//            response.append(" " + command.usage);
-//        }
-//        response.append("** <<");
-//        return response.toString();
-//    }
-//
-//    public static String getCommandInfo(Command command) {
-//        StringBuilder response = new StringBuilder(">> **" + Globals.defaultPrefixCommand + command.names[0]);
-//        if (command.usage != null) {
-//            response.append(" " + command.usage);
-//        }
-//        response.append("** <<");
-//        return response.toString();
-//    }
+    //Logger
+    private static final Logger LOGGER = LoggerFactory.getLogger(Utility.class);
 
     public static String checkBlacklist(String message, List<BlackListObject> blacklist) {
         for (BlackListObject b : blacklist) {
@@ -93,9 +78,7 @@ public class Utility {
     }
 
     public static String removeMentions(String from) {
-        if (from == null) {
-            return from;
-        }
+        if (from == null) return null;
         from = from.replaceAll("<@&[0-9]*>", "");
         return from.replaceAll("(?i)@(everyone|here)", "");
     }
@@ -125,24 +108,23 @@ public class Utility {
             if (minutes != 0) values++;
             if (seconds != 0) values++;
             if (days != 0) {
-                msg.append(days + " day");
+                msg.append(days).append(" day");
                 addSplit(msg, values, days);
                 values--;
             }
             if (hours != 0) {
-                msg.append(hours + " hour");
+                msg.append(hours).append(" hour");
                 addSplit(msg, values, hours);
                 values--;
             }
             if (minutes != 0) {
-                msg.append(minutes + " minute");
+                msg.append(minutes).append(" minute");
                 addSplit(msg, values, minutes);
                 values--;
             }
             if (seconds != 0) {
-                msg.append(seconds + " second");
+                msg.append(seconds).append(" second");
                 addSplit(msg, values, seconds);
-                values--;
             }
             time = msg.toString();
         } else {
@@ -151,11 +133,10 @@ public class Utility {
         return time;
     }
 
-    private static StringBuilder addSplit(StringBuilder msg, int values, long time) {
+    private static void addSplit(StringBuilder msg, int values, long time) {
         if (time > 1) msg.append("s");
         if (values == 2) msg.append(" and ");
         if (values > 2) msg.append(", ");
-        return msg;
     }
 
     public static String formatTimeSeconds(long timeSeconds) {
@@ -166,11 +147,9 @@ public class Utility {
     public static Boolean testModifier(String modifier) {
         switch (modifier.toLowerCase()) {
             case "+":
-                return true;
-            case "-":
-                return false;
             case "add":
                 return true;
+            case "-":
             case "del":
                 return false;
             default:
@@ -344,7 +323,7 @@ public class Utility {
                 formatted.setContent("less than a minute ago");
             }
         } catch (NoSuchElementException e) {
-            logger.error("Error getting Edited Message Timestamp.");
+            LOGGER.error("Error getting Edited Message Timestamp.");
         }
         return formatted.toString();
     }
@@ -430,13 +409,12 @@ public class Utility {
         } catch (MalformedURLException e) {
             return false;
         }
-        List<String> suffixes = new ArrayList<String>() {{
-            add(".png");
-            add(".gif");
-            add(".jpg");
-            add(".webp");
-            add(".jpeg");
-        }};
+        List<String> suffixes = new ArrayList<>();
+        suffixes.add(".png");
+        suffixes.add(".gif");
+        suffixes.add(".jpg");
+        suffixes.add(".webp");
+        suffixes.add(".jpeg");
         if (link.contains("\n") || link.contains(" ")) {
             return false;
         }
@@ -547,10 +525,8 @@ public class Utility {
         if (embed.getAuthor() != null) embedToString.append("**").append(embed.getAuthor().getName()).append("**\n");
         if (embed.getTitle() != null) embedToString.append("**").append(embed.getTitle()).append("**\n");
         if (embed.getDescription() != null) embedToString.append(embed.getDescription()).append("\n");
-        if (embed.getFields() != null) {
-            for (MessageEmbed.Field field : embed.getFields()) {
-                embedToString.append("**").append(field.getName()).append("**\n").append(field.getValue()).append("\n");
-            }
+        for (MessageEmbed.Field field : embed.getFields()) {
+            embedToString.append("**").append(field.getName()).append("**\n").append(field.getValue()).append("\n");
         }
         if (embed.getFooter() != null) {
             embedToString.append("*").append(embed.getFooter().getText()).append("*");
@@ -571,7 +547,8 @@ public class Utility {
                 StringHandler regex = new StringHandler("<@!?").append(user.getIdLong()).append(">");
                 StringHandler replacement;
                 if (message.getChannel().getType().isGuild()) {
-                    replacement = new StringHandler("__@").append(message.getGuild().getMember(user).getNickname()).append("__");
+                    Member member = message.getGuild().getMember(user);
+                    replacement = new StringHandler("__@").append(member == null ? user.getName() : member.getEffectiveName()).append("__");
                 } else {
                     replacement = new StringHandler("__@").append(user.getName()).append("__");
                 }
@@ -613,42 +590,18 @@ public class Utility {
     }
 
     public static void sortRewards(List<RewardRoleObject> rewardRoles) {
-        Collections.sort(rewardRoles, (o1, o2) -> {
-            if (o1.getLevel() < o2.getLevel()) {
-                return -1;
-            } else if (o1.getLevel() > o2.getLevel()) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
+        rewardRoles.sort(Comparator.comparingLong(RewardRoleObject::getLevel));
     }
 
     public static void sortUserObjects(List<ProfileObject> users, boolean sortAsc) {
         if (sortAsc) {
-            Collections.sort(users, (o1, o2) -> {
-                if (o1.getXP() < o2.getXP()) {
-                    return -1;
-                } else if (o1.getXP() > o2.getXP()) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
+            users.sort(Comparator.comparingLong(ProfileObject::getXP));
         } else {
-            Collections.sort(users, (o1, o2) -> {
-                if (o1.getXP() > o2.getXP()) {
-                    return -1;
-                } else if (o1.getXP() < o2.getXP()) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
+            users.sort((o1, o2) -> Long.compare(o2.getXP(), o1.getXP()));
         }
     }
 
-    public static List<String> getChannelMentions(ArrayList<Long> channelIDs, CommandObject command) {
+    public static List<String> getChannelMentions(List<Long> channelIDs, CommandObject command) {
         List<String> channelNames = new ArrayList<>();
         if (channelIDs != null) {
             for (long s : channelIDs) {
@@ -675,7 +628,7 @@ public class Utility {
         if (count > 25) count = 25;
         StringHandler builder = new StringHandler();
         builder.addViaJoin(Globals.getAllLogs().subList(0, count), "\n");
-        logger.error(s.toString() + "\n>> LAST " + Globals.getAllLogs().size() + " DEBUG LOGS<<\n" + builder.toString());
+        LOGGER.error(s.toString() + "\n>> LAST " + Globals.getAllLogs().size() + " DEBUG LOGS<<\n" + builder.toString());
     }
 
     public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, SAILType type, boolean testPerms) {
@@ -715,16 +668,14 @@ public class Utility {
                     .filter(c -> c.isVisibleInType(commandObject, type))
                     .collect(Collectors.toList());
         }
-        if (type != SAILType.DM) {
-            toReturn = toReturn.stream().filter(c -> c.channel != ChannelSetting.FROM_DM).collect(Collectors.toList());
-        }
+        toReturn = toReturn.stream().filter(c -> c.channel != ChannelSetting.FROM_DM).collect(Collectors.toList());
         toReturn.sort(Comparator.comparing(o -> o.names[0]));
         return toReturn;
     }
 
 
     public static List<String> getChannelMentions(List<TextChannel> channels) {
-        return channels.stream().map(c -> c.getAsMention()).collect(Collectors.toList());
+        return channels.stream().map(IMentionable::getAsMention).collect(Collectors.toList());
     }
 
     public static UserObject getUser(CommandObject command, String args, boolean doContains, boolean hasProfile) {
@@ -737,7 +688,7 @@ public class Utility {
             }
         } catch (NumberFormatException e) {
             List<User> mention = command.message.getMentions();
-            if (mention.size() > 0) {
+            if (!mention.isEmpty()) {
                 Collections.reverse(mention);
                 return new UserObject(mention.get(0), command.guild);
             }
@@ -771,7 +722,7 @@ public class Utility {
                 if (u.getUser().getName().matches("(?i)" + toTest) && user == null) {
                     user = u;
                 }
-                String displayName = u.getNickname();
+                String displayName = u.getEffectiveName();
                 if (displayName.matches("(?i)" + toTest) && user == null) {
                     user = u;
                 }

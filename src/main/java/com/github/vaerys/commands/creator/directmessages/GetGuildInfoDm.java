@@ -51,6 +51,6 @@ public class GetGuildInfoDm extends DMCommand {
 
     @Override
     public void init() {
-
+        // do nothing
     }
 }

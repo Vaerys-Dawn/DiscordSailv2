@@ -57,6 +57,6 @@ public class BlockUser extends DMCommand {
 
     @Override
     public void init() {
-
+        // do nothing
     }
 }

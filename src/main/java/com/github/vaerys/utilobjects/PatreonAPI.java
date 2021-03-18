@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -111,17 +112,13 @@ public class PatreonAPI {
             return null;
         }
         String nextLinkString = nextLink.toString();
-        try {
-            List<NameValuePair> queryParameters = URLEncodedUtils.parse(new URI(nextLinkString), Charset.forName("UTF-8"));
-            for (NameValuePair pair : queryParameters) {
-                String name = pair.getName();
-                if (name.equals("page[cursor]")) {
-                    String cursorValue = pair.getValue();
-                    return cursorValue;
-                }
+        List<NameValuePair> queryParameters = URLEncodedUtils.parse(nextLinkString, StandardCharsets.UTF_8);
+        for (NameValuePair pair : queryParameters) {
+            String name = pair.getName();
+            if (name.equals("page[cursor]")) {
+                String cursorValue = pair.getValue();
+                return cursorValue;
             }
-        } catch (URISyntaxException e) {
-            LOG.debug(e.getMessage());
         }
         return null;
     }

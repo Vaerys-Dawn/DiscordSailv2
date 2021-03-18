@@ -15,10 +15,10 @@ public class UnBlockUser extends DMCommand {
     @Override
     public String executeDm(String args, DmCommandObject command) {
         GlobalData globalData = Globals.getGlobalData();
-        ListIterator iterator = globalData.getBlockedFromDMS().listIterator();
+        ListIterator<Long> iterator = globalData.getBlockedFromDMS().listIterator();
         long userID = Utility.stringLong(args.split(" ")[0]);
         while (iterator.hasNext()) {
-            long id = (long) iterator.next();
+            long id = iterator.next();
             if (id == userID) {
                 iterator.remove();
                 return "\\> User Unblocked";

@@ -23,12 +23,14 @@ public class Respond extends DMCommand {
             return "\\> Could Not Send Response, Contents cannot be empty.";
         }
         PrivateChannel channel = recipient.openPrivateChannel().complete();
+        StringBuilder builder = new StringBuilder(prefix);
+        builder.append(args);
         if (command.message.getAttachments().size() != 0) {
             for (Message.Attachment a : command.message.getAttachments()) {
-                args += "\n" + a.getUrl();
+                builder.append("\n").append(a.getUrl());
             }
         }
-        if (channel.sendMessage(prefix + args).complete() == null) {
+        if (channel.sendMessage(builder).complete() == null) {
             return "\\> An Error occurred while attempting to run this command.";
         } else {
             return "\\> Message Sent.";
@@ -69,6 +71,6 @@ public class Respond extends DMCommand {
 
     @Override
     public void init() {
-
+        // do nothing
     }
 }

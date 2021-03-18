@@ -24,7 +24,7 @@ public class EventSetup extends Command {
         if (eventName.getFirstWord().equalsIgnoreCase("list")) {
             XEmbedBuilder builder = new XEmbedBuilder(command);
             builder.setTitle("All Events:");
-            String eventList = Utility.listFormatter(Globals.getEvents().stream().map(event1 -> event1.getEventName()).collect(Collectors.toList()), true);
+            String eventList = Utility.listFormatter(Globals.getEvents().stream().map(TimedEvent::getEventName).collect(Collectors.toList()), true);
             builder.setDescription("```\n" + eventList + SPACER + "```");
             builder.queue(command);
             return null;

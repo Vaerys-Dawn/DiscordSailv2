@@ -49,6 +49,6 @@ public class PatreonToken extends DMCommand {
 
     @Override
     public void init() {
-
+        // do nothing
     }
 }

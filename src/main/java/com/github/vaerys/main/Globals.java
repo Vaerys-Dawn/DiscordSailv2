@@ -6,7 +6,6 @@ import com.github.vaerys.enums.FilePaths;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleList;
 import com.github.vaerys.handlers.FileHandler;
-import com.github.vaerys.handlers.SetupHandler;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.botlevel.RandomStatusObject;
 import com.github.vaerys.objects.events.TimedEvent;
@@ -23,9 +22,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.RequestBuffer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -82,10 +78,8 @@ public class Globals {
     private static List<User> contributors = new LinkedList<>();
     private static final Random globalRandom = new Random();
 
-    public static void initConfig(IDiscordClient ourClient, Config config, GlobalData newGlobalData) {
-        if (newGlobalData != null) {
-            globalData = newGlobalData;
-        }
+    public static void initConfig(JDA ourClient, Config config, GlobalData newGlobalData) {
+        globalData = newGlobalData;
         client = ourClient;
         botName = config.botName;
         creatorID = config.creatorID;
@@ -116,8 +110,6 @@ public class Globals {
     private static void initCommands() {
         // Load Guild Toggles
 
-        SetupHandler.getStages();
-
         // validate commands
         if (errorStack != null) {
             logger.error("\n>> Begin Error Report <<\n" + errorStack + ">> End Error Report <<");
@@ -126,7 +118,7 @@ public class Globals {
 
         logger.info(CommandList.getAllCommands(true).size() + " Commands Loaded.");
         logger.info(CommandList.getAllCreatorCommands(true).size() + " Creator Commands Loaded.");
-        logger.info(CommandList.getSetupCommands(true).size() + " Setup Commands Loaded.");
+//        logger.info(CommandList.getSetupCommands(true).size() + " Setup Commands Loaded.");
         logger.info(SAILType.values().length + " SAIL Types Loaded.");
         logger.info(ChannelSetting.values().length + " Channel Types Loaded.");
         logger.info(ToggleList.getSettings(true).size() + " Guild Settings Loaded.");
@@ -183,7 +175,7 @@ public class Globals {
     }
 
     public static boolean isCreatorValid() {
-        IUser creator = Client.getClient().fetchUser(creatorID);
+        User creator = Client.getClient().getUserById(creatorID);
         if (creator == null) {
             logger.error("\nError:" + "   > creatorID is invalid.");
             return false;
@@ -192,9 +184,7 @@ public class Globals {
         if (Client.getClient().getGuilds().size() == 0) {
             logger.warn("No guilds to connect to. Will idle for connections.");
         } else {
-            IUser user = RequestBuffer.request(() -> {
-                return Client.getClient().getUserByID(creatorID);
-            }).get();
+            User user = Client.getClient().getUserById(creatorID);
             if (user == null) {
                 // hecc
                 logger.error("Could not find creator in any connected guilds. Make sure you are using the right globalUser ID in " + Constants.FILE_CONFIG);
@@ -296,11 +286,7 @@ public class Globals {
     }
 
     public static GlobalData getGlobalData() {
-        if (globalData != null) {
-            return globalData;
-        } else {
-            return null;
-        }
+        return globalData;
     }
 
     public static List<SAILType> getCommandTypes() {

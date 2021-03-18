@@ -161,7 +161,7 @@ public enum ChannelSetting {
         return desc;
     }
 
-    public ArrayList<Long> getIDs(GuildObject guild) {
+    public List<Long> getIDs(GuildObject guild) {
         for (ChannelSettingObject o : guild.channelData.getChannelSettings()) {
             if (o.getType().name().equals(name())) {
                 if (!o.getChannelIDs().isEmpty()) {

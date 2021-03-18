@@ -15,25 +15,22 @@ public class AutoBlocker {
 
     public AutoBlocker(CommandObject command) {
         this.userID = command.user.longID;
-        this.instants = new ArrayList<Instant>() {{
-            add(command.message.get().getTimestamp());
-        }};
+        this.instants = new ArrayList<>();
+        instants.add(command.message.getTimestamp());
     }
 
-    public boolean addCount(Instant instant) {
-        if (blocked) return true;
+    public void addCount(Instant instant) {
+        if (blocked) return;
         counter++;
         instants.add(instant);
         if (counter > 5) {
-            Instant min = instants.stream().min(Instant::compareTo).get();
-            Instant max = instants.stream().max(Instant::compareTo).get();
+            Instant min = instants.stream().min(Instant::compareTo).orElseGet(Instant::now);
+            Instant max = instants.stream().max(Instant::compareTo).orElseGet(Instant::now);
             if (max.toEpochMilli() - 60 * 1000 < min.toEpochMilli()) {
                 Globals.getGlobalData().blockUserFromDMS(userID);
                 blocked = true;
-                return true;
             }
         }
-        return false;
     }
 
     public long getUserID() {

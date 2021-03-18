@@ -1,13 +1,12 @@
 package com.github.vaerys.tags.admintags;
 
 import com.github.vaerys.enums.TagType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminSubTagObject;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
 
 public class TagAlert extends TagAdminSubTagObject {
 
@@ -24,10 +23,10 @@ public class TagAlert extends TagAdminSubTagObject {
     public String execute(String from, CommandObject command, String args, AdminCCObject cc) {
         try {
             long id = Long.parseUnsignedLong(getSubTag(from));
-            TextChannel destination = command.guild.getChannelByID(id);
+            MessageChannel destination = command.guild.getChannelByID(id);
             if (destination == null) {
-                IUser user = command.guild.getUserByID(id);
-                if (user != null) destination = UserObject.getNewUserObject(id, command.guild).getDmChannel();
+                Member user = command.guild.getUserByID(id);
+                if (user != null) destination = new UserObject(user, command.guild).getDmChannel();
             }
             if (destination == null) return replaceFirstTag(from, error);
             String message = getContents(from);
@@ -36,7 +35,7 @@ public class TagAlert extends TagAdminSubTagObject {
             message = message.replace("<ccName>", cc.getName(command));
             message = message.replaceAll("(?i)@(here|everyone)", "[REDACTED]");
             message = message.replaceAll("<@&[0-9]*>","[REDACTED]");
-            RequestHandler.sendMessage(message, destination);
+            destination.sendMessage(message).queue();
             return removeAllTag(from);
         } catch (NumberFormatException e) {
             return replaceFirstTag(from, error);

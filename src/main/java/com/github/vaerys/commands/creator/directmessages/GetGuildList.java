@@ -54,6 +54,6 @@ public class GetGuildList extends DMCommand {
 
     @Override
     public void init() {
-
+        // do nothing
     }
 }

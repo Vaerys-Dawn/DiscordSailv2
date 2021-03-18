@@ -42,7 +42,7 @@ public class BotStats extends Command {
         handler.append(nf.format(totalMemory / mb)).append("MB total\t");
         handler.append(nf.format(usedMemory / mb)).append("MB used\t");
         handler.append(nf.format(freeMemory / mb)).append("MB free");
-        handler.append(String.format("\n**Gateway Ping:** %sms, **Rest Ping:** %sms", nf.format(pingGate), nf.format(pingRest)));
+        handler.append(String.format("%n**Gateway Ping:** %sms, **Rest Ping:** %sms", nf.format(pingGate), nf.format(pingRest)));
         builder.setDescription(handler.toString());
         builder.setThumbnail(command.client.bot.avatarURL);
         builder.queue(command.guildChannel);
@@ -91,6 +91,6 @@ public class BotStats extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

@@ -15,6 +15,7 @@ import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -74,7 +75,7 @@ public class ModNote extends Command {
             opts = "info " + opts;
         }
 
-        // empty globalUser arg is not allowed;
+        // do not allow empty users
         if (userCall == null || userCall.isEmpty()) return missingArgs(command);
         if (opts == null || opts.isEmpty()) opts = "list";
 
@@ -150,6 +151,8 @@ public class ModNote extends Command {
                 case "rem":
                     modNotes.remove(index - 1);
                     return "\\> Note #" + index + " for " + user.displayName + " deleted.";
+                default:
+                    // do nothing
             }
         } else {
             if (profile.modNotes == null) profile.modNotes = new LinkedList<>();
@@ -168,12 +171,12 @@ public class ModNote extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
 
 
-        builder.withColor(userObject.color);
+        builder.setColor(userObject.color);
         builder.setTitle("Notes for " + userObject.displayName);
 
         //avatar
-        if (userObject.get() != null) builder.withThumbnail(userObject.get().getAvatarURL());
-        else builder.withThumbnail(user.getDefaultAvatarURL());
+        if (userObject.get() != null) builder.setThumbnail(userObject.get().getAvatarUrl());
+        else builder.setThumbnail(user.getDefaultAvatarURL());
 
         // get all notes and put together the bits and bobs
         int counter = 0;
@@ -208,16 +211,15 @@ public class ModNote extends Command {
         } else {
             builder.setTitle("Note " + (index + 1) + " - " + displayName);
         }
-        if (userObject.get() != null) builder.withThumbnail(userObject.get().getAvatarURL());
-        else builder.withThumbnail(user.getDefaultAvatarURL());
+        if (userObject.get() != null) builder.setThumbnail(userObject.get().getAvatarUrl());
+        else builder.setThumbnail(user.getDefaultAvatarURL());
 
         // add note to embed
-        builder.appendDesc(noteObject.getNote());
+        builder.appendDescription(noteObject.getNote());
         // Get a UserObject from the stored ID to add to the embed.
         UserObject creator = new UserObject(command.guild.getUserByID(noteObject.getCreatorId()), command.guild);
-        builder.setFooter("Created by " + creator.displayName);
-        builder.withFooterIcon(creator.avatarURL);
-        builder.withTimestamp(noteObject.getTimestamp() * 1000);
+        builder.setFooter("Created by " + creator.displayName, creator.avatarURL);
+        builder.setTimestamp(Instant.ofEpochMilli(noteObject.getTimestamp() * 1000));
 
         if (noteObject.getEditorId() != -1) {
             // get editor's info and display it?
@@ -226,9 +228,9 @@ public class ModNote extends Command {
             long diff = command.message.getTimestampZone().toEpochSecond() - noteObject.getLastEditedTimestamp();
             if (diff >= 86400 * 7) { // 7d
                 String editDate = new SimpleDateFormat("dd/MMM/yyyy").format(noteObject.getLastEditedTimestamp() * 1000);
-                builder.appendDesc(String.format(editFieldText, editor.displayName, "on " + editDate));
+                builder.appendDescription(String.format(editFieldText, editor.displayName, "on " + editDate));
             } else {
-                builder.appendDesc(String.format(editFieldText, editor.displayName, Utility.formatTimeDifference(diff)));
+                builder.appendDescription(String.format(editFieldText, editor.displayName, Utility.formatTimeDifference(diff)));
             }
         }
 

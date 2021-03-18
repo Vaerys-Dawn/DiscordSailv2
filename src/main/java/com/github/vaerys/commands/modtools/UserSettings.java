@@ -3,7 +3,6 @@ package com.github.vaerys.commands.modtools;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
@@ -46,6 +45,8 @@ public class UserSettings extends Command {
         return settings.toString();
     }
 
+    private static final String LINE_PREFIX = "\\> **";
+
     @Override
     public String execute(String args, CommandObject command) {
         if (args == null || args.isEmpty()) return settings(command) + "\n\n" + missingArgs(command);
@@ -65,66 +66,68 @@ public class UserSettings extends Command {
                 switch (toTest) {
                     case DENIED_XP:
                         return profile.toggleSetting(UserSetting.DENIED_XP,
-                                "\\> **" + user.displayName + "** will now gain xp again.",
-                                "\\> **" + user.displayName + "** will no longer gain XP.");
+                                LINE_PREFIX + user.displayName + "** will now gain xp again.",
+                                LINE_PREFIX + user.displayName + "** will no longer gain XP.");
                     case DONT_SHOW_LEADERBOARD:
                         return profile.toggleSetting(UserSetting.DONT_SHOW_LEADERBOARD,
-                                "\\> **" + user.displayName + "'s** rank is now visible.",
-                                "\\> **" + user.displayName + "** will no longer show their rank.");
+                                LINE_PREFIX + user.displayName + "'s** rank is now visible.",
+                                LINE_PREFIX + user.displayName + "** will no longer show their rank.");
                     case DONT_DECAY:
                         return profile.toggleSetting(UserSetting.DONT_DECAY,
-                                "\\> **" + user.displayName + "** will now have pixel decay.",
-                                "\\> **" + user.displayName + "** will no longer have pixel decay.");
+                                LINE_PREFIX + user.displayName + "** will now have pixel decay.",
+                                LINE_PREFIX + user.displayName + "** will no longer have pixel decay.");
                     case DENY_AUTO_ROLE:
                         return profile.toggleSetting(UserSetting.DENY_AUTO_ROLE,
-                                "\\> **" + user.displayName + "** will now automatically be granted roles.",
-                                "\\> **" + user.displayName + "** will no longer automatically be granted roles.");
+                                LINE_PREFIX + user.displayName + "** will now automatically be granted roles.",
+                                LINE_PREFIX + user.displayName + "** will no longer automatically be granted roles.");
+                    default:
+                        // do nothing
                 }
             }
             if (command.guild.config.moduleCC) {
                 switch (toTest) {
                     case DENY_MAKE_CC:
                         return profile.toggleSetting(UserSetting.DENY_MAKE_CC,
-                                "\\> **" + user.displayName + "** can now make custom commands.",
-                                "\\> **" + user.displayName + "** can no longer make custom commands.");
+                                LINE_PREFIX + user.displayName + "** can now make custom commands.",
+                                LINE_PREFIX + user.displayName + "** can no longer make custom commands.");
                     case DENY_USE_CCS:
                         return profile.toggleSetting(UserSetting.DENY_USE_CCS,
-                                "\\> **" + user.displayName + "** can now use custom commands.",
-                                "\\> **" + user.displayName + "** can no longer use custom commands.");
+                                LINE_PREFIX + user.displayName + "** can now use custom commands.",
+                                LINE_PREFIX + user.displayName + "** can no longer use custom commands.");
                     case AUTO_SHITPOST:
                         return profile.toggleSetting(UserSetting.AUTO_SHITPOST,
-                                "\\> **" + user.displayName + "** no longer has the shitpost tag automatically added to all of their new Custom Commands.",
-                                "\\> **" + user.displayName + "** now has the shitpost tag automatically added to all of their new Custom Commands.");
+                                LINE_PREFIX + user.displayName + "** no longer has the shitpost tag automatically added to all of their new Custom Commands.",
+                                LINE_PREFIX + user.displayName + "** now has the shitpost tag automatically added to all of their new Custom Commands.");
+                    default:
+                        // do nothing
                 }
             }
-            if (command.guild.config.artPinning) {
-                if (toTest == UserSetting.DENY_ART_PINNING) {
-                    return profile.toggleSetting(UserSetting.DENY_ART_PINNING,
-                            "\\> **" + user.displayName + "** can now pin art.",
-                            "\\> **" + user.displayName + "** can no longer pin art.");
-                }
+            if (command.guild.config.artPinning && toTest == UserSetting.DENY_ART_PINNING) {
+                return profile.toggleSetting(UserSetting.DENY_ART_PINNING,
+                        LINE_PREFIX + user.displayName + "** can now pin art.",
+                        LINE_PREFIX + user.displayName + "** can no longer pin art.");
             }
-            if (command.guild.config.readRuleReward) {
-                if (toTest == UserSetting.READ_RULES) {
-                    String response = profile.toggleSetting(UserSetting.READ_RULES,
-                            "\\> Read Rules status has been disabled for **" + user.displayName + "**.",
-                            "\\> Read Rules status has been enabled for **" + user.displayName + "**.");
-                    RequestHandler.roleManagement(command, command.guild.getRuleCodeRole(), profile.hasSetting(UserSetting.READ_RULES));
-                    return response;
+            if (command.guild.config.readRuleReward && toTest == UserSetting.READ_RULES) {
+                String response = profile.toggleSetting(UserSetting.READ_RULES,
+                        "\\> Read Rules status has been disabled for **" + user.displayName + "**.",
+                        "\\> Read Rules status has been enabled for **" + user.displayName + "**.");
+                if (profile.hasSetting(UserSetting.READ_RULES)) {
+                    command.guild.get().addRoleToMember(profile.getUser(command.guild).getMember(), command.guild.getRuleCodeRole()).queue();
+                } else {
+                    command.guild.get().removeRoleFromMember(profile.getUser(command.guild).getMember(), command.guild.getRuleCodeRole()).queue();
                 }
+                return response;
             }
-            switch (toTest) {
-                case DENY_INVITES:
-                    return profile.toggleSetting(UserSetting.DENY_INVITES,
-                            "\\> **" + user.displayName + "** can now post instant invites.",
-                            "\\> **" + user.displayName + "** can no longer post instant invites.");
-                default:
-                    String response = (split.getRest() == null || split.getRest().isEmpty()) ? "" : "> Not a valid User Setting.\n\n";
-                    if (profile.getSettings().size() == 0) {
-                        return response + "\\> **" + user.displayName + "** has no settings attached to their profile.\n\n" + settings(command) + "\n\n" + missingArgs(command);
-                    } else {
-                        return sendList(response, profile, command, user, true);
-                    }
+            if (toTest == UserSetting.DENY_INVITES) {
+                return profile.toggleSetting(UserSetting.DENY_INVITES,
+                        LINE_PREFIX + user.displayName + "** can now post instant invites.",
+                        LINE_PREFIX + user.displayName + "** can no longer post instant invites.");
+            }
+            String response = (split.getRest() == null || split.getRest().isEmpty()) ? "" : "> Not a valid User Setting.\n\n";
+            if (profile.getSettings().size() == 0) {
+                return response + LINE_PREFIX + user.displayName + "** has no settings attached to their profile.\n\n" + settings(command) + "\n\n" + missingArgs(command);
+            } else {
+                return sendList(response, profile, command, user, true);
             }
         } else {
             return "\\> Invalid globalUser.";
@@ -138,8 +141,8 @@ public class UserSettings extends Command {
         }
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.setTitle(user.displayName + "'s User settings:");
-        if (userSettings.size() == 0) {
-            return "\\> **" + user.displayName + "** has no settings on their profile.";
+        if (userSettings.isEmpty()) {
+            return LINE_PREFIX + user.displayName + "** has no settings on their profile.";
         } else {
             String desc = "```\n" + Utility.listFormatter(userSettings, true) + "```";
             if (showCommand) {
@@ -147,7 +150,7 @@ public class UserSettings extends Command {
             }
             builder.setDescription(desc);
         }
-        RequestHandler.sendEmbedMessage(prefix, builder, command.guildChannel.get());
+        command.guildChannel.queueMessage(prefix, builder.build());
         return "";
     }
 
@@ -193,6 +196,6 @@ public class UserSettings extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

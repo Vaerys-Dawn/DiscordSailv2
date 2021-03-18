@@ -23,7 +23,7 @@ public class WhoWasThat extends DMCommand {
                 long userID = Long.parseUnsignedLong(args);
                 user = new GlobalUserObject(userID);
             } catch (NumberFormatException e) {
-
+                // do nothing
             }
         }
         NumberFormat formatter = NumberFormat.getInstance();
@@ -55,23 +55,24 @@ public class WhoWasThat extends DMCommand {
         } else {
             builder.append(mutualGuilds);
         }
-        builder.append("\n**Total Profiles:** " + user.getProfiles().size());
-        builder.append("\n**Total Pixels:** " + formatter.format(totalxp[0]) + "    **Average Pixels:** " + formatter.format(totalxp[0] / user.getProfiles().size()));
+        builder.append("\n**Total Profiles:** ").append(user.getProfiles().size());
+        builder.append("\n**Total Pixels:** ").append(formatter.format(totalxp[0]))
+                .append("    **Average Pixels:** ").append(formatter.format(totalxp[0] / user.getProfiles().size()));
 
-        builder.append("\n**Total CCs:** " + formatter.format(user.getCustomCommands().size()));
+        builder.append("\n**Total CCs:** ").append(formatter.format(user.getCustomCommands().size()));
         if (ccActive[0] >= 0 && user.getCustomCommands().size() != 0)
-            builder.append("    **Average CCs:** " + formatter.format((double) user.getCustomCommands().size() / ccActive[0]));
+            builder.append("    **Average CCs:** ").append(formatter.format((double) user.getCustomCommands().size() / ccActive[0]));
 
-        builder.append("\n**Total Chars:** " + formatter.format(user.getCharacters().size()));
+        builder.append("\n**Total Chars:** ").append(formatter.format(user.getCharacters().size()));
         if (charsActive[0] >= 0 && user.getCharacters().size() != 0)
-            builder.append("    **Average Chars:** " + formatter.format((double) user.getCharacters().size() / charsActive[0]));
+            builder.append("    **Average Chars:** ").append(formatter.format((double) user.getCharacters().size() / charsActive[0]));
 
-        builder.append("\n**Total Servers:** " + formatter.format(user.getServers().size()));
+        builder.append("\n**Total Servers:** ").append(formatter.format(user.getServers().size()));
         if (serversActive[0] >= 0 && user.getServers().size() != 0)
-            builder.append("    **Average Servers:** " + formatter.format((double) user.getServers().size() / serversActive[0]));
+            builder.append("    **Average Servers:** ").append(formatter.format((double) user.getServers().size() / serversActive[0]));
 
-        builder.append("\n**Total DailyMessages:** " + user.getDailyMessages().size());
-        builder.append("\n**Total Reminders:** " + user.getReminders().size());
+        builder.append("\n**Total DailyMessages:** ").append(user.getDailyMessages().size());
+        builder.append("\n**Total Reminders:** ").append(user.getReminders().size());
 
         embed.setFooter(user.longID + ", Creation Date");
         embed.setTimestamp(user.get().getTimeCreated().toInstant());
@@ -107,6 +108,6 @@ public class WhoWasThat extends DMCommand {
 
     @Override
     public void init() {
-
+        // do nothing
     }
 }

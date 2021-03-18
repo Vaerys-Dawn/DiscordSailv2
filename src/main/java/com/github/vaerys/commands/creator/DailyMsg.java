@@ -16,7 +16,6 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.time.DayOfWeek;
 import java.util.Formatter;
-import java.util.ListIterator;
 
 public class DailyMsg extends Command {
 
@@ -49,41 +48,35 @@ public class DailyMsg extends Command {
             }
             switch (totest.toLowerCase()) {
                 case "edit":
-                    if (mode.getRest() == null) {
+                    if (mode == null || mode.getRest() == null) {
                         return "\\> Missing args";
                     }
                     messageObject.setContents(mode.getRest());
                     return "\\> Daily Message contents updated";
                 case "delete":
-                    ListIterator iterator = Globals.getDailyMessages().getMessages().listIterator();
-                    while (iterator.hasNext()) {
-                        DailyMessage object = (DailyMessage) iterator.next();
-                        if (object.getUID() == uID) {
-                            iterator.remove();
-                        }
-                    }
+                    Globals.getDailyMessages().getMessages().removeIf(object -> object.getUID() == uID);
                     return "\\> Daily Message Deleted";
                 case "moveday":
-                    if (mode.getRest() == null) {
+                    if (mode == null || mode.getRest() == null) {
                         return "> Missing args";
                     }
-                    String day = mode.getRest().toUpperCase();
-                    try {
-                        DayOfWeek dayOfWeek = DayOfWeek.valueOf(day);
-                        messageObject.setDay(dayOfWeek);
-                        return "\\> Moved message to " + dayOfWeek + ".";
-                    } catch (IllegalArgumentException e) {
-                        return "\\> Not a valid day of the week.";
-                    }
-                case "info":
-                    getInfo(messageObject,command).queue(command);
-                    return null;
+                    return moveDay(messageObject, mode.getRest().toUpperCase());
                 default:
-                    getInfo(messageObject,command).queue(command);
+                    getInfo(messageObject, command).queue(command);
                     return null;
             }
         } catch (NumberFormatException e) {
             return "\\> Invalid UID.";
+        }
+    }
+
+    private String moveDay(DailyMessage messageObject, String day) {
+        try {
+            DayOfWeek dayOfWeek = DayOfWeek.valueOf(day);
+            messageObject.setDay(dayOfWeek);
+            return "\\> Moved message to " + dayOfWeek + ".";
+        } catch (IllegalArgumentException e) {
+            return "\\> Not a valid day of the week.";
         }
     }
 
@@ -103,11 +96,13 @@ public class DailyMsg extends Command {
             embedBuilder.setDescription("\\> " + contents);
         }
         String formattedFooter;
+        Formatter formatter = new Formatter();
         if (messageObject.getUID() != -1) {
-            formattedFooter = new Formatter().format("UID: %04d", messageObject.getUID()).toString();
+            formattedFooter = formatter.format("UID: %04d", messageObject.getUID()).toString();
         } else {
             formattedFooter = messageObject.getSpecialID();
         }
+        formatter.close();
         embedBuilder.setFooter(formattedFooter);
         return embedBuilder;
     }
@@ -154,6 +149,6 @@ public class DailyMsg extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

@@ -1,7 +1,8 @@
 package com.github.vaerys.objects.userlevel;
 
-import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Utility;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * Created by Vaerys on 05/04/2017.
@@ -16,7 +17,8 @@ public class ReminderObject {
     public ReminderObject(long userID, long channelID, String message, long reminderTime) {
         this.userID = userID;
         this.channelID = channelID;
-        this.message = Globals.getClient().getUserByID(userID).mention() + " " + Utility.removeMentions(message);
+        User user = Client.getClient().getUserById(userID);
+        this.message = (user != null ? user.getAsMention() : ("<@" + userID + ">")) + " " + Utility.removeMentions(message);
         this.executeTime = reminderTime;
     }
 

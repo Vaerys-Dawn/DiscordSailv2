@@ -1,6 +1,6 @@
 package com.github.vaerys.enums;
 
-import com.github.vaerys.main.Utility;
+import emoji4j.EmojiUtils;
 
 public enum DungeonStat {
 
@@ -15,14 +15,14 @@ public enum DungeonStat {
     WISDOM("eye"),
     CHARISMA("performing_arts");
 
-    private String emojiName;
+    private final String emojiName;
 
     DungeonStat(String emojiName) {
         this.emojiName = emojiName;
     }
 
     public String getEmoji() {
-        return Utility.getUnicodeEmoji(emojiName);
+        return EmojiUtils.getEmoji(emojiName).getEmoji();
     }
 
 }

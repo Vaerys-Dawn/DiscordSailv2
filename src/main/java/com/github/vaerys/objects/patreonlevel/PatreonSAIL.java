@@ -11,7 +11,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class PatreonSAIL {
 
     public static void refreshToken(String clientID, String clientSecret, String refreshToken) {
         String postUrl = "https://www.patreon.com/api/oauth2/token";// put in your url
-        HttpClient httpClient = HttpClientBuilder.create().setUserAgent(Constants.MOZILLA_USER_AGENT).build();
+        HttpClient httpClient = new DefaultHttpClient();
         HttpPost post = new HttpPost(postUrl);
         List<NameValuePair> data = new LinkedList<>();
         data.add(new BasicNameValuePair("grant_type", "refresh_token"));

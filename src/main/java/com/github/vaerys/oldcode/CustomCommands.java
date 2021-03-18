@@ -1,6 +1,6 @@
 package com.github.vaerys.oldcode;
 
-import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 
@@ -12,13 +12,11 @@ import java.util.ArrayList;
 @Deprecated
 public class CustomCommands {
 
-
     //1 = Command name
     //0 = User ID
     //2 = Contents
 
     ArrayList<String[]> commands = new ArrayList<>();
-//    final String[] commandNotFound = {"noUser", "404", "No Command with that name found."};
 
     public CCommandObject convertCommand(String command) {
         boolean isLocked = false;
@@ -33,7 +31,7 @@ public class CustomCommands {
                 commandContents = c[2];
                 if (c[0].contains("LockedCommand")) {
                     isLocked = true;
-                    userID = Globals.getClient().getOurUser().getIdLong();
+                    userID = Client.getClient().getSelfUser().getIdLong();
                 } else {
                     isLocked = false;
                     userID = Utility.stringLong(c[0]);

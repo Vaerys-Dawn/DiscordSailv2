@@ -5,6 +5,7 @@ import com.github.vaerys.handlers.*;
 import com.github.vaerys.pogos.Config;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.templates.FileFactory;
+import net.dv8tion.jda.api.JDA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.Discord4J;
@@ -15,6 +16,7 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RateLimitException;
 
+import javax.security.auth.login.LoginException;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Scanner;
@@ -56,7 +58,6 @@ public class Main {
 
         // you need to set a token in Token/Token.txt for the bot to run
         try {
-            Discord4J.disableAudio();
             FileHandler.createDirectory(Constants.DIRECTORY_STORAGE);
             FileHandler.createDirectory(Constants.DIRECTORY_GLOBAL_IMAGES);
             FileHandler.createDirectory(Constants.DIRECTORY_COMP);
@@ -89,25 +90,7 @@ public class Main {
                 logger.info("No Pastebin Token found.");
             }
 
-
-            //stuff that i cant getAllToggles to work because reasons, ignore completely
-
-//            try{
-//                List<String> richPresesnce = FileHandler.readFromFile(Constants.FILE_RPC_TOKEN);
-//                Client.initRichPresence(richPresesnce);
-//            }catch (IndexOutOfBoundsException e){
-//                logger.info("Rich presence information missing.");
-//            }
-
-//            try {
-//                List<String> imgurToken = FileHandler.readFromFile(Constants.FILE_IMGUR_TOKEN);
-//                Client.initImgur(imgurToken);
-//            } catch (IndexOutOfBoundsException e) {
-//                logger.info("No Patreon Token found.");
-//            }
-
-
-            IDiscordClient client = Client.createClient(token, false);
+            JDA client = Client.createClient(token, false);
 
             //load config phase 2
             Globals.initConfig(client, config, globalData);
@@ -173,10 +156,7 @@ public class Main {
             //timed events getSlashCommands
             new TimerHandler();
 
-
-        } catch (DiscordException ex) {
-            logger.error(ex.getErrorMessage());
-        } catch (RateLimitException e) {
+        } catch (LoginException e) {
             Utility.sendStack(e);
         }
     }

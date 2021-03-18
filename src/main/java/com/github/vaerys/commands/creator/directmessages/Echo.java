@@ -46,6 +46,6 @@ public class Echo extends DMCommand {
 
     @Override
     public void init() {
-
+        // do nothing
     }
 }

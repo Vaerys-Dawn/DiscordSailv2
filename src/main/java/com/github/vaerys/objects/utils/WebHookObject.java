@@ -1,6 +1,6 @@
 package com.github.vaerys.objects.utils;
 
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,14 +9,14 @@ public class WebHookObject {
     String content;
     String username;
     String avatar_url;
-    List<EmbedObject> embeds;
+    List<MessageEmbed> embeds;
 
     public WebHookObject(String content) {
         if (content == null) content = "";
         this.content = content;
     }
 
-    public WebHookObject(EmbedObject embed) {
+    public WebHookObject(MessageEmbed embed) {
         embeds = new LinkedList<>();
         embeds.add(embed);
     }
@@ -36,7 +36,7 @@ public class WebHookObject {
         return this;
     }
 
-    public WebHookObject addEmbed(EmbedObject embed) {
+    public WebHookObject addEmbed(MessageEmbed embed) {
         embeds.add(embed);
         return this;
     }

@@ -49,6 +49,6 @@ public class QuickRespond extends DMCommand {
 
     @Override
     public void init() {
-
+        // do nothing
     }
 }

@@ -81,9 +81,9 @@ public class AdminCCObject {
     public void grantKey(String subTag, CommandObject command) {
         TriVar<Long, String, Long> key = getKey(subTag, command);
         if (key == null) {
-            pathKeys.add(new TriVar<>(command.user.longID, subTag, command.message.get().getTimestamp().toEpochMilli()));
+            pathKeys.add(new TriVar<>(command.user.longID, subTag, command.message.getTimestamp().toEpochMilli()));
         } else {
-            key.setVar3(command.message.get().getTimestamp().toEpochMilli());
+            key.setVar3(command.message.getTimestamp().toEpochMilli());
         }
     }
 
