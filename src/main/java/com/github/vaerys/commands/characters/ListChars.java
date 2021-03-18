@@ -6,6 +6,7 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -38,9 +39,9 @@ public class ListChars extends Command {
             return "\\> User has set their profile to private.";
         }
         //generate list
-        List<String> list = user.getCharacters(command.guild.longID).stream().map(c -> c.getName()).collect(Collectors.toList());
+        List<String> list = user.getCharacters(command.guild.longID).stream().map(CharacterObject::getName).collect(Collectors.toList());
         //give message if empty
-        if (list.size() == 0) {
+        if (list.isEmpty()) {
             return user.longID == command.user.longID ?
                     "\\> You do not have any characters yet. Create one with **" + new UpdateChar().getUsage(command) + "**." :
                     "\\> User does not have any characters yet.";
@@ -101,6 +102,6 @@ public class ListChars extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

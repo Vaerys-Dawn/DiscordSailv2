@@ -15,6 +15,12 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class CCEditModes {
 
+    private static final String EMBED_PREFIX = "<embedImage>{";
+
+    private CCEditModes() {
+        throw new IllegalStateException("Utility Class");
+    }
+
     public static String lock(CCommandObject c, CommandObject command, Member author, Guild guild) {
         if (GuildHandler.testForPerms(author, guild, Permission.MESSAGE_MANAGE)) {
             c.toggleLocked();
@@ -53,15 +59,15 @@ public class CCEditModes {
         return "\\> Command Edited.";
     }
 
-    public static String toEmbed(CCommandObject commmand) {
-        String contents = commmand.getContents(false);
+    public static String toEmbed(CCommandObject command) {
+        String contents = command.getContents(false);
         if (contents.contains(" ") || contents.contains("\n")) {
             return "\\> Failed to add embed tag.";
         }
-        if (contents.contains("<embedImage>{")) {
+        if (contents.contains(EMBED_PREFIX)) {
             return "\\> Command already has an EmbedImage Tag, cannot add more than one.";
         }
-        commmand.setContents("<embedImage>{" + contents + "}");
+        command.setContents(EMBED_PREFIX + contents + "}");
         return "\\> Embed tag added.";
     }
 
@@ -72,7 +78,7 @@ public class CCEditModes {
         if ((command.getContents(false) + content).length() > 2000) {
             return "\\> Cannot append content, would make command to large.";
         }
-        if (StringUtils.countMatches(command.getContents(false) + content, "<embedImage>{") > 1) {
+        if (StringUtils.countMatches(command.getContents(false) + content, EMBED_PREFIX) > 1) {
             if (commandObject.message.get().getAttachments().size() != 0) {
                 return "\\> Custom commands cannot contain more than one image.";
             }

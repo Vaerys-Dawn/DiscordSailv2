@@ -55,6 +55,6 @@ public class EditDungeonChar extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

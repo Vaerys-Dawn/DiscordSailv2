@@ -71,6 +71,6 @@ public class SetMutedRole extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

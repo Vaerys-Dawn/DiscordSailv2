@@ -66,6 +66,6 @@ public class SetRuleCode extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

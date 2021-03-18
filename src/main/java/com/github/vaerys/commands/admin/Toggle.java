@@ -35,11 +35,8 @@ public class Toggle extends Command {
         if (!args.isEmpty()) {
             GuildToggle toggle = ToggleList.getGuildToggle(args, isModule);
             if (toggle == null) {
-                if (isModule) {
-                    desc.append("\\> Could not find Module **" + args + "**.\n\n");
-                } else {
-                    desc.append("\\> Could not find Setting **" + args + "**.\n\n");
-                }
+                desc.append(isModule ? "\\> Could not find Module **" : "\\> Could not find Setting **");
+                desc.append(args + "**.\n\n");
             } else {
                 GuildToggle module = ToggleList.getModuleFromSetting(toggle.name());
                 if (module != null && !module.enabled(command.guild.config)) {
@@ -72,8 +69,8 @@ public class Toggle extends Command {
         Collections.sort(typesDeactivated);
         embedBuilder.setTitle(title);
 
-        desc.append("**Activated**\n```\n" + spacer + Utility.listEnumFormatter(typesActive, true) + "```\n" +
-                "**Deactivated**\n```\n" + spacer + Utility.listEnumFormatter(typesDeactivated, true) + "```\n");
+        desc.append("**Activated**\n```\n" + SPACER + Utility.listEnumFormatter(typesActive, true) + "```\n" +
+                "**Deactivated**\n```\n" + SPACER + Utility.listEnumFormatter(typesDeactivated, true) + "```\n");
         desc.append("The Command **");
         if (isModule) {
             desc.append(modules.getUsage(command));
@@ -131,6 +128,6 @@ public class Toggle extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

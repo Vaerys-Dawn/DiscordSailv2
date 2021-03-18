@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,26 +19,20 @@ import java.util.List;
  */
 public class SelectChar extends Command {
 
-    private final static Logger logger = LoggerFactory.getLogger(SelectChar.class);
-
     @Override
     public String execute(String args, CommandObject command) {
         for (CharacterObject c : command.guild.characters.getCharacters(command.guild.get())) {
             if (c.getName().equalsIgnoreCase(args)) {
                 if (c.getUserID() == command.user.longID) {
-                    List<Role> userRoles = command.user.roles;
+                    List<Role> userRoles = new ArrayList<>(command.user.roles);
                     //resets User roles back to scratch.
-                    for (int i = 0; i < userRoles.size(); i++) {
-                        if (command.guild.config.isRoleCosmetic(userRoles.get(i).getIdLong())) {
-                            userRoles.remove(i);
-                        }
-                    }
+                    userRoles.removeIf(r -> command.guild.config.isRoleCosmetic(r.getIdLong()));
                     //loads new roles.
                     for (long r : c.getRoleIDs()) {
                         userRoles.add(command.guild.getRoleById(r));
                     }
-                    command.guild.get().modifyMemberRoles(command.user.getMember(), userRoles);
-                    command.guild.get().modifyNickname(command.user.getMember(), c.getEffectiveName());
+                    command.guild.get().modifyMemberRoles(command.user.getMember(), userRoles).complete();
+                    command.guild.get().modifyNickname(command.user.getMember(), c.getEffectiveName()).complete();
                     return "\\> Character " + c.getEffectiveName() + " Loaded.";
                 } else {
                     return "\\> " + c.getName() + " is not your character.";
@@ -89,6 +84,6 @@ public class SelectChar extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

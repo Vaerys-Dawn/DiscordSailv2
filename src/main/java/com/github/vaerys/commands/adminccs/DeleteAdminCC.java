@@ -60,6 +60,6 @@ public class DeleteAdminCC extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

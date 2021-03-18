@@ -11,10 +11,10 @@ import com.github.vaerys.templates.FileFactory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.Guild;
 
 import java.util.ArrayList;
 

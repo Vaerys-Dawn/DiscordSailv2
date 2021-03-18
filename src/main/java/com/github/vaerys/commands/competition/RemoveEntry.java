@@ -64,6 +64,6 @@ public class RemoveEntry extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

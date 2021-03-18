@@ -35,9 +35,9 @@ public class ChannelHere extends Command {
 
         List<ChannelSetting> channelSettings = command.guild.channelSettings;
         List<String> types = channelSettings.stream().filter(channelSetting -> !channelSetting.isSetting()).map(ChannelSetting::toString).collect(Collectors.toList());
-        List<String> settings = channelSettings.stream().filter(channelSetting -> channelSetting.isSetting()).map(ChannelSetting::toString).collect(Collectors.toList());
+        List<String> settings = channelSettings.stream().filter(ChannelSetting::isSetting).map(ChannelSetting::toString).collect(Collectors.toList());
         Collections.sort(types);
-        desc += "**Types**\n```\n" + spacer + Utility.listFormatter(types, true) + "```\n" + spacer + "**Settings**\n```\n" + Utility.listFormatter(settings, true) + "```\n";
+        desc += "**Types**\n```\n" + SPACER + Utility.listFormatter(types, true) + "```\n" + SPACER + "**Settings**\n```\n" + Utility.listFormatter(settings, true) + "```\n";
         desc += "The Command **" + get(HelpChannel.class).getUsage(command) + "** Can give you extra information about each of the above.\n\n";
         desc += "See what is enabled on a messageChannel via **" +get(ChannelStats.class).getUsage(command) + "**\n\n";
         desc += missingArgs(command);
@@ -55,7 +55,7 @@ public class ChannelHere extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 
     @Override

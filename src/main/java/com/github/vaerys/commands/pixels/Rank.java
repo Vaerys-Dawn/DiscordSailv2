@@ -88,9 +88,9 @@ public class Rank extends Command {
                     Member ranked = command.guild.getUserByID(r.getUserID());
                     String rankPos = "**" + PixelHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
                     String toFormat = ranked.getNickname()
-                            + "\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`";
+                            + "\n " + INDENT + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`";
                     if (r.getUserID() == user.longID) {
-                        response.add(rankPos + spacer + "**" + toFormat + "**");
+                        response.add(rankPos + SPACER + "**" + toFormat + "**");
                     } else {
                         response.add(rankPos + toFormat);
                     }

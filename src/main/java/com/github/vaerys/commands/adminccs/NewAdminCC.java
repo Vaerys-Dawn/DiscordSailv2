@@ -16,9 +16,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class NewAdminCC extends Command {
 
     protected enum ResponseCode {
@@ -55,10 +52,11 @@ public class NewAdminCC extends Command {
                 return "\\> This server has already hit the limit on how many Admin Custom Commands it can hold, you will need to delete or edit old commands to make room.";
             case OVERLOADS_SLOTS:
                 return "\\> There are not enough slots left for you to create this Admin Custom Command. The length of the command is too long.";
+            default:
+                // do nothing
         }
 
         AdminCCObject cc = command.guild.adminCCs.addCommand(command, object.getFirstWord(), contents.toString());
-
 
         int remainder = (20 - command.guild.adminCCs.getUsedSlots());
         return String.format("\\> New Admin Custom Command Created, you can run the new command by performing `%s`. (%d Admin CC slot%s remain)",
@@ -80,7 +78,7 @@ public class NewAdminCC extends Command {
             contents.append(tag.prefix).append(attachment.getUrl()).append(tag.suffix);
         }
         StringHandler temp = new StringHandler();
-        List<String> lines = Arrays.asList(contents.split("\n"));
+        String[] lines = contents.split("\n");
         for (String line : lines) {
             if (!temp.isEmpty()) temp.append("\n");
             if (!line.startsWith("//")) {
@@ -149,6 +147,6 @@ public class NewAdminCC extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

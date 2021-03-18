@@ -5,7 +5,6 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
@@ -17,6 +16,7 @@ import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class RandomCC extends Command {
 
@@ -26,25 +26,15 @@ public class RandomCC extends Command {
         if (object != null && object.getSettings().contains(UserSetting.DENY_USE_CCS)) {
             return "\\> Nothing interesting happens. `(ERROR: 403)`";
         }
-        if (command.guild.channelHasSetting(ChannelSetting.CC_DENIED,command.guildChannel.longID)) {
+        if (command.guild.channelHasSetting(ChannelSetting.CC_DENIED, command.guildChannel.longID)) {
             return "\\> Custom Command usage has been disabled for this messageChannel.";
         }
         Random random = Globals.getGlobalRandom();
-        int counter = 0;
-        List<CCommandObject> commands = command.guild.customCommands.getCommandList();
+        List<CCommandObject> commands = command.guild.customCommands.getCommandList().stream()
+                .filter(c -> !command.guildChannel.settings.contains(ChannelSetting.SHITPOST) && c.isShitPost() && command.guild.config.shitPostFiltering)
+                .collect(Collectors.toList());
+        if (commands.isEmpty()) return "\\> Could not find any non shitpost commands for this channel...";
         CCommandObject randCC = commands.get(random.nextInt(commands.size()));
-        while (!command.guildChannel.settings.contains(ChannelSetting.SHITPOST) && randCC.isShitPost() && command.guild.config.shitPostFiltering) {
-            if (counter > 25) {
-                return "\\> Your server has way to many shitpost commands, I couldn't find you a normal one.";
-            }
-            randCC = commands.get(random.nextInt(commands.size()));
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                Utility.sendStack(e);
-            }
-            counter++;
-        }
         String response = randCC.getContents(true);
         for (TagObject t : TagList.getType(TagType.CC)) {
             if (t.name.equals(new TagEmbedImage(0).name)) {
@@ -98,6 +88,6 @@ public class RandomCC extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

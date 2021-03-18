@@ -67,6 +67,6 @@ public class SetBioRolePrefix extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

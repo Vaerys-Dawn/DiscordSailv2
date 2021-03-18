@@ -19,9 +19,6 @@ public class FinalTally extends Command {
         builder.append("\\> tally being performed.\n");
         ArrayList<String> votes = command.guild.competition.getVotes();
         int[] tally = new int[command.guild.competition.getEntries().size()];
-        for (int i = 0; i < tally.length; i++) {
-            tally[i] = 0;
-        }
         int userVoteClusters = 0;
         int totalVotes = 0;
         for (String s : votes) {
@@ -33,12 +30,12 @@ public class FinalTally extends Command {
                 totalVotes++;
             }
         }
-        builder.append("total of users that voted: " + userVoteClusters + "\n");
-        builder.append("total number of votes: " + totalVotes + "\n");
+        builder.append("total of users that voted: ").append(userVoteClusters).append("\n");
+        builder.append("total number of votes: ").append(totalVotes).append("\n");
         int entry = 0;
         for (int i : tally) {
             entry++;
-            builder.append("Entry " + entry + ": " + i + "\n");
+            builder.append("Entry ").append(entry).append(": ").append(i).append("\n");
         }
         return builder.toString();
     }
@@ -85,6 +82,6 @@ public class FinalTally extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

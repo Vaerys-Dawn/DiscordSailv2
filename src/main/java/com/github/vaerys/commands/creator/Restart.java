@@ -54,7 +54,7 @@ public class Restart extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Restarts the bot.\n" + ownerOnly;
+        return "Restarts the bot.\n" + OWNER_ONLY;
     }
 
     @Override

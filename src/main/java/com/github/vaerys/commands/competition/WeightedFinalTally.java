@@ -36,7 +36,7 @@ public class WeightedFinalTally extends Command {
                             Member user = command.guild.getUserByID(Utility.stringLong(splitVotes[0]));
                             if (user != null) {
                                 int weight = PixelHandler.getRewardCount(command.guild, user.getIdLong());
-                                entryVotes.put(vote, entryVotes.get(vote).longValue() + weight + 1);
+                                entryVotes.put(vote, entryVotes.get(vote) + weight + 1);
                                 totalVotes += weight + 1;
                             }
                         }
@@ -48,9 +48,9 @@ public class WeightedFinalTally extends Command {
             }
         }
         builder.append("**Total Weighted Votes\n**");
-        entryVotes.forEach((k, v) -> builder.append("\\> Entry " + k + ": " + v + " Votes.\n"));
-        builder.append("Total votes: " + totalVotes + ".\n");
-        builder.append("Total Entries: " + totalEntries + ".");
+        entryVotes.forEach((k, v) -> builder.append("\\> Entry ").append(k).append(": ").append(v).append(" Votes.\n"));
+        builder.append("Total votes: ").append(totalVotes).append(".\n");
+        builder.append("Total Entries: ").append(totalEntries).append(".");
         return builder.toString();
     }
 
@@ -96,6 +96,6 @@ public class WeightedFinalTally extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

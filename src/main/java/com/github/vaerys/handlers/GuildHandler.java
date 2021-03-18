@@ -13,10 +13,7 @@ import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.pogos.GuildConfig;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,65 +140,72 @@ public class GuildHandler {
 
     /**
      * Searches for a role within the guild
+     *
      * @param roleName - the full or partial name of the role
-     * @param guild - the guild to search within
+     * @param guild    - the guild to search within
      * @return The closest matching role
      */
     public static Role getRoleFromName(String roleName, Guild guild) {
         return getRoleFromName(roleName, guild, false);
     }
-    
+
     /**
      * Searches for a role within the guild
-     * @param roleName - the full or partial name of the role
-     * @param guild - the guild to search within
+     *
+     * @param roleName   - the full or partial name of the role
+     * @param guild      - the guild to search within
      * @param startsWith - Whether the search should look for
      * @return The closest matching role
      */
     public static Role getRoleFromName(String roleName, Guild guild, boolean startsWith) {
         return getRoleFromName(roleName, guild.getRoles(), false);
     }
-    
+
     /**
      * Searches for a role within the guild
-     * @param roleName - the full or partial name of the role
-     * @param guild - the guild to search within
+     *
+     * @param roleName  - the full or partial name of the role
+     * @param guild     - the guild to search within
      * @param filterIds - a list of role ids to filter in
      * @return The closest matching role
      */
     public static Role getRoleFromName(String roleName, Guild guild, List<Long> filterIds) {
-    	return getRoleFromName(roleName, guild, filterIds, false );
+        return getRoleFromName(roleName, guild, filterIds, false);
     }
-    
+
     /**
      * Searches for a role within the guild
-     * @param roleName - the full or partial name of the role
-     * @param guild - the guild to search within
-     * @param filterIds - a list of role ids to filter in
+     *
+     * @param roleName   - the full or partial name of the role
+     * @param guild      - the guild to search within
+     * @param filterIds  - a list of role ids to filter in
      * @param startsWith - Whether the search should look for
      * @return The closest matching role
      */
     public static Role getRoleFromName(String roleName, Guild guild, List<Long> filterIds, boolean startsWith) {
-    	List<Role> filtered =
-    			guild
-    			.getRoles()
-    			.stream()
-    			.filter((Role r) -> { return filterIds.contains(r.getIdLong());})
-    			.collect(Collectors.toList()) ;
-    	return getRoleFromName(roleName, filtered, startsWith );
+        List<Role> filtered =
+                guild
+                        .getRoles()
+                        .stream()
+                        .filter((Role r) -> {
+                            return filterIds.contains(r.getIdLong());
+                        })
+                        .collect(Collectors.toList());
+        return getRoleFromName(roleName, filtered, startsWith);
     }
-    
+
     /**
      * Searches for a role within the guild
-     * @param roleName - The full or partial name of the role
+     *
+     * @param roleName      - The full or partial name of the role
      * @param rolesToSearch - The list of roles to search through
-     * @param startsWith - Whether the search should look for
+     * @param startsWith    - Whether the search should look for
      * @return The closest matching role
      */
     public static Role getRoleFromName(String roleName, List<Role> rolesToSearch, boolean startsWith) {
-    	Role role = null;
+        Role role = null;
         for (Role r : rolesToSearch) {
-    		if (startsWith) {
+            if (startsWith) {
                 if (r.getName().toLowerCase().startsWith(roleName.toLowerCase())) {
                     role = r;
                     break;
@@ -342,21 +346,25 @@ public class GuildHandler {
         return testForPerms(user, guild, perms.toArray(new Permission[perms.size()]));
     }
 
-    public static boolean testForPerms(CommandObject command, TextChannel channel, Permission... perms) {
+    public static boolean testForPerms(CommandObject command, MessageChannel channel, Permission... perms) {
         boolean hasPerms = true;
         if (canBypass(command.user.getMember(), command.guild.get())) {
             return true;
         }
         for (Permission p : perms) {
-            if (!channel.getPermissionOverride(command.user.getMember()).getAllowed().contains(p)) {
-                hasPerms = false;
+            if (channel instanceof TextChannel) {
+                TextChannel textChannel = (TextChannel) channel;
+                PermissionOverride perm = textChannel.getPermissionOverride(command.user.getMember());
+                if (perm == null || !perm.getAllowed().contains(p)) {
+                    hasPerms = false;
+                }
             }
         }
         return hasPerms;
     }
 
     public static boolean testForPerms(CommandObject command, ChannelObject channel, Permission... perms) {
-        return testForPerms(command, channel.get(), perms);
+        return testForPerms(command, channel.getMessageChannel(), perms);
     }
 
 
@@ -369,19 +377,17 @@ public class GuildHandler {
         if (user == null) return;
         if (guild == null) return;
         List<Role> temp = new ArrayList<>(Arrays.asList(roles));
-        ListIterator iterator = temp.listIterator();
+        ListIterator<Role> iterator = temp.listIterator();
         while (iterator.hasNext()) {
-            Role next = (Role) iterator.next();
+            Role next = iterator.next();
             if (next == null) continue;
             if (user.roles.contains(next)) {
                 user.roles.remove(next);
                 iterator.remove();
             }
         }
-        if (roles.length != 0) {
-            user.roles.addAll(temp);
-        }
-        guild.get().modifyMemberRoles(user.getMember(), user.roles);
+        user.roles.addAll(temp);
+        guild.get().modifyMemberRoles(user.getMember(), user.roles).queue();
     }
 
     public static void toggleRoles(Member user, Guild guild, Role... roles) {

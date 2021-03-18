@@ -31,7 +31,7 @@ public class ChannelStats extends Command {
                 if (s.toString().equalsIgnoreCase(args)) {
                     List<TextChannel> channels = command.guild.getChannelsByType(s);
                     List<String> channelMentions = Utility.getChannelMentions(channels);
-                    if (channels.size() != 0) {
+                    if (!channels.isEmpty()) {
                         builder.addField(s.toString(), Utility.listFormatter(channelMentions, true), false);
                         builder.queue(command.guildChannel);
                         return null;
@@ -61,13 +61,13 @@ public class ChannelStats extends Command {
             }
         }
 
-        if (channelSettings.size() == 0 && channelTypes.size() == 0) {
+        if (channelSettings.isEmpty() && channelTypes.isEmpty()) {
             return "\\> I found nothing of value.";
         }
-        if (channelTypes.size() != 0) {
+        if (!channelTypes.isEmpty()) {
             builder.addField("Types:", Utility.listFormatter(channelTypes, true), false);
         }
-        if (channelSettings.size() != 0) {
+        if (!channelSettings.isEmpty()) {
             builder.addField("Settings:", Utility.listFormatter(channelSettings, true), false);
         }
         builder.queue(command.guildChannel);
@@ -82,7 +82,7 @@ public class ChannelStats extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 
     @Override

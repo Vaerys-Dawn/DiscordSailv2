@@ -67,6 +67,6 @@ public class SetRuleCodeReward extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

@@ -22,10 +22,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -48,7 +45,7 @@ public class NewCC extends Command {
 
         isShitpost = shitpostChannels.contains(command.guildChannel);
 
-        if (object.getSettings().contains(UserSetting.AUTO_SHITPOST)) {
+        if (Objects.requireNonNull(object).getSettings().contains(UserSetting.AUTO_SHITPOST)) {
             isShitpost = true;
         }
 
@@ -73,7 +70,7 @@ public class NewCC extends Command {
             return "\\> Command name cannot be empty.";
         }
         CCommandObject existing = command.guild.customCommands.getCommand(nameCC);
-        if (existing != null){
+        if (existing != null) {
             if (existing.getUserID() == command.user.longID) {
                 return String.format("> You have already created the custom command **%s**, Please use `%s %s [contents]` instead.", nameCC, get(EditCC.class).getCommand(command), nameCC);
             }
@@ -131,14 +128,14 @@ public class NewCC extends Command {
     }
 
     private boolean handleNameFilter(CommandObject command, String nameCC) {
-        List<Command> exceptions = new ArrayList<Command>() {{
-            add(Command.get(Test.class));
-            add(Command.get(Hello.class));
-            add(Command.get(Patreon.class));
-            add(Command.get(Echo.class));
-            add(Command.get(Ping.class));
-            addAll(CommandList.getCommandsByType(SAILType.SLASH));
-        }};
+        List<Command> exceptions = new ArrayList<>();
+        //init exceptions
+        exceptions.add(Command.get(Test.class));
+        exceptions.add(Command.get(Hello.class));
+        exceptions.add(Command.get(Patreon.class));
+        exceptions.add(Command.get(Echo.class));
+        exceptions.add(Command.get(Ping.class));
+        exceptions.addAll(CommandList.getCommandsByType(SAILType.SLASH));
         // ccs cannot have names that match existing commands:
         List<Command> toTest = new ArrayList<>(command.guild.commands);
         toTest.removeAll(exceptions);

@@ -6,6 +6,7 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 /**
@@ -20,15 +21,20 @@ public class GetCCData extends Command {
         if (cc == null) return "\\> Custom command " + args + " could not be found.";
 
         StringBuilder content = new StringBuilder("Command Name: \"" + cc.getName() + "\"");
-        User createdBy = command.guild.getUserByID(cc.getUserID()).getUser();
-        if (createdBy == null) createdBy = command.client.getUserByID(cc.getUserID());
+        Member member = command.guild.getUserByID(cc.getUserID());
+        User createdBy;
+        if (member == null) {
+            createdBy = command.client.getUserByID(cc.getUserID());
+        } else {
+            createdBy = member.getUser();
+        }
         if (createdBy == null) content.append("\nCreated by: \"null\"");
         else {
-            content.append("\nCreated by: \"" + createdBy.getName() + "#" + createdBy.getDiscriminator() + "\"");
+            content.append("\nCreated by: \"").append(createdBy.getName()).append("#").append(createdBy.getDiscriminator()).append("\"");
         }
-        content.append("\nTimes run: \"" + cc.getTimesRun() + "\"");
-        content.append("\nContents: \"" + cc.getContents(false) + "\"");
-        String fileName = String.format("%s.txt",cc.getName());
+        content.append("\nTimes run: \"").append(cc.getTimesRun()).append("\"");
+        content.append("\nContents: \"").append(cc.getContents(false)).append("\"");
+        String fileName = String.format("%s.txt", cc.getName());
         command.guildChannel.queueFile("\\> Here is the raw data for Custom Command: **" + cc.getName() + "**", content.toString().getBytes(), fileName);
         return "";
     }
@@ -75,6 +81,6 @@ public class GetCCData extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

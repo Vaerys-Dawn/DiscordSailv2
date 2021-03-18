@@ -22,20 +22,17 @@ public class UpdateRolePerms extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         List<Role> parentRole = GuildHandler.getRolesByName(command.guild.get(), args);
-        EnumSet parentPerms = command.guild.get().getPublicRole().getPermissions();
+        EnumSet<Permission> parentPerms = command.guild.get().getPublicRole().getPermissions();
         ArrayList<String> permList = new ArrayList<>();
         Message workingMsg = command.guildChannel.sendMessage("`Working...`");
-        if (parentRole.size() != 0) {
-            if (command.guild.config.isRoleCosmetic(parentRole.get(0).getIdLong())) {
-                parentPerms = parentRole.get(0).getPermissions();
-            }
+        if (!parentRole.isEmpty() && command.guild.config.isRoleCosmetic(parentRole.get(0).getIdLong())) {
+            parentPerms = parentRole.get(0).getPermissions();
         }
         for (Role r : command.guild.get().getRoles()) {
-            if (command.guild.config.isRoleCosmetic(r.getIdLong())) {
-                if (!r.getPermissions().containsAll(parentPerms) && !parentPerms.containsAll(r.getPermissions())) {
-                    EnumSet finalParentPerms = parentPerms;
-                    r.getManager().setPermissions(finalParentPerms).queue();
-                }
+            boolean hasPerms = !r.getPermissions().containsAll(parentPerms) && !parentPerms.containsAll(r.getPermissions());
+            boolean isCosmetic = command.guild.config.isRoleCosmetic(r.getIdLong());
+            if (isCosmetic && hasPerms) {
+                r.getManager().setPermissions(parentPerms).queue();
             }
         }
         for (Object p : parentPerms.toArray()) {
@@ -87,6 +84,6 @@ public class UpdateRolePerms extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

@@ -2,13 +2,10 @@ package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.PixelHandler;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
-import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,9 +65,9 @@ public class UserObject extends GlobalUserObject {
         Matcher displayMatcher = pattern.matcher(displayName);
 
         if (nameMatcher.find() || displayMatcher.find()) {
-            name = name.replace("@", "@" + Command.spacer);
-            displayName = displayName.replace("@", "@" + Command.spacer);
-            username = username.replace("@", "@" + Command.spacer);
+            name = name.replace("@", "@" + Command.SPACER);
+            displayName = displayName.replace("@", "@" + Command.SPACER);
+            username = username.replace("@", "@" + Command.SPACER);
         }
     }
 

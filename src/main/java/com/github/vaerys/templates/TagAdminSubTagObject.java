@@ -14,7 +14,7 @@ public abstract class TagAdminSubTagObject extends TagObject {
 
     protected String usageName;
 
-    protected final String ERROR_PIXELS_DISABLED = "#ERROR#:<" + tagName() + ":PIXELS_DISABLED" + Command.spacer + ">";
+    protected final String ERROR_PIXELS_DISABLED = "#ERROR#:<" + tagName() + ":PIXELS_DISABLED" + Command.SPACER + ">";
 
     public String getSubPrefix(String from) {
         return "<" + tagName() + ":" + getSubTag(from) + ">{";
@@ -36,7 +36,7 @@ public abstract class TagAdminSubTagObject extends TagObject {
         super(priority, types);
         name = "<" + tagName() + ">";
         usageName = "<" + tagName() + ":" + subTagUsage() + ">" + (requiredArgs != 0 ? "{" : "");
-        error = "#ERROR#:" + "<" + tagName() + Command.spacer + ">";
+        error = "#ERROR#:" + "<" + tagName() + Command.SPACER + ">";
     }
 
     @Override

@@ -38,9 +38,9 @@ public class TopTen extends Command {
             Member ranked = command.guild.getUserByID(r.getUserID());
             String rankPos = "**" + PixelHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
             StringBuilder toFormat = new StringBuilder(ranked.getNickname());
-            toFormat.append("\n " + indent + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`");
+            toFormat.append("\n " + INDENT + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`");
             if (r.getUserID() == command.user.get().getIdLong()) {
-                response.add(rankPos + spacer + "**" + toFormat + "**");
+                response.add(rankPos + SPACER + "**" + toFormat + "**");
             } else {
                 response.add(rankPos + toFormat);
             }

@@ -68,6 +68,6 @@ public class ListAdminCCs extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

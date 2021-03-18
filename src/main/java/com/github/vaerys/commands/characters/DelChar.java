@@ -63,6 +63,6 @@ public class DelChar extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

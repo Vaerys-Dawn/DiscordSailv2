@@ -29,12 +29,12 @@ import java.util.stream.Collectors;
  */
 public abstract class Command {
 
-    public static final String spacer = "\u200B";
-    public static final String indent = "    ";
-    public static final String codeBlock = "```";
-    public static final String ownerOnly = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
+    public static final String SPACER = "\u200B";
+    public static final String INDENT = "    ";
+    public static final String CODE_BLOCK = "```";
+    public static final String OWNER_ONLY = ">> ONLY THE BOT'S OWNER CAN RUN THIS <<";
 
-    private final static Logger logger = LoggerFactory.getLogger(Command.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Command.class);
 
     public final ChannelSetting channel;
     public final SAILType type;
@@ -197,13 +197,14 @@ public abstract class Command {
     }
 
     public boolean isCall(String args, DmCommandObject command) {
-        List<String> prefixes = new ArrayList<>() {{
-            add("$");
-            add("!");
-            add("%");
-            add("@");
-            add(String.format("<@%d> ", command.client.bot.longID));
-        }};
+        List<String> prefixes = new ArrayList<>();
+        // init prefixes
+        prefixes.add("$");
+        prefixes.add("!");
+        prefixes.add("%");
+        prefixes.add("@");
+        prefixes.add(String.format("<@%d> ", command.client.bot.longID));
+
         List<String> validStates = new ArrayList(Arrays.asList(names));
         subCommands.forEach(subCommandObject -> {
             for (String s : subCommandObject.getNames()) {
@@ -213,9 +214,9 @@ public abstract class Command {
         if (args.length() > 200) {
             args = StringUtils.truncate(args, 200);
         }
-        for (String s: prefixes) {
+        for (String s : prefixes) {
             for (String state : validStates) {
-                String regexString = "^(?i)" +  Utility.escapeRegex(s) + state + " (.|\n)*";
+                String regexString = "^(?i)" + Utility.escapeRegex(s) + state + " (.|\n)*";
                 String regexStringEnd = "^(?i)" + Utility.escapeRegex(s) + state + "$";
                 if (Pattern.compile(regexString).matcher(args).matches() || Pattern.compile(regexStringEnd).matcher(args).matches()) {
                     return true;
@@ -269,14 +270,14 @@ public abstract class Command {
                 .filter(subCommandObject -> GuildHandler.testForPerms(command, subCommandObject.getPermissions()))
                 .collect(Collectors.toList());
 
-        if (objectList.size() != 0) builder.append("\n" + Command.spacer);
+        if (objectList.size() != 0) builder.append("\n" + Command.SPACER);
 
         infoEmbed.setTitle("> Help - " + names()[0]);
-        infoEmbed.addField("**" + getUsage(command) + "**    " + Command.spacer, builder.toString(), true);
+        infoEmbed.addField("**" + getUsage(command) + "**    " + Command.SPACER, builder.toString(), true);
 
 
         for (SubCommandObject s : objectList) {
-            infoEmbed.addField(s.getCommandUsage(command) + "    " + Command.spacer, s.getHelpDesc(command), true);
+            infoEmbed.addField(s.getCommandUsage(command) + "    " + Command.SPACER, s.getHelpDesc(command), true);
         }
 
         //Handle channels
@@ -386,7 +387,6 @@ public abstract class Command {
     public static <T extends Command> T get(Class obj) {
         return CommandList.getCommand(obj);
     }
-
 
 
 }

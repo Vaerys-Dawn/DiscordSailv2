@@ -40,34 +40,38 @@ public class EditChar extends Command {
                         rest = "";
                     }
                     command.setAuthor(command.guild.getUserByID(c.getUserID()));
-                    switch (mode.getFirstWord().toLowerCase()) {
-                        case "age":
-                            return CharEditModes.age(rest, c, command);
-                        case "gender":
-                            return CharEditModes.gender(rest, c, command);
-                        case "avatar":
-                            return CharEditModes.avatar(rest, c, command);
-                        case "bio":
-                            return CharEditModes.desc(rest, c, command);
-                        case "longdesc":
-                            return CharEditModes.longDesc(rest, c);
-                        case "weight":
-                            return CharEditModes.weight(rest, c, command);
-                        case "height":
-                            return CharEditModes.height(rest, c, command);
-                        case "name":
-                            return CharEditModes.name(rest, c);
-                        case "roles":
-                            return CharEditModes.roles(command, c);
-                        default:
-                            return "\\> Mode not Valid.";
-                    }
+                    return runMode(command, mode, rest, c);
                 } else {
                     return command.user.notAllowed;
                 }
             }
         }
         return "\\> Char with that name not found.";
+    }
+
+    private String runMode(CommandObject command, SplitFirstObject mode, String rest, CharacterObject c) {
+        switch (mode.getFirstWord().toLowerCase()) {
+            case "age":
+                return CharEditModes.age(rest, c, command);
+            case "gender":
+                return CharEditModes.gender(rest, c, command);
+            case "avatar":
+                return CharEditModes.avatar(rest, c, command);
+            case "bio":
+                return CharEditModes.desc(rest, c, command);
+            case "longdesc":
+                return CharEditModes.longDesc(rest, c);
+            case "weight":
+                return CharEditModes.weight(rest, c, command);
+            case "height":
+                return CharEditModes.height(rest, c, command);
+            case "name":
+                return CharEditModes.name(rest, c);
+            case "roles":
+                return CharEditModes.roles(command, c);
+            default:
+                return "\\> Mode not Valid.";
+        }
     }
 
     @Override
@@ -112,6 +116,6 @@ public class EditChar extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

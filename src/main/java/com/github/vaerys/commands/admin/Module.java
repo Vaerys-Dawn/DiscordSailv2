@@ -23,7 +23,7 @@ public class Module extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 
     @Override

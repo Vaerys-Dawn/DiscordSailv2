@@ -95,7 +95,7 @@ public class UserInfo extends Command {
         if (showCC || showLevel) desc.append("\n");
         if (showCC) desc.append(String.format("**Custom Commands:** %d", user.getCustomCommands(command.guild.longID).size()));
         if (showLevel) {
-            if (showCC) desc.append(indent + indent + indent);
+            if (showCC) desc.append(INDENT + INDENT + INDENT);
             desc.append(String.format("**Level:** %d", PixelHandler.xpToLevel(profile.getXP())));
         }
 
@@ -108,7 +108,7 @@ public class UserInfo extends Command {
         //append links
         if (links.size() != 0) desc.append("\n").append(Utility.listFormatter(links, true));
         //add break between footer
-        desc.append("\n").append(spacer);
+        desc.append("\n").append(SPACER);
         //add desc
         builder.setDescription(desc.toString());
         //sends Message

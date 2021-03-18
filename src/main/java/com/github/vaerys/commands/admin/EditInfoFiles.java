@@ -33,14 +33,12 @@ public class EditInfoFiles extends Command {
             case "removeimage":
                 return InfoEditModes.removeFile(object.getRest(), command);
             case "listimages":
-                return InfoEditModes.listFiles(command);
             case "listfiles":
                 return InfoEditModes.listFiles(command);
             case "uploadinfo":
                 return InfoEditModes.uploadInfo(command);
-            case "getinfofile": {
+            case "getinfofile":
                 return InfoEditModes.getInfoFile(command);
-            }
             default:
                 return "Invalid Edit Mode.\n" + missingArgs(command);
         }
@@ -53,7 +51,7 @@ public class EditInfoFiles extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 
 

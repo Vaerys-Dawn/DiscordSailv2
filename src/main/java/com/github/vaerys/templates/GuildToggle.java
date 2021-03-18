@@ -61,15 +61,15 @@ public abstract class GuildToggle {
         List<ChannelSetting> channelNames = channels.stream().collect(Collectors.toList());
 
         if (commandNames.size() != 0) {
-            builder.addField("Commands:", "```\n" + Utility.listFormatter(commandNames, true) + Command.spacer + "```", true);
+            builder.addField("Commands:", "```\n" + Utility.listFormatter(commandNames, true) + Command.SPACER + "```", true);
         }
 
         if (settingNames.size() != 0) {
-            builder.addField("Settings:", "```\n" + Utility.listEnumFormatter(settingNames, true) + Command.spacer + "```", true);
+            builder.addField("Settings:", "```\n" + Utility.listEnumFormatter(settingNames, true) + Command.SPACER + "```", true);
         }
 
         if (channelNames.size() != 0) {
-            builder.addField("Channels:", "```\n" + Utility.listEnumFormatter(channelNames, true) + Command.spacer + "```", true);
+            builder.addField("Channels:", "```\n" + Utility.listEnumFormatter(channelNames, true) + Command.SPACER + "```", true);
         }
 
         StringBuilder footer = new StringBuilder();

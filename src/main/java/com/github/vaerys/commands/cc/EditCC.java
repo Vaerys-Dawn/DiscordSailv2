@@ -18,16 +18,15 @@ import net.dv8tion.jda.api.Permission;
  */
 public class EditCC extends Command {
 
-    private static String adminModes = "**Admin Modes:**\n" +
+    private static final String ADMIN_MODES = "**Admin Modes:**\n" +
             "> Shitpost\n" +
             "> Lock\n";
     private static final SubCommandObject SUB_1 = new SubCommandObject(
             new String[]{"EditCC"},
             "[Command Name] (Mode)",
-            "allows editing of other globalUser's commands or editing toggles.\n" + adminModes,
+            "allows editing of other globalUser's commands or editing toggles.\n" + ADMIN_MODES,
             SAILType.MOD_TOOLS,
-            new Permission[]{Permission.MESSAGE_MANAGE}
-    );
+            Permission.MESSAGE_MANAGE);
 
     @Override
     public String execute(String args, CommandObject command) {
@@ -61,7 +60,7 @@ public class EditCC extends Command {
         boolean canBypass = GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE);
         boolean isAuthor = command.user.longID == customCommand.getUserID();
         //test if can edit
-        if ((customCommand.isLocked() && !canBypass) || (!canBypass && !isAuthor)) {
+        if (customCommand.isLocked() && !canBypass && !isAuthor) {
             return "\\> You do not have permission to edit this command.";
         }
         if (customCommand.isLocked() && !canBypass) {

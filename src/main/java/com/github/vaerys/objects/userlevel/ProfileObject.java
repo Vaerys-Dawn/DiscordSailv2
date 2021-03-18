@@ -28,27 +28,25 @@ import static com.github.vaerys.enums.UserSetting.PRIVATE_PROFILE;
  * Created by Vaerys on 27/08/2016.
  */
 public class ProfileObject {
-    private static final String defaultQuote = "This person doesn't seem to have much to say for themselves.";
-    private static final String defaultGender = "Unknown";
+    private static final String DEFAULT_QUOTE = "This person doesn't seem to have much to say for themselves.";
+    private static final String DEFAULT_GENDER = "Unknown";
     public long lastTalked = -1;
     long userID;
     long xp = 0;
     long currentLevel = 0;
-    String gender = defaultGender;
-    String quote = defaultQuote;
-    ArrayList<UserSetting> settings = new ArrayList<>();
-    ArrayList<UserLinkObject> links = new ArrayList<>();
+    String gender = DEFAULT_GENDER;
+    String quote = DEFAULT_QUOTE;
+    private List<UserSetting> settings = new ArrayList<>();
+    private List<UserLinkObject> links = new ArrayList<>();
     public List<ModNoteObject> modNotes;
 
     public ProfileObject(long userID) {
         this.userID = userID;
-        if (links == null) links = new ArrayList<>();
-        if (settings == null) settings = new ArrayList<>();
     }
 
     public String getQuote() {
         if (quote == null) {
-            quote = "This person doesn't seem to have much to say for themselves.";
+            quote = DEFAULT_QUOTE;
         }
         return quote;
     }
@@ -59,7 +57,7 @@ public class ProfileObject {
 
     public String getGender() {
         if (gender == null) {
-            gender = "Unknown";
+            gender = DEFAULT_GENDER;
         }
         return Utility.removeFun(gender);
     }
@@ -109,18 +107,19 @@ public class ProfileObject {
         return xp;
     }
 
-    public ArrayList<UserSetting> getSettings() {
-        if (settings == null) {
-            return new ArrayList<>();
-        }
+    public List<UserSetting> getSettings() {
+        if (settings == null) settings = new ArrayList<>();
         return settings;
     }
 
-    public void setSettings(ArrayList<UserSetting> settings) {
+    public void setSettings(List<UserSetting> settings) {
+        if (settings == null) {
+            settings = new ArrayList<>();
+        }
         this.settings = settings;
     }
 
-    public ArrayList<UserLinkObject> getLinks() {
+    public List<UserLinkObject> getLinks() {
         return links;
     }
 
@@ -160,13 +159,7 @@ public class ProfileObject {
     }
 
     public void removeLevelFloor() {
-        ListIterator iterator = settings.listIterator();
-        while (iterator.hasNext()) {
-            UserSetting setting = (UserSetting) iterator.next();
-            if (setting == UserSetting.HIT_LEVEL_FLOOR) {
-                iterator.remove();
-            }
-        }
+        settings.removeIf(setting -> setting == UserSetting.HIT_LEVEL_FLOOR);
     }
 
     public UserObject getUser(GuildObject content) {
@@ -177,8 +170,8 @@ public class ProfileObject {
 
     public boolean isEmpty() {
         return xp == 0 &&
-                quote.equals(defaultQuote) &&
-                gender.equals(defaultGender) &&
+                quote.equals(DEFAULT_QUOTE) &&
+                gender.equals(DEFAULT_GENDER) &&
                 links.size() == 0 &&
                 settings.size() == 0;
     }

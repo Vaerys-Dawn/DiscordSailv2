@@ -60,6 +60,6 @@ public class PurgeComp extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

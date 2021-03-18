@@ -59,9 +59,9 @@ public class GroupUp extends Command {
                     }
                     builder.replaceRegex("(?i)@(here|everyone)", "[REDACTED]");
                     builder.replaceRegex("<@(!|&)?[0-9]*>", "[REDACTED]");
-                    completeList.add(indent + user.getAsMention() + " Playing: " + builder.toString());
+                    completeList.add(INDENT + user.getAsMention() + " Playing: " + builder.toString());
                 } else {
-                    completeList.add(indent + user.getAsMention());
+                    completeList.add(INDENT + user.getAsMention());
                 }
             }
         }

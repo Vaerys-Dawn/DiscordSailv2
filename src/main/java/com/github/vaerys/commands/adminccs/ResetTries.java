@@ -60,6 +60,6 @@ public class ResetTries extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

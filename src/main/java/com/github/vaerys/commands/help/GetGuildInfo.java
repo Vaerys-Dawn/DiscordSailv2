@@ -135,9 +135,9 @@ public class GetGuildInfo extends Command {
                 }
             }
 
-            toggles.addField("MODULES", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
-                    "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.spacer, true);
-            toggles.addField("SETTINGS", "**Enabled**```\n" + spacer + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
+            toggles.addField("MODULES", "**Enabled**```\n" + SPACER + Utility.listEnumFormatter(enabledModules, true) + "```\n" +
+                    "**Disabled**```" + Utility.listEnumFormatter(disabledModules, true) + "```\n" + Command.SPACER, true);
+            toggles.addField("SETTINGS", "**Enabled**```\n" + SPACER + Utility.listEnumFormatter(enabledSettings, true) + "```\n" +
                     "**Disabled**```" + Utility.listEnumFormatter(disabledSettings, true) + "```", true);
             command.user.queueDm(toggles.build());
         }

@@ -82,6 +82,6 @@ public class DelCC extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

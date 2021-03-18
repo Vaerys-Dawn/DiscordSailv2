@@ -80,6 +80,6 @@ public class EditAdminCC extends Command {
 
     @Override
     protected void init() {
-
+        // does nothing
     }
 }

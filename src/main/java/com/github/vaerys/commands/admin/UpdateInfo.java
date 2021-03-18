@@ -18,7 +18,7 @@ public class UpdateInfo extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.INFO);
-        if (channels.size() == 0) {
+        if (channels.isEmpty()) {
             return "\\> No Info messageChannel set up yet, you need to set one up in order to run this command.\n" + missingArgs(command);
         }
         if (channels.get(0).getIdLong() == command.guildChannel.longID) {
@@ -71,6 +71,6 @@ public class UpdateInfo extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

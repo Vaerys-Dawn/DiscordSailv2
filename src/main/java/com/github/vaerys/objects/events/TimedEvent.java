@@ -204,8 +204,8 @@ public class TimedEvent {
             if (eventAvatar.day == null) return "Default";
             else return eventAvatar.day.toString();
         }).collect(Collectors.toList()), true);
-        if (messageList.length() != 0) desc.append("\n**Messages:**\n```\n" + messageList + Command.spacer + "```");
-        if (avatarList.length() != 0) desc.append("\n**Avatars:**\n```\n" + avatarList + Command.spacer + "```");
+        if (messageList.length() != 0) desc.append("\n**Messages:**\n```\n" + messageList + Command.SPACER + "```");
+        if (avatarList.length() != 0) desc.append("\n**Avatars:**\n```\n" + avatarList + Command.SPACER + "```");
         builder.setDescription(desc.toString());
         RequestHandler.sendEmbedMessage("", builder, command.guildChannel.get());
         return null;

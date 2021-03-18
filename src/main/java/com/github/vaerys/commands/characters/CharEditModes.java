@@ -16,6 +16,12 @@ import java.util.stream.Collectors;
  */
 public class CharEditModes {
 
+    private static final String X_TOO_LONG = "%s length must be under %d characters. %s";
+
+    private CharEditModes() {
+        throw new IllegalStateException("Utility Class");
+    }
+
     private static String getOverDraw(long amount) {
         if (amount == 1) return "(over by " + amount + " character)";
         return "(over by " + amount + " characters)";
@@ -26,7 +32,7 @@ public class CharEditModes {
         if (command.user.isPatron) maxChars += maxChars;
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
-            return "\\> Character age length must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+            return String.format(X_TOO_LONG, "Character age", maxChars, getOverDraw(overDraw));
         } else if (args.contains("\n")) {
             return "\\> Character age cannot contain newlines.";
         } else {
@@ -40,7 +46,7 @@ public class CharEditModes {
         if (command.user.isPatron) maxChars += maxChars;
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
-            return "\\> Gender Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+            return String.format(X_TOO_LONG, "Character Gender", maxChars, getOverDraw(overDraw));
         } else if (args.contains("\n")) {
             return "\\> Character gender cannot contain newlines.";
         } else {
@@ -54,7 +60,7 @@ public class CharEditModes {
         if (command.user.isPatron) maxChars += maxChars;
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
-            return "\\> Character height Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+            return String.format(X_TOO_LONG, "Character Height", maxChars, getOverDraw(overDraw));
         } else if (args.contains("\n")) {
             return "\\> Character height cannot contain newlines.";
         } else {
@@ -68,7 +74,7 @@ public class CharEditModes {
         if (command.user.isPatron) maxChars += maxChars;
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
-            return "\\> Character weight Must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+            return String.format(X_TOO_LONG, "Character Weight", maxChars, getOverDraw(overDraw));
         } else if (args.contains("\n")) {
             return "\\> Character weight cannot contain newlines.";
         } else {
@@ -81,11 +87,10 @@ public class CharEditModes {
         if (args.contains(" ") || args.contains("\n")) {
             return "\\> Image URL specified is invalid.";
         }
-        if (args.length() > 128) return "\\> The URL you have used is too long, please use a shorter link. (Max 128 chars)";
-        if (args == null || args.isEmpty()) {
-            if (command.message.getAttachments().size() != 0) {
-                args = command.message.getAttachments().get(0).getUrl();
-            }
+        if (args.length() > 128)
+            return "\\> The URL you have used is too long, please use a shorter link. (Max 128 chars)";
+        if (args.isEmpty() && command.message.getAttachments().size() != 0) {
+            args = command.message.getAttachments().get(0).getUrl();
         }
         if (Utility.isImageLink(args)) {
             character.setAvatarURL(args);
@@ -105,7 +110,7 @@ public class CharEditModes {
         long newlineCount = StringUtils.countMatches(args, "\n");
         if (args.length() > maxChars) {
             long overDraw = args.length() - maxChars;
-            return "\\> Character Description must be under " + maxChars + " characters. " + getOverDraw(overDraw);
+            return String.format(X_TOO_LONG, "Character Description", maxChars, getOverDraw(overDraw));
         } else if (newlineCount > maxNewlines) {
             long overdraw = newlineCount - maxNewlines;
             return "\\> Character Description has too many Newline characters (over by " + overdraw + " newlines)";

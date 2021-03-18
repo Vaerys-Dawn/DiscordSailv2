@@ -218,10 +218,10 @@ public class Utility {
                                           boolean horizontal) {
         String formattedList = listFormatter(list, horizontal);
         if (title == null || title.isEmpty()) {
-            title = Command.spacer;
+            title = Command.SPACER;
         }
         if (formattedList.isEmpty()) {
-            builder.addField(title, Command.spacer, false);
+            builder.addField(title, Command.SPACER, false);
             return;
         }
         if (horizontal) {
@@ -234,10 +234,10 @@ public class Utility {
     public static void listFormatterEmbed(String title, EmbedBuilder builder, List<String> list, boolean horizontal, String suffix) {
         String formattedList = listFormatter(list, horizontal);
         if (title == null || title.isEmpty()) {
-            title = Command.spacer;
+            title = Command.SPACER;
         }
         if (formattedList.isEmpty()) {
-            builder.addField(title, Command.spacer + suffix, false);
+            builder.addField(title, Command.SPACER + suffix, false);
             return;
         }
         if (horizontal) {

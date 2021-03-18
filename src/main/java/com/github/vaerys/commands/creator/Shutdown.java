@@ -53,7 +53,7 @@ public class Shutdown extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Shuts the bot down safely.\n" + ownerOnly;
+        return "Shuts the bot down safely.\n" + OWNER_ONLY;
     }
 
     @Override

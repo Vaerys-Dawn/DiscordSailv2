@@ -41,12 +41,7 @@ public class GetCompEntries extends Command {
                     builder.setDescription(compObjects.get(i).getFileUrl());
                 }
             }
-            builder.queue(command.guildChannel);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                Utility.sendStack(e);
-            }
+            builder.send(command.guildChannel);
         }
         return "";
     }

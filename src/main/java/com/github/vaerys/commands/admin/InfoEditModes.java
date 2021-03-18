@@ -21,6 +21,10 @@ import java.util.ArrayList;
  */
 public class InfoEditModes {
 
+    private InfoEditModes() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static String uploadFile(CommandObject command) {
         if (command.message.getAttachments() == null || command.message.getAttachments().size() == 0) {
             return "\\> No file to upload found.";
@@ -42,7 +46,7 @@ public class InfoEditModes {
 
                 //save or update file
                 if (file.exists()) {
-                    file.delete();
+                    Files.delete(Paths.get(file.getPath()));
                     Files.copy(stream, Paths.get(file.getPath()));
                     stream.close();
                     return "\\> File **" + attachment.getFileName() + "** updated";
@@ -64,13 +68,17 @@ public class InfoEditModes {
     }
 
     public static String removeFile(String rest, CommandObject command) {
-        File imagDir = new File(Utility.getGuildImageDir(command.guild.longID));
-        File[] imageList = imagDir.listFiles();
-        for (File f : imageList) {
-            if (f.getName().equalsIgnoreCase(rest)) {
-                f.delete();
-                return "\\> File Removed.";
+        try {
+            File imagDir = new File(Utility.getGuildImageDir(command.guild.longID));
+            File[] imageList = imagDir.listFiles();
+            for (File f : imageList) {
+                if (f.getName().equalsIgnoreCase(rest)) {
+                    Files.delete(Paths.get(f.getPath()));
+                    return "\\> File Removed.";
+                }
             }
+        }catch (IOException e) {
+            // do nothing
         }
         return "\\> File Not Found.";
     }
@@ -109,7 +117,7 @@ public class InfoEditModes {
 
                 //save or update file
                 if (file.exists()) {
-                    file.delete();
+                    Files.delete(Paths.get(file.getPath()));
                     Files.copy(stream, Paths.get(file.getPath()));
                     stream.close();
                     return "\\> Updated **" + Constants.FILE_INFO + "** file.";
@@ -139,7 +147,8 @@ public class InfoEditModes {
         if (file == null || !file.exists()) {
             return "\\> Something went wrong! The template must be missing, please Direct message me to alert my developer.";
         }
-        if (templateLoaded) message = message.concat("\nThis file has been preloaded with some related info and a basic template for your convenience.");
+        if (templateLoaded)
+            message = message.concat("\nThis file has been preloaded with some related info and a basic template for your convenience.");
         command.guildChannel.queueFile(message, file, "Info.txt");
         return null;
     }

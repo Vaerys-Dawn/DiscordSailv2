@@ -25,7 +25,7 @@ public class UpdateAvatar extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Update's the bot's Avatar.\n" + ownerOnly;
+        return "Update's the bot's Avatar.\n" + OWNER_ONLY;
     }
 
     @Override

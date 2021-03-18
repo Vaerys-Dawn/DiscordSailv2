@@ -22,7 +22,7 @@ public class SilentReport extends Report {
     @Override
     public String description(CommandObject command) {
         return "Can be used to send a globalUser report to the server staff.\n" +
-                indent + " It will also remove the message used to call the command.";
+                INDENT + " It will also remove the message used to call the command.";
     }
 
     @Override

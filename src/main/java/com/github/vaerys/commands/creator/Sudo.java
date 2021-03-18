@@ -60,7 +60,7 @@ public class Sudo extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Runs a command as though you were someone else.\n" + ownerOnly;
+        return "Runs a command as though you were someone else.\n" + OWNER_ONLY;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.github.vaerys.commands.dmCommands;
+package com.github.vaerys.commands.dmcommands;
 
 import com.github.vaerys.commands.general.Invite;
 import com.github.vaerys.enums.ChannelSetting;

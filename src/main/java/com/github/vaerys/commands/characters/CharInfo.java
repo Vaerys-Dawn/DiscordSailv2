@@ -37,38 +37,41 @@ public class CharInfo extends Command {
                 ArrayList<String> roleNames = new ArrayList<>();
                 for (Long roleId : object.getRoleIDs()) {
                     if (command.client.get().getRoleById(roleId) != null) {
-                        roles.add(command.guild.getRoleById(roleId));
-                        roleNames.add(command.client.get().getRoleById(roleId).getName());
+                        Role role = command.guild.getRoleById(roleId);
+                        if (role != null) {
+                            roles.add(role);
+                            roleNames.add(role.getName());
+                        }
                     }
                 }
-                if (roles.size() != 0) {
+                if (!roles.isEmpty()) {
                     builder.setColor(GuildHandler.getUsersColour(roles));
                 } else {
                     builder.setColor(GuildHandler.getUsersColour(user, command.guild.get()));
                 }
 
                 StringBuilder description = new StringBuilder();
-                description.append("**Age:** " + object.getAge());
-                description.append("\n**Gender:** " + object.getGender());
+                description.append("**Age:** ").append(object.getAge());
+                description.append("\n**Gender:** ").append(object.getGender());
                 if (object.getHeight() != null || object.getWeight() != null) {
                     description.append("\n");
                     if (object.getHeight() != null) {
-                        description.append("**Height:** " + object.getHeight() + indent);
+                        description.append("**Height:** ").append(object.getHeight()).append(INDENT);
                     }
                     if (object.getWeight() != null) {
-                        description.append("**Weight:** " + object.getWeight());
+                        description.append("**Weight:** ").append(object.getWeight());
                     }
                 }
-                if (roleNames.size() != 0) {
+                if (!roleNames.isEmpty()) {
                     if (command.guild.characters.getRolePrefix() != null && !command.guild.characters.getRolePrefix().isEmpty()) {
-                        description.append("\n" + command.guild.characters.getRolePrefix() + " " + Utility.listFormatter(roleNames, true));
+                        description.append("\n").append(command.guild.characters.getRolePrefix()).append(" ").append(Utility.listFormatter(roleNames, true));
                     } else {
-                        description.append("\n" + Utility.listFormatter(roleNames, true));
+                        description.append("\n").append(Utility.listFormatter(roleNames, true));
                     }
                 }
-                description.append("\n**Bio:** " + object.getShortBio());
+                description.append("\n**Bio:** ").append(object.getShortBio());
                 if (object.getLongBioURL() != null && !object.getLongBioURL().isEmpty()) {
-                    description.append("\n\n**[Long Description Link...](" + object.getLongBioURL() + ")**");
+                    description.append("\n\n**[Long Description Link...](").append(object.getLongBioURL()).append(")**");
                 }
                 builder.setDescription(description.toString());
                 if (object.getAvatarURL() != null && !object.getAvatarURL().isEmpty()) {
@@ -126,6 +129,6 @@ public class CharInfo extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

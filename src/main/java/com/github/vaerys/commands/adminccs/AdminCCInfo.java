@@ -12,10 +12,7 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AdminCCInfo extends Command {
 
@@ -38,7 +35,7 @@ public class AdminCCInfo extends Command {
 
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.setTitle(String.format("\\> Here is the information for the Admin Custom Command: %s", cc.getName()));
-        UserObject creator = new UserObject(command.guild.get().getMemberById(cc.getCreatorID()), command.guild);
+        UserObject creator = new UserObject(Objects.requireNonNull(command.guild.get().getMemberById(cc.getCreatorID())), command.guild);
         StringHandler desc = new StringHandler("Creator: **@%s**\nTimes Run: **%d**\nSlots Used: **%d**", creator.username, cc.getTimesRun(), cc.getSlots(), cc.getPathKeys().size());
         if (cc.hasLimitTry()) {
             long attempts = command.guild.adminCCs.getTries(cc).size();
@@ -47,7 +44,7 @@ public class AdminCCInfo extends Command {
         if (keyCount.size() == 0) {
             desc.append("\nKey Count: 0");
         } else {
-            List formattedKeys = new LinkedList();
+            List<String> formattedKeys = new LinkedList<>();
             keyCount.forEach((key, count) -> formattedKeys.add(String.format("%s: %d", key, count)));
             String compiled = Utility.listFormatter(formattedKeys, true);
             desc.appendFormatted("\nKey Counts: \n```\n%s```", compiled);
@@ -99,6 +96,6 @@ public class AdminCCInfo extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

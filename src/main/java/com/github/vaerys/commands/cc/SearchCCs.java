@@ -45,7 +45,7 @@ public class SearchCCs extends Command {
         if (contents.length() > 2040) {
             List<String> blah = new ArrayList<>();
             StringBuilder complete = new StringBuilder();
-            complete.append("\\> Search for \"" + args + "\", Results found: " + searched.size() + "\n");
+            complete.append("\\> Search for \"").append(args).append("\", Results found: ").append(searched.size()).append("\n");
             for (CCommandObject c : searched) {
                 if (blah.size() == 8) {
                     complete.append(Utility.listFormatter(blah, true));
@@ -55,21 +55,20 @@ public class SearchCCs extends Command {
                 }
                 blah.add(c.getName(command));
             }
-            if (blah.size() != 0) {
+            if (!blah.isEmpty()) {
                 complete.append(Utility.listFormatter(blah, true));
             }
             if (complete.toString().endsWith(",\n")) {
                 complete.replace(complete.length() - 2, complete.length() - 1, ".");
             }
             command.guildChannel.queueFile(title, complete.toString().getBytes(), String.format("Search_%s.txt", args));
-            return null;
         } else {
             embedBuilder.setTitle(title);
-            embedBuilder.setDescription("```\n" + contents + spacer + "```");
+            embedBuilder.setDescription("```\n" + contents + SPACER + "```");
             embedBuilder.queue(command);
             embedBuilder.setFooter("Results Found: " + searched.size());
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -114,6 +113,6 @@ public class SearchCCs extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

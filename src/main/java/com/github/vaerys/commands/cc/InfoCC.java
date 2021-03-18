@@ -25,10 +25,10 @@ public class InfoCC extends Command {
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String title = "\\> Here is the information for command: **" + customCommand.getName() + "**\n";
         UserObject createdBy = new UserObject(customCommand.getUserID(), command.guild);
-        builder.append("Creator: **@" + createdBy.username + "**\n");
-        builder.append("Time Run: **" + customCommand.getTimesRun() + "**\n");
-        builder.append("Is Locked: **" + customCommand.isLocked() + "**\n");
-        builder.append("Is ShitPost: **" + customCommand.isShitPost() + "**");
+        builder.append("Creator: **@").append(createdBy.username).append("**\n");
+        builder.append("Time Run: **").append(customCommand.getTimesRun()).append("**\n");
+        builder.append("Is Locked: **").append(customCommand.isLocked()).append("**\n");
+        builder.append("Is ShitPost: **").append(customCommand.isShitPost()).append("**");
         embedBuilder.addField(title, builder.toString(), false);
         embedBuilder.queue(command);
         return null;
@@ -77,6 +77,6 @@ public class InfoCC extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

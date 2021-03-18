@@ -64,6 +64,6 @@ public class SetPinLimit extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

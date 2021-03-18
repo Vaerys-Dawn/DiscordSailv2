@@ -29,7 +29,7 @@ public class ListCCs extends Command {
         }
         try {
             int page;
-            if (args == null || args.isEmpty()) {
+            if (args.isEmpty()) {
                 page = 1;
             } else {
                 page = Integer.parseInt(args.split(" ")[0]);
@@ -44,7 +44,6 @@ public class ListCCs extends Command {
     public String getUserCommands(CommandObject command, UserObject user) {
         if (user == null) return "> Could not find globalUser.";
         int total = 0;
-//        command.setAuthor(globalUser);
         int max = command.guild.customCommands.maxCCs(user, command.guild);
         XEmbedBuilder builder = new XEmbedBuilder(command);
         String title = "> Here are the custom commands for globalUser: @" + user.username + ".";
@@ -139,6 +138,6 @@ public class ListCCs extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

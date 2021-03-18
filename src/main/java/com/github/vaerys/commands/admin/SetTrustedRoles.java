@@ -71,6 +71,6 @@ public class SetTrustedRoles extends Command {
 
     @Override
     public void init() {
-
+        // does nothing
     }
 }

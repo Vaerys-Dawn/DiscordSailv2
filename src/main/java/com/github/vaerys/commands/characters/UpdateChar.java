@@ -7,6 +7,7 @@ import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class UpdateChar extends Command {
 
-    private final static SubCommandObject UPDATE_CHAR = new SubCommandObject(
+    private static final SubCommandObject UPDATE_CHAR = new SubCommandObject(
             new String[]{"UpdateChar"},
             "[Character ID]",
             "Allows you to update the data attached to one of your characters.",
@@ -31,7 +32,7 @@ public class UpdateChar extends Command {
         String charName = args.split(" ")[0];
         CharacterObject selectedChar = command.guild.characters.getCharByName(charName);
         List<Role> cosmeticRoles = command.user.getCosmeticRoles();
-        List<Long> cosmeticRoleIDs = cosmeticRoles.stream().map(iRole -> iRole.getIdLong()).collect(Collectors.toList());
+        List<Long> cosmeticRoleIDs = cosmeticRoles.stream().map(ISnowflake::getIdLong).collect(Collectors.toList());
         String cosmeticString = command.guild.config.moduleRoles ? " and cosmetic roles" : "";
         if (selectedChar != null) {
             if (selectedChar.getUserID() != command.user.longID) {
