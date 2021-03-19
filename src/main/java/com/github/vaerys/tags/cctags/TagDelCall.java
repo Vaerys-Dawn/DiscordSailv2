@@ -1,11 +1,10 @@
 package com.github.vaerys.tags.cctags;
 
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.enums.TagType;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.templates.TagObject;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 public class TagDelCall extends TagObject {
 
@@ -15,8 +14,8 @@ public class TagDelCall extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        if (GuildHandler.testForPerms(command,Permissions.MANAGE_MESSAGES)) {
-            RequestHandler.deleteMessage(command.message.get());
+        if (GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE)) {
+            command.message.delete();
         }
         return removeAllTag(from);
     }

@@ -3,7 +3,6 @@ package com.github.vaerys.main;
 import com.github.kennedyoliveira.pastebin4j.AccountCredentials;
 import com.github.kennedyoliveira.pastebin4j.PasteBin;
 import com.github.vaerys.handlers.FileHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.masterobjects.ClientObject;
 import com.github.vaerys.objects.events.EventAvatar;
 import com.github.vaerys.objects.events.TimedEvent;
@@ -17,6 +16,7 @@ import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Icon;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -169,19 +170,27 @@ public class Client {
         } else {
             avatarFile = new File(Constants.DIRECTORY_GLOBAL_IMAGES + Globals.defaultAvatarFile);
         }
-        Image avatar = Image.forFile(avatarFile);
-        if (event != null && event.doRotateAvatars()) {
-            EventAvatar eventAvatar = event.getAvatarDay(timeNow.getDayOfWeek());
-            if (eventAvatar != null) {
-                avatar = Image.forUrl(FilenameUtils.getExtension(eventAvatar.getLink()), eventAvatar.getLink());
+
+        try {
+            Icon avatar = Icon.from(avatarFile);
+            if (event != null && event.doRotateAvatars()) {
+                EventAvatar eventAvatar = event.getAvatarDay(timeNow.getDayOfWeek());
+                if (eventAvatar != null) {
+                    InputStream stream = Utility.getImageStreamFromURL(eventAvatar.getLink());
+                    if (stream != null) Icon.from(stream, Icon.IconType.PNG);
+                }
             }
+            client.getSelfUser().getManager().setAvatar(avatar).complete();
+        } catch (IOException e) {
+            Utility.sendStack(e);
         }
-        RequestHandler.updateAvatar(avatar);
+
         //wait for the avatar to update properly
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             Utility.sendStack(e);
+            Thread.currentThread().interrupt();
         }
     }
 

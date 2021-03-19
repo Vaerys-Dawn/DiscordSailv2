@@ -49,7 +49,7 @@ public class UserRateObject {
     }
 
     public List<TextChannel> getChannels(GuildObject guild) {
-        return channelIDs.stream().map(l -> guild.getChannelByID(l)).collect(Collectors.toList());
+        return channelIDs.stream().map(guild::getChannelByID).collect(Collectors.toList());
     }
 
     public Member getUser(GuildObject guild) {

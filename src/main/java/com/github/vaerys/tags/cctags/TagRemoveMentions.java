@@ -1,11 +1,11 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.Role;
-import sx.blah.discord.handle.obj.IUser;
 
 import java.util.regex.Pattern;
 
@@ -31,10 +31,9 @@ public class TagRemoveMentions extends TagObject {
         if (!isRoleMention) {
             try {
                 long userID = Long.parseUnsignedLong(id);
-                IUser user = command.guild.getUserByID(userID);
+                Member user = command.guild.getUserByID(userID);
                 if (user != null) {
-                    from = from.replace(user.mention(true), user.getDisplayName(command.guild.get()));
-                    from = from.replace(user.mention(false), user.getDisplayName(command.guild.get()));
+                    from = from.replaceFirst("<@!?" + id + ">", user.getEffectiveName());
                 } else {
                     throw new NumberFormatException("You shouldn't see this.");
                 }

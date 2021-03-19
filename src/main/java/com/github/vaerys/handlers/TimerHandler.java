@@ -18,11 +18,10 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.userlevel.ReminderObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.sun.management.OperatingSystemMXBean;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.handle.obj.*;
-import sx.blah.discord.util.DiscordException;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
@@ -112,7 +111,7 @@ public class TimerHandler {
         } else if (FileHandler.exists("screenlog.0")) {
             File file = new File("screenlog.0");
             if (file.length() > 1048576 * 10) {
-                IUser creator = Client.getClient().getUserByID(Globals.creatorID);
+                User creator = Client.getClient().getUserById(Globals.creatorID);
                 if (creator == null) return;
                 UserObject creatorUser = new UserObject(creator, null);
                 creatorUser.queueDm("\\> screenlog.0 got too big, potential log spam, archived log to prevent loss of usage.");
@@ -151,8 +150,7 @@ public class TimerHandler {
         if (initialDelay < 120) {
             initialDelay += 24 * 60 * 60;
         }
-//        initialDelay = 60;
-//        period = 60 * 1000;
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -198,9 +196,6 @@ public class TimerHandler {
 
         Random random = Globals.getGlobalRandom();
 
-        //uncomment for a random day of the week.
-//          day = DayOfWeek.values()[random.nextInt(DayOfWeek.values().length)];
-
         for (GuildObject task : Globals.getGuilds()) {
             GuildConfig guildconfig = task.config;
             //do decay
@@ -229,7 +224,7 @@ public class TimerHandler {
                 finalMessage = messages.get(randomMessage);
                 task.config.setLastDailyMessage(finalMessage);
                 CommandObject command = new CommandObject(task, generalChannel);
-                RequestHandler.sendMessage(finalMessage.getContents(command), generalChannel);
+                generalChannel.sendMessage(finalMessage.getContents(command)).queue();
             }
         }
     }
@@ -270,7 +265,6 @@ public class TimerHandler {
     public static void sendReminder(ReminderObject object) {
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         long initialDelay = object.getExecuteTime() - now.toEpochSecond();
-//        System.out.println(initialDelay + "");
         if (initialDelay < 0) {
             initialDelay = 5;
         }
@@ -278,26 +272,31 @@ public class TimerHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                IUser user = Client.getClient().getUserByID(object.getUserID());
-                TextChannel channel = Client.getClient().getChannelByID(object.getChannelID());
-                // sanitize messageChannel
-                if (channel == null) {
-                    channel = user.getOrCreatePMChannel();
-                } else if (!channel.isPrivate()) {
-                    if (channel.getGuild().getUserByID(object.getUserID()) == null) {
-                        channel = user.getOrCreatePMChannel();
+                User user = Client.getClient().getUserById(object.getUserID());
+                MessageChannel channel;
+                TextChannel guildChannel = Client.getClient().getTextChannelById(object.getChannelID());
+                if (user == null) return;
+                if (guildChannel == null) {
+                    channel = Client.getClient().getPrivateChannelById(object.getChannelID());
+                } else {
+                    if (guildChannel.getGuild().getMember(user) == null) {
+                        channel = Client.getClient().getPrivateChannelById(object.getChannelID());
+                    } else {
+                        channel = guildChannel;
                     }
                 }
-                Message message = RequestHandler.sendMessage(object.getMessage(), channel).get();
-
-                boolean canSend = channel.getModifiedPermissions(Client.getClient().getOurUser()).contains(Permissions.SEND_MESSAGES);
-                //check message sent.
-                if (message == null && !channel.isPrivate() && canSend) {
-                    logger.error("REMINDER FAILED FOR USER WITH ID \"" + object.getUserID() + "\" TO SEND. WILL ATTEMPT TO SEND AGAIN IN 5 MINS.");
-                    object.setSent(false);
-                } else {
+                if (channel == null) {
                     Globals.getGlobalData().removeReminder(object);
+                    return;
                 }
+                Message message = channel.sendMessage(object.getMessage()).complete();
+                if (message == null && channel instanceof TextChannel) {
+                    Member bot = ((TextChannel) channel).getGuild().getMember(Client.getClient().getSelfUser());
+                    if (bot != null && ((TextChannel) channel).getPermissionOverride(bot).getAllowed().contains(Permission.MESSAGE_WRITE)) {
+                        object.setSent(false);
+                    }
+                }
+                Globals.getGlobalData().removeReminder(object);
             }
         }, initialDelay * 1000);
     }
@@ -339,23 +338,23 @@ public class TimerHandler {
             //get channels
             List<TextChannel> channels = u.getChannels(guild);
             //get admin messageChannel
-            if (admin == null && !channels.isEmpty()) admin = channels.get(channels.size() - 1);
+            if (admin == null) admin = channels.get(channels.size() - 1);
             //get offender
-            IUser offender = u.getUser(guild);
+            Member offender = u.getUser(guild);
             ProfileObject profile = guild.users.getUserByID(u.getUserID());
             //get amount over limit
             long rate = u.getSize() - guild.config.messageLimit;
             //format messageChannel mentions
-            String formattedChannels = String.join(", ", channels.stream().map(channel -> channel.mention()).collect(Collectors.toList()));
+            String formattedChannels = channels.stream().map(IMentionable::getAsMention).collect(Collectors.joining(", "));
             //debug log mute
-            guild.sendDebugLog(offender, admin, "RATE_LIMITING", "MUTE", rate + " over limit.");
+            guild.sendDebugLog(offender.getUser(), admin, "RATE_LIMITING", "MUTE", rate + " over limit.");
             //logging
             if (guild.config.deleteLogging) {
-                LoggingHandler.sendLog("\\> **@" + offender.getName() + "#" + offender.getDiscriminator() + "** was muted for breaking rate limit.", guild, true);
+                LoggingHandler.sendLog("\\> **@" + offender.getUser().getAsTag() + "** was muted for breaking rate limit.", guild, true);
             }
             //send messages
             profile.addSailModNote(String.format(modNoteFormat, rate, channels.size() > 1 ? "s" : "", formattedChannels), u.getTimeStamp(), false);
-            RequestHandler.sendMessage(String.format(adminFormat, offender.mention(), rate, channels.size() > 1 ? "channels: " + formattedChannels : formattedChannels), admin);
+            admin.sendMessage(String.format(adminFormat, offender.getAsMention(), rate, channels.size() > 1 ? "channels: " + formattedChannels : formattedChannels)).queue();
         }
     }
 
@@ -382,9 +381,10 @@ public class TimerHandler {
 
     private static void doEventFiveMin(ZonedDateTime nowUTC) {
         try {
-            Globals.client.getDispatcher().waitFor(ReadyEvent.class);
+            Globals.client.awaitReady();
         } catch (InterruptedException e) {
-            Utility.sendStack(e);
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
         ZonedDateTime nextTimeUTC;
         long initialDelay;
@@ -434,33 +434,15 @@ public class TimerHandler {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             Utility.sendStack(e);
+            Thread.currentThread().interrupt();
         }
-        try {
-            Globals.getClient().checkLoggedIn("Check Online status");
-            randomPlayingStatus();
-            Globals.saveFiles(false);
-            if (Globals.showSaveWarning) {
-                logger.info("Files Saved.");
-            } else {
-                logger.debug("Files Saved.");
-            }
-        } catch (DiscordException e) {
-            logger.error(e.getErrorMessage());
-            logger.info("Logging back in.");
-            try {
-                Thread.sleep(4000);
-                Globals.getClient().login();
-                RequestHandler.changePresence("Recovered From Crash.");
-                return;
-            } catch (DiscordException e2) {
-                if (!e2.getMessage().contains("login")) {
-                    Utility.sendStack(e2);
-                }
-            } catch (IllegalStateException ex) {
-                //ignore exception
-            } catch (InterruptedException e1) {
-                Utility.sendStack(e1);
-            }
+
+        randomPlayingStatus();
+        Globals.saveFiles(false);
+        if (Globals.showSaveWarning) {
+            logger.info("Files Saved.");
+        } else {
+            logger.debug("Files Saved.");
         }
     }
 
@@ -487,8 +469,8 @@ public class TimerHandler {
             logger.info(memString.toString());
             logger.error("CPU USAGE LIMIT REACHED RESTARTING.");
             Utility.sendStack(new Exception("CPU overloaded - Dumping logs of last 25 actions"), 25);
-            RequestHandler.sendCreatorDm("\\> CPU USAGE LIMIT REACHED, AUTO RESTARTING...").get();
-            Globals.getClient().logout();
+            Client.getClientObject().creator.sendDm("\\> CPU USAGE LIMIT REACHED, AUTO RESTARTING...");
+            Client.getClient().shutdown();
             System.exit(Constants.EXITCODE_RESTART);
         }
 

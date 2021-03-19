@@ -1,10 +1,10 @@
 package com.github.vaerys.tags.infotags;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
-import sx.blah.discord.handle.obj.TextChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 public class TagChannel extends TagObject {
 
@@ -16,7 +16,7 @@ public class TagChannel extends TagObject {
     public String execute(String from, CommandObject command, String args) {
         TextChannel channel = command.guild.getChannelByID(Utility.stringLong(getContents(from)));
         if (channel != null) {
-            return replaceFirstTag(from, channel.mention());
+            return replaceFirstTag(from, channel.getAsMention());
         } else {
             return replaceFirstTag(from, error);
         }

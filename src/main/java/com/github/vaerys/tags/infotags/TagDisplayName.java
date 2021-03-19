@@ -1,10 +1,10 @@
 package com.github.vaerys.tags.infotags;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.Member;
 
 public class TagDisplayName extends TagObject {
 
@@ -14,9 +14,9 @@ public class TagDisplayName extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        IUser user = command.guild.getUserByID(Utility.stringLong(getContents(from)));
+        Member user = command.guild.getUserByID(Utility.stringLong(getContents(from)));
         if (user != null) {
-            return replaceFirstTag(from, user.getDisplayName(command.guild.get()));
+            return replaceFirstTag(from, user.getEffectiveName());
         } else {
             return replaceFirstTag(from, error);
         }

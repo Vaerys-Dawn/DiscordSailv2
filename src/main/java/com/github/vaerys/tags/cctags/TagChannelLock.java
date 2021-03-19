@@ -5,8 +5,8 @@ import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.TextChannel;
 
 import java.util.ArrayList;
 import java.util.List;

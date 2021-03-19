@@ -16,11 +16,18 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLHandshakeException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
@@ -923,5 +930,110 @@ public class Utility {
         return fixedEnum.toString();
     }
 
+    public static Message sendImageFromURL(String preMessage, String imageURL, MessageChannel channel, boolean loadMessage) {
+        // if url is empty send as regular Image
+        if (imageURL.isEmpty()) {
+            return channel.sendMessage(preMessage).complete();
+        }
 
+        //make sure that the message getContents is valid
+        if (StringUtils.containsOnly(preMessage, "\n") || preMessage == null || preMessage.isEmpty()) {
+            preMessage = "";
+        }
+
+        // if url isn't considered a image URL send as message.
+        if (!Utility.isImageLink(imageURL, true) || imageURL.contains("giphy.gif")) {
+            return channel.sendMessage(preMessage + "\n" + imageURL).complete();
+        }
+        //convert into final value
+        final String message = preMessage;
+
+        //send loading message
+        Message loading = null;
+        if (loadMessage) {
+            loading = channel.sendMessage("`Loading...`").complete();
+        }
+        //request for image to be sent.
+        MessageAction sentMessage = null;
+        InputStream stream = null;
+        int responseCode = -1;
+        try {
+            //connect to the Image URL
+            HttpURLConnection connection = (HttpURLConnection) new URL(imageURL).openConnection();
+            connection.setRequestProperty("User-Agent", Constants.MOZILLA_USER_AGENT);
+
+            //getAllToggles responseCode in case of IOException;
+            responseCode = connection.getResponseCode();
+
+            //turn the image connection into an inputStream
+            stream = connection.getInputStream();
+
+            //image's file name
+            String filename = FilenameUtils.getName(imageURL);
+
+            //send file
+            sentMessage = channel.sendMessage(Utility.removeMentions(message)).addFile(stream, filename);
+        } catch (InsufficientPermissionException e) {
+            //send message and url with url closed
+            missingPermissions("URL_FILE", channel);
+            sentMessage = channel.sendMessage(message + " <" + imageURL + ">");
+        } catch (MalformedURLException e) {
+            //this should never show up. seriously
+            Utility.sendStack(e);
+        } catch (SSLHandshakeException e) {
+            //something to do with the ssl handshake failed. unsure what causes this.
+            sentMessage = channel.sendMessage(message + " " + imageURL + " `FAILED TO EMBED - FAILED SSL HANDSHAKE.`");
+        } catch (IOException e) {
+            //the file failed to be grabbed.
+            String response = " `ERROR:" + responseCode + ", IMAGE FAILED TO EMBED";
+            if (responseCode == 403) {
+                sentMessage = channel.sendMessage(message + "\n" + imageURL + response + ", IMAGE LINK NEEDS UPDATING.`");
+            } else if (responseCode != -1) {
+                sentMessage = channel.sendMessage(message + "\n" + imageURL + response + "`");
+            } else {
+                sentMessage = channel.sendMessage(message + "\n" + imageURL);
+            }
+        } catch (IllegalArgumentException e) {
+            //the host failed, unsure as to the cause. inspect.
+            if (e.getMessage().contains("http host = null")) {
+                sentMessage = channel.sendMessage(message + "\n" + imageURL + " `HTTP HOST ERROR, CHECK URL FOR ERRORS.`");
+            }
+        }
+        try {
+            //close off the stream
+            if (stream != null) stream.close();
+        } catch (IOException e) {
+            //how the hell did this even happen
+            Utility.sendStack(e);
+        }
+        // delete loading message
+        Message sent = sentMessage.complete();
+        if (loading != null) loading.delete().complete();
+        //return the completed message
+        return sent;
+    }
+
+    private static void sendError(String prefix, String message, MessageChannel channel) {
+        long guildID = -1;
+        if (channel instanceof TextChannel) ((TextChannel) channel).getGuild().getIdLong();
+        String format = String.format("%s {\"MESSAGE\": \"%s\", \"GUILD\": %d, \"CHANNEL\": %d}", prefix, message, guildID, channel.getIdLong());
+        LOGGER.debug(format);
+    }
+
+    private static void missingPermissions(String message, MessageChannel channel) {
+        sendError("Could not send message, Missing Permissions.", message, channel);
+    }
+
+
+    public static InputStream getImageStreamFromURL(String link) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(link).openConnection();
+            connection.setRequestProperty("User-Agent", Constants.MOZILLA_USER_AGENT);
+
+            //turn the image connection into an inputStream
+            return connection.getInputStream();
+        }catch (IOException e) {
+            return null;
+        }
+    }
 }

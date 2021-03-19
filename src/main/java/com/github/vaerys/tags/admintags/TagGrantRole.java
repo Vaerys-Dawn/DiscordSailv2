@@ -2,12 +2,11 @@ package com.github.vaerys.tags.admintags;
 
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminSubTagObject;
-import sx.blah.discord.handle.obj.Role;
+import net.dv8tion.jda.api.entities.Role;
 
 public class TagGrantRole extends TagAdminSubTagObject {
 
@@ -20,10 +19,10 @@ public class TagGrantRole extends TagAdminSubTagObject {
         Role role = GuildHandler.getRoleFromName(getSubTag(from), command.guild.get());
         if (role == null) {
             return replaceFirstTag(from, error);
-        } else if (!Utility.testUserHierarchy(command.client.bot.get(), role, command.guild.get())) {
+        } else if (!Utility.testUserHierarchy(command.botUser.getMember(), role, command.guild.get())) {
             return removeAllTag(from);
         } else {
-            RequestHandler.roleManagement(command, role, true);
+            command.guild.get().addRoleToMember(command.user.getMember(), role).queue();
             from = replaceFirstTag(from,"You have been granted the **" + role.getName() + "** role");
             from = removeAllTag(from);
             return from;

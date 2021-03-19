@@ -1,11 +1,11 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
+import net.dv8tion.jda.api.entities.Role;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.Role;
 
 import java.util.List;
 

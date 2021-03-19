@@ -1,11 +1,11 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.GuildHandler;
-import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
-import sx.blah.discord.handle.obj.Permissions;
+import net.dv8tion.jda.api.Permission;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,14 +21,14 @@ public class TagEmbedImage extends TagObject {
         String imageURL = getContents(from);
         try {
             new URL(imageURL);
-            boolean hasPerm = GuildHandler.testForPerms(command, command.guildChannel.get(), Permissions.EMBED_LINKS);
+            boolean hasPerm = GuildHandler.testForPerms(command, command.guildChannel.get(), Permission.MESSAGE_EMBED_LINKS);
             String replaceWith = hasPerm ? "" : "<" + imageURL + ">";
             from = replaceAllTag(from, replaceWith);
             from = get(TagRemoveMentions.class).handleTag(from, command, args);
             if (hasPerm) {
-                RequestHandler.sendFileURL(from, imageURL, command.guildChannel.get(), true);
+                Utility.sendImageFromURL(from, imageURL, command.guildChannel.get(), true);
             } else {
-                RequestHandler.sendMessage(from, command.guildChannel.get());
+                command.guildChannel.queueMessage(from);
             }
         } catch (MalformedURLException e) {
             from = replaceFirstTag(from, imageURL);

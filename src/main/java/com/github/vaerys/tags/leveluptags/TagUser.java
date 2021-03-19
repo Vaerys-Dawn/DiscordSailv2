@@ -1,7 +1,7 @@
 package com.github.vaerys.tags.leveluptags;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
 
 public class TagUser extends TagObject {
@@ -12,7 +12,7 @@ public class TagUser extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        return replaceAllTag(from, command.user.get().mention());
+        return replaceAllTag(from, command.user.get().getAsMention());
     }
 
     @Override

@@ -1,9 +1,10 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
-import com.github.vaerys.handlers.RequestHandler;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
+
+import java.nio.charset.StandardCharsets;
 
 public class TagCheckLength extends TagObject {
 
@@ -14,8 +15,7 @@ public class TagCheckLength extends TagObject {
     @Override
     public String execute(String from, CommandObject command, String args) {
         if (from.length() > 2000) {
-            RequestHandler.sendFile("ERROR: Custom command output exceeds 2000 characters.", from, "Error.txt", command.guildChannel.get());
-//            RequestHandler.queueMessage("ERROR: Custom command output exceeds 2000 characters.", command.messageChannel.get());
+            command.guildChannel.queueFile("ERROR: Custom command output exceeds 2000 characters.", from.getBytes(StandardCharsets.UTF_8), "Error.txt");
             return null;
         }
         return from;
@@ -48,6 +48,6 @@ public class TagCheckLength extends TagObject {
 
     @Override
     public String handleTag(String from, CommandObject command, String args) {
-        return execute(from,command,args);
+        return execute(from, command, args);
     }
 }
