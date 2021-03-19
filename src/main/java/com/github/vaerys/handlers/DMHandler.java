@@ -141,13 +141,12 @@ public class DMHandler {
 
     private boolean commandChecker(DmCommandObject command) {
         List<GuildObject> guilds = Globals.getGuilds();
-        List<String> prefixes = new LinkedList<>() {{
-            add("!");
-            add("!!");
-            add("/");
-            add("$");
-            add("%");
-        }};
+        List<String> prefixes = new LinkedList<>();
+        prefixes.add("!");
+        prefixes.add("!!");
+        prefixes.add("/");
+        prefixes.add("$");
+        prefixes.add("%");
         for (GuildObject g : guilds) {
             prefixes.add(g.config.getPrefixCommand());
             prefixes.add(g.config.getPrefixCC());
@@ -164,7 +163,7 @@ public class DMHandler {
     }
 
     private boolean inviteCatcher(DmCommandObject command) {
-        if (Pattern.compile("(?i)(discord\\.gg/|discordapp\\.com/Invite/)").matcher(command.message.getContent()).find()) {
+        if (Pattern.compile("(?i)(discord\\.gg/|discordapp\\.com/Invite/|discord\\.com/Invite/)").matcher(command.message.getContent()).find()) {
             command.globalUser.queueDm("\\> Hey it looks like you are trying to send me a Invite link to a server. If you want me to " +
                     "join your server please send a request to the Support server found in my info command.\n" +
                     "Note: My Creator may be busy or asleep when you send the request so please be polite, " +

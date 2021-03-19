@@ -14,6 +14,7 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
+import emoji4j.EmojiUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -1032,8 +1033,12 @@ public class Utility {
 
             //turn the image connection into an inputStream
             return connection.getInputStream();
-        }catch (IOException e) {
+        } catch (IOException e) {
             return null;
         }
+    }
+
+    public static MessageReaction.ReactionEmote getReaction(String x) {
+        return MessageReaction.ReactionEmote.fromUnicode(EmojiUtils.getEmoji(x).getEmoji(), Client.getClient());
     }
 }

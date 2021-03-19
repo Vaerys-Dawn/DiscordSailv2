@@ -112,10 +112,6 @@ public class Main {
                 System.exit(Constants.EXITCODE_STOP);
             }
 
-
-            ThreadGroup group = new ThreadGroup("GuildCreateGroup");
-            final int[] count = new int[]{0};
-
             //login + register listener.
             client.login();
 
@@ -130,22 +126,6 @@ public class Main {
                 // save it back out to file.
                 config.flushFile();
             }
-
-            ExecutorService guildService = new ThreadPoolExecutor(2, 50, 1,
-                    TimeUnit.MINUTES, new ArrayBlockingQueue<>(1000),
-                    r -> new Thread(group, r, group.getName() + "-Thread-" + ++count[0]));
-            ExecutorService commandService = new ThreadPoolExecutor(2, 50, 1,
-                    TimeUnit.MINUTES, new ArrayBlockingQueue<>(1000),
-                    r -> new Thread(group, r, group.getName() + "-Thread-" + ++count[0]));
-            ExecutorService creatorService = new ThreadPoolExecutor(2, 50, 1,
-                    TimeUnit.MINUTES, new ArrayBlockingQueue<>(1000),
-                    r -> new Thread(group, r, group.getName() + "-Thread-" + ++count[0]));
-
-            EventDispatcher dispatcher = client.getDispatcher();
-            dispatcher.registerListener(guildService, new GuildCreateListener());
-            dispatcher.registerListener(commandService, new AnnotationListener());
-            dispatcher.registerListener(creatorService, new CreatorHandler());
-            dispatcher.registerTemporaryListener(new InitEvent());
 
             //validate config file
             Globals.setVersion();

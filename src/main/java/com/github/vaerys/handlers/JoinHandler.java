@@ -11,8 +11,8 @@ import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
 
 import java.util.List;
 import java.util.Random;
@@ -41,22 +41,22 @@ public class JoinHandler {
      *
      * @param user    The globalUser that joined. ({@link UserObject})
      * @param content The Guild that the globalUser joined. ({@link GuildObject})
-     * @param event   The event that calls this. ({@link UserJoinEvent})
+     * @param event   The event that calls this. ({@link GuildMemberJoinEvent})
      */
-    public static void checkNewUsers(GuildObject content, UserJoinEvent event, UserObject user) {
-        long difference = event.getJoinTime().toEpochMilli() - event.getUser().getCreationDate().toEpochMilli();
-        if (StringUtils.containsIgnoreCase(user.username,"igg-games.com")){
-            RequestHandler.roleManagement(user, content, content.config.getMutedRoleID(), true);
+    public static void checkNewUsers(GuildObject content, GuildMemberJoinEvent event, UserObject user) {
+        long difference = event.getMember().getTimeJoined().toInstant().toEpochMilli() - event.getUser().getTimeCreated().toInstant().toEpochMilli();
+        if (StringUtils.containsIgnoreCase(user.username, "igg-games.com")) {
+            content.get().addRoleToMember(user.getMember(), content.getRoleById(content.config.getMutedRoleID())).complete();
         }
         if ((5 * 60 * 60 * 1000) > difference) {
-            ProfileObject profileObject = user.addProfile(content);
+            ProfileObject profileObject = user.addProfile();
             profileObject.getSettings().add(UserSetting.JOIN_WHILE_NEW);
             TextChannel admin = content.getChannelByType(ChannelSetting.ADMIN_LOG);
             if (admin == null) {
                 admin = event.getGuild().getDefaultChannel();
             }
             if (admin != null) {
-                RequestHandler.sendMessage("> New globalUser " + user.mention() + " has a creation time less than 5 hours ago.", admin);
+                admin.sendMessage("> New globalUser " + user.mention() + " has a creation time less than 5 hours ago.").queue();
             }
         }
     }
@@ -66,9 +66,9 @@ public class JoinHandler {
      *
      * @param user    The globalUser that joined. ({@link UserObject})
      * @param content The Guild that the globalUser joined. ({@link GuildObject})
-     * @param event   The event that calls this. ({@link UserJoinEvent})
+     * @param event   The event that calls this. ({@link GuildMemberJoinEvent})
      */
-    public static void sendWelcomeMessage(GuildObject content, UserJoinEvent event, UserObject user) {
+    public static void sendWelcomeMessage(GuildObject content, GuildMemberJoinEvent event, UserObject user) {
         String message = content.config.getJoinMessage();
         message = message.replace("<server>", event.getGuild().getName());
         message = message.replace("<globalUser>", event.getUser().getName());
@@ -80,9 +80,9 @@ public class JoinHandler {
      *
      * @param user    The globalUser that joined. ({@link UserObject})
      * @param content The Guild that the globalUser joined. ({@link GuildObject})
-     * @param event   The event that calls this. ({@link UserJoinEvent})
+     * @param event   The event that calls this. ({@link GuildMemberJoinEvent})
      */
-    public static void autoReMute(UserJoinEvent event, GuildObject content, UserObject user) {
+    public static void autoReMute(GuildMemberJoinEvent event, GuildObject content, UserObject user) {
         for (MutedUserObject u : content.users.mutedUsers) {
             if (u.getID() == event.getUser().getIdLong()) {
                 TextChannel admin = content.getChannelByType(ChannelSetting.ADMIN);

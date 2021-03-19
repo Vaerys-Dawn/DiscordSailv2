@@ -2,6 +2,7 @@ package com.github.vaerys.main;
 
 import com.github.kennedyoliveira.pastebin4j.AccountCredentials;
 import com.github.kennedyoliveira.pastebin4j.PasteBin;
+import com.github.vaerys.handlers.EventManager;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.masterobjects.ClientObject;
 import com.github.vaerys.objects.events.EventAvatar;
@@ -17,7 +18,7 @@ import com.patreon.resources.Pledge;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Icon;
-import org.apache.commons.io.FilenameUtils;
+import net.dv8tion.jda.api.hooks.IEventManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +51,7 @@ public class Client {
         clientBuilder.setToken(token);
         clientBuilder.setMaxReconnectDelay(4000);
         client = clientBuilder.build();
+        client.setEventManager(new EventManager());
         return client;
     }
 

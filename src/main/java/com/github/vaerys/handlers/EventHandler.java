@@ -1,12 +1,29 @@
-package com.github.vaerys.main;
+package com.github.vaerys.handlers;
 
-import com.github.vaerys.handlers.*;
+import com.github.vaerys.main.Client;
+import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.*;
 import com.github.vaerys.objects.utils.LogObject;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateNameEvent;
+import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateParentEvent;
+import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdatePositionEvent;
+import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateNameEvent;
+import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateParentEvent;
+import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdatePositionEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.EventListener;
+import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
+import net.dv8tion.jda.api.events.role.update.GenericRoleUpdateEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +51,9 @@ import sx.blah.discord.handle.obj.Permissions;
  * Created by Vaerys on 03/08/2016.
  */
 
-@SuppressWarnings({"unused", "StringConcatenationInsideStringBufferAppend"})
-public class AnnotationListener extends ListenerAdapter {
+public class EventHandler {
 
-    final static Logger logger = LoggerFactory.getLogger(AnnotationListener.class);
+    final static Logger logger = LoggerFactory.getLogger(EventHandler.class);
 
     public static void updateVariables(Guild guild) {
         long guildID = guild.getIdLong();
@@ -50,27 +66,13 @@ public class AnnotationListener extends ListenerAdapter {
      * Sets up the relevant files for each guild.
      */
 
-    @EventSubscriber
-    public void onGuildLeaveEvent(GuildLeaveEvent event) {
-        Globals.unloadGuild(event.getGuild().getIdLong());
-    }
-
-    @EventSubscriber
-    public void onReadyEvent(ReadyEvent event) {
-        Globals.isReady = true;
-        RequestHandler.changePresence(Globals.playing);
-        RequestHandler.updateUsername(Globals.botName);
-    }
-
-
-    public void handlePinnedMessages(MessageReceivedEvent event) {
+    public static void handlePinnedMessages(MessageReceivedEvent event) {
         Message message = event.getMessage();
         if (message.getAuthor().getIdLong() == Client.getClientObject().bot.longID) return;
         message.delete().queue();
     }
 
-    @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public static void onMessageReceived(MessageReceivedEvent event) {
         if (event.getMessage().getType() == MessageType.CHANNEL_PINNED_ADD) {
             handlePinnedMessages(event);
         }
@@ -87,7 +89,7 @@ public class AnnotationListener extends ListenerAdapter {
             if (channel.getType() == ChannelType.PRIVATE) {
                 DmCommandObject command = new DmCommandObject(event.getMessage(), event.getPrivateChannel(), event.getAuthor());
                 MessageHandler.handleDmMessage(args, command);
-            }else {
+            } else {
                 CommandObject command = new CommandObject(event.getMessage(), event.getGuild());
                 MessageHandler.handleMessage(args, command);
             }
@@ -119,79 +121,32 @@ public class AnnotationListener extends ListenerAdapter {
         }
     }
 
-    @EventSubscriber
-    public void onMentionEvent(MentionEvent event) {
-        // nothing interesting happens.
-    }
-
-    @EventSubscriber
-    public void onRoleUpdateEvent(RoleUpdateEvent event) {
-        updateVariables(event.getGuild());
-    }
-
-    @EventSubscriber
-    public void onRoleDeleteEvent(RoleDeleteEvent event) {
-        updateVariables(event.getGuild());
-    }
-
-    @EventSubscriber
-    public void onVoiceChannelUpdateEvent(VoiceChannelUpdateEvent event) {
-        LoggingHandler.logChannelUpdate(Globals.getGuildContent(event.getGuild().getIdLong()), event.getOldVoiceChannel(), event.getNewVoiceChannel());
-    }
-
-    @EventSubscriber
-    public void onChannelUpdateEvent(ChannelUpdateEvent event) {
-        if (event.getChannel().isPrivate()) {
-            return;
-        }
-        updateVariables(event.getNewChannel().getGuild());
-        LoggingHandler.logChannelUpdate(Globals.getGuildContent(event.getGuild().getIdLong()), event.getOldChannel(), event.getNewChannel());
-    }
-
-    @EventSubscriber
-    public void onChannelDeleteEvent(ChannelDeleteEvent event) {
-        if (event.getChannel().isPrivate()) {
-            return;
-        }
-        LoggingHandler.doChannelDeleteLog(event);
-        updateVariables(event.getChannel().getGuild());
-    }
-
-    @EventSubscriber
-    public void onChannelCreateEvent(ChannelCreateEvent event) {
-        LoggingHandler.doChannelCreateLog(event);
-    }
-
-    @EventSubscriber
-    public void onReactionAddEvent(ReactionAddEvent event) {
+    public static void onReactionAddEvent(GuildMessageReactionAddEvent event) {
         Globals.reactionCount++;
         if (event.getUser().isBot()) {
             return;
         }
-        ReactionEmoji x = Utility.getReaction("x");
-        ReactionEmoji pin = Utility.getReaction(Constants.EMOJI_ADD_PIN);
-        ReactionEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
-        ReactionEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
-        ReactionEmoji heart = Utility.getReaction(Constants.EMOJI_LIKE_PIN);
-        ReactionEmoji remove = Utility.getReaction(Constants.EMOJI_REMOVE_PIN);
-        ReactionEmoji gift = Utility.getReaction("gift");
-        ReactionEmoji emoji = event.getReaction().getEmoji();
+        MessageReaction.ReactionEmote x = Utility.getReaction("x");
+        MessageReaction.ReactionEmote pin = Utility.getReaction(Constants.EMOJI_ADD_PIN);
+        MessageReaction.ReactionEmote thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
+        MessageReaction.ReactionEmote thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
+        MessageReaction.ReactionEmote heart = Utility.getReaction(Constants.EMOJI_LIKE_PIN);
+        MessageReaction.ReactionEmote remove = Utility.getReaction(Constants.EMOJI_REMOVE_PIN);
+        MessageReaction.ReactionEmote gift = Utility.getReaction("gift");
+        MessageReaction.ReactionEmote emoji = event.getReaction().getReactionEmote();
 
-        if (emoji == null) return;
+        Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
 
-        Message message = event.getMessage();
-        if (message == null) message = event.getChannel().getMessageByID(event.getMessageID());
-
-        CommandObject object = new CommandObject(message);
+        CommandObject object = new CommandObject(message, event.getGuild());
         UserObject pinner = new UserObject(event.getUser(), object.guild);
-        UserObject owner = new UserObject(event.getAuthor(), object.guild);
+        UserObject owner = new UserObject(message.getAuthor(), object.guild);
 
 
         //do only on server channels
-        if (!event.getChannel().isPrivate() && emoji.isUnicode()) {
+        if (emoji.isEmoji()) {
             //if is x and can bypass
             if (emoji.equals(remove)) ArtHandler.unPin(object);
-            if (emoji.equals(x) && GuildHandler.testForPerms(event.getUser(), event.getGuild(), Permissions.MANAGE_MESSAGES) &&
+            if (emoji.equals(x) && GuildHandler.testForPerms(event.getUser(), event.getGuild(), Permission.MESSAGE_MANAGE) &&
                     object.client.bot.longID == object.user.longID) {
                 RequestHandler.deleteMessage(object.message);
             }
@@ -208,27 +163,24 @@ public class AnnotationListener extends ListenerAdapter {
             if (emoji.equals(gift))
                 Globals.getGlobalData().giveGift(message.getIdLong(), pinner, object.guild);
             //do only within Direct messages
-        } else if (event.getChannel().isPrivate() && emoji.isUnicode()) {
+        } else if (event.getChannel() instanceof PrivateChannel && emoji.isEmoji()) {
             //if anyone uses x
             if (emoji.equals(x) && object.client.bot.longID == object.user.longID) {
-                RequestHandler.deleteMessage(message);
+                message.delete().queue();
             }
         }
     }
 
-    @EventSubscriber
-    public void onMessageDeleteEvent(MessageDeleteEvent event) {
-        if (event.getChannel().isPrivate()) return;
+    public static void onMessageDeleteEvent(MessageDeleteEvent event) {
+        if (event.getChannel() instanceof PrivateChannel) return;
         if (!Globals.isReady) return;
-        if (event.getMessage() == null) return;
         if (event.getGuild().getUserByID(event.getAuthor().getIdLong()) == null) return;
         CommandObject command = new CommandObject(event.getMessage());
         if (!command.guild.config.moduleLogging) return;
         LoggingHandler.logDelete(command, event.getMessage());
     }
 
-    @EventSubscriber
-    public void onUserJoinEvent(UserJoinEvent event) {
+    public static void onUserJoinEvent(GuildMemberJoinEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         UserObject user = new UserObject(event.getUser(), content);
         if (content.config.welcomeMessages && !user.get().isBot()) {
@@ -243,16 +195,9 @@ public class AnnotationListener extends ListenerAdapter {
         GuildHandler.checkUsersRoles(user.longID, content);
         JoinHandler.autoReMute(event, content, user);
         if (!content.config.moduleLogging) return;
-        LoggingHandler.doJoinLeaveLog(event, true);
     }
 
-    @EventSubscriber
-    public void onUserLeaveEvent(UserLeaveEvent event) {
-        LoggingHandler.doJoinLeaveLog(event, false);
-    }
-
-    @EventSubscriber
-    public void onMessageUpdateEvent(MessageUpdateEvent event) {
+    public static void onMessageUpdateEvent(MessageUpdateEvent event) {
         if (event.getOldMessage() == null || event.getNewMessage() == null) return;
         if (event.getNewMessage().getContent() == null || event.getOldMessage().getContent() == null) return;
         if (event.getNewMessage().getContent().isEmpty() || event.getOldMessage().getContent().isEmpty()) return;
@@ -261,15 +206,5 @@ public class AnnotationListener extends ListenerAdapter {
         CommandObject command = new CommandObject(event.getMessage());
 
         LoggingHandler.doMessageEditLog(command, event.getOldMessage(), event.getNewMessage());
-    }
-
-    @EventSubscriber
-    public void onUserRoleUpdateEvent(UserRoleUpdateEvent event) {
-        LoggingHandler.doRoleUpdateLog(event);
-    }
-
-    @EventSubscriber
-    public void onUserBanEvent(UserBanEvent event) {
-        LoggingHandler.doBanLog(event);
     }
 }

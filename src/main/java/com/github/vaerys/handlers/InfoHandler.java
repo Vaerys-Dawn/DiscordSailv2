@@ -1,15 +1,14 @@
 package com.github.vaerys.handlers;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.TagObject;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
-import sx.blah.discord.handle.obj.TextChannel;
-import sx.blah.discord.handle.obj.Guild;
-import sx.blah.discord.util.RequestBuffer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,13 +28,13 @@ public class InfoHandler {
         this.object = object;
         this.channel = object.guildChannel.get();
         this.guild = object.guild.get();
-        RequestHandler.deleteMessage(object.message.get());
+        object.message.delete();
         infoContents = FileHandler.readFromFile(Utility.getFilePath(guild.getIdLong(), Constants.FILE_INFO));
         updateChannel();
     }
 
     private void updateChannel() {
-        RequestBuffer.request(() -> channel.getMessageHistory().bulkDelete());
+        channel.deleteMessages(channel.getHistory().getRetrievedHistory()).complete();
         StringBuilder builder = new StringBuilder();
         ArrayList<String> stringChunks = new ArrayList<>();
         String lastChunk;
@@ -88,9 +87,9 @@ public class InfoHandler {
             if (contents.contains(imagePrefix)) {
                 image = StringUtils.substringBetween(contents, imagePrefix, imageSuffix);
                 File file = new File(Utility.getGuildImageDir(guild.getIdLong()) + image);
-                RequestHandler.sendFile("", file, channel).get();
+                channel.sendFile(file).complete();
             } else {
-                RequestHandler.sendMessage(contents, channel).get();
+                channel.sendMessage(contents).complete();
             }
         }
     }

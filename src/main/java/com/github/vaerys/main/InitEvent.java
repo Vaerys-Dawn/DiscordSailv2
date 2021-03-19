@@ -1,25 +1,24 @@
 package com.github.vaerys.main;
 
+import com.github.vaerys.handlers.RequestHandler;
+import net.dv8tion.jda.api.events.ReadyEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.ReadyEvent;
 
 public class InitEvent {
 
     final static Logger logger = LoggerFactory.getLogger(Main.class);
 
-    @EventSubscriber
-    public void initBot(ReadyEvent event) {
+    public static void initBot() {
         //makes sure that nothing in the config file will cause an error
         if (!Globals.isCreatorValid()) {
             System.exit(Constants.EXITCODE_STOP);
         }
-//        if (args.length > 0 && args[0].equals("-w")) {
-//            WikiBuilder.handleCommandLists();
-//        }
         Globals.loadContributors();
         Main.consoleInput();
+        Globals.isReady = true;
+        RequestHandler.changePresence(Globals.playing);
+        RequestHandler.updateUsername(Globals.botName);
     }
 
 }

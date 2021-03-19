@@ -7,9 +7,20 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
+import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
+import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdatePositionEvent;
+import net.dv8tion.jda.api.events.channel.voice.VoiceChannelCreateEvent;
+import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent;
+import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdatePositionEvent;
+import net.dv8tion.jda.api.events.guild.GuildBanEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
+import net.dv8tion.jda.api.hooks.IEventManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.internal.DiscordUtils;
@@ -28,10 +39,7 @@ import sx.blah.discord.handle.obj.*;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class LoggingHandler {
@@ -81,9 +89,9 @@ public class LoggingHandler {
     }
 
     private static boolean messageEmpty(Message message) {
-        return (message.getContentRaw() == null || message.getContentRaw().isEmpty()) &&
-                message.getEmbeds().size() == 0 &&
-                message.getAttachments().size() == 0;
+        return (message.getContentRaw().isEmpty()) &&
+                message.getEmbeds().isEmpty() &&
+                message.getAttachments().isEmpty();
     }
 
     private static int getVarsLength(List<String> vars) {
@@ -96,7 +104,7 @@ public class LoggingHandler {
 
     private static String getFormattedTimeStamp(CommandObject command, Message message) {
         long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - message.getTimestamp().atZone(ZoneOffset.UTC).toEpochSecond();
-        StringBuffer formatted = new StringBuffer();
+        StringBuilder formatted = new StringBuilder();
         if (command.guild.config.useTimeStamps) {
             formatted.append("at `").append(Utility.formatTimestamp(message.getTimestamp().atZone(ZoneOffset.UTC))).append(" - UTC`");
         } else {
@@ -109,44 +117,14 @@ public class LoggingHandler {
         if (!command.guild.config.deleteLogging) return;
         if (!shouldLog(command)) return;
         if (messageEmpty(deletedMessage)) return;
-        StringBuffer content;
-        StringBuffer extraContent = new StringBuffer();
-        MessageEmbed embed = null;
-        int charLimit = 2000;
         String timestamp = getFormattedTimeStamp(command, deletedMessage);
-        String format = "> **@%s's** Message %s was **Deleted** in messageChannel: %s with contents:\n%s\n%s";
-        //check embed
-        if (deletedMessage.getEmbeds().size() != 0) embed = deletedMessage.getEmbeds().get(0);
-        //add and attachments
-        for (Message.Attachment atc : deletedMessage.getAttachments()) {
-            if (extraContent.length() != 0) extraContent.append("\n");
-            extraContent.append("<").append(atc.getUrl()).append(">");
-        }
+        String format = "> **@%s's** Message %s was **Deleted** in messageChannel: %s";
         //add all of the args
-        List<String> vars = new ArrayList<String>() {{
-            add(command.user.username);
-            add(timestamp);
-            add(command.guildChannel.mention);
-            add(extraContent.toString());
-        }};
-        //calculate the limit of content
-        charLimit -= getVarsLength(vars);
-        charLimit -= format.length() + Utility.embedToString(embed).length();
-        //make sure that the length doesn't go over.
-        content = new StringBuffer(Utility.unFormatMentions(command.message.get()));
-        if (charLimit < 0) {
-            logger.error("Message caused Charlimit to go under 0.\n" +
-                    "Content:" + content +
-                    "\nExtra Content:" + extraContent);
-            return;
-        }
-        if (content.length() > charLimit) {
-            content.setLength(charLimit);
-            content.append("...");
-        }
-        vars.add(3, content.toString());
-        content = new StringBuffer(String.format(format, vars.toArray()));
-        sendLog(content.toString(), command, false, embed);
+        List<String> vars = new ArrayList<>();
+        vars.add(command.user.username);
+        vars.add(timestamp);
+        vars.add(command.guildChannel.mention);
+        sendLog(String.format(format, vars.toArray()), command, false);
     }
 
 
@@ -154,143 +132,184 @@ public class LoggingHandler {
     //messageChannel moved (Category changed), messageChannel name updated.
     private static final String channelUpdateFormat = "> %s's %s.\n%s";
 
-    public static void logChannelUpdate(GuildObject guild, TextChannel oldChannel, TextChannel newChannel) {
-        if (!guild.config.moduleLogging) return;
-        if (!guild.config.channelLogging) return;
-        boolean isVoice = newChannel instanceof VoiceChannel;
-        List<String> logs = new LinkedList<>();
-        String newChannelName = isVoice ? String.format("**%s**", newChannel.getName()) : newChannel.mention();
-        int oldPosition = oldChannel.getPosition();
-        int newPosition = newChannel.getPosition();
-        ICategory oldCategory = oldChannel.getCategory();
-        ICategory newCategory = newChannel.getCategory();
-        boolean categoryChanged = (oldCategory == null ? !newCategory.equals(oldCategory) : !oldCategory.equals(newCategory));
-
-        if (!oldChannel.getName().equalsIgnoreCase(newChannel.getName())) {
-            logs.add(String.format(channelUpdateFormat, newChannelName, " name was **Updated**", String.format("**Old Name:** %s%s", (isVoice ? "" : "#"), oldChannel.getName())));
-        } else if (oldPosition != newPosition || categoryChanged) {
-            logs.add(logChannelMove(newChannelName, oldChannel, newChannel, guild));
-        }
-
-        if (isVoice) {
-            logs.add(logVoiceUpdate(newChannelName, (VoiceChannel) oldChannel, (VoiceChannel) newChannel));
-        } else {
-            logs.add(logTextUpdate(newChannelName, oldChannel, newChannel));
-        }
-        logs = logs.stream().filter(l -> !l.isEmpty()).collect(Collectors.toList());
-        sendLog(String.join("\n", logs), guild, false);
-    }
-
-    //Text Only
-    //toggle NSFW, change topic, remove topic, add topic
-    private static String logTextUpdate(String channelName, TextChannel oldChannel, TextChannel newChannel) {
-        StringHandler action = new StringHandler();
-        StringHandler extraContent = new StringHandler();
-        String oldTopic = oldChannel.getTopic() == null ? "" : oldChannel.getTopic();
-        String newTopic = newChannel.getTopic() == null ? "" : newChannel.getTopic();
-        if (oldChannel.isNSFW() != newChannel.isNSFW()) {
-            action.appendFormatted("NSFW Tag was %s", (newChannel.isNSFW() ? "**Added**" : "**Removed**"));
-        }
-
-        if (!oldTopic.equalsIgnoreCase(newTopic)) {
-            if (!action.isEmpty()) action.append(" and the Channel's ");
-            if (oldTopic.isEmpty()) action.append("Topic was **Created**");
-            else if (newTopic.isEmpty()) action.append("Topic was **Removed**");
-            else action.append("Topic was **Updated**");
-
-            if (!oldTopic.isEmpty()) {
-                oldTopic = oldChannel.getTopic().length() < 300 ? oldChannel.getTopic() : oldChannel.getTopic().substring(0, 300).concat("...");
-                extraContent.appendFormatted("**Old Topic:** `%s`", oldTopic);
-            }
-            if (!newTopic.isEmpty()) {
-                if (!extraContent.isEmpty()) extraContent.append("\n");
-                newTopic = newChannel.getTopic().length() < 300 ? newChannel.getTopic() : newChannel.getTopic().substring(0, 300).concat("...");
-                extraContent.appendFormatted("**New Topic:** `%s`", newTopic);
-            }
-        }
-        if (!action.isEmpty()) {
-            return String.format(channelUpdateFormat, channelName, action, extraContent);
-        }
-        return "";
-    }
-
-    //Voice only
-    //Changed User Cap, Changed bitrate
-    private static String logVoiceUpdate(String channelName, VoiceChannel oldChannel, VoiceChannel newChannel) {
-        int oldUserCap = oldChannel.getUserLimit();
-        int newUserCap = newChannel.getUserLimit();
-        int oldBitrate = oldChannel.getBitrate() / 1000;
-        int newBitrate = newChannel.getBitrate() / 1000;
-        StringHandler action = new StringHandler();
-        StringHandler extraContent = new StringHandler();
-
-        if (oldUserCap != newUserCap) {
-            if (oldUserCap == 0) action.append("User Limit was **Added**");
-            else if (newUserCap == 0) action.append("User Limit was **Removed**");
-            else action.append("User Limit was **Updated**");
-            if (oldUserCap != 0) extraContent.appendFormatted("**Old User Limit:** %d", oldUserCap);
-            if (newUserCap != 0) {
-                if (!extraContent.isEmpty()) extraContent.append(", ");
-                extraContent.appendFormatted("**New User Limit:** %d", newUserCap);
-            }
-        }
-        if (oldBitrate != newBitrate) {
-            if (!action.isEmpty()) action.append(" and the Channel's ");
-            if (!extraContent.isEmpty()) extraContent.append("\n");
-            action.append("Bitrate was **Updated**");
-            extraContent.appendFormatted("**Old Bitrate:** %dkbps, **New Bitrate:** %dkbps", oldBitrate, newBitrate);
-        }
-        if (!action.isEmpty()) {
-            return String.format(channelUpdateFormat, channelName, action, extraContent);
-        }
-        return "";
-    }
-
-    private static String logChannelMove(String channelName, TextChannel oldChannel, TextChannel newChannel, GuildObject guild) {
-        int oldPosition = oldChannel.getPosition();
-        int newPosition = newChannel.getPosition();
-        ICategory oldCategory = oldChannel.getCategory();
-        ICategory newCategory = newChannel.getCategory();
-        String oldCategoryName = oldCategory == null ? "No Category" : oldCategory.getName();
-        String newCategoryName = newCategory == null ? "No Category" : newCategory.getName();
-        StringHandler action = new StringHandler();
-        StringHandler extraContent = new StringHandler();
-
-        if (!oldCategory.equals(newCategory)) {
-            if (!action.isEmpty()) action.append(" and it's ");
-            if (!extraContent.isEmpty()) extraContent.append("\n");
-            action.append("Category was **Changed**");
-            extraContent.appendFormatted("**Old Category:** %s, **New Category:** %s", oldCategoryName, newCategoryName);
-//            if ((newChannel instanceof VoiceChannel ? guild.get().getVoiceChannels().size() : guild.get().getChannels().size()) > 1) {
-//                extraContent.appendFormatted("\n**Old Position:** %d, **New Position:** %d", oldPosition, newPosition);
+//    public static void logChannelUpdate(GuildObject guild, GuildChannel oldChannel, GuildChannel newChannel) {
+//        if (!guild.config.moduleLogging) return;
+//        if (!guild.config.channelLogging) return;
+//        boolean isVoice = newChannel.getType() == ChannelType.VOICE;
+//        List<String> logs = new LinkedList<>();
+//        String newChannelName;
+//        if (newChannel instanceof TextChannel) {
+//            newChannelName = ((TextChannel) newChannel).getAsMention();
+//        } else {
+//            newChannelName = newChannel.getName();
+//        }
+//        int oldPosition = oldChannel.getPosition();
+//        int newPosition = newChannel.getPosition();
+//        Category oldCategory = oldChannel.getParent();
+//        Category newCategory = newChannel.getParent();
+//        boolean categoryChanged = (!Objects.equals(oldCategory, newCategory));
+//
+//        if (!oldChannel.getName().equalsIgnoreCase(newChannel.getName())) {
+//            logs.add(String.format(channelUpdateFormat, newChannelName, " name was **Updated**", String.format("**Old Name:** %s%s", (isVoice ? "" : "#"), oldChannel.getName())));
+//        } else if (oldPosition != newPosition || categoryChanged) {
+//            logs.add(logChannelMove(newChannelName, oldChannel, newChannel, guild));
+//        }
+//
+//        if (isVoice) {
+//            logs.add(logVoiceUpdate(newChannelName, (VoiceChannel) oldChannel, (VoiceChannel) newChannel));
+//        } else {
+//            if (newChannel instanceof TextChannel && oldChannel instanceof TextChannel) {
+//                logs.add(logTextUpdate(newChannelName, (TextChannel) oldChannel, (TextChannel) newChannel));
 //            }
-        } else if (oldPosition != newPosition) {
-            action.append("Position was **Updated**");
-            extraContent.appendFormatted("**Old Position:** %d, **New Position:** %d", oldPosition, newPosition);
-        }
+//        }
+//        logs = logs.stream().filter(l -> !l.isEmpty()).collect(Collectors.toList());
+//        sendLog(String.join("\n", logs), guild, false);
+//    }
+//
+//    //Text Only
+//    //toggle NSFW, change topic, remove topic, add topic
+//    private static String logTextUpdate(String channelName, TextChannel oldChannel, TextChannel newChannel) {
+//        StringHandler action = new StringHandler();
+//        StringHandler extraContent = new StringHandler();
+//        String oldTopic = oldChannel.getTopic() == null ? "" : oldChannel.getTopic();
+//        String newTopic = newChannel.getTopic() == null ? "" : newChannel.getTopic();
+//        if (oldChannel.isNSFW() != newChannel.isNSFW()) {
+//            action.appendFormatted("NSFW Tag was %s", (newChannel.isNSFW() ? "**Added**" : "**Removed**"));
+//        }
+//
+//        if (!oldTopic.equalsIgnoreCase(newTopic)) {
+//            if (!action.isEmpty()) action.append(" and the Channel's ");
+//            if (oldTopic.isEmpty()) action.append("Topic was **Created**");
+//            else if (newTopic.isEmpty()) action.append("Topic was **Removed**");
+//            else action.append("Topic was **Updated**");
+//
+//            if (!oldTopic.isEmpty()) {
+//                oldTopic = oldChannel.getTopic().length() < 300 ? oldChannel.getTopic() : oldChannel.getTopic().substring(0, 300).concat("...");
+//                extraContent.appendFormatted("**Old Topic:** `%s`", oldTopic);
+//            }
+//            if (!newTopic.isEmpty()) {
+//                if (!extraContent.isEmpty()) extraContent.append("\n");
+//                newTopic = newChannel.getTopic().length() < 300 ? newChannel.getTopic() : newChannel.getTopic().substring(0, 300).concat("...");
+//                extraContent.appendFormatted("**New Topic:** `%s`", newTopic);
+//            }
+//        }
+//        if (!action.isEmpty()) {
+//            return String.format(channelUpdateFormat, channelName, action, extraContent);
+//        }
+//        return "";
+//    }
+//
+//    //Voice only
+//    //Changed User Cap, Changed bitrate
+//    private static String logVoiceUpdate(String channelName, VoiceChannel oldChannel, VoiceChannel newChannel) {
+//        int oldUserCap = oldChannel.getUserLimit();
+//        int newUserCap = newChannel.getUserLimit();
+//        int oldBitrate = oldChannel.getBitrate() / 1000;
+//        int newBitrate = newChannel.getBitrate() / 1000;
+//        StringHandler action = new StringHandler();
+//        StringHandler extraContent = new StringHandler();
+//
+//        if (oldUserCap != newUserCap) {
+//            if (oldUserCap == 0) action.append("User Limit was **Added**");
+//            else if (newUserCap == 0) action.append("User Limit was **Removed**");
+//            else action.append("User Limit was **Updated**");
+//            if (oldUserCap != 0) extraContent.appendFormatted("**Old User Limit:** %d", oldUserCap);
+//            if (newUserCap != 0) {
+//                if (!extraContent.isEmpty()) extraContent.append(", ");
+//                extraContent.appendFormatted("**New User Limit:** %d", newUserCap);
+//            }
+//        }
+//        if (oldBitrate != newBitrate) {
+//            if (!action.isEmpty()) action.append(" and the Channel's ");
+//            if (!extraContent.isEmpty()) extraContent.append("\n");
+//            action.append("Bitrate was **Updated**");
+//            extraContent.appendFormatted("**Old Bitrate:** %dkbps, **New Bitrate:** %dkbps", oldBitrate, newBitrate);
+//        }
+//        if (!action.isEmpty()) {
+//            return String.format(channelUpdateFormat, channelName, action, extraContent);
+//        }
+//        return "";
+//    }
+//
+//    private static String logChannelMove(String channelName, GuildChannel oldChannel, GuildChannel newChannel, GuildObject guild) {
+//        int oldPosition = oldChannel.getPosition();
+//        int newPosition = newChannel.getPosition();
+//        Category oldCategory = oldChannel.getParent();
+//        Category newCategory = newChannel.getParent();
+//        String oldCategoryName = oldCategory == null ? "No Category" : oldCategory.getName();
+//        String newCategoryName = newCategory == null ? "No Category" : newCategory.getName();
+//        StringHandler action = new StringHandler();
+//        StringHandler extraContent = new StringHandler();
+//
+//        if (!oldCategory.equals(newCategory)) {
+//            if (!action.isEmpty()) action.append(" and it's ");
+//            if (!extraContent.isEmpty()) extraContent.append("\n");
+//            action.append("Category was **Changed**");
+//            extraContent.appendFormatted("**Old Category:** %s, **New Category:** %s", oldCategoryName, newCategoryName);
+////            if ((newChannel instanceof VoiceChannel ? guild.get().getVoiceChannels().size() : guild.get().getChannels().size()) > 1) {
+////                extraContent.appendFormatted("\n**Old Position:** %d, **New Position:** %d", oldPosition, newPosition);
+////            }
+//        } else if (oldPosition != newPosition) {
+//            action.append("Position was **Updated**");
+//            extraContent.appendFormatted("**Old Position:** %d, **New Position:** %d", oldPosition, newPosition);
+//        }
+//
+//        if (!action.isEmpty()) {
+//            return String.format(channelUpdateFormat, channelName, action, extraContent);
+//        }
+//        return "";
+//    }
 
-        if (!action.isEmpty()) {
-            return String.format(channelUpdateFormat, channelName, action, extraContent);
-        }
-        return "";
-    }
-
-    public static void doChannelDeleteLog(ChannelDeleteEvent event) {
+    public static void doTextChannelDeleteLog(TextChannelDeleteEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel #" + event.getChannel().getName() + " was deleted.";
             sendLog(log, content, false);
         }
+        updateVariables(event.getChannel().getGuild());
     }
 
-    public static void doChannelCreateLog(ChannelCreateEvent event) {
+    public static void doVoiceChannelDeleteLog(VoiceChannelDeleteEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
-            String log = "> Channel " + event.getChannel().mention() + " was created.";
+            String log = "> Channel " + event.getChannel().getName() + " was deleted.";
             sendLog(log, content, false);
         }
+        updateVariables(event.getChannel().getGuild());
+    }
+
+    public static void updateVariables(Guild guild) {
+        long guildID = guild.getIdLong();
+        GuildObject guildObject = Globals.getGuildContent(guildID);
+        guildObject.config.updateVariables(guild);
+        guildObject.characters.updateVars(guild);
+    }
+
+    public static void doTextChannelCreateLog(TextChannelCreateEvent event) {
+        GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
+        if (!content.config.moduleLogging) return;
+        if (content.config.channelLogging) {
+            String log = "> Channel " + event.getChannel().getAsMention() + " was created.";
+            sendLog(log, content, false);
+        }
+    }
+
+    public static void doVoiceChannelCreateLog(VoiceChannelCreateEvent event) {
+        GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
+        if (!content.config.moduleLogging) return;
+        if (content.config.channelLogging) {
+            String log = "> Channel " + event.getChannel().getName() + " was created.";
+            sendLog(log, content, false);
+        }
+    }
+    public static void doJoinLogging(GuildMemberJoinEvent event) {
+
+    }
+
+    public static void doLeaveLogging(GuildMemberLeaveEvent event) {
+
     }
 
     public static void doJoinLeaveLog(GuildMemberEvent event, boolean joining) {
@@ -344,7 +363,7 @@ public class LoggingHandler {
         sendLog(response, command.guild, false);
     }
 
-    public static void doRoleUpdateLog(UserRoleUpdateEvent event) {
+    public static void doRoleUpdateLog() {
         Guild guild = event.getGuild();
         UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getIdLong()));
         GuildObject content = Globals.getGuildContent(guild.getIdLong());
@@ -415,7 +434,7 @@ public class LoggingHandler {
     }
 
 
-    public static void doBanLog(UserBanEvent event) {
+    public static void doBanLog(GuildBanEvent event) {
         Guild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getIdLong());
         if (!guildObject.config.moduleLogging || !guildObject.config.banLogging) return;
@@ -434,5 +453,37 @@ public class LoggingHandler {
         String reason = lastBan.getReason().isPresent() ? lastBan.getReason().get() : "No reason provided";
         output.appendFormatted(" with reason `%s`", reason);
         sendLog(output.toString(), guildObject, true);
+    }
+
+    public static void doUserRoleAddLogging(GuildMemberRoleAddEvent event){
+
+    }
+
+    public static void doUserRoleRemoveEvent(GuildMemberRoleRemoveEvent event){
+
+    }
+
+    public static void logTextChannelNameUpdate(TextChannel channel, String oldName, String newName) {
+
+    }
+
+    public static void logVoiceChannelNameUpdate(VoiceChannel channel, String oldName, String newName) {
+
+    }
+
+    public static void logTextChannelParentUpdate(TextChannel channel, Category oldParent, Category newParent) {
+
+    }
+
+    public static void logVoiceChannelParentUpdate(VoiceChannel channel, Category oldParent, Category newParent) {
+
+    }
+
+    public static void logTextChannelMoveUpdate(TextChannelUpdatePositionEvent event) {
+
+    }
+
+    public static void logVoiceChannelMoveUpdate(VoiceChannelUpdatePositionEvent event) {
+
     }
 }

@@ -6,6 +6,7 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,8 +15,7 @@ import java.util.stream.Collectors;
 
 public class CreatorHandler {
 
-    @EventSubscriber
-    public void creatorCommands(MessageReceivedEvent event) {
+    public static void creatorCommands(MessageReceivedEvent event) {
         if (event.getAuthor().getIdLong() != Globals.creatorID) return;
         List<Command> commands;
         CommandObject command = new CommandObject(event.getMessage());
@@ -35,8 +35,7 @@ public class CreatorHandler {
         }
     }
 
-    @EventSubscriber
-    public void restart(MessageReceivedEvent event) {
+    public static void restart(MessageReceivedEvent event) {
         CommandObject command = new CommandObject(event.getMessage());
         Restart restart = new Restart();
         if (restart.isCall(event.getMessage().getContent(), command)) {

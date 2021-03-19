@@ -7,13 +7,11 @@ import net.dv8tion.jda.api.entities.Message;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.Message;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -204,15 +202,18 @@ public class FileHandler {
     public static File copyToFile(String filePath, InputStream file) {
         try {
             Path newFile = Paths.get(filePath);
+            FileWriter writer = new FileWriter(filePath);
             try {
                 if (!exists(filePath)) {
                     Files.createFile(newFile);
                 }
-                IOUtils.copy(file, new FileWriter(filePath), StandardCharsets.UTF_8);
+                IOUtils.copy(file, writer);
             } catch (IOException e) {
                 Utility.sendStack(e);
+            } finally {
+                writer.close();
+                file.close();
             }
-            file.close();
             return new File(filePath);
         } catch (IOException e) {
             return null;
