@@ -7,6 +7,9 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.audit.ActionType;
+import net.dv8tion.jda.api.audit.AuditLogEntry;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
@@ -15,31 +18,25 @@ import net.dv8tion.jda.api.events.channel.voice.VoiceChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent;
 import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdatePositionEvent;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
-import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
-import net.dv8tion.jda.api.hooks.IEventManager;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
+import net.dv8tion.jda.api.events.role.update.RoleUpdateHoistedEvent;
+import net.dv8tion.jda.api.events.role.update.RoleUpdateNameEvent;
+import net.dv8tion.jda.api.events.role.update.RoleUpdatePermissionsEvent;
+import net.dv8tion.jda.api.utils.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.internal.DiscordUtils;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.audit.ActionType;
-import sx.blah.discord.handle.audit.entry.AuditLogEntry;
-import sx.blah.discord.handle.audit.entry.TargetedEntry;
-import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
-import sx.blah.discord.handle.impl.events.guild.member.GuildMemberEvent;
-import sx.blah.discord.handle.impl.events.guild.member.UserBanEvent;
-import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
-import sx.blah.discord.handle.impl.obj.VoiceChannel;
-import sx.blah.discord.handle.obj.*;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class LoggingHandler {
@@ -51,11 +48,11 @@ public class LoggingHandler {
         return command.user.longID == command.client.bot.longID;
     }
 
-    private static void sendLog(String message, CommandObject command, boolean isAdmin, EmbedObject... object) {
+    private static void sendLog(String message, CommandObject command, boolean isAdmin, MessageEmbed... object) {
         sendLog(message, command.guild, isAdmin, object);
     }
 
-    public static void sendLog(String message, GuildObject guild, boolean isAdmin, EmbedObject... object) {
+    public static void sendLog(String message, GuildObject guild, boolean isAdmin, MessageEmbed... object) {
         TextChannel channel;
         if (isAdmin) channel = guild.getChannelByType(ChannelSetting.ADMIN_LOG);
         else channel = guild.getChannelByType(ChannelSetting.SERVER_LOG);
@@ -103,25 +100,28 @@ public class LoggingHandler {
     }
 
     private static String getFormattedTimeStamp(CommandObject command, Message message) {
-        long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - message.getTimestamp().atZone(ZoneOffset.UTC).toEpochSecond();
+        return getFormattedTimeStamp(command, message.getTimeCreated().toInstant());
+    }
+
+    private static String getFormattedTimeStamp(CommandObject command, Instant timeStamp) {
+        long difference = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond() - timeStamp.atZone(ZoneOffset.UTC).toEpochSecond();
         StringBuilder formatted = new StringBuilder();
         if (command.guild.config.useTimeStamps) {
-            formatted.append("at `").append(Utility.formatTimestamp(message.getTimestamp().atZone(ZoneOffset.UTC))).append(" - UTC`");
+            formatted.append("at `").append(Utility.formatTimestamp(timeStamp.atZone(ZoneOffset.UTC))).append(" - UTC`");
         } else {
             formatted.append("from ").append(Utility.formatTimeDifference(difference));
         }
         return formatted.toString();
     }
 
-    public static void logDelete(CommandObject command, Message deletedMessage) {
+    public static void logDelete(CommandObject command, MessageDeleteEvent event) {
         if (!command.guild.config.deleteLogging) return;
         if (!shouldLog(command)) return;
-        if (messageEmpty(deletedMessage)) return;
-        String timestamp = getFormattedTimeStamp(command, deletedMessage);
-        String format = "> **@%s's** Message %s was **Deleted** in messageChannel: %s";
+        Instant time = TimeUtil.getTimeCreated(event.getMessageIdLong()).toInstant();
+        String timestamp = getFormattedTimeStamp(command, time);
+        String format = "> Message %s was **Deleted** in messageChannel: %s";
         //add all of the args
         List<String> vars = new ArrayList<>();
-        vars.add(command.user.username);
         vars.add(timestamp);
         vars.add(command.guildChannel.mention);
         sendLog(String.format(format, vars.toArray()), command, false);
@@ -304,6 +304,7 @@ public class LoggingHandler {
             sendLog(log, content, false);
         }
     }
+
     public static void doJoinLogging(GuildMemberJoinEvent event) {
 
     }
@@ -333,34 +334,16 @@ public class LoggingHandler {
         }
     }
 
-    public static void doMessageEditLog(CommandObject command, Message oldMessage, Message newMessage) {
+    public static void doMessageEditLog(CommandObject command) {
         if (!shouldLog(command)) return;
 
         if (!command.guild.config.editLogging) return;
         //formats how long ago this was.
-        int charLimit;
-        if (command.guild.config.extendEditLog) {
-            charLimit = 900;
-        } else {
-            charLimit = 1800;
+        if (command.message.get().getTimeEdited() != null) {
+            String response = String.format("> **@%s's** Message %s was **Edited** in messageChannel: %s.", command.user.username,
+                    getFormattedTimeStamp(command, Objects.requireNonNull(command.message.get().getTimeEdited()).toInstant()), command.guildChannel.mention);
+            sendLog(response, command.guild, false);
         }
-
-        String oldContent = oldMessage.getContent() == null ? "" : Utility.unFormatMentions(oldMessage);
-        String newContent = newMessage.getContent() == null ? "" : Utility.unFormatMentions(newMessage);
-        oldContent = oldContent.length() > charLimit ? oldContent.substring(0, charLimit).concat("...") : oldContent;
-        newContent = newContent.length() > charLimit ? newContent.substring(0, charLimit).concat("...") : newContent;
-        StringBuilder extraContent = new StringBuilder();
-
-        if (command.message.get().getContent().isEmpty()) return;
-
-        extraContent.append("**\nMessage's Old Contents:**\n" + oldContent);
-        if (command.guild.config.extendEditLog) {
-            extraContent.append("\n**Message's New Contents:**\n" + newContent);
-        }
-
-        String response = String.format("> **@%s's** Message %s was **Edited** in messageChannel: %s.\n%s", command.user.username,
-                getFormattedTimeStamp(command, oldMessage), command.guildChannel.mention, extraContent);
-        sendLog(response, command.guild, false);
     }
 
     public static void doRoleUpdateLog() {
@@ -392,10 +375,10 @@ public class LoggingHandler {
      * @param guild the Guild the globalUser left.
      * @param user  the User that left the server.
      */
-    private static void doKickLog(Guild guild, IUser user) {
-        IUser botUser = Client.getClient().getOurUser();
+    private static void doKickLog(Guild guild, User user) {
+        Member botUser = guild.getMember(Client.getClient().getSelfUser());
         //test if the bot has auditLog perms
-        if (!GuildHandler.testForPerms(botUser, guild, Permissions.VIEW_AUDIT_LOG)) return;
+        if (!GuildHandler.testForPerms(botUser, guild, Permission.VIEW_AUDIT_LOGS)) return;
 
         //getTimestampZone
         long timeStamp = Instant.now().atZone(ZoneOffset.UTC).toEpochSecond() * 1000;
@@ -405,27 +388,30 @@ public class LoggingHandler {
         StringHandler kickLog = new StringHandler("**@%s#%s** has been **Kicked** by **@%s#%s**");
 
         // do some checks to make sure the globalUser was in fact kicked
-        List<TargetedEntry> kicksLog = guild.getAuditLog(ActionType.MEMBER_KICK).getEntriesByTarget(user.getIdLong());
-        if (kicksLog.size() == 0) return;
+        List<AuditLogEntry> kicksLog = guild.retrieveAuditLogs().stream().filter(auditLogEntry -> {
+            return auditLogEntry.getType() == ActionType.KICK && auditLogEntry.getTargetIdLong() == user.getIdLong();
+        }).collect(Collectors.toList());
+        if (kicksLog.isEmpty()) return;
 
         //sort kickLog and get latest entry
-        kicksLog.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getIdLong()).toEpochMilli()));
+        kicksLog.sort(Comparator.comparingLong(o -> TimeUtil.getTimeCreated(o.getIdLong()).toInstant().toEpochMilli()));
         AuditLogEntry lastKick = kicksLog.get(kicksLog.size() - 1);
 
         //get the latest entry's timestamp
-        long lastKickTime = DiscordUtils.getSnowflakeTimeFromID(lastKick.getIdLong()).toEpochMilli();
+        long lastKickTime = TimeUtil.getTimeCreated(lastKick.getIdLong()).toInstant().toEpochMilli();
 
         //get globalUser responsible
-        IUser responsible = lastKick.getResponsibleUser();
+        User responsible = lastKick.getUser();
+        if (responsible == null) return;
 
         // Check if timestamp is within fifteen seconds either way, lastKick is valid.
         long timeDiff = Math.abs(timeStamp - lastKickTime);
         if (timeDiff > 15000) return;
 
         //format and send message
-        kickLog.format(user.getName(), user.getDiscriminator(), responsible.getName(), responsible.getDiscriminator());
-        if (lastKick.getReason().isPresent()) {
-            kickLog.appendFormatted(" with reason `%s`", lastKick.getReason().get());
+        kickLog.format(user.getName(), user.getDiscriminator(), responsible.getAsTag());
+        if (lastKick.getReason() != null) {
+            kickLog.appendFormatted(" with reason `%s`", lastKick.getReason());
         }
 
         //send log
@@ -438,12 +424,12 @@ public class LoggingHandler {
         Guild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getIdLong());
         if (!guildObject.config.moduleLogging || !guildObject.config.banLogging) return;
-        if (!GuildHandler.testForPerms(Client.getClient().getOurUser(), guild, Permissions.VIEW_AUDIT_LOG)) return;
+        if (!GuildHandler.testForPerms(guild.getMember(Client.getClient().getSelfUser()), guild, Permission.VIEW_AUDIT_LOGS)) return;
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
 
         // get recent bans
-        List<TargetedEntry> recentBans = event.getGuild().getAuditLog(ActionType.MEMBER_BAN_ADD).getEntriesByTarget(event.getUser().getIdLong());
+        List<AuditLogEntry> recentBans = event.getGuild().retrieveAuditLogs(ActionType.MEMBER_BAN_ADD).getEntriesByTarget(event.getUser().getIdLong());
         if (recentBans.size() == 0) return;
         // and sort them. last entry is most recent.
         recentBans.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getIdLong()).toEpochMilli()));
@@ -455,11 +441,11 @@ public class LoggingHandler {
         sendLog(output.toString(), guildObject, true);
     }
 
-    public static void doUserRoleAddLogging(GuildMemberRoleAddEvent event){
+    public static void doUserRoleAddLogging(GuildMemberRoleAddEvent event) {
 
     }
 
-    public static void doUserRoleRemoveEvent(GuildMemberRoleRemoveEvent event){
+    public static void doUserRoleRemoveEvent(GuildMemberRoleRemoveEvent event) {
 
     }
 
@@ -486,4 +472,17 @@ public class LoggingHandler {
     public static void logVoiceChannelMoveUpdate(VoiceChannelUpdatePositionEvent event) {
 
     }
+
+    public static void logRoleNameUpdateEvent(RoleUpdateNameEvent event) {
+
+    }
+
+    public static void logRolePermissionEvent(RoleUpdatePermissionsEvent event) {
+
+    }
+
+    public static void logRoleHoistedEvent(RoleUpdateHoistedEvent event) {
+
+    }
+
 }

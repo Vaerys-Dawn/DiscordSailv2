@@ -4,11 +4,16 @@ import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.guildtoggles.ToggleList;
+import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.internal.entities.AbstractMessage;
+import net.dv8tion.jda.internal.entities.DataMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +97,7 @@ public abstract class GuildToggle {
             response.append("   > " + prefix + " type is empty.\n");
             isError = true;
         }
-        if (desc(new CommandObject()) == null || desc(new CommandObject()).isEmpty()) {
+        if (desc(new CommandObject(Globals.defaultMessage, Globals.defaultMessage.getGuild())) == null || desc(new CommandObject(Globals.defaultMessage, Globals.defaultMessage.getGuild())).isEmpty()) {
             response.append("   > " + prefix + " description is empty.\n");
             isError = true;
         }

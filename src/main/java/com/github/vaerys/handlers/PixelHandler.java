@@ -4,6 +4,7 @@ import com.github.vaerys.commands.general.ProfileSettings;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -21,7 +22,6 @@ import emoji4j.EmojiUtils;
 import net.dv8tion.jda.api.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.*;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -118,11 +118,11 @@ public class PixelHandler {
         if (userObject.getSettings().contains(DENY_AUTO_ROLE)) return;
 
         //check if globalUser is on the server.
-        User user = Globals.getClient().getUserByID(userObject.getUserID());
+        Member user = content.get().getMemberById(id);
         if (user == null) {
             return;
         }
-        List<Role> userRoles = user.getRolesForGuild(content.get());
+        List<Role> userRoles = user.getRoles();
         //remove all rewardRoles to prep for checking.
         ListIterator iterator = userRoles.listIterator();
         while (iterator.hasNext()) {
@@ -145,7 +145,7 @@ public class PixelHandler {
             }
         }
         //only do a role update if the role count changes
-        List<Role> currentRoles = user.getRolesForGuild(content.get());
+        List<Role> currentRoles = user.getRoles();
         if (!currentRoles.containsAll(userRoles) || currentRoles.size() != userRoles.size()) {
             RequestHandler.roleManagement(user, content.get(), userRoles);
         }
@@ -191,13 +191,13 @@ public class PixelHandler {
         deniedPrefixes.add(object.guild.config.getPrefixCC());
         deniedPrefixes.add(object.guild.config.getPrefixAdminCC());
         for (String s : deniedPrefixes) {
-            if (object.message.get().getContent().startsWith(s)) {
+            if (object.message.get().getContentRaw().startsWith(s)) {
                 return;
             }
         }
 
         //you must have typed at least 10 chars to gain xp and doesn't contain an image.
-        if (object.message.get().getContent().length() < 10 &&
+        if (object.message.get().getContentRaw().length() < 10 &&
                 object.message.get().getAttachments().isEmpty()) return;
 
         //you cannot gain xp in an xpDenied messageChannel
@@ -268,7 +268,7 @@ public class PixelHandler {
         boolean rankedUp = reward != null;
         TextChannel levelChannel = object.guild.getChannelByType(ChannelSetting.LEVEL_UP);
         TextChannel currentChannel = object.guildChannel.get();
-        TextChannel dmChannel = object.user.getDmChannel();
+        PrivateChannel dmChannel = object.user.getDmChannel();
         Message levelMessage = null;
 
         //force override
@@ -334,7 +334,7 @@ public class PixelHandler {
      * @param doGif    weather the gif should be displayed.
      * @return the message that was sent.
      */
-    private static Message sendLevelMessage(String message, TextChannel channel, boolean isRankUp, boolean doGif) {
+    private static Message sendLevelMessage(String message, MessageChannel channel, boolean isRankUp, boolean doGif) {
         return doGif ?
                 (RequestHandler.sendEmbededImage(message, isRankUp ? Constants.RANK_UP_IMAGE_URL : Constants.LEVEL_UP_IMAGE_URL, channel).get()) :
                 (RequestHandler.sendMessage(message, channel).get());

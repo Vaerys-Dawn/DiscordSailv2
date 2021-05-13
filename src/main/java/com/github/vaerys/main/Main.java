@@ -1,29 +1,23 @@
 package com.github.vaerys.main;
 
 import com.github.vaerys.enums.FilePaths;
-import com.github.vaerys.handlers.*;
+import com.github.vaerys.handlers.FileHandler;
+import com.github.vaerys.handlers.PatchHandler;
+import com.github.vaerys.handlers.TimerHandler;
 import com.github.vaerys.pogos.Config;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.templates.FileFactory;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.Discord4J;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.api.events.EventDispatcher;
-import sx.blah.discord.handle.obj.TextChannel;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.RateLimitException;
 
 import javax.security.auth.login.LoginException;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Vaerys on 19/05/2016.
@@ -117,7 +111,7 @@ public class Main {
 
             // initialize creatorID if it is completely unset:
             if (config.creatorID == 0) {
-                IUser botOwner = client.getApplicationOwner();
+                User botOwner = client.getSelfUser().getApplicationOwner();
                 config.creatorID = botOwner.getIdLong();
                 Globals.creatorID = config.creatorID;
 
@@ -152,14 +146,15 @@ public class Main {
                 return;
             }
             if (Globals.consoleMessageCID != -1) {
-                TextChannel channel = Globals.getClient().getChannelByID(Globals.consoleMessageCID);
+                TextChannel channel = Client.getClient().getTextChannelById(Globals.consoleMessageCID);
 
-                message = message.replace("#Dawn#", Globals.getClient().getUserByID(153159020528533505L).getName());
+                if (channel == null) return;
+                message = message.replace("#Dawn#", Client.getClient().getUserById(153159020528533505L).getName());
                 message = message.replace("teh", "the");
                 message = message.replace("Teh", "The");
-//            System.out.println(message);
+                logger.info(message);
                 if (!message.equals("")) {
-                    RequestHandler.sendMessage(message, channel);
+                    channel.sendMessage(message).queue();
                 }
             }
         }

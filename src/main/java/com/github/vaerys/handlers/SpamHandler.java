@@ -15,11 +15,11 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.*;
 
 import java.time.Instant;
 import java.util.*;
@@ -64,9 +64,9 @@ public class SpamHandler {
                         // add an automated note to the globalUser.
                         command.user.getProfile().addSailModNote(report, command, false);
                         if (admin != null) {
-                            RequestHandler.sendMessage(report + " in " + command.guildChannel.get().mention() + ".", admin);
+                            admin.sendMessage(report + " in " + command.guildChannel.get().getAsMention() + ".").queue();
                         } else {
-                            RequestHandler.sendMessage(report + ".", command.guildChannel.get());
+                            command.guildChannel.queueMessage(report + ".");
                         }
                         return true;
                     }
@@ -81,21 +81,21 @@ public class SpamHandler {
     public static boolean checkMentionCount(CommandObject command) {
         Message message = command.message.get();
         GuildConfig guildconfig = command.guild.config;
-        IUser author = command.user.get();
+        Member author = command.user.getMember();
         List<Role> oldRoles = command.user.roles;
         Guild guild = command.guild.get();
 
         List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
         if (channels.contains(command.guildChannel.get())) return false;
 
-        if (GuildHandler.testForPerms(command, Permissions.MENTION_EVERYONE)) return false;
+        if (GuildHandler.testForPerms(command, Permission.MESSAGE_MENTION_EVERYONE)) return false;
 
         if (message.toString().contains("@everyone") || message.toString().contains("@here")) {
             return false;
         }
         if (guildconfig.maxMentions) {
             if (message.getMentions().size() > 8) {
-                RequestHandler.deleteMessage(message);
+                message.delete().queue();
                 int i = 0;
                 boolean offenderFound = false;
                 for (OffenderObject o : guildconfig.getOffenders()) {
@@ -109,23 +109,23 @@ public class SpamHandler {
                             command.guild.users.muteUser(command, -1);
                             command.guild.sendDebugLog(command, "STOP_MASS_MENTIONS", "MUTE", o.getCount() + " Offences");
                             // add strike in modnote
-                            command.user.getProfile().addSailModNote(String.format(report, author.mention()), command, false);
+                            command.user.getProfile().addSailModNote(String.format(report, author.getAsMention()), command, false);
                             // send admin notification
-                            RequestHandler.sendMessage(String.format(report, author.mention()), command.guildChannel.get());
+                            command.guildChannel.queueMessage(String.format(report, author.getAsMention()));
                         }
                     }
                 }
                 if (!offenderFound) {
                     guildconfig.addOffender(new OffenderObject(author.getIdLong()));
                 }
-                String response = "\\> <mentionAdmin>, " + author.mention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message in " + command.guildChannel.mention + ".";
+                String response = "\\> <mentionAdmin>, " + author.getAsMention() + "  has attempted to post more than " + guildconfig.getMaxMentionLimit() + " Mentions in a single message in " + command.guildChannel.mention + ".";
                 Role roleToMention = command.guild.getRoleById(guildconfig.getRoleToMentionID());
                 if (roleToMention != null) {
-                    response = response.replaceAll("<mentionAdmin>", roleToMention.mention());
+                    response = response.replaceAll("<mentionAdmin>", roleToMention.getAsMention());
                 } else {
                     response = response.replaceAll("<mentionAdmin>", "Admin");
                 }
-                RequestHandler.sendMessage(response, command.guildChannel.get());
+                command.guildChannel.queueMessage(response);
                 return true;
             }
         }
@@ -136,9 +136,9 @@ public class SpamHandler {
     public static boolean rateLimiting(CommandObject command) {
         //make sure that the rate limiting should actually happen
         if (!command.guild.config.rateLimiting) return false;
-        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
+        if (GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE)) return false;
         if (command.guildChannel.settings.contains(ChannelSetting.MUTE_APPEALS)) return false;
-        if (command.guild.users.isUserMuted(command.user.get())) return false;
+        if (command.guild.users.isUserMuted(command.user.getMember())) return false;
 
         //ignore spam in tagged channels
         List<TextChannel> channels = command.guild.getChannelsByType(ChannelSetting.IGNORE_SPAM);
@@ -150,8 +150,8 @@ public class SpamHandler {
         //Force Reset rate limiter if things go wrong
         if (Globals.lastRateLimitReset + 20 * 1000 < System.currentTimeMillis()) {
             command.guild.resetRateLimit();
-            RequestHandler.sendMessage("\\> Forced Rate Limit Reset. **Guild ID:** " + command.guild.longID +
-                    ", **Guild Name:** " + command.guild.get().getName(), command.client.creator.getDmChannel());
+            command.client.creator.queueDm("\\> Forced Rate Limit Reset. **Guild ID:** " + command.guild.longID +
+                    ", **Guild Name:** " + command.guild.get().getName());
         }
 
         //check if globalUser is rate limited
@@ -202,12 +202,12 @@ public class SpamHandler {
         }
         Message message = command.message.get();
         Guild guild = command.guild.get();
-        IUser author = command.user.get();
+        Member author = command.user.getMember();
         List<String> inviteformats = new ArrayList<String>() {{
             add("discord.gg");
             add("discordapp.com/Invite");
         }};
-        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
+        if (GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE)) return false;
 
         boolean inviteFound = false;
         boolean shouldDelete = false;
@@ -236,9 +236,9 @@ public class SpamHandler {
             } else {
                 response = "\\> " + command.user.mention() + ", please do not post Instant Invites.";
             }
-            RequestHandler.deleteMessage(message);
-            command.guild.sendDebugLog(command, "INVITE_REMOVAL", "REMOVED", message.getContent());
-            RequestHandler.sendMessage(response, command.guildChannel.get());
+            message.delete().queue();
+            command.guild.sendDebugLog(command, "INVITE_REMOVAL", "REMOVED", message.getContentRaw());
+            command.guildChannel.queueMessage(response);
             return true;
         }
         return false;
@@ -248,13 +248,13 @@ public class SpamHandler {
         // This is not something guilds can turn on/off, it is a temporary blacklist to keep spammers from abusing bot commands.
 
         //exit thinger if is staff or can bypass
-        if (GuildHandler.testForPerms(command, Permissions.MANAGE_MESSAGES)) return false;
+        if (GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE)) return false;
 
         // check if this is even a command first:
         List<Command> commands = new ArrayList<>(command.guild.commands);
         boolean isCommand = false;
         for (Command c : commands) {
-            if (c.isCall(command.message.get().getContent(), command)) {
+            if (c.isCall(command.message.get().getContentRaw(), command)) {
                 isCommand = true;
                 break;
             }

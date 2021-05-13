@@ -18,8 +18,11 @@ import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.FileFactory;
 import com.github.vaerys.templates.GlobalFile;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.internal.entities.DataMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +67,7 @@ public class Globals {
     public static int maxReminderSlots = 5;
     public static String errorStack = null;
     public static long reactionCount = 0;
+    public static Message defaultMessage = new DataMessage(false, "", "", new EmbedBuilder().build());
     private static List<GuildObject> guilds = new LinkedList<>();
     private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
     private static List<LogObject> allLogs = new LinkedList<>();

@@ -8,44 +8,13 @@ import com.github.vaerys.masterobjects.*;
 import com.github.vaerys.objects.utils.LogObject;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateNameEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateParentEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdatePositionEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateNameEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateParentEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdatePositionEvent;
-import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
-import net.dv8tion.jda.api.events.role.update.GenericRoleUpdateEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.*;
-import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
-import sx.blah.discord.handle.impl.events.guild.member.UserBanEvent;
-import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
-import sx.blah.discord.handle.impl.events.guild.member.UserLeaveEvent;
-import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
-import sx.blah.discord.handle.impl.events.guild.role.RoleDeleteEvent;
-import sx.blah.discord.handle.impl.events.guild.role.RoleUpdateEvent;
-import sx.blah.discord.handle.impl.events.guild.voice.VoiceChannelUpdateEvent;
-import sx.blah.discord.handle.impl.obj.ReactionEmoji;
-import sx.blah.discord.handle.obj.Guild;
-import sx.blah.discord.handle.obj.Message;
-import sx.blah.discord.handle.obj.Permissions;
 
 /**
  * Created by Vaerys on 03/08/2016.
@@ -146,7 +115,7 @@ public class EventHandler {
         if (emoji.isEmoji()) {
             //if is x and can bypass
             if (emoji.equals(remove)) ArtHandler.unPin(object);
-            if (emoji.equals(x) && GuildHandler.testForPerms(event.getUser(), event.getGuild(), Permission.MESSAGE_MANAGE) &&
+            if (emoji.equals(x) && GuildHandler.testForPerms(event.getMember(), event.getGuild(), Permission.MESSAGE_MANAGE) &&
                     object.client.bot.longID == object.user.longID) {
                 RequestHandler.deleteMessage(object.message);
             }
@@ -174,10 +143,12 @@ public class EventHandler {
     public static void onMessageDeleteEvent(MessageDeleteEvent event) {
         if (event.getChannel() instanceof PrivateChannel) return;
         if (!Globals.isReady) return;
-        if (event.getGuild().getUserByID(event.getAuthor().getIdLong()) == null) return;
-        CommandObject command = new CommandObject(event.getMessage());
-        if (!command.guild.config.moduleLogging) return;
-        LoggingHandler.logDelete(command, event.getMessage());
+        if (event.getChannel() instanceof TextChannel) {
+            TextChannel channel = event.getTextChannel();
+            CommandObject command = new CommandObject(Globals.getGuildContent(event.getGuild().getIdLong()), channel);
+            if (!command.guild.config.moduleLogging) return;
+            LoggingHandler.logDelete(command, event);
+        }
     }
 
     public static void onUserJoinEvent(GuildMemberJoinEvent event) {
@@ -190,7 +161,7 @@ public class EventHandler {
             JoinHandler.checkNewUsers(content, event, user);
         }
         if (content.config.moduleJoinMessages && content.config.sendJoinMessages) {
-            JoinHandler.customJoinMessages(content, event.getUser());
+            JoinHandler.customJoinMessages(content, event.getMember());
         }
         GuildHandler.checkUsersRoles(user.longID, content);
         JoinHandler.autoReMute(event, content, user);
@@ -198,13 +169,9 @@ public class EventHandler {
     }
 
     public static void onMessageUpdateEvent(MessageUpdateEvent event) {
-        if (event.getOldMessage() == null || event.getNewMessage() == null) return;
-        if (event.getNewMessage().getContent() == null || event.getOldMessage().getContent() == null) return;
-        if (event.getNewMessage().getContent().isEmpty() || event.getOldMessage().getContent().isEmpty()) return;
-        if (event.getNewMessage().getContent().equals(event.getOldMessage().getContent())) return;
-        if (event.getChannel().isPrivate()) return;
-        CommandObject command = new CommandObject(event.getMessage());
+        if (event.getChannel() instanceof PrivateChannel) return;
+        CommandObject command = new CommandObject(event.getMessage(), event.getGuild());
 
-        LoggingHandler.doMessageEditLog(command, event.getOldMessage(), event.getNewMessage());
+        LoggingHandler.doMessageEditLog(command);
     }
 }
