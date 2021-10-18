@@ -20,6 +20,7 @@ import com.github.vaerys.templates.FileFactory;
 import com.github.vaerys.templates.GlobalFile;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.internal.entities.DataMessage;
@@ -67,7 +68,7 @@ public class Globals {
     public static int maxReminderSlots = 5;
     public static String errorStack = null;
     public static long reactionCount = 0;
-    public static Message defaultMessage = new DataMessage(false, "", "", new EmbedBuilder().build());
+    public static Message defaultMessage = new DataMessage(false, "", "", List.of());
     private static List<GuildObject> guilds = new LinkedList<>();
     private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
     private static List<LogObject> allLogs = new LinkedList<>();
@@ -179,23 +180,22 @@ public class Globals {
     }
 
     public static boolean isCreatorValid() {
-        User creator = Client.getClient().getUserById(creatorID);
+        User creator = Client.getClient().retrieveUserById(creatorID).complete();
         if (creator == null) {
-            logger.error("\nError:" + "   > creatorID is invalid.");
+            logger.error("Error: creatorID is invalid.");
             return false;
         }
         // check if the creator is a thinger in guilds?
-        if (Client.getClient().getGuilds().size() == 0) {
-            logger.warn("No guilds to connect to. Will idle for connections.");
-        } else {
-            User user = Client.getClient().getUserById(creatorID);
-            if (user == null) {
-                // hecc
-                logger.error("Could not find creator in any connected guilds. Make sure you are using the right globalUser ID in " + Constants.FILE_CONFIG);
-                return false;
+        if (!Client.getClient().getGuilds().isEmpty()) {
+            for (Guild guild : Client.getClient().getGuilds()) {
+                if (guild.retrieveMember(creator).complete() != null) {
+                    logger.info("> Creator was found in guild {}", guild.getName());
+                    return true;
+                }
             }
         }
-        return true;
+        logger.error("> Could not find creator");
+        return false;
     }
 
     public static void initGuild(GuildObject guild) {

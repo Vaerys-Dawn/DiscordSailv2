@@ -82,7 +82,7 @@ public class ListTags extends Command {
         XEmbedBuilder builder = new XEmbedBuilder(command);
         builder.setTitle("\\> Modes");
         builder.setDescription("```\n" + Utility.listFormatter(getModes(command), false) + "```\n" + missingArgs(command));
-        RequestHandler.sendEmbedMessage(s, builder, command);
+        command.guildChannel.queueMessage(s, builder.build());
     }
 
     @Override

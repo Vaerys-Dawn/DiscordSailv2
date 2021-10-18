@@ -10,6 +10,7 @@ import com.github.vaerys.objects.adminlevel.JoinMessage;
 import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -86,10 +87,15 @@ public class JoinHandler {
         for (MutedUserObject u : content.users.mutedUsers) {
             if (u.getID() == event.getUser().getIdLong()) {
                 TextChannel admin = content.getChannelByType(ChannelSetting.ADMIN);
-                if (admin != null) {
-                    RequestHandler.sendMessage("\\> Looks like " + user.mention() + " has returned, I have muted them again for you.", admin);
+                Role muted = event.getGuild().getRoleById(content.config.getMutedRoleID());
+                if (muted == null)  {
+                    admin.sendMessage("\\> "+ user.mention() +" has returned I attempted to re-mute them but I could not find the Muted role").queue();
+                    return;
                 }
-                RequestHandler.roleManagement(user, content, content.config.getMutedRoleID(), true);
+                if (admin != null) {
+                    admin.sendMessage("\\> Looks like " + user.mention() + " has returned, I have muted them again for you.").queue();
+                }
+                event.getGuild().addRoleToMember(user.getMember(), muted).queue();
             }
         }
     }

@@ -34,9 +34,9 @@ public class Commands extends Command {
         List<Command> dmCommands = CommandList.getCommands(true);
         //is creator
         if (command.user.checkIsCreator()) {
-            dmCommands.addAll(CommandList.getCreatorCommands(true));
+            dmCommands.addAll(CommandList.getCreatorCommands());
             //add creator type and page
-            List<Command> creatorCommands = CommandList.getCreatorCommands(false);
+            List<Command> creatorCommands = CommandList.getCreatorCommands();
             pages.put(SAILType.CREATOR, buildPage(creatorCommands, command, SAILType.CREATOR, types));
             types.add(SAILType.CREATOR);
         }

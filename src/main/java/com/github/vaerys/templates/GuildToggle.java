@@ -97,10 +97,10 @@ public abstract class GuildToggle {
             response.append("   > " + prefix + " type is empty.\n");
             isError = true;
         }
-        if (desc(new CommandObject(Globals.defaultMessage, Globals.defaultMessage.getGuild())) == null || desc(new CommandObject(Globals.defaultMessage, Globals.defaultMessage.getGuild())).isEmpty()) {
-            response.append("   > " + prefix + " description is empty.\n");
-            isError = true;
-        }
+//        if (desc(new CommandObject(Globals.defaultMessage, Globals.defaultMessage.getGuild())) == null || desc(new CommandObject(Globals.defaultMessage, Globals.defaultMessage.getGuild())).isEmpty()) {
+//            response.append("   > " + prefix + " description is empty.\n");
+//            isError = true;
+//        }
         if (isError) {
             return response.toString();
         } else {

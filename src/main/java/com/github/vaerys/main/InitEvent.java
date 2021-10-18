@@ -11,14 +11,7 @@ public class InitEvent {
 
     public static void initBot() {
         //makes sure that nothing in the config file will cause an error
-        if (!Globals.isCreatorValid()) {
-            System.exit(Constants.EXITCODE_STOP);
-        }
-        Globals.loadContributors();
-        Main.consoleInput();
-        Globals.isReady = true;
-        RequestHandler.changePresence(Globals.playing);
-        RequestHandler.updateUsername(Globals.botName);
+
     }
 
 }

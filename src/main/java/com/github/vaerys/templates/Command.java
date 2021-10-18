@@ -72,7 +72,7 @@ public abstract class Command {
     public abstract String execute(String args, CommandObject command);
 
     public String executeDm(String args, DmCommandObject command) {
-        return "";
+        return "> This command does not have a DM implementation, if you encounter this message please respond to this dm with the command that you attempted to use.";
     }
 
 

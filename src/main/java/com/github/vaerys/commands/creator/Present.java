@@ -15,7 +15,7 @@ public class Present extends Command {
     public String execute(String args, CommandObject command) {
         if (!command.guild.config.modulePixels && !command.guild.config.xpGain) return "\\> Cannot give gift right now :C";
         Message message = command.guildChannel.sendMessage("\\> Click Me :D");
-        message.addReaction(Utility.getReaction("gift"));
+        message.addReaction(Utility.getReaction("gift").getEmote()).complete();
         Globals.getGlobalData().setPresentId(message.getIdLong());
         return null;
     }

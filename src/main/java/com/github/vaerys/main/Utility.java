@@ -14,6 +14,8 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
+import emoji4j.Emoji;
+import emoji4j.EmojiManager;
 import emoji4j.EmojiUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -1038,7 +1040,7 @@ public class Utility {
         }
     }
 
-    public static MessageReaction.ReactionEmote getReaction(String x) {
+   public static MessageReaction.ReactionEmote getReaction(String x) {
         return MessageReaction.ReactionEmote.fromUnicode(EmojiUtils.getEmoji(x).getEmoji(), Client.getClient());
     }
 }

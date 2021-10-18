@@ -294,11 +294,11 @@ public class SpamHandler {
                     long diffTime = blUser.getEndTime() - Instant.now().toEpochMilli();
 
                     if (blUser.getCounter() >= 5) {
-                        RequestHandler.sendMessage("\\> OKAY, ENOUGH " + user.mention() + ". You've been permanently blacklisted from using commands.", command.guildChannel);
-                        RequestHandler.sendCreatorDm(String.format("\\> @%s(%d) was blacklisted from using commands", user.username, user.longID));
+                        command.guildChannel.queueMessage("\\> OKAY, ENOUGH " + user.mention() + ". You've been permanently blacklisted from using commands.");
+                        command.client.creator.queueDm(String.format("\\> @%s(%d) was blacklisted from using commands", user.username, user.longID));
                     } else {
-                        RequestHandler.sendMessage("\\> You're using commands too much " + user.mention() +
-                                ". Take a chill pill, and try again in " + Utility.formatTime(diffTime / 1000, true), command.guildChannel);
+                        command.guildChannel.queueMessage("\\> You're using commands too much " + user.mention() +
+                                ". Take a chill pill, and try again in " + Utility.formatTime(diffTime / 1000, true));
                     }
 
                     spamCounter.remove(userID);

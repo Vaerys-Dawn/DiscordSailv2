@@ -1,6 +1,7 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.listeners.LoggingHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -382,7 +383,7 @@ public class TimerHandler {
     private static void doEventFiveMin(ZonedDateTime nowUTC) {
         try {
             Globals.client.awaitReady();
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | IllegalArgumentException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
         }
@@ -516,6 +517,5 @@ public class TimerHandler {
             status = games.get(nextRand);
         }
         RequestHandler.changePresence(status);
-        return;
     }
 }

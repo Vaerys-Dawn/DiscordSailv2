@@ -48,7 +48,7 @@ public class CCHandler {
 
         List<TextChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
         if (ccDenied.contains(command.guildChannel.get())) {
-            RequestHandler.sendMessage("\\> Custom Command usage has been disabled for this messageChannel.", command.guildChannel);
+            command.guildChannel.queueMessage("\\> Custom Command usage has been disabled for this messageChannel.");
             return;
         }
 
@@ -113,7 +113,7 @@ public class CCHandler {
 
         List<TextChannel> ccDenied = command.guild.getChannelsByType(ChannelSetting.CC_DENIED);
         if (ccDenied.contains(command.guildChannel.get())) {
-            RequestHandler.sendMessage("\\> Custom Command usage has been disabled for this messageChannel.", command.guildChannel);
+            command.guildChannel.queueMessage("\\> Custom Command usage has been disabled for this messageChannel.");
             return;
         }
 

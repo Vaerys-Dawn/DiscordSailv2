@@ -1,32 +1,27 @@
-package com.github.vaerys.handlers;
+package com.github.vaerys.listeners;
 
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.handlers.GuildHandler;
+import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.masterobjects.UserObject;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.audit.ActionType;
 import net.dv8tion.jda.api.audit.AuditLogEntry;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdatePositionEvent;
 import net.dv8tion.jda.api.events.channel.voice.VoiceChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdatePositionEvent;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
+import net.dv8tion.jda.api.events.guild.member.*;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
-import net.dv8tion.jda.api.events.role.update.RoleUpdateHoistedEvent;
-import net.dv8tion.jda.api.events.role.update.RoleUpdateNameEvent;
-import net.dv8tion.jda.api.events.role.update.RoleUpdatePermissionsEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.TimeUtil;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +34,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class LoggingHandler {
+public class LoggingHandler extends ListenerAdapter {
 
     private final static Logger logger = LoggerFactory.getLogger(LoggingHandler.class);
 
+
+    private static final String JOIN_LEAVE_FORMAT = "> **@%s#%s** %s.\n**Current Users:** %s.";
 
     private static boolean isSailMessage(CommandObject command) {
         return command.user.longID == command.client.bot.longID;
@@ -58,8 +55,8 @@ public class LoggingHandler {
         else channel = guild.getChannelByType(ChannelSetting.SERVER_LOG);
         if (channel == null) return;
         message = message.replaceAll("(?i)@(here|everyone)", "[REDACTED]");
-        if (object.length == 0 || object[0] == null) RequestHandler.sendMessage(message, channel);
-        else RequestHandler.sendEmbed(message, object[0], channel);
+        if (object.length == 0 || object[0] == null) channel.sendMessage(message).queue();
+        else channel.sendMessage(message).embed(object[0]).queue();
     }
 
     private static boolean shouldLog(CommandObject command) {
@@ -260,22 +257,25 @@ public class LoggingHandler {
 //        return "";
 //    }
 
-    public static void doTextChannelDeleteLog(TextChannelDeleteEvent event) {
+
+    @Override
+    public void onTextChannelDelete(@NotNull TextChannelDeleteEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel #" + event.getChannel().getName() + " was deleted.";
-            sendLog(log, content, false);
+            LoggingHandler.sendLog(log, content, false);
         }
         updateVariables(event.getChannel().getGuild());
     }
 
-    public static void doVoiceChannelDeleteLog(VoiceChannelDeleteEvent event) {
+    @Override
+    public void onVoiceChannelDelete(@NotNull VoiceChannelDeleteEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel " + event.getChannel().getName() + " was deleted.";
-            sendLog(log, content, false);
+            LoggingHandler.sendLog(log, content, false);
         }
         updateVariables(event.getChannel().getGuild());
     }
@@ -287,7 +287,8 @@ public class LoggingHandler {
         guildObject.characters.updateVars(guild);
     }
 
-    public static void doTextChannelCreateLog(TextChannelCreateEvent event) {
+    @Override
+    public void onTextChannelCreate(@NotNull TextChannelCreateEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
@@ -296,7 +297,8 @@ public class LoggingHandler {
         }
     }
 
-    public static void doVoiceChannelCreateLog(VoiceChannelCreateEvent event) {
+    @Override
+    public void onVoiceChannelCreate(@NotNull VoiceChannelCreateEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
@@ -305,34 +307,29 @@ public class LoggingHandler {
         }
     }
 
-    public static void doJoinLogging(GuildMemberJoinEvent event) {
-
-    }
-
-    public static void doLeaveLogging(GuildMemberLeaveEvent event) {
-
-    }
-
-    public static void doJoinLeaveLog(GuildMemberEvent event, boolean joining) {
-        Guild guild = event.getGuild();
-        GuildObject content = Globals.getGuildContent(guild.getIdLong());
+    @Override
+    public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
+        GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
-
-        String output = "> **@%s#%s** %s.\n**Current Users:** %s."; //name, descriminator, thinger, usercount.
-        output = String.format(output, event.getUser().getName(), event.getUser().getDiscriminator(), "%s", event.getGuild().getUsers().size());
-        //String builder = "> **@" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "** has **%s** the server.\n**Current Users:** " + event.getGuild().getUsers().size() + ".";
-
+        String output = String.format(JOIN_LEAVE_FORMAT, event.getUser().getName(), event.getUser().getDiscriminator(), "has **Joined** the server", event.getGuild().getMemberCount());
         if (content.config.joinLeaveLogging) {
-            if (joining) {
-                sendLog(String.format(output, "has **Joined** the server"), content, false);
-            } else {
-                if (content.config.kickLogging) {
-                    doKickLog(guild, event.getUser());
-                }
-                sendLog(String.format(output, "has **Left** the server"), content, false);
-            }
+            sendLog(output, content, false);
         }
     }
+
+    @Override
+    public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
+        GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
+        if (!content.config.moduleLogging) return;
+        String output = String.format(JOIN_LEAVE_FORMAT, event.getUser().getName(), event.getUser().getDiscriminator(), "has **Left** the server", event.getGuild().getMemberCount());
+        if (content.config.joinLeaveLogging) {
+            if (content.config.kickLogging) {
+                doKickLog(event.getGuild(), event.getUser());
+            }
+            sendLog(output, content, false);
+        }
+    }
+
 
     public static void doMessageEditLog(CommandObject command) {
         if (!shouldLog(command)) return;
@@ -346,28 +343,28 @@ public class LoggingHandler {
         }
     }
 
-    public static void doRoleUpdateLog() {
-        Guild guild = event.getGuild();
-        UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getIdLong()));
-        GuildObject content = Globals.getGuildContent(guild.getIdLong());
-        if (!content.config.moduleLogging) return;
-        if (content.config.userRoleLogging) {
-            ArrayList<String> oldRoles = new ArrayList<>();
-            ArrayList<String> newRoles = new ArrayList<>();
-            oldRoles.addAll(event.getOldRoles().stream().filter(r -> !r.isEveryoneRole()).map(Role::getName).collect(Collectors.toList()));
-            newRoles.addAll(event.getNewRoles().stream().filter(r -> !r.isEveryoneRole()).map(Role::getName).collect(Collectors.toList()));
-            StringBuilder oldRoleList = new StringBuilder();
-            StringBuilder newRoleList = new StringBuilder();
-            for (String r : oldRoles) {
-                oldRoleList.append(r + ", ");
-            }
-            for (String r : newRoles) {
-                newRoleList.append(r + ", ");
-            }
-            String prefix = "> **@" + user.username + "'s** Role have been Updated.";
-            sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content, false);
-        }
-    }
+//    public static void doRoleUpdateLog() {
+//        Guild guild = event.getGuild();
+//        UserObject user = new UserObject(event.getUser(), Globals.getGuildContent(event.getGuild().getIdLong()));
+//        GuildObject content = Globals.getGuildContent(guild.getIdLong());
+//        if (!content.config.moduleLogging) return;
+//        if (content.config.userRoleLogging) {
+//            ArrayList<String> oldRoles = new ArrayList<>();
+//            ArrayList<String> newRoles = new ArrayList<>();
+//            oldRoles.addAll(event.getOldRoles().stream().filter(r -> !r.isEveryoneRole()).map(Role::getName).collect(Collectors.toList()));
+//            newRoles.addAll(event.getNewRoles().stream().filter(r -> !r.isEveryoneRole()).map(Role::getName).collect(Collectors.toList()));
+//            StringBuilder oldRoleList = new StringBuilder();
+//            StringBuilder newRoleList = new StringBuilder();
+//            for (String r : oldRoles) {
+//                oldRoleList.append(r + ", ");
+//            }
+//            for (String r : newRoles) {
+//                newRoleList.append(r + ", ");
+//            }
+//            String prefix = "> **@" + user.username + "'s** Role have been Updated.";
+//            sendLog(prefix + "\nOld Roles: " + Utility.listFormatter(oldRoles, true) + "\nNew Roles: " + Utility.listFormatter(newRoles, true), content, false);
+//        }
+//    }
 
     /***
      * Handler for logging Kicks.
@@ -375,7 +372,7 @@ public class LoggingHandler {
      * @param guild the Guild the globalUser left.
      * @param user  the User that left the server.
      */
-    private static void doKickLog(Guild guild, User user) {
+    private void doKickLog(Guild guild, User user) {
         Member botUser = guild.getMember(Client.getClient().getSelfUser());
         //test if the bot has auditLog perms
         if (!GuildHandler.testForPerms(botUser, guild, Permission.VIEW_AUDIT_LOGS)) return;
@@ -419,70 +416,31 @@ public class LoggingHandler {
         sendLog(kickLog.toString(), content, true);
     }
 
-
-    public static void doBanLog(GuildBanEvent event) {
+    @Override
+    public void onGuildBan(@NotNull GuildBanEvent event) {
         Guild guild = event.getGuild();
         GuildObject guildObject = Globals.getGuildContent(guild.getIdLong());
         if (!guildObject.config.moduleLogging || !guildObject.config.banLogging) return;
-        if (!GuildHandler.testForPerms(guild.getMember(Client.getClient().getSelfUser()), guild, Permission.VIEW_AUDIT_LOGS)) return;
+        if (!GuildHandler.testForPerms(guild.getMember(Client.getClient().getSelfUser()), guild, Permission.VIEW_AUDIT_LOGS))
+            return;
         StringHandler output = new StringHandler("> **@%s#%s** was banned");
         output.setContent(String.format(output.toString(), event.getUser().getName(), event.getUser().getDiscriminator()));
 
         // get recent bans
-        List<AuditLogEntry> recentBans = event.getGuild().retrieveAuditLogs(ActionType.MEMBER_BAN_ADD).getEntriesByTarget(event.getUser().getIdLong());
-        if (recentBans.size() == 0) return;
+        List<AuditLogEntry> recentBans = event.getGuild().retrieveAuditLogs().complete().stream()
+                .filter(auditLogEntry -> auditLogEntry.getType() == ActionType.BAN && auditLogEntry.getTargetIdLong() == event.getUser().getIdLong())
+                .collect(Collectors.toList());
+        if (recentBans.isEmpty()) return;
         // and sort them. last entry is most recent.
-        recentBans.sort(Comparator.comparingLong(o -> DiscordUtils.getSnowflakeTimeFromID(o.getIdLong()).toEpochMilli()));
+        recentBans.sort(Comparator.comparingLong(o -> TimeUtil.getTimeCreated(o.getIdLong()).toInstant().toEpochMilli()));
 
         AuditLogEntry lastBan = recentBans.get(recentBans.size() - 1);
-        output.appendFormatted(" by **@%s#%s**", lastBan.getResponsibleUser().getName(), lastBan.getResponsibleUser().getDiscriminator());
-        String reason = lastBan.getReason().isPresent() ? lastBan.getReason().get() : "No reason provided";
+        String user = "Unknown_User#0000";
+        if (lastBan.getUser() != null) user = lastBan.getUser().getAsTag();
+        output.appendFormatted(" by **@%s**", user);
+        String reason = lastBan.getReason() != null ? lastBan.getReason() : "No reason provided";
         output.appendFormatted(" with reason `%s`", reason);
         sendLog(output.toString(), guildObject, true);
-    }
-
-    public static void doUserRoleAddLogging(GuildMemberRoleAddEvent event) {
-
-    }
-
-    public static void doUserRoleRemoveEvent(GuildMemberRoleRemoveEvent event) {
-
-    }
-
-    public static void logTextChannelNameUpdate(TextChannel channel, String oldName, String newName) {
-
-    }
-
-    public static void logVoiceChannelNameUpdate(VoiceChannel channel, String oldName, String newName) {
-
-    }
-
-    public static void logTextChannelParentUpdate(TextChannel channel, Category oldParent, Category newParent) {
-
-    }
-
-    public static void logVoiceChannelParentUpdate(VoiceChannel channel, Category oldParent, Category newParent) {
-
-    }
-
-    public static void logTextChannelMoveUpdate(TextChannelUpdatePositionEvent event) {
-
-    }
-
-    public static void logVoiceChannelMoveUpdate(VoiceChannelUpdatePositionEvent event) {
-
-    }
-
-    public static void logRoleNameUpdateEvent(RoleUpdateNameEvent event) {
-
-    }
-
-    public static void logRolePermissionEvent(RoleUpdatePermissionsEvent event) {
-
-    }
-
-    public static void logRoleHoistedEvent(RoleUpdateHoistedEvent event) {
-
     }
 
 }

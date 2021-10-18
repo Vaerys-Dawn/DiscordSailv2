@@ -1,5 +1,6 @@
-package com.github.vaerys.handlers;
+package com.github.vaerys.listeners;
 
+import com.github.vaerys.handlers.*;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -13,6 +14,11 @@ import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.role.GenericRoleEvent;
+import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,20 +26,26 @@ import org.slf4j.LoggerFactory;
  * Created by Vaerys on 03/08/2016.
  */
 
-public class EventHandler {
+public class EventListener extends ListenerAdapter {
 
-    final static Logger logger = LoggerFactory.getLogger(EventHandler.class);
+    final static Logger logger = LoggerFactory.getLogger(EventListener.class);
 
-    public static void updateVariables(Guild guild) {
+    @Override
+    public void onGenericRole(@NotNull GenericRoleEvent event) {
+        updateVariables(event.getGuild());
+    }
+
+    @Override
+    public void onRoleDelete(@NotNull RoleDeleteEvent event) {
+        updateVariables(event.getGuild());
+    }
+
+    public void updateVariables(Guild guild) {
         long guildID = guild.getIdLong();
         GuildObject guildObject = Globals.getGuildContent(guildID);
         guildObject.config.updateVariables(guild);
         guildObject.characters.updateVars(guild);
     }
-
-    /**
-     * Sets up the relevant files for each guild.
-     */
 
     public static void handlePinnedMessages(MessageReceivedEvent event) {
         Message message = event.getMessage();
@@ -41,15 +53,14 @@ public class EventHandler {
         message.delete().queue();
     }
 
-    public static void onMessageReceived(MessageReceivedEvent event) {
+    @Override
+    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if (event.getMessage().getType() == MessageType.CHANNEL_PINNED_ADD) {
             handlePinnedMessages(event);
         }
         if (!Globals.isReady) return;
         try {
             if (event.getAuthor().isBot()) return;
-
-            GlobalUserObject user = new GlobalUserObject(event.getAuthor());
             MessageChannel channel = event.getChannel();
 
             //message and command handling
@@ -90,7 +101,8 @@ public class EventHandler {
         }
     }
 
-    public static void onReactionAddEvent(GuildMessageReactionAddEvent event) {
+    @Override
+    public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
         Globals.reactionCount++;
         if (event.getUser().isBot()) {
             return;
@@ -117,7 +129,7 @@ public class EventHandler {
             if (emoji.equals(remove)) ArtHandler.unPin(object);
             if (emoji.equals(x) && GuildHandler.testForPerms(event.getMember(), event.getGuild(), Permission.MESSAGE_MANAGE) &&
                     object.client.bot.longID == object.user.longID) {
-                RequestHandler.deleteMessage(object.message);
+                object.message.delete();
             }
             //if is pushpin
             if (emoji.equals(pin)) ArtHandler.pinMessage(object, pinner, owner);
@@ -132,15 +144,11 @@ public class EventHandler {
             if (emoji.equals(gift))
                 Globals.getGlobalData().giveGift(message.getIdLong(), pinner, object.guild);
             //do only within Direct messages
-        } else if (event.getChannel() instanceof PrivateChannel && emoji.isEmoji()) {
-            //if anyone uses x
-            if (emoji.equals(x) && object.client.bot.longID == object.user.longID) {
-                message.delete().queue();
-            }
         }
     }
 
-    public static void onMessageDeleteEvent(MessageDeleteEvent event) {
+    @Override
+    public void onMessageDelete(@NotNull MessageDeleteEvent event) {
         if (event.getChannel() instanceof PrivateChannel) return;
         if (!Globals.isReady) return;
         if (event.getChannel() instanceof TextChannel) {
@@ -151,7 +159,8 @@ public class EventHandler {
         }
     }
 
-    public static void onUserJoinEvent(GuildMemberJoinEvent event) {
+    @Override
+    public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         UserObject user = new UserObject(event.getUser(), content);
         if (content.config.welcomeMessages && !user.get().isBot()) {
@@ -165,13 +174,30 @@ public class EventHandler {
         }
         GuildHandler.checkUsersRoles(user.longID, content);
         JoinHandler.autoReMute(event, content, user);
-        if (!content.config.moduleLogging) return;
     }
 
-    public static void onMessageUpdateEvent(MessageUpdateEvent event) {
+    @Override
+    public void onMessageUpdate(@NotNull MessageUpdateEvent event) {
         if (event.getChannel() instanceof PrivateChannel) return;
         CommandObject command = new CommandObject(event.getMessage(), event.getGuild());
 
         LoggingHandler.doMessageEditLog(command);
+    }
+
+    /***
+     * Delete on X emoji added
+     * @param event
+     */
+    @Override
+    public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
+        MessageReaction.ReactionEmote x = Utility.getReaction("x");
+        MessageReaction.ReactionEmote emoji = event.getReaction().getReactionEmote();
+        Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
+        if (event.getChannel() instanceof PrivateChannel && emoji.isEmoji()) {
+            //if anyone uses x
+            if (emoji.equals(x) && Client.getClientObject().bot.longID == event.getUser().getIdLong()) {
+                message.delete().queue();
+            }
+        }
     }
 }

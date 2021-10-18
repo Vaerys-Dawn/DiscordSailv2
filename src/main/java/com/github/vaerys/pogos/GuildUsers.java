@@ -73,7 +73,7 @@ public class GuildUsers extends GlobalFile {
         if (!found) {
             mutedUsers.add(new MutedUserObject(userID, time, roles));
         }
-        return RequestHandler.muteUser(guildID, userID, true).get();
+        return RequestHandler.muteUser(guildID, userID, true);
     }
 
     public boolean muteUser(UserObject user, GuildObject guild, long timeSecs) {
@@ -85,8 +85,7 @@ public class GuildUsers extends GlobalFile {
     }
 
     public boolean unMuteUser(long userID, long guildID) {
-        boolean result = RequestHandler.muteUser(guildID, userID, false).get();
-        return result;
+        return RequestHandler.muteUser(guildID, userID, false);
     }
 
     public boolean unMuteUser(UserObject user, GuildObject guild) {

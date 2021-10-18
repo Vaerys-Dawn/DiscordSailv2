@@ -287,18 +287,6 @@ public class CommandList {
         return getCommands;
     }
 
-    public static List<Command> getCreatorCommands(boolean isDm) {
-        List<Command> getCommands = new ArrayList<>();
-        for (Command c : creatorCommands) {
-            if (isDm) {
-                if (c.channel == ChannelSetting.FROM_DM || c.hasDmVersion) getCommands.add(c);
-            } else {
-                if (c.channel != ChannelSetting.FROM_DM) getCommands.add(c);
-            }
-        }
-        return getCommands;
-    }
-
     public static <T extends Command> T getCommand(Class obj) {
         if (!Command.class.isAssignableFrom(obj)) {
             throw new IllegalArgumentException("Cannot Get Command from Class (" + obj.getName() + ")");

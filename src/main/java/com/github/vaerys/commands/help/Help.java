@@ -31,7 +31,7 @@ public class Help extends Command {
 
         List<Command> commands = command.guild.getAllCommands(command);
         if (command.user.longID == command.client.creator.longID) {
-            commands.addAll(CommandList.getCreatorCommands(false));
+            commands.addAll(CommandList.getCreatorCommands());
         }
 
         Command foundCommand = null;
@@ -53,7 +53,7 @@ public class Help extends Command {
     public String executeDm(String commandArgs, DmCommandObject command) {
         XEmbedBuilder builder = new XEmbedBuilder();
         List<Command> commands = CommandList.getCommands(true);
-        if (command.globalUser.checkIsCreator()) commands.addAll(CommandList.getCreatorCommands(true));
+        if (command.globalUser.checkIsCreator()) commands.addAll(CommandList.getCreatorCommands());
         List<String> list = new ArrayList<>();
         for (Command c : commands) {
             list.add(c.getCommand());

@@ -18,7 +18,7 @@ public class InfoDM extends DMCommand {
     public String execute(String args, CommandObject command) {
         List<Command> commands = command.guild.getAllCommands(command);
         if (command.user.longID == command.client.creator.longID) {
-            commands.addAll(CommandList.getCreatorCommands(true));
+            commands.addAll(CommandList.getCreatorCommands());
         }
 
         String error = "\\> Could not find information on any commands named **" + args + "**.";

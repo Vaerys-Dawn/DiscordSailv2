@@ -2,6 +2,7 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.enums.ChannelSetting;
+import com.github.vaerys.listeners.LoggingHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
@@ -101,7 +102,7 @@ public class MessageHandler {
         return false;
     }
 
-    protected static void handleLogging(CommandObject commandObject, Command command, String args) {
+    public static void handleLogging(CommandObject commandObject, Command command, String args) {
         if (!commandObject.guild.config.moduleLogging) return;
         if (command.doAdminLogging && !commandObject.guild.config.adminLogging) {
             return;

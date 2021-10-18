@@ -4,7 +4,6 @@ import com.github.vaerys.commands.general.ProfileSettings;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.enums.UserSetting;
-import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
@@ -20,6 +19,7 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
 import emoji4j.EmojiUtils;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -335,9 +335,14 @@ public class PixelHandler {
      * @return the message that was sent.
      */
     private static Message sendLevelMessage(String message, MessageChannel channel, boolean isRankUp, boolean doGif) {
-        return doGif ?
-                (RequestHandler.sendEmbededImage(message, isRankUp ? Constants.RANK_UP_IMAGE_URL : Constants.LEVEL_UP_IMAGE_URL, channel).get()) :
-                (RequestHandler.sendMessage(message, channel).get());
+        MessageAction sent;
+        if (doGif) {
+            sent = RequestHandler.requestEmbedImage(message, isRankUp ? Constants.RANK_UP_IMAGE_URL : Constants.LEVEL_UP_IMAGE_URL, channel);
+        } else {
+            sent = channel.sendMessage(message);
+        }
+        if (sent != null) return sent.complete();
+        else return null;
     }
 
     /***

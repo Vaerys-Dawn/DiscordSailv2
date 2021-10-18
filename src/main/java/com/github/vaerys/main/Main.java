@@ -12,7 +12,6 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IUser;
 
 import javax.security.auth.login.LoginException;
 import java.net.UnknownHostException;
@@ -84,7 +83,7 @@ public class Main {
                 logger.info("No Pastebin Token found.");
             }
 
-            JDA client = Client.createClient(token, false);
+            JDA client = Client.createClient(token);
 
             //load config phase 2
             Globals.initConfig(client, config, globalData);
@@ -106,12 +105,9 @@ public class Main {
                 System.exit(Constants.EXITCODE_STOP);
             }
 
-            //login + register listener.
-            client.login();
-
             // initialize creatorID if it is completely unset:
             if (config.creatorID == 0) {
-                User botOwner = client.getSelfUser().getApplicationOwner();
+                User botOwner = client.retrieveApplicationInfo().complete().getOwner();
                 config.creatorID = botOwner.getIdLong();
                 Globals.creatorID = config.creatorID;
 

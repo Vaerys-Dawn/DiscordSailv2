@@ -26,7 +26,7 @@ public class ClientObject {
     }
 
     public User getUserByID(long userID) {
-        return object.getUserById(userID);
+        return object.retrieveUserById(userID).complete();
     }
 
     public List<Guild> getGuilds() {
