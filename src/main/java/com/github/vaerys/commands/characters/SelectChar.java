@@ -8,8 +8,6 @@ import com.github.vaerys.objects.userlevel.CharacterObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;

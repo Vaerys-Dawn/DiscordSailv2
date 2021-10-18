@@ -1,7 +1,7 @@
 package com.github.vaerys.handlers;
 
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.listeners.LoggingHandler;
+import com.github.vaerys.listeners.LoggingListener;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -351,7 +351,7 @@ public class TimerHandler {
             guild.sendDebugLog(offender.getUser(), admin, "RATE_LIMITING", "MUTE", rate + " over limit.");
             //logging
             if (guild.config.deleteLogging) {
-                LoggingHandler.sendLog("\\> **@" + offender.getUser().getAsTag() + "** was muted for breaking rate limit.", guild, true);
+                LoggingListener.sendLog("\\> **@" + offender.getUser().getAsTag() + "** was muted for breaking rate limit.", guild, true);
             }
             //send messages
             profile.addSailModNote(String.format(modNoteFormat, rate, channels.size() > 1 ? "s" : "", formattedChannels), u.getTimeStamp(), false);

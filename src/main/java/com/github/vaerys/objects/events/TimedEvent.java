@@ -1,9 +1,8 @@
 package com.github.vaerys.objects.events;
 
-import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.handlers.RequestHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;

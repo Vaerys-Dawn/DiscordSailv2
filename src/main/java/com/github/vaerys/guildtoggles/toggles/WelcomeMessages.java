@@ -1,10 +1,9 @@
 package com.github.vaerys.guildtoggles.toggles;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.commands.admin.SetWelcomeMessage;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildSetting;
 
 /**

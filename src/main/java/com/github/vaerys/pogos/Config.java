@@ -1,8 +1,8 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.main.Constants;
-import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.objects.botlevel.RandomStatusObject;
+import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.templates.GlobalFile;
 
 import java.util.ArrayList;

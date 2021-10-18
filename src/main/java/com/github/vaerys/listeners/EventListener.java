@@ -5,7 +5,10 @@ import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.*;
+import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.DmCommandObject;
+import com.github.vaerys.masterobjects.GuildObject;
+import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.utils.LogObject;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -155,7 +158,7 @@ public class EventListener extends ListenerAdapter {
             TextChannel channel = event.getTextChannel();
             CommandObject command = new CommandObject(Globals.getGuildContent(event.getGuild().getIdLong()), channel);
             if (!command.guild.config.moduleLogging) return;
-            LoggingHandler.logDelete(command, event);
+            LoggingListener.logDelete(command, event);
         }
     }
 
@@ -181,7 +184,7 @@ public class EventListener extends ListenerAdapter {
         if (event.getChannel() instanceof PrivateChannel) return;
         CommandObject command = new CommandObject(event.getMessage(), event.getGuild());
 
-        LoggingHandler.doMessageEditLog(command);
+        LoggingListener.doMessageEditLog(command);
     }
 
     /***

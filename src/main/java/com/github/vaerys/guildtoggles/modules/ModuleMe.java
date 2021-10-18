@@ -5,11 +5,8 @@ import com.github.vaerys.commands.general.SetGender;
 import com.github.vaerys.commands.general.SetQuote;
 import com.github.vaerys.commands.general.UserInfo;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.guildtoggles.ToggleList;
-import com.github.vaerys.guildtoggles.toggles.UserInfoShowsDate;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildModule;
 
 /**

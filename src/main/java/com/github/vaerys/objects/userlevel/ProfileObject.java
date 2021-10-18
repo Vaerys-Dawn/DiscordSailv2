@@ -18,7 +18,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.vaerys.enums.UserSetting.DONT_DECAY;

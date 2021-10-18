@@ -1,14 +1,10 @@
 package com.github.vaerys.listeners;
 
 import com.github.vaerys.handlers.RequestHandler;
-import com.github.vaerys.main.*;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageReaction;
-import net.dv8tion.jda.api.entities.PrivateChannel;
+import com.github.vaerys.main.Constants;
+import com.github.vaerys.main.Globals;
+import com.github.vaerys.main.Main;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 

@@ -2,7 +2,7 @@ package com.github.vaerys.handlers;
 
 import com.github.vaerys.commands.CommandList;
 import com.github.vaerys.enums.ChannelSetting;
-import com.github.vaerys.listeners.LoggingHandler;
+import com.github.vaerys.listeners.LoggingListener;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
@@ -120,7 +120,7 @@ public class MessageHandler {
             builder.append(" with args: `").append(args).append("`");
         }
         builder.append(" in messageChannel ").append(commandObject.guildChannel.get().getAsMention()).append(".");
-        LoggingHandler.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
+        LoggingListener.sendLog(builder.toString(), commandObject.guild, command.doAdminLogging);
     }
 
     private static boolean handleDmCommand(DmCommandObject command, String args) {

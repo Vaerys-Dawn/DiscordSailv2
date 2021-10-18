@@ -1,7 +1,7 @@
 package com.github.vaerys.tags.cctags;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.ReplaceObject;
 import com.github.vaerys.templates.TagReplaceObject;
 import org.apache.commons.lang3.StringUtils;

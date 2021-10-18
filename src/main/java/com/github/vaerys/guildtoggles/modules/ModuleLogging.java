@@ -2,8 +2,6 @@ package com.github.vaerys.guildtoggles.modules;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.guildtoggles.ToggleList;
-import com.github.vaerys.guildtoggles.toggles.*;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;

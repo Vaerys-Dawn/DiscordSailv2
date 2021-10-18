@@ -5,7 +5,6 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import emoji4j.Emoji;
 import emoji4j.EmojiUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Emote;

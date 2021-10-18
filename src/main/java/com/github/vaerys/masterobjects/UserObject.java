@@ -5,7 +5,10 @@ import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;

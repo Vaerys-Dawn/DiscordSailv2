@@ -18,7 +18,6 @@ import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.FileFactory;
 import com.github.vaerys.templates.GlobalFile;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;

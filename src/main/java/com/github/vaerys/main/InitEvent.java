@@ -1,7 +1,5 @@
 package com.github.vaerys.main;
 
-import com.github.vaerys.handlers.RequestHandler;
-import net.dv8tion.jda.api.events.ReadyEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

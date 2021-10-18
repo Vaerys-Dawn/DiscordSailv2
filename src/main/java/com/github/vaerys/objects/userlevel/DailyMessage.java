@@ -1,7 +1,7 @@
 package com.github.vaerys.objects.userlevel;
 
-import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.enums.TagType;
+import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.TagObject;
 

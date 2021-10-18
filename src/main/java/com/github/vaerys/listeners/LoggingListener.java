@@ -17,7 +17,8 @@ import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
 import net.dv8tion.jda.api.events.channel.voice.VoiceChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
-import net.dv8tion.jda.api.events.guild.member.*;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.TimeUtil;
@@ -34,9 +35,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class LoggingHandler extends ListenerAdapter {
+public class LoggingListener extends ListenerAdapter {
 
-    private final static Logger logger = LoggerFactory.getLogger(LoggingHandler.class);
+    private final static Logger logger = LoggerFactory.getLogger(LoggingListener.class);
 
 
     private static final String JOIN_LEAVE_FORMAT = "> **@%s#%s** %s.\n**Current Users:** %s.";
@@ -264,7 +265,7 @@ public class LoggingHandler extends ListenerAdapter {
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel #" + event.getChannel().getName() + " was deleted.";
-            LoggingHandler.sendLog(log, content, false);
+            LoggingListener.sendLog(log, content, false);
         }
         updateVariables(event.getChannel().getGuild());
     }
@@ -275,7 +276,7 @@ public class LoggingHandler extends ListenerAdapter {
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel " + event.getChannel().getName() + " was deleted.";
-            LoggingHandler.sendLog(log, content, false);
+            LoggingListener.sendLog(log, content, false);
         }
         updateVariables(event.getChannel().getGuild());
     }

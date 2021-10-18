@@ -2,9 +2,9 @@ package com.github.vaerys.main;
 
 import com.github.kennedyoliveira.pastebin4j.AccountCredentials;
 import com.github.kennedyoliveira.pastebin4j.PasteBin;
-import com.github.vaerys.listeners.*;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.StringHandler;
+import com.github.vaerys.listeners.*;
 import com.github.vaerys.masterobjects.ClientObject;
 import com.github.vaerys.objects.events.EventAvatar;
 import com.github.vaerys.objects.events.TimedEvent;
@@ -53,7 +53,7 @@ public class Client {
         clientBuilder.setMaxReconnectDelay(4000);
         client = clientBuilder.build();
         client.addEventListener(new ReadyListener());
-        client.addEventListener(new LoggingHandler());
+        client.addEventListener(new LoggingListener());
         client.addEventListener(new EventListener());
         client.addEventListener(new CreatorListener());
         client.addEventListener(new GuildEventListener());

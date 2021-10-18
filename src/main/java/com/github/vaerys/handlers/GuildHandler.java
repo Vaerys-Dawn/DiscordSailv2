@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.vaerys.enums.UserSetting.DENY_AUTO_ROLE;
