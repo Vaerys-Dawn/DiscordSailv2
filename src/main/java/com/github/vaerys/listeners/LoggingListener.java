@@ -61,6 +61,7 @@ public class LoggingListener extends ListenerAdapter {
     }
 
     private static boolean shouldLog(CommandObject command) {
+        if (command.message == null) return false;
         String chars200 = command.message.getContent();
         //pin regex handler
         String pinRegex = "> (\\*\\*.*?\\*\\*|I have pinned) Has pinned (\\*\\*.*'s\\*\\*|their) art(\\n|.)*";

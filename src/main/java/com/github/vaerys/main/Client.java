@@ -34,6 +34,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
@@ -49,14 +50,14 @@ public class Client {
     private static ClientObject clientObject = null;
 
     public static JDA createClient(String token) throws LoginException {
+        ThreadPoolExecutor eventPool = new ThreadPoolExecutor(10, 50, 20, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        ScheduledExecutorService gatewayPool = new ScheduledThreadPoolExecutor(10);
         JDABuilder clientBuilder = JDABuilder.createDefault(token);
+        clientBuilder.setEventPool(eventPool);
+        clientBuilder.setGatewayPool(gatewayPool);
         clientBuilder.setMaxReconnectDelay(4000);
+        clientBuilder.addEventListeners(new ReadyListener(), new LoggingListener(), new EventListener(), new CreatorListener(), new GuildEventListener());
         client = clientBuilder.build();
-        client.addEventListener(new ReadyListener());
-        client.addEventListener(new LoggingListener());
-        client.addEventListener(new EventListener());
-        client.addEventListener(new CreatorListener());
-        client.addEventListener(new GuildEventListener());
         return client;
     }
 

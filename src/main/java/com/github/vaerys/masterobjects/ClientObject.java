@@ -26,6 +26,7 @@ public class ClientObject {
     }
 
     public User getUserByID(long userID) {
+        if (userID > 9223372036854775807L || userID < 0) throw new IllegalStateException(userID + " is not a valid UserID");
         return object.retrieveUserById(userID).complete();
     }
 
@@ -34,7 +35,7 @@ public class ClientObject {
     }
 
     public Emote getEmojiByID(long emojiID) {
-        Optional<Emote> emote = getGuilds().stream().flatMap(g-> g.getEmotes().stream().filter(e->e.getIdLong() == emojiID)).findFirst();
+        Optional<Emote> emote = getGuilds().stream().flatMap(g -> g.getEmotes().stream().filter(e -> e.getIdLong() == emojiID)).findFirst();
         if (emote.isPresent()) return emote.get();
         else return null;
     }

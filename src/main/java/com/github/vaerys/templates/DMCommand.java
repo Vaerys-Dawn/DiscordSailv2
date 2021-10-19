@@ -9,9 +9,12 @@ import net.dv8tion.jda.api.Permission;
  */
 public abstract class DMCommand extends Command {
 
+
+
     @Override
     public String execute(String args, CommandObject command) {
-        return null;
+        return "This command cannot be run in servers, It must be run in my Direct Messages.";
+
     }
 
     //Channel Constants

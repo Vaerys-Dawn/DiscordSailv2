@@ -38,19 +38,19 @@ public class UserObject extends GlobalUserObject {
 
     public UserObject(User object, GuildObject guild) {
         super(object);
-        member = guild.get().getMember(object);
+        member = guild.get().retrieveMember(object).complete();
         initMember(member, guild);
     }
 
     public UserObject(GlobalUserObject globalUser, GuildObject guild) {
         super(globalUser.object);
-        member = guild.get().getMember(object);
+        member = guild.get().retrieveMember(object).complete();
         initMember(member, guild);
     }
 
     public UserObject(long userID, GuildObject guild) {
         super(userID);
-        member = guild.get().getMemberById(longID);
+        member = guild.get().retrieveMemberById(longID).complete();
         initMember(member, guild);
     }
 

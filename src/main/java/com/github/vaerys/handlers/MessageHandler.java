@@ -72,7 +72,7 @@ public class MessageHandler {
         }
 
         // do the command stuff
-        if (handleCommand(command, args)) return;
+        handleCommand(command, args);
     }
 
     public static void handleDmMessage(String args, DmCommandObject command) {
