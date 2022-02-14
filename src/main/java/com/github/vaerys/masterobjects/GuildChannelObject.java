@@ -21,11 +21,13 @@ public class GuildChannelObject extends ChannelObject {
         this.object = channel;
         this.mention = channel.getAsMention();
         this.guild = guild;
-        for (ChannelSetting setting : guild.channelSettings) {
-            if (setting.getIDs(guild).size() == 0) {
-                break;
-            } else if (setting.getIDs(guild).contains(Long.toUnsignedString(longID))) {
-                settings.add(setting);
+        if (guild != null) {
+            for (ChannelSetting setting : guild.channelSettings) {
+                if (setting.getIDs(guild).size() == 0) {
+                    break;
+                } else if (setting.getIDs(guild).contains(Long.toUnsignedString(longID))) {
+                    settings.add(setting);
+                }
             }
         }
     }

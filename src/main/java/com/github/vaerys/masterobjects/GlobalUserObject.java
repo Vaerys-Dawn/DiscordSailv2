@@ -221,26 +221,32 @@ public class GlobalUserObject {
     }
 
     public void queueDm(String s) {
+        if (getDmChannel() == null) return;
         getDmChannel().sendMessage(s).queue();
     }
 
     public void queueDm(MessageEmbed embed) {
+        if (getDmChannel() == null) return;
         getDmChannel().sendMessage(embed).queue();
     }
 
     public void queueDm(String s, MessageEmbed embed) {
+        if (getDmChannel() == null) return;
         getDmChannel().sendMessage(s).embed(embed).queue();
     }
 
     public Message sendDm(String s) {
+        if (getDmChannel() == null) return null;
         return getDmChannel().sendMessage(s).complete();
     }
 
     public Message sendDm(MessageEmbed embed) {
+        if (getDmChannel() == null) return null;
         return getDmChannel().sendMessage(embed).complete();
     }
 
     public Message sendDm(String s, MessageEmbed embed) {
+        if (getDmChannel() == null) return null;
         return getDmChannel().sendMessage(s).embed(embed).complete();
     }
 
