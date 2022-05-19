@@ -6,12 +6,18 @@ import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.EmptyUserObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.ModNoteObject;
 import com.github.vaerys.pogos.GuildConfig;
+import com.github.vaerys.templates.GuildToggle;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -19,6 +25,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.github.vaerys.enums.UserSetting.DONT_DECAY;
 import static com.github.vaerys.enums.UserSetting.PRIVATE_PROFILE;
@@ -38,6 +45,8 @@ public class ProfileObject {
     private List<UserSetting> settings = new ArrayList<>();
     private List<UserLinkObject> links = new ArrayList<>();
     public List<ModNoteObject> modNotes;
+    private boolean unknown = false;
+    final static Logger logger = LoggerFactory.getLogger(ProfileObject.class);
 
     public ProfileObject(long userID) {
         this.userID = userID;
@@ -133,6 +142,7 @@ public class ProfileObject {
     }
 
     public void setLastTalked(long lastTalked) {
+        unknown = false;
         this.lastTalked = lastTalked;
     }
 
@@ -162,8 +172,15 @@ public class ProfileObject {
     }
 
     public UserObject getUser(GuildObject content) {
+        if (unknown) return new EmptyUserObject(content);
         Member user = content.getUserByID(userID);
-        if (user == null) return new UserObject(userID, content);
+        if (user == null) try {
+            user = content.get().retrieveMemberById(userID).complete();
+        } catch (ErrorResponseException e) {
+            logger.info("empty user found: {}", userID);
+            this.unknown = true;
+            return new EmptyUserObject(content);
+        }
         return new UserObject(user, content);
     }
 
@@ -171,8 +188,8 @@ public class ProfileObject {
         return xp == 0 &&
                 quote.equals(DEFAULT_QUOTE) &&
                 gender.equals(DEFAULT_GENDER) &&
-                links.size() == 0 &&
-                settings.size() == 0;
+                links.isEmpty() &&
+                settings.isEmpty();
     }
 
     public long daysDecayed(GuildObject guild) {
@@ -238,5 +255,28 @@ public class ProfileObject {
 
     public boolean hasSetting(UserSetting setting) {
         return settings.contains(setting);
+    }
+
+    public void merge(ProfileObject profile) {
+        if (this.lastTalked < profile.lastTalked) this.lastTalked = profile.lastTalked;
+        if (this.xp < profile.xp) this.xp = profile.xp;
+        if (this.currentLevel < profile.currentLevel) this.currentLevel = profile.currentLevel;
+        if (this.gender.equals(DEFAULT_GENDER) && !profile.gender.equals(DEFAULT_GENDER)) this.gender = profile.gender;
+        if (this.quote.equals(DEFAULT_QUOTE) && !profile.quote.equals(DEFAULT_QUOTE)) this.quote = profile.quote;
+        this.settings.addAll(profile.settings);
+        this.settings = settings.stream().distinct().collect(Collectors.toList());
+        if (this.links == null) {
+            this.links = profile.links;
+        } else {
+            this.links.addAll(profile.links == null ? new LinkedList<>() : profile.links);
+            this.links = links.stream().distinct().collect(Collectors.toList());
+        }
+        if (this.modNotes == null) {
+            this.modNotes = profile.modNotes;
+        } else {
+            this.modNotes.addAll(profile.modNotes == null ? new LinkedList<>() : profile.modNotes);
+            this.modNotes = modNotes.stream().distinct().collect(Collectors.toList());
+        }
+
     }
 }

@@ -21,7 +21,7 @@ public class SetQuote extends Command {
     public static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
             new String[]{"SetUserQuote", "SetUserDesc"},
             "[@User] [Quote]",
-            "Edits a globalUser's quote.",
+            "Edits a user's quote.",
             SAILType.MOD_TOOLS,
             Permission.MESSAGE_MANAGE
     );
@@ -35,7 +35,7 @@ public class SetQuote extends Command {
             if (GuildHandler.testForPerms(command, Permission.MESSAGE_MANAGE)) {
                 SplitFirstObject userCall = new SplitFirstObject(quote);
                 user = Utility.getUser(command, userCall.getFirstWord(), false, true);
-                if (user == null) return "\\> Could not find globalUser.";
+                if (user == null) return "\\> Could not find user.";
                 quote = userCall.getRest();
                 adminEdit = true;
             } else {

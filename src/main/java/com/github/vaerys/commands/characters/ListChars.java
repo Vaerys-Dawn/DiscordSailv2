@@ -28,7 +28,7 @@ public class ListChars extends Command {
         if (args != null && !args.isEmpty()) {
             user = Utility.getUser(command, args, true);
             if (user == null) {
-                return "\\> Could not find globalUser.";
+                return "\\> Could not find user.";
             }
             if (user.longID != command.user.longID) {
                 title = "\\> Here are all of @" + user.displayName + "'s Characters.";

@@ -1,19 +1,23 @@
 package com.github.vaerys.pogos;
 
 import com.github.vaerys.enums.UserSetting;
+import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.adminlevel.OffenderObject;
 import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
+import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.GlobalFile;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -92,7 +96,7 @@ public class GuildConfig extends GlobalFile {
     public int pinLimit = 25;
     public UserSetting defaultLevelMode = UserSetting.SEND_LVLUP_RANK_CHANNEL;
     public String levelUpReaction = "null";
-    public String levelUpMessage = "\\> Ding. Gratz on level <level> <globalUser>.";
+    public String levelUpMessage = "\\> Ding. Gratz on level <level> <user>.";
     public long ruleCodeRewardID = -1;
     String prefixCommand = Globals.defaultPrefixCommand;
     String prefixCC = Globals.defaultPrefixCC;
@@ -109,7 +113,7 @@ public class GuildConfig extends GlobalFile {
     // TODO: 04/10/2016 let the mention limit be customisable.
     ArrayList<RewardRoleObject> rewardRoles = new ArrayList<>();
     ArrayList<OffenderObject> offenders = new ArrayList<>();
-    private String joinMessage = "\\> Welcome to the <server> server <globalUser>.";
+    private String joinMessage = "\\> Welcome to the <server> server <user>.";
     private DailyMessage lastDailyMessage = null;
     private ArrayList<String> xpDeniedPrefixes = new ArrayList<>();
     private String ruleCode = null;
@@ -462,4 +466,24 @@ public class GuildConfig extends GlobalFile {
     }
 
 
+    public Set<Role> updateRewardRoles(ProfileObject userObject, GuildObject guild, Set<Role> roles) {
+        long rank = PixelHandler.rank(guild.users, guild.get(), userObject.getUserID());
+        boolean isTopTen = (rank<= 10 && rank > 0);
+        long currentLevel = userObject.getCurrentLevel();
+        Role topten = guild.getTopTenRole();
+        for (RewardRoleObject r : rewardRoles) {
+            Role role = r.getRole(guild);
+            if (r.getLevel() > currentLevel) {
+                roles.remove(role);
+            } else {
+                roles.add(role);
+            }
+        }
+        if (isTopTen) {
+            roles.add(topten);
+        } else {
+            roles.remove(topten);
+        }
+        return roles;
+    }
 }

@@ -51,7 +51,7 @@ public class Respond extends DMCommand {
 
     @Override
     public String description(CommandObject command) {
-        return "Sends a response to a globalUser.";
+        return "Sends a response to a user.";
     }
 
     @Override

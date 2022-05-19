@@ -23,7 +23,7 @@ public class SetLevel extends Command {
         SplitFirstObject xpArgs = new SplitFirstObject(args);
         UserObject user = Utility.getUser(command, xpArgs.getFirstWord(), false);
         if (user == null) {
-            return "\\> Could not find globalUser.";
+            return "\\> Could not find user.";
         }
         try {
             long level = Long.parseLong(xpArgs.getRest());
@@ -53,7 +53,7 @@ public class SetLevel extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows you to set the level of a globalUser.";
+        return "Allows you to set the level of a user.";
     }
 
     @Override

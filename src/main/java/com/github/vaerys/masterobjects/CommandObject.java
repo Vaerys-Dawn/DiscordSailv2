@@ -29,7 +29,9 @@ public class CommandObject{
         this.message = new MessageObject(message);
         this.guild = Globals.getGuildContent(guild.getIdLong());
         this.guildChannel = new GuildChannelObject(message.getTextChannel(), this.guild);
-        this.user = new UserObject(message.getMember(), this.guild);
+        Member member = message.getMember();
+        if (member == null) member = guild.retrieveMember(member.getUser()).complete();
+        this.user = new UserObject(member, this.guild);
         this.botUser = new UserObject(client.bot, this.guild);
     }
 

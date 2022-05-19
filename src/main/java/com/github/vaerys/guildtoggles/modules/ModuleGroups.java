@@ -33,7 +33,7 @@ public class ModuleGroups extends GuildModule {
 
     @Override
     public String desc(CommandObject command) {
-        return "This module is to help globalUser find other people to play together by letting them group up with each other.";
+        return "This module is to help user find other people to play together by letting them group up with each other.";
     }
 
     @Override

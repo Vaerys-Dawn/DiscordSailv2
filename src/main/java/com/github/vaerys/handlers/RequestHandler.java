@@ -1,5 +1,6 @@
 package com.github.vaerys.handlers;
 
+import com.github.vaerys.listeners.LoggingListener;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
@@ -17,9 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -271,7 +270,7 @@ public class RequestHandler {
 //
 //
 
-    public static boolean roleManagement(Member author, Guild guild, List<Role> userRoles) {
+    public static boolean roleManagement(Member author, Guild guild, Collection<Role> userRoles) {
         return roleManagement(author, guild, userRoles, false);
     }
 
@@ -283,7 +282,7 @@ public class RequestHandler {
      * @param suppressWarnings suppress permission warnings
      * @return whether the action was successful
      */
-    public static boolean roleManagement(Member author, Guild guild, List<Role> userRoles, boolean suppressWarnings) {
+    public static boolean roleManagement(Member author, Guild guild, Collection<Role> userRoles, boolean suppressWarnings) {
         try {
             List<Role> temp = userRoles.stream().filter(Objects::nonNull).collect(Collectors.toList());
             Role[] roles = temp.toArray(new Role[0]);
@@ -292,16 +291,17 @@ public class RequestHandler {
             guild.modifyMemberRoles(author, roles).complete();
             return true;
         } catch (HierarchyException e) {
-          return false;
+            return false;
         } catch (PermissionException e) {
             if (!suppressWarnings) {
-                logger.warn("Error Editing roles of globalUser with id: " + author.getIdLong() + " on guild with id: " + guild.getIdLong() +
+                logger.warn("Error Editing roles of user with id: " + author.getIdLong() + " on guild with id: " + guild.getIdLong() +
                         ".\n" + Constants.PREFIX_EDT_LOGGER_INDENT + "Reason: Edited roles hierarchy is too high.");
             }
             return false;
         }
     }
-//
+
+    //
 //    public static void updateAvatar(Image avatar) {
 //        RequestBuffer.request(() -> {
 //            try {
@@ -326,7 +326,7 @@ public class RequestHandler {
         Role mutedRole = Globals.client.getRoleById(content.config.getMutedRoleID());
 
         if (user == null) return false;
-        List<Role> newRoles = user.getRoles();
+        List<Role> newRoles = new ArrayList<>(user.getRoles());
         //roles for logging
         List<Role> oldRoles = new ArrayList<>(newRoles);
 
@@ -339,9 +339,11 @@ public class RequestHandler {
             MutedUserObject mutedUser = content.users.getMutedUser(userID);
             if (mutedUser != null) newRoles.addAll(mutedUser.getRoles(guild));
             newRoles.remove(mutedRole);
-            content.users.mutedUsers.removeIf(m -> m.getID() == userID);
+            content.users.mutedUsers.remove(userID);
         }
-
+        LoggingListener.sendLog(String.format("> Removed Roles from user: %s%n[%s]", user.getUser().getAsTag(),
+                String.join(", ", oldRoles.stream().map(Role::getName).collect(Collectors.toSet()))),
+                content, true);
         return roleManagement(user, guild, newRoles);
     }
 

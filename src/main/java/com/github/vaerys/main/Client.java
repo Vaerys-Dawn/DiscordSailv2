@@ -19,6 +19,9 @@ import com.patreon.resources.Pledge;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Icon;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.jsoup.HttpStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +59,8 @@ public class Client {
         clientBuilder.setEventPool(eventPool);
         clientBuilder.setGatewayPool(gatewayPool);
         clientBuilder.setMaxReconnectDelay(4000);
+        clientBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.GUILD_PRESENCES);
+        clientBuilder.setMemberCachePolicy(MemberCachePolicy.ALL);
         clientBuilder.addEventListeners(new ReadyListener(), new LoggingListener(), new EventListener(), new CreatorListener(), new GuildEventListener());
         client = clientBuilder.build();
         return client;
@@ -188,6 +193,10 @@ public class Client {
             client.getSelfUser().getManager().setAvatar(avatar).complete();
         } catch (IOException e) {
             Utility.sendStack(e);
+        } catch (ErrorResponseException e) {
+            if (e.getResponse().isRateLimit()) {
+                logger.info("Rate limit reached for avatar changing.");
+            }
         }
 
         //wait for the avatar to update properly

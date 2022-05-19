@@ -34,6 +34,7 @@ import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
@@ -635,8 +636,9 @@ public class Utility {
         }
         if (count > 25) count = 25;
         StringHandler builder = new StringHandler();
-        builder.addViaJoin(Globals.getAllLogs().subList(0, count), "\n");
-        LOGGER.error(s.toString() + "\n>> LAST " + Globals.getAllLogs().size() + " DEBUG LOGS<<\n" + builder.toString());
+        long logSize = Globals.getAllLogs().size();
+        builder.addViaJoin(logSize < count ? Globals.getAllLogs() :  Globals.getAllLogs().subList(0, count), "\n");
+        LOGGER.error("{}\n>> LAST {} DEBUG LOGS<<\n{}", s, Globals.getAllLogs().size(), builder);
     }
 
     public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, SAILType type, boolean testPerms) {
@@ -687,23 +689,48 @@ public class Utility {
     }
 
     public static UserObject getUser(CommandObject command, String args, boolean doContains, boolean hasProfile) {
-        if (args == null || args.isEmpty()) return null;
-        try {
-            long userId = Long.parseUnsignedLong(args);
-            User user = command.client.getUserByID(userId);
-            if (user != null || UserObject.checkForUser(userId, command.guild)) {
-                return new UserObject(user, command.guild);
-            }
-        } catch (NumberFormatException e) {
-            List<User> mention = command.message.getMentions();
-            if (!mention.isEmpty()) {
-                Collections.reverse(mention);
-                return new UserObject(mention.get(0), command.guild);
-            }
+
+        Pattern patternMention = Pattern.compile("<@(!?)(\\d{17,19})>");
+        Matcher matchesMention = patternMention.matcher(args);
+        Pattern patternLongID = Pattern.compile("\\d{17,19}");
+        Matcher matchesLongID = patternLongID.matcher(args);
+        Pattern patternUserTag = Pattern.compile("(\\S.{1,31}?)#(\\d{4})");
+        Matcher matchesUserTag = patternUserTag.matcher(args);
+
+        String argument = "";
+        UserPatternType type = UserPatternType.INVALID;
+        if (matchesMention.find()) {
+            type = UserPatternType.MENTION;
+            argument = args.substring(matchesMention.start(), matchesMention.end());
+        } else if (matchesLongID.find()) {
+            type = UserPatternType.USERID;
+            argument = args.substring(matchesLongID.start(), matchesLongID.end());
+        } else if (matchesUserTag.find()) {
+            type = UserPatternType.TAG;
+            argument = args.substring(matchesUserTag.start(), matchesUserTag.end());
         }
 
+        User user;
+        switch (type) {
+            case MENTION:
+                long userID = Long.parseLong(argument.replaceFirst("<@(!?)(\\d{17,19})>", "$2"));
+                user = Client.getClient().retrieveUserById(userID).complete();
+                break;
+            case TAG:
+                user = Client.getClient().getUserByTag(argument);
+                break;
+            case USERID:
+                user = Client.getClient().retrieveUserById(argument).complete();
+                break;
+            case INVALID:
+            default:
+                user = null;
+                break;
+        }
+        if (user != null) return new UserObject(user, command.guild);
 
-        Member user = null;
+
+        Member member = null;
         Member conUser = null;
         String toTest;
         if (args.split(" ").length != 1) {
@@ -711,11 +738,11 @@ public class Utility {
         } else {
             toTest = escapeRegex(args).replace("_", "[_| ]");
         }
-        List<Member> guildUsers = command.guild.getUsers();
+        List<Member> guildUsers = new LinkedList<>(command.guild.getUsers());
         guildUsers.sort(Comparator.comparing(o -> o.getRoles().size()));
         Collections.reverse(guildUsers);
         for (Member u : guildUsers) {
-            if (user != null) {
+            if (member != null) {
                 break;
             }
             try {
@@ -725,14 +752,14 @@ public class Utility {
                     if (profile == null || profile.isEmpty()) continue;
                 }
                 if ((u.getUser().getAsTag()).matches("(?i)" + toTest)) {
-                    user = u;
+                    member = u;
                 }
-                if (u.getUser().getName().matches("(?i)" + toTest) && user == null) {
-                    user = u;
+                if (u.getUser().getName().matches("(?i)" + toTest) && member == null) {
+                    member = u;
                 }
                 String displayName = u.getEffectiveName();
-                if (displayName.matches("(?i)" + toTest) && user == null) {
-                    user = u;
+                if (displayName.matches("(?i)" + toTest) && member == null) {
+                    member = u;
                 }
                 if (doContains && conUser == null) {
                     if (u.getUser().getName().matches("(?i).*" + toTest + ".*")) {
@@ -747,13 +774,20 @@ public class Utility {
             }
         }
         UserObject userObject = null;
-        if (user == null && doContains) {
-            user = conUser;
+        if (member == null && doContains) {
+            member = conUser;
         }
-        if (user != null) {
-            userObject = new UserObject(user, command.guild);
+        if (member != null) {
+            userObject = new UserObject(member, command.guild);
         }
         return userObject;
+    }
+
+    public enum UserPatternType {
+        MENTION,
+        TAG,
+        USERID,
+        INVALID
     }
 
     public static UserObject getUser(CommandObject command, String args, boolean doContains) {
@@ -1038,7 +1072,7 @@ public class Utility {
         }
     }
 
-   public static MessageReaction.ReactionEmote getReaction(String x) {
+    public static MessageReaction.ReactionEmote getReaction(String x) {
         return MessageReaction.ReactionEmote.fromUnicode(EmojiUtils.getEmoji(x).getEmoji(), Client.getClient());
     }
 }

@@ -39,7 +39,7 @@ public class Report extends Command {
             return "\\> " + command.user.mention() + ", You have been blocked, you can no longer send any more report requests.";
         }
         if (reported == null) {
-            return "\\> Cannot send report. Could not find globalUser.";
+            return "\\> Cannot send report. Could not find user.";
         }
         if (reported.longID == command.user.longID) {
             return "\\> You can't report yourself.";
@@ -102,7 +102,7 @@ public class Report extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Can be used to send a globalUser report to the server staff.";
+        return "Can be used to send a user report to the server staff.";
     }
 
     @Override

@@ -56,8 +56,16 @@ public class LoggingListener extends ListenerAdapter {
         else channel = guild.getChannelByType(ChannelSetting.SERVER_LOG);
         if (channel == null) return;
         message = message.replaceAll("(?i)@(here|everyone)", "[REDACTED]");
+        if (!channel.canTalk(guild.get().getMember(Client.getClientObject().bot.get()))) {
+            try {
+                guild.getfirstSpeakingChannel().sendMessage("\\> logging is enabled but I do not have permission to talk in the logging channels. Please set up my permissions properly.").queue();
+            } catch (Exception e) {
+                logger.error(e.toString());
+            }
+            return;
+        }
         if (object.length == 0 || object[0] == null) channel.sendMessage(message).queue();
-        else channel.sendMessage(message).embed(object[0]).queue();
+        else channel.sendMessage(message).setEmbeds(object[0]).queue();
     }
 
     private static boolean shouldLog(CommandObject command) {
@@ -77,7 +85,7 @@ public class LoggingListener extends ListenerAdapter {
         if (chars200.equals("`Working...`") && isSailMessage(command)) return false;
         if (chars200.equals("`Loading...`") && isSailMessage(command)) return false;
         if (isSailMessage(command) && chars200.matches(pinRegex)) return false;
-        if (isSailMessage(command) && command.message.get().getEmbeds().size() != 0) return false;
+        if (isSailMessage(command) && !command.message.get().getEmbeds().isEmpty()) return false;
         if (serverLog != null && serverLog.equals(command.guildChannel.get()) && isSailMessage(command)) return false;
         if (adminLog != null && adminLog.equals(command.guildChannel.get()) && isSailMessage(command)) return false;
         if (info != null && info.equals(command.guildChannel.get()) && isSailMessage(command)) return false;

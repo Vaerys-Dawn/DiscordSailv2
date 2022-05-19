@@ -23,7 +23,7 @@ public class Mute extends Command {
     private final static SubCommandObject UN_MUTE = new SubCommandObject(
             new String[]{"UnMute"},
             "[@User]",
-            "Allows you to UnMute a globalUser.",
+            "Allows you to UnMute a user.",
             SAILType.MOD_TOOLS
     );
 
@@ -57,7 +57,7 @@ public class Mute extends Command {
         TextChannel adminChannel = command.guild.getChannelByType(ChannelSetting.ADMIN);
 
         // check for globalUser and muted role
-        if (mutedUser == null || mutedUser.get() == null) return "\\> Could not find globalUser";
+        if (mutedUser == null || mutedUser.get() == null) return "\\> Could not find user";
         if (mutedUser.getProfile() == null) mutedUser.addProfile();
         if (mutedRole == null) return "\\> Muted role is not configured.";
 
@@ -103,7 +103,7 @@ public class Mute extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Mutes a globalUser and adds a modnote to the globalUser. if a ⚠ emoji is added to the mute reason the note will be a strike.";
+        return "Mutes a user and adds a modnote to the user. if a ⚠ emoji is added to the mute reason the note will be a strike.";
     }
 
     @Override

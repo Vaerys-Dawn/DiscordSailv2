@@ -130,7 +130,7 @@ public class EventSetup extends Command {
         if (rest.equalsIgnoreCase("remove")) {
             event.setHelloMessage(null);
         }
-        if (rest.contains("<globalUser>")) {
+        if (rest.contains("<user>")) {
             if (rest.startsWith("> ")) {
                 event.setHelloMessage(rest);
             } else {
@@ -138,7 +138,7 @@ public class EventSetup extends Command {
             }
             return "> Hello message set.";
         } else {
-            return "> Missing <globalUser> tag";
+            return "> Missing <user> tag";
         }
     }
 

@@ -45,7 +45,7 @@ public class ModulePixels extends GuildModule {
         }
         return "This module enables **" + command.botUser.displayName + "'s** XP system known as pixels.\n" +
                 "\\> Pixels are a xp system that allows the **granting of roles** at certain levels.\n" +
-                "\\> When a globalUser levels up a **level up message** will be sent to them based on specific settings.\n" +
+                "\\> When a user levels up a **level up message** will be sent to them based on specific settings.\n" +
                 "\\> Level up messages can be **customised completely**, from where they are sent by default to the text that they send.\n" +
                 "\\> Pixels are able to be granted **once per minute** to users when they send messa    ges.\n" +
                 "\\> The amount of pixels that are given per chunk can be customised via a **settable multiplier**.\n" +

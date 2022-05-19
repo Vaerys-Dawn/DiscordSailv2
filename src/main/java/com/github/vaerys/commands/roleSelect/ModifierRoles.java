@@ -10,8 +10,10 @@ import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Vaerys on 31/01/2017.
@@ -93,7 +95,7 @@ public class ModifierRoles extends Command {
             if (role == null && args.length() > 3) {
                 role = GuildHandler.getRoleFromName(args, command.guild.get(), command.guild.config.getModifierRoleIDs(), true);
             }
-            List<Role> userRoles = command.user.roles;
+            Set<Role> userRoles = new HashSet<>(command.user.roles);
             String response;
             if (role == null) {
                 ListModifs.getList(command).queue("\\> **" + args + "** is not a valid Role Name.", command);

@@ -33,7 +33,7 @@ public class JoinLeaveLogging extends GuildSetting {
 
     @Override
     public String shortDesc(CommandObject command) {
-        return "Enables logging of globalUser joins/leaves.";
+        return "Enables logging of user joins/leaves.";
     }
 
     @Override

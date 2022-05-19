@@ -32,7 +32,7 @@ public class SetRuleCodeReward extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows admins to set up a role that will automatically be assigned when a globalUser correctly guesses the Rule Code.";
+        return "Allows admins to set up a role that will automatically be assigned when a user correctly guesses the Rule Code.";
     }
 
     @Override

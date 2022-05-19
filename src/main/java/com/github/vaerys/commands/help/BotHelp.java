@@ -80,7 +80,7 @@ public class BotHelp extends Command {
                 "\\> `[]` brackets means that this argument is required.\n" +
                 "\\> `()` brackets means that this argument is optional.\n" +
                 "\\> When an argument ends in `...` it means you can input as many of this argument as you like.\n" +
-                "\\> The `@User` argument means that you can either use a globalUser ID, mention or the globalUser's display name or username as an argument.\n" +
+                "\\> The `@User` argument means that you can either use a user ID, mention or the user's display name or username as an argument.\n" +
                 "\\> The `Time` argument means that you can enter a number or a number ending in `d` for days, `h` for hours, `m` for minutes or `s` for seconds.");
         builder.queue(channel);
         return null;

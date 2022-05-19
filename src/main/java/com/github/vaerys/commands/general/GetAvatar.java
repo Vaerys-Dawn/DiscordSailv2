@@ -26,7 +26,7 @@ public class GetAvatar extends Command {
             }
             return message;
         } else {
-            return "\\> Could not find globalUser.";
+            return "\\> Could not find user.";
         }
     }
 

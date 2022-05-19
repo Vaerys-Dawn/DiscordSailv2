@@ -50,6 +50,6 @@ public class TagIfRoleReplace extends TagReplaceObject {
 
     @Override
     protected String desc() {
-        return "Replaces the second argument with true if globalUser running the command has a Role that contains argument and false if they do not.";
+        return "Replaces the second argument with true if user running the command has a Role that contains argument and false if they do not.";
     }
 }

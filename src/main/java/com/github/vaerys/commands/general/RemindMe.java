@@ -75,7 +75,7 @@ public class RemindMe extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Sets a Reminder for yourself, Limit 5 per globalUser (10 for patrons).\n" +
+        return "Sets a Reminder for yourself, Limit 5 per user (10 for patrons).\n" +
                 "**Time**:\n" +
                 "\\> [Num]d - `Days`\n" +
                 "\\> [Num]h - `Hours`\n" +

@@ -63,7 +63,7 @@ public class TopUserForRole extends Command {
 
         if (index > userIDs.size()) {
             working.delete().complete();
-            return "\\> There's only " + userIDs.size() + (userIDs.size() == 1 ? " globalUser" : " users") + " with that role.";
+            return "\\> There's only " + userIDs.size() + (userIDs.size() == 1 ? " user" : " users") + " with that role.";
         }
 
         if (index == 1) {
@@ -88,7 +88,7 @@ public class TopUserForRole extends Command {
         XEmbedBuilder embed = new XEmbedBuilder(command);
         int showing = (userIDs.size() > 5 ? 5 : userIDs.size());
 
-        embed.setTitle("Top " + (userIDs.size() == 1 ? " globalUser" : showing + " users") + " for role " + role.getName());
+        embed.setTitle("Top " + (userIDs.size() == 1 ? " user" : showing + " users") + " for role " + role.getName());
         embed.setFooter("Total ranked users with this role: " + userIDs.size());
         ProfileObject userProfile;
         UserObject userObject;
@@ -115,7 +115,7 @@ public class TopUserForRole extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Gets the top globalUser (Pixel wise) for a specific role.";
+        return "Gets the top user (Pixel wise) for a specific role.";
     }
 
     @Override

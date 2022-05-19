@@ -128,7 +128,7 @@ public class ArtHandler {
             response += " art by reacting with the \uD83D\uDCCC emoji.";
         }
         if (command.guild.config.likeArt && command.guild.config.modulePixels) {
-            response += "\nYou can now react with a \u2764 emoji to give the globalUser some pixels.";
+            response += "\nYou can now react with a \u2764 emoji to give the user some pixels.";
         }
         Message pinResponse = command.guildChannel.sendMessage(response);
         Thread thread = new Thread(() -> {

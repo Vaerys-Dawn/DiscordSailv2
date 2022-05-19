@@ -39,7 +39,7 @@ public class SetLevelUpReaction extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Sets the Reaction that the bot will post to the message a globalUser sent to level up.";
+        return "Sets the Reaction that the bot will post to the message a user sent to level up.";
     }
 
     @Override

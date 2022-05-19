@@ -28,7 +28,7 @@ public class UserInfoShowsDate extends GuildSetting {
 
     @Override
     public String shortDesc(CommandObject command) {
-        return "Show full date on globalUser profile instead of time since created.";
+        return "Show full date on user profile instead of time since created.";
     }
 
     @Override

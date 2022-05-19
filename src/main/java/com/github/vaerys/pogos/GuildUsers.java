@@ -10,68 +10,67 @@ import com.github.vaerys.templates.GlobalFile;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Vaerys on 03/02/2017.
  */
 public class GuildUsers extends GlobalFile {
     public static final String FILE_PATH = "Guild_Users.json";
-    private double fileVersion = 1.2;
-    public ArrayList<ProfileObject> profiles = new ArrayList<>();
-    public ArrayList<MutedUserObject> mutedUsers = new ArrayList<>();
+    private double fileVersion = 1.3;
+    public Map<Long, ProfileObject> profiles = new HashMap<>();
+    public Map<Long, MutedUserObject> mutedUsers = new HashMap<>();
 
-    public ArrayList<ProfileObject> getProfiles() {
+    public GuildUsers() {
+        // do nothing
+    }
+
+    public GuildUsers(Map<Long, ProfileObject> newProfileSet, Map<Long, MutedUserObject> newMutedUsersSet, double fileVersion) {
+        this.profiles = newProfileSet;
+        this.mutedUsers = newMutedUsersSet;
+        this.fileVersion = fileVersion;
+    }
+
+    public Map<Long, ProfileObject> getProfiles() {
         return profiles;
     }
 
-    public ArrayList<MutedUserObject> getMutedUsers() {
+    public Map<Long, MutedUserObject> getMutedUsers() {
         return mutedUsers;
     }
 
     public MutedUserObject getMutedUser(long userID) {
-        for (MutedUserObject m : mutedUsers) {
-            if (m.getID() == userID) return m;
-        }
-        return null;
+        return mutedUsers.get(userID);
     }
 
     public ProfileObject addUser(long id) {
+        if (profiles.containsKey(id)) return profiles.get(id);
         ProfileObject user = new ProfileObject(id);
-        profiles.add(user);
+        profiles.put(id, user);
         return user;
     }
 
     public ProfileObject getUserByID(long authorID) {
-        for (ProfileObject u : profiles) {
-            if (u.getUserID() == authorID) {
-                return u;
-            }
-        }
-        return null;
+        return profiles.get(authorID);
     }
 
     public void addUser(ProfileObject profile) {
-        profiles.add(profile);
+        if (profiles.containsKey(profile.getUserID())) {
+            profile.merge(profiles.get(profile.getUserID()));
+        }
+        profiles.put(profile.getUserID(), profile);
     }
 
     public boolean checkForUser(long userID) {
-        if (profiles.stream().map(c -> c.getUserID()).filter(c -> c == userID).toArray().length != 0) return true;
-        if (mutedUsers.stream().map(c -> c.getID()).filter(c -> c == userID).toArray().length != 0) return true;
-        return false;
+        return profiles.containsKey(userID) || mutedUsers.containsKey(userID);
     }
 
     public boolean muteUser(long userID, long guildID, long time, List<Role> roles) {
         boolean found = false;
-        for (MutedUserObject c : mutedUsers) {
-            if (c.getID() == userID) {
-                c.setRemainderSecs(time);
-                found = true;
-            }
-        }
-        if (!found) {
-            mutedUsers.add(new MutedUserObject(userID, time, roles));
+        if (mutedUsers.containsKey(userID)) {
+            mutedUsers.get(userID).setRemainderSecs(time);
+        }else {
+            mutedUsers.put(userID, new MutedUserObject(userID, time, roles));
         }
         return RequestHandler.muteUser(guildID, userID, true);
     }
@@ -93,9 +92,6 @@ public class GuildUsers extends GlobalFile {
     }
 
     public boolean isUserMuted(Member user) {
-        for (MutedUserObject u : mutedUsers) {
-            if (u.getID() == user.getIdLong()) return true;
-        }
-        return false;
+        return mutedUsers.containsKey(user.getIdLong());
     }
 }

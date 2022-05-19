@@ -51,6 +51,6 @@ public class TagGrantRole extends TagAdminSubTagObject {
 
     @Override
     protected String desc() {
-        return "Grants the globalUser the role specified in the Subtag upon activation. Replaces itself with \"You have been granted the **RoleName** role\".";
+        return "Grants the user the role specified in the Subtag upon activation. Replaces itself with \"You have been granted the **RoleName** role\".";
     }
 }

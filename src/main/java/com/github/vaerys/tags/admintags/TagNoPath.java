@@ -49,6 +49,6 @@ public class TagNoPath extends TagAdminObject {
 
     @Override
     protected String desc() {
-        return "If the globalUser has Path Keys and no paths have been activated it will replace itself with the contents of the tag, else it will remove itself.";
+        return "If the user has Path Keys and no paths have been activated it will replace itself with the contents of the tag, else it will remove itself.";
     }
 }

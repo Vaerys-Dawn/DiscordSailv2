@@ -5,6 +5,7 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.EmptyUserObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.ModNoteObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
@@ -32,25 +33,25 @@ public class ModNote extends Command {
     // sub commands.
     private static final SubCommandObject EDIT_MOD_NOTE = new SubCommandObject(
             new String[]{"EditModNote"},
-            "[@globalUser] [index] message",
+            "[@user] [index] message",
             "Edit an existing mod note",
             SAILType.MOD_TOOLS
     );
     private static final SubCommandObject DELETE_MOD_NOTE = new SubCommandObject(
             new String[]{"DeleteModNote", "DelModNote"},
-            "[@globalUser] [index]",
+            "[@user] [index]",
             "Delete an existing mod note.",
             SAILType.MOD_TOOLS
     );
     private static final SubCommandObject STRIKE_MOD_NOTE = new SubCommandObject(
             new String[]{"AddStrike", "StrikeModNote"},
-            "[@globalUser] [index]",
+            "[@user] [index]",
             "Switches the strike status on a mod note.",
             SAILType.MOD_TOOLS
     );
     private static final SubCommandObject GET_MOD_NOTE = new SubCommandObject(
             new String[]{"GetModNote"},
-            "[@globalUser] [index]",
+            "[@user] [index]",
             "Get a detailed version of an existing mod note.",
             SAILType.MOD_TOOLS
     );
@@ -80,7 +81,7 @@ public class ModNote extends Command {
         if (opts == null || opts.isEmpty()) opts = "list";
 
         UserObject user = Utility.getUser(command, userCall, false, true);
-        if (user == null) return "\\> Could not find globalUser.";
+        if (user == null) return "\\> Could not find user.";
 
         ProfileObject profile = user.getProfile();
         if (profile == null) return "\\> No profile found for " + user.displayName + ".";
@@ -126,7 +127,7 @@ public class ModNote extends Command {
                     String newNote = new SplitFirstObject(modeOpts).getRest();
 
                     modNotes.get(index - 1).editNote(newNote, command.user.longID, timestamp);
-                    return "\\> Note #" + index + " edited for globalUser " + user.displayName + ".";
+                    return "\\> Note #" + index + " edited for user " + user.displayName + ".";
 
                 // "info" mode
                 case "info":
@@ -138,10 +139,10 @@ public class ModNote extends Command {
                     boolean strike = modNotes.get(index - 1).getStrike();
                     if (strike) {
                         modNotes.get(index - 1).setStrike(false);
-                        return "\\> Strike cleared for note " + index + " for globalUser " + user.displayName + ".";
+                        return "\\> Strike cleared for note " + index + " for user " + user.displayName + ".";
                     } else {
                         modNotes.get(index - 1).setStrike(true);
-                        return "\\> Strike set for note " + index + " for globalUser " + user.displayName + ".";
+                        return "\\> Strike set for note " + index + " for user " + user.displayName + ".";
                     }
 
                     // "delete" command
@@ -162,12 +163,12 @@ public class ModNote extends Command {
         return "\\> This code should be unreachable.";
     }
 
-    private String createListEmbed(ProfileObject user, CommandObject command) {
-        if (user.modNotes == null || user.modNotes.size() == 0) {
-            return "\\> " + user.getUser(command.guild).displayName + " doesn't have any notes yet.";
+    private String createListEmbed(ProfileObject profile, CommandObject command) {
+        if (profile.modNotes == null || profile.modNotes.isEmpty() || profile.getUser(command.guild) instanceof EmptyUserObject) {
+            return "\\> " + profile.getUser(command.guild).displayName + " doesn't have any notes yet.";
         }
 
-        UserObject userObject = user.getUser(command.guild);
+        UserObject userObject = profile.getUser(command.guild);
         XEmbedBuilder builder = new XEmbedBuilder(command);
 
 
@@ -176,14 +177,14 @@ public class ModNote extends Command {
 
         //avatar
         if (userObject.get() != null) builder.setThumbnail(userObject.get().getAvatarUrl());
-        else builder.setThumbnail(user.getDefaultAvatarURL());
+        else builder.setThumbnail(profile.getDefaultAvatarURL());
 
         // get all notes and put together the bits and bobs
         int counter = 0;
         String noteLine = "**Note #%d:**\n%s\n";
         StringHandler content = new StringHandler();
 
-        for (ModNoteObject noteObject : user.modNotes) {
+        for (ModNoteObject noteObject : profile.modNotes) {
             String shortNote = Utility.truncateString(Utility.removeFun(noteObject.getNote()), 65);
             if (noteObject.getStrike()) {
                 content.append("⚠ ");
@@ -193,7 +194,7 @@ public class ModNote extends Command {
         builder.setDescription(content.toString());
 
         // finalize and send message:
-        builder.setFooter("Total Notes: " + user.modNotes.size());
+        builder.setFooter("Total Notes: " + profile.modNotes.size());
         builder.queue(command.guildChannel);
         return null;
     }

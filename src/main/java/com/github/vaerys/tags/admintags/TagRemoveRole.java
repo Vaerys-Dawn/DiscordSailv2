@@ -53,6 +53,6 @@ public class TagRemoveRole extends TagAdminSubTagObject {
 
     @Override
     protected String desc() {
-        return "Removes the role specified in the Subtag from the globalUser upon activation. Replaces itself with \"You have had the **RoleName** role removed\".";
+        return "Removes the role specified in the Subtag from the user upon activation. Replaces itself with \"You have had the **RoleName** role removed\".";
     }
 }

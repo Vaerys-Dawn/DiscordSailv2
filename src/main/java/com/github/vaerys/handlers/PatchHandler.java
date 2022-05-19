@@ -6,8 +6,10 @@ import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.botlevel.PatchObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
+import com.github.vaerys.oldcode.OldGuildUsers;
 import com.github.vaerys.pogos.*;
 import com.github.vaerys.templates.FileFactory;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -51,6 +53,7 @@ public class PatchHandler {
         sanitizer(guild);
         updateChannelTypesForCodeConventions(guild);
         refactorTrustedToInviteAllowed(guild);
+        removeDuplicateProfiles(guild);
 
         //1.4 fixes
         removeNullPrefix(guild);
@@ -71,6 +74,20 @@ public class PatchHandler {
 
         //1.2 patches
         fixMultipleDailies();
+
+
+    }
+
+    private static void removeDuplicateProfiles(Guild guild) {
+        PatchObject patchObject = getJsonConfig(guild, GuildUsers.FILE_PATH,
+                1.3, "Remove_Duplicate_User_Profiles");
+        if (patchObject != null) {
+            Gson gson = new Gson();
+            OldGuildUsers guildUsers = gson.fromJson(patchObject.getObject(), OldGuildUsers.class);
+            guildUsers.fileVersion = 1.3;
+            GuildUsers newUsers = guildUsers.convert();
+            FileHandler.writeToJson(patchObject.getPath(), newUsers);
+        }
     }
 
     private static PatchObject getJsonConfig(Guild guild, String file, double patchID, String patch) {
@@ -204,7 +221,7 @@ public class PatchHandler {
 
         // patch
         GuildUsers guildUsers = FileFactory.create(guild.getIdLong(), FilePaths.GUILD_USERS, GuildUsers.class);
-        guildUsers.profiles.forEach(object -> {
+        guildUsers.profiles.forEach((l, object) -> {
             if (object.modNotes == null) return;
 
             object.modNotes.forEach(note -> {

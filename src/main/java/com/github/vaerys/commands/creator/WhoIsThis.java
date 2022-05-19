@@ -21,7 +21,7 @@ public class WhoIsThis extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Gives global info about a globalUser";
+        return "Gives global info about a user";
     }
 
     @Override

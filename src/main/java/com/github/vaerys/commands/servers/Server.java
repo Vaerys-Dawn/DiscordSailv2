@@ -2,10 +2,12 @@ package com.github.vaerys.commands.servers;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
+import com.github.vaerys.main.Client;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.ServerObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 /**
@@ -17,21 +19,20 @@ public class Server extends Command {
     public String execute(String args, CommandObject command) {
         for (ServerObject s : command.guild.servers.getServers()) {
             if (s.getName().equalsIgnoreCase(args)) {
-                User user = command.guild.getUserByID(s.getCreatorID()).getUser();
-                boolean isGuildUser = true;
-                if (user == null) {
-                    user = command.client.get().getUserById(s.getCreatorID());
-                    isGuildUser = false;
-                }
+                User user = Client.getClient().getUserById(s.getCreatorID());
+                Member member = user == null ? null : command.guild.get().getMember(user);
 
                 StringBuilder builder = new StringBuilder();
-                builder.append("**" + s.getName() + "**\n");
-                builder.append("**IP:** " + s.getServerIP() + " **Port:** " + s.getServerPort() + "\n");
-                if (isGuildUser) {
-                    builder.append("**Listing Creator:** " + command.guild.get().getMember(user).getNickname() + "\n");
-                } else {
-                    builder.append("**Listing Creator:** " + user.getName() + "#" + user.getDiscriminator() + "\n");
+                builder.append("**").append(s.getName()).append("**\n");
+                builder.append("**IP:** ").append(s.getServerIP()).append(" **Port:** ").append(s.getServerPort()).append("\n");
+
+                String creator = "null";
+                if (member != null) {
+                    creator = member.getEffectiveName();
+                } else if (user != null) {
+                    creator = user.getAsTag();
                 }
+                builder.append("**Listing Creator:** ").append(creator).append("\n");
                 builder.append(s.getServerDesc());
                 command.user.queueDm(builder.toString());
                 return "\\> Server info has been sent to your DMs";

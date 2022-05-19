@@ -31,7 +31,7 @@ public class JoinMessageInfo extends Command {
         builder.setDescription(message.getContent());
         UserObject user = new UserObject(message.getCreator(), command.guild);
         if (user == null) {
-            builder.setFooter("Could not find globalUser.");
+            builder.setFooter("Could not find user.");
         } else {
             builder.setFooter("Creator: @" + user.username, user.avatarURL);
         }

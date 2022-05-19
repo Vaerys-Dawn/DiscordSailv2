@@ -15,7 +15,7 @@ public class Echo extends DMCommand {
         if (recipient != null) {
             return Respond.sendDM(args, command, recipient, "\\> ");
         } else {
-            return "\\> no globalUser to respond to.";
+            return "\\> no user to respond to.";
         }
     }
 
@@ -26,7 +26,7 @@ public class Echo extends DMCommand {
 
     @Override
     public String description(CommandObject command) {
-        return "Sail sends a response to the most recent globalUser";
+        return "Sail sends a response to the most recent user";
     }
 
     @Override

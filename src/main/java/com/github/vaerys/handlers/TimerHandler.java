@@ -9,7 +9,6 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.adminlevel.UserRateObject;
 import com.github.vaerys.objects.botlevel.RandomStatusObject;
 import com.github.vaerys.objects.depreciated.BlackListObject;
@@ -19,8 +18,8 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.userlevel.ReminderObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.sun.management.OperatingSystemMXBean;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.MissingAccessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -156,40 +155,43 @@ public class TimerHandler {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                try {
-                    keepAliveDaily = System.currentTimeMillis();
-                    //init vars
-
-
-                    //do checks
-                    Client.checkPatrons();
-                    checkKeepAlive();
-
-                    //update Active Event
-                    Globals.updateEvent();
-                    TimedEvent event = Globals.getCurrentEvent();
-
-                    //handle avatars
-                    Client.handleAvatars();
-
-                    //backups
-                    Globals.backupAll();
-
-                    // clear blacklist
-                    List<BlackListObject.BlacklistedUserObject> blacklistedUserObjects = Globals.getGlobalData().getBlacklistedUsers();
-                    blacklistedUserObjects.removeIf(object -> object.getCounter() < 5);
-
-                    dailyMessageHandler(event);
-
-
-                } catch (Exception e) {
-                    Utility.sendStack(e);
-                }
+               dailyReset();
             }
         }, initialDelay * 1000, period);
     }
 
-    private static void dailyMessageHandler(TimedEvent event) {
+    public static void dailyReset() {
+        try {
+            keepAliveDaily = System.currentTimeMillis();
+            //init vars
+
+            //do checks
+            Client.checkPatrons();
+            checkKeepAlive();
+
+            //update Active Event
+            Globals.updateEvent();
+            TimedEvent event = Globals.getCurrentEvent();
+
+            //handle avatars
+            Client.handleAvatars();
+
+            //backups
+            Globals.backupAll();
+
+            // clear blacklist
+            List<BlackListObject.BlacklistedUserObject> blacklistedUserObjects = Globals.getGlobalData().getBlacklistedUsers();
+            blacklistedUserObjects.removeIf(object -> object.getCounter() < 5);
+
+            dailyTaskHandler(event);
+
+
+        } catch (Exception e) {
+            Utility.sendStack(e);
+        }
+    }
+
+    private static void dailyTaskHandler(TimedEvent event) {
         ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
         DayOfWeek day = timeNow.getDayOfWeek();
 
@@ -210,6 +212,8 @@ public class TimerHandler {
 
             //getAllToggles general messageChannel
             TextChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
+
+
 
             //do daily messages
             if (generalChannel != null && guildconfig.dailyMessage) {
@@ -273,29 +277,24 @@ public class TimerHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                User user = Client.getClient().getUserById(object.getUserID());
-                MessageChannel channel;
-                TextChannel guildChannel = Client.getClient().getTextChannelById(object.getChannelID());
-                if (user == null) return;
-                if (guildChannel == null) {
+                MessageChannel channel = Client.getClient().getTextChannelById(object.getChannelID());
+                if (channel == null) {
                     channel = Client.getClient().getPrivateChannelById(object.getChannelID());
-                } else {
-                    if (guildChannel.getGuild().getMember(user) == null) {
-                        channel = Client.getClient().getPrivateChannelById(object.getChannelID());
-                    } else {
-                        channel = guildChannel;
-                    }
                 }
                 if (channel == null) {
                     Globals.getGlobalData().removeReminder(object);
                     return;
                 }
-                Message message = channel.sendMessage(object.getMessage()).complete();
-                if (message == null && channel instanceof TextChannel) {
-                    Member bot = ((TextChannel) channel).getGuild().getMember(Client.getClient().getSelfUser());
-                    if (bot != null && ((TextChannel) channel).getPermissionOverride(bot).getAllowed().contains(Permission.MESSAGE_WRITE)) {
-                        object.setSent(false);
+                try {
+                    Message message = channel.sendMessage(object.getMessage()).complete();
+                    if (message == null && channel instanceof TextChannel) {
+                        Member bot = ((TextChannel) channel).getGuild().getMember(Client.getClient().getSelfUser());
+                        if (bot != null && ((TextChannel) channel).canTalk()) {
+                            object.setSent(false);
+                        }
                     }
+                } catch (MissingAccessException e) {
+                    logger.error("Could not send message to user, missing permissions. UserID: {} ChannelID: {}", object.getUserID(), object.getChannelID());
                 }
                 Globals.getGlobalData().removeReminder(object);
             }
@@ -363,20 +362,19 @@ public class TimerHandler {
     private static void tenSecGuildTask(GuildObject task) {
         task.resetRateLimit();
         Globals.lastRateLimitReset = System.currentTimeMillis();
-        if (task.getRateUsers().size() != 0) {
+        if (!task.getRateUsers().isEmpty()) {
             logger.error("Failed to clear list, forcing it to clear.");
             task.forceClearRate();
         }
         //Mutes.
-        ArrayList<MutedUserObject> mutedUsers = task.users.getMutedUsers();
-        for (int i = 0; i < mutedUsers.size(); i++) {
-            if (mutedUsers.get(i).getRemainderSecs() != -1) {
-                mutedUsers.get(i).tickDown(10);
-                if (mutedUsers.get(i).getRemainderSecs() == 0) {
-                    task.users.unMuteUser(mutedUsers.get(i).getID(), task.longID);
+        task.users.mutedUsers.forEach((id, profile) -> {
+            if (profile.getRemainderSecs() != -1) {
+                profile.tickDown(10);
+                if (profile.getRemainderSecs() == 0) {
+                    task.users.unMuteUser(profile.getID(), task.longID);
                 }
             }
-        }
+        });
     }
 
 

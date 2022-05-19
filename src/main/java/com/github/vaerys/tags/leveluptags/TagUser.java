@@ -17,7 +17,7 @@ public class TagUser extends TagObject {
 
     @Override
     public String tagName() {
-        return "<globalUser>";
+        return "<user>";
     }
 
     @Override
@@ -32,6 +32,6 @@ public class TagUser extends TagObject {
 
     @Override
     public String desc() {
-        return "Replaces itself with a globalUser mention of the current globalUser.";
+        return "Replaces itself with a user mention of the current user.";
     }
 }

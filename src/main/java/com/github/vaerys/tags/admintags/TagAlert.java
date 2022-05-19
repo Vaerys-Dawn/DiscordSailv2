@@ -74,7 +74,7 @@ public class TagAlert extends TagAdminSubTagObject {
 
     @Override
     protected String desc() {
-        return "Removes itself and sends an alert to the specified globalUser's Dms or if it's a Channel ID send it to that messageChannel." +
+        return "Removes itself and sends an alert to the specified user's Dms or if it's a Channel ID send it to that messageChannel." +
                 " The contents of the message requires <mention> to be placed somewhere in the text, you may also place <ccName> in the contents as well to show the Custom Command Name.\n" +
                 "Only the first of this tag will run and the rest will be removed.";
     }

@@ -1,12 +1,15 @@
 package com.github.vaerys.main;
 
 import com.github.vaerys.enums.FilePaths;
+import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.PatchHandler;
 import com.github.vaerys.handlers.TimerHandler;
 import com.github.vaerys.pogos.Config;
 import com.github.vaerys.pogos.GlobalData;
+import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.FileFactory;
+import com.github.vaerys.templates.TagObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -22,7 +25,6 @@ import java.util.Scanner;
  * Created by Vaerys on 19/05/2016.
  */
 public class Main {
-
 
     static Logger logger;
 
@@ -111,7 +113,7 @@ public class Main {
                 config.creatorID = botOwner.getIdLong();
                 Globals.creatorID = config.creatorID;
 
-                logger.info("Default creatorID set to globalUser " + botOwner.getName() + "#" + botOwner.getDiscriminator());
+                logger.info("Default creatorID set to user " + botOwner.getName() + "#" + botOwner.getDiscriminator());
 
                 // save it back out to file.
                 config.flushFile();

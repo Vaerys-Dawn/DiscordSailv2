@@ -36,7 +36,7 @@ public class ModuleAdminCC extends GuildModule {
     public String desc(CommandObject command) {
         return "This module allows admins to create admin custom commands.\n" +
                 "\\> Admin Custom commands use the **" + command.guild.config.getPrefixAdminCC() + "** command prefix.\n" +
-                "\\> Admin Custom commands are completely globalUser created and they can use the tag system to change how they work.\n" +
+                "\\> Admin Custom commands are completely user created and they can use the tag system to change how they work.\n" +
                 "\\> For information about the tag system you can run the **" + Command.get(HelpTags.class).getCommand(command) + "** command.";
     }
 

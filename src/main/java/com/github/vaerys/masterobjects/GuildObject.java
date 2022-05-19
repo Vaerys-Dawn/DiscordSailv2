@@ -459,4 +459,17 @@ public class GuildObject {
             return super.equals(obj);
         }
     }
+
+    public TextChannel getfirstSpeakingChannel() throws Exception {
+        for (TextChannel channel: object.getTextChannels()) {
+            if (channel.canTalk(object.retrieveMember(client.bot.get()).complete())) {
+                return channel;
+            }
+        }
+        throw new Exception("Cannot speak in any text channel what the hecc...");
+    }
+
+    public Member getBot() {
+        return object.getMemberById(client.bot.longID);
+    }
 }

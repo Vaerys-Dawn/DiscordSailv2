@@ -25,7 +25,7 @@ public class Pixels extends Command {
         UserObject user = command.user;
         if (!args.isEmpty()) {
             user = Utility.getUser(command, args, true);
-            if (user == null) return "\\> Could not find globalUser.";
+            if (user == null) return "\\> Could not find user.";
         }
         ProfileObject profile = user.getProfile();
         if (profile == null) {

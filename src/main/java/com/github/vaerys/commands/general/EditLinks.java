@@ -24,7 +24,7 @@ public class EditLinks extends Command {
     protected static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
             new String[]{"EditLinks", "NewLink"},
             "[@User] [Link Name] (Link)",
-            "Allows the modification of globalUser links.",
+            "Allows the modification of user links.",
             SAILType.MOD_TOOLS,
             Permission.MESSAGE_MANAGE
     );
@@ -109,7 +109,7 @@ public class EditLinks extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows uses to manage the links attached to their profile. Max 5 links per globalUser (10 if globalUser is a patron).";
+        return "Allows uses to manage the links attached to their profile. Max 5 links per user (10 if user is a patron).";
     }
 
     @Override

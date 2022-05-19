@@ -22,11 +22,11 @@ public class AddProfile extends Command {
             }
         }
         if (command.guild.users.getUserByID(user.getIdLong()) != null) {
-            return "\\> " + user.getNickname() + " already has a profile.";
+            return "\\> " + user.getEffectiveName() + " already has a profile.";
         }
         if (user == null) return "\\> Invalid UserID";
         command.guild.users.addUser(user.getIdLong());
-        return "\\> Profile for **" + user.getNickname() + "** Created.";
+        return "\\> Profile for **" + user.getEffectiveName() + "** Created.";
     }
 
     @Override
@@ -36,7 +36,7 @@ public class AddProfile extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows Admins to initiate a profile for a globalUser using a userID";
+        return "Allows Admins to initiate a profile for a user using a userID";
     }
 
     @Override

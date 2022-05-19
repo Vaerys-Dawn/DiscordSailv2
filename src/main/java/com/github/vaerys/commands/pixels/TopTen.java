@@ -12,8 +12,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TopTen extends Command {
 
@@ -22,7 +21,7 @@ public class TopTen extends Command {
         ArrayList<ProfileObject> ranks = new ArrayList<>();
         ArrayList<String> response = new ArrayList<>();
 
-        List<ProfileObject> profiles = new ArrayList<>(command.guild.users.profiles);
+        List<ProfileObject> profiles = new ArrayList<>(command.guild.users.profiles.values());
         Utility.sortUserObjects(profiles, false);
         int counter = 0;
         for (ProfileObject p : profiles) {
@@ -37,7 +36,7 @@ public class TopTen extends Command {
         for (ProfileObject r : ranks) {
             Member ranked = command.guild.getUserByID(r.getUserID());
             String rankPos = "**" + PixelHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
-            StringBuilder toFormat = new StringBuilder(ranked.getNickname());
+            StringBuilder toFormat = new StringBuilder(ranked.getEffectiveName());
             toFormat.append("\n " + INDENT + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`");
             if (r.getUserID() == command.user.get().getIdLong()) {
                 response.add(rankPos + SPACER + "**" + toFormat + "**");

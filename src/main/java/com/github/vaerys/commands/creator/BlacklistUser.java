@@ -27,7 +27,7 @@ public class BlacklistUser extends Command {
         if (globalData.blacklistUser(user.longID, 5) != null)
             return "\\> User **" + user.get().getName() + "#" + user.get().getDiscriminator() + "** blacklisted.";
 
-        return "\\> Failed to blacklist globalUser.";
+        return "\\> Failed to blacklist user.";
     }
 
     @Override
@@ -37,7 +37,7 @@ public class BlacklistUser extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Adds a globalUser to the command blacklist, preventing that person from using any bot commands on any server.";
+        return "Adds a user to the command blacklist, preventing that person from using any bot commands on any server.";
     }
 
     @Override

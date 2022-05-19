@@ -196,6 +196,7 @@ Global_Data.json
 *.ttf
 CC templates/
 Storage/
+Storage_old/
 wiki/
 /modules/
 
@@ -203,3 +204,5 @@ wiki/
 !target/JavaDiscordSAILv2.jar
 easySquish.bat
 /target/
+Storage.tgz
+Storage.tar

@@ -22,7 +22,7 @@ public class Sudo extends Command {
         SplitFirstObject sudo = new SplitFirstObject(args);
         UserObject user = Utility.getUser(command, sudo.getFirstWord(), false, false);
         if (user == null) {
-            return "\\> Could not find globalUser.";
+            return "\\> Could not find user.";
         }
         command.setAuthor(user.getMember());
         if (sudo.getRest() == null) {

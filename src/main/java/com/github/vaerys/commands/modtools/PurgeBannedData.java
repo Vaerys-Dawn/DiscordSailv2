@@ -41,14 +41,14 @@ public class PurgeBannedData extends Command {
             Member toTest = command.guild.getUserByID(userId);
             if (toTest != null) {
                 if (toTest.getPermissions().contains(Permission.ADMINISTRATOR)) {
-                    return "\\> You cannot purge a globalUser with the administrator permission, if you have found an error in their data please DM me with the details.";
+                    return "\\> You cannot purge a user with the administrator permission, if you have found an error in their data please DM me with the details.";
                 }
             }
         } catch (NumberFormatException e) {
             //do nothing
         }
         if (!command.botUser.getPermissions().contains(Permission.BAN_MEMBERS)) {
-            return "\\> I cant purge the data of banned globalUser unless I get the **Ban Members** permission.\n" +
+            return "\\> I cant purge the data of banned user unless I get the **Ban Members** permission.\n" +
                     "Feel free to remove the permission after you purge the data as I will no longer need it.";
         }
         if (userId != -1 && userStringID != null) {
@@ -68,15 +68,9 @@ public class PurgeBannedData extends Command {
     }
 
     public void purgeData(long userID, CommandObject command, long[] purgedData) {
-        ListIterator iterator = command.guild.users.profiles.listIterator();
-        while (iterator.hasNext()) {
-            ProfileObject object = (ProfileObject) iterator.next();
-            if (userID == object.getUserID()) {
-                iterator.remove();
-                purgedData[0]++;
-            }
-        }
-        iterator = command.guild.customCommands.getCommandList().listIterator();
+        ProfileObject object = command.guild.users.profiles.remove(userID);
+        if (object != null) purgedData[0]++;
+        ListIterator iterator = command.guild.customCommands.getCommandList().listIterator();
         while (iterator.hasNext()) {
             CCommandObject ccObject = (CCommandObject) iterator.next();
             if (userID == ccObject.getUserID()) {
@@ -109,7 +103,7 @@ public class PurgeBannedData extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Removes all data related to banned users from the server's data. or just the data from one globalUser.\n\n" +
+        return "Removes all data related to banned users from the server's data. or just the data from one user.\n\n" +
                 "***!!! WARNING: IF YOU USE A USER_ID YOU WILL PURGE ALL DATA FOR THAT USER REGARDLESS OF STATUS SO BE CAREFUL !!!***\n";
     }
 

@@ -42,11 +42,11 @@ public class ListCCs extends Command {
     }
 
     public String getUserCommands(CommandObject command, UserObject user) {
-        if (user == null) return "> Could not find globalUser.";
+        if (user == null) return "> Could not find user.";
         int total = 0;
         int max = command.guild.customCommands.maxCCs(user, command.guild);
         XEmbedBuilder builder = new XEmbedBuilder(command);
-        String title = "> Here are the custom commands for globalUser: @" + user.username + ".";
+        String title = "> Here are the custom commands for user: @" + user.username + ".";
         List<String> list = new ArrayList<>();
         for (CCommandObject c : command.guild.customCommands.getCommandList()) {
             if (c.getUserID() == user.longID) {

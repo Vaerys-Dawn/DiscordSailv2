@@ -15,13 +15,13 @@ public class Hello extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        String message = "\\> Hello <globalUser>.";
+        String message = "\\> Hello <user>.";
         TimedEvent event = Globals.getCurrentEvent();
         if (event != null && event.getHelloMessage() != null) message = event.getHelloMessage();
         if (command.user.longID == 153159020528533505L) {
-            message = message.replace("<globalUser>", "Mother");
+            message = message.replace("<user>", "Mother");
         }
-        return message.replace("<globalUser>", command.user.displayName);
+        return message.replace("<user>", command.user.displayName);
     }
 
     @Override

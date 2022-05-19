@@ -57,7 +57,7 @@ public class JoinHandler {
                 admin = event.getGuild().getDefaultChannel();
             }
             if (admin != null) {
-                admin.sendMessage("> New globalUser " + user.mention() + " has a creation time less than 5 hours ago.").queue();
+                admin.sendMessage("> New user " + user.mention() + " has a creation time less than 5 hours ago.").queue();
             }
         }
     }
@@ -72,7 +72,7 @@ public class JoinHandler {
     public static void sendWelcomeMessage(GuildObject content, GuildMemberJoinEvent event, UserObject user) {
         String message = content.config.getJoinMessage();
         message = message.replace("<server>", event.getGuild().getName());
-        message = message.replace("<globalUser>", event.getUser().getName());
+        message = message.replace("<user>", event.getUser().getName());
         user.queueDm(message);
     }
 
@@ -84,19 +84,17 @@ public class JoinHandler {
      * @param event   The event that calls this. ({@link GuildMemberJoinEvent})
      */
     public static void autoReMute(GuildMemberJoinEvent event, GuildObject content, UserObject user) {
-        for (MutedUserObject u : content.users.mutedUsers) {
-            if (u.getID() == event.getUser().getIdLong()) {
-                TextChannel admin = content.getChannelByType(ChannelSetting.ADMIN);
-                Role muted = event.getGuild().getRoleById(content.config.getMutedRoleID());
-                if (muted == null)  {
-                    admin.sendMessage("\\> "+ user.mention() +" has returned I attempted to re-mute them but I could not find the Muted role").queue();
-                    return;
-                }
-                if (admin != null) {
-                    admin.sendMessage("\\> Looks like " + user.mention() + " has returned, I have muted them again for you.").queue();
-                }
-                event.getGuild().addRoleToMember(user.getMember(), muted).queue();
+        if (content.users.mutedUsers.containsKey(user.longID)) {
+            TextChannel admin = content.getChannelByType(ChannelSetting.ADMIN);
+            Role muted = event.getGuild().getRoleById(content.config.getMutedRoleID());
+            if (muted == null) {
+                admin.sendMessage("\\> " + user.mention() + " has returned I attempted to re-mute them but I could not find the Muted role").queue();
+                return;
             }
+            if (admin != null) {
+                admin.sendMessage("\\> Looks like " + user.mention() + " has returned, I have muted them again for you.").queue();
+            }
+            event.getGuild().addRoleToMember(user.getMember(), muted).queue();
         }
     }
 }

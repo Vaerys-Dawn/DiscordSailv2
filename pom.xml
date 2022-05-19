@@ -6,7 +6,7 @@
 
     <groupId>com.github.vaerys</groupId>
     <artifactId>DiscordSAIL</artifactId>
-    <version>2.11.0 snapshot 10</version>
+    <version>3.0.0 Release Candidate 2</version>
 
     <properties>
         <patreonAPI.version>0.4.2</patreonAPI.version>

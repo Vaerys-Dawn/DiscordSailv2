@@ -28,7 +28,7 @@ public class UserInfo extends Command {
         UserObject user;
         if (args == null || args.isEmpty()) user = command.user;
         else user = Utility.getUser(command, args, true);
-        if (user == null) return "\\> Could not find globalUser.";
+        if (user == null) return "\\> Could not find user.";
 
         ProfileObject profile = user.getProfile();
 
@@ -127,12 +127,12 @@ public class UserInfo extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Lets you see some information about yourself or another globalUser.";
+        return "Lets you see some information about yourself or another user.";
     }
 
     @Override
     protected String usage() {
-        return "(@globalUser)";
+        return "(@user)";
     }
 
     @Override

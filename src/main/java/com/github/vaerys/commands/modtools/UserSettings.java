@@ -6,6 +6,7 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.EmptyUserObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
@@ -41,7 +42,7 @@ public class UserSettings extends Command {
             settings.append("\\> " + UserSetting.READ_RULES);
         }
         settings.append("\\> " + UserSetting.DENY_INVITES);
-        settings.append("\\> List - `Shows the globalUser's settings.`");
+        settings.append("\\> List - `Shows the user's settings.`");
         return settings.toString();
     }
 
@@ -53,15 +54,17 @@ public class UserSettings extends Command {
         SplitFirstObject split = new SplitFirstObject(args);
         UserObject user = Utility.getUser(command, split.getFirstWord(), false);
         if (user == null) {
-            return "\\> Could not find globalUser.";
+            return "\\> Could not find user.";
         }
         ProfileObject profile = user.getProfile();
         if (profile != null) {
+            if (profile.getUser(command.guild) instanceof EmptyUserObject) return "\\> Profile invalid.";
+
             if (split.getRest() == null || split.getRest().equalsIgnoreCase("list")) {
                 return sendList("", profile, command, user, false);
             }
             UserSetting toTest = UserSetting.get(split.getRest());
-            if (toTest == null) return "\\> Not a valid globalUser setting.\n" + settings(command);
+            if (toTest == null) return "\\> Not a valid user setting.\n" + settings(command);
             if (command.guild.config.modulePixels) {
                 switch (toTest) {
                     case DENIED_XP:
@@ -130,7 +133,7 @@ public class UserSettings extends Command {
                 return sendList(response, profile, command, user, true);
             }
         } else {
-            return "\\> Invalid globalUser.";
+            return "\\> Invalid user.";
         }
     }
 
@@ -161,7 +164,7 @@ public class UserSettings extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "allows setting of certain globalUser settings.\n" + settings(command);
+        return "allows setting of certain user settings.\n" + settings(command);
     }
 
     @Override

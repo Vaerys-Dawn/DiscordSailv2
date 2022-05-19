@@ -7,10 +7,7 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.main.Utility;
-import com.github.vaerys.masterobjects.ChannelObject;
-import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.masterobjects.GuildObject;
-import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.masterobjects.*;
 import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.pogos.GuildUsers;
@@ -25,9 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -51,17 +46,18 @@ public class PixelHandler {
      * @param user    the profile object for the globalUser that is having decay tested.
      */
     public static void doDecay(GuildObject content, ProfileObject user) {
+        if (user.getUser(content) instanceof EmptyUserObject) return;
         long days = user.daysDecayed(content);
-        if (7 > days) {
+        if (7 < days) {
             long decay;
             user.setCurrentLevel(PixelHandler.xpToLevel(user.getXP()));
             //modifiable min and max decay days needs to be implemented.
-            if (days > 15) {
-                //plateaued xp decay
-                decay = (long) ((15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
-            } else if (days > 90) {
+            if (days > 90) {
                 // kill the xp after 90 days of absences
                 decay = (long) ((90 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
+            } else if (days > 15) {
+                //plateaued xp decay
+                decay = (long) ((15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
             } else {
                 //normal xp decay formula
                 decay = (long) ((days - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
@@ -79,7 +75,7 @@ public class PixelHandler {
                     long rewardFloor = rewardRole.getXp() - 100;
                     if (user.getXP() > rewardFloor) {
                         user.setXp(user.getXP() - decay);
-                        // your total xp should never reach below 0;
+                        //your total xp should never reach below 0
                         if (user.getXP() < 0) {
                             user.setXp(0);
                         }
@@ -122,32 +118,12 @@ public class PixelHandler {
         if (user == null) {
             return;
         }
-        List<Role> userRoles = user.getRoles();
-        //remove all rewardRoles to prep for checking.
-        ListIterator iterator = userRoles.listIterator();
-        while (iterator.hasNext()) {
-            Role role = (Role) iterator.next();
-            if (content.config.isRoleReward(role.getIdLong())) {
-                iterator.remove();
-            }
-        }
-        //add all roles that the globalUser should have.
-        ArrayList<RewardRoleObject> allRewards = content.config.getAllRewards(userObject.getCurrentLevel());
-        for (RewardRoleObject r : allRewards) {
-            userRoles.add(r.getRole(content));
-        }
-        //add the top ten role if they should have it.
-        Role topTenRole = content.get().getRoleById(content.config.topTenRoleID);
-        if (topTenRole != null) {
-            long rank = PixelHandler.rank(content.users, content.get(), user.getIdLong());
-            if (rank <= 10 && rank > 0) {
-                userRoles.add(topTenRole);
-            }
-        }
+
+        Set<Role> newRoleList = content.config.updateRewardRoles(userObject, content, new HashSet<>(user.getRoles()));
         //only do a role update if the role count changes
         List<Role> currentRoles = user.getRoles();
-        if (!currentRoles.containsAll(userRoles) || currentRoles.size() != userRoles.size()) {
-            RequestHandler.roleManagement(user, content.get(), userRoles);
+        if (!currentRoles.containsAll(newRoleList) || currentRoles.size() != newRoleList.size()) {
+            RequestHandler.roleManagement(user, content.get(), newRoleList);
         }
     }
 
@@ -163,7 +139,7 @@ public class PixelHandler {
         //creates a profile for the globalUser if they don't already have one.
         ProfileObject user = new ProfileObject(object.user.longID);
         if (object.guild.users.getUserByID(object.user.longID) == null) {
-            object.guild.users.getProfiles().add(user);
+            object.guild.users.addUser(user);
         } else {
             user = object.guild.users.getUserByID(object.user.longID);
         }
@@ -440,7 +416,7 @@ public class PixelHandler {
 
         //rank calc
         long rank = 0;
-        ArrayList<ProfileObject> users = (ArrayList<ProfileObject>) guildUsers.getProfiles().clone();
+        List<ProfileObject> users = new LinkedList<>(guildUsers.getProfiles().values());
         //sort so that can accurately check rank
         Utility.sortUserObjects(users, false);
 
@@ -464,9 +440,8 @@ public class PixelHandler {
     }
 
     public static long totalRanked(CommandObject command) {
-        return command.guild.users.getProfiles().stream()
-                .filter(p -> p.showRank(command.guild))
-                .collect(Collectors.toList()).size();
+        return command.guild.users.getProfiles().values().stream()
+                .filter(p -> p.showRank(command.guild)).count();
     }
 
     public static int getRewardCount(GuildObject object, long userID) {
@@ -477,8 +452,8 @@ public class PixelHandler {
         }
         List<RewardRoleObject> userRewards = object.config.getAllRewards(userObject.getCurrentLevel());
         List<RewardRoleObject> allRewards = object.config.getRewardRoles();
-        if (allRewards.size() == 0) return 4;
-        if (userRewards.size() == 0) {
+        if (allRewards.isEmpty()) return 4;
+        if (userRewards.isEmpty()) {
             return 0;
         } else {
             if (allRewards.size() < 4) {

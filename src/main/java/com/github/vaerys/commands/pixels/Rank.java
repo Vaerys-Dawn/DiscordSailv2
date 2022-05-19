@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.entities.Member;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Rank extends Command {
 
@@ -26,7 +27,7 @@ public class Rank extends Command {
             if (userObject != null) {
                 user = userObject;
             } else {
-                return "\\> Could not find globalUser.";
+                return "\\> Could not find user.";
             }
         }
         String error = "\\> Cannot get rank stats for " + user.displayName + ".";
@@ -46,7 +47,7 @@ public class Rank extends Command {
             }
         }
         //grab a copy of the list
-        ArrayList<ProfileObject> users = (ArrayList<ProfileObject>) command.guild.users.getProfiles().clone();
+        List<ProfileObject> users = new ArrayList<>(command.guild.users.getProfiles().values());
         //sort profiles by Xp in ascending order (lowest Xp to highest XP).
         Utility.sortUserObjects(users, true);
         //test to see if said globalUser actually has rank stats.
@@ -87,7 +88,7 @@ public class Rank extends Command {
                 for (ProfileObject r : ranks) {
                     Member ranked = command.guild.getUserByID(r.getUserID());
                     String rankPos = "**" + PixelHandler.rank(command.guild.users, command.guild.get(), r.getUserID()) + "** - ";
-                    String toFormat = ranked.getNickname()
+                    String toFormat = ranked.getEffectiveName()
                             + "\n " + INDENT + "`Level: " + r.getCurrentLevel() + ", Pixels: " + NumberFormat.getInstance().format(r.getXP()) + "`";
                     if (r.getUserID() == user.longID) {
                         response.add(rankPos + SPACER + "**" + toFormat + "**");

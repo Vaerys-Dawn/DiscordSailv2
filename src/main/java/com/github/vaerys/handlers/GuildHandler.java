@@ -14,6 +14,8 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.pogos.GuildConfig;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import okhttp3.Cache;
+import org.apache.commons.collections4.KeyValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,11 +31,29 @@ public class GuildHandler {
 
     public static void dailyTask(GuildObject content) {
         boolean doDecay = content.config.xpGain && content.config.modulePixels && content.config.xpDecay;
-        for (ProfileObject p : content.users.getProfiles()) {
+
+
+        List<Set<Long>> partitions = new LinkedList<>();
+        Set<Long> partition = new HashSet<>();
+        Set<Long> cache = content.get().getMemberCache().stream().map(ISnowflake::getIdLong).collect(Collectors.toSet());
+        Set<Long> toPartition = content.users.profiles.keySet().stream().filter(k -> !cache.contains(k)).collect(Collectors.toSet());
+
+        logger.info("Cached: {}, to Collect: {}", cache.size(), toPartition.size());
+        for (long k : toPartition) {
+            if (partition.size() >= 100) {
+                partitions.add(partition);
+                partition = new HashSet<>();
+            }
+            partition.add(k);
+        }
+
+        partitions.forEach(p -> content.get().retrieveMembersByIds(p).get());
+
+        content.users.profiles.forEach((l, p) -> {
             if (doDecay) PixelHandler.doDecay(content, p);
             //check globalUser's roles and make sure that they have the right roles.
             checkUsersRoles(p.getUserID(), content, true);
-        }
+        });
         checkTopTen(content);
     }
 
@@ -41,7 +61,7 @@ public class GuildHandler {
         if (!content.config.modulePixels || !content.config.xpGain) return;
         Role topTenRole = content.get().getRoleById(content.config.topTenRoleID);
         if (topTenRole == null) return;
-        List<ProfileObject> profiles = new ArrayList<>(content.users.profiles);
+        List<ProfileObject> profiles = new ArrayList<>(content.users.profiles.values());
         Utility.sortUserObjects(profiles, false);
         int counter = 0;
         //empty non top ten users
@@ -86,9 +106,16 @@ public class GuildHandler {
         Member user = content.getUserByID(profile.getUserID());
         if (user == null) return;
 
-        List<Role> userRoles = user.getRoles();
+        // get roles for user
+        Set<Role> userRoles;
+        if (content.config.modulePixels && content.config.xpGain) {
+            userRoles = content.config.updateRewardRoles(profile, content, new HashSet<>(user.getRoles()));
+        }else {
+            userRoles = new HashSet<>(user.getRoles());
+        }
         if (userRoles.contains(content.getMutedRole())) return;
 
+        // check if they have read rule
         if (content.config.readRuleReward) {
             Role ruleReward = content.getRoleById(content.config.ruleCodeRewardID);
             if (ruleReward != null) {
@@ -96,34 +123,6 @@ public class GuildHandler {
                     userRoles.add(ruleReward);
                 } else {
                     userRoles.remove(ruleReward);
-                }
-            }
-        }
-
-        if (content.config.modulePixels && content.config.xpGain) {
-            //remove all rewardRoles to prep for checking.
-            ListIterator iterator = userRoles.listIterator();
-            while (iterator.hasNext()) {
-                Role role = (Role) iterator.next();
-                if (content.config.isRoleReward(role.getIdLong())) {
-                    iterator.remove();
-                }
-            }
-            //add all roles that the globalUser should have.
-            ArrayList<RewardRoleObject> allRewards = content.config.getAllRewards(profile.getCurrentLevel());
-            for (RewardRoleObject r : allRewards) {
-                userRoles.add(content.get().getRoleById(r.getRoleID()));
-            }
-            if (!bulkCheck) {
-                //add the top ten role if they should have it.
-                Role topTenRole = content.get().getRoleById(content.config.topTenRoleID);
-                if (topTenRole != null) {
-                    long rank = PixelHandler.rank(content.users, content.get(), user.getIdLong());
-                    if (rank <= 10 && rank > 0) {
-                        userRoles.add(topTenRole);
-                    } else {
-                        userRoles.remove(topTenRole);
-                    }
                 }
             }
         }

@@ -21,19 +21,19 @@ public class EditXp extends Command {
     private static final SubCommandObject SET_XP = new SubCommandObject(
             new String[]{"SetPixels", "SetXp"},
             "[@User] [Amount]",
-            "Set's the globalUser's pixels to the amount specified.",
+            "Set's the user's pixels to the amount specified.",
             SAILType.PIXEL
     );
     private static final SubCommandObject DEL_XP = new SubCommandObject(
             new String[]{"RemovePixels", "SubPixels", "RemoveXp", "SubXp"},
             "[@User] [Amount]",
-            "Removes the specified amount of pixels from the globalUser's profile.",
+            "Removes the specified amount of pixels from the user's profile.",
             SAILType.PIXEL
     );
     private static final SubCommandObject ADD_XP = new SubCommandObject(
             new String[]{"AddPixels", "AddXp"},
             "[@User] [Amount]",
-            "Adds the specified amount of pixels to the globalUser's profile.",
+            "Adds the specified amount of pixels to the user's profile.",
             SAILType.PIXEL
     );
 
@@ -46,7 +46,7 @@ public class EditXp extends Command {
         boolean xpChanged = false;
 
         UserObject user = Utility.getUser(command, splitArgs[0], false);
-        if (user == null) return "\\> Could not find globalUser.";
+        if (user == null) return "\\> Could not find user.";
         if (Utility.testUserHierarchy(user, command.user, command.guild)) {
             return "\\> You do not have permission to edit " + user.displayName + "'s pixels.";
         }
@@ -126,7 +126,7 @@ public class EditXp extends Command {
 
     private String setXp(ProfileObject profile, long pixelAmount, UserObject user) {
         profile.setXp(pixelAmount);
-        return "\\> Set Pixels to **" + pixelAmount + "** for globalUser **" + user.displayName + "**.";
+        return "\\> Set Pixels to **" + pixelAmount + "** for user **" + user.displayName + "**.";
     }
 
     private String delXp(ProfileObject profile, long pixelAmount, UserObject user) {
@@ -167,7 +167,7 @@ public class EditXp extends Command {
                 "\\> +/add - `Add [Pixels] pixels.`\n" +
                 "\\> -/sub - `Remove [Pixels] pixels.`\n" +
                 "\\> =/set - `Set pixels to [Pixels].`\n";
-        return "Allows you to add or remove pixels from a globalUser." + modifiers;
+        return "Allows you to add or remove pixels from a user." + modifiers;
     }
 
     @Override

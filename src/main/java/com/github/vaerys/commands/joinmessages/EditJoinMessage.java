@@ -32,7 +32,7 @@ public class EditJoinMessage extends Command {
         if (splitArgs.getRest() == null) {
             return "\\> Could not find any content to edit with.";
         }
-        if (!splitArgs.getRest().contains("<globalUser>")) return "\\> Could not find <globalUser> tag.";
+        if (!splitArgs.getRest().contains("<user>")) return "\\> Could not find <user> tag.";
         for (JoinMessage m : messages) {
             if (m.getContent().equals(splitArgs.getRest())) {
                 return "\\> New Contents matches another Custom join message's contents, cannot have duplicate messages.";

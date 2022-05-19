@@ -39,6 +39,6 @@ public class TagDisplayName extends TagObject {
 
     @Override
     public String desc() {
-        return "Replaces the tag with the display name of the globalUser.";
+        return "Replaces the tag with the display name of the user.";
     }
 }

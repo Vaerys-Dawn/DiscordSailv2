@@ -31,7 +31,7 @@ public class WhoWasThat extends DMCommand {
             user = new GlobalUserObject(Globals.lastDmUserID);
         }
         if (user.get() == null) {
-            return "\\> No globalUser found.";
+            return "\\> No user found.";
         }
         XEmbedBuilder embed = new XEmbedBuilder(user);
         embed.setAuthor("@" + user.username);
@@ -88,7 +88,7 @@ public class WhoWasThat extends DMCommand {
 
     @Override
     public String description(CommandObject command) {
-        return "Gives information about the most recent Dm globalUser.";
+        return "Gives information about the most recent Dm user.";
     }
 
     @Override

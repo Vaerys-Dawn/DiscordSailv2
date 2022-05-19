@@ -24,7 +24,7 @@ public class TagRandEmote extends TagObject {
         if (emoji.getImageUrl().endsWith(".gif")) {
             output = "<a:" + emoji.getName() + ":" + emoji.getIdLong() + ">";
         } else {
-            output = emoji.toString();
+            output = emoji.getAsMention();
         }
         return replaceFirstTag(from, output);
     }

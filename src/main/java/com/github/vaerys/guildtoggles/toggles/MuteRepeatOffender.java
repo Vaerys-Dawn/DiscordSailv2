@@ -37,7 +37,7 @@ public class MuteRepeatOffender extends GuildSetting {
 
     @Override
     public String desc(CommandObject command) {
-        return "If the " + new MentionSpam().name() + " setting is enabled, after 3 times of triggering the feature it will automatically mute the globalUser.";
+        return "If the " + new MentionSpam().name() + " setting is enabled, after 3 times of triggering the feature it will automatically mute the user.";
     }
 
     @Override

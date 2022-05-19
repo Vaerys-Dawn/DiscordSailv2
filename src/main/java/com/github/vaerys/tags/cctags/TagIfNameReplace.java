@@ -47,6 +47,6 @@ public class TagIfNameReplace extends TagReplaceObject {
 
     @Override
     protected String desc() {
-        return "Replaces the second argument with true if globalUser running the command has the first argument in their name or nickname and false if they do not.";
+        return "Replaces the second argument with true if user running the command has the first argument in their name or nickname and false if they do not.";
     }
 }

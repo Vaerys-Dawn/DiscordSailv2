@@ -34,7 +34,7 @@ public class ReactToLevelUp extends GuildSetting {
 
     @Override
     public String desc(CommandObject command) {
-        return "Enables the ability to have a reaction automatically added to the messages that caused a globalUser to level up.";
+        return "Enables the ability to have a reaction automatically added to the messages that caused a user to level up.";
     }
 
     @Override

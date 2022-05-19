@@ -55,9 +55,9 @@ public class TagPathReplaceRandom extends TagAdminReplaceObject {
 
     @Override
     protected String desc() {
-        return "If the globalUser has the Path Key specifies in the SubTag it will replace the first variable with one of the randomly " +
+        return "If the user has the Path Key specifies in the SubTag it will replace the first variable with one of the randomly " +
                 "chosen variables of the tag and then remove itself, else it will just remove itself.\n" +
-                "However if the SubTag is set to \"Start\" it will act as if the globalUser has that key unless they have any other keys.\n" +
-                "When activated the tag will remove any keys the globalUser may have to the path.";
+                "However if the SubTag is set to \"Start\" it will act as if the user has that key unless they have any other keys.\n" +
+                "When activated the tag will remove any keys the user may have to the path.";
     }
 }

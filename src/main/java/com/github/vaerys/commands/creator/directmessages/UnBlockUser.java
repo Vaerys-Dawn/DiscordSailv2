@@ -24,7 +24,7 @@ public class UnBlockUser extends DMCommand {
                 return "\\> User Unblocked";
             }
         }
-        return "\\> Could not find globalUser or invalid ID.";
+        return "\\> Could not find user or invalid ID.";
     }
 
     @Override
@@ -34,7 +34,7 @@ public class UnBlockUser extends DMCommand {
 
     @Override
     public String description(CommandObject command) {
-        return "unblocks a globalUser";
+        return "unblocks a user";
     }
 
     @Override

@@ -5,10 +5,8 @@ import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,10 +23,9 @@ import java.util.stream.Collectors;
 public class UserObject extends GlobalUserObject {
 
     public String displayName;
-    private Member member;
+    protected Member member;
     public List<Role> roles;
-    private GuildObject guild;
-
+    protected GuildObject guild;
 
     public UserObject(Member object, GuildObject guild) {
         super(object.getUser());
@@ -54,7 +51,7 @@ public class UserObject extends GlobalUserObject {
         initMember(member, guild);
     }
 
-    private void initMember(Member member, GuildObject guild) {
+    protected void initMember(Member member, GuildObject guild) {
         this.guild = guild;
         displayName = member.getEffectiveName();
         roles = member.getRoles();
@@ -62,7 +59,7 @@ public class UserObject extends GlobalUserObject {
         notAllowed = "\\> I'm sorry " + displayName + ", I'm afraid I can't let you do that.";
     }
 
-    private void escapeMentions() {
+    protected void escapeMentions() {
         Pattern pattern = Pattern.compile("(?i)(@everyone|@here|<@[!|&]?[0-9]*>)");
         Matcher nameMatcher = pattern.matcher(name);
         Matcher displayMatcher = pattern.matcher(displayName);
@@ -75,8 +72,7 @@ public class UserObject extends GlobalUserObject {
     }
 
     public List<TextChannel> getVisibleChannels(List<TextChannel> channels) {
-        List<Permission> neededPerms = Arrays.asList(Permission.MESSAGE_WRITE, Permission.MESSAGE_READ);
-        return channels.stream().filter(c -> c.getPermissionOverride(member).getAllowed().containsAll(neededPerms)).collect(Collectors.toList());
+        return channels.stream().filter(c -> c.canTalk(member)).collect(Collectors.toList());
     }
 
     public ProfileObject getProfile() {
@@ -84,7 +80,7 @@ public class UserObject extends GlobalUserObject {
         if (profile == null && (member != null && !isBot)) {
             profile = guild.users.addUser(longID);
         }
-        if (profile != null && profile.getSettings() != null && profile.getSettings().size() != 0) {
+        if (profile != null && profile.getSettings() != null && !profile.getSettings().isEmpty()) {
             profile.setSettings(new ArrayList<>(profile.getSettings().stream().distinct().collect(Collectors.toList())));
         }
         return profile;
@@ -105,7 +101,6 @@ public class UserObject extends GlobalUserObject {
     public boolean showRank() {
         return PixelHandler.rank(guild.users, guild.get(), longID) != -1;
     }
-
 
 
     public String mention() {

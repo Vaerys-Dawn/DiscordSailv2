@@ -55,7 +55,7 @@ public class GlobalUserObject {
         init(user);
     }
 
-    private void init(User user) {
+    protected void init(User user) {
         object = user;
         longID = user.getIdLong();
         name = user.getName();

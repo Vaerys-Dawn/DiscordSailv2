@@ -64,7 +64,7 @@ public class TagRemovePixels extends TagAdminSubTagObject {
 
     @Override
     protected String desc() {
-        return "Removes the amount of pixels specified in the SubTag from the globalUser's profile upon activation. Replaces itself with \"You have lost x pixels\".\n" +
+        return "Removes the amount of pixels specified in the SubTag from the user's profile upon activation. Replaces itself with \"You have lost x pixels\".\n" +
                 "Limit of 200 Pixels. (Affected by Pixel multiplier)";
     }
 }

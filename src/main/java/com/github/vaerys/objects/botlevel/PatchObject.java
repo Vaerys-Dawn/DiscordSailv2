@@ -1,5 +1,8 @@
 package com.github.vaerys.objects.botlevel;
 
+import com.github.vaerys.pogos.GuildUsers;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 public class PatchObject {

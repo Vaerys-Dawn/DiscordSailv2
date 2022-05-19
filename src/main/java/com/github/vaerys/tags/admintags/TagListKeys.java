@@ -36,6 +36,6 @@ public class TagListKeys extends TagAdminObject {
 
     @Override
     protected String desc() {
-        return "replaces itself with a list of all active keys the globalUser has.";
+        return "replaces itself with a list of all active keys the user has.";
     }
 }

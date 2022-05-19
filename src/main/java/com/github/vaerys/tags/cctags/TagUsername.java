@@ -33,6 +33,6 @@ public class TagUsername extends TagObject {
 
     @Override
     public String desc() {
-        return "Replaces itself with the username of the globalUser running the command.";
+        return "Replaces itself with the username of the user running the command.";
     }
 }

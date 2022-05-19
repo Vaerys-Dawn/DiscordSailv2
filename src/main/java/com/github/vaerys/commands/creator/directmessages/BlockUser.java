@@ -37,7 +37,7 @@ public class BlockUser extends DMCommand {
 
     @Override
     public String description(CommandObject command) {
-        return "Allows the author to block a globalUser from sending them DMs.";
+        return "Allows the author to block a user from sending them DMs.";
     }
 
     @Override

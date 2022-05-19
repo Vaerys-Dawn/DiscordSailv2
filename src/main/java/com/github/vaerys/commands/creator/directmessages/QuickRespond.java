@@ -18,7 +18,7 @@ public class QuickRespond extends DMCommand {
         if (recipient != null) {
             return Respond.sendDM(args, command, recipient, command.globalUser.username + ": ");
         } else {
-            return "\\> no globalUser to respond to.";
+            return "\\> no user to respond to.";
         }
     }
 

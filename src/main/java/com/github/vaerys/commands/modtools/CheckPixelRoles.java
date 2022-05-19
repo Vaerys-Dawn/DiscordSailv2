@@ -32,7 +32,7 @@ public class CheckPixelRoles extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "checks all globalUser's Roles and allocates the correct roles based on their Pixel stats.";
+        return "checks all user's Roles and allocates the correct roles based on their Pixel stats.";
     }
 
     @Override

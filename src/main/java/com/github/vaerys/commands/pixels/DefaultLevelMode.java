@@ -30,7 +30,7 @@ public class DefaultLevelMode extends Command {
                 return message + "the current messageChannel.";
             case "dms":
                 command.guild.config.setDefaultLevelMode(UserSetting.SEND_LVLUP_DMS);
-                return message + "the globalUser's Direct messages.";
+                return message + "the user's Direct messages.";
             case "nomessage":
                 command.guild.config.setDefaultLevelMode(UserSetting.DONT_SEND_LVLUP);
                 return "\\> Now set to now no longer send level up messages";

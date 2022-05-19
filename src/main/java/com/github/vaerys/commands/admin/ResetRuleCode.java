@@ -16,11 +16,9 @@ public class ResetRuleCode extends Command {
     @Override
     public String execute(String args, CommandObject command) {
         Message working = command.guildChannel.sendMessage("`Working...`");
-        for (ProfileObject p : command.guild.users.profiles) {
-            if (p.getSettings().size() != 0) {
-                p.getSettings().remove(UserSetting.READ_RULES);
-            }
-        }
+        command.guild.users.profiles.forEach((l, p) -> {
+            p.getSettings().remove(UserSetting.READ_RULES);
+        });
         for (Member u : command.guild.getUsers()) {
             GuildHandler.checkUsersRoles(u.getIdLong(), command.guild);
         }

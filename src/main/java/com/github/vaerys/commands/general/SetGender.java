@@ -19,7 +19,7 @@ public class SetGender extends Command {
     public static final SubCommandObject ADMIN_EDIT = new SubCommandObject(
             new String[]{"SetUserGender"},
             "[@User] [Gender]",
-            "Edits a globalUser's gender.",
+            "Edits a user's gender.",
             SAILType.MOD_TOOLS,
             Permission.MESSAGE_MANAGE
     );
@@ -32,7 +32,7 @@ public class SetGender extends Command {
         if (ADMIN_EDIT.isSubCommand(command)) {
             SplitFirstObject userCall = new SplitFirstObject(quote);
             user = Utility.getUser(command, userCall.getFirstWord(), false, true);
-            if (user == null) return "\\> Could not find globalUser.";
+            if (user == null) return "\\> Could not find user.";
             quote = userCall.getRest();
             adminEdit = true;
         }

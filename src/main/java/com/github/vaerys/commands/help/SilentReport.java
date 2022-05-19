@@ -21,7 +21,7 @@ public class SilentReport extends Report {
 
     @Override
     public String description(CommandObject command) {
-        return "Can be used to send a globalUser report to the server staff.\n" +
+        return "Can be used to send a user report to the server staff.\n" +
                 INDENT + " It will also remove the message used to call the command.";
     }
 

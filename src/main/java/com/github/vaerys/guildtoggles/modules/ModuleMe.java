@@ -36,7 +36,7 @@ public class ModuleMe extends GuildModule {
 
     @Override
     public String desc(CommandObject command) {
-        return "This module automatically generates a profile for each globalUser that they can then customise.";
+        return "This module automatically generates a profile for each user that they can then customise.";
     }
 
     @Override

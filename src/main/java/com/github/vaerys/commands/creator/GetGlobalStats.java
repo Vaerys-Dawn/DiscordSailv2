@@ -8,12 +8,12 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.botlevel.ToggleStatsObject;
-import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.GuildToggle;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by Vaerys on 25/02/2017.
@@ -32,8 +32,8 @@ public class GetGlobalStats extends Command {
 //        for (ChannelSetting c : Globals.getChannelSettings()) {
 //            channelStats.add(new ChannelStatsObject(c.type(), c.isSetting()));
 //        }
-        long totalXpUsers = 0;
-        long totalXP = 0;
+        AtomicLong totalXpUsers = new AtomicLong();
+        AtomicLong totalXP = new AtomicLong();
         for (GuildObject g : Globals.getGuilds()) {
             CommandObject object = command.setGuild(g.get());
             for (ToggleStatsObject s : toggleStats) {
@@ -57,12 +57,12 @@ public class GetGlobalStats extends Command {
 //                }
 //            }
             if (command.guild.config.modulePixels) {
-                for (ProfileObject o : command.guild.users.getProfiles()) {
-                    if (o.getXP() != 0) {
-                        totalXP += o.getXP();
-                        totalXpUsers++;
+                command.guild.users.profiles.forEach((l, p) -> {
+                    if (p.getXP() != 0) {
+                        totalXP.addAndGet(p.getXP());
+                        totalXpUsers.getAndIncrement();
                     }
-                }
+                });
             }
         }
         for (ToggleStatsObject t : toggleStats) {
@@ -80,7 +80,7 @@ public class GetGlobalStats extends Command {
         output.append("\n\n**[MODULE STATS]**\n");
         output.append(Utility.listFormatter(outModules, false));
         output.append("\n\n**[PIXEL STATS]**");
-        output.append("\nAvg Pixels: " + totalXP / totalXpUsers);
+        output.append("\nAvg Pixels: " + totalXP.get() / totalXpUsers.get());
         command.user.queueDm(output.toString());
         return "\\> Data sent to Your DMs";
 

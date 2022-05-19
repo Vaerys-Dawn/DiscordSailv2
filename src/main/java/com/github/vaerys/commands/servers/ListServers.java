@@ -41,7 +41,7 @@ public class ListServers extends Command {
 
     @Override
     public String description(CommandObject command) {
-        return "Shows a listing of this guild's globalUser registered servers.";
+        return "Shows a listing of this guild's user registered servers.";
     }
 
     @Override

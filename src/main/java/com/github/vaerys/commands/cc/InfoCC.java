@@ -4,11 +4,16 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.masterobjects.CommandObject;
+import com.github.vaerys.masterobjects.EmptyUserObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.userlevel.CCommandObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+
 
 /**
  * Created by Vaerys on 01/02/2017.
@@ -24,7 +29,13 @@ public class InfoCC extends Command {
         StringBuilder builder = new StringBuilder();
         XEmbedBuilder embedBuilder = new XEmbedBuilder(command);
         String title = "\\> Here is the information for command: **" + customCommand.getName() + "**\n";
-        UserObject createdBy = new UserObject(customCommand.getUserID(), command.guild);
+        UserObject createdBy;
+        try {
+            Member member = command.guild.get().retrieveMemberById(customCommand.getUserID()).complete();
+            createdBy = new UserObject(member, command.guild);
+        }catch (ErrorResponseException e) {
+            createdBy = new EmptyUserObject(command.guild);
+        }
         builder.append("Creator: **@").append(createdBy.username).append("**\n");
         builder.append("Time Run: **").append(customCommand.getTimesRun()).append("**\n");
         builder.append("Is Locked: **").append(customCommand.isLocked()).append("**\n");

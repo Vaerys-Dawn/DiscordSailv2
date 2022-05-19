@@ -19,8 +19,8 @@ public class LevelUpMessage extends Command {
         if (args.length() > 100) {
             return "\\> Message to long.";
         } else {
-            if (!args.contains("<level>") || !args.contains("<globalUser>")) {
-                return "\\> Missing <level> and/or <globalUser> tags.";
+            if (!args.contains("<level>") || !args.contains("<user>")) {
+                return "\\> Missing <level> and/or <user> tags.";
             }
             command.guild.config.setLevelUpMessage(args);
             return "\\> New Level Up message set.";

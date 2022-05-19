@@ -9,28 +9,28 @@ import net.dv8tion.jda.api.Permission;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 
 public class PruneEmptyProfiles extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        ArrayList<ProfileObject> profiles = command.guild.users.getProfiles();
+        List<Long> idsToRemove = new LinkedList<>();
         ProfileObject defaultProfile = new ProfileObject(-1);
-        long profileCount = 0;
-        ListIterator listIterator = profiles.listIterator();
-        while (listIterator.hasNext()) {
-            ProfileObject profile = (ProfileObject) listIterator.next();
+        command.guild.users.profiles.forEach((id, profile) -> {
             boolean noXP = profile.getXP() == 0;
             boolean noGender = defaultProfile.getGender().equals(profile.getGender());
             boolean noQuote = defaultProfile.getQuote().equals(profile.getQuote());
-            boolean noSettings = profile.getSettings().size() == 0;
-            boolean noLinks = profile.getLinks().size() == 0;
+            boolean noSettings = profile.getSettings().isEmpty();
+            boolean noLinks = profile.getLinks().isEmpty();
             if (noXP && noGender && noQuote && noSettings && noLinks) {
-                listIterator.remove();
-                profileCount++;
+                idsToRemove.add(id);
             }
-        }
+        });
+        long profileCount = idsToRemove.size();
+        idsToRemove.forEach(l -> command.guild.users.profiles.remove(l));
         return "\\> " + NumberFormat.getInstance().format(profileCount) + " empty profiles pruned.";
     }
 
