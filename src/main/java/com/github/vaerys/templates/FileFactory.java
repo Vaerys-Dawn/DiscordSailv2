@@ -29,7 +29,7 @@ public class FileFactory {
 
     public static <T extends GlobalFile> T create(FilePaths newPath, Class<?> object) {
         T t;
-        String path = storageDir + "/" + newPath.toString();
+        String path = storageDir + newPath.toString();
         if (!FileHandler.exists(path)) {
             t = (T) getObject(object);
             FileHandler.writeToJson(path, t);

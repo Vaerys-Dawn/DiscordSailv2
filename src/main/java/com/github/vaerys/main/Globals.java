@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.internal.entities.DataMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,22 +181,12 @@ public class Globals {
     }
 
     public static boolean isCreatorValid() {
-        User creator = Client.getClient().retrieveUserById(creatorID).complete();
-        if (creator == null) {
-            logger.error("Error: creatorID is invalid.");
+        try {
+            Client.getClient().retrieveUserById(creatorID).complete();
+            return true;
+        }catch (ErrorResponseException e) {
             return false;
         }
-        // check if the creator is a thinger in guilds?
-        if (!Client.getClient().getGuilds().isEmpty()) {
-            for (Guild guild : Client.getClient().getGuilds()) {
-                if (guild.retrieveMember(creator).complete() != null) {
-                    logger.info("> Creator was found in guild {}", guild.getName());
-                    return true;
-                }
-            }
-        }
-        logger.error("> Could not find creator");
-        return false;
     }
 
     public static void initGuild(GuildObject guild) {

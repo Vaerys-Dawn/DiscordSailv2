@@ -7,11 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="DiscordSAIL" />
-        <module name="DiscordSailv2" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="DiscordSAIL" target="9" />
+      <module name="DiscordSAIL" target="8" />
       <module name="DiscordSailv2" target="1.5" />
     </bytecodeTargetLevel>
   </component>

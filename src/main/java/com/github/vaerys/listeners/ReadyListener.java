@@ -12,11 +12,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class ReadyListener extends ListenerAdapter {
 
+
+
     @Override
     public void onReady(@NotNull ReadyEvent event) {
-        if (!Globals.isCreatorValid()) {
-            System.exit(Constants.EXITCODE_STOP);
-        }
+//        if (!Globals.isCreatorValid()) {
+//            System.exit(Constants.EXITCODE_STOP);
+//        }
         Globals.loadContributors();
         Globals.isReady = true;
         RequestHandler.changePresence(Globals.playing);
