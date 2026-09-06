@@ -4,6 +4,9 @@ For all your Starboundy Bot Needs.
 ### Support Discord  
 https://discord.gg/XSyQQrR
 
+## Privacy Policy
+https://www.dawnfelstar.com/sail-privacy-policy
+
 ## Patreon Rewards
 
 * Double the length of the gender and quote fields on your profile.  
