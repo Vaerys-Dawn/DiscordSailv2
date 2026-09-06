@@ -10,7 +10,9 @@ import com.github.vaerys.templates.GlobalFile;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Vaerys on 03/02/2017.

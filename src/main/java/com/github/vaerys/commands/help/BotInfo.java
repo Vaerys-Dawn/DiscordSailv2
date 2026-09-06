@@ -35,16 +35,25 @@ public class BotInfo extends Command {
         User creator = client.creator.get();
         builder.setTitle("Information about " + Globals.botName);
         response.append("Created by: **@" + creator.getName() + "#" + creator.getDiscriminator() + "**.");
-        response.append("\nCreated entirely using Java 8 and the **[Discord4J Libraries](https://discord4j.com/)**.");
+        response.append("\nCreated entirely using Java 8 and **[JDA Libraries](https://github.com/discord-jda/JDA)**.");
         response.append("\nSupport " + Globals.botName + " on **[Patreon](https://www.patreon.com/DawnFelstar)**.");
         response.append("\nFind " + Globals.botName + " on **[GitHub](https://github.com/Vaerys-Dawn/DiscordSailv2)**.");
         response.append("\nBot's Support Discord: **https://discord.gg/XSyQQrR**.");
         response.append("\n\nContributors: ");
         response.append(String.join(", ", Globals.getContributors().stream().map(u -> u.getAsTag()).collect(Collectors.toList())));
         response.append(".");
+        response.append("\n\n@S.A.I.L needs data to work, this policy will outline the sort of data we collect and how we use it.\n" +
+                "\n" +
+                "By using @S.A.I.L you acknowledge that some data may be collected to " +
+                "allow the bot to function correctly, S.A.I.L will never store data " +
+                "without you knowing it and will never use the data for Generative AI purposes, " +
+                "if you have any concerns about Data collection and Data usage please contact the developer " +
+                "via @S.A.I.L’s Direct messages.\n\n" +
+                "Privacy Policy: https://www.dawnfelstar.com/sail-privacy-policy");
         builder.setDescription(response.toString());
         builder.setThumbnail(client.bot.avatarURL);
-        builder.setFooter("Bot Version: " + Globals.version + " | D4J Version: " + Globals.d4jVersion);
+
+        builder.setFooter("Bot Version: " + Globals.version);
         channel.queueMessage(builder.build());
     }
 

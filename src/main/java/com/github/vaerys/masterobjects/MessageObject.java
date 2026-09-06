@@ -55,13 +55,13 @@ public class MessageObject {
     }
 
     public MessageReaction getReactionByName(String s) {
-        Optional<MessageReaction> temp = object.getReactions().stream().filter(r -> r.getReactionEmote().getName() == s).findFirst();
+        Optional<MessageReaction> temp = object.getReactions().stream().filter(r -> r.getEmoji().getName().equals(s)).findFirst();
         if (temp.isPresent()) return temp.get();
         return null;
     }
 
     public List<User> getMentions() {
-        return object.getMentionedUsers();
+        return object.getMentions().getUsers();
     }
 
     public Instant getTimestamp() {

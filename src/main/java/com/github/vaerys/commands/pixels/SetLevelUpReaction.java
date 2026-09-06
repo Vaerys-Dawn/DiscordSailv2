@@ -5,9 +5,9 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
-import emoji4j.EmojiUtils;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
+import net.fellbaum.jemoji.EmojiManager;
 
 public class SetLevelUpReaction extends Command {
 
@@ -17,13 +17,12 @@ public class SetLevelUpReaction extends Command {
         if (args.equalsIgnoreCase("Remove")) {
             command.guild.config.levelUpReaction = "null";
             return "\\> Level Up reaction was removed.";
-        } else if (EmojiUtils.isEmoji(emojiString)) {
-            String emoji = EmojiUtils.getEmoji(emojiString).getEmoji();
-            command.guild.config.levelUpReaction = emoji;
-            return "\\> The message a user level ups with will now be reacted with " + emoji + ".";
-        } else if (command.message.get().getEmotes().size() > 0) {
-            Emote emote = command.message.get().getEmotes().get(0);
-            if (command.client.get().getEmoteById(emote.getId()) == null)
+        } else if (EmojiManager.isEmoji(emojiString)) {
+            command.guild.config.levelUpReaction = emojiString;
+            return "\\> The message a user level ups with will now be reacted with " + emojiString + ".";
+        } else if (command.message.get().getMentions().getCustomEmojis().size() > 0) {
+            CustomEmoji emote = command.message.get().getMentions().getCustomEmojis().get(0);
+            if (command.client.get().getEmojiById(emote.getId()) == null)
                 return "\\> Not an Emoji that is on any of my guilds.";
             command.guild.config.levelUpReaction = emote.getId();
             return "\\> The message a user level ups with will now be reacted with " + emote.getAsMention() + ".";
@@ -59,7 +58,7 @@ public class SetLevelUpReaction extends Command {
 
     @Override
     protected Permission[] perms() {
-        return new Permission[]{Permission.MANAGE_EMOTES};
+        return new Permission[]{Permission.MANAGE_GUILD_EXPRESSIONS};
     }
 
     @Override

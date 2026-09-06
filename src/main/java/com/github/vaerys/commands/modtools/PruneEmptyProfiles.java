@@ -8,10 +8,8 @@ import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class PruneEmptyProfiles extends Command {
 

@@ -9,8 +9,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PermissionOverride;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.managers.ChannelManager;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.managers.channel.concrete.TextChannelManager;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -29,7 +29,7 @@ public class PropMutePerms extends Command {
         // get current messageChannel's "Muted" role perms
         Role mutedRole = command.guild.getMutedRole();
         if (mutedRole == null) return "\\> No muted role set.";
-        List<PermissionOverride> roleOverrides = command.guildChannel.get().getRolePermissionOverrides();
+        List<PermissionOverride> roleOverrides = command.guildChannel.get().getPermissionContainer().getRolePermissionOverrides();
         Optional<PermissionOverride> mutedRoleOverride = roleOverrides.stream().filter(p -> p.getRole().getIdLong() == mutedRole.getIdLong()).findFirst();
 
         if (!mutedRoleOverride.isPresent()) return "\\> No modified Permission for " + mutedRole.getName() + " in this messageChannel.";
@@ -40,18 +40,22 @@ public class PropMutePerms extends Command {
         List<TextChannel> guildChannels = command.guild.get().getTextChannels();
         int counter = 0;
         for (TextChannel channel : guildChannels) {
-            ChannelManager manager = channel.getManager();
+            TextChannelManager manager = channel.getManager();
             // remove old Permission, then add our stored set.
-            if (!manager.getChannel().getPermissionOverride(command.botUser.getMember()).getAllowed().contains(Permission.MANAGE_PERMISSIONS)) {
+            PermissionOverride perms = manager.getChannel().getPermissionOverride(command.botUser.getMember());
+
+
+            if (perms != null && !perms.getAllowed().contains(Permission.MANAGE_PERMISSIONS)) {
                 if (extraComments.isEmpty()) {
                     extraComments.append("\\> Could not apply the Permission to the following channels:");
                 }
                 extraComments.append("\n" + channel.getAsMention());
             } else {
-                channel.getManager().removePermissionOverride(mutedRole);
-                channel.getManager().putPermissionOverride(mutedRole, mutedRoleOverride.get().getAllowed(), mutedRoleOverride.get().getDenied());
+                manager = manager.removePermissionOverride(mutedRole);
+                manager = manager.putPermissionOverride(mutedRole, mutedRoleOverride.get().getAllowed(), mutedRoleOverride.get().getDenied());
                 counter++;
             }
+            manager.complete();
         }
 
         workingMsg.delete().complete();

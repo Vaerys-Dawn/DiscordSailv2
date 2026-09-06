@@ -3,7 +3,7 @@ package com.github.vaerys.tags.infotags;
 import com.github.vaerys.enums.TagType;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
-import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class TagEmoji extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        List<Emote> emoji = command.guild.getEmojiByName(getContents(from));
+        List<RichCustomEmoji> emoji = command.guild.getEmojiByName(getContents(from));
         if (emoji == null || emoji.isEmpty()) {
             return replaceFirstTag(from, error);
         }

@@ -14,6 +14,7 @@ import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 public class AdminCCs extends GlobalFile {
+    public static final String FILE_PATH = "Admin_CCs.json";
     private double fileVersion = 1.0;
     private List<AdminCCObject> commands = new ArrayList<>(20);
     private List<DualVar<Long, String>> tries = new LinkedList<>();

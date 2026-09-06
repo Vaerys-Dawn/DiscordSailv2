@@ -7,7 +7,6 @@ import com.github.vaerys.templates.GlobalFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 public class OldGuildUsers extends GlobalFile {

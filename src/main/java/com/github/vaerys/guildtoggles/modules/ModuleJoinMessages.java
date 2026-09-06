@@ -6,7 +6,7 @@ import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.GuildModule;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 public class ModuleJoinMessages extends GuildModule {
 

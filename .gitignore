@@ -206,3 +206,6 @@ easySquish.bat
 /target/
 Storage.tgz
 Storage.tar
+Storage_old/
+Storage_old 2024-08-06/
+*.tgz

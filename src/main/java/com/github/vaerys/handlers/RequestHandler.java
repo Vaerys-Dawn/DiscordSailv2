@@ -10,15 +10,23 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -288,7 +296,7 @@ public class RequestHandler {
             Role[] roles = temp.toArray(new Role[0]);
             List<Role> tempUserRoles = author.getRoles();
             if (tempUserRoles.containsAll(temp) && temp.containsAll(tempUserRoles)) return false;
-            guild.modifyMemberRoles(author, roles).complete();
+            guild.modifyMemberRoles(author, roles).queue();
             return true;
         } catch (HierarchyException e) {
             return false;
@@ -355,7 +363,7 @@ public class RequestHandler {
         Client.getClient().getPresence().setPresence(OnlineStatus.ONLINE, Activity.playing(s));
     }
 
-    public static MessageAction requestEmbedImage(@Nullable String s, String imageUrl, MessageChannel channel) {
+    public static MessageCreateAction requestEmbedImage(@Nullable String s, String imageUrl, MessageChannel channel) {
         XEmbedBuilder builder = new XEmbedBuilder(Constants.pixelColour);
         builder.setImage(imageUrl);
 
@@ -365,13 +373,13 @@ public class RequestHandler {
             return null;
         }
         if (s == null || s.isEmpty()) {
-            return channel.sendMessage(builder.build());
+            return channel.sendMessageEmbeds(builder.build());
         }
         if (s.length() > 2000) {
             sendError("Could not send message, Too Large.", s, channel, guild);
             return null;
         }
-        return channel.sendMessage(s).embed(builder.build());
+        return channel.sendMessage(s).addEmbeds(builder.build());
     }
 //
 //    public static RequestBuffer.RequestFuture<Boolean> roleManagement(UserObject user, GuildObject content, long mutedRoleID, boolean isAdding) {

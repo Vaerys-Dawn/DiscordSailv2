@@ -19,7 +19,7 @@ import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;

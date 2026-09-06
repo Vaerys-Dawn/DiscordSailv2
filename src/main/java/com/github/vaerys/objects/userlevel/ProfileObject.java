@@ -11,11 +11,9 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.ModNoteObject;
 import com.github.vaerys.pogos.GuildConfig;
-import com.github.vaerys.templates.GuildToggle;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

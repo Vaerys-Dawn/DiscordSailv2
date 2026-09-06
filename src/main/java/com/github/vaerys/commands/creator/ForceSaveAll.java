@@ -3,31 +3,30 @@ package com.github.vaerys.commands.creator;
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.main.Globals;
-import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 
-public class Present extends Command {
+
+public class ForceSaveAll extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
-        if (!command.guild.config.modulePixels && !command.guild.config.xpGain) return "\\> Cannot give gift right now :C";
-        Message message = command.guildChannel.sendMessage("\\> Click Me :D");
-        message.addReaction(Utility.getReaction("gift")).complete();
-        Globals.getGlobalData().setPresentId(message.getIdLong());
-        return null;
+        Message message = command.guildChannel.sendMessage("> Attempting to save all files");
+        Globals.saveFiles(false);
+        message.delete().complete();
+        return "> Saved all files?";
     }
 
     @Override
     protected String[] names() {
-        return new String[]{"Present"};
+        return new String[]{"ForceSaveAll"};
     }
 
     @Override
     public String description(CommandObject command) {
-        return "Gives a present";
+        return "attempts to force the saving of all files";
     }
 
     @Override

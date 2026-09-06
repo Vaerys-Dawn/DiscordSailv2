@@ -4,6 +4,7 @@ import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.FilePaths;
 import com.github.vaerys.main.Constants;
 import com.github.vaerys.main.Utility;
+import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.objects.botlevel.PatchObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.oldcode.OldGuildUsers;
@@ -152,8 +153,10 @@ public class PatchHandler {
         PatchObject json = getJsonConfig(guild, ChannelData.FILE_PATH,
                 1.2, "Change_ChannelSettings_To_Enum");
         if (json == null) return;
+        if (json.getObject() == null) return;
 
         JsonArray channelSettings = json.getObject().getAsJsonArray("channelSettings");
+        if (channelSettings == null) return;
         for (int i = 0; i < channelSettings.size(); i++) {
             JsonObject object = channelSettings.get(i).getAsJsonObject();
             String type = object.get("type").getAsString();
@@ -175,6 +178,7 @@ public class PatchHandler {
         if (json == null) return;
 
         JsonArray channelSettings = json.getObject().getAsJsonArray("channelSettings");
+        if (channelSettings == null) return;
         for (int i = 0; i < channelSettings.size(); i++) {
             JsonObject object = channelSettings.get(i).getAsJsonObject();
             String type = object.get("type").getAsString();
@@ -591,6 +595,8 @@ public class PatchHandler {
         JsonObject json = FileHandler.fileToJsonObject(path);
         if (checkPatch(1.0, guild, "Overhaul_Characters", json)) return;
         JsonElement e = json.get("characters");
+
+        if (e == null) return;
         JsonArray array = e.getAsJsonArray();
         if (array == null) return;
         array.forEach(jsonElement -> {

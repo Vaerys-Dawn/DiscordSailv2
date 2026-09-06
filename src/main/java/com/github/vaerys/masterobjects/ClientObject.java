@@ -3,9 +3,9 @@ package com.github.vaerys.masterobjects;
 import com.github.vaerys.main.Client;
 import com.github.vaerys.main.Globals;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +34,8 @@ public class ClientObject {
         return object.getGuilds();
     }
 
-    public Emote getEmojiByID(long emojiID) {
-        Optional<Emote> emote = getGuilds().stream().flatMap(g -> g.getEmotes().stream().filter(e -> e.getIdLong() == emojiID)).findFirst();
-        if (emote.isPresent()) return emote.get();
-        else return null;
+    public RichCustomEmoji getEmojiByID(long emojiID) {
+        Optional<RichCustomEmoji> emote = getGuilds().stream().flatMap(g -> g.getEmojis().stream().filter(e -> e.getIdLong() == emojiID)).findFirst();
+        return emote.orElse(null);
     }
 }

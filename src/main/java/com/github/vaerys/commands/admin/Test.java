@@ -2,14 +2,10 @@ package com.github.vaerys.commands.admin;
 
 import com.github.vaerys.enums.ChannelSetting;
 import com.github.vaerys.enums.SAILType;
-import com.github.vaerys.handlers.StringHandler;
-import com.github.vaerys.handlers.TimerHandler;
-import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
 
 /**
  * Created by Vaerys on 30/01/2017.
@@ -25,10 +21,19 @@ public class Test extends Command {
 
     @Override
     public String execute(String args, CommandObject command) {
+//        PrivateChannel privateChannel = command.user.getDmChannel();
+//
+//        privateChannel.sendMessage("Hello World").complete();
+
+        command.user.sendDm("Test");
+
+        throw new IllegalArgumentException("Test Exception");
+
+
 //        Message message = command.guildChannel.sendMessage("\\> Running Daily Reset...");
 ////        TimerHandler.dailyReset();
 //        message.delete().complete();
-        return "\\> Nothing to test right now.";
+//        return "\\> Testing...";
     }
 
     @Override

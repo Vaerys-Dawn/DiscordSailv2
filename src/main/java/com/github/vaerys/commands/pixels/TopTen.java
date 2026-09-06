@@ -12,7 +12,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TopTen extends Command {
 

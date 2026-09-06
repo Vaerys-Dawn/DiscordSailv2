@@ -1,7 +1,6 @@
 package com.github.vaerys.utilobjects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.github.jasminb.jsonapi.*;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
@@ -36,7 +35,7 @@ public class PatreonAPI {
         this.accessToken = accessToken;
 
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+//        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         this.converter = new ResourceConverter(
                 objectMapper,
                 User.class,

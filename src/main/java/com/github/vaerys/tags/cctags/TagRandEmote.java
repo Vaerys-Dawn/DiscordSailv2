@@ -4,7 +4,7 @@ import com.github.vaerys.enums.TagType;
 import com.github.vaerys.main.Globals;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.templates.TagObject;
-import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 
 import java.util.List;
 import java.util.Random;
@@ -17,9 +17,9 @@ public class TagRandEmote extends TagObject {
 
     @Override
     public String execute(String from, CommandObject command, String args) {
-        List<Emote> emojis = command.guild.get().getEmotes();
+        List<RichCustomEmoji> emojis = command.guild.get().getEmojis();
         Random random = Globals.getGlobalRandom();
-        Emote emoji = emojis.get(random.nextInt(emojis.size()));
+        RichCustomEmoji emoji = emojis.get(random.nextInt(emojis.size()));
         String output;
         if (emoji.getImageUrl().endsWith(".gif")) {
             output = "<a:" + emoji.getName() + ":" + emoji.getIdLong() + ">";

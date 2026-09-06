@@ -2,14 +2,12 @@ package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.main.Client;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.utils.AttachmentOption;
-import net.dv8tion.jda.internal.entities.DataMessage;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.LinkedList;
 
 public class ChannelObject {
     public ClientObject client;
@@ -54,51 +52,51 @@ public class ChannelObject {
         }
     }
 
-    public void queueFile(byte[] bytes, String fileName, AttachmentOption... options) {
-        messageChannel.sendFile(bytes, fileName, options).queue();
+    public void queueFile(byte[] bytes, String fileName) {
+        messageChannel.sendFiles(FileUpload.fromData(bytes, fileName)).queue();
     }
 
-    public void queueFile(String s, byte[] bytes, String fileName, AttachmentOption... options) {
+    public void queueFile(String s, byte[] bytes, String fileName) {
         if (s == null || s.isEmpty()) {
-            queueFile(bytes, fileName, options);
+            queueFile(bytes, fileName);
         } else {
-            messageChannel.sendMessage(s).addFile(bytes, fileName, options).queue();
+            messageChannel.sendMessage(s).addFiles(FileUpload.fromData(bytes, fileName)).queue();
         }
     }
 
-    public void queueFile(InputStream stream, String fileName, AttachmentOption... options) {
-        messageChannel.sendFile(stream, fileName, options).queue();
+    public void queueFile(InputStream stream, String fileName) {
+        messageChannel.sendFiles(FileUpload.fromData(stream, fileName)).queue();
     }
 
-    public void queueFile(String s, InputStream stream, String fileName, AttachmentOption... options) {
+    public void queueFile(String s, InputStream stream, String fileName) {
         if (s == null || s.isEmpty()) {
-            queueFile(stream, fileName, options);
+            queueFile(stream, fileName);
         } else {
-            messageChannel.sendMessage(s).addFile(stream, fileName, options).queue();
+            messageChannel.sendMessage(s).addFiles(FileUpload.fromData(stream, fileName)).queue();
         }
     }
 
-    public void queueFile(File file, String fileName, AttachmentOption... options) {
-        messageChannel.sendFile(file, fileName, options).queue();
+    public void queueFile(File file, String fileName) {
+        messageChannel.sendFiles(FileUpload.fromData(file, fileName)).queue();
     }
 
-    public void queueFile(File file, AttachmentOption... options) {
-        messageChannel.sendFile(file, options).queue();
+    public void queueFile(File file) {
+        messageChannel.sendFiles(FileUpload.fromData(file)).queue();
     }
 
-    public void queueFile(String s, File file, String fileName, AttachmentOption... options) {
+    public void queueFile(String s, File file, String fileName) {
         if (s == null || s.isEmpty()) {
-            queueFile(file, fileName, options);
+            queueFile(file, fileName);
         } else {
-            messageChannel.sendMessage(s).addFile(file, fileName, options).queue();
+            messageChannel.sendMessage(s).addFiles(FileUpload.fromData(file, fileName)).queue();
         }
     }
 
-    public void queueFile(String s, File file, AttachmentOption... options) {
+    public void queueFile(String s, File file) {
         if (s == null || s.isEmpty()) {
-            queueFile(file, options);
+            queueFile(file);
         } else {
-            messageChannel.sendMessage(s).addFile(file, options).queue();
+            messageChannel.sendMessage(s).addFiles(FileUpload.fromData(file)).queue();
         }
     }
 
@@ -119,51 +117,51 @@ public class ChannelObject {
         }
     }
 
-    public Message sendFile(byte[] bytes, String fileName, AttachmentOption... options) {
-        return messageChannel.sendFile(bytes, fileName, options).complete();
+    public Message sendFile(byte[] bytes, String fileName) {
+        return messageChannel.sendFiles(FileUpload.fromData(bytes, fileName)).complete();
     }
 
-    public Message sendFile(String s, byte[] bytes, String fileName, AttachmentOption... options) {
+    public Message sendFile(String s, byte[] bytes, String fileName) {
         if (s == null || s.isEmpty()) {
-            return sendFile(bytes, fileName, options);
+            return sendFile(bytes, fileName);
         }else {
-            return messageChannel.sendMessage(s).addFile(bytes, fileName, options).complete();
+            return messageChannel.sendMessage(s).addFiles(FileUpload.fromData(bytes, fileName)).complete();
         }
     }
 
-    public Message sendFile(InputStream stream, String fileName, AttachmentOption... options) {
-        return messageChannel.sendFile(stream, fileName, options).complete();
+    public Message sendFile(InputStream stream, String fileName) {
+        return messageChannel.sendFiles(FileUpload.fromData(stream, fileName)).complete();
     }
 
-    public Message sendFile(String s, InputStream stream, String fileName, AttachmentOption... options) {
+    public Message sendFile(String s, InputStream stream, String fileName) {
         if (s == null || s.isEmpty()) {
-            return sendFile(stream, fileName, options);
+            return sendFile(stream, fileName);
         }else {
-            return messageChannel.sendMessage(s).addFile(stream, fileName, options).complete();
+            return messageChannel.sendMessage(s).addFiles(FileUpload.fromData(stream, fileName)).complete();
         }
     }
 
-    public Message sendFile(File file, String fileName, AttachmentOption... options) {
-        return messageChannel.sendFile(file, fileName, options).complete();
+    public Message sendFile(File file, String fileName) {
+        return messageChannel.sendFiles(FileUpload.fromData(file, fileName)).complete();
     }
 
-    public Message sendFile(File file, AttachmentOption... options) {
-        return messageChannel.sendFile(file, options).complete();
+    public Message sendFile(File file) {
+        return messageChannel.sendFiles(FileUpload.fromData(file)).complete();
     }
 
-    public Message sendFile(String s, File file, String fileName, AttachmentOption... options) {
+    public Message sendFile(String s, File file, String fileName) {
         if (s == null || s.isEmpty()) {
-            return sendFile(file, fileName, options);
+            return sendFile(file, fileName);
         }else {
-            return messageChannel.sendMessage(s).addFile(file, fileName, options).complete();
+            return messageChannel.sendMessage(s).addFiles(FileUpload.fromData(file, fileName)).complete();
         }
     }
 
-    public Message sendFile(String s, File file, AttachmentOption... options) {
+    public Message sendFile(String s, File file) {
         if (s == null || s.isEmpty()) {
-            return sendFile(file, options);
+            return sendFile(file);
         }else {
-            return messageChannel.sendMessage(s).addFile(file, options).complete();
+            return messageChannel.sendMessage(s).addFiles(FileUpload.fromData(file)).complete();
         }
     }
 

@@ -7,8 +7,8 @@ import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.DMCommand;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 
 /**
  * Created by Vaerys on 05/02/2017.

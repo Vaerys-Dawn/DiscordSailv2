@@ -1,18 +1,15 @@
 package com.github.vaerys.main;
 
 import com.github.vaerys.enums.FilePaths;
-import com.github.vaerys.enums.TagType;
 import com.github.vaerys.handlers.FileHandler;
 import com.github.vaerys.handlers.PatchHandler;
 import com.github.vaerys.handlers.TimerHandler;
 import com.github.vaerys.pogos.Config;
 import com.github.vaerys.pogos.GlobalData;
-import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.FileFactory;
-import com.github.vaerys.templates.TagObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +26,7 @@ public class Main {
     static Logger logger;
 
     public static void main(String[] args) throws UnknownHostException {
+        new Constants();
 
         //important, do not move
         PatchHandler.preInitPatches();
@@ -90,14 +88,14 @@ public class Main {
             //load config phase 2
             Globals.initConfig(client, config, globalData);
 
-            if (Globals.creatorID == 153159020528533505L) {
-                try {
-                    List<String> patreonToken = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN);
-                    Client.initPatreon(patreonToken);
-                } catch (IndexOutOfBoundsException e) {
-                    logger.info("No Patreon Token found.");
-                }
-            }
+//            if (Globals.creatorID == 153159020528533505L) {
+//                try {
+//                    List<String> patreonToken = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN);
+//                    Client.initPatreon(patreonToken);
+//                } catch (IndexOutOfBoundsException e) {
+//                    logger.info("No Patreon Token found.");
+//                }
+//            }
 
             Globals.validateConfig();
             if (Globals.errorStack != null) {

@@ -12,7 +12,7 @@ import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.objects.utils.SubCommandObject;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

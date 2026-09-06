@@ -9,6 +9,7 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
+import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.adminlevel.UserRateObject;
 import com.github.vaerys.objects.botlevel.RandomStatusObject;
 import com.github.vaerys.objects.depreciated.BlackListObject;
@@ -19,7 +20,12 @@ import com.github.vaerys.objects.userlevel.ReminderObject;
 import com.github.vaerys.pogos.GuildConfig;
 import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.exceptions.MissingAccessException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -155,18 +161,23 @@ public class TimerHandler {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-               dailyReset();
+                dailyReset();
             }
         }, initialDelay * 1000, period);
+
     }
 
     public static void dailyReset() {
+        dailyReset(true);
+    }
+
+    public static void dailyReset(boolean doDecay) {
         try {
             keepAliveDaily = System.currentTimeMillis();
             //init vars
 
             //do checks
-            Client.checkPatrons();
+//            Client.checkPatrons();
             checkKeepAlive();
 
             //update Active Event
@@ -183,7 +194,7 @@ public class TimerHandler {
             List<BlackListObject.BlacklistedUserObject> blacklistedUserObjects = Globals.getGlobalData().getBlacklistedUsers();
             blacklistedUserObjects.removeIf(object -> object.getCounter() < 5);
 
-            dailyTaskHandler(event);
+            dailyTaskHandler(event, doDecay);
 
 
         } catch (Exception e) {
@@ -191,7 +202,7 @@ public class TimerHandler {
         }
     }
 
-    private static void dailyTaskHandler(TimedEvent event) {
+    private static void dailyTaskHandler(TimedEvent event, boolean doDecay) {
         ZonedDateTime timeNow = ZonedDateTime.now(ZoneOffset.UTC);
         DayOfWeek day = timeNow.getDayOfWeek();
 
@@ -200,36 +211,45 @@ public class TimerHandler {
         Random random = Globals.getGlobalRandom();
 
         for (GuildObject task : Globals.getGuilds()) {
-            GuildConfig guildconfig = task.config;
-            //do decay
-            GuildHandler.dailyTask(task);
+            try {
+                GuildConfig guildconfig = task.config;
+                //do decay
+                GuildHandler.dailyTask(task, doDecay);
 
-            //reset offenders
-            task.resetOffenders();
+                //reset offenders
+                task.resetOffenders();
 
-            //reset Admin CC counters
-            task.adminCCs.dailyReset();
+                //reset Admin CC counters
+                task.adminCCs.dailyReset();
 
-            //getAllToggles general messageChannel
-            TextChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
+                //getAllToggles general messageChannel
+                TextChannel generalChannel = task.getChannelByType(ChannelSetting.GENERAL);
 
 
-
-            //do daily messages
-            if (generalChannel != null && guildconfig.dailyMessage) {
-                DailyMessage finalMessage;
-                List<DailyMessage> messages;
-                if (event != null && event.doSpecialMessages() && event.getMessagesDay(day).size() != 0) {
-                    messages = event.getMessagesDay(day);
-                } else {
-                    messages = new ArrayList<>(Globals.getDailyMessages().getDailyMessages(day));
-                    messages.add(Globals.getDailyMessage(day));
+                //do daily messages
+                if (generalChannel != null && guildconfig.dailyMessage) {
+                    DailyMessage finalMessage;
+                    List<DailyMessage> messages;
+                    if (event != null && event.doSpecialMessages() && event.getMessagesDay(day).size() != 0) {
+                        messages = event.getMessagesDay(day);
+                    } else {
+                        messages = new ArrayList<>(Globals.getDailyMessages().getDailyMessages(day));
+                        messages.add(Globals.getDailyMessage(day));
+                    }
+                    int randomMessage = random.nextInt(messages.size());
+                    finalMessage = messages.get(randomMessage);
+                    task.config.setLastDailyMessage(finalMessage);
+                    CommandObject command = new CommandObject(task, generalChannel);
+                    generalChannel.sendMessage(finalMessage.getContents(command)).queue();
                 }
-                int randomMessage = random.nextInt(messages.size());
-                finalMessage = messages.get(randomMessage);
-                task.config.setLastDailyMessage(finalMessage);
-                CommandObject command = new CommandObject(task, generalChannel);
-                generalChannel.sendMessage(finalMessage.getContents(command)).queue();
+            } catch (InsufficientPermissionException e) {
+                GuildMessageChannel channel = task.getChannelByType(ChannelSetting.ADMIN);
+                if (channel != null && channel.canTalk()) {
+                    channel.sendMessage("\\> An error occurred trying to send daily message, Reason: Missing permissions to send message to daily message channel").queue();
+                }
+
+            } catch (Exception e) {
+                Client.getClientObject().creator.sendDm(String.format("Server: %s threw an Error during daily task%n%s", task.get().getName(), ExceptionUtils.getStackTrace(e)));
             }
         }
     }
@@ -293,7 +313,7 @@ public class TimerHandler {
                             object.setSent(false);
                         }
                     }
-                } catch (MissingAccessException e) {
+                } catch (InsufficientPermissionException e) {
                     logger.error("Could not send message to user, missing permissions. UserID: {} ChannelID: {}", object.getUserID(), object.getChannelID());
                 }
                 Globals.getGlobalData().removeReminder(object);
@@ -367,14 +387,16 @@ public class TimerHandler {
             task.forceClearRate();
         }
         //Mutes.
-        task.users.mutedUsers.forEach((id, profile) -> {
+
+        for (Map.Entry<Long, MutedUserObject> longMutedUserObjectEntry : task.users.mutedUsers.entrySet()) {
+            MutedUserObject profile = longMutedUserObjectEntry.getValue();
             if (profile.getRemainderSecs() != -1) {
                 profile.tickDown(10);
                 if (profile.getRemainderSecs() == 0) {
                     task.users.unMuteUser(profile.getID(), task.longID);
                 }
             }
-        });
+        }
     }
 
 

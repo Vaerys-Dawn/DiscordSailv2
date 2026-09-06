@@ -16,7 +16,7 @@ import com.github.vaerys.tags.cctags.TagRemoveMentions;
 import com.github.vaerys.templates.TagObject;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

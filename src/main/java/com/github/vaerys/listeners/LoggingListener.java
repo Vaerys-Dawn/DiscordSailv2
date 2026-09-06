@@ -12,10 +12,10 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.audit.ActionType;
 import net.dv8tion.jda.api.audit.AuditLogEntry;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
-import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
-import net.dv8tion.jda.api.events.channel.voice.VoiceChannelCreateEvent;
-import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
@@ -269,25 +269,20 @@ public class LoggingListener extends ListenerAdapter {
 
 
     @Override
-    public void onTextChannelDelete(@NotNull TextChannelDeleteEvent event) {
+    public void onChannelDelete(ChannelDeleteEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
-            String log = "> Channel #" + event.getChannel().getName() + " was deleted.";
-            LoggingListener.sendLog(log, content, false);
-        }
-        updateVariables(event.getChannel().getGuild());
-    }
 
-    @Override
-    public void onVoiceChannelDelete(@NotNull VoiceChannelDeleteEvent event) {
-        GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
-        if (!content.config.moduleLogging) return;
-        if (content.config.channelLogging) {
-            String log = "> Channel " + event.getChannel().getName() + " was deleted.";
+            String log;
+            if (event.getChannel().getType() == ChannelType.TEXT){
+                log = "> Channel #" + event.getChannel().getName() + " was deleted.";
+            }else {
+                log = "> Channel " + event.getChannel().getName() + " was deleted.";
+            }
             LoggingListener.sendLog(log, content, false);
         }
-        updateVariables(event.getChannel().getGuild());
+        updateVariables(event.getGuild());
     }
 
     public static void updateVariables(Guild guild) {
@@ -298,21 +293,11 @@ public class LoggingListener extends ListenerAdapter {
     }
 
     @Override
-    public void onTextChannelCreate(@NotNull TextChannelCreateEvent event) {
+    public void onChannelCreate(ChannelCreateEvent event) {
         GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
         if (!content.config.moduleLogging) return;
         if (content.config.channelLogging) {
             String log = "> Channel " + event.getChannel().getAsMention() + " was created.";
-            sendLog(log, content, false);
-        }
-    }
-
-    @Override
-    public void onVoiceChannelCreate(@NotNull VoiceChannelCreateEvent event) {
-        GuildObject content = Globals.getGuildContent(event.getGuild().getIdLong());
-        if (!content.config.moduleLogging) return;
-        if (content.config.channelLogging) {
-            String log = "> Channel " + event.getChannel().getName() + " was created.";
             sendLog(log, content, false);
         }
     }

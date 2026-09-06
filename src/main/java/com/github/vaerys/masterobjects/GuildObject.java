@@ -21,6 +21,10 @@ import com.github.vaerys.templates.GlobalFile;
 import com.github.vaerys.templates.GuildToggle;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -277,8 +281,8 @@ public class GuildObject {
         return object.getVoiceChannelById(id);
     }
 
-    public Emote getEmojiById(long id) {
-        return object.getEmoteById(id);
+    public RichCustomEmoji getEmojiById(long id) {
+        return object.getEmojiById(id);
     }
 
     public long getOwnerID() {
@@ -293,8 +297,8 @@ public class GuildObject {
         return object.getMembers();
     }
 
-    public List<Emote> getEmojiByName(String name) {
-        return object.getEmotesByName(name, true);
+    public List<RichCustomEmoji> getEmojiByName(String name) {
+        return object.getEmojisByName(name, true);
     }
 
     public void handleWelcome(CommandObject command) {
@@ -471,5 +475,9 @@ public class GuildObject {
 
     public Member getBot() {
         return object.getMemberById(client.bot.longID);
+    }
+
+    public List<GuildMessageChannel> getMessageChannels() {
+        return object.getChannels().stream().filter(GuildMessageChannel.class::isInstance).map(GuildMessageChannel.class::cast).collect(Collectors.toList());
     }
 }

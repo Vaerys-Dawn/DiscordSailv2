@@ -6,7 +6,7 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.AdminCCObject;
 import com.github.vaerys.templates.TagAdminSubTagObject;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
 public class TagAlert extends TagAdminSubTagObject {
 

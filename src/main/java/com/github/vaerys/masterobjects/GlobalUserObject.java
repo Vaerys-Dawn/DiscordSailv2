@@ -6,16 +6,22 @@ import com.github.vaerys.main.Utility;
 import com.github.vaerys.objects.userlevel.*;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.api.utils.TimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GlobalUserObject {
@@ -41,9 +47,12 @@ public class GlobalUserObject {
     private Optional<List<ReminderObject>> reminders = Optional.empty();
     private Optional<List<GuildObject>> guilds = Optional.empty();
 
+    Logger logger = LoggerFactory.getLogger(GlobalUserObject.class);
+
     public User get() {
         return object;
     }
+
 
     public GlobalUserObject(User user, ClientObject client) {
         this.client = client;
@@ -141,7 +150,7 @@ public class GlobalUserObject {
     }
 
     public List<ServerObject> getServers(long guildID) {
-        if (!characters.isPresent()) {
+        if (!servers.isPresent()) {
             getServers();
         }
         return servers.get().get(guildID);
@@ -150,9 +159,13 @@ public class GlobalUserObject {
     public List<ProfileObject> getProfiles() {
         if (!profiles.isPresent()) {
             HashMap<Long, ProfileObject> temp = new HashMap<>();
-            getGuilds().forEach(g -> temp.put(g.longID, g.users.getUserByID(longID)));
+            List<GuildObject> guilds = getGuilds();
+            guilds.forEach(guildObject -> {
+                temp.put(guildObject.longID, guildObject.users.getUserByID(longID));
+            });
+            profiles = Optional.of(temp);
         }
-        return profiles.get().values().stream().collect(Collectors.toList());
+        return new ArrayList<>(profiles.get().values());
     }
 
     public ProfileObject getProfile(long guildID) {
@@ -217,7 +230,7 @@ public class GlobalUserObject {
     }
 
     public PrivateChannel getDmChannel() {
-        return client.get().getPrivateChannelById(longID);
+        return object.openPrivateChannel().complete();
     }
 
     public void queueDm(String s) {
@@ -227,27 +240,28 @@ public class GlobalUserObject {
 
     public void queueDm(MessageEmbed embed) {
         if (getDmChannel() == null) return;
-        getDmChannel().sendMessage(embed).queue();
+        getDmChannel().sendMessageEmbeds(embed).queue();
     }
 
     public void queueDm(String s, MessageEmbed embed) {
         if (getDmChannel() == null) return;
-        getDmChannel().sendMessage(s).embed(embed).queue();
+        getDmChannel().sendMessage(s).addEmbeds(embed).queue();
     }
 
     public Message sendDm(String s) {
-        if (getDmChannel() == null) return null;
-        return getDmChannel().sendMessage(s).complete();
+        PrivateChannel channel = getDmChannel();
+        if (channel == null) return null;
+        return channel.sendMessage(s).complete();
     }
 
     public Message sendDm(MessageEmbed embed) {
         if (getDmChannel() == null) return null;
-        return getDmChannel().sendMessage(embed).complete();
+        return getDmChannel().sendMessageEmbeds(embed).complete();
     }
 
     public Message sendDm(String s, MessageEmbed embed) {
         if (getDmChannel() == null) return null;
-        return getDmChannel().sendMessage(s).embed(embed).complete();
+        return getDmChannel().sendMessage(s).addEmbeds(embed).complete();
     }
 
     @Override
@@ -258,4 +272,24 @@ public class GlobalUserObject {
             return super.equals(obj);
         }
     }
+
+    public void sendErrorFileDm(String toString) {
+        sendErrorFileDm("", toString);
+    }
+
+    public void sendErrorFileDm(String message, String error) {
+        LocalDateTime dateTime = LocalDateTime.ofEpochSecond(Instant.now().getEpochSecond(), 0, ZoneOffset.UTC);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd-h-mm-ss", Locale.ENGLISH);
+        String formattedDate = dateTime.format(formatter);
+        String fileName = "Error_" + formattedDate + ".txt";
+        ByteArrayInputStream stream = new ByteArrayInputStream(error.getBytes(StandardCharsets.UTF_8));
+        if (message.isEmpty()) {
+            getDmChannel().sendFiles(FileUpload.fromData(stream, fileName)).queue();
+        } else {
+            FileUpload upload = FileUpload.fromData(stream, fileName);
+            getDmChannel().sendMessage(message).addFiles(upload).queue();
+        }
+    }
+
+
 }

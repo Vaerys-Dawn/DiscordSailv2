@@ -7,7 +7,10 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.TagObject;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -22,7 +25,7 @@ public class InfoHandler {
     List<String> infoContents;
     CommandObject object;
     private Guild guild;
-    private TextChannel channel;
+    private GuildMessageChannel channel;
 
     public InfoHandler(CommandObject object) {
         this.object = object;
@@ -34,7 +37,8 @@ public class InfoHandler {
     }
 
     private void updateChannel() {
-        channel.deleteMessages(channel.getHistory().getRetrievedHistory()).complete();
+        List<Message> messages = channel.getHistory().getRetrievedHistory();
+        if (!messages.isEmpty()) channel.deleteMessages(messages).complete();
         StringBuilder builder = new StringBuilder();
         ArrayList<String> stringChunks = new ArrayList<>();
         String lastChunk;
@@ -87,7 +91,7 @@ public class InfoHandler {
             if (contents.contains(imagePrefix)) {
                 image = StringUtils.substringBetween(contents, imagePrefix, imageSuffix);
                 File file = new File(Utility.getGuildImageDir(guild.getIdLong()) + image);
-                channel.sendFile(file).complete();
+                channel.sendFiles(FileUpload.fromData(file)).complete();
             } else {
                 channel.sendMessage(contents).complete();
             }

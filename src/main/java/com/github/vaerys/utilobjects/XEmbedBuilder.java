@@ -7,8 +7,9 @@ import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.masterobjects.GlobalUserObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -33,7 +34,7 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     public void queue(TextChannel channel) {
-        channel.sendMessage(this.build()).queue();
+        channel.sendMessageEmbeds(this.build()).queue();
     }
 
     public void queue(ChannelObject channel) {
@@ -49,11 +50,11 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     public void queue(MessageChannel channel) {
-        channel.sendMessage(this.build()).queue();
+        channel.sendMessageEmbeds(this.build()).queue();
     }
 
     public void queue(String s, TextChannel channel) {
-        channel.sendMessage(s).embed(this.build()).queue();
+        channel.sendMessage(s).addEmbeds(this.build()).queue();
     }
 
     public void queue(String s, ChannelObject channel) {
@@ -69,11 +70,11 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     public void queue(String s, MessageChannel channel) {
-        channel.sendMessage(s).embed(this.build()).queue();
+        channel.sendMessage(s).addEmbeds(this.build()).queue();
     }
 
     public Message send(TextChannel channel) {
-        return channel.sendMessage(this.build()).complete();
+        return channel.sendMessageEmbeds(this.build()).complete();
     }
 
     public Message send(ChannelObject channel) {
@@ -89,11 +90,11 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     public Message send(MessageChannel channel) {
-        return channel.sendMessage(this.build()).complete();
+        return channel.sendMessageEmbeds(this.build()).complete();
     }
 
     public Message send(String s, TextChannel channel) {
-        return channel.sendMessage(s).embed(this.build()).complete();
+        return channel.sendMessage(s).addEmbeds(this.build()).complete();
     }
 
     public Message send(String s, ChannelObject channel) {
@@ -109,7 +110,7 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
     public Message send(String s, MessageChannel channel) {
-        return channel.sendMessage(s).embed(this.build()).complete();
+        return channel.sendMessage(s).addEmbeds(this.build()).complete();
     }
 
     @Override
@@ -122,26 +123,31 @@ public class XEmbedBuilder extends EmbedBuilder {
     }
 
 
+    @NotNull
     @Override
-    public EmbedBuilder addField(String title, String content, boolean inline) {
+    public EmbedBuilder addField(@NotNull String title, @NotNull String content, boolean inline) {
         return super.addField(Utility.removeMentions(title), Utility.removeMentions(content), inline);
     }
 
+    @NotNull
     @Override
     public EmbedBuilder setFooter(String footerText) {
         return super.setFooter(Utility.removeMentions(footerText));
     }
 
+    @NotNull
     @Override
     public EmbedBuilder setFooter(String footerText, String footerImageURL) {
         return super.setFooter(Utility.removeMentions(footerText), footerImageURL);
     }
 
+    @NotNull
     @Override
     public EmbedBuilder setAuthor(String authorName) {
         return super.setAuthor(Utility.removeMentions(authorName));
     }
 
+    @NotNull
     @Override
     public EmbedBuilder setAuthor(String authorName, String avatarImageURL) {
         return super.setAuthor(Utility.removeMentions(authorName), avatarImageURL);

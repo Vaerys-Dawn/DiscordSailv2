@@ -13,7 +13,7 @@ import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -89,25 +89,24 @@ public class PixelHelp extends Command {
         String rules = "";
         if (command.guild.config.xpDecay) {
             long maxDecay = (long) ((8) * (Globals.avgMessagesPerDay * command.guild.config.xpRate * command.guild.config.xpModifier) / 8);
+            long doubleMaxDecay = (long) ((23) * (Globals.avgMessagesPerDay * command.guild.config.xpRate * command.guild.config.xpModifier) / 8);
             long minDecay = (long) ((Globals.avgMessagesPerDay * command.guild.config.xpRate * command.guild.config.xpModifier) / 8);
-//            long minMessageCount = (long) (minDecay / (command.guild.config.xpRate * command.guild.config.xpModifier));
-//            long messageCount = (long) (maxDecay / (command.guild.config.xpRate * command.guild.config.xpModifier));
             rules += "**How pixel decay works:** \n" +
-                    "> Pixel decay starts after 7 days of no messages sent.\n" +
-                    "> The value for the first day of decay is " + minDecay + " pixels.\n" +
-                    "> Decay then increases at a rate of " + minDecay + " pixels per day before reaching a max of " + maxDecay + " pixels per day.\n" +
-                    "> Decay only reaches its maximum after 15 days of inactivity.\n";
-//                    "> The max decay value per day is " + maxDecay + " pixels or about " + messageCount + " messages worth of pixels.\n";
+                    "\\> Pixel decay starts after 7 days of no messages sent.\n" +
+                    "\\> The value for the first day of decay is " + minDecay + " pixels.\n" +
+                    "\\> Decay then increases at a rate of " + minDecay + " pixels per day before reaching a max of " + maxDecay + " pixels per day.\n" +
+                    "\\> Decay reaches a maximum after 15 days of inactivity.\n" +
+                    "\\> Decay will increase again to " + doubleMaxDecay + " after 90 days of inactivity.\n";
             if (command.guild.config.getRewardRoles().size() != 0) {
-                rules += "> There is a level floor below every reward role which sits at 100 pixels below the pixels required to receive that role.\n" +
-                        "> If you reach a multiple of 30 days and you are at a reward's pixel floor it will decay you past the level floor.\n" +
-                        "> Decay cannot decay you past the lowest reward role.\n" +
-                        "> Decay does not affect you if you are below the lowest reward role.\n";
+                rules += "\\> There is a level floor below every reward role which sits at 100 pixels below the pixels required to receive that role.\n" +
+                        "\\> If you reach a multiple of 30 days and you are at a reward's pixel floor it will decay you past the level floor.\n" +
+                        "\\> Decay cannot decay you past the lowest reward role.\n" +
+                        "\\> Decay does not affect you if you are below the lowest reward role.\n";
             }
-            rules += "> Any message regardless of size or messageChannel will reset the decay timer.\n\n";
+            rules += "\\> Any message regardless of size or messageChannel will reset the decay timer.\n\n";
             return rules;
         } else {
-            return "> Decay is not currently active on this server.";
+            return "\\> Decay is not currently active on this server.";
         }
     }
 
@@ -115,14 +114,14 @@ public class PixelHelp extends Command {
         try {
             long level = Long.parseLong(args);
             if (level < 0) {
-                return "> Please use a positive number.";
+                return "\\> Please use a positive number.";
             }
             if (level > Constants.LEVEL_CAP) {
-                return "> No, I don't want to calculate the total xp for level " + NumberFormat.getInstance().format(level) + "!";
+                return "\\> No, I don't want to calculate the total xp for level " + NumberFormat.getInstance().format(level) + "!";
             }
-            return "> Level: " + level + " = " + NumberFormat.getInstance().format(PixelHandler.totalXPForLevel(level)) + " pixels.";
+            return "\\> Level: " + level + " = " + NumberFormat.getInstance().format(PixelHandler.totalXPForLevel(level)) + " pixels.";
         } catch (NumberFormatException e) {
-            return "> You must supply a valid number.";
+            return "\\> You must supply a valid number.";
         }
     }
 
@@ -130,14 +129,14 @@ public class PixelHelp extends Command {
         try {
             long xp = Long.parseLong(args);
             if (xp < 0) {
-                return "> Please use a positive number.";
+                return "\\> Please use a positive number.";
             }
             if (xp > Constants.PIXELS_CAP) {
-                return "> Its something over level 1000, could you leave me alone.";
+                return "\\> Its something over level 1000, could you leave me alone.";
             }
-            return "> " + NumberFormat.getInstance().format(xp) + "XP = Level: " + PixelHandler.xpToLevel(xp);
+            return "\\> " + NumberFormat.getInstance().format(xp) + "XP = Level: " + PixelHandler.xpToLevel(xp);
         } catch (NumberFormatException e) {
-            return "> You must supply a valid number.";
+            return "\\> You must supply a valid number.";
         }
     }
 

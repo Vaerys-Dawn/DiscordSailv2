@@ -15,7 +15,7 @@ import com.github.vaerys.utilobjects.XEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.Region;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -57,7 +57,7 @@ public class GetGuildInfo extends Command {
         //todo change this to the proper impl when api allows it.
 
 
-        boolean isVIP = command.guild.get().getRegion().isVip();
+        boolean isVIP = command.guild.get().getFeatures().contains("PARTNERED") || command.guild.get().getFeatures().contains("VERIFIED");
 
 
         serverInfo.setThumbnail(command.guild.get().getIconUrl());
@@ -72,11 +72,7 @@ public class GetGuildInfo extends Command {
         UserObject owner = new UserObject(command.guild.getOwner(), command.guild);
         serverStats.append("**Guild ID:** " + command.guild.longID);
         serverStats.append("\n**Guild Owner:** @" + owner.username);
-        Region region = command.guild.get().getRegion();
-        if (region != null) {
-            serverStats.append("\n**Region:** ");
-            serverStats.append(command.guild.get().getRegion().getName());
-        }
+
         long totalChannels = command.guild.get().getChannels().size();
         long totalVoiceChannels = command.guild.get().getVoiceChannels().size();
         totalChannels -= totalVoiceChannels;

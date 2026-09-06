@@ -14,9 +14,19 @@ import com.github.vaerys.pogos.GuildUsers;
 import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.templates.TagObject;
-import emoji4j.EmojiUtils;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.fellbaum.jemoji.EmojiManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +36,6 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static com.github.vaerys.enums.UserSetting.*;
 
@@ -54,7 +63,7 @@ public class PixelHandler {
             //modifiable min and max decay days needs to be implemented.
             if (days > 90) {
                 // kill the xp after 90 days of absences
-                decay = (long) ((90 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
+                decay = (long) ((30 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
             } else if (days > 15) {
                 //plateaued xp decay
                 decay = (long) ((15 - 7) * (Globals.avgMessagesPerDay * content.config.xpRate * content.config.xpModifier) / 8);
@@ -243,7 +252,7 @@ public class PixelHandler {
         UserSetting userState = user.getLevelState();
         boolean rankedUp = reward != null;
         TextChannel levelChannel = object.guild.getChannelByType(ChannelSetting.LEVEL_UP);
-        TextChannel currentChannel = object.guildChannel.get();
+        GuildMessageChannel currentChannel = object.guildChannel.get();
         PrivateChannel dmChannel = object.user.getDmChannel();
         Message levelMessage = null;
 
@@ -311,7 +320,7 @@ public class PixelHandler {
      * @return the message that was sent.
      */
     private static Message sendLevelMessage(String message, MessageChannel channel, boolean isRankUp, boolean doGif) {
-        MessageAction sent;
+        MessageCreateAction sent;
         if (doGif) {
             sent = RequestHandler.requestEmbedImage(message, isRankUp ? Constants.RANK_UP_IMAGE_URL : Constants.LEVEL_UP_IMAGE_URL, channel);
         } else {
@@ -330,13 +339,17 @@ public class PixelHandler {
     private static void handleReactions(ProfileObject user, CommandObject object) {
         if (user.getSettings().contains(UserSetting.NO_LEVEL_UP_REACTIONS)) return;
         if (object.guild.config.levelUpReaction.equalsIgnoreCase("null")) return;
-        Emote emote = object.client.get().getEmoteById(object.guild.config.levelUpReaction);
-        if (EmojiUtils.isEmoji(object.guild.config.levelUpReaction)) {
-            object.message.get().addReaction(object.guild.config.levelUpReaction).queue();
-        } else if (emote != null) {
-            object.message.get().addReaction(emote).queue();
-        } else {
-            sendReactionError(object);
+        RichCustomEmoji emote = object.client.get().getEmojiById(object.guild.config.levelUpReaction);
+        try {
+            if (EmojiManager.isEmoji(object.guild.config.levelUpReaction)) {
+                object.message.get().addReaction(Emoji.fromUnicode(object.guild.config.levelUpReaction)).queue();
+            } else if (emote != null) {
+                object.message.get().addReaction(emote).queue();
+            } else {
+                sendReactionError(object);
+            }
+        }catch (InsufficientPermissionException e) {
+            logger.info("Failed to send reaction to channel id: {}", object.guildChannel.longID);
         }
     }
 

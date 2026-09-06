@@ -17,14 +17,16 @@ public class AddProfile extends Command {
             user = command.guild.getUserByID(userID);
 
         } catch (NumberFormatException e) {
-            if (command.message.get().getMentions().size() != 0) {
-                user = command.message.get().getMentionedMembers().get(0);
+            if (!command.message.get().getMentions().getMembers().isEmpty()) {
+                user = command.message.get().getMentions().getMembers().get(0);
             }
+        }
+        if (user == null) {
+            return "\\> Could not find user.";
         }
         if (command.guild.users.getUserByID(user.getIdLong()) != null) {
             return "\\> " + user.getEffectiveName() + " already has a profile.";
         }
-        if (user == null) return "\\> Invalid UserID";
         command.guild.users.addUser(user.getIdLong());
         return "\\> Profile for **" + user.getEffectiveName() + "** Created.";
     }

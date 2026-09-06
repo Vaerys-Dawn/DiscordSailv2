@@ -16,7 +16,11 @@ import com.github.vaerys.pogos.GlobalData;
 import com.github.vaerys.pogos.GuildConfig;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,14 +98,14 @@ public class SpamHandler {
             return false;
         }
         if (guildconfig.maxMentions) {
-            if (message.getMentions().size() > 8) {
+            if (message.getMentions().getMembers().size() > 8) {
                 message.delete().queue();
                 int i = 0;
                 boolean offenderFound = false;
                 for (OffenderObject o : guildconfig.getOffenders()) {
                     if (author.getIdLong() == o.getID()) {
                         guildconfig.addOffence(o.getID());
-                        command.guild.sendDebugLog(command, "STOP_MASS_MENTIONS", "OFFENCE_ADDED", message.getMentions().size() + " Mentions");
+                        command.guild.sendDebugLog(command, "STOP_MASS_MENTIONS", "OFFENCE_ADDED", message.getMentions().getMembers().size() + " Mentions");
                         offenderFound = true;
                         i++;
                         if (o.getCount() >= Globals.maxWarnings) {

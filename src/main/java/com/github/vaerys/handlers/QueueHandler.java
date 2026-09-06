@@ -8,7 +8,14 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.botlevel.QueueObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
+import net.dv8tion.jda.api.entities.emoji.UnicodeEmoji;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -26,8 +33,8 @@ public class QueueHandler {
 
     public static void addToQueue(CommandObject object, String content, DayOfWeek dayOfWeek, String type) {
         runCheck();
-        MessageReaction.ReactionEmote thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
-        MessageReaction.ReactionEmote thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
+        UnicodeEmoji thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
+        UnicodeEmoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
         TextChannel channel = object.client.get().getTextChannelById(Globals.queueChannelID);
 
         if (channel != null) {
@@ -46,8 +53,8 @@ public class QueueHandler {
                     embedBuilder.addField(dowString, dayOfWeek + "", true);
                     embedBuilder.addField(uIDString, uID + "", true);
                     Message message = embedBuilder.send(channel);
-                    message.addReaction(thumbsUp.getEmoji()).complete();
-                    message.addReaction(thumbsDown.getEmoji()).complete();
+                    message.addReaction(thumbsUp).complete();
+                    message.addReaction(thumbsDown).complete();
                     Globals.getDailyMessages().getQueue().add(new QueueObject(message.getIdLong(), uID, type));
                     return;
                 default:
@@ -77,10 +84,10 @@ public class QueueHandler {
 
     public static void reactionAdded(CommandObject object, MessageReaction reaction) {
         runCheck();
-        MessageReaction.ReactionEmote thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
-        MessageReaction.ReactionEmote thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
-        MessageReaction.ReactionEmote ok = Utility.getReaction(Constants.EMOJI_ALLOW);
-        MessageReaction.ReactionEmote no = Utility.getReaction(Constants.EMOJI_DENY);
+        Emoji thumbsUp = Utility.getReaction(Constants.EMOJI_THUMBS_UP);
+        Emoji thumbsDown = Utility.getReaction(Constants.EMOJI_THUMBS_DOWN);
+        Emoji ok = Utility.getReaction(Constants.EMOJI_ALLOW);
+        Emoji no = Utility.getReaction(Constants.EMOJI_DENY);
         Message message = object.message.get();
         User owner = object.client.creator.get();
         //exit if not the queue messageChannel
@@ -88,11 +95,7 @@ public class QueueHandler {
         //exit if not the owner.
         if (reaction.getCount() == 0) return;
         List<User> users;
-        if (reaction.getReactionEmote().isEmoji()) {
-            users = message.retrieveReactionUsers(reaction.getReactionEmote().getEmoji()).complete();
-        } else {
-            users = message.retrieveReactionUsers(reaction.getReactionEmote().getEmote()).complete();
-        }
+        users = message.retrieveReactionUsers(reaction.getEmoji()).complete();
         if (users.isEmpty()) return;
         //exit if no embeds
         if (message.getEmbeds().isEmpty()) return;
@@ -121,17 +124,17 @@ public class QueueHandler {
                     }
                     UserObject user = new UserObject(object.client.getUserByID(userID), null);
                     //do if accepted
-                    if (reaction.getReactionEmote().equals(thumbsUp)) {
+                    if (reaction.getEmoji().equals(thumbsUp)) {
 
                         user.queueDm("\\> A daily message you sent was approved. **[" + uID + "]**");
                         Globals.getDailyMessages().getMessages().add(new DailyMessage(embed.getDescription(), day, userID, uID));
-                        message.addReaction(ok.getEmoji()).complete();
+                        message.addReaction(ok).complete();
                         request.toggleMarkedForRemoval();
                         //do if denied
-                    } else if (reaction.getReactionEmote().equals(thumbsDown)) {
+                    } else if (reaction.getEmoji().equals(thumbsDown)) {
                         user.queueDm("\\> A daily message you sent was denied. **[" + uID + "]**");
                         request.toggleMarkedForRemoval();
-                        message.addReaction(no.getEmoji()).complete();
+                        message.addReaction(no).complete();
                     }
                 } catch (IllegalArgumentException e) {
                     request.toggleMarkedForRemoval();

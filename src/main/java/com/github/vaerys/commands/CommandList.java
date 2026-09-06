@@ -1,7 +1,7 @@
 package com.github.vaerys.commands;
 
-import com.github.vaerys.commands.admin.Module;
 import com.github.vaerys.commands.admin.*;
+import com.github.vaerys.commands.admin.Module;
 import com.github.vaerys.commands.adminccs.*;
 import com.github.vaerys.commands.cc.*;
 import com.github.vaerys.commands.characters.*;
@@ -92,6 +92,7 @@ public class CommandList {
         add(new UserInfo());
         add(new WhatsMyColour());
         add(new Invite());
+        add(new RequestData());
 
         //Help commands
         add(new BotHelp());
@@ -215,6 +216,8 @@ public class CommandList {
         add(new Sudo());
         add(new UpdateAvatar());
         add(new GetGlobalStats());
+        add(new ForceDailyReset());
+        add(new ForceSaveAll());
         add(new ResetPlayingStatus());
         add(new ToggleTypingStatus());
         add(new SetPlayingStatus());

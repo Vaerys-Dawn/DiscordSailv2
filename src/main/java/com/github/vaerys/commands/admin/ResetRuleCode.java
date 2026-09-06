@@ -5,7 +5,6 @@ import com.github.vaerys.enums.SAILType;
 import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.GuildHandler;
 import com.github.vaerys.masterobjects.CommandObject;
-import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;

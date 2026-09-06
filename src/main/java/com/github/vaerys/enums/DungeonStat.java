@@ -1,6 +1,6 @@
 package com.github.vaerys.enums;
 
-import emoji4j.EmojiUtils;
+import com.github.vaerys.main.Utility;
 
 public enum DungeonStat {
 
@@ -22,7 +22,7 @@ public enum DungeonStat {
     }
 
     public String getEmoji() {
-        return EmojiUtils.getEmoji(emojiName).getEmoji();
+        return Utility.getEmoji(emojiName);
     }
 
 }

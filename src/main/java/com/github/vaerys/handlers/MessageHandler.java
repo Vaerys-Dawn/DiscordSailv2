@@ -10,7 +10,7 @@ import com.github.vaerys.masterobjects.DmCommandObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 
 
-@SuppressWarnings({"StringConcatenationInsideStringBufferAppend"})
+
 // gdi dawn <3
 public class MessageHandler {
 
@@ -49,7 +49,7 @@ public class MessageHandler {
         if (!GuildHandler.testForPerms(command, command.guildChannel.get(), Permission.MESSAGE_MENTION_EVERYONE)) {
             // sanitize @everyone and @here mentions.
             args = args.replaceAll("(?i)@(everyone|here)", "REDACTED");
-            for (Role r : command.message.get().getMentionedRoles()) {
+            for (Role r : command.message.get().getMentions().getRoles()) {
                 args = args.replaceAll(r.getAsMention(), r.getName());
             }
         }

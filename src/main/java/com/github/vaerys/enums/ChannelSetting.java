@@ -9,7 +9,7 @@ import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.objects.adminlevel.ChannelSettingObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.ArrayList;
 import java.util.List;

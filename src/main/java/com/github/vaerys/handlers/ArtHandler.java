@@ -10,8 +10,9 @@ import com.github.vaerys.objects.botlevel.TrackLikes;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageReaction;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,10 +44,10 @@ public class ArtHandler {
         for (long l : pins) {
             if (command.message.longID == l && command.message.author.longID == command.user.longID) {
                 channel.unpinMessageById(command.message.longID).queue();
-                command.message.get().addReaction(Constants.EMOJI_REMOVE_PIN).queue();
+                command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_REMOVE_PIN)).queue();
                 MessageReaction reaction = command.message.getReactionByName(Constants.EMOJI_ADD_PIN);
                 for (User user : reaction.retrieveUsers().complete()) {
-                    command.message.get().removeReaction(reaction.getReactionEmote().getEmote(), user).queue();
+                    command.message.get().removeReaction(reaction.getEmoji(), user).queue();
                 }
                 checkList(command);
                 return;
@@ -68,7 +69,7 @@ public class ArtHandler {
         //exit if message has already been unpinned.
         MessageReaction reaction = command.message.getReactionByName(Constants.EMOJI_REMOVE_PIN);
         if (reaction != null && reaction.retrieveUsers().stream().anyMatch(c -> c == command.client.bot.get())) {
-            command.message.get().removeReaction(Constants.EMOJI_ADD_PIN, reacted.get()).queue();
+            command.message.get().removeReaction(Utility.getReaction(Constants.EMOJI_ADD_PIN), reacted.get()).queue();
             return;
         }
         //exit if globalUser has art pinning denied.
@@ -106,12 +107,12 @@ public class ArtHandler {
         //add to ping
         pins.add(command.message.longID);
         //add pin response
-        command.message.get().addReaction(Constants.EMOJI_ADD_PIN).queue();
+        command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_ADD_PIN)).queue();
         //if like art
 
         if (command.guild.config.likeArt && command.guild.config.modulePixels) {
             //add heart
-            command.message.get().addReaction(Constants.EMOJI_LIKE_PIN).queue();
+            command.message.get().addReaction(Utility.getReaction(Constants.EMOJI_LIKE_PIN)).queue();
             //add to list
             likes.add(new TrackLikes(command.message.longID));
         }

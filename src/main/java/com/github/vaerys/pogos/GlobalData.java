@@ -6,7 +6,10 @@ import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.depreciated.BlackListObject;
 import com.github.vaerys.objects.userlevel.ReminderObject;
 import com.github.vaerys.templates.GlobalFile;
+import com.github.vaerys.utilobjects.Pair;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -17,9 +20,11 @@ import java.util.stream.Collectors;
  */
 public class GlobalData extends GlobalFile {
     public static final String FILE_PATH = "Global_Data.json";
-    private double fileVersion = 1.0;
+    private double fileVersion = 1.1;
     List<Long> blockedFromDMS = new ArrayList<>();
     List<BlackListObject.BlacklistedUserObject> blacklistedUsers = new ArrayList<>();
+    private List<Pair<Long, Long>> dataRequests = new ArrayList<>();
+    private List<Pair<Long, Long>> deleteRequests = new ArrayList<>();
     ArrayList<ReminderObject> reminders = new ArrayList<>();
     private long presentID = -1;
     List<Long> giftsGiven = new ArrayList<>();
@@ -31,6 +36,48 @@ public class GlobalData extends GlobalFile {
     public List<Long> getBlockedFromDMS() {
         if (blockedFromDMS == null) blockedFromDMS = new ArrayList<>();
         return blockedFromDMS;
+    }
+
+    private Pair<Long, Long> searchOrCreateDataRequests(long userID) {
+        Pair<Long, Long> found = null;
+        for (Pair<Long, Long> check: dataRequests) {
+            if (check.getFirst() == userID) found = check;
+        }
+        if (found == null) {
+            found = new Pair<>(userID, 0L);
+            dataRequests.add(found);
+        }
+        return found;
+    }
+
+    private Pair<Long, Long> searchOrCreateDeleteRequests(long userID) {
+        Pair<Long, Long> found = null;
+        for (Pair<Long, Long> check: deleteRequests) {
+            if (check.getFirst() == userID) found = check;
+        }
+        if (found == null) {
+            found = new Pair<>(userID, 0L);
+            deleteRequests.add(found);
+        }
+        return found;
+    }
+
+    public boolean canSendDataRequest(long userID) {
+        Pair<Long, Long> check = searchOrCreateDataRequests(userID);
+        return check.getSecond() + (60 * 60 * 3) < ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
+    }
+
+    public void updateDataRequest(long userID) {
+        searchOrCreateDataRequests(userID).setSecond(ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond());
+    }
+
+    public boolean canSendDeleteRequest(long userID) {
+        Pair<Long, Long> check = searchOrCreateDeleteRequests(userID);
+        return check.getSecond() + (60 * 60 * 24) < ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
+    }
+
+    public void updateDeleteRequest(long userID) {
+        searchOrCreateDeleteRequests(userID).setSecond(ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond());
     }
 
     public void blockUserFromDMS(long userID) {

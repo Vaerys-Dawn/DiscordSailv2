@@ -5,12 +5,14 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.awt.*;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.LinkedList;
 import java.util.List;
 
 public class EmptyUserObject extends UserObject {

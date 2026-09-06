@@ -12,7 +12,6 @@ import net.dv8tion.jda.api.entities.Role;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 /**

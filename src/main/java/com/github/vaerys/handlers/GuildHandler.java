@@ -9,13 +9,12 @@ import com.github.vaerys.masterobjects.ChannelObject;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
-import com.github.vaerys.objects.adminlevel.RewardRoleObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.pogos.GuildConfig;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import okhttp3.Cache;
-import org.apache.commons.collections4.KeyValue;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +28,7 @@ import static com.github.vaerys.enums.UserSetting.DENY_AUTO_ROLE;
 public class GuildHandler {
     final static Logger logger = LoggerFactory.getLogger(GuildHandler.class);
 
-    public static void dailyTask(GuildObject content) {
+    public static void dailyTask(GuildObject content, boolean doDailyDecay) {
         boolean doDecay = content.config.xpGain && content.config.modulePixels && content.config.xpDecay;
 
 
@@ -50,7 +49,7 @@ public class GuildHandler {
         partitions.forEach(p -> content.get().retrieveMembersByIds(p).get());
 
         content.users.profiles.forEach((l, p) -> {
-            if (doDecay) PixelHandler.doDecay(content, p);
+            if (doDailyDecay && doDecay) PixelHandler.doDecay(content, p);
             //check globalUser's roles and make sure that they have the right roles.
             checkUsersRoles(p.getUserID(), content, true);
         });
@@ -129,6 +128,7 @@ public class GuildHandler {
 
         //only do a role update if the role count changes
         List<Role> currentRoles = user.getRoles();
+        userRoles.removeIf(Objects::isNull);
         if (!currentRoles.containsAll(userRoles) || currentRoles.size() != userRoles.size()) {
             content.get().modifyMemberRoles(user, userRoles).queue();
         }

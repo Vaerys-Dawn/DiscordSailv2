@@ -7,11 +7,11 @@ import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.masterobjects.GuildObject;
 import com.github.vaerys.masterobjects.UserObject;
 import com.github.vaerys.objects.adminlevel.JoinMessage;
-import com.github.vaerys.objects.adminlevel.MutedUserObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.unions.DefaultGuildChannelUnion;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,7 +54,12 @@ public class JoinHandler {
             profileObject.getSettings().add(UserSetting.JOIN_WHILE_NEW);
             TextChannel admin = content.getChannelByType(ChannelSetting.ADMIN_LOG);
             if (admin == null) {
-                admin = event.getGuild().getDefaultChannel();
+                DefaultGuildChannelUnion temp = event.getGuild().getDefaultChannel();
+                try {
+                    admin = temp == null ? event.getGuild().getTextChannels().get(0) : temp.asTextChannel();
+                }catch (IndexOutOfBoundsException e) {
+                    // no message channel found
+                }
             }
             if (admin != null) {
                 admin.sendMessage("> New user " + user.mention() + " has a creation time less than 5 hours ago.").queue();

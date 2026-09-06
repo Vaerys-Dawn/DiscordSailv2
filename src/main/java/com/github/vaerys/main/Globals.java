@@ -19,12 +19,8 @@ import com.github.vaerys.tags.TagList;
 import com.github.vaerys.templates.FileFactory;
 import com.github.vaerys.templates.GlobalFile;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-import net.dv8tion.jda.internal.entities.DataMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +65,6 @@ public class Globals {
     public static int maxReminderSlots = 5;
     public static String errorStack = null;
     public static long reactionCount = 0;
-    public static Message defaultMessage = new DataMessage(false, "", "", null);
     private static List<GuildObject> guilds = new LinkedList<>();
     private static List<RandomStatusObject> randomStatuses = new LinkedList<>();
     private static List<LogObject> allLogs = new LinkedList<>();
@@ -204,7 +199,7 @@ public class Globals {
             final Properties properties = new Properties();
             properties.load(Main.class.getClassLoader().getResourceAsStream("project.properties"));
             version = properties.getProperty("version");
-            d4jVersion = properties.getProperty("discord4jVersion");
+            d4jVersion = properties.getProperty("");
             logger.info("Bot version : " + version);
         } catch (IOException e) {
             Utility.sendStack(e);

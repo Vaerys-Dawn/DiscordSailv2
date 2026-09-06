@@ -10,12 +10,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,7 +24,11 @@ import java.util.Scanner;
  */
 public class FileHandler {
 
-    private final static Logger logger = LoggerFactory.getLogger(FileHandler.class);
+    private FileHandler() {
+        // utility class
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(FileHandler.class);
 
     /**
      * Creates Directory using "dirName" as the path.
@@ -32,8 +36,8 @@ public class FileHandler {
     public static void createDirectory(String dirName) {
         File file = new File(dirName);
         if (!file.exists()) {
-            file.mkdirs();
-            logger.info("Directory Created: " + dirName);
+            boolean created = file.mkdirs();
+            logger.info("Directory {}: {}", created ? "Created" : "Could not be created", dirName);
         }
     }
 
@@ -47,11 +51,11 @@ public class FileHandler {
             }
             List<String> fileContents;
             fileContents = Files.readAllLines(Paths.get(file));
-            logger.trace("Reading from file: " + file);
+            logger.trace("Reading from file: {}", file);
             return fileContents;
         } catch (IOException e) {
             logger.error(e.getCause().toString());
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -63,7 +67,7 @@ public class FileHandler {
             List<String> fileContents = readFromFile(file);
             fileContents.set(line, text);
             Files.write(Paths.get(file), fileContents);
-            logger.trace("Writing to file: " + file + " at line: " + line);
+            logger.trace("Writing to file: {} at line: {}", file, line);
         } catch (IOException e) {
             logger.error(e.getCause().toString());
         }
@@ -77,18 +81,17 @@ public class FileHandler {
             if (!Files.exists(Paths.get(file))) {
                 Files.createFile(Paths.get(file));
             }
+        } catch (IOException e) {
+            Utility.sendStack(e);
+        }
+        try (FileWriter fileWriter = new FileWriter(file, !overwrite)) {
             if (overwrite) {
-                FileWriter fileWriter = new FileWriter(file, false);
                 fileWriter.write(text);
-                fileWriter.flush();
-                fileWriter.close();
             } else {
-                FileWriter fileWriter = new FileWriter(file, true);
-                fileWriter.append("\n" + text);
-                fileWriter.flush();
-                fileWriter.close();
+                fileWriter.append("\n").append(text);
             }
-            logger.trace("Writing to file: " + file);
+            fileWriter.flush();
+            logger.trace("Writing to file: {}", file);
         } catch (IOException e) {
             Utility.sendStack(e);
         }
@@ -99,10 +102,9 @@ public class FileHandler {
      */
     public static Object readFromJson(String file, Class<?> objClass) {
         Gson gson = new Gson();
-        try (Reader reader = new InputStreamReader(new FileInputStream(new File(file)), StandardCharsets.UTF_8)) {
+        try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             Object newObject = gson.fromJson(reader, objClass);
-            logger.trace("Reading Data from Json File: " + file + " applying to Object: " + objClass.getName());
-            reader.close();
+            logger.trace("Reading Data from Json File: {} applying to Object: {}", file, objClass.getName());
             return newObject;
         } catch (JsonSyntaxException e) {
             logger.error(file);
@@ -122,8 +124,8 @@ public class FileHandler {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             gson.toJson(object, writer);
-            logger.trace("Saving " + object.getClass().getName() + " to Json File: " + file);
-            writer.close();
+            logger.trace("Saving {} to Json File: {}", object.getClass().getName(), file);
+            writer.flush();
         } catch (IOException e) {
             logger.error(e.getCause().toString());
         }
@@ -143,18 +145,14 @@ public class FileHandler {
 
     public static JsonObject fileToJsonObject(String filePath) {
         JsonObject jsonObject = new JsonObject();
-        try {
-            Reader reader = new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8);
+        try (Reader reader = new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)) {
             JsonParser parser = new JsonParser();
             JsonElement jsonElement = parser.parse(reader);
-            reader.close();
             jsonObject = jsonElement.getAsJsonObject();
         } catch (IllegalStateException e) {
             logger.error("{} failed to init please check file.", filePath);
         } catch (JsonSyntaxException e) {
-            System.err.printf("File \"%s\" has malformed json data or is corrupted.\n", filePath);
-            Utility.sendStack(e);
-        } catch (FileNotFoundException e) {
+            logger.error("File \"{}\" has malformed json data or is corrupted.\n", filePath);
             Utility.sendStack(e);
         } catch (IOException e) {
             Utility.sendStack(e);
@@ -163,12 +161,12 @@ public class FileHandler {
     }
 
     public static void writeToFile(List<String> contents, String path) {
-        String toSave = "";
+        StringBuilder toSave = new StringBuilder();
         for (String s : contents) {
             if (toSave.length() != 0) s += "\n";
-            toSave += s;
+            toSave.append(s);
         }
-        writeToFile(path, toSave, true);
+        writeToFile(path, toSave.toString(), true);
     }
 
     /***
@@ -189,36 +187,27 @@ public class FileHandler {
             }
             s.close();
             return content.toString();
-        } catch (MalformedURLException e) {
-            return "";
         } catch (IOException e) {
             return "";
         }
     }
 
     public static boolean isEmpty(String filePath) {
-        if (!exists(filePath)) return true;
+        if (filePath == null || !exists(filePath)) return true;
         return String.join("", FileHandler.readFromFile(filePath)).isEmpty();
     }
 
     public static File copyToFile(String filePath, InputStream file) {
-        try {
-            Path newFile = Paths.get(filePath);
-            FileWriter writer = new FileWriter(filePath);
-            try {
-                if (!exists(filePath)) {
-                    Files.createFile(newFile);
-                }
-                IOUtils.copy(file, writer);
-            } catch (IOException e) {
-                Utility.sendStack(e);
-            } finally {
-                writer.close();
-                file.close();
+        Path newFile = Paths.get(filePath);
+
+        try (FileWriter writer = new FileWriter(filePath)) {
+            if (!exists(filePath)) {
+                Files.createFile(newFile);
             }
-            return new File(filePath);
+            IOUtils.copy(file, writer, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            return null;
+            Utility.sendStack(e);
         }
+        return new File(filePath);
     }
 }

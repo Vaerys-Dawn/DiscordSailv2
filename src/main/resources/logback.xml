@@ -40,6 +40,22 @@
         <triggeringPolicy class="com.github.vaerys.utilobjects.TriggerOncePolicy"/>
     </appender>
 
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <file>Storage/logs/bot.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>Storage/logs/bot-trace-%i.log</fileNamePattern>
+            <minIndex>0</minIndex>
+            <maxIndex>9</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="com.github.vaerys.utilobjects.TriggerOncePolicy"/>
+    </appender>
+
     <root level="TRACE">
         <appender-ref ref="CONSOLE"/>
         <!-- Uncomment the next line to also log to a file -->

@@ -10,7 +10,7 @@ import com.github.vaerys.objects.userlevel.GroupUpObject;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.GlobalFile;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.time.Instant;
 import java.util.ArrayList;

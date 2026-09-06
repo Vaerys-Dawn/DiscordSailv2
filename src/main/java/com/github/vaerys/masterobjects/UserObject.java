@@ -5,11 +5,12 @@ import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.templates.Command;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.regex.Matcher;

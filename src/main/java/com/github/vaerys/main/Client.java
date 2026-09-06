@@ -3,42 +3,34 @@ package com.github.vaerys.main;
 import com.github.kennedyoliveira.pastebin4j.AccountCredentials;
 import com.github.kennedyoliveira.pastebin4j.PasteBin;
 import com.github.vaerys.handlers.FileHandler;
-import com.github.vaerys.handlers.StringHandler;
 import com.github.vaerys.listeners.*;
 import com.github.vaerys.masterobjects.ClientObject;
 import com.github.vaerys.objects.events.EventAvatar;
 import com.github.vaerys.objects.events.TimedEvent;
-import com.github.vaerys.objects.patreonlevel.PatreonSAIL;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.patreon.PatreonAPI;
 import com.patreon.PatreonOAuth;
-import com.patreon.resources.Campaign;
-import com.patreon.resources.Pledge;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import org.jsoup.HttpStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vaerys on 19/05/2016.
@@ -59,8 +51,8 @@ public class Client {
         clientBuilder.setEventPool(eventPool);
         clientBuilder.setGatewayPool(gatewayPool);
         clientBuilder.setMaxReconnectDelay(4000);
-        clientBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.GUILD_PRESENCES);
-        clientBuilder.setMemberCachePolicy(MemberCachePolicy.ALL);
+        clientBuilder.enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
+        //clientBuilder.setMemberCachePolicy(MemberCachePolicy.ALL);
         clientBuilder.addEventListeners(new ReadyListener(), new LoggingListener(), new EventListener(), new CreatorListener(), new GuildEventListener());
         client = clientBuilder.build();
         return client;
@@ -82,12 +74,12 @@ public class Client {
     }
 
 
-    public static PatreonAPI initPatreon(List<String> token) throws IndexOutOfBoundsException {
-        patreonApi = new PatreonAPI(token.get(0));
-
-        checkPatrons();
-        return patreonApi;
-    }
+//    public static PatreonAPI initPatreon(List<String> token) throws IndexOutOfBoundsException {
+//        patreonApi = new PatreonAPI(token.get(0));
+//
+//        checkPatrons();
+//        return patreonApi;
+//    }
 
     public static void initPastebin(List<String> pastebinToken) {
         credentials = new AccountCredentials(pastebinToken.get(0));
@@ -110,63 +102,63 @@ public class Client {
     }
 
 
-    public static void checkPatrons() {
-        if (!checkPatreonIsValid()) return;
-        List<Long> patronIDs = new ArrayList<Long>() {{
-            add(153159020528533505L);
-        }};
-        try {
-            if (patreonApi == null) return;
-            List<Campaign> campaigns = patreonApi.fetchCampaigns().get();
-            for (Campaign c : campaigns) {
-                List<Pledge> pledges = patreonApi.fetchAllPledges(c.getId());
-                if (pledges != null) {
-                    for (Pledge p : pledges) {
-                        if (p.getReward().getTitle().equalsIgnoreCase("Pioneer")) {
-                            try {
-                                long userID = Long.parseUnsignedLong(p.getPatron().getSocialConnections().getDiscord().getUser_id());
-                                patronIDs.add(userID);
-                            } catch (NumberFormatException e) {
-                                //skip
-                            }
-                        }
-                    }
-                }
-            }
-            logger.info("Patron List Updated.");
-        } catch (IOException e) {
-            //nothing happens
-        }
-        Globals.setPatrons(patronIDs);
-    }
+//    public static void checkPatrons() {
+//        if (!checkPatreonIsValid()) return;
+//        List<Long> patronIDs = new ArrayList<Long>() {{
+//            add(153159020528533505L);
+//        }};
+//        try {
+//            if (patreonApi == null) return;
+//            List<Campaign> campaigns = patreonApi.fetchCampaigns().get();
+//            for (Campaign c : campaigns) {
+//                List<Pledge> pledges = patreonApi.fetchAllPledges(c.getId());
+//                if (pledges != null) {
+//                    for (Pledge p : pledges) {
+//                        if (p.getReward().getTitle().equalsIgnoreCase("Pioneer")) {
+//                            try {
+//                                long userID = Long.parseUnsignedLong(p.getPatron().getSocialConnections().getDiscord().getUser_id());
+//                                patronIDs.add(userID);
+//                            } catch (NumberFormatException e) {
+//                                //skip
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            logger.info("Patron List Updated.");
+//        } catch (IOException e) {
+//            //nothing happens
+//        }
+//        Globals.setPatrons(patronIDs);
+//    }
 
-    private static boolean checkPatreonIsValid() {
-        List<String> token = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN);
-        try {
-            patreonApi.fetchCampaigns();
-        } catch (IOException e) {
-            if (token.size() == 4) {
-                logger.info("Token Invalid attempting to collect new token.");
-                refreshPatreonToken(token.get(1), token.get(2), token.get(3));
-            }
-        }
-        if (FileHandler.exists(Constants.DIRECTORY_STORAGE + "manual_patron.txt")) {
-            List<Long> patronIDs = FileHandler.readFromFile(Constants.DIRECTORY_STORAGE + "manual_patron.txt").stream()
-                    .map(s -> Utility.stringLong(s)).filter(l -> l != -1).distinct().collect(Collectors.toList());
-            Globals.setPatrons(patronIDs);
-            logger.info("Patron List Updated.");
-            return false;
-        }
-        try {
-            patreonApi.fetchCampaigns();
-            logger.info("Patreon Account Linked.");
-        } catch (IOException e) {
-            logger.info("Could not Link Patreon Account.");
-            return false;
-        }
-
-        return true;
-    }
+//    private static boolean checkPatreonIsValid() {
+//        List<String> token = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN);
+//        try {
+//            patreonApi.fetchCampaigns();
+//        } catch (IOException e) {
+//            if (token.size() == 4) {
+//                logger.info("Token Invalid attempting to collect new token.");
+//                refreshPatreonToken(token.get(1), token.get(2), token.get(3));
+//            }
+//        }
+//        if (FileHandler.exists(Constants.DIRECTORY_STORAGE + "manual_patron.txt")) {
+//            List<Long> patronIDs = FileHandler.readFromFile(Constants.DIRECTORY_STORAGE + "manual_patron.txt").stream()
+//                    .map(s -> Utility.stringLong(s)).filter(l -> l != -1).distinct().collect(Collectors.toList());
+//            Globals.setPatrons(patronIDs);
+//            logger.info("Patron List Updated.");
+//            return false;
+//        }
+//        try {
+//            patreonApi.fetchCampaigns();
+//            logger.info("Patreon Account Linked.");
+//        } catch (IOException e) {
+//            logger.info("Could not Link Patreon Account.");
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
     public static void handleAvatars() {
         TimedEvent event = Globals.getCurrentEvent();
@@ -208,29 +200,29 @@ public class Client {
         }
     }
 
-    public static void refreshPatreonToken(String clientID, String clientSecret, String refreshToken) {
-        PatreonSAIL.refreshToken(clientID, clientSecret, refreshToken);
-        String access = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN).get(0);
-        patreonApi = new PatreonAPI(access);
-        try {
-        patreonOAuth = new PatreonOAuth(clientID, clientSecret, "");
-            PatreonOAuth.TokensResponse refresh = patreonOAuth.refreshTokens(refreshToken);
-            StringHandler tokenData = new StringHandler();
-            tokenData.append(refresh.getAccessToken() + "\n");
-            tokenData.append(clientID + "\n");
-            tokenData.append(clientSecret + "\n");
-            tokenData.append(refresh.getRefreshToken());
-            FileHandler.copyToFile(Constants.FILE_PATREON_TOKEN, new ByteArrayInputStream(tokenData.toString().getBytes(StandardCharsets.UTF_8)));
-        } catch (HttpStatusException e) {
-            if (e.getStatusCode() == 401) {
-                logger.error("Refresh Token is invalid.");
-                return;
-            }
-            Utility.sendStack(e);
-        } catch (IOException e) {
-            Utility.sendStack(e);
-        }
-    }
+//    public static void refreshPatreonToken(String clientID, String clientSecret, String refreshToken) {
+//        PatreonSAIL.refreshToken(clientID, clientSecret, refreshToken);
+//        String access = FileHandler.readFromFile(Constants.FILE_PATREON_TOKEN).get(0);
+//        patreonApi = new PatreonAPI(access);
+//        try {
+//        patreonOAuth = new PatreonOAuth(clientID, clientSecret, "");
+//            PatreonOAuth.TokensResponse refresh = patreonOAuth.refreshTokens(refreshToken);
+//            StringHandler tokenData = new StringHandler();
+//            tokenData.append(refresh.getAccessToken() + "\n");
+//            tokenData.append(clientID + "\n");
+//            tokenData.append(clientSecret + "\n");
+//            tokenData.append(refresh.getRefreshToken());
+//            FileHandler.copyToFile(Constants.FILE_PATREON_TOKEN, new ByteArrayInputStream(tokenData.toString().getBytes(StandardCharsets.UTF_8)));
+//        } catch (HttpStatusException e) {
+//            if (e.getStatusCode() == 401) {
+//                logger.error("Refresh Token is invalid.");
+//                return;
+//            }
+//            Utility.sendStack(e);
+//        } catch (IOException e) {
+//            Utility.sendStack(e);
+//        }
+//    }
 
     public static ClientObject getClientObject() {
         if (clientObject == null) {

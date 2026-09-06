@@ -5,7 +5,6 @@ import com.github.vaerys.enums.UserSetting;
 import com.github.vaerys.handlers.PixelHandler;
 import com.github.vaerys.masterobjects.CommandObject;
 import com.github.vaerys.objects.userlevel.DailyMessage;
-import emoji4j.EmojiUtils;
 
 import java.awt.*;
 import java.time.DayOfWeek;
@@ -15,6 +14,12 @@ import java.util.ArrayList;
  * Created by Vaerys on 03/08/2016.
  */
 public class Constants {
+
+
+
+    public Constants() {
+        // do nothing except load the class
+    }
 
     //Command prefix constants
     public static final String PREFIX_INDENT = "    ";
@@ -125,13 +130,15 @@ public class Constants {
 
 
     //Emoji Constants
-    public static final String EMOJI_THUMBS_DOWN = EmojiUtils.getEmoji("thumbsdown").getEmoji();
-    public static final String EMOJI_THUMBS_UP = EmojiUtils.getEmoji("thumbsup").getEmoji();
-    public static final String EMOJI_DENY = EmojiUtils.getEmoji("no_entry_sign").getEmoji();
-    public static final String EMOJI_ALLOW = EmojiUtils.getEmoji("white_check_mark").getEmoji();
-    public static final String EMOJI_REMOVE_PIN = EmojiUtils.getEmoji("x").getEmoji();
-    public static final String EMOJI_ADD_PIN = EmojiUtils.getEmoji("pushpin").getEmoji();
-    public static final String EMOJI_LIKE_PIN = EmojiUtils.getEmoji("heart").getEmoji();
+    public static final String EMOJI_THUMBS_DOWN = Utility.getEmoji("thumbsdown");
+    public static final String EMOJI_THUMBS_UP = Utility.getEmoji("thumbsup");
+    public static final String EMOJI_DENY = Utility.getEmoji("no_entry_sign");
+    public static final String EMOJI_ALLOW = Utility.getEmoji("white_check_mark");
+    public static final String EMOJI_REMOVE_PIN = Utility.getEmoji("x");
+    public static final String EMOJI_ADD_PIN = Utility.getEmoji("pushpin");
+
+    public static final String EMOJI_ADD_PIN_UNICODE = "\uD83D\uDCCC";
+    public static final String EMOJI_LIKE_PIN = Utility.getEmoji("heart");
 
     //image Constants
     public static final String LINK_GITHUB = "https://github.com/Vaerys-Dawn/DiscordSailv2";

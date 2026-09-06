@@ -14,11 +14,17 @@ import com.github.vaerys.objects.userlevel.ProfileObject;
 import com.github.vaerys.objects.utils.SplitFirstObject;
 import com.github.vaerys.templates.Command;
 import com.github.vaerys.utilobjects.XEmbedBuilder;
-import emoji4j.EmojiUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.entities.emoji.UnicodeEmoji;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.api.utils.FileUpload;
+import net.fellbaum.jemoji.EmojiManager;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -44,6 +50,7 @@ import java.util.stream.Stream;
  * Created by Vaerys on 17/08/2016.
  */
 public class Utility {
+
 
     private Utility() {
         throw new IllegalStateException("Utility Class");
@@ -551,7 +558,7 @@ public class Utility {
     public static String unFormatMentions(Message message) {
         StringHandler from = new StringHandler(message.getContentRaw());
         from.replaceRegex("(?i)(@here|@everyone)", "**[REDACTED]**");
-        for (User user : message.getMentionedUsers()) {
+        for (User user : message.getMentions().getUsers()) {
             if (user != null) {
                 StringHandler regex = new StringHandler("<@!?").append(user.getIdLong()).append(">");
                 StringHandler replacement;
@@ -564,7 +571,7 @@ public class Utility {
                 from.replaceRegex(regex, replacement);
             }
         }
-        for (Role role : message.getMentionedRoles()) {
+        for (Role role : message.getMentions().getRoles()) {
             StringHandler toReplace = new StringHandler("<@&").append(role.getIdLong()).append(">");
             StringHandler replaceWith = new StringHandler("__**@").append(role.getName()).append("**__");
             from.replace(toReplace, replaceWith);
@@ -623,6 +630,25 @@ public class Utility {
         return channelNames;
     }
 
+    public static void sendStack(Exception e, User author, Message message) {
+        StringHandler handler = new StringHandler();
+        handler.append("User: ")
+                .append(author.getAsTag())
+                .append("'s (")
+                .append(author.getId())
+                .append(") Message in ")
+                .append(message.getChannel() instanceof PrivateChannel ? "Dms" : message.getGuild().getName())
+                .append(" caused an error:");
+        handler.append("\n");
+        handler.append(message.getContentRaw());
+        handler.substring(0, Math.min(handler.length(), 4000));
+        StringHandler s = new StringHandler(ExceptionUtils.getStackTrace(e));
+        s.setContent(s.substring(0, s.length() - 2));
+        if (!s.toString().endsWith(")")) {
+            s.append(")");
+        }
+        Client.getClientObject().creator.sendErrorFileDm(handler.toString(), s.toString());
+    }
 
     public static void sendStack(Exception e) {
         sendStack(e, 5);
@@ -634,11 +660,16 @@ public class Utility {
         if (!s.toString().endsWith(")")) {
             s.append(")");
         }
+        sendStack(s, count);
+    }
+
+    public static void sendStack(StringHandler s, int count) {
         if (count > 25) count = 25;
         StringHandler builder = new StringHandler();
         long logSize = Globals.getAllLogs().size();
-        builder.addViaJoin(logSize < count ? Globals.getAllLogs() :  Globals.getAllLogs().subList(0, count), "\n");
+        builder.addViaJoin(logSize < count ? Globals.getAllLogs() : Globals.getAllLogs().subList(0, count), "\n");
         LOGGER.error("{}\n>> LAST {} DEBUG LOGS<<\n{}", s, Globals.getAllLogs().size(), builder);
+        Client.getClientObject().creator.sendErrorFileDm(s.toString());
     }
 
     public static List<Command> getCommandsByType(List<Command> commands, CommandObject commandObject, SAILType type, boolean testPerms) {
@@ -989,7 +1020,7 @@ public class Utility {
             loading = channel.sendMessage("`Loading...`").complete();
         }
         //request for image to be sent.
-        MessageAction sentMessage = null;
+        MessageCreateAction sentMessage = null;
         InputStream stream = null;
         int responseCode = -1;
         try {
@@ -1007,7 +1038,7 @@ public class Utility {
             String filename = FilenameUtils.getName(imageURL);
 
             //send file
-            sentMessage = channel.sendMessage(Utility.removeMentions(message)).addFile(stream, filename);
+            sentMessage = channel.sendMessage(Utility.removeMentions(message)).addFiles(FileUpload.fromData(stream, filename));
         } catch (InsufficientPermissionException e) {
             //send message and url with url closed
             missingPermissions("URL_FILE", channel);
@@ -1064,7 +1095,6 @@ public class Utility {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(link).openConnection();
             connection.setRequestProperty("User-Agent", Constants.MOZILLA_USER_AGENT);
-
             //turn the image connection into an inputStream
             return connection.getInputStream();
         } catch (IOException e) {
@@ -1072,7 +1102,17 @@ public class Utility {
         }
     }
 
-    public static MessageReaction.ReactionEmote getReaction(String x) {
-        return MessageReaction.ReactionEmote.fromUnicode(EmojiUtils.getEmoji(x).getEmoji(), Client.getClient());
+    public static UnicodeEmoji getReaction(String x) {
+        return Emoji.fromUnicode(getEmoji(x));
+    }
+
+    public static UnicodeEmoji getReactionUnicode(String x) {
+        return Emoji.fromUnicode(x);
+    }
+
+    public static String getEmoji(String input) {
+        Optional<net.fellbaum.jemoji.Emoji> emoji = EmojiManager.getByAlias(input);
+        if (emoji.isPresent()) return emoji.get().getEmoji();
+        else return "‼️";
     }
 }

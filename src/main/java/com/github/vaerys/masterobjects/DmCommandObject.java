@@ -2,8 +2,8 @@ package com.github.vaerys.masterobjects;
 
 import com.github.vaerys.main.Client;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
 public class DmCommandObject {
 
